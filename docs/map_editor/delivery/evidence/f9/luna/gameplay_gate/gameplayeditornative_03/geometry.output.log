@@ -1,0 +1,28 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+F9_GAMEPLAY_EDITOR_CHECK actual_map_panel_has_gameplay_controls true
+F9_GAMEPLAY_EDITOR_CHECK human_two_room_example_compiles_for_test true
+F9_GAMEPLAY_EDITOR_CHECK seven_shared_gameplay_commands_are_inspectable true
+F9_GAMEPLAY_EDITOR_CHECK ax_class_selection_uses_same_visible_selector true
+F9_GAMEPLAY_EDITOR_CHECK ax_launch_uses_actual_fixed_game_scene true
+F9_GAMEPLAY_EDITOR_CHECK launch_preserves_authored_source true
+F9_GAMEPLAY_EDITOR_CHECK human_test_does_not_start_technical_circle true
+F9_GAMEPLAY_EDITOR_CHECK editor_launch_boots_real_player_process true
+F9_GAMEPLAY_EDITOR_CHECK ax_move_posts_to_shared_game_authority true
+F9_GAMEPLAY_EDITOR_CHECK real_player_crosses_example_door true
+F9_GAMEPLAY_EDITOR_CHECK ax_stop_uses_stable_window_token true
+F9_GAMEPLAY_EDITOR_CHECK editor_stop_suspends_before_closing true
+F9_GAMEPLAY_EDITOR_CHECK new_panel_recovers_last_test_reference true
+F9_GAMEPLAY_EDITOR_CHECK resume_uses_new_window_over_saved_revision true
+F9_GAMEPLAY_EDITOR_CHECK resumed_test_keeps_same_run_identity true
+F9_GAMEPLAY_EDITOR_CHECK source_change_requires_recompile true
+F9_GAMEPLAY_EDITOR_CHECK game_controls_do_not_hide_source_undo_history true
+F9_GAMEPLAY_EDITOR_CHECK population_has_same_gameplay_tools true
+F9_GAMEPLAY_EDITOR_CHECK population_has_seven_same_semantic_commands true
+F9_GAMEPLAY_EDITOR_CHECK patrol_has_same_gameplay_tools true
+F9_GAMEPLAY_EDITOR_CHECK patrol_has_seven_same_semantic_commands true
+F9_GAMEPLAY_EDITOR_CHECK capture_real_editor_gameplay_controls true
+F9_GAMEPLAY_EDITOR_RESULT {"checks":[{"id":"actual_map_panel_has_gameplay_controls","ok":true},{"id":"human_two_room_example_compiles_for_test","ok":true},{"id":"seven_shared_gameplay_commands_are_inspectable","ok":true},{"id":"ax_class_selection_uses_same_visible_selector","ok":true},{"id":"ax_launch_uses_actual_fixed_game_scene","ok":true},{"id":"launch_preserves_authored_source","ok":true},{"id":"human_test_does_not_start_technical_circle","ok":true},{"id":"editor_launch_boots_real_player_process","ok":true},{"id":"ax_move_posts_to_shared_game_authority","ok":true},{"id":"real_player_crosses_example_door","ok":true},{"id":"ax_stop_uses_stable_window_token","ok":true},{"id":"editor_stop_suspends_before_closing","ok":true},{"id":"new_panel_recovers_last_test_reference","ok":true},{"id":"resume_uses_new_window_over_saved_revision","ok":true},{"id":"resumed_test_keeps_same_run_identity","ok":true},{"id":"source_change_requires_recompile","ok":true},{"id":"game_controls_do_not_hide_source_undo_history","ok":true},{"id":"population_has_same_gameplay_tools","ok":true},{"id":"population_has_seven_same_semantic_commands","ok":true},{"id":"patrol_has_same_gameplay_tools","ok":true},{"id":"patrol_has_seven_same_semantic_commands","ok":true},{"id":"capture_real_editor_gameplay_controls","ok":true}],"count":22,"ok":true}
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)

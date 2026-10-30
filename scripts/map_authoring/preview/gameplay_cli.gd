@@ -25,7 +25,7 @@ func execute(request: Dictionary) -> Dictionary:
 	if not request.get("command") is String: return {"ok":false,"code":"usage"}
 	var client := Launcher.new()
 	if request.command == "launch":
-		if not shape(request,["command","kind","source_path","package_path"],["class_id","headless"]) or not request.kind is String or not request.source_path is String or not request.package_path is String or not request.get("class_id","swordsman") is String or not request.get("headless",false) is bool: return {"ok":false,"code":"arguments_invalid"}
+		if not shape(request,["command","kind","source_path","package_path"],["class_id","headless","hold_start"]) or not request.get("hold_start",false) is bool or not request.kind is String or not request.source_path is String or not request.package_path is String or not request.get("class_id","swordsman") is String or not request.get("headless",false) is bool: return {"ok":false,"code":"arguments_invalid"}
 		var source := Exchange.load_json(request.source_path)
 		if not source.ok: return source
 		var validated := Exchange.read(request.kind,source.data)
@@ -37,10 +37,10 @@ func execute(request: Dictionary) -> Dictionary:
 			"patrol": loaded = Patrols.load_package(request.package_path); hash_value = PatrolDocument.hash_source(source.data)
 			_: return {"ok":false,"code":"candidate_kind"}
 		if not loaded.ok: return loaded
-		return client.launch(request.kind,loaded.package,hash_value,request.get("class_id","swordsman"),request.get("headless",false))
+		return client.launch(request.kind,loaded.package,hash_value,request.get("class_id","swordsman"),request.get("headless",false),request.get("hold_start",false))
 	if request.command == "resume":
-		if not shape(request,["command","window_path"],["headless"]) or not request.window_path is String or not request.get("headless",false) is bool: return {"ok":false,"code":"arguments_invalid"}
-		return client.resume_window(request.window_path,request.get("headless",false))
+		if not shape(request,["command","window_path"],["headless","hold_start"]) or not request.window_path is String or not request.get("headless",false) is bool or not request.get("hold_start",false) is bool: return {"ok":false,"code":"arguments_invalid"}
+		return client.resume_window(request.window_path,request.get("headless",false),request.get("hold_start",false))
 	if request.command in ["stop","inspect"]:
 		if not shape(request,["command","window_path"]) or not request.window_path is String: return {"ok":false,"code":"arguments_invalid"}
 		client.window_path = request.window_path

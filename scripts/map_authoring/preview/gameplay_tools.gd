@@ -49,13 +49,13 @@ func set_class(id: String) -> Dictionary:
 		if class_choice.get_item_metadata(index) == id: class_choice.select(index); return {"ok":true}
 	return _result({"ok":false,"code":"arguments_invalid"})
 
-func launch(class_id: String = "", headless: bool = false) -> Dictionary:
+func launch(class_id: String = "", headless: bool = false, hold_start: bool = false) -> Dictionary:
 	_refresh_identity()
 	if class_id.is_empty(): class_id = selected_class()
 	if not IdentityIds.is_base_class(StringName(class_id)): return _result({"ok":false,"code":"arguments_invalid"})
 	var package: Dictionary = package_getter.call()
 	if package.is_empty(): return _result({"ok":false,"code":"compile_required"})
-	var opened := launcher.launch(kind,package,String(hash_getter.call()),class_id,headless)
+	var opened := launcher.launch(kind,package,String(hash_getter.call()),class_id,headless,hold_start)
 	if opened.ok:
 		var remembered := _remember()
 		if not remembered.ok: opened["reference_warning"] = remembered.code
@@ -64,10 +64,10 @@ func launch(class_id: String = "", headless: bool = false) -> Dictionary:
 func toggle() -> Dictionary:
 	return stop() if launcher.running() else launch()
 
-func resume(headless: bool = false) -> Dictionary:
+func resume(headless: bool = false, hold_start: bool = false) -> Dictionary:
 	_refresh_identity()
 	if launcher.window_path.is_empty(): return _result({"ok":false,"code":"preview_missing"})
-	var result := launcher.request_action({"kind":"resume"}) if launcher.running() else launcher.resume_window("",headless)
+	var result := launcher.request_action({"kind":"resume"}) if launcher.running() else launcher.resume_window("",headless,hold_start)
 	if result.ok: _remember()
 	return _result(result)
 
@@ -88,7 +88,7 @@ func _process(delta: float) -> void:
 	if launcher.window_path.is_empty(): return
 	var current := launcher.state()
 	if not current.ok: return
-	var label: String = {"starting":"Preparando…","ready":"Preparando personagem…","active":"Jogando","suspended":"Suspenso","closed":"Encerrado","completed":"Concluído","error":"Teste recusado"}.get(current.state.state,current.state.state)
+	var label: String = {"starting":"Preparando…","ready":"Preparando personagem…","active":"Jogando","suspended":"Suspenso","closed":"Encerrado","completed":"Concluído","error":"Teste recusado","held":"Pronto · clique em Iniciar teste na janela"}.get(current.state.state,current.state.state)
 	message.text = label+" · revisão "+String(current.state.candidate_hash).substr(0,10)
 
 func _refresh_identity() -> void:
@@ -132,18 +132,18 @@ func _result(value: Dictionary) -> Dictionary:
 
 func authoring_commands() -> Array[Dictionary]:
 	var prefix := screen_id+"/gameplay/"
-	return [{"id":prefix+"launch","parameters":{"class_id":"base class?","headless":"boolean?"}},{"id":prefix+"resume","parameters":{"headless":"boolean?"}},{"id":prefix+"stop","parameters":{}},{"id":prefix+"inspect","parameters":{}},{"id":prefix+"select_class","parameters":{"class_id":"base class"}},{"id":prefix+"action","parameters":{"action":"closed gameplay action","session_id":"token?","request_id":"token?"}},{"id":prefix+"reply","parameters":{"request_id":"token","session_id":"token?","fingerprint":"hash?"}}]
+	return [{"id":prefix+"launch","parameters":{"class_id":"base class?","headless":"boolean?","hold_start":"boolean?"}},{"id":prefix+"resume","parameters":{"headless":"boolean?","hold_start":"boolean?"}},{"id":prefix+"stop","parameters":{}},{"id":prefix+"inspect","parameters":{}},{"id":prefix+"select_class","parameters":{"class_id":"base class"}},{"id":prefix+"action","parameters":{"action":"closed gameplay action","session_id":"token?","request_id":"token?"}},{"id":prefix+"reply","parameters":{"request_id":"token","session_id":"token?","fingerprint":"hash?"}}]
 
 func ax_command(id: String, args: Dictionary = {}) -> Dictionary:
 	var prefix := screen_id+"/gameplay/"
 	if not id.begins_with(prefix): return {"ok":false,"code":"action_missing"}
 	var action := id.trim_prefix(prefix)
 	if action == "launch":
-		if not args.keys().all(func(key: Variant) -> bool: return key in ["class_id","headless"]) or not args.get("class_id","") is String or not args.get("headless",false) is bool: return {"ok":false,"code":"arguments_invalid"}
-		return launch(args.get("class_id",""),args.get("headless",false))
+		if not args.keys().all(func(key: Variant) -> bool: return key in ["class_id","headless","hold_start"]) or not args.get("class_id","") is String or not args.get("headless",false) is bool or not args.get("hold_start",false) is bool: return {"ok":false,"code":"arguments_invalid"}
+		return launch(args.get("class_id",""),args.get("headless",false),args.get("hold_start",false))
 	if action == "resume":
-		if args.size() > 1 or (not args.is_empty() and (not args.has("headless") or not args.headless is bool)): return {"ok":false,"code":"arguments_invalid"}
-		return resume(args.get("headless",false))
+		if not args.keys().all(func(key: Variant) -> bool: return key in ["headless","hold_start"]) or not args.get("headless",false) is bool or not args.get("hold_start",false) is bool: return {"ok":false,"code":"arguments_invalid"}
+		return resume(args.get("headless",false),args.get("hold_start",false))
 	if action in ["stop","inspect"]:
 		if not args.is_empty(): return {"ok":false,"code":"arguments_invalid"}
 		return stop() if action == "stop" else inspect()

@@ -30,7 +30,7 @@ static func _text(value: Variant, limit: int = 256) -> bool:
 static func action_valid(value: Dictionary) -> bool:
 	if not value.get("kind") is String: return false
 	match value.kind:
-		"inspect","suspend","resume","restart","close": return _shape(value,["kind"])
+		"inspect","suspend","resume","restart","close","begin": return _shape(value,["kind"])
 		"interaction": return _shape(value,["kind","interaction_id"]) and _text(value.interaction_id)
 		"collect": return _shape(value,["kind","ticket_id"]) and _text(value.ticket_id)
 		"move","skill":

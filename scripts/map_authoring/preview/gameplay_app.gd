@@ -27,23 +27,46 @@ var caption: Label
 var suspend_button: Button
 var resume_button: Button
 var restart_button: Button
+## Optional human start gate and diagnostics (checkpoint31). Absent flag keeps prior flow.
+var hold_start := false
+var gate_layer: CanvasLayer
+var gate_label: Label
+var gate_button: Button
+var timings: Dictionary = {}
+var _boot_usec := 0
+var _metrics_elapsed := 0.0
+var _metrics_frames := 0
+var _metrics_max_ms := 0.0
+var _metrics_last_usec := 0
+var _metrics_lines := 0
+var _loading_since := 0
+var _hold_pending := false
+const METRICS_LIMIT := 7200
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS; process_priority = 100; mouse_filter = Control.MOUSE_FILTER_IGNORE
 	child_entered_tree.connect(_child_entered)
+	_boot_usec = Time.get_ticks_usec(); _metrics_last_usec = _boot_usec
 	_build_controls()
 	get_tree().auto_accept_quit = false
 	if not session.is_empty(): return
+	hold_start = hold_start or "--f9-hold-start" in OS.get_cmdline_user_args()
 	for argument: String in OS.get_cmdline_user_args():
 		if argument.begins_with("--f9-window="):
-			var opened := open_window(argument.trim_prefix("--f9-window="))
-			if opened.ok: start()
+			_boot.call_deferred(argument.trim_prefix("--f9-window="),true)
 			return
 		if argument.begins_with("--f9-session="):
-			var result := open(argument.trim_prefix("--f9-session="))
-			if result.ok: start()
+			_boot.call_deferred(argument.trim_prefix("--f9-session="),false)
 			return
 	_set_result(Candidate.fail("candidate_invalid"))
+
+func _boot(path: String, is_window: bool) -> void:
+	# Preparation runs off the main thread so the window keeps drawing and accepting input.
+	var opened: Dictionary
+	if is_window: opened = await open_window_async(path)
+	else: opened = await open_async(path)
+	if opened.ok: await _start_with_gate()
+	else: _show_gate("Não foi possível preparar o teste.",false)
 
 func open(path: String) -> Dictionary:
 	if claimed or is_instance_valid(host): return {"ok":false,"code":"preview_busy"}
@@ -51,6 +74,47 @@ func open(path: String) -> Dictionary:
 	if not resolved.ok: return _set_result(resolved)
 	if not window.is_empty() and (window.window.candidate_hash != resolved.session.candidate_hash or window.base_path != resolved.base_path): return _set_result(Candidate.fail("candidate_invalid"))
 	var built := Candidate.prepare(resolved.candidate)
+	return _finish_open(resolved,built)
+
+func open_async(path: String) -> Dictionary:
+	if claimed or busy or is_instance_valid(host): return {"ok":false,"code":"preview_busy"}
+	var job: Dictionary = await _prepare_async(path,window.duplicate(true))
+	var resolved: Dictionary = job.resolved
+	if not resolved.ok: return _set_result(resolved)
+	if not job.has("built"): return _set_result(Candidate.fail("candidate_invalid"))
+	return _finish_open(resolved,job.built)
+
+static func _load_job(path: String, owner_window: Dictionary) -> Dictionary:
+	# Same order as open(): resolve, window identity, then preparation.
+	var started := Time.get_ticks_usec()
+	var resolved := Launcher.resolve(path)
+	var job := {"resolved":resolved,"resolve_ms":(Time.get_ticks_usec()-started)/1000.0}
+	if not resolved.ok: return job
+	if not owner_window.is_empty() and (owner_window.window.candidate_hash != resolved.session.candidate_hash or owner_window.base_path != resolved.base_path): return job
+	started = Time.get_ticks_usec()
+	job["built"] = Candidate.prepare(resolved.candidate)
+	job["prepare_only_ms"] = (Time.get_ticks_usec()-started)/1000.0
+	return job
+
+func _prepare_async(path: String, owner_window: Dictionary) -> Dictionary:
+	busy = true; status = "starting"; _loading_since = Time.get_ticks_usec()
+	_show_gate("Carregando o mapa…",false); _refresh(); _write_status()
+	var started := Time.get_ticks_usec()
+	var worker := Thread.new()
+	var launched := worker.start(_load_job.bind(path,owner_window))
+	var job: Dictionary
+	if launched != OK: job = _load_job(path,owner_window)
+	else:
+		while worker.is_alive():
+			if gate_label != null: gate_label.text = "Carregando o mapa… %ds"%int((Time.get_ticks_usec()-started)/1000000.0)
+			await get_tree().process_frame
+		job = worker.wait_to_finish()
+	timings["prepare_ms"] = (Time.get_ticks_usec()-started)/1000.0
+	timings["resolve_ms"] = job.get("resolve_ms",0.0); timings["prepare_only_ms"] = job.get("prepare_only_ms",0.0)
+	busy = false; _loading_since = 0; _write_timings()
+	return job
+
+func _finish_open(resolved: Dictionary, built: Dictionary) -> Dictionary:
 	if not built.ok: return _set_result(built)
 	var acquired := Launcher.claim(resolved)
 	if not acquired.ok: return _set_result(acquired)
@@ -71,6 +135,76 @@ func open_window(path: String) -> Dictionary:
 	if not result.ok:
 		Launcher.release(window); window_claimed = false
 	return result
+
+func open_window_async(path: String) -> Dictionary:
+	if claimed or window_claimed or is_instance_valid(host): return {"ok":false,"code":"preview_busy"}
+	var descriptor := Launcher.window_header(path)
+	if not descriptor.ok: return _set_result(descriptor)
+	var acquired := Launcher.claim_window(descriptor)
+	if not acquired.ok: return _set_result(acquired)
+	window = descriptor; window_claimed = true
+	var result: Dictionary = await open_async(window.window.initial_session)
+	if not result.ok:
+		Launcher.release(window); window_claimed = false
+	return result
+
+func _start_with_gate() -> Dictionary:
+	_show_gate("Montando o mundo e os atores…",false)
+	await get_tree().process_frame; await get_tree().process_frame
+	var started := Time.get_ticks_usec()
+	_hold_pending = hold_start
+	var result := start()
+	_hold_pending = false
+	timings["start_ms"] = (Time.get_ticks_usec()-started)/1000.0
+	await get_tree().process_frame
+	timings["first_frame_after_start_ms"] = (Time.get_ticks_usec()-started)/1000.0
+	timings["boot_to_world_ms"] = (Time.get_ticks_usec()-_boot_usec)/1000.0
+	_write_timings()
+	if not result.ok: _show_gate("Não foi possível montar o teste.",false); return result
+	if hold_start and is_instance_valid(host): _hold()
+	else: _hide_gate()
+	return result
+
+func _hold() -> void:
+	get_tree().paused = true; status = "held"
+	_show_gate("Mapa pronto · preparo %.1fs · montagem %.1fs\nO jogo está pausado até você iniciar."%[float(timings.get("prepare_ms",0.0))/1000.0,float(timings.get("start_ms",0.0))/1000.0],true)
+	_refresh(); _write_status()
+
+func begin() -> Dictionary:
+	if status != "held" or not is_instance_valid(host): return {"ok":false,"code":"preview_not_held"}
+	status = host.campaign_runtime.state.lifecycle
+	get_tree().paused = status != "active"
+	timings["begin_after_boot_ms"] = (Time.get_ticks_usec()-_boot_usec)/1000.0
+	_write_timings(); _hide_gate()
+	return _set_result({"ok":true})
+
+func _show_gate(text: String, startable: bool) -> void:
+	if gate_layer == null: return
+	gate_layer.visible = true; gate_label.text = text; gate_button.visible = startable
+	if startable: gate_button.grab_focus()
+
+func _hide_gate() -> void:
+	if gate_layer != null: gate_layer.visible = false
+
+func _write_timings() -> void:
+	var directory: String = window.directory if not window.is_empty() else (session.directory if not session.is_empty() else "")
+	if directory.is_empty(): return
+	Launcher.write_atomic(directory.path_join("timings.json"),JSON.stringify(timings).to_utf8_buffer())
+
+func _record_metrics(delta: float) -> void:
+	var now := Time.get_ticks_usec()
+	_metrics_frames += 1; _metrics_max_ms = maxf(_metrics_max_ms,(now-_metrics_last_usec)/1000.0); _metrics_last_usec = now
+	_metrics_elapsed += delta
+	if _metrics_elapsed < 1.0 or _metrics_lines >= METRICS_LIMIT: return
+	var directory: String = window.directory if not window.is_empty() else (session.directory if not session.is_empty() else "")
+	if directory.is_empty(): return
+	var path := directory.path_join("metrics.jsonl")
+	var file := FileAccess.open(path,FileAccess.READ_WRITE) if FileAccess.file_exists(path) else FileAccess.open(path,FileAccess.WRITE)
+	if file == null: return
+	file.seek_end()
+	var line := {"t_s":snappedf((now-_boot_usec)/1000000.0,0.01),"status":status,"paused":get_tree().paused,"frames":_metrics_frames,"window_s":snappedf(_metrics_elapsed,0.001),"max_frame_ms":snappedf(_metrics_max_ms,0.01),"fps":Performance.get_monitor(Performance.TIME_FPS),"process_ms":snappedf(Performance.get_monitor(Performance.TIME_PROCESS)*1000.0,0.01),"physics_ms":snappedf(Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS)*1000.0,0.01),"nodes":Performance.get_monitor(Performance.OBJECT_NODE_COUNT)}
+	file.store_line(JSON.stringify(line)); file.close()
+	_metrics_lines += 1; _metrics_elapsed = 0.0; _metrics_frames = 0; _metrics_max_ms = 0.0
 
 func start() -> Dictionary:
 	if not claimed or busy or is_instance_valid(host): return _set_result({"ok":false,"code":"preview_busy"})
@@ -164,7 +298,7 @@ func _adopt(value: RunController) -> Dictionary:
 	var attached := value.attach_expedition_view(view,prepared.manifest._data.input.traversal.height)
 	if not attached.ok: view.free(); get_tree().paused = true; return _set_result(attached)
 	if is_instance_valid(old): old.get_parent().remove_child(old); old.queue_free()
-	host = value; status = host.campaign_runtime.state.lifecycle
+	host = value; status = "held" if _hold_pending else host.campaign_runtime.state.lifecycle
 	if host.class_button != null: host.class_button.hide()
 	if host.class_overlay != null: host.class_overlay.hide()
 	if host.route_camera != null:
@@ -201,6 +335,9 @@ func suspend() -> Dictionary:
 		ExpeditionSceneFlow.lobby(host); return {"ok":true}
 	var panel := host.ui_root.get_node_or_null("ExpeditionStatus") as ExpeditionStatusPanel
 	if panel == null: return _set_result({"ok":false,"code":"preview_detached"})
+	if status == "held":
+		# The gate only pauses presentation; canonical suspension needs a running tree.
+		status = host.campaign_runtime.state.lifecycle; get_tree().paused = false; _hide_gate()
 	busy = true
 	var result: Dictionary = await panel.run_action({"kind":"suspend"})
 	busy = false
@@ -217,8 +354,9 @@ func restart() -> Dictionary:
 	if not created.ok: return _set_result(created)
 	Launcher.release(session); claimed = false
 	session = {}; prepared = {}; facade = null; host = null
-	var opened := open(created.path)
-	return start() if opened.ok else opened
+	var opened: Dictionary = await open_async(created.path)
+	if not opened.ok: return opened
+	return await _start_with_gate()
 
 func request_close() -> void:
 	if busy: return
@@ -241,6 +379,7 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST: request_close()
 
 func _process(delta: float) -> void:
+	_record_metrics(delta)
 	if is_instance_valid(host):
 		if host.class_button != null: host.class_button.hide()
 		_localize_stage()
@@ -289,7 +428,14 @@ func _build_controls() -> void:
 	suspend_button = _button(row,"Suspender",suspend)
 	resume_button = _button(row,"Retomar",resume)
 	restart_button = _button(row,"Reiniciar",restart)
-	_button(row,"Fechar",request_close); _refresh()
+	_button(row,"Fechar",request_close)
+	gate_layer = CanvasLayer.new(); gate_layer.layer = 99; gate_layer.visible = false; add_child(gate_layer)
+	var shade := ColorRect.new(); shade.color = Color(0.03,0.04,0.06,0.82); shade.set_anchors_preset(Control.PRESET_FULL_RECT); shade.mouse_filter = Control.MOUSE_FILTER_STOP; gate_layer.add_child(shade)
+	var center := CenterContainer.new(); center.set_anchors_preset(Control.PRESET_FULL_RECT); gate_layer.add_child(center)
+	var box := VBoxContainer.new(); box.alignment = BoxContainer.ALIGNMENT_CENTER; box.add_theme_constant_override("separation",14); center.add_child(box)
+	gate_label = Label.new(); gate_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; gate_label.add_theme_font_size_override("font_size",22); box.add_child(gate_label)
+	gate_button = Button.new(); gate_button.text = "Iniciar teste"; gate_button.custom_minimum_size = Vector2(220,48); gate_button.visible = false; gate_button.pressed.connect(func() -> void: begin()); box.add_child(gate_button)
+	_refresh()
 
 func _button(parent: Node, text: String, callback: Callable) -> Button:
 	var button := Button.new(); button.text = text; button.pressed.connect(callback); parent.add_child(button); return button
@@ -299,7 +445,7 @@ func _refresh() -> void:
 	_localize_stage()
 	var revision: String = session.session.candidate_hash.substr(0,10) if not session.is_empty() else (String(window.window.candidate_hash).substr(0,10) if not window.is_empty() else "—")
 	var message: String = last_result.get("message",_error_text(last_result)) if not last_result.is_empty() and not last_result.ok else ""
-	caption.text = "TESTE DESCARTÁVEL · %s · %s%s"%[revision,{"active":"jogando","ready":"pronto","suspended":"suspenso","completed":"concluído","error":"falha","closed":"encerrado"}.get(status,status),(" · "+message) if not message.is_empty() else ""]
+	caption.text = "TESTE DESCARTÁVEL · %s · %s%s"%[revision,{"active":"jogando","ready":"pronto","starting":"carregando","held":"pronto para iniciar","suspended":"suspenso","completed":"concluído","error":"falha","closed":"encerrado"}.get(status,status),(" · "+message) if not message.is_empty() else ""]
 	suspend_button.disabled = busy or not is_instance_valid(host)
 	resume_button.disabled = busy or is_instance_valid(host) or facade == null or status not in ["suspended","error"]
 	restart_button.disabled = busy or session.is_empty()
@@ -364,6 +510,7 @@ func command(action: Dictionary) -> Dictionary:
 		"suspend": return await suspend()
 		"resume": return resume()
 		"restart": return await restart()
+		"begin": return begin()
 		"close": await request_close(); return {"ok":true}
 	if not _live_host() or host._memory_snapshot_pending: return {"ok":false,"code":"command_busy"}
 	var value := Protocol.normalize_action(action)

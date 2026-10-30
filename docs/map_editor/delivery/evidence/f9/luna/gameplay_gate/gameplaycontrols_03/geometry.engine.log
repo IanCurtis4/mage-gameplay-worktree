@@ -1,0 +1,32 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_CONTROLS_CHECK authored_interactions_compile_without_synthetic_enemies true
+F9_CONTROLS_CHECK disposable_skill_fixture_uses_canonical_profile_admin true
+F9_CONTROLS_CHECK real_mage_boots_with_existing_learned_skill true
+F9_CONTROLS_CHECK fingerprint_survives_json_integer_float_roundtrip true
+F9_CONTROLS_CHECK boolean_coordinate_rejected true
+F9_CONTROLS_CHECK executable_or_unknown_payload_field_rejected true
+F9_CONTROLS_CHECK boolean_revision_rejected true
+F9_CONTROLS_CHECK inspect_reports_actual_resources_and_geometry true
+F9_CONTROLS_CHECK stale_geometry_refuses_without_moving_actor true
+F9_CONTROLS_CHECK remote_move_uses_real_pointer_authority true
+F9_CONTROLS_CHECK remote_move_advances_real_world_point true
+F9_CONTROLS_CHECK skill_preview_does_not_spend_sp true
+F9_CONTROLS_CHECK skill_request_accepted_before_ack_io_failure true
+F9_CONTROLS_CHECK actual_cast_spends_sp_and_starts_cooldown true
+F9_CONTROLS_CHECK actual_world_field_is_emitted true
+F9_CONTROLS_CHECK suspend_during_failed_ack_preserves_real_graph true
+F9_CONTROLS_CHECK nonzero_skill_state_is_durably_restorable true
+F9_CONTROLS_CHECK failed_ack_never_redispatches_real_skill true
+F9_CONTROLS_CHECK ack_retry_publishes_cached_result true
+F9_CONTROLS_CHECK completed_request_replay_is_cached true
+F9_CONTROLS_CHECK request_id_cannot_change_payload true
+F9_CONTROLS_CHECK remote_resume_keeps_exact_nonzero_sp_and_cooldown true
+F9_CONTROLS_CHECK existing_interaction_approach_is_real_movement true
+F9_CONTROLS_CHECK existing_refuge_interaction_suspends_canonically true
+F9_CONTROLS_CHECK remote_restart_changes_run_but_keeps_window true
+F9_CONTROLS_CHECK old_run_command_cannot_cross_restart true
+F9_CONTROLS_CHECK restart_does_not_copy_admin_fixture_into_fresh_profile true
+F9_CONTROLS_CHECK duplicate_json_is_rejected_without_dispatch true
+F9_CONTROLS_CHECK close_reply_is_published_and_leases_released true
+F9_CONTROLS_RESULT {"checks":[{"id":"authored_interactions_compile_without_synthetic_enemies","ok":true},{"id":"disposable_skill_fixture_uses_canonical_profile_admin","ok":true},{"id":"real_mage_boots_with_existing_learned_skill","ok":true},{"id":"fingerprint_survives_json_integer_float_roundtrip","ok":true},{"id":"boolean_coordinate_rejected","ok":true},{"id":"executable_or_unknown_payload_field_rejected","ok":true},{"id":"boolean_revision_rejected","ok":true},{"id":"inspect_reports_actual_resources_and_geometry","ok":true},{"id":"stale_geometry_refuses_without_moving_actor","ok":true},{"id":"remote_move_uses_real_pointer_authority","ok":true},{"id":"remote_move_advances_real_world_point","ok":true},{"id":"skill_preview_does_not_spend_sp","ok":true},{"id":"skill_request_accepted_before_ack_io_failure","ok":true},{"id":"actual_cast_spends_sp_and_starts_cooldown","ok":true},{"id":"actual_world_field_is_emitted","ok":true},{"id":"suspend_during_failed_ack_preserves_real_graph","ok":true},{"id":"nonzero_skill_state_is_durably_restorable","ok":true},{"id":"failed_ack_never_redispatches_real_skill","ok":true},{"id":"ack_retry_publishes_cached_result","ok":true},{"id":"completed_request_replay_is_cached","ok":true},{"id":"request_id_cannot_change_payload","ok":true},{"id":"remote_resume_keeps_exact_nonzero_sp_and_cooldown","ok":true},{"id":"existing_interaction_approach_is_real_movement","ok":true},{"id":"existing_refuge_interaction_suspends_canonically","ok":true},{"id":"remote_restart_changes_run_but_keeps_window","ok":true},{"id":"old_run_command_cannot_cross_restart","ok":true},{"id":"restart_does_not_copy_admin_fixture_into_fresh_profile","ok":true},{"id":"duplicate_json_is_rejected_without_dispatch","ok":true},{"id":"close_reply_is_published_and_leases_released","ok":true}],"count":29,"ok":true}

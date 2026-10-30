@@ -113,6 +113,10 @@ static func window_state(path: String) -> Dictionary:
 	var status_path: String = String(window.directory).path_join("status.json")
 	if not FileAccess.file_exists(status_path): return {"ok":true,"state":{"state":"starting","current_session_path":window.window.initial_session,"candidate_hash":window.window.candidate_hash,"window_id":window.window.window_id}}
 	var file := FileAccess.open(status_path,FileAccess.READ)
+	# The window replaces status.json atomically; a reader can briefly lose that race on Windows.
+	for attempt: int in 3:
+		if file != null or not FileAccess.file_exists(status_path): break
+		OS.delay_msec(5); file = FileAccess.open(status_path,FileAccess.READ)
 	if file == null or file.get_length() > 128*1024: return Candidate.fail("candidate_invalid")
 	var raw: Variant = JSON.parse_string(file.get_as_text()); file.close()
 	if not raw is Dictionary or raw.get("window_id") != window.window.window_id or raw.get("candidate_hash") != window.window.candidate_hash or not raw.get("current_session_path") is String or not raw.get("state") is String: return Candidate.fail("candidate_invalid")
@@ -148,13 +152,13 @@ static func release(resolved: Dictionary) -> void:
 	if not FileAccess.file_exists(lock.path_join("pid.txt")) or FileAccess.get_file_as_string(lock.path_join("pid.txt")) != str(OS.get_process_id()): return
 	DirAccess.remove_absolute(lock.path_join("pid.txt")); DirAccess.remove_absolute(lock)
 
-func launch(kind: String, package: Dictionary, current_source_hash: String, class_id: String = "swordsman", headless: bool = false) -> Dictionary:
+func launch(kind: String, package: Dictionary, current_source_hash: String, class_id: String = "swordsman", headless: bool = false, hold_start: bool = false) -> Dictionary:
 	if running(): return {"ok":false,"code":"preview_busy"}
 	var made := Candidate.create(kind,package,current_source_hash)
 	if not made.ok: return made
 	var created := create_session(made.candidate,class_id)
 	if not created.ok: return created
-	return open_session(created.path,headless)
+	return open_session(created.path,headless,hold_start)
 
 func running() -> bool:
 	if window_path.is_empty(): return process_id > 0 and OS.is_process_running(process_id)
@@ -166,7 +170,7 @@ func running() -> bool:
 	# A reloaded panel did not spawn this process and cannot probe its PID.
 	return DirAccess.dir_exists_absolute(String(window.directory).path_join("active.lock"))
 
-func open_session(path: String, headless: bool = false) -> Dictionary:
+func open_session(path: String, headless: bool = false, hold_start: bool = false) -> Dictionary:
 	if running(): return {"ok":false,"code":"preview_busy"}
 	var resolved := resolve(path)
 	if not resolved.ok: return resolved
@@ -178,16 +182,18 @@ func open_session(path: String, headless: bool = false) -> Dictionary:
 	args.append_array(["--log-file",String(window.directory).path_join("engine.log")])
 	if OS.has_feature("editor"): args.append_array(["--path",ProjectSettings.globalize_path("res://")])
 	args.append_array([SCENE,"--","--f9-window="+window.path])
+	# Human tests may keep the prepared world paused until "Iniciar teste".
+	if hold_start: args.append("--f9-hold-start")
 	process_id = OS.create_process(OS.get_executable_path(),args,false)
 	if process_id <= 0: return {"ok":false,"code":"preview_launch","message":"Não foi possível abrir a janela de teste."}
 	session_path = resolved.path; window_path = window.path
 	return {"ok":true,"session_path":session_path,"window_path":window_path,"process_id":process_id}
 
-func resume_window(path: String = "", headless: bool = false) -> Dictionary:
+func resume_window(path: String = "", headless: bool = false, hold_start: bool = false) -> Dictionary:
 	if path.is_empty(): path = window_path
 	var current := window_state(path)
 	if not current.ok: return current
-	return open_session(current.state.current_session_path,headless)
+	return open_session(current.state.current_session_path,headless,hold_start)
 
 func stop() -> Dictionary:
 	if not window_path.is_empty():

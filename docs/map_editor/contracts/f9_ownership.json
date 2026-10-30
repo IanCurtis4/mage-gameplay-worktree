@@ -2963,6 +2963,18 @@
       "owner": "Luna F9 (engine-generated)",
       "previous_owner": "new F9 file",
       "base_sha256": "69d81aaa57b7ebbf1c3b8a347d321df546c340289027bd1d34ba5100ff82b2b8"
+    },
+    {
+      "path": "tests/map_editor_gameplay_gate_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint31 start gate)",
+      "base_sha256": "726c7c6ed8828b2b35526b682d3ea5288a63704b9b9c9fbae16e10f1ed522d6e"
+    },
+    {
+      "path": "tests/map_editor_gameplay_gate_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint31 start gate)",
+      "base_sha256": "d934c7fb27b867c8089e0b7a686117b63de2fbaad872a047ae23c842fba7a2e5"
     }
   ],
   "read_only_shared": [
@@ -3570,6 +3582,45 @@
         "GameplayNative": 52
       },
       "limits": "batch union may admit positives an individual path would not; existence only, not shortest cost; Bosque App timings recorded separately"
+    },
+    "gameplay_start_gate": {
+      "state": "validated_increment_F9_still_open",
+      "base": "7452c2fc",
+      "human_request": "30/10: test looked stuck loading, character already dead, restart black; add a start button and check loading vs debug mode",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "files": [
+        "scripts/map_authoring/preview/gameplay_app.gd",
+        "scripts/map_authoring/preview/gameplay_launcher.gd",
+        "scripts/map_authoring/preview/gameplay_tools.gd",
+        "scripts/map_authoring/preview/gameplay_cli.gd",
+        "scripts/map_authoring/preview/gameplay_protocol.gd",
+        "tools/map_editor_completion/run.ps1"
+      ],
+      "test_files": [
+        "tests/map_editor_gameplay_gate_test.gd",
+        "tests/map_editor_gameplay_gate_test.gd.uid"
+      ],
+      "scope": "candidate resolve and prepare run on a Thread; hold_start/--f9-hold-start pauses after start() with status held and an Iniciar teste button; begin command only from held; async restart; timings.json and metrics.jsonl per window; window_state read retry",
+      "test_expected_checks": 24,
+      "validation": {
+        "GameplayGate": 24,
+        "GameplayWindow": 33,
+        "GameplayCli": 18,
+        "GameplayControls": 29,
+        "GameplayNative": 52,
+        "GameplayEditorNative": 22,
+        "CandidateBatch": 18
+      },
+      "measurements": {
+        "bosque_prepare_ms_thread": 93483.003,
+        "bosque_start_ms_main_thread": 31772.003,
+        "bosque_boot_to_world_ms": 144987.947,
+        "active_fps": "18-24",
+        "active_worst_frame_ms": 136.25,
+        "release_vs_debug_speedup_max": 1.3
+      },
+      "decision": "lag is not debug mode; long cross-seam WorldGeometry.path (55-87 s, no reuse) replanned by AI; human chose reusable navigation graph (contracts/f9_runtime_navigation.md option 1)",
+      "limits": "start() still on main thread; prepare revalidates candidate (~18 s); no navigation change in this increment"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"
