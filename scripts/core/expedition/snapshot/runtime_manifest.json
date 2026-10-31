@@ -517,7 +517,10 @@
       "_occupant_id",
       "_configuration_revision"
     ],
-    "omitted": {}
+    "omitted": {
+      "_pending": "transient background route request (checkpoint36); dropped on restore, the actor asks again",
+      "_pending_finished": "transient background route request (checkpoint36); dropped on restore, the actor asks again"
+    }
   },
   "res://scripts/core/expedition/spatial/world_effect_area.gd": {
     "revision": 1,
@@ -596,7 +599,14 @@
     "omitted": {
       "_support_index": "derived read-only support topology; empty after restore, lazily rebuilt from _stage on first query",
       "_navigation_epoch": "derived cache epoch for the cross-query navigation memo; restarts at 0 with an empty memo",
-      "_navigation_shared": "derived cross-query navigation predicate memo keyed by revisions, epoch and profile; empty after restore, refilled by queries"
+      "_navigation_shared": "derived cross-query navigation predicate memo keyed by revisions, epoch and profile; empty after restore, refilled by queries",
+      "navigation_async": "transient background navigation state (checkpoint36); empty after restore, the gameplay host re-enables it",
+      "_navigation_view": "transient background navigation state (checkpoint36); empty after restore, the gameplay host re-enables it",
+      "_navigation_view_key": "transient background navigation state (checkpoint36); empty after restore, the gameplay host re-enables it",
+      "_navigation_queue": "transient background navigation state (checkpoint36); empty after restore, the gameplay host re-enables it",
+      "_navigation_task": "transient background navigation state (checkpoint36); empty after restore, the gameplay host re-enables it",
+      "_navigation_running": "transient background navigation state (checkpoint36); empty after restore, the gameplay host re-enables it",
+      "_navigation_box": "transient background navigation state (checkpoint36); empty after restore, the gameplay host re-enables it"
     }
   },
   "res://scripts/core/expedition/spatial/world_ground_field.gd": {
@@ -1429,7 +1439,8 @@
       "encounter_active": "computed directly from serialized combat participation in expeditions, legacy backing otherwise",
       "_expedition_transaction_service": "external in-flight writer coordinator, never serialized; pending commands remain frozen in campaign",
       "_expedition_flush_running": "ephemeral scheduling guard; durable campaign pending_events is authoritative",
-      "expedition_entry_mode": "construction-only switch; restored hosts are passive and never rerun startup"
+      "expedition_entry_mode": "construction-only switch; restored hosts are passive and never rerun startup",
+      "_pending_world_click": "transient background ground-click route (checkpoint36); dropped on restore"
     },
     "omitted_signals": {
       "memory_snapshot_ready": "out-of-graph capture result consumer, emitted only after capture"

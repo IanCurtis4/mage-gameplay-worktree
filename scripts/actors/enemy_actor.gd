@@ -89,19 +89,30 @@ func _combat_target_reachable(maximum_range: float) -> bool:
 	if world_motion != null: return world_can_reach(player,maximum_range)
 	return global_position.distance_to(player.global_position) <= maximum_range and navigation != null and navigation.is_segment_clear(global_position,player.global_position,0.0)
 
+# Background search when the gameplay host enables it (checkpoint36): the mob
+# keeps its current route and asks again only after the answer arrives.
 func _world_plan(destination: ExpeditionWorldPoint) -> void:
+	if world_motion.plan_pending(): return
 	if not patrol.is_empty() and engagement_mode == &"returning":
 		if _repath_time > 0.0: return
 		_repath_time = 1.0
-		var planned := world_motion.plan(destination,world_motion.geometry.geometry_revision)
-		if not planned.ok:
-			world_motion.cancel(); world_ai_failure = planned.get("error_code",&"patrol_blocked")
-			patrol.state = "blocked"; patrol.error = String(world_ai_failure)
-		else: patrol.state = "interrupted"; patrol.error = ""; world_ai_failure = &""
+		var planned := world_motion.plan_async(destination,world_motion.geometry.geometry_revision,0,_patrol_return_planned)
+		if not planned.get("pending",false): _patrol_return_planned(planned)
 		return
 	if _repath_time > 0.0 and world_motion.has_route(): return
 	_repath_time = 0.45
-	if destination == null or not world_motion.plan(destination,world_motion.geometry.geometry_revision)["ok"]: world_motion.cancel()
+	if destination == null: world_motion.cancel(); return
+	var chased := world_motion.plan_async(destination,world_motion.geometry.geometry_revision,0,_world_chase_planned)
+	if not chased.get("pending",false): _world_chase_planned(chased)
+
+func _world_chase_planned(planned: Dictionary) -> void:
+	if not planned.get("ok",false): world_motion.cancel()
+
+func _patrol_return_planned(planned: Dictionary) -> void:
+	if not planned.ok:
+		world_motion.cancel(); world_ai_failure = planned.get("error_code",&"patrol_blocked")
+		patrol.state = "blocked"; patrol.error = String(world_ai_failure)
+	else: patrol.state = "interrupted"; patrol.error = ""; world_ai_failure = &""
 
 func _world_walk(delta: float) -> void:
 	if is_rooted() or is_stunned() or not world_motion.has_route(): return

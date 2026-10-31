@@ -1,0 +1,17 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+WP step {"click_ok":true,"code":"","i":1,"ms":332,"pending":false,"pos":"(265.7148, 0.0, 654.2861)","route_after_ms":41,"surface":"clearing/c_1c58e1b8efb1df2f_3_7_4_13","worst_ms":44.5}
+WP step {"click_ok":true,"code":"","i":2,"ms":0,"pending":false,"pos":"(265.7148, 0.0, 654.2861)","route_after_ms":-1,"surface":"clearing/c_1c58e1b8efb1df2f_3_7_4_13","worst_ms":0.0}
+WP step {"click_ok":true,"code":"","i":3,"ms":957,"pending":false,"pos":"(477.1436, 0.0, 682.8574)","route_after_ms":9,"surface":"clearing/c_1c58e1b8efb1df2f_7_6_1_14","worst_ms":45.9}
+WP step {"click_ok":true,"code":"","i":4,"ms":475,"pending":false,"pos":"(582.8574, 0.0, 697.1436)","route_after_ms":11,"surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":28.6}
+WP step {"click_ok":true,"code":"","i":5,"ms":498,"pending":false,"pos":"(688.5723, 0.0, 711.4287)","route_after_ms":9,"surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":98.4}
+WP step {"click_ok":true,"code":"","i":6,"ms":493,"pending":false,"pos":"(794.2861, 0.0, 725.7148)","route_after_ms":9,"surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":70.3}
+WP step {"click_ok":true,"code":"","i":7,"ms":477,"pending":false,"pos":"(900.0, 0.0, 740.0)","route_after_ms":8,"surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":46.1}
+WP step {"click_ok":true,"code":"","i":8,"ms":456,"pending":false,"pos":"(1005.715, 0.0, 754.2861)","route_after_ms":24,"surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":54.0}
+WP step {"click_ok":true,"code":"","i":9,"ms":493,"pending":false,"pos":"(1111.429, 0.0, 768.5723)","route_after_ms":8,"surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":51.6}
+WP step {"click_ok":false,"code":"occluded_surface","i":10,"ms":0,"pending":false,"pos":"(1111.429, 0.0, 768.5723)","route_after_ms":-1,"surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":0.0}
+WP step {"click_ok":false,"code":"occluded_surface","i":11,"ms":0,"pending":false,"pos":"(1111.429, 0.0, 768.5723)","route_after_ms":-1,"surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":0.0}
+WP step {"click_ok":true,"code":"","i":12,"ms":2403,"pending":true,"pos":"(1428.572, 0.0, 811.4287)","route_after_ms":794,"surface":"overpass/c_e33596bc5a5c9222_0_0_4_10","worst_ms":75.6}
+WP step {"click_ok":true,"code":"","i":13,"ms":477,"pending":false,"pos":"(1534.286, 0.0, 825.7148)","route_after_ms":11,"surface":"overpass/c_e33596bc5a5c9222_0_0_4_10","worst_ms":52.8}
+WP step {"click_ok":true,"code":"","i":14,"ms":450,"pending":false,"pos":"(1640.0, 0.0, 840.0)","route_after_ms":10,"surface":"overpass/c_e33596bc5a5c9222_0_0_4_10","worst_ms":48.2}
+WP_DONE

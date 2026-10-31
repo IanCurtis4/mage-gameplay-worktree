@@ -1,0 +1,19 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+CP long_frame {"dt_ms":108.8,"encounter":true,"kills":3,"queue":0,"t":8406}
+CP long_frame {"dt_ms":114.2,"encounter":true,"kills":3,"queue":0,"t":9438}
+CP long_frame {"dt_ms":151.7,"encounter":true,"kills":3,"queue":0,"t":12022}
+CP long_frame {"dt_ms":13325.8,"encounter":false,"kills":3,"queue":0,"t":26017}
+CP long_frame {"dt_ms":100.2,"encounter":false,"kills":3,"queue":0,"t":29162}
+CP long_frame {"dt_ms":108.6,"encounter":false,"kills":3,"queue":0,"t":31952}
+CP long_frame {"dt_ms":159.1,"encounter":false,"kills":3,"queue":0,"t":32497}
+CP long_frame {"dt_ms":115.9,"encounter":false,"kills":3,"queue":0,"t":32612}
+CP long_frame {"dt_ms":106.4,"encounter":false,"kills":3,"queue":0,"t":34733}
+CP long_frame {"dt_ms":105.2,"encounter":false,"kills":3,"queue":0,"t":36965}
+CP long_frame {"dt_ms":105.1,"encounter":false,"kills":3,"queue":0,"t":37508}
+CP long_frame {"dt_ms":107.6,"encounter":false,"kills":3,"queue":0,"t":37739}
+CP long_frame {"dt_ms":104.5,"encounter":false,"kills":3,"queue":0,"t":37843}
+CP long_frame {"dt_ms":103.5,"encounter":false,"kills":3,"queue":0,"t":39803}
+CP long_frame {"dt_ms":108.1,"encounter":false,"kills":3,"queue":0,"t":40527}
+CP long_frame {"dt_ms":108.0,"encounter":false,"kills":3,"queue":0,"t":41029}
+CP_RESULT {"alive":true,"async":true,"frames":1054,"kills":3,"max":13325.797,"over_100ms":16,"over_250ms":1,"over_50ms":145,"p50":23.35,"p99":106.359}

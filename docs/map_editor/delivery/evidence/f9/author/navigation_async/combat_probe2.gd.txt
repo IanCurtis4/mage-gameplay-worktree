@@ -1,0 +1,47 @@
+extends SceneTree
+## Diagnostic (Sol, checkpoint36): frame times while fighting on the Bosque, with
+## background navigation on or off (--async=1/0).
+const Launcher = preload("res://scripts/map_authoring/preview/gameplay_launcher.gd")
+const App = preload("res://scripts/map_authoring/preview/gameplay_app.gd")
+var app: App
+func _initialize() -> void: run.call_deferred()
+func alive_host() -> bool: return is_instance_valid(app) and is_instance_valid(app.host) and is_instance_valid(app.host.player) and app.host.player.is_alive()
+func run() -> void:
+	var path := ""; var async := true
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--candidate="): path = arg.trim_prefix("--candidate=")
+		if arg == "--async=0": async = false
+	var candidate: Variant = bytes_to_var(FileAccess.get_file_as_bytes(path))
+	var created := Launcher.create_session(candidate)
+	var window := Launcher.create_window(created.path) if created.ok else {"ok":false}
+	app = App.new(); app.quit_on_close = false; app.hold_start = true; root.add_child(app); current_scene = app
+	var opened: Dictionary = await app.open_window_async(window.path)
+	var started: Dictionary = await app._start_with_gate() if opened.ok else {"ok":false}
+	if not started.ok: print("CP start_failed"); quit(1); return
+	var main = app.host
+	app.begin()
+	main.expedition_view.geometry.navigation_async = async
+	var start := Time.get_ticks_msec(); var last := Time.get_ticks_usec(); var frames: Array[float] = []; var kills := 0; var busy := 0; var nav_frames: Array[float] = []
+	var current: CombatActor
+	while alive_host() and Time.get_ticks_msec()-start < 45000:
+		await process_frame
+		var dt := (Time.get_ticks_usec()-last)/1000.0; last = Time.get_ticks_usec()
+		if not alive_host(): break
+		main = app.host
+		if main.expedition_view != null and main.expedition_view.geometry.navigation_async != async: main.expedition_view.geometry.navigation_async = async
+		frames.append(dt)
+		if main.expedition_view != null and main.expedition_view.geometry.navigation_pending() > 0: busy += 1; nav_frames.append(dt)
+		if dt > 100.0: print("CP long_frame "+JSON.stringify({"t":Time.get_ticks_msec()-start,"dt_ms":snappedf(dt,0.1),"kills":kills,"encounter":main.encounter_active,"queue":main.expedition_view.geometry.navigation_pending() if main.expedition_view != null else -1}))
+		if current != null and (not is_instance_valid(current) or not current.is_alive()): kills += 1; current = null
+		if current == null:
+			var best := 400.0
+			for e: CombatActor in main.enemies:
+				if is_instance_valid(e) and e.is_alive():
+					var d: float = main.player.world_point().position.distance_to(e.world_point().position)
+					if d < best: best = d; current = e
+			if current != null: main.spatial_pointer_move(current.global_position+Vector2(0,-26))
+	frames.sort(); nav_frames.sort()
+	var n := frames.size()
+	var over := func(limit: float) -> int: return frames.filter(func(v: float) -> bool: return v > limit).size()
+	print("CP_RESULT "+JSON.stringify({"async":async,"frames":n,"kills":kills,"alive":alive_host(),"p50":frames[n/2] if n > 0 else 0,"p99":frames[int(n*0.99)] if n > 0 else 0,"max":frames[-1] if n > 0 else 0,"over_50ms":over.call(50.0),"over_100ms":over.call(100.0),"over_250ms":over.call(250.0),"busy_frames":busy,"busy_p50":(nav_frames[nav_frames.size()/2] if not nav_frames.is_empty() else 0.0)}))
+	quit(0)

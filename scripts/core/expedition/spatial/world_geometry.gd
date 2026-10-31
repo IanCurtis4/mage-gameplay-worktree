@@ -19,6 +19,32 @@ var _segments: Dictionary[String, WorldSolidSegment] = {}
 var _solid_slabs: Array[AABB] = []
 var _occupancy: Dictionary[String, Dictionary] = {}
 var _support_index: Dictionary = {}
+## Background navigation (checkpoint36, contracts/f9_navigation_async.md).
+## Off by default: tests, editor and headless runs stay synchronous. All fields
+## below are transient and omitted from snapshots.
+var navigation_async := false
+var _navigation_view: WorldGeometry
+var _navigation_view_key: Array = []
+var _navigation_queue: Array[PathRequest] = []
+var _navigation_task := -1
+var _navigation_running: PathRequest
+var _navigation_box: Dictionary = {}
+
+class PathRequest extends RefCounted:
+	var from: ExpeditionWorldPoint
+	var to: ExpeditionWorldPoint
+	var profile: Dictionary = {}
+	var revision := 0
+	var priority := 0
+	var owner: WeakRef
+	var state := &"queued"
+	var result: Dictionary = {}
+	var queued_usec := 0
+	var compute_usec := 0
+	var finished_usec := 0
+	func done() -> bool: return state == &"done"
+	func cancel() -> void:
+		if state == &"queued" or state == &"running": state = &"cancelled"
 
 func configure(manifest: ExpeditionManifest, stage_id: String) -> Dictionary:
 	if manifest == null: return _failure(&"invalid_manifest")
@@ -27,7 +53,8 @@ func configure(manifest: ExpeditionManifest, stage_id: String) -> Dictionary:
 		if stage["stage_id"] == stage_id:
 			if not _stage_prisms_valid(stage): return _failure(&"invalid_manifest")
 			_stage = stage.duplicate(true)
-			_support_index.clear()
+			# A background view may still read the previous index: replace, never clear.
+			_support_index = {}
 			_solid_slabs.clear()
 			# Preserve F0's distinction between authored solids and planar blockers.
 			for instance: Dictionary in stage["part_instances"]:
@@ -160,6 +187,87 @@ func remove_occupant(id: String) -> void:
 
 func path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictionary, revision: int) -> Dictionary:
 	return _path(from,to,profile,revision,null)
+
+# Same answer as path(). With navigation_async on, only the graph search runs on
+# a worker thread; invalid input and the straight route are answered here.
+func request_path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictionary, revision: int, owner: Object = null, priority: int = 0) -> PathRequest:
+	var request := PathRequest.new()
+	request.revision = revision; request.priority = priority; request.queued_usec = Time.get_ticks_usec()
+	if owner != null: request.owner = weakref(owner)
+	if from == null or to == null: _navigation_finish(request,_failure(&"invalid_support")); return request
+	request.from = ExpeditionWorldPoint.create(from.stage_id,from.surface_id,from.position)
+	request.to = ExpeditionWorldPoint.create(to.stage_id,to.surface_id,to.position)
+	request.profile = profile.duplicate(true)
+	if not navigation_async: _navigation_finish(request,path(request.from,request.to,request.profile,revision)); return request
+	if not _current(revision) or not _profile_valid(profile) or not _candidate_point(request.from,profile["radius"],profile["height"],null) or not _candidate_point(request.to,profile["radius"],profile["height"],null):
+		_navigation_finish(request,path(request.from,request.to,request.profile,revision)); return request
+	var direct := _navigation_direct(request.from,request.to,request.profile,revision,null)
+	if direct.ok: _navigation_finish(request,direct); return request
+	var index := _navigation_queue.size()
+	while index > 0 and _navigation_queue[index-1].priority < priority: index -= 1
+	_navigation_queue.insert(index,request)
+	navigation_pump()
+	return request
+
+func navigation_pending() -> int:
+	return _navigation_queue.size()+(1 if _navigation_task >= 0 else 0)
+
+# Collect a finished task, deliver it, and start the next queued request.
+func navigation_pump() -> void:
+	if _navigation_task >= 0:
+		if not WorkerThreadPool.is_task_completed(_navigation_task): return
+		WorkerThreadPool.wait_for_task_completion(_navigation_task)
+		_navigation_task = -1
+		var request := _navigation_running; var box := _navigation_box
+		_navigation_running = null; _navigation_box = {}
+		if request.state == &"running":
+			request.compute_usec = int(box.get("usec",0))
+			var result: Dictionary = box.get("result",_failure(&"navigation_budget_exceeded"))
+			_navigation_finish(request,result if _current(request.revision) else _failure(&"stale_geometry"))
+			_navigation_deliver(request)
+	while _navigation_task < 0 and not _navigation_queue.is_empty():
+		var next: PathRequest = _navigation_queue.pop_front()
+		if next.state != &"queued": continue
+		if not _current(next.revision):
+			_navigation_finish(next,_failure(&"stale_geometry")); _navigation_deliver(next); continue
+		var view := _navigation_current_view()
+		next.state = &"running"; _navigation_running = next; _navigation_box = {}
+		_navigation_task = WorkerThreadPool.add_task(_navigation_work.bind(view,next.from,next.to,next.profile,next.revision,_navigation_box),false,"world_navigation")
+
+func _navigation_finish(request: PathRequest, result: Dictionary) -> void:
+	request.result = result; request.state = &"done"; request.finished_usec = Time.get_ticks_usec()
+
+func _navigation_deliver(request: PathRequest) -> void:
+	var owner: Object = request.owner.get_ref() if request.owner != null else null
+	if owner != null and owner.has_method("_navigation_delivered"): owner._navigation_delivered(request)
+
+# Runs on a worker thread. It touches only the frozen view and its own box.
+func _navigation_work(view: WorldGeometry, from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictionary, revision: int, box: Dictionary) -> void:
+	var started := Time.get_ticks_usec()
+	box["result"] = view.path(from,to,profile,revision)
+	box["usec"] = Time.get_ticks_usec()-started
+
+# Read-only copy for the worker: _stage and _support_index are never mutated in
+# place after configure, the mutable containers are copied. Its memo is private.
+func _navigation_current_view() -> WorldGeometry:
+	var key := [configuration_revision,geometry_revision,_navigation_epoch]
+	if _navigation_view != null and _navigation_view_key == key: return _navigation_view
+	_ensure_support_index()
+	var view := WorldGeometry.new()
+	view._stage = _stage; view._support_index = _support_index
+	view._temporary.assign(_temporary); view._segments.assign(_segments); view._solid_slabs.assign(_solid_slabs)
+	view.geometry_revision = geometry_revision; view.configuration_revision = configuration_revision; view._navigation_epoch = _navigation_epoch
+	_navigation_view = view; _navigation_view_key = key
+	return view
+
+# The local-edge test of the navigation graph (exact sweep and full support),
+# used to join a route computed in the background to an actor that moved on.
+func segment_walkable(surface_id: String, a: Vector3, b: Vector3, profile: Dictionary, revision: int) -> bool:
+	if not _current(revision) or not _profile_valid(profile) or _cell(surface_id).is_empty(): return false
+	return _navigation_clear(a,b,profile,null,surface_id,{}) and _navigation_fraction(_cell(surface_id),a,b,profile,{}) >= 1.0-EPS
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE and _navigation_task >= 0: WorkerThreadPool.wait_for_task_completion(_navigation_task)
 
 func _navigation_invalidate() -> void:
 	_navigation_epoch += 1; _navigation_shared = {}

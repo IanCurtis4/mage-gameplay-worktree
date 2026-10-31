@@ -1,0 +1,5 @@
+ERROR: coincident surface seam is refused rather than choosing floor by order: { "ok": true, "error_code": &"", "geometry_revision": 1, "data": { "point": { "stage_id": "sample", "surface_id": "sample/root/surface/floor", "position": (300.0, 0.0, 150.0) }, "normal": (0.0, 1.0, 0.0) } }
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e07_f1_presentation_test.gd:8)
+       [1] _run (res://tests/e07_f1_presentation_test.gd:55)

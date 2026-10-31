@@ -1,0 +1,17 @@
+﻿RUN NavigationAsync import 2026-10-31T12:29:40.8407354-03:00
+F9 NavigationAsync: True
+F9_ASYNC_METRICS {"organic":{"call_usec":5371,"compute_usec":1782327,"settle":{"frames":261,"ms":1787,"settled":true,"worst_pump_usec":508}},"port":{"call_usec":2381,"compute_usec":99090,"settle":{"frames":18,"ms":104,"settled":true,"worst_pump_usec":50}}}
+RUN GameplayNative 2026-10-31T12:30:22.2743278-03:00
+
+F9 GameplayNative: True
+RUN combat2_on_a 2026-10-31T12:32:03.8212726-03:00
+CP_RESULT {"alive":true,"async":true,"busy_frames":0,"busy_p50":0.0,"frames":1782,"kills":3,"max":11799.854,"over_100ms":1,"over_250ms":1,"over_50ms":16,"p50":15.386,"p99":49.179}
+RUN combat2_off_a 2026-10-31T12:35:53.1733348-03:00
+CP_RESULT {"alive":true,"async":false,"busy_frames":0,"busy_p50":0.0,"frames":1884,"kills":3,"max":11463.011,"over_100ms":3,"over_250ms":1,"over_50ms":35,"p50":14.297,"p99":58.002}
+RUN combat2_on_b 2026-10-31T12:39:45.2532301-03:00
+CP_RESULT {"alive":true,"async":true,"busy_frames":0,"busy_p50":0.0,"frames":1653,"kills":3,"max":12233.854,"over_100ms":3,"over_250ms":2,"over_50ms":54,"p50":15.002,"p99":64.332}
+RUN combat2_off_b 2026-10-31T12:43:34.2951489-03:00
+CP_RESULT {"alive":true,"async":false,"busy_frames":0,"busy_p50":0.0,"frames":1577,"kills":3,"max":12349.678,"over_100ms":3,"over_250ms":1,"over_50ms":66,"p50":15.396,"p99":68.77}
+DONE 2026-10-31T12:47:37.5132010-03:00
+
+

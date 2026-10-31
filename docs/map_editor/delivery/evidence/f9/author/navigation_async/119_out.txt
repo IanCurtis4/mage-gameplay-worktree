@@ -1,0 +1,51 @@
+﻿RUN NavigationAsync import 2026-10-31T12:13:30.2397197-03:00
+F9 NavigationAsync: False
+SCRIPT ERROR: Parse Error: Cannot infer the type of "kept" variable because the value doesn't have a set type.
+ERROR: Failed to load script "res://tests/map_editor_navigation_async_test.gd" with error "Parse error".
+RUN NavigationAstar 2026-10-31T12:14:00.5880981-03:00
+
+F9 NavigationAstar: True
+RUN NavigationLazy 2026-10-31T12:14:33.3967182-03:00
+F9 NavigationLazy: True
+RUN GameplayNative 2026-10-31T12:14:50.5828075-03:00
+F9 GameplayNative: False
+RUN walk6 2026-10-31T12:16:28.7384699-03:00
+WP step {"click_ok":true,"code":"","i":1,"ms":332,"pending":false,"pos":"(265.7148, 0.0, 654.2861)","route_after_ms":41,"surface":"clearing/c_1c58e1b8efb1df2f_3_7_4_13","worst_ms":44.5}
+WP step {"click_ok":true,"code":"","i":2,"ms":0,"pending":false,"pos":"(265.7148, 0.0, 654.2861)","route_after_ms":-1,"surface":"clearing/c_1c58e1b8efb1df2f_3_7_4_13","worst_ms":0.0}
+WP step {"click_ok":true,"code":"","i":3,"ms":957,"pending":false,"pos":"(477.1436, 0.0, 682.8574)","route_after_ms":9,"surface":"clearing/c_1c58e1b8efb1df2f_7_6_1_14","worst_ms":45.9}
+WP step {"click_ok":true,"code":"","i":4,"ms":475,"pending":false,"pos":"(582.8574, 0.0, 697.1436)","route_after_ms":11,"surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":28.6}
+WP step {"click_ok":true,"code":"","i":5,"ms":498,"pending":false,"pos":"(688.5723, 0.0, 711.4287)","route_after_ms":9,"surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":98.4}
+WP step {"click_ok":true,"code":"","i":6,"ms":493,"pending":false,"pos":"(794.2861, 0.0, 725.7148)","route_after_ms":9,"surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":70.3}
+WP step {"click_ok":true,"code":"","i":7,"ms":477,"pending":false,"pos":"(900.0, 0.0, 740.0)","route_after_ms":8,"surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":46.1}
+WP step {"click_ok":true,"code":"","i":8,"ms":456,"pending":false,"pos":"(1005.715, 0.0, 754.2861)","route_after_ms":24,"surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":54.0}
+WP step {"click_ok":true,"code":"","i":9,"ms":493,"pending":false,"pos":"(1111.429, 0.0, 768.5723)","route_after_ms":8,"surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":51.6}
+WP step {"click_ok":false,"code":"occluded_surface","i":10,"ms":0,"pending":false,"pos":"(1111.429, 0.0, 768.5723)","route_after_ms":-1,"surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":0.0}
+WP step {"click_ok":false,"code":"occluded_surface","i":11,"ms":0,"pending":false,"pos":"(1111.429, 0.0, 768.5723)","route_after_ms":-1,"surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":0.0}
+WP step {"click_ok":true,"code":"","i":12,"ms":2403,"pending":true,"pos":"(1428.572, 0.0, 811.4287)","route_after_ms":794,"surface":"overpass/c_e33596bc5a5c9222_0_0_4_10","worst_ms":75.6}
+WP step {"click_ok":true,"code":"","i":13,"ms":477,"pending":false,"pos":"(1534.286, 0.0, 825.7148)","route_after_ms":11,"surface":"overpass/c_e33596bc5a5c9222_0_0_4_10","worst_ms":52.8}
+WP step {"click_ok":true,"code":"","i":14,"ms":450,"pending":false,"pos":"(1640.0, 0.0, 840.0)","route_after_ms":10,"surface":"overpass/c_e33596bc5a5c9222_0_0_4_10","worst_ms":48.2}
+RUN combat_on 2026-10-31T12:19:40.7190543-03:00
+CP long_frame {"dt_ms":108.8,"encounter":true,"kills":3,"queue":0,"t":8406}
+CP long_frame {"dt_ms":114.2,"encounter":true,"kills":3,"queue":0,"t":9438}
+CP long_frame {"dt_ms":151.7,"encounter":true,"kills":3,"queue":0,"t":12022}
+CP long_frame {"dt_ms":13325.8,"encounter":false,"kills":3,"queue":0,"t":26017}
+CP long_frame {"dt_ms":100.2,"encounter":false,"kills":3,"queue":0,"t":29162}
+CP long_frame {"dt_ms":108.6,"encounter":false,"kills":3,"queue":0,"t":31952}
+CP long_frame {"dt_ms":159.1,"encounter":false,"kills":3,"queue":0,"t":32497}
+CP long_frame {"dt_ms":115.9,"encounter":false,"kills":3,"queue":0,"t":32612}
+CP long_frame {"dt_ms":106.4,"encounter":false,"kills":3,"queue":0,"t":34733}
+CP long_frame {"dt_ms":105.2,"encounter":false,"kills":3,"queue":0,"t":36965}
+CP long_frame {"dt_ms":105.1,"encounter":false,"kills":3,"queue":0,"t":37508}
+CP long_frame {"dt_ms":107.6,"encounter":false,"kills":3,"queue":0,"t":37739}
+CP long_frame {"dt_ms":104.5,"encounter":false,"kills":3,"queue":0,"t":37843}
+CP long_frame {"dt_ms":103.5,"encounter":false,"kills":3,"queue":0,"t":39803}
+CP long_frame {"dt_ms":108.1,"encounter":false,"kills":3,"queue":0,"t":40527}
+CP long_frame {"dt_ms":108.0,"encounter":false,"kills":3,"queue":0,"t":41029}
+CP_RESULT {"alive":true,"async":true,"frames":1054,"kills":3,"max":13325.797,"over_100ms":16,"over_250ms":1,"over_50ms":145,"p50":23.35,"p99":106.359}
+RUN combat_off 2026-10-31T12:23:37.4976026-03:00
+CP long_frame {"dt_ms":108.1,"encounter":true,"kills":1,"queue":0,"t":4678}
+CP long_frame {"dt_ms":12422.5,"encounter":false,"kills":3,"queue":0,"t":27805}
+CP_RESULT {"alive":true,"async":false,"frames":1654,"kills":3,"max":12422.5,"over_100ms":2,"over_250ms":1,"over_50ms":50,"p50":15.157,"p99":62.135}
+DONE 2026-10-31T12:27:36.2805225-03:00
+
+

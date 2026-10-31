@@ -11,6 +11,9 @@ var _cursor := 0
 var _route_revision := 0
 var _occupant_id := ""
 var _configuration_revision := 0
+## Transient background request (checkpoint36); omitted from snapshots.
+var _pending: WorldGeometry.PathRequest
+var _pending_finished := Callable()
 func configure(world: WorldGeometry, point: ExpeditionWorldPoint, profile: Dictionary, occupant_id: String) -> Dictionary:
 	if world == null: return {"ok":false,"error_code":&"invalid_geometry"}
 	var check := world.position_query(point,profile,world.geometry_revision)
@@ -30,6 +33,7 @@ func profile() -> Dictionary:
 func plan(destination: ExpeditionWorldPoint, revision: int) -> Dictionary:
 	if geometry == null: return {"ok":false,"error_code":&"invalid_geometry"}
 	if not is_current_world(): return _failure(&"world_reconfigured")
+	_drop_pending()
 	var result := geometry.path(_point,destination,_profile,revision)
 	if not result["ok"]: return result
 	_route = result["data"]["points"].duplicate(true)
@@ -38,18 +42,56 @@ func plan(destination: ExpeditionWorldPoint, revision: int) -> Dictionary:
 	return result
 ## Installs a route the caller already computed with geometry.path for this exact
 ## point and profile at `revision`, instead of searching the same route twice.
-## Anything else (moved point, other revision, empty route) falls back to plan().
-func adopt_route(result: Dictionary, destination: ExpeditionWorldPoint, revision: int) -> Dictionary:
+## A route computed in the background for an actor that kept walking is joined
+## at the current point when that first segment passes the graph's local-edge
+## test. Another revision, an empty route or a route that cannot be joined fall
+## back to plan(), or fail when replan is false.
+func adopt_route(result: Dictionary, destination: ExpeditionWorldPoint, revision: int, replan: bool = true) -> Dictionary:
 	if not result.get("ok",false): return result
-	if geometry == null or not is_current_world() or revision != geometry.geometry_revision: return plan(destination,revision)
-	var points: Array = result["data"].get("points",[])
-	if points.is_empty() or _point == null or Vector3(points[0]["position"]).distance_to(_point.position) > WorldGeometry.EPS or points[0]["surface_id"] != _point.surface_id: return plan(destination,revision)
+	if geometry == null or not is_current_world() or revision != geometry.geometry_revision: return plan(destination,revision) if replan else _failure(&"stale_geometry")
+	_drop_pending()
+	var points: Array = _joined(result["data"].get("points",[]),revision)
+	if points.is_empty(): return plan(destination,revision) if replan else _failure(&"route_moved")
 	_route = points.duplicate(true)
 	_cursor = 1
 	_route_revision = revision
-	return result
+	if points == result["data"].get("points",[]): return result
+	var joined := result.duplicate(true); joined["data"]["points"] = points.duplicate(true)
+	return joined
+func _joined(points: Array, revision: int) -> Array:
+	if points.is_empty() or _point == null: return []
+	if Vector3(points[0]["position"]).distance_to(_point.position) <= WorldGeometry.EPS and points[0]["surface_id"] == _point.surface_id: return points
+	for index: int in [1,0]:
+		if index >= points.size() or points[index]["surface_id"] != _point.surface_id: continue
+		if geometry.segment_walkable(_point.surface_id,_point.position,points[index]["position"],_profile,revision):
+			return [_point.to_data()]+points.slice(index)
+	return []
+## With navigation_async off this is plan(). On, the graph search runs in the
+## background; the actor keeps its current route until the answer arrives.
+func plan_async(destination: ExpeditionWorldPoint, revision: int, priority: int = 0, finished: Callable = Callable()) -> Dictionary:
+	if geometry == null: return {"ok":false,"error_code":&"invalid_geometry"}
+	if not is_current_world(): return _failure(&"world_reconfigured")
+	if not geometry.navigation_async: return plan(destination,revision)
+	_drop_pending()
+	var request := geometry.request_path(_point,destination,_profile,revision,self,priority)
+	if request.done():
+		return adopt_route(request.result,destination,revision,false) if request.result.get("ok",false) else request.result
+	_pending = request; _pending_finished = finished
+	return {"ok":false,"pending":true,"error_code":&"navigation_pending","geometry_revision":revision,"data":{}}
+func plan_pending() -> bool:
+	return _pending != null
+func _navigation_delivered(request: WorldGeometry.PathRequest) -> void:
+	if request != _pending: return
+	var finished := _pending_finished
+	_pending = null; _pending_finished = Callable()
+	var result: Dictionary = adopt_route(request.result,request.to,request.revision,false) if request.result.get("ok",false) else request.result
+	if finished.is_valid(): finished.call(result)
+func _drop_pending() -> void:
+	if _pending != null: _pending.cancel()
+	_pending = null; _pending_finished = Callable()
 func plan_ground_line(heading: Vector3, distance: float, revision: int) -> Dictionary:
 	if not is_current_world(): return _failure(&"world_reconfigured")
+	_drop_pending()
 	var result := geometry.trace_ground(_point,heading,distance,_profile,revision)
 	if not result["ok"]: return result
 	_route = result["data"]["points"].duplicate(true)
@@ -107,7 +149,7 @@ func teleport(destination: ExpeditionWorldPoint, maximum_range: float, revision:
 	if not check["data"]["hit"]: return _failure(&"illegal_teleport")
 	var before := point()
 	_point = ExpeditionWorldPoint.create(destination.stage_id,destination.surface_id,destination.position)
-	_route.clear()
+	_route.clear(); _drop_pending()
 	var registered := geometry.set_occupant(_occupant_id,_point,_profile,revision)
 	if registered["ok"]:
 		var segments: Array[Dictionary] = [{"from":before.to_data(),"to":point().to_data(),"kind":&"teleport"}]
@@ -118,10 +160,12 @@ func _failure(code: StringName) -> Dictionary:
 
 func release() -> void:
 	if is_current_world() and not _occupant_id.is_empty(): geometry.remove_occupant(_occupant_id)
+	_drop_pending()
 	geometry = null
 	_route.clear()
 
 func cancel() -> void:
+	_drop_pending()
 	_route.clear()
 	_cursor = 0
 	_route_revision = geometry.geometry_revision if geometry != null else 0

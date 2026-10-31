@@ -2530,8 +2530,11 @@ func _advance_world_player(delta: float) -> void:
 		_attack_engaged = false
 		if _attack_recovery > 0.0: return
 		_repath_time -= delta
-		if _repath_time <= 0.0 or not world_motion.has_route():
-			if target.world_motion == null or not world_motion.plan(target.world_point(),world_motion.geometry.geometry_revision)["ok"]: world_motion.cancel()
+		if (_repath_time <= 0.0 or not world_motion.has_route()) and not world_motion.plan_pending():
+			if target.world_motion == null: world_motion.cancel()
+			else:
+				var pursued := world_motion.plan_async(target.world_point(),world_motion.geometry.geometry_revision,5,_world_pursuit_planned)
+				if not pursued.get("pending",false): _world_pursuit_planned(pursued)
 			_repath_time = 0.22
 	elif target != null:
 		target = null
@@ -3004,6 +3007,9 @@ func use_world_teleport(destination: ExpeditionWorldPoint, revision: int) -> boo
 	_repath_time = 0.0
 	resources_changed.emit()
 	return true
+
+func _world_pursuit_planned(planned: Dictionary) -> void:
+	if not planned.get("ok",false): world_motion.cancel()
 
 func use_world_dash(destination: ExpeditionWorldPoint, revision: int) -> bool:
 	if world_motion == null or class_id != &"swordsman" or is_rooted() or not _can_pay_skill(&"dash"): return false

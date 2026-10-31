@@ -1,0 +1,6 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+CP long_frame {"dt_ms":124.7,"encounter":true,"kills":3,"queue":0,"t":11800}
+CP long_frame {"dt_ms":12349.7,"encounter":false,"kills":3,"queue":0,"t":24947}
+CP long_frame {"dt_ms":156.3,"encounter":false,"kills":3,"queue":0,"t":36097}
+CP_RESULT {"alive":true,"async":false,"busy_frames":0,"busy_p50":0.0,"frames":1577,"kills":3,"max":12349.678,"over_100ms":3,"over_250ms":1,"over_50ms":66,"p50":15.396,"p99":68.77}

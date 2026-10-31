@@ -1,0 +1,23 @@
+{
+  "NavigationLazy": 24,
+  "NavigationDense": 5,
+  "NavigationContext": 11,
+  "CandidateBatch": 18,
+  "PopulationPlanner": 20,
+  "PopulationReachability": 27,
+  "SurfacePick": 24,
+  "Batch": 36,
+  "Ports": 92,
+  "Geometry": 46,
+  "Organic": 15,
+  "WorldTargeting": 16,
+  "WorldRewardPoll": 10,
+  "GameplayGate": 24,
+  "GameplayControls": 29,
+  "GameplayWindow": 33,
+  "GameplayCli": 18,
+  "CanvasOrder": 43,
+  "RuntimeView": 12,
+  "FieldsNative": 73,
+  "E07_legacy_suites": 30
+}

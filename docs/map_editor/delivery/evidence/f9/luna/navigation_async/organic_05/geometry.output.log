@@ -1,0 +1,35 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_ORGANIC_CHECK same_gauss17_source_keeps_exact_shape true
+F9_ORGANIC_CHECK rounded_geometry_keeps_512_actual_supports true
+F9_ORGANIC_CHECK original_storage_budget_is_preserved true
+F9_ORGANIC_CHECK gauss17_map_publishes_in_original_budget true
+F9_ORGANIC_CHECK compilation_preserves_source true
+F9_ORGANIC_CHECK same_curvature_accepts_actual_player_body true
+F9_ORGANIC_CHECK configured_player_profile_remains_20_32 true
+F9_ORGANIC_CHECK inspection_package_is_not_rewritten true
+F9_ORGANIC_CHECK organic_area_is_one_authored_piece true
+F9_ORGANIC_CHECK canonical_runtime_world_configures true
+F9_ORGANIC_CHECK all_512_terminals_have_both_directions true
+F9_ORGANIC_WITNESS_PROGRESS 32
+F9_ORGANIC_WITNESS_PROGRESS 64
+F9_ORGANIC_WITNESS_PROGRESS 96
+F9_ORGANIC_WITNESS_PROGRESS 128
+F9_ORGANIC_WITNESS_PROGRESS 160
+F9_ORGANIC_WITNESS_PROGRESS 192
+F9_ORGANIC_WITNESS_PROGRESS 224
+F9_ORGANIC_WITNESS_PROGRESS 256
+F9_ORGANIC_WITNESS_PROGRESS 288
+F9_ORGANIC_WITNESS_PROGRESS 320
+F9_ORGANIC_WITNESS_PROGRESS 352
+F9_ORGANIC_WITNESS_PROGRESS 384
+F9_ORGANIC_WITNESS_PROGRESS 416
+F9_ORGANIC_WITNESS_PROGRESS 448
+F9_ORGANIC_WITNESS_PROGRESS 480
+F9_ORGANIC_WITNESS_PROGRESS 512
+F9_ORGANIC_CHECK all_1024_public_witnesses_revalidate_geometry true
+F9_ORGANIC_CHECK all_witness_endpoints_keep_surface_and_position true
+F9_ORGANIC_CHECK actual_motion_walks_every_witness_with_real_profile true
+F9_ORGANIC_CHECK proofs_preserve_source_package_and_world_revision true
+F9_ORGANIC_METRICS {"map_ms":29356.186,"public_validation_and_movement_ms":148812.731,"publication":{"direct_pairs":1022,"direct_witness_proofs_reused":512,"elapsed_ms":24273.384,"expansions":2,"operations":1,"peak_storage_bytes":105254480,"snapshot_storage_units":21830400,"states":512,"storage_bytes":105254480,"terminal_checks":512},"publication_ms":24391.168,"real_body_ms":38831.524,"terrain_ms":2973.192,"witnesses":1024}
+F9_ORGANIC_RESULT {"checks":[{"id":"same_gauss17_source_keeps_exact_shape","ok":true},{"id":"rounded_geometry_keeps_512_actual_supports","ok":true},{"id":"original_storage_budget_is_preserved","ok":true},{"id":"gauss17_map_publishes_in_original_budget","ok":true},{"id":"compilation_preserves_source","ok":true},{"id":"same_curvature_accepts_actual_player_body","ok":true},{"id":"configured_player_profile_remains_20_32","ok":true},{"id":"inspection_package_is_not_rewritten","ok":true},{"id":"organic_area_is_one_authored_piece","ok":true},{"id":"canonical_runtime_world_configures","ok":true},{"id":"all_512_terminals_have_both_directions","ok":true},{"id":"all_1024_public_witnesses_revalidate_geometry","ok":true},{"id":"all_witness_endpoints_keep_surface_and_position","ok":true},{"id":"actual_motion_walks_every_witness_with_real_profile","ok":true},{"id":"proofs_preserve_source_package_and_world_revision","ok":true}],"count":15,"ok":true}

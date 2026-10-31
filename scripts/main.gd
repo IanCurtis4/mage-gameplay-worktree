@@ -121,6 +121,9 @@ var combat_numbers_visible := true
 var world_spawn_error: StringName = &""
 var expedition_view: ExpeditionGeometryView
 var expedition_field_height := 0.0
+## Ground click whose route is searched in the background (checkpoint36).
+## Transient: {request, destination, retried}; omitted from snapshots.
+var _pending_world_click: Dictionary = {}
 var _world_companion_attempts: Dictionary[int, bool] = {}
 var _world_pending_companions: Dictionary[int, WeakRef] = {}
 var reward: RewardPickup
@@ -380,6 +383,7 @@ func _advance_runtime(_delta: float) -> void:
 			battle_indicators.sync_spiritualist_focus(player.get_instance_id(), player.spiritualist_focus_remaining)
 
 func _process(_delta: float) -> void:
+	_pump_world_navigation()
 	_advance_runtime(_delta)
 	_update_hud()
 	for element: StringName in geometer_element_buttons:
@@ -4064,6 +4068,9 @@ func attach_expedition_view(view: ExpeditionGeometryView, field_height: float) -
 		var bound := geometer_casting.bind_world_construction(field_height)
 		if not bound["ok"]: return bound
 	expedition_view = view; expedition_field_height = field_height; view.controller = self
+	# Interactive play searches long routes on a worker thread; headless runs,
+	# tests and RAGRPG_SYNC_NAVIGATION=1 stay synchronous.
+	view.geometry.navigation_async = DisplayServer.get_name() != "headless" and OS.get_environment("RAGRPG_SYNC_NAVIGATION") != "1"
 	view.observe(player)
 	view.present_campaign(self)
 	for actor: CombatActor in enemies:
@@ -4082,15 +4089,47 @@ func spatial_pointer_move(point: Vector2) -> Dictionary:
 		return result
 	var data: Dictionary = result["data"]["point"]
 	var destination := ExpeditionWorldPoint.create(data["stage_id"],data["surface_id"],data["position"])
-	# Plan before cancelling the current action: a rejected click changes no gameplay state.
-	var route := expedition_view.geometry.path(player.world_point(),destination,player.world_motion.profile(),result["geometry_revision"])
+	return _request_world_click(destination,result["geometry_revision"],false)
+
+# Plan before cancelling the current action: a rejected click changes no gameplay
+# state. In the background, the player keeps the current action until the answer.
+func _request_world_click(destination: ExpeditionWorldPoint, revision: int, retried: bool) -> Dictionary:
+	if not _pending_world_click.is_empty(): _pending_world_click.request.cancel()
+	_pending_world_click = {}
+	var request := expedition_view.geometry.request_path(player.world_point(),destination,player.world_motion.profile(),revision,null,10)
+	if request.done(): return _apply_world_click(request.result,destination,revision,false)
+	_pending_world_click = {"request":request,"destination":destination,"retried":retried}
+	expedition_view.indicate(destination,true)
+	status_label.text = "Calculando caminho…"
+	return {"ok":true,"pending":true,"error_code":&"","geometry_revision":revision,"data":{}}
+
+func _apply_world_click(route: Dictionary, destination: ExpeditionWorldPoint, revision: int, background: bool) -> Dictionary:
 	if route["ok"]:
+		if background:
+			# Join the answer to where the player is now; a route that cannot be
+			# joined is refused before any gameplay state changes.
+			route = player.world_motion.adopt_route(route,destination,revision,false)
+			if not route["ok"]: return route
 		player.cancel_active_cast(); player.target = null
-		route = player.world_motion.adopt_route(route,destination,result["geometry_revision"])
+		route = player.world_motion.adopt_route(route,destination,revision)
 		expedition_view.indicate(destination,route["ok"],route["data"].get("points",[]))
 	else: expedition_view.indicate(destination,false)
 	status_label.text = "Movendo pela superfície" if route["ok"] else "Destino sem caminho transitável."
 	return route
+
+func _pump_world_navigation() -> void:
+	if expedition_view == null or expedition_view.geometry == null: return
+	expedition_view.geometry.navigation_pump()
+	if _pending_world_click.is_empty() or not _pending_world_click.request.done(): return
+	var pending := _pending_world_click; _pending_world_click = {}
+	if run_finished or not is_instance_valid(player) or not player.is_alive() or player.world_motion == null: return
+	var request: WorldGeometry.PathRequest = pending.request
+	var applied := _apply_world_click(request.result,pending.destination,request.revision,true)
+	# The player walked off the route's start meanwhile: search once more from here.
+	if not applied["ok"] and applied.get("error_code",&"") == &"route_moved" and not pending.retried:
+		_request_world_click(pending.destination,expedition_view.geometry.geometry_revision,true)
+	elif not applied["ok"]:
+		expedition_view.indicate(pending.destination,false); status_label.text = "Destino sem caminho transitável."
 func spatial_pointer_skill(skill: StringName, point: Vector2, preview: bool) -> Dictionary:
 	if expedition_view == null or not expedition_view.current() or get_tree().paused or run_finished or not player.is_alive(): return WorldSkillCast.failure(&"pointer_unavailable")
 	var revision := expedition_view.geometry.geometry_revision
