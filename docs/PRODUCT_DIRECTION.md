@@ -10,6 +10,13 @@ Propostas do assistente abaixo são pendências, não aprovações.
 
 ## Campanha, fases e ramificações
 
+**31/10/2026:** as decisões de fase em
+[f10_phase_architecture](map_editor/contracts/f10_phase_architecture.md)
+substituem neste documento: desbloqueios por perfil (agora por personagem),
+limpeza total para abrir portais (agora só na primeira jogada de cada fase),
+término antecipado sem bônus (agora bônus proporcional ao que foi feito) e a
+referência de tamanho (agora pelo menos metade da área dos campos do RO).
+
 Lobby → selecionar fase desbloqueada → explorar e limpar estágio → escolher
 portal → próximo estágio → conclusão e retorno ao lobby.
 

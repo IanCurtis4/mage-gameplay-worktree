@@ -1,7 +1,35 @@
 # Retomada F9 —30/10/2026
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint38 — gravação em segundo plano, coleta automática, leash e fundo temático
+## Checkpoint39 — morte sem trava, retorno sem pose de morto, fundo com a arte do bioma
+
+31/10/2026. Mesmo checkout/branch/fixture. Base 4edafa3a; código e documentação
+em commits próprios. Papéis inalterados.
+
+- Pedido humano: a morte ainda travava a tela por segundos; ao voltar, o
+  personagem aparecia com o sprite de morto; o fundo saía azul-acinzentado em vez
+  de um bosque. Respondeu também os conflitos do estudo de fase.
+- Morte e retorno: `player_death` entra numa entrada de mortes do diário e o
+  retorno vira uma entrada `revive` (relógio depois da penalidade); ambos gravam
+  em segundo plano no mesmo host. Probe com janela no Bosque: morte 20,8 ms de
+  pior quadro (485 ms até a gravação durável), retorno 20,0 ms (639 ms), host
+  mantido, jogo pausado em recuperação e solto depois do retorno.
+- Pose: `CombatAnimationState.revive()` limpa o estado `dead`; o retorno chama e
+  redesenha.
+- Fundo: `ExpeditionBackdrop` pinta o chão com a textura do bioma e duas camadas
+  de props da biblioteca (carvalhos, arbustos, pedras; pilares em ruína; cactos
+  no deserto) em parallax, com névoa e bordas escuras.
+- Decisões de fase registradas em `contracts/f10_phase_architecture.md`
+  (boss como estrutura mínima, término antecipado com bônus proporcional,
+  limpeza total só na primeira jogada, desbloqueios por personagem, fundo por
+  mapa/dungeon, mapas grandes ≥ metade da área dos campos do RO).
+- GameplayNative63, CampaignJournal19, demais etapas e 38 legados E06/E07 PASS.
+
+Pendente: gravar cada morte de mob na hora; J3 (ondas/respawn, inclusive retorno
+com respawn pendente); contrato de F10; aceite humano.
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint38 — gravação em segundo plano, coleta automática, leash e fundo temático
 
 31/10/2026. Mesmo checkout/branch/fixture. Base 3a12a2a4; código e documentação
 em commits próprios. Papéis inalterados.
@@ -25,7 +53,6 @@ em commits próprios. Papéis inalterados.
 
 Pendente: validação humana do estudo de fase; gravar mortes na hora; J3
 (ondas/respawn); aceite humano.
-<!-- /f9-patrol-gameplay-active -->
 
 ## Histórico checkpoint37 — rampa sob a saída final e diário de campanha (J1–J2)
 

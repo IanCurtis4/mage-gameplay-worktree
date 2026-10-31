@@ -223,3 +223,9 @@ diário é publicado depois do resultado durável (pior quadro 43,6 ms); drops e
 chegam ao personagem sozinhos como entrada de coleta do diário; mob fora do leash
 recupera o HP em 4 s ignorando aggro; o fundo preto virou parallax temático por
 bioma. Ver [contrato do diário](contracts/f9_campaign_journal.md).
+
+Checkpoint39 (31/10, Sol/Astra Opus): a morte do jogador e o retorno passam pelo
+diário, gravados em segundo plano no mesmo host (pior quadro 20,8 ms e 20,0 ms em
+janela); o retorno limpa a pose de morto; o fundo usa a arte do bioma (bosque de
+carvalhos no forest). Decisões de fase em
+[f10_phase_architecture](contracts/f10_phase_architecture.md).

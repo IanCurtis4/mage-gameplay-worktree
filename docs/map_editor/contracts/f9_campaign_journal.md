@@ -173,3 +173,36 @@ reproduz os tickets entregues.
 
 Com a escrita fora do quadro, o próximo passo natural é gravar cada morte na
 hora (fim do adiamento) e levar ondas/respawn ao diário (J3).
+
+## Implementado no checkpoint39 (morte e retorno do jogador pelo diário)
+
+31/10/2026, Sol/Astra (Claude Opus). Pedido humano: "quando eu morro, o
+salvamento ainda trava completamente a tela por alguns segundos" e "quando eu
+volto, eu volto com o sprite de morto".
+
+- Causa da trava: a morte do jogador entrava na fila como `player_death` e só
+  as mortes de mob iam ao diário; qualquer `player_death` forçava a transação
+  completa (captura, gravação síncrona e troca do host). O retorno ("Reviver")
+  também era transação completa.
+- Diário: uma entrada de mortes pode trazer o evento `player_death` (`kind` e
+  `event_id`, nada mais). Novo tipo de entrada `revive`: `event_id` da morte e o
+  relógio de ondas depois da penalidade (`started`, `remaining`, `interval`,
+  `wave_index`).
+- `ExpeditionService.journal_events` aceita a morte do jogador: o estado passa
+  a `recovering`, o lock também, e a gravação segue em segundo plano.
+  `journal_revive` resolve o retorno numa cópia do estado (mesma regra de
+  `revive`, mesma penalidade), recusa (`journal_unavailable`, cai na transação
+  completa) se houver respawn pendente no estágio atual, e grava em segundo
+  plano. A reaplicação na carga refaz a morte (pose e HP 0) e o retorno (relógio
+  do payload, chegada no último portal, metade do HP).
+- `main`: durante a gravação o jogo continua desenhando quadros; o resultado é
+  lido a cada quadro mesmo com a árvore pausada. Depois da morte o jogo fica
+  pausado em recuperação (como antes); depois do retorno ele volta a rodar. O
+  painel tenta o diário primeiro e só usa a transação completa se o diário
+  recusar.
+- Pose de morte: `CombatAnimationState.revive()` zera morte, ação, dano e
+  movimento; `ExpeditionDeathRecovery.revive` chama e redesenha. Antes, o
+  personagem voltava vivo com o estado de animação ainda em `dead`.
+
+Fora deste passo: retorno com onda/respawn pendente no estágio (J3) e gravar
+cada morte de mob na hora.
