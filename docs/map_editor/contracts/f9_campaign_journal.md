@@ -83,7 +83,10 @@ depois da aplicação". A segunda metade vira teste diferencial obrigatório.
 
 ## Decisões humanas pedidas
 
-- Aceitar que, após uma queda, os inimigos vivos voltem ao estado do último base.
-- Gatilho da compactação: só pontos seguros, ou também a cada N eventos (sugestão: 32).
+- Aceitar que, após uma queda, os inimigos vivos voltem ao estado do último base:
+  em aberto, levada pelo humano ao tester (31/10).
+- Gatilho da compactação: respondida em 31/10 — só pontos seguros, até a
+  gravação deixar de travar o jogo (assíncrona). O humano não se importa com
+  gravações frequentes se elas não travarem o movimento.
 - Ordem: respondida em 31/10 — grafo de navegação primeiro (checkpoint35,
   contracts/f9_navigation_graph.md), depois o diário.

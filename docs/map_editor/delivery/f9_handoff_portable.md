@@ -1,7 +1,35 @@
 # RagRPG — handoff portátil de F9
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint35 — grafo de navegação reutilizável
+## Checkpoint36 — rotas em segundo plano
+
+31/10/2026. Mesmo checkout/branch/fixture. Base e8d6532a; código e documentação
+em commits próprios. Papéis inalterados. Contrato:
+contracts/f9_navigation_async.md.
+
+- Pedido humano: 1 s de travada ainda é visível; calcular aos poucos, só as rotas
+  pedidas.
+- Fatias por quadro não bastavam (busca quente ainda ~80 ms). A mesma busca de
+  `WorldGeometry.path` roda numa thread do WorkerThreadPool sobre uma vista
+  congelada da geometria, com memo próprio; o quadro principal só checa a linha
+  direta, enfileira e recebe. Desligado em headless/testes/editor
+  (`RAGRPG_SYNC_NAVIGATION=1` força o síncrono).
+- Clique no chão, perseguição do jogador e IA dos inimigos (perseguição, recuo,
+  volta para casa) pedem a rota em segundo plano; o ator segue a rota anterior e
+  a resposta é emendada onde ele está, com o teste de aresta local do grafo.
+- Bosque: clique na emenda deixa de travar 0,76 s; pior quadro 76 ms e a rota
+  chega 0,79 s depois (personagem parado, "Calculando caminho…"). Combate igual
+  com e sem (p50 ~15 ms).
+- A gravação do fim do combate (11,5–13,3 s) é agora o maior travamento medido.
+- NavigationAsync18 novo; navegação, gameplay e legados E07 PASS.
+- Diário: compactação só em pontos seguros até a gravação ser assíncrona; estado
+  dos inimigos após queda levado ao tester.
+
+Pendente: diário de campanha (J1–J2 primeiro, para tirar a gravação do fim do
+combate); captura da rampa; aceite humano.
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint35 — grafo de navegação reutilizável
 
 31/10/2026. Mesmo checkout/branch/fixture. Base 11c67b2a; código e documentação
 em commits próprios. Papéis inalterados. Contrato:
@@ -24,7 +52,6 @@ contracts/f9_navigation_graph.md.
 
 Pendente: aquecer superfícies em segundo plano (0,5 s na primeira emenda);
 decisões do contrato do diário (J1–J4); captura da rampa; aceite humano.
-<!-- /f9-patrol-gameplay-active -->
 
 ## Histórico checkpoint34 — fim de fase, emenda do mapa e gravação incremental proposta
 
