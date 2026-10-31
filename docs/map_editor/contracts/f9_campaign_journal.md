@@ -85,4 +85,5 @@ depois da aplicação". A segunda metade vira teste diferencial obrigatório.
 
 - Aceitar que, após uma queda, os inimigos vivos voltem ao estado do último base.
 - Gatilho da compactação: só pontos seguros, ou também a cada N eventos (sugestão: 32).
-- Ordem: fazer o diário (J1–J2) antes ou depois do grafo de navegação reutilizável.
+- Ordem: respondida em 31/10 — grafo de navegação primeiro (checkpoint35,
+  contracts/f9_navigation_graph.md), depois o diário.

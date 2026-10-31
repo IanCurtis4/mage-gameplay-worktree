@@ -60,7 +60,7 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 11 export limpo/dependências/API | F8 | release técnico existe; ampliar aos consumidores F9 | pendente |
 | 12 área temática/fluxo humano sem código | validação, F8 | mapa Terra viaAX com2peças/trilha/colina/ponte/47props/emenda e bordas/contexto runtime florestais; fluxo humano/área final faltam | checkpoint26: fonte45.615B, lote AX4/2 e consumidor12 corpo20x32/84apoios PASS; sem App/caminhada/combate/FPS do Bosque |
 | 12 clareira/rampa/platô/ponte/rota inferior/santuário/emenda | validação, F8 | amostra técnica existente; demonstrar produto final | pendente |
-| 12 disperso/grupo/patrulha/interação | validação, F8 | Bosque: 3 dispersos, grupo de 3, guarda fixo com patrulha `alley_watch` e `shrine_completion`, todos via AX; App abre e patrulha anda no jogo | checkpoint30: patrol AX 211s PASS, janela ativa 138s, guarda chegou ao 1º ponto; checkpoint31 portão "Iniciar teste" (GameplayGate24); checkpoint32 mira por corpo desenhado + trava inteligente (WorldTargeting16); lag de rota longa (55–87 s) aguarda grafo reutilizável; checkpoint33 gravação por morte adiada ao fim do combate (11,2 s em vez de 17–19 s por morte); checkpoint34 marco final com círculo e mensagem exata, rota da emenda calculada uma vez; diário incremental proposto; aceite humano pendente |
+| 12 disperso/grupo/patrulha/interação | validação, F8 | Bosque: 3 dispersos, grupo de 3, guarda fixo com patrulha `alley_watch` e `shrine_completion`, todos via AX; App abre e patrulha anda no jogo | checkpoint30: patrol AX 211s PASS, janela ativa 138s, guarda chegou ao 1º ponto; checkpoint31 portão "Iniciar teste" (GameplayGate24); checkpoint32 mira por corpo desenhado + trava inteligente (WorldTargeting16); lag de rota longa (55–87 s) aguarda grafo reutilizável; checkpoint33 gravação por morte adiada ao fim do combate (11,2 s em vez de 17–19 s por morte); checkpoint34 marco final com círculo e mensagem exata, rota da emenda calculada uma vez; diário incremental proposto; checkpoint35 grafo de navegação reutilizável (memo entre consultas + A*): casa→entrada 57,9 s → 1,18 s fria/0,10 s repetida, emenda 1,61 s → 0,76 s, NavigationAstar18; aceite humano pendente |
 
 Medições antigas não certificam mudanças F9. Limites defensivos medidos não são
 requisitos adiados; exclusões explícitas continuam as do contrato (campanha,
@@ -198,3 +198,10 @@ ao marco (48 unidades), não pela limpeza (estado salvo: 7 mortos,
 `cleared_once`). A mensagem agora separa os casos e o mapa mostra o círculo do
 marco. O clique que cruza a emenda calculava a rota duas vezes (3,3 s → 1,6 s).
 Gravação incremental proposta em [contrato do diário](contracts/f9_campaign_journal.md).
+
+Checkpoint35 (31/10, Sol/Astra Opus): o lag do cruzamento dos mapas era a busca
+de rota. `WorldGeometry` agora reaproveita os predicados exatos entre consultas e
+busca com A* (custos idênticos ao Dijkstra). Bosque: casa→entrada 57,9 s → 1,18 s
+fria e 0,10 s repetida; emenda 1,61 s → 0,76 s na primeira vez. Ver
+[contrato do grafo](contracts/f9_navigation_graph.md) e
+[consolidação](delivery/evidence/f9/author/navigation_graph/consolidation.md).

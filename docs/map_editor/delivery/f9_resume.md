@@ -1,7 +1,32 @@
 # Retomada F9 —30/10/2026
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint34 — fim de fase, emenda do mapa e gravação incremental proposta
+## Checkpoint35 — grafo de navegação reutilizável
+
+31/10/2026. Mesmo checkout/branch/fixture. Base 11c67b2a; código e documentação
+em commits próprios. Papéis inalterados. Contrato:
+contracts/f9_navigation_graph.md.
+
+- Pedido humano: o lag no cruzamento dos mapas tornava o teste injogável; grafo
+  de navegação antes do diário.
+- `WorldGeometry` guarda os predicados exatos de navegação entre consultas
+  (memo por revisões, epoch de mutação e perfil; consulta especulativa fica de
+  fora). A busca passou a A* com a distância reta (consistente: arestas custam a
+  corda ou mais), com volta ao Dijkstra se um grafo violar isso. Arestas locais
+  que a relaxação já rejeitaria pulam sweep e suporte.
+- Bosque: casa→entrada 57,9 s → 1,18 s fria e 0,10 s repetida; emenda
+  clareira→viaduto no clique 1,61 s → 0,76 s na primeira vez e ~0,08 s depois.
+  Custos idênticos aos do Dijkstra.
+- O snapshot exige declarar toda variável nova: os dois campos derivados entram
+  em `omitted` do runtime_manifest.json.
+- NavigationAstar18 novo; navegação, gameplay e 32 legados E07 PASS (presentation
+  com a falha conhecida).
+
+Pendente: aquecer superfícies em segundo plano (0,5 s na primeira emenda);
+decisões do contrato do diário (J1–J4); captura da rampa; aceite humano.
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint34 — fim de fase, emenda do mapa e gravação incremental proposta
 
 31/10/2026. Mesmo checkout/branch/fixture. Base 2262b8c3; código e documentação
 em commits próprios. Papéis inalterados.
@@ -22,7 +47,6 @@ em commits próprios. Papéis inalterados.
 
 Pendente: decisões do contrato do diário; grafo de navegação reutilizável;
 captura da rampa; aceite humano.
-<!-- /f9-patrol-gameplay-active -->
 
 ## Histórico checkpoint33 — travamento em combate: gravação por morte adiada e aliviada
 
