@@ -22,6 +22,14 @@ func to_record() -> Dictionary:
 		if not journal.is_empty(): record["journal"] = journal.duplicate(true)
 	return record
 
+## Reward session and owner digest in force: the last journaled collection, or
+## the checkpoint's own when the journal collected nothing (checkpoint38).
+func effective_session() -> Dictionary:
+	return Journal.effective(journal,checkpoint)["session"] if not journal.is_empty() else checkpoint.get("session",{})
+
+func effective_owner_digest() -> String:
+	return String(Journal.effective(journal,checkpoint)["owner_digest"] if not journal.is_empty() else checkpoint.get("owner_digest",""))
+
 func copy_lock() -> ExpeditionAssetLock:
 	var copy := ExpeditionAssetLock.new()
 	copy.expedition_id = expedition_id

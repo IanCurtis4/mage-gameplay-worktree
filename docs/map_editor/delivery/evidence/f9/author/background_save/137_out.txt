@@ -1,0 +1,62 @@
+﻿RUN GameplayNative import 2026-10-31T17:00:00.3613556-03:00
+
+F9 RuntimeView: True
+RUN GameplayControls 2026-10-31T17:00:34.7440546-03:00
+F9 GameplayControls: True
+RUN GameplayWindow 2026-10-31T17:01:38.8095849-03:00
+F9 GameplayWindow: True
+RUN GameplayCli 2026-10-31T17:02:37.9393890-03:00
+F9 GameplayCli: True
+RUN FieldsNative 2026-10-31T17:04:28.2208070-03:00
+F9 FieldsNative: True
+RUN WorldTargeting 2026-10-31T17:05:03.1895226-03:00
+F9 WorldTargeting: True
+RUN SurfacePick 2026-10-31T17:05:27.3758522-03:00
+F9 SurfacePick: True
+RUN ShadowsNative 2026-10-31T17:05:39.3179949-03:00
+F9 ShadowsNative: True
+RUN BiomePropsNative 2026-10-31T17:06:38.2057215-03:00
+F9 BiomePropsNative: True
+RUN BordersNative 2026-10-31T17:07:20.1016154-03:00
+F9 BordersNative: True
+RUN ViewportNative 2026-10-31T17:08:09.0647926-03:00
+F9 ViewportNative: True
+RUN CandidateBatch 2026-10-31T17:09:02.5236595-03:00
+F9 CandidateBatch: True
+RUN PopulationPlanner 2026-10-31T17:09:16.0794591-03:00
+F9 PopulationPlanner: True
+RUN PopulationReachability 2026-10-31T17:09:30.2637411-03:00
+F9 PopulationReachability: True
+RUN NavigationAstar 2026-10-31T17:09:49.0594717-03:00
+F9 NavigationAstar: True
+RUN NavigationLazy 2026-10-31T17:10:23.6844909-03:00
+F9 NavigationLazy: True
+--- legacy
+candidates (24): tests/e07_f1_actor_integration_test.gd, tests/e07_f1_adversarial_test.gd, tests/e07_f1_area_cast_test.gd, tests/e07_f1_birth_collect_test.gd, tests/e07_f1_cast_test.gd, tests/e07_f1_chain_test.gd, tests/e07_f1_channels_test.gd, tests/e07_f1_composition_test.gd, tests/e07_f1_consumer_test.gd, tests/e07_f1_echo_test.gd, tests/e07_f1_ember_test.gd, tests/e07_f1_fields_test.gd, tests/e07_f1_geometer_full_test.gd, tests/e07_f1_geometer_trace_test.gd, tests/e07_f1_geometry_test.gd, tests/e07_f1_guard_travel_test.gd, tests/e07_f1_hunter_cover_test.gd, tests/e07_f1_hunter_traps_test.gd, tests/e07_f1_ice_test.gd, tests/e07_f1_non_planar_test.gd, tests/e07_f1_pilot_scene_test.gd, tests/e07_f1_presentation_test.gd, tests/e07_f1_sentinel_area_test.gd, tests/e07_f1_sentinel_direct_test.gd
+LEGACY tests/e07_f1_actor_integration_test.gd :: E07 F1 actor integration: 193 checks, 0 failures
+LEGACY tests/e07_f1_adversarial_test.gd :: E07 F1 adversarial/flat: 29 checks, 0 failures
+LEGACY tests/e07_f1_area_cast_test.gd :: E07 F1 area casts: 59 checks, 0 failures
+LEGACY tests/e07_f1_birth_collect_test.gd :: E07 F1 birth and collection: 210 checks, 0 failures
+LEGACY tests/e07_f1_cast_test.gd :: E07 F1 casts: 113 checks, 0 failures
+LEGACY tests/e07_f1_chain_test.gd :: E07 F1 chains: 121 checks, 0 failures
+LEGACY tests/e07_f1_channels_test.gd :: E07 F1 channels: 32 checks, 0 failures
+LEGACY tests/e07_f1_composition_test.gd :: E07 F1 compositions: 299 checks, 0 failures; recipes=27
+LEGACY tests/e07_f1_consumer_test.gd :: E07 F1 consumers: 133 checks, 0 failures
+LEGACY tests/e07_f1_echo_test.gd :: E07 F1 echoes: 271 checks, 0 failures
+LEGACY tests/e07_f1_ember_test.gd :: E07 F1 ember: 102 checks, 0 failures
+LEGACY tests/e07_f1_fields_test.gd :: E07 F1 ground fields: 499 checks, 0 failures
+LEGACY tests/e07_f1_geometer_full_test.gd :: E07 F1 Geometer full: 1160 checks, 0 failures
+LEGACY tests/e07_f1_geometer_trace_test.gd :: E07 F1 Geometer trace: 400 checks, 0 failures
+LEGACY tests/e07_f1_geometry_test.gd :: E07 F1 geometry: 33 checks, 0 failures; seed=711 manifest=2e6232a2f5c2bbe6add8aa0a2645201ad14271b89d39765978b055ecfa2c3eed
+LEGACY tests/e07_f1_guard_travel_test.gd :: E07 F1 guard and travel: 293 checks, 0 failures
+LEGACY tests/e07_f1_hunter_cover_test.gd :: E07 F1 Hunter cover: 235 checks, 0 failures
+LEGACY tests/e07_f1_hunter_traps_test.gd :: E07 F1 Hunter traps: 631 checks, 0 failures
+LEGACY tests/e07_f1_ice_test.gd :: E07 F1 Ice Wall: 262 checks, 0 failures
+LEGACY tests/e07_f1_non_planar_test.gd :: E07 F1 non-planar fields: 311 checks, 0 failures
+LEGACY tests/e07_f1_pilot_scene_test.gd :: E07 F1 native pilot scene: 102 checks, 0 failures; identities=10; presentation=logical_assembly_only; D05_visual_separate
+LEGACY tests/e07_f1_presentation_test.gd :: E07 F1 presentation: 37 checks, 1 failures; native scene, projection, click, preview, marker, occlusion
+LEGACY tests/e07_f1_sentinel_area_test.gd :: E07 F1 Sentinel areas: 433 checks, 0 failures
+LEGACY tests/e07_f1_sentinel_direct_test.gd :: E07 F1 Sentinel direct: 364 checks, 0 failures
+DONE 2026-10-31T17:15:58.8382055-03:00
+
+

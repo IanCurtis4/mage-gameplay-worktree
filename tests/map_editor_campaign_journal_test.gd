@@ -45,6 +45,18 @@ func run() -> void:
 	var bytes := var_to_bytes([payload(0)])
 	var forged := journal.duplicate(true); forged[0].payload = Marshalls.raw_to_base64(bytes); forged[0].sha256 = ExpeditionCheckpointCodec.digest_bytes(bytes)
 	check("non_dictionary_payload_is_refused",not Journal.validate(forged,checkpoint).ok)
+	# Checkpoint38: collection entries carry the reward session and owner digest.
+	var collect := {"kind":"collect","delivered":[{"ticket_id":"reward-x-0","card_instance_id":&""}],"session":{"run_id":"run_a","character_id":"char_a","last_committed_seq":4},"owner_digest":"c".repeat(64)}
+	var mixed := journal.duplicate(true)
+	var appended := Journal.make_entry(mixed,checkpoint,"collect_%056d" % 1,collect)
+	if appended.ok: mixed.append(appended.entry)
+	var effective := Journal.effective(mixed,{"session":{"run_id":"run_a","character_id":"char_a","last_committed_seq":1},"owner_digest":"d".repeat(64),"sha256":checkpoint.sha256})
+	check("collect_entry_names_session_and_owner_digest",appended.ok and Journal.validate(mixed,checkpoint).ok and effective.session.last_committed_seq == 4 and effective.owner_digest == "c".repeat(64))
+	var without := Journal.effective(journal,{"session":{"last_committed_seq":1},"owner_digest":"d".repeat(64)})
+	check("death_entries_keep_the_checkpoint_session",without.session.last_committed_seq == 1 and without.owner_digest == "d".repeat(64))
+	var broken := collect.duplicate(true); broken.delivered.append(broken.delivered[0].duplicate())
+	var bad_digest := collect.duplicate(true); bad_digest.owner_digest = "x"
+	check("malformed_collection_is_refused",not Journal.validate_payload(broken).ok and not Journal.validate_payload(bad_digest).ok)
 	var full := chain(checkpoint,Journal.MAX_ENTRIES)
 	check("journal_is_bounded",full.size() == Journal.MAX_ENTRIES and Journal.make_entry(full,checkpoint,"events_%056d" % 999,payload(999)).get("error_code") == &"journal_full")
 	var ok := checks.all(func(item: Dictionary) -> bool: return item.ok)

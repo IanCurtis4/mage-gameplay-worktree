@@ -13,6 +13,9 @@ var _active_request_id := ""
 var _uncertain_transaction: Dictionary = {}
 var _read_only := false
 var _read_only_error_code: StringName = &""
+# Checkpoint38: one expedition commit may run on a worker thread. The operation
+# stays in progress (every other operation gets save_in_progress) until polled.
+var _async_commit: Dictionary = {}
 
 func _init(store: ProfileStore = null, reward_resolver: ProfileRewardResolver = null) -> void:
 	_store = store if store != null else ProfileStore.new()
@@ -925,7 +928,7 @@ func _open_profile_transaction() -> Dictionary:
 		return loaded
 	var pending_expedition := _profile.expedition_for_character(_profile.reward_session["character_id"])
 	if pending_expedition != null and not pending_expedition.checkpoint.is_empty():
-		if pending_expedition.checkpoint["session"] != _profile.reward_session: return _block_with({"ok":false,"error_code":&"invalid_checkpoint","read_only":true})
+		if pending_expedition.effective_session() != _profile.reward_session: return _block_with({"ok":false,"error_code":&"invalid_checkpoint","read_only":true})
 		loaded["expedition_resume_available"] = true
 		return loaded
 	if _store.has_pending_transaction():
@@ -1388,6 +1391,38 @@ func commit_expedition_candidate(candidate: ProfileState, request_id: String, ex
 	if candidate.profile_id != _profile.profile_id or candidate.revision != expected_revision: return _finish_operation(request_id,BuildEffectCatalog.failure(&"stale_revision"))
 	if _store.has_pending_transaction(): return _finish_operation(request_id,_block_with({"ok":false,"error_code":&"recovery_required","read_only":true}))
 	return _finish_operation(request_id,_resolve_commit(_profile.copy_state(),candidate,_store.commit(candidate),true))
+
+## Same commit as commit_expedition_candidate, written by ProfileStore on a
+## worker thread over a detached copy of the candidate. Returns pending, then
+## poll_async_commit() returns the same public result the synchronous call would.
+func commit_expedition_candidate_async(candidate: ProfileState, request_id: String, expected_revision: int) -> Dictionary:
+	if _operation_in_progress: return BuildEffectCatalog.failure(&"save_in_progress")
+	var ready := _begin_operation(request_id,expected_revision)
+	if not ready["ok"]: return _finish_operation(request_id,ready)
+	if candidate.profile_id != _profile.profile_id or candidate.revision != expected_revision: return _finish_operation(request_id,BuildEffectCatalog.failure(&"stale_revision"))
+	if _store.has_pending_transaction(): return _finish_operation(request_id,_block_with({"ok":false,"error_code":&"recovery_required","read_only":true}))
+	var detached := candidate.copy_state(); var box := {}
+	_async_commit = {"request_id":request_id,"before":_profile.copy_state(),"candidate":detached,"box":box}
+	_async_commit["task"] = WorkerThreadPool.add_task(_async_store_commit.bind(_store,detached,box),false,"profile_commit")
+	return {"ok":true,"pending":true,"request_id":request_id}
+
+func async_commit_pending() -> bool:
+	return not _async_commit.is_empty()
+
+func poll_async_commit() -> Dictionary:
+	if _async_commit.is_empty(): return BuildEffectCatalog.failure(&"invalid_transaction")
+	if not WorkerThreadPool.is_task_completed(_async_commit["task"]): return {"ok":false,"pending":true,"error_code":&"save_in_progress"}
+	WorkerThreadPool.wait_for_task_completion(_async_commit["task"])
+	var pending := _async_commit; _async_commit = {}
+	var written: Dictionary = pending["box"].get("result",{"ok":false,"error_code":&"save_failed"})
+	return _finish_operation(pending["request_id"],_resolve_commit(pending["before"],pending["candidate"],written,true))
+
+# Worker thread: only the store and this detached candidate are touched.
+func _async_store_commit(store: ProfileStore, candidate: ProfileState, box: Dictionary) -> void:
+	box["result"] = store.commit(candidate)
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE and not _async_commit.is_empty(): WorkerThreadPool.wait_for_task_completion(_async_commit["task"])
 
 func recover_expedition_pending() -> Dictionary:
 	if _operation_in_progress or not _uncertain_transaction.is_empty(): return BuildEffectCatalog.failure(&"save_in_progress")

@@ -3107,6 +3107,36 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 file (checkpoint37 campaign journal)",
       "base_sha256": "76bc67634204765fb5e2062f2bee4a8a5a9b602643251b8c7bebc778df4964b8"
+    },
+    {
+      "path": "scripts/core/profile_facade.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer for checkpoint38 (background save, journal collect, leash recovery); base is HEAD blob",
+      "base_sha256": "6a4e4870aa28f04754e5d6400e4b34f760400668d0dc2fcb46d2a980c1014cc0"
+    },
+    {
+      "path": "scripts/core/expedition/ownership/character_assets.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer for checkpoint38 (background save, journal collect, leash recovery); base is HEAD blob",
+      "base_sha256": "2c56c6cb1ea48efa16f8ce9438d99f8a2640c419632f111b19d65c4fedf914d6"
+    },
+    {
+      "path": "tests/e06_gameplay_ai_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer for checkpoint38 (background save, journal collect, leash recovery); base is HEAD blob",
+      "base_sha256": "5ecfdbad2cbb09c7385621099d19c2181d5928169ce3426c4b75022e206174f6"
+    },
+    {
+      "path": "scripts/world/expedition_backdrop.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint38 parallax backdrop)",
+      "base_sha256": "2b53dd2a9f9967e02cce5df0dbe36eb0d46656e6a8ae0f2bba9a4d270a942705"
+    },
+    {
+      "path": "scripts/world/expedition_backdrop.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint38 parallax backdrop)",
+      "base_sha256": "d8bf568bf5976c945d544c197db09df43ac24d76586780399a3209f90f24ab87"
     }
   ],
   "read_only_shared": [
@@ -4077,6 +4107,63 @@
         "FieldsNative": 73
       },
       "known_unrelated_failure": "tests/e07_f1_presentation_test.gd 1/37 coincident seam ambiguity; LibraryNative 2 AX command-count checks (test file from 28/10, editor library code untouched here)"
+    },
+    "background_save_and_play_fixes": {
+      "state": "validated_increment_F9_still_open",
+      "base": "3a12a2a4",
+      "human_report": "31/10: write the profile in the background; drops and XP should reach the character automatically (the collect button froze the game and took one kill at a time); mobs beyond the leash recover HP gradually ignoring aggro; themed parallax instead of the black background; phase architecture study (answered in chat for validation, no contract yet)",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "contract": "docs/map_editor/contracts/f9_campaign_journal.md",
+      "files": [
+        "scripts/core/profile_facade.gd",
+        "scripts/core/expedition/expedition_service.gd",
+        "scripts/core/expedition/persistence/expedition_journal_codec.gd",
+        "scripts/core/expedition/ownership/expedition_asset_lock.gd",
+        "scripts/core/expedition/ownership/character_assets.gd",
+        "scripts/core/expedition/snapshot/runtime_manifest.json",
+        "scripts/main.gd",
+        "scripts/actors/enemy_actor.gd",
+        "scripts/world/expedition_backdrop.gd",
+        "tools/map_editor_completion/run.ps1"
+      ],
+      "test_files": [
+        "tests/map_editor_gameplay_ui_test.gd",
+        "tests/map_editor_campaign_journal_test.gd",
+        "tests/e06_gameplay_ai_test.gd"
+      ],
+      "scope": "profile commit on a WorkerThreadPool task over a detached candidate, journal effect published after the durable result; journal collect entries (delivered tickets, session and owner digest after grants) with effective session/digest in ownership rules; automatic collection out of combat; returning or hurt idle mobs recover full HP over 4 s; CanvasLayer parallax backdrop per stage biome",
+      "measurements": {
+        "journal_death_commit_worst_frame_ms_sync": 433.5,
+        "journal_death_commit_worst_frame_ms_background": 43.6
+      },
+      "validation": {
+        "GameplayNative": 63,
+        "CampaignJournal": 16,
+        "NavigationAsync": 18,
+        "WorldRewardPoll": 10,
+        "GameplayGate": 24,
+        "CanvasOrder": 46,
+        "RuntimeView": 12,
+        "GameplayControls": 29,
+        "GameplayWindow": 33,
+        "GameplayCli": 18,
+        "FieldsNative": 73,
+        "WorldTargeting": 16,
+        "SurfacePick": 24,
+        "ShadowsNative": 90,
+        "BiomePropsNative": 23,
+        "BordersNative": 32,
+        "ViewportNative": 52,
+        "CandidateBatch": 18,
+        "PopulationPlanner": 20,
+        "PopulationReachability": 27,
+        "NavigationAstar": 18,
+        "NavigationLazy": 24,
+        "legacy_E06_E07_F2_F7_suites": 38,
+        "legacy_E07_F1_spatial_suites": 24
+      },
+      "decision_change": "E06 \"return preserves damage\" replaced by the human rule: out-of-leash return recovers HP gradually",
+      "known_unrelated_failure": "tests/e07_f1_presentation_test.gd 1/37; E04 swordsman 4/93; LibraryNative 2 AX command-count checks (not rerun here)"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

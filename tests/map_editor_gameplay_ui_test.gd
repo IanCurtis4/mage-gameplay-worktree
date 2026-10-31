@@ -124,19 +124,25 @@ func run() -> void:
 	# Deaths are committed once combat ends (checkpoint33), not on the killing frame;
 	# since checkpoint37 as one journal entry on this same host (no world capture).
 	deadline = Time.get_ticks_msec()+30000
-	var journal_frame_ms := 0.0; var frame_clock := Time.get_ticks_usec()
-	while Time.get_ticks_msec() < deadline and not (is_instance_valid(app.host) and app.host.campaign_runtime != null and app.host.campaign_runtime.state.slots.guard.initial_resolved):
+	# Checkpoint38: the profile write runs on a worker thread (forced here; headless
+	# runs default to the synchronous write, which e07_f7_actions keeps covering).
+	OS.set_environment("RAGRPG_BACKGROUND_SAVE","1")
+	var journal_frame_ms := 0.0; var frame_clock := Time.get_ticks_usec(); var saw_background := false
+	while Time.get_ticks_msec() < deadline and not (is_instance_valid(app.host) and app.host.campaign_runtime != null and app.host.campaign_runtime.state.slots.guard.initial_resolved and not app.host.expedition_save_busy()):
 		await process_frame
 		journal_frame_ms = maxf(journal_frame_ms,(Time.get_ticks_usec()-frame_clock)/1000.0); frame_clock = Time.get_ticks_usec()
+		saw_background = saw_background or (is_instance_valid(app.host) and app.host.expedition_save_busy())
 	print("F9_GAMEPLAY_JOURNAL_FRAME_MS "+str(snappedf(journal_frame_ms,0.1)))
 	check("real_combat_resolves_population_slot",is_instance_valid(app.host) and app.host.campaign_runtime.state.slots.guard.initial_resolved)
 	await process_frame
 	var cleared_panel := app.host.ui_root.get_node_or_null("ExpeditionStatus") as ExpeditionStatusPanel if is_instance_valid(app.host) else null
 	check("completion_hint_points_to_marker_after_clear",cleared_panel != null and cleared_panel.completion_hint().begins_with("Fique dentro do círculo"))
 	var journal_lock := app.facade.current_profile().expedition_for_character(app.facade.current_profile().selected_character_id)
-	check("death_commits_as_one_journal_entry",journal_lock != null and journal_lock.journal.size() == 1 and journal_lock.receipts.values().any(func(receipt: Dictionary) -> bool: return receipt["operation"] == "journal"))
+	var journal_payloads: Array = ExpeditionService.Journal.decode(journal_lock.journal,journal_lock.checkpoint).get("payloads",[]) if journal_lock != null else []
+	check("death_commits_as_one_journal_entry",journal_payloads.size() >= 1 and not ExpeditionService.Journal.is_collect(journal_payloads[0]) and journal_payloads[0].events.size() == 1 and journal_lock.receipts.values().any(func(receipt: Dictionary) -> bool: return receipt["operation"] == "journal"))
 	check("journal_keeps_live_host_and_skin",is_instance_valid(app.host) and app.host == host and app.host.expedition_view.skin.get_instance_id() == skin_before and not app.host.enemies.has(enemy) and not enemy.visible and enemy.process_mode == Node.PROCESS_MODE_DISABLED and not app.host.get_tree().paused)
 	check("journal_commit_frame_stays_short",journal_frame_ms < 1500.0)
+	check("deaths_are_written_in_the_background",saw_background)
 	var reread: Dictionary = ExpeditionAssetLock.from_record(JSON.parse_string(JSON.stringify(journal_lock.to_record()))) if journal_lock != null else {"ok":false}
 	check("journal_survives_the_profile_json_round_trip",reread.ok and reread.lock.journal == journal_lock.journal and reread.lock.to_record().size() == 8)
 	var replayed := ExpeditionService.new(app.facade)._restore(journal_lock) if journal_lock != null else {"ok":false}
@@ -148,6 +154,20 @@ func run() -> void:
 		same_replay = copy.campaign_runtime.state.slots == host.campaign_runtime.state.slots and copy.campaign_runtime.state.stages == host.campaign_runtime.state.stages and copy.reward_service._tickets == host.reward_service._tickets and copy.reward_service._queue == host.reward_service._queue and copy.reward_service._next_sequence == host.reward_service._next_sequence and copy.rng.state == ExpeditionService.Journal.decode(journal_lock.journal,journal_lock.checkpoint).payloads[0].rng_state and copy.enemies.size() == host.enemies.size() and copy.campaign_runtime.pending_events == host.campaign_runtime.pending_events and copy_enemy != null and not copy_enemy.visible and int(replayed.snapshot.objects[stable].node.mode) == Node.PROCESS_MODE_DISABLED
 		copy.free()
 	check("base_plus_journal_restores_live_campaign_state",same_replay)
+	# Checkpoint38: out of combat the drop and its XP reach the character without
+	# a button, as one more journal entry on the same host.
+	var issued: int = journal_payloads[0].tickets.size() if not journal_payloads.is_empty() else 0
+	deadline = Time.get_ticks_msec()+10000
+	while issued > 0 and Time.get_ticks_msec() < deadline and is_instance_valid(app.host) and (app.host.reward_service.has_uncollected() or app.host.expedition_save_busy()): await process_frame
+	OS.set_environment("RAGRPG_BACKGROUND_SAVE","")
+	var collected_lock := app.facade.current_profile().expedition_for_character(app.facade.current_profile().selected_character_id)
+	var collected_payloads: Array = ExpeditionService.Journal.decode(collected_lock.journal,collected_lock.checkpoint).get("payloads",[]) if collected_lock != null else []
+	check("drops_and_xp_are_collected_automatically",issued > 0 and app.host == host and not host.reward_service.has_uncollected() and not collected_payloads.is_empty() and ExpeditionService.Journal.is_collect(collected_payloads[-1]) and collected_payloads[-1].delivered.size() == issued and app.facade.current_profile().reward_session.last_committed_seq == collected_payloads[-1].session.last_committed_seq and collected_lock.effective_session() == app.facade.current_profile().reward_session)
+	var replayed_collect := ExpeditionService.new(app.facade)._restore(collected_lock) if collected_lock != null else {"ok":false}
+	check("base_plus_journal_restores_delivered_rewards",replayed_collect.ok and not replayed_collect.root.reward_service.has_uncollected() and replayed_collect.root.reward_service._tickets == host.reward_service._tickets)
+	if replayed_collect.ok: replayed_collect.root.free()
+	var backdrop: Node = host.get_node_or_null("ExpeditionBackdrop")
+	check("themed_parallax_backdrop_follows_stage_biome",backdrop is CanvasLayer and backdrop.layer < 0 and backdrop.biome == backdrop.theme_id(String(host.expedition_view.geometry._stage.get("biome",""))) and backdrop.get_child_count() >= 4)
 	await capture("gameplay_combat")
 	var old_directory: String = app.session.directory; var old_hash: String = app.session.session.candidate_hash
 	var restarted := await app.restart()

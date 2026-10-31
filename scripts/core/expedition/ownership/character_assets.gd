@@ -27,8 +27,8 @@ static func validate(profile: ProfileState) -> Dictionary:
 		if id != slot.expedition_id or profile.character_by_id(slot.character_id) == null or (slot.lifecycle != &"completed" and seen.has(slot.character_id)): return BuildEffectCatalog.failure(&"expedition_conflict")
 		if slot.lifecycle != &"completed": seen[slot.character_id] = true
 		if not slot.checkpoint.is_empty():
-			if slot.lifecycle != &"completed" and ExpeditionCheckpointCodec.owner_digest(profile,slot.character_id) != slot.checkpoint["owner_digest"]: return BuildEffectCatalog.failure(&"checkpoint_assets_mismatch")
-			if slot.lifecycle in [&"active", &"recovering"] and profile.reward_session != slot.checkpoint["session"]: return BuildEffectCatalog.failure(&"invalid_checkpoint")
+			if slot.lifecycle != &"completed" and ExpeditionCheckpointCodec.owner_digest(profile,slot.character_id) != slot.effective_owner_digest(): return BuildEffectCatalog.failure(&"checkpoint_assets_mismatch")
+			if slot.lifecycle in [&"active", &"recovering"] and profile.reward_session != slot.effective_session(): return BuildEffectCatalog.failure(&"invalid_checkpoint")
 			if slot.lifecycle == &"suspended" and profile.reward_session != null and profile.reward_session["character_id"] == slot.character_id: return BuildEffectCatalog.failure(&"invalid_checkpoint")
 	for id: StringName in profile.profile_unlocks:
 		if not IdentityIds.is_technical_id(String(id)) or not profile.profile_unlocks[id]: return BuildEffectCatalog.failure(&"invalid_unlock")
@@ -96,7 +96,7 @@ static func validate_transition(before: ProfileState, after: ProfileState) -> Di
 			# Only a material checkpoint may advance XP; build and lobby edits stay locked.
 			var previous := before.expedition_for_character(character.character_id)
 			var next: ExpeditionAssetLock = after.expeditions.get(previous.expedition_id)
-			if next == null or next.revision != previous.revision+1 or next.checkpoint.is_empty() or next.checkpoint == previous.checkpoint or ExpeditionCheckpointCodec.owner_digest(after,character.character_id) != next.checkpoint["owner_digest"]: return BuildEffectCatalog.failure(&"locked_by_expedition")
+			if not _material_advance(previous, next, after, character.character_id): return BuildEffectCatalog.failure(&"locked_by_expedition")
 			var material_keys := ["base_xp_total", "job_xp_total"]
 			if changed.gold != character.gold and next.lifecycle != &"completed": return BuildEffectCatalog.failure(&"locked_by_expedition")
 			for key: String in material_keys:
@@ -118,6 +118,19 @@ static func validate_transition(before: ProfileState, after: ProfileState) -> Di
 		var new_cards := after.card_inventory.for_character(character.character_id, after.equipment_for_character(character.character_id))
 		if old_cards.sockets() != new_cards.sockets() and not build_commit: return BuildEffectCatalog.failure(&"locked_by_expedition")
 	return {"ok": true}
+
+# XP and owned assets advance only with a durable record of the world that
+# delivered them: a new material checkpoint, or (checkpoint38) exactly one new
+# journal entry that collects tickets and names the resulting owner digest.
+static func _material_advance(previous: ExpeditionAssetLock, next: ExpeditionAssetLock, after: ProfileState, character_id: String) -> bool:
+	if next == null or next.revision != previous.revision+1 or next.checkpoint.is_empty(): return false
+	var digest := ExpeditionCheckpointCodec.owner_digest(after,character_id)
+	if next.checkpoint != previous.checkpoint: return digest == next.checkpoint["owner_digest"]
+	if next.journal.size() != previous.journal.size()+1 or next.journal.slice(0,previous.journal.size()) != previous.journal: return false
+	var decoded := ExpeditionAssetLock.Journal.validate(next.journal,next.checkpoint)
+	if not decoded["ok"]: return false
+	var payload: Dictionary = decoded["payloads"][-1]
+	return ExpeditionAssetLock.Journal.is_collect(payload) and digest == payload["owner_digest"]
 
 static func _is_build_checkpoint(before: ProfileState, after: ProfileState, character_id: String) -> bool:
 	var previous := before.expedition_for_character(character_id)

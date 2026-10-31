@@ -4,6 +4,8 @@ extends RefCounted
 const Journal = preload("res://scripts/core/expedition/persistence/expedition_journal_codec.gd")
 var facade: ProfileFacade
 var _pending: Dictionary = {}
+# Checkpoint38: a journal commit written in the background (context until polled).
+var _background: Dictionary = {}
 
 func _init(profile_facade: ProfileFacade) -> void:
 	facade = profile_facade
@@ -119,12 +121,12 @@ func resume(expedition_id: String, character_id: String, request_id: String, exp
 	var replay := _replay(profile,expedition_id,request_id,fingerprint)
 	if not replay.is_empty():
 		if not replay.get("ok",false): return replay
-		if lock.lifecycle not in [&"active", &"recovering"] or profile.reward_session != lock.checkpoint["session"]: return _fail(&"invalid_session")
+		if lock.lifecycle not in [&"active", &"recovering"] or profile.reward_session != lock.effective_session(): return _fail(&"invalid_session")
 		var reopened := _restore(lock)
 		if reopened["ok"]: reopened["already_applied"] = true
 		return reopened
 	if profile.revision != expected_revision: return _fail(&"stale_revision")
-	if profile.reward_session != null and profile.reward_session != lock.checkpoint["session"]: return _fail(&"run_active")
+	if profile.reward_session != null and profile.reward_session != lock.effective_session(): return _fail(&"run_active")
 	# Compatibility and passive reconstruction must succeed BEFORE changing the durable state.
 	var restored := _restore(lock)
 	if not restored["ok"]: return restored
@@ -132,7 +134,7 @@ func resume(expedition_id: String, character_id: String, request_id: String, exp
 	restored["root"].free()
 	var candidate := profile.copy_state()
 	candidate.selected_character_id = character_id
-	candidate.reward_session = lock.checkpoint["session"].duplicate(true)
+	candidate.reward_session = lock.effective_session().duplicate(true)
 	lock.lifecycle = &"recovering" if recovering else &"active"
 	lock.revision += 1
 	lock.receipts[request_id] = {"fingerprint":fingerprint,"operation":"resume","revision":lock.revision}
@@ -154,7 +156,7 @@ func reconcile(request_id: String) -> Dictionary:
 
 func _restore(lock: ExpeditionAssetLock) -> Dictionary:
 	var profile := facade.current_profile()
-	if ExpeditionCheckpointCodec.owner_digest(profile,lock.character_id) != lock.checkpoint["owner_digest"]: return _fail(&"checkpoint_assets_mismatch")
+	if ExpeditionCheckpointCodec.owner_digest(profile,lock.character_id) != lock.effective_owner_digest(): return _fail(&"checkpoint_assets_mismatch")
 	var decoded := ExpeditionCheckpointCodec.unpack(lock.checkpoint)
 	if not decoded["ok"]: return decoded
 	var snapshot: Dictionary = decoded["snapshot"]
@@ -518,8 +520,8 @@ func _apply_campaign(host: RunController, command: Dictionary) -> Dictionary:
 # world transaction. Effects are resolved on the live host and rolled back,
 # written durably, and only then applied to the live host. Nothing is restored
 # and the host is not replaced. Restoring the base replays the same payloads.
-func journal_events(controller: RunController, barrier: SnapshotTickBarrier, events: Array, request_id: String, expected_revision: int) -> Dictionary:
-	if not _pending.is_empty(): return _fail(&"recovery_required")
+func journal_events(controller: RunController, barrier: SnapshotTickBarrier, events: Array, request_id: String, expected_revision: int, background: bool = false) -> Dictionary:
+	if not _pending.is_empty() or not _background.is_empty(): return _fail(&"recovery_required")
 	if controller == null or controller.persistent_facade != facade or controller.campaign_runtime == null or barrier == null or not barrier.owns(controller): return _fail(&"tick_barrier_required")
 	if events.is_empty() or events.any(func(event: Variant) -> bool: return not event is Dictionary or event.get("kind") != "mob_death"): return _fail(&"invalid_payload")
 	if not _valid_campaign_command({"kind": "events", "events": events}): return _fail(&"invalid_payload")
@@ -544,7 +546,78 @@ func journal_events(controller: RunController, barrier: SnapshotTickBarrier, eve
 	slot.journal.append(made["entry"])
 	slot.revision += 1
 	slot.receipts[request_id] = {"fingerprint": fingerprint, "operation": "journal", "revision": slot.revision}
-	return _commit(candidate, request_id, expected_revision, {"source": weakref(controller), "barrier": weakref(barrier), "expedition_id": id, "journal_payload": resolved["payload"]})
+	var context := {"source": weakref(controller), "barrier": weakref(barrier), "expedition_id": id, "journal_payload": resolved["payload"]}
+	return _commit_background(candidate, request_id, expected_revision, context) if background else _commit(candidate, request_id, expected_revision, context)
+
+# The profile write runs on a worker thread; the live host keeps playing. The
+# effect is published only when poll_background() sees the durable result.
+func _commit_background(candidate: ProfileState, request_id: String, expected_revision: int, context: Dictionary) -> Dictionary:
+	context["request_id"] = request_id
+	context.erase("barrier") # Released before the write; nothing to retain.
+	var started := facade.commit_expedition_candidate_async(candidate, request_id, expected_revision)
+	if started.get("pending", false):
+		_background = context
+		return {"ok": false, "pending": true, "error_code": &"save_in_progress", "request_id": request_id}
+	if started.get("read_only", false): _pending = context
+	else: _discard_staged(context)
+	return started
+
+func background_pending() -> bool:
+	return not _background.is_empty()
+
+func poll_background() -> Dictionary:
+	if _background.is_empty(): return _fail(&"invalid_transaction")
+	var result := facade.poll_async_commit()
+	if result.get("pending", false): return result
+	var context := _background; _background = {}
+	if result.get("ok", false): return _publish(result, context)
+	if result.get("read_only", false): _pending = context
+	else: _discard_staged(context)
+	return result
+
+# Checkpoint38: every mob ticket waiting at the head of the queue is collected
+# in one journal entry. The grants are prepared on the profile candidate in
+# ticket order; the entry records which tickets were delivered and the reward
+# session and owner digest after them. The world is not captured.
+func journal_collect(controller: RunController, barrier: SnapshotTickBarrier, request_id: String, expected_revision: int, background: bool = false) -> Dictionary:
+	if not _pending.is_empty() or not _background.is_empty(): return _fail(&"recovery_required")
+	if controller == null or controller.persistent_facade != facade or controller.campaign_runtime == null or barrier == null or not barrier.owns(controller): return _fail(&"tick_barrier_required")
+	var profile := facade.current_profile()
+	if profile == null: return _fail(&"profile_unavailable")
+	var lock := profile.expedition_for_character(controller.run_state.character_id)
+	if lock == null or lock.checkpoint.is_empty() or lock.lifecycle != &"active" or profile.reward_session == null or profile.reward_session["run_id"] != controller.run_state.run_id: return _fail(&"invalid_session")
+	var rewards := controller.reward_service
+	var tickets: Array[String] = []
+	for ticket_id: String in rewards._queue:
+		if not rewards._tickets[ticket_id].get("mob_ticket", false) or rewards._tickets[ticket_id]["delivered"]: break
+		tickets.append(ticket_id)
+	if tickets.is_empty(): return _fail(&"reward_unavailable")
+	var fingerprint := _fingerprint("journal", lock.expedition_id, lock.phase_id, "collect:" + ",".join(tickets))
+	var replay := _replay(profile, lock.expedition_id, request_id, fingerprint)
+	if not replay.is_empty(): return replay
+	if profile.revision != expected_revision: return _fail(&"stale_revision")
+	if rewards.has_pending_transaction() or controller.inventory_frozen or controller.encounter_active or controller.run_state.has_open_offer() or controller.run_finished or not controller.player.is_alive(): return _fail(&"save_in_progress")
+	if lock.journal.size() >= Journal.MAX_ENTRIES: return _fail(&"journal_full")
+	var candidate := profile
+	var delivered: Array = []
+	for ticket_id: String in tickets:
+		var entry: Dictionary = rewards._tickets[ticket_id]
+		var prepared := facade.prepare_ticket_candidate(candidate, ticket_id, int(entry["sequence"]), entry["payload"])
+		if not prepared["ok"]: return prepared
+		candidate = prepared["candidate"]
+		delivered.append({"ticket_id": ticket_id, "card_instance_id": StringName(prepared["card_instance_id"])})
+	if candidate == profile: return _fail(&"reward_unavailable")
+	for ticket_id: String in tickets:
+		if not rewards._presentation_xp_before.has(ticket_id): rewards._presentation_xp_before[ticket_id] = rewards._observe_xp(controller)
+	var payload := {"kind": "collect", "delivered": delivered, "session": candidate.reward_session.duplicate(true), "owner_digest": ExpeditionCheckpointCodec.owner_digest(candidate, lock.character_id)}
+	var slot: ExpeditionAssetLock = candidate.expeditions[lock.expedition_id]
+	var made := Journal.make_entry(slot.journal, slot.checkpoint, request_id, payload)
+	if not made["ok"]: return made
+	slot.journal.append(made["entry"])
+	slot.revision += 1
+	slot.receipts[request_id] = {"fingerprint": fingerprint, "operation": "journal", "revision": slot.revision}
+	var context := {"source": weakref(controller), "barrier": weakref(barrier), "expedition_id": lock.expedition_id, "journal_payload": payload}
+	return _commit_background(candidate, request_id, expected_revision, context) if background else _commit(candidate, request_id, expected_revision, context)
 
 # Validates the deaths on a scratch copy of the slot data and rolls the drops on
 # the live reward ledger, then restores the ledger and RNG exactly.
@@ -580,6 +653,7 @@ func _journal_effects(host: RunController, events: Array) -> Dictionary:
 func _journal_apply(host: RunController, payload: Dictionary, replay: bool, barrier: SnapshotTickBarrier = null) -> Dictionary:
 	var runtime := host.campaign_runtime
 	if runtime == null: return _fail(&"invalid_session")
+	if Journal.is_collect(payload): return _journal_apply_collect(host, payload, replay)
 	var disabled: Array[Node] = []
 	var applied := {}
 	for event: Dictionary in payload["events"]:
@@ -609,6 +683,23 @@ func _journal_apply(host: RunController, payload: Dictionary, replay: bool, barr
 		kept.append(event)
 	runtime.pending_events = kept
 	return {"ok": true, "disabled": disabled}
+
+# The grants are already in the profile; the run state takes them from it, the
+# tickets leave the queue in order, and the live host shows the confirmation.
+func _journal_apply_collect(host: RunController, payload: Dictionary, replay: bool) -> Dictionary:
+	var rewards := host.reward_service
+	var profile := facade.current_profile()
+	for item: Dictionary in payload["delivered"]:
+		var ticket_id: String = item["ticket_id"]
+		if not rewards._tickets.has(ticket_id): return _fail(&"invalid_reward")
+		var entry: Dictionary = rewards._tickets[ticket_id]
+		if entry["delivered"]: continue
+		if rewards._queue.is_empty() or rewards._queue[0] != ticket_id: return _fail(&"invalid_reward_sequence")
+		rewards.apply_collected(ticket_id, {"card_instance_id": item["card_instance_id"]}, profile)
+		if replay: continue
+		var receipt := rewards._confirmed_receipt(host, entry, true)
+		rewards.reward_confirmed.emit(receipt)
+	return {"ok": true, "disabled": [] as Array[Node]}
 
 # Replays the journal over a restored base before anything activates it. The
 # registry would re-enable removed mobs from their recorded modes, so those

@@ -1440,7 +1440,8 @@
       "_expedition_transaction_service": "external in-flight writer coordinator, never serialized; pending commands remain frozen in campaign",
       "_expedition_flush_running": "ephemeral scheduling guard; durable campaign pending_events is authoritative",
       "expedition_entry_mode": "construction-only switch; restored hosts are passive and never rerun startup",
-      "_pending_world_click": "transient background ground-click route (checkpoint36); dropped on restore"
+      "_pending_world_click": "transient background ground-click route (checkpoint36); dropped on restore",
+      "_auto_collect_after_msec": "transient retry delay of the automatic reward collection (checkpoint38)"
     },
     "omitted_signals": {
       "memory_snapshot_ready": "out-of-graph capture result consumer, emitted only after capture"

@@ -18,6 +18,10 @@ func request_memory_snapshot() -> Dictionary:
 
 func _capture_memory_snapshot() -> void:
 	if not _memory_snapshot_pending: return
+	# A background journal write publishes first; the cut then includes it.
+	if expedition_save_busy() and is_inside_tree():
+		get_tree().process_frame.connect(_capture_memory_snapshot,CONNECT_ONE_SHOT)
+		return
 	_memory_snapshot_previous_pause = get_tree().paused
 	get_tree().paused = true
 	_memory_snapshot_barrier = SnapshotTickBarrier.new()
@@ -58,6 +62,7 @@ func release_memory_snapshot() -> void:
 	_memory_snapshot_pending = false
 
 const IceWallScript = preload("res://scripts/world/ice_wall.gd")
+const ExpeditionBackdropScript = preload("res://scripts/world/expedition_backdrop.gd")
 const ElementalistSequenceScript = preload("res://scripts/world/elementalist_sequence.gd")
 
 const ARENA_BOUNDS := Rect2(80, 80, 1640, 920)
@@ -124,6 +129,9 @@ var expedition_field_height := 0.0
 ## Ground click whose route is searched in the background (checkpoint36).
 ## Transient: {request, destination, retried}; omitted from snapshots.
 var _pending_world_click: Dictionary = {}
+## Earliest time for the next automatic collection after a refusal (checkpoint38).
+## Transient; omitted from snapshots.
+var _auto_collect_after_msec := 0
 var _world_companion_attempts: Dictionary[int, bool] = {}
 var _world_pending_companions: Dictionary[int, WeakRef] = {}
 var reward: RewardPickup
@@ -384,6 +392,8 @@ func _advance_runtime(_delta: float) -> void:
 
 func _process(_delta: float) -> void:
 	_pump_world_navigation()
+	_poll_expedition_save()
+	_auto_collect()
 	_advance_runtime(_delta)
 	_update_hud()
 	for element: StringName in geometer_element_buttons:
@@ -2665,9 +2675,9 @@ func _advance_expedition_runtime(delta: float) -> void:
 			campaign_runtime.pending_events.append({"kind": "wave", "wave_index": campaign_runtime.state.clock.wave_index})
 		_flush_expedition_events.call_deferred()
 
-func _flush_expedition_events() -> void:
+func _flush_expedition_events(allow_journal: bool = true) -> void:
 	if campaign_runtime == null or _expedition_flush_running or campaign_runtime.pending_events.is_empty() or _memory_snapshot_pending: return
-	if _journal_flush(): return
+	if allow_journal and _journal_flush(): return
 	_expedition_flush_running = true
 	var saved_status := status_label.text
 	status_label.text = "Salvando a expedição…"
@@ -2708,7 +2718,11 @@ func _journal_flush() -> bool:
 	var events := campaign_runtime.pending_events.duplicate(true)
 	var request := "events_" + ExpeditionCanonical.digest({"kind": "events", "events": events}).substr(0, 56)
 	_expedition_transaction_service = ExpeditionService.new(persistent_facade)
-	var result := _expedition_transaction_service.journal_events(self, _memory_snapshot_barrier, events, request, profile.revision)
+	# Checkpoint38: the effect is resolved under the barrier, the profile is
+	# written on a worker thread and the game keeps running meanwhile.
+	var result := _expedition_transaction_service.journal_events(self, _memory_snapshot_barrier, events, request, profile.revision, _background_saves())
+	if result.get("pending", false):
+		release_memory_snapshot(); _expedition_flush_running = true; return true
 	if result["ok"]:
 		release_memory_snapshot(); return true
 	if result.get("read_only", false):
@@ -2718,6 +2732,68 @@ func _journal_flush() -> bool:
 		return true
 	release_memory_snapshot()
 	return false
+
+# Background profile writes outside headless runs; RAGRPG_SYNC_SAVE=1 forces the
+# synchronous write and RAGRPG_BACKGROUND_SAVE=1 the background one (tests).
+func _background_saves() -> bool:
+	if OS.get_environment("RAGRPG_BACKGROUND_SAVE") == "1": return true
+	return DisplayServer.get_name() != "headless" and OS.get_environment("RAGRPG_SYNC_SAVE") != "1"
+
+# Checkpoint38: out of combat, every mob drop and its XP waiting in the queue go
+# to the character in one journal entry, written in the background. The status
+# panel button remains the explicit fallback.
+func _auto_collect() -> void:
+	if campaign_runtime == null or reward_service == null or persistent_facade == null or not reward_service.has_uncollected(): return
+	if snapshot_passive or _expedition_flush_running or expedition_save_busy() or _memory_snapshot_pending or encounter_active or run_finished or inventory_frozen: return
+	if not is_inside_tree() or get_tree().paused or not player.is_alive() or run_state.has_open_offer() or not campaign_runtime.pending_events.is_empty(): return
+	if Time.get_ticks_msec() < _auto_collect_after_msec or not reward_service.next_pending_ticket().get("mob_ticket", false): return
+	var profile := persistent_facade.current_profile()
+	var lock := profile.expedition_for_character(run_state.character_id) if profile != null else null
+	if lock == null or lock.checkpoint.is_empty() or lock.lifecycle != &"active": return
+	_memory_snapshot_pending = true
+	_memory_snapshot_previous_pause = get_tree().paused
+	get_tree().paused = true
+	_memory_snapshot_barrier = SnapshotTickBarrier.new()
+	if not _memory_snapshot_barrier.acquire(self)["ok"]:
+		release_memory_snapshot(); return
+	var queued: Array = []
+	for ticket_id: String in reward_service._queue: queued.append(ticket_id)
+	var request := "collect_" + ExpeditionCanonical.digest(queued).substr(0, 56)
+	_expedition_transaction_service = ExpeditionService.new(persistent_facade)
+	var result := _expedition_transaction_service.journal_collect(self, _memory_snapshot_barrier, request, profile.revision, _background_saves())
+	if result.get("pending", false):
+		release_memory_snapshot(); _expedition_flush_running = true; return
+	if result.get("ok", false):
+		release_memory_snapshot(); return
+	if result.get("read_only", false):
+		_expedition_flush_running = true
+		status_label.text = "A expedição está pausada; confirme a recuperação antes de continuar: %s" % result["error_code"]
+		return
+	release_memory_snapshot()
+	_auto_collect_after_msec = Time.get_ticks_msec() + 5000
+
+func expedition_save_busy() -> bool:
+	return _expedition_transaction_service != null and _expedition_transaction_service.background_pending()
+
+func _poll_expedition_save() -> void:
+	if not expedition_save_busy(): return
+	var result := _expedition_transaction_service.poll_background()
+	if result.get("pending", false): return
+	if result.get("ok", false):
+		_expedition_flush_running = false
+		return
+	if result.get("read_only", false):
+		# Same rule as a synchronous uncertain write: freeze until recovery.
+		_memory_snapshot_pending = true
+		_memory_snapshot_previous_pause = get_tree().paused
+		get_tree().paused = true
+		_memory_snapshot_barrier = SnapshotTickBarrier.new()
+		_memory_snapshot_barrier.acquire(self)
+		status_label.text = "A expedição está pausada; confirme a recuperação antes de continuar: %s" % result["error_code"]
+		return
+	# Refused without a write: the full transaction reports or repairs it.
+	_expedition_flush_running = false
+	_flush_expedition_events.call_deferred(false)
 
 func reconcile_expedition_transaction(request_id: String) -> Dictionary:
 	if _expedition_transaction_service == null: return WorldSkillCast.failure(&"invalid_transaction")
@@ -2729,6 +2805,8 @@ func retry_expedition_events() -> Dictionary:
 	if campaign_runtime == null or not _memory_snapshot_pending: return WorldSkillCast.failure(&"invalid_transaction")
 	var command := {"kind": "events", "events": campaign_runtime.pending_events.duplicate(true)}
 	var request := "events_" + ExpeditionCanonical.digest(command).substr(0, 56)
+	# An uncertain journal write may be a collection, not the pending deaths.
+	if _expedition_transaction_service != null and not _expedition_transaction_service._pending.is_empty(): request = String(_expedition_transaction_service._pending.get("request_id", request))
 	if _expedition_transaction_service != null:
 		var result := _expedition_transaction_service.reconcile(request)
 		if result["ok"]: return _install_expedition_result(result)
@@ -4105,6 +4183,11 @@ func attach_expedition_view(view: ExpeditionGeometryView, field_height: float) -
 	# Interactive play searches long routes on a worker thread; headless runs,
 	# tests and RAGRPG_SYNC_NAVIGATION=1 stay synchronous.
 	view.geometry.navigation_async = DisplayServer.get_name() != "headless" and OS.get_environment("RAGRPG_SYNC_NAVIGATION") != "1"
+	# Checkpoint38: themed parallax behind the world instead of a flat colour.
+	var backdrop: Variant = get_node_or_null("ExpeditionBackdrop")
+	if backdrop == null:
+		backdrop = ExpeditionBackdropScript.new(); add_child(backdrop)
+	backdrop.configure(String(view.geometry._stage.get("biome","")))
 	view.observe(player)
 	view.present_campaign(self)
 	for actor: CombatActor in enemies:

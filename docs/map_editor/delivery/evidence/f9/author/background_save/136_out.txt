@@ -1,0 +1,57 @@
+﻿RUN GameplayNative import 2026-10-31T16:36:28.2854216-03:00
+F9 GameplayNative: True
+F9_GAMEPLAY_JOURNAL_FRAME_MS 43.6
+RUN CampaignJournal 2026-10-31T16:38:24.4513493-03:00
+
+F9 CampaignJournal: True
+RUN NavigationAsync 2026-10-31T16:38:36.8634834-03:00
+F9 NavigationAsync: True
+RUN WorldRewardPoll 2026-10-31T16:38:56.2862898-03:00
+F9 WorldRewardPoll: True
+RUN GameplayGate 2026-10-31T16:39:24.0928541-03:00
+F9 GameplayGate: True
+RUN CanvasOrder 2026-10-31T16:40:28.5957097-03:00
+F9 CanvasOrder: True
+--- legacy
+candidates (38)
+LEGACY tests/e06_gameplay_ai_test.gd :: E06 gameplay AI: 73 checks, 0 failures
+LEGACY tests/e06_tx_loot_test.gd :: E06 TX3 loot: 49 checks, 0 failures
+LEGACY tests/e07_f1_birth_collect_test.gd :: E07 F1 birth and collection: 210 checks, 0 failures
+LEGACY tests/e07_f1_consumer_test.gd :: E07 F1 consumers: 133 checks, 0 failures
+LEGACY tests/e07_f2_integration_test.gd :: E07 F2 e07_f2_integration_test.gd: 18 checks, 0 failures
+LEGACY tests/e07_f2_migration_test.gd :: E07 F2 e07_f2_migration_test.gd: 35 checks, 0 failures
+LEGACY tests/e07_f2_ownership_test.gd :: E07 F2 e07_f2_ownership_test.gd: 45 checks, 0 failures
+LEGACY tests/e07_f2_store_test.gd :: E07 F2 e07_f2_store_test.gd: 87 checks, 0 failures
+LEGACY tests/e07_f3_action_matrix_test.gd :: E07 F3 action matrix: 2004 checks, 0 failures; scenarios=21
+LEGACY tests/e07_f3_continuation_test.gd :: E07 F3 continuation: 2743 checks, 0 failures; scenarios=30
+LEGACY tests/e07_f3_lifecycle_test.gd :: E07 F3 lifecycle: 90 checks, 0 failures
+LEGACY tests/e07_f3_mob_state_test.gd :: E07 F3 mob state: 372 checks, 0 failures; scenarios=4
+LEGACY tests/e07_f3_snapshot_test.gd :: E07 F3 snapshot: 50 checks, 0 failures
+LEGACY tests/e07_f4_alt_isolation_test.gd :: E07 F4 e07_f4_alt_isolation_test.gd: 16 checks, 0 failures
+LEGACY tests/e07_f4_compatibility_test.gd :: E07 F4 e07_f4_compatibility_test.gd: 16 checks, 0 failures
+LEGACY tests/e07_f4_controller_test.gd :: E07 F4 e07_f4_controller_test.gd: 11 checks, 0 failures
+LEGACY tests/e07_f4_durable_test.gd :: E07 F4 e07_f4_durable_test.gd: 28 checks, 0 failures
+LEGACY tests/e07_f4_fault_test.gd :: E07 F4 e07_f4_fault_test.gd: 53 checks, 0 failures
+LEGACY tests/e07_f4_restart_test.gd :: E07 F4 e07_f4_restart_test.gd: 3 checks, 0 failures
+LEGACY tests/e07_f5_build_test.gd :: E07 F5 e07_f5_build_test.gd: 32 checks, 0 failures
+LEGACY tests/e07_f5_campaign_test.gd :: E07 F5 e07_f5_campaign_test.gd: 28 checks, 0 failures
+LEGACY tests/e07_f5_completion_test.gd :: E07 F5 e07_f5_completion_test.gd: 39 checks, 0 failures
+LEGACY tests/e07_f5_death_kits_test.gd :: E07 F5 death kits: 191 checks, 0 failures
+LEGACY tests/e07_f5_fault_test.gd :: E07 F5 e07_f5_fault_test.gd: 20 checks, 0 failures
+LEGACY tests/e07_f5_population_test.gd :: E07 F5 population: 40 checks, 0 failures
+LEGACY tests/e07_f5_quest_test.gd :: E07 F5 e07_f5_quest_test.gd: 21 checks, 0 failures
+LEGACY tests/e07_f5_recovery_test.gd :: E07 F5 e07_f5_recovery_test.gd: 33 checks, 0 failures
+LEGACY tests/e07_f5_reward_test.gd :: E07 F5 rewards: 6 checks, 0 failures
+LEGACY tests/e07_f5_waves_test.gd :: E07 F5 e07_f5_waves_test.gd: 37 checks, 0 failures
+LEGACY tests/e07_f6_runtime_test.gd :: E07 F5 e07_f6_runtime_test.gd: 33 checks, 0 failures
+LEGACY tests/e07_f6_snapshot_test.gd :: E07 F5 e07_f6_snapshot_test.gd: 40 checks, 0 failures
+LEGACY tests/e07_f6_threat_test.gd :: E07 F6 threat: 43 checks, 0 failures
+LEGACY tests/e07_f7_actions_test.gd :: E07 F7 actions: 27 checks, 0 failures
+LEGACY tests/e07_f7_authoring_test.gd :: E07 F7 authoring: 26 checks, 0 failures
+LEGACY tests/e07_f7_flow_test.gd :: E07 F7 flow: PASS (23 assertions, opaque selection/visible/isometric camera/enter/lobby locks/closed portal/usable uncertain recovery/resume/install/activate)
+LEGACY tests/e07_f7_migration_boundary_test.gd :: E07 F7 migration: PASS (16 assertions; opaque modal/original missing-roster boundary resolved)
+LEGACY tests/e07_f7_presentation_test.gd :: E07 F7 presentation: 10 checks, 0 failures
+LEGACY tests/profile_facade_test.gd :: Fachada de perfil E01.3-A: PASS (52 checks)
+DONE 2026-10-31T16:59:58.6293416-03:00
+
+
