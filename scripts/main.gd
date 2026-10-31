@@ -2292,7 +2292,10 @@ func _on_enemy_died(actor: CombatActor) -> void:
 		if not slot_id.is_empty():
 			var slot: Dictionary = campaign_runtime.state.slots[slot_id]
 			campaign_runtime.pending_events.append({"kind": "mob_death", "slot_id": slot_id, "generation": slot["generation"], "event_id": "death_" + actor.occurrence.occurrence_id})
-			_flush_expedition_events.call_deferred()
+			# Durable commit waits for the end of combat (one transaction per fight,
+			# not per kill). The dead actor stays a tombstone; valid() admits it
+			# while its mob_death event is pending, and snapshots carry the queue.
+			if not encounter_active: _flush_expedition_events.call_deferred()
 			return
 		if actor is EnemyActor and actor.is_summoned:
 			enemies.erase(actor)
@@ -2644,6 +2647,8 @@ func _advance_expedition_runtime(delta: float) -> void:
 			links[enemy.occurrence.occurrence_id if enemy.occurrence != null else "companion"] = true
 	combat_participation.observe(links, delta)
 	encounter_active = combat_participation.active()
+	if not encounter_active and not _expedition_flush_running and campaign_runtime.pending_events.any(func(event: Dictionary) -> bool: return event["kind"] == "mob_death"):
+		_flush_expedition_events.call_deferred()
 	var wave := campaign_runtime.state.advance(delta)
 	var pending_safe := false
 	for slot: Dictionary in campaign_runtime.state.slots.values():
@@ -2659,8 +2664,13 @@ func _advance_expedition_runtime(delta: float) -> void:
 func _flush_expedition_events() -> void:
 	if campaign_runtime == null or _expedition_flush_running or campaign_runtime.pending_events.is_empty() or _memory_snapshot_pending: return
 	_expedition_flush_running = true
+	var saved_status := status_label.text
+	status_label.text = "Salvando a expedição…"
+	# Let the notice render once before the frozen capture.
+	await get_tree().process_frame
+	if campaign_runtime == null or campaign_runtime.pending_events.is_empty() or _memory_snapshot_pending: _expedition_flush_running = false; status_label.text = saved_status; return
 	var requested := request_memory_snapshot()
-	if not requested["ok"]: _expedition_flush_running = false; return
+	if not requested["ok"]: _expedition_flush_running = false; status_label.text = saved_status; return
 	var captured: Dictionary = await memory_snapshot_ready
 	if not captured["ok"]:
 		status_label.text = "A expedição está pausada: %s" % captured["error_code"]
@@ -2668,7 +2678,8 @@ func _flush_expedition_events() -> void:
 	_expedition_transaction_service = ExpeditionService.new(persistent_facade)
 	var command := {"kind": "events", "events": campaign_runtime.pending_events.duplicate(true)}
 	var request := "events_" + ExpeditionCanonical.digest(command).substr(0, 56)
-	var result := _expedition_transaction_service.campaign_command(self, _memory_snapshot_barrier, command, request, persistent_facade.current_profile().revision)
+	# The frozen cut is reused: the barrier guarantees nothing changed since it was taken.
+	var result := _expedition_transaction_service.campaign_command(self, _memory_snapshot_barrier, command, request, persistent_facade.current_profile().revision, captured)
 	if result["ok"]:
 		_install_expedition_result(result)
 	else:

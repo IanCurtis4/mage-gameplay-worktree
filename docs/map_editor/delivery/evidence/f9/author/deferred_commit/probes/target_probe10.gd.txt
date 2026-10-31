@@ -1,0 +1,81 @@
+extends SceneTree
+## Diagnostic (Sol, checkpoint33): what costs seconds per frame right after a kill on the real Bosque.
+const Launcher = preload("res://scripts/map_authoring/preview/gameplay_launcher.gd")
+const App = preload("res://scripts/map_authoring/preview/gameplay_app.gd")
+var app: App
+func _initialize() -> void: run.call_deferred()
+func ms(t: int) -> float: return snappedf((Time.get_ticks_usec()-t)/1000.0,0.01)
+func alive_host() -> bool: return is_instance_valid(app) and is_instance_valid(app.host) and is_instance_valid(app.host.player) and app.host.player.is_alive()
+func snapshot(main, label: String) -> void:
+	var player: PlayerActor = main.player; var geo: WorldGeometry = main.expedition_view.geometry
+	var rows: Array = []
+	for e: CombatActor in main.enemies:
+		if not is_instance_valid(e) or not e.is_alive() or e.world_motion == null: continue
+		var d := player.world_point().position.distance_to(e.world_point().position)
+		if d > 600.0: continue
+		var t := Time.get_ticks_usec()
+		var r := geo.path(e.world_point(),player.world_point(),e.world_motion.profile(),geo.geometry_revision)
+		var row := {"name":e.actor_name.substr(0,12),"d":snappedf(d,0.1),"to_player_ms":ms(t),"ok":r.ok,"mode":String(e.get("engagement_mode")) if e.get("engagement_mode") != null else "","route":e.world_motion.has_route()}
+		var home = e.get("_world_home")
+		if home is ExpeditionWorldPoint:
+			t = Time.get_ticks_usec(); var h := geo.path(e.world_point(),home,e.world_motion.profile(),geo.geometry_revision); row["to_home_ms"] = ms(t); row["home_ok"] = h.ok
+		rows.append(row)
+	var reward_ms := -1.0
+	if is_instance_valid(main.reward):
+		var t2 := Time.get_ticks_usec(); main.reward.can_collect_world(player,48.0); reward_ms = ms(t2)
+	print("TP6 snapshot "+JSON.stringify({"label":label,"enemies":rows,"reward":is_instance_valid(main.reward),"reward_poll_ms":reward_ms,"encounter_active":main.encounter_active,"hp":player.health.current_hp}))
+func run() -> void:
+	var path := ""
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--candidate="): path = arg.trim_prefix("--candidate=")
+	var candidate: Variant = bytes_to_var(FileAccess.get_file_as_bytes(path))
+	var created := Launcher.create_session(candidate)
+	var window := Launcher.create_window(created.path) if created.ok else {"ok":false}
+	app = App.new(); app.quit_on_close = false; app.hold_start = true; root.add_child(app); current_scene = app
+	var opened: Dictionary = await app.open_window_async(window.path)
+	var started: Dictionary = await app._start_with_gate() if opened.ok else {"ok":false}
+	if not started.ok: print("TP6 start_failed"); quit(1); return
+	var main = app.host
+	var host_id: int = main.get_instance_id()
+	app.begin()
+	var start := Time.get_ticks_msec(); var last := Time.get_ticks_usec(); var kills := 0; var snaps := 0
+	var current: CombatActor
+	while alive_host() and Time.get_ticks_msec()-start < 90000 and snaps < 10:
+		await process_frame
+		var dt := (Time.get_ticks_usec()-last)/1000.0; last = Time.get_ticks_usec()
+		if not alive_host(): break
+		main = app.host
+		if app.host.get_instance_id() != host_id:
+			print("TP9 host_replaced "+JSON.stringify({"t":Time.get_ticks_msec()-start,"frame_ms":snappedf(dt,0.1),"kills":kills}))
+			host_id = app.host.get_instance_id(); main = app.host; current = null
+		if dt > 1000.0:
+			print("TP9 long_frame "+JSON.stringify({"t":Time.get_ticks_msec()-start,"dt_ms":snappedf(dt,0.1),"kills":kills}))
+			snapshot(main,"after_long_frame"); snaps += 1; last = Time.get_ticks_usec()
+		if current != null and (not is_instance_valid(current) or not current.is_alive()):
+			kills += 1; current = null
+			print("TP6 kill "+JSON.stringify({"t":Time.get_ticks_msec()-start,"kills":kills}))
+			snapshot(main,"right_after_kill"); snaps += 1; last = Time.get_ticks_usec()
+			if kills == 1 and main.encounter_active and not main.campaign_runtime.pending_events.is_empty():
+				var t := Time.get_ticks_usec()
+				main._expedition_flush_running = true
+				var requested: Dictionary = main.request_memory_snapshot()
+				var captured: Dictionary = await main.memory_snapshot_ready
+				var t_cap := ms(t); t = Time.get_ticks_usec()
+				var service := ExpeditionService.new(main.persistent_facade); main._expedition_transaction_service = service
+				var command := {"kind": "events", "events": main.campaign_runtime.pending_events.duplicate(true)}
+				var request := "events_" + ExpeditionCanonical.digest(command).substr(0, 56)
+				var result: Dictionary = service.campaign_command(main, main._memory_snapshot_barrier, command, request, main.persistent_facade.current_profile().revision, captured)
+				var t_cmd := ms(t); t = Time.get_ticks_usec()
+				var installed: Dictionary = main._install_expedition_result(result) if result.ok else {}
+				var t_inst := ms(t)
+				print("TP10 flush_breakdown "+JSON.stringify({"requested":requested.ok,"captured":captured.ok,"capture_ms":t_cap,"campaign_command_ms":t_cmd,"command_ok":result.ok,"code":String(result.get("error_code","")),"install_ms":t_inst,"installed_ok":installed.get("ok",false)}))
+				last = Time.get_ticks_usec()
+		if current == null:
+			var best := 150.0
+			for e: CombatActor in main.enemies:
+				if is_instance_valid(e) and e.is_alive():
+					var d: float = main.player.world_point().position.distance_to(e.world_point().position)
+					if d < best: best = d; current = e
+			if current != null: main.spatial_pointer_move(current.global_position+Vector2(0,-26))
+	print("TP6_DONE "+JSON.stringify({"kills":kills,"alive":alive_host()}))
+	quit(0)

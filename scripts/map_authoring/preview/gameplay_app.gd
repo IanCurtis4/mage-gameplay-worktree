@@ -12,6 +12,9 @@ var _handling_command := false
 var _command_receipts: Dictionary = {}
 var _command_error := ""
 var prepared: Dictionary = {}
+var _prepare_serial := 0
+var _skin_stash: Node
+var _skin_stash_serial := -1
 var facade: ProfileFacade
 var host: RunController
 var status := "idle"
@@ -118,7 +121,7 @@ func _finish_open(resolved: Dictionary, built: Dictionary) -> Dictionary:
 	if not built.ok: return _set_result(built)
 	var acquired := Launcher.claim(resolved)
 	if not acquired.ok: return _set_result(acquired)
-	session = resolved; prepared = built; claimed = true
+	session = resolved; prepared = built; claimed = true; _prepare_serial += 1
 	status = "ready"
 	get_tree().root.title = "RagRPG · Teste descartável · "+String(session.session.candidate_hash).substr(0,10)
 	_refresh()
@@ -289,11 +292,18 @@ func resume() -> Dictionary:
 
 func _adopt(value: RunController) -> Dictionary:
 	if not is_instance_valid(value) or value.get_parent() != self or value.campaign_runtime == null: return {"ok":false,"code":"preview_detached"}
+	var reuse: Node = _skin_stash if is_instance_valid(_skin_stash) and _skin_stash_serial == _prepare_serial else null
+	if is_instance_valid(_skin_stash) and reuse == null: _skin_stash.free()
+	_skin_stash = null
 	if value.expedition_view is AuthoredView:
+		if is_instance_valid(reuse): reuse.free()
 		host = value; return {"ok":true}
 	var view := AuthoredView.new(); value.add_child(view)
-	var made := view.configure_package(prepared.map_package,value.player.world_motion.geometry)
-	if not made.ok: view.free(); get_tree().paused = true; return _set_result(made)
+	var made := view.configure_with_skin(prepared.map_package,value.player.world_motion.geometry,reuse) if reuse != null else view.configure_package(prepared.map_package,value.player.world_motion.geometry)
+	if not made.ok:
+		if is_instance_valid(reuse) and reuse.get_parent() == null: reuse.free()
+		view.free(); get_tree().paused = true; return _set_result(made)
+	view.set_meta("prepare_serial",_prepare_serial)
 	var old := value.expedition_view
 	var attached := value.attach_expedition_view(view,prepared.manifest._data.input.traversal.height)
 	if not attached.ok: view.free(); get_tree().paused = true; return _set_result(attached)
@@ -307,6 +317,13 @@ func _adopt(value: RunController) -> Dictionary:
 
 func _child_entered(node: Node) -> void:
 	if node is RunController:
+		# A campaign transaction replaces the host with a restored copy of the same
+		# world: keep the outgoing skin for the incoming view instead of rebuilding it.
+		if is_instance_valid(host) and host != node and host.expedition_view is AuthoredView and is_instance_valid(host.expedition_view.skin):
+			if is_instance_valid(_skin_stash): _skin_stash.free()
+			var outgoing: AuthoredView = host.expedition_view
+			outgoing.field_views.clear() # Field visuals belong to the outgoing world's state.
+			_skin_stash = outgoing.skin; outgoing.remove_child(_skin_stash); outgoing.skin = null; _skin_stash_serial = int(outgoing.get_meta("prepare_serial",-1))
 		# External write destinations are deliberately omitted from snapshots.
 		# Assign before _ready / presentation installation can expose controls.
 		if not session.is_empty(): node.control_preferences.path = session.directory.path_join("controls.cfg")
@@ -353,6 +370,8 @@ func restart() -> Dictionary:
 	var created := Launcher.create_session(session.candidate,session.session.class_id,session.root_path)
 	if not created.ok: return _set_result(created)
 	Launcher.release(session); claimed = false
+	if is_instance_valid(_skin_stash): _skin_stash.free()
+	_skin_stash = null
 	session = {}; prepared = {}; facade = null; host = null
 	var opened: Dictionary = await open_async(created.path)
 	if not opened.ok: return opened

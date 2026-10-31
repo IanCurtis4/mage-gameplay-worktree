@@ -1,0 +1,45 @@
+extends SceneTree
+## Diagnostic (Sol, checkpoint33): cost of the per-kill expedition transaction parts on the real Bosque.
+const Launcher = preload("res://scripts/map_authoring/preview/gameplay_launcher.gd")
+const App = preload("res://scripts/map_authoring/preview/gameplay_app.gd")
+func _initialize() -> void: run.call_deferred()
+func ms(t: int) -> float: return snappedf((Time.get_ticks_usec()-t)/1000.0,0.1)
+func run() -> void:
+	var path := ""
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--candidate="): path = arg.trim_prefix("--candidate=")
+	var candidate: Variant = bytes_to_var(FileAccess.get_file_as_bytes(path))
+	var created := Launcher.create_session(candidate)
+	var window := Launcher.create_window(created.path) if created.ok else {"ok":false}
+	var app := App.new(); app.quit_on_close = false; app.hold_start = true; root.add_child(app); current_scene = app
+	var opened: Dictionary = await app.open_window_async(window.path)
+	var started: Dictionary = await app._start_with_gate() if opened.ok else {"ok":false}
+	if not started.ok: print("TP8 start_failed"); quit(1); return
+	var main = app.host
+	var out := {}
+	for round_id: int in 2:
+		var barrier := SnapshotTickBarrier.new(); barrier.acquire(main)
+		var t := Time.get_ticks_usec()
+		var cut: Dictionary = SnapshotRegistry.new().capture(main,barrier)
+		out["capture_ms_%d" % round_id] = ms(t); out["capture_ok_%d" % round_id] = cut.ok
+		if not cut.ok: out["capture_code"] = String(cut.get("error_code","")); barrier.release(); break
+		out["snapshot_bytes"] = var_to_bytes(cut.snapshot).size()
+		t = Time.get_ticks_usec()
+		var restored: Dictionary = SnapshotRegistry.new().restore(cut.snapshot,main.persistent_facade)
+		out["restore_ms_%d" % round_id] = ms(t); out["restore_ok_%d" % round_id] = restored.ok
+		if restored.ok and round_id == 0:
+			var staged_barrier := SnapshotTickBarrier.new(); staged_barrier.acquire(restored.root)
+			t = Time.get_ticks_usec(); var after: Dictionary = SnapshotRegistry.new().capture(restored.root,staged_barrier); out["staged_capture_ms"] = ms(t)
+			staged_barrier.release()
+			var profile = main.persistent_facade.current_profile()
+			t = Time.get_ticks_usec(); var packed := ExpeditionCheckpointCodec.pack(after.snapshot,ExpeditionCheckpointCodec.owner_digest(profile,main.run_state.character_id),profile.reward_session); out["pack_ms"] = ms(t); out["pack_ok"] = packed.ok
+			if packed.ok: out["checkpoint_bytes"] = var_to_bytes(packed.checkpoint).size()
+			t = Time.get_ticks_usec(); var copy = profile.copy_state(); out["profile_copy_ms"] = ms(t)
+			var holder := Node.new(); root.add_child(holder)
+			t = Time.get_ticks_usec(); var installed: Dictionary = restored["registry"].install(restored,holder) if restored.has("registry") else SnapshotRegistry.new().install(restored,holder); out["install_ms"] = ms(t); out["install_ok"] = installed.get("ok",false); out["install_code"] = String(installed.get("error_code",""))
+			holder.queue_free()
+		elif restored.ok:
+			t = Time.get_ticks_usec(); restored.root.free(); out["free_ms_%d" % round_id] = ms(t)
+		barrier.release()
+	print("TP8_RESULT "+JSON.stringify(out))
+	quit(0)

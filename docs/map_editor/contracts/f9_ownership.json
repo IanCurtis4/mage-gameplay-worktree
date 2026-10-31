@@ -3017,6 +3017,12 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 file (checkpoint33 reward poll)",
       "base_sha256": "cd5af1b1ae69f030a8fde9cd81690a9b02171650b9df1f666c65e56f05c6f45f"
+    },
+    {
+      "path": "scripts/core/expedition/expedition_service.gd",
+      "owner": "Sol F9",
+      "previous_owner": "E07 runtime; sequential transfer for deferred commit / skin reuse only (checkpoint33); base is HEAD blob",
+      "base_sha256": "67cca732165e5b066a1ece8eaace5b5522e58db0d72847b4ba1864639a2fd3c6"
     }
   ],
   "read_only_shared": [
@@ -3728,6 +3734,33 @@
       },
       "finding": "each campaign mob death commits a full expedition transaction (3 world captures, 2 restores, host reinstall) costing ~17-18 s per kill on the Bosque; this, not picking, freezes combat; decision pending",
       "limits": "per-kill transaction cost unchanged in this increment"
+    },
+    "deferred_mob_commit": {
+      "state": "validated_increment_F9_still_open",
+      "base": "a416be84",
+      "human_decision": "31/10: \"Adiar + aliviar\" - defer the per-kill expedition commit to the end of combat and lighten it",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "files": [
+        "scripts/main.gd",
+        "scripts/core/expedition/expedition_service.gd",
+        "scripts/world/authored_expedition_view.gd",
+        "scripts/map_authoring/preview/gameplay_app.gd",
+        "tools/map_editor_completion/run.ps1"
+      ],
+      "test_files": [
+        "tests/map_editor_gameplay_ui_test.gd"
+      ],
+      "scope": "mob_death events stay pending during combat and flush once combat ends; travel/finish/revive apply pending deaths first; flush reuses the frozen cut; preview reuses the outgoing authored skin for the restored host",
+      "unchanged_invariant": "ExpeditionService staged/final restore pair (E07 F5: no grant or scene publish before the canonical writer commits)",
+      "measurements": {
+        "capture_ms": 2400,
+        "restore_ms": 2200,
+        "pack_ms": 1145,
+        "campaign_command_ms": 9552,
+        "skin_adopt_ms_before": 5823,
+        "per_kill_freeze_ms_before": "17000-19000"
+      },
+      "risk": "deaths of an unfinished fight are lost if the process dies during that fight"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

@@ -1,0 +1,13 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_REWARD_POLL_CHECK fixture_campaign_held true
+F9_REWARD_POLL_CHECK enemy_available true
+F9_REWARD_POLL_CHECK reward_bound_at_player true
+F9_REWARD_POLL_CHECK player_at_anchor_passes_prefilter true
+F9_REWARD_POLL_CHECK enemy_beyond_range_is_prefiltered true
+F9_REWARD_POLL_CHECK prefilter_never_rejects_a_real_hit true
+F9_REWARD_POLL_CHECK prefilter_admits_within_straight_distance true
+F9_REWARD_POLL_CHECK contains_actor_matches_full_query true
+F9_REWARD_POLL_CHECK far_actor_cannot_collect true
+F9_REWARD_POLL_CHECK reward_is_still_placed_after_far_poll true
+F9_REWARD_POLL_RESULT {"checks":[{"detail":null,"id":"fixture_campaign_held","ok":true},{"detail":null,"id":"enemy_available","ok":true},{"detail":null,"id":"reward_bound_at_player","ok":true},{"detail":null,"id":"player_at_anchor_passes_prefilter","ok":true},{"detail":{"gap":174.88493347168},"id":"enemy_beyond_range_is_prefiltered","ok":true},{"detail":{"radii":[173.88493347168,87.4424667358398,175.88493347168,254.88493347168]},"id":"prefilter_never_rejects_a_real_hit","ok":true},{"detail":null,"id":"prefilter_admits_within_straight_distance","ok":true},{"detail":null,"id":"contains_actor_matches_full_query","ok":true},{"detail":null,"id":"far_actor_cannot_collect","ok":true},{"detail":null,"id":"reward_is_still_placed_after_far_poll","ok":true}],"count":10,"expected_count":10,"ok":true}

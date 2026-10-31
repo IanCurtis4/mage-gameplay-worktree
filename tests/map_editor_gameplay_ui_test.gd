@@ -111,6 +111,7 @@ func run() -> void:
 	check("restored_controls_are_reassigned_by_preview_owner",app.host.control_preferences.path == app.session.directory.path_join("controls.cfg"))
 	await process_frame
 	host = app.host; enemy = host.enemies[0]
+	var skin_before: int = host.expedition_view.skin.get_instance_id()
 	var damage := DamageProbe.new(); app.add_child(damage)
 	enemy.health.damage_applied.connect(damage.record)
 	var attack := host.spatial_pointer_move(View.project(enemy.world_point().position)+Vector2(0,-24))
@@ -118,7 +119,12 @@ func run() -> void:
 	deadline = Time.get_ticks_msec()+12000
 	while is_instance_valid(enemy) and enemy.is_alive() and is_instance_valid(app.host) and Time.get_ticks_msec() < deadline: await process_frame
 	check("real_attack_changes_enemy_health",damage.actual_damage > 0.0)
+	# Deaths are committed once combat ends (checkpoint33), not on the killing frame.
+	deadline = Time.get_ticks_msec()+30000
+	while Time.get_ticks_msec() < deadline and not (is_instance_valid(app.host) and app.host.campaign_runtime != null and app.host.campaign_runtime.state.slots.guard.initial_resolved): await process_frame
 	check("real_combat_resolves_population_slot",is_instance_valid(app.host) and app.host.campaign_runtime.state.slots.guard.initial_resolved)
+	await process_frame
+	check("transaction_host_reuses_authored_skin",is_instance_valid(app.host) and app.host != host and app.host.expedition_view is View and is_instance_valid(app.host.expedition_view.skin) and app.host.expedition_view.skin.get_instance_id() == skin_before and app.host.expedition_view.skin.get_parent() == app.host.expedition_view)
 	await capture("gameplay_combat")
 	var old_directory: String = app.session.directory; var old_hash: String = app.session.session.candidate_hash
 	var restarted := await app.restart()

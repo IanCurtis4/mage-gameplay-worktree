@@ -21,6 +21,24 @@ func configure_package(value: Dictionary, world: WorldGeometry) -> Dictionary:
 		_effects.z_as_relative = false; add_child(_effects); _effects.draw.connect(_draw_effects)
 	return made
 
+## Reuses a skin already built for this exact prepared package. The skin is
+## presentation only and its static support data is identical across the
+## worlds a campaign transaction restores, so the rebuild (seconds) is skipped.
+func configure_with_skin(value: Dictionary, world: WorldGeometry, reused_node: Node) -> Dictionary:
+	var reused := reused_node as PackageView
+	if not is_instance_valid(reused): return configure_package(value,world)
+	var snapshot := world.presentation_snapshot(world.geometry_revision)
+	if not snapshot.ok: return snapshot
+	field_views.clear()
+	if is_instance_valid(skin) and skin != reused: skin.free()
+	if reused.get_parent() != null: reused.get_parent().remove_child(reused)
+	package = value.duplicate(true); skin = reused; skin.geometry = world; add_child(skin)
+	geometry = world; _epoch = world.configuration_revision; _surfaces = snapshot.data.surfaces
+	if _effects == null:
+		_effects = Node2D.new(); _effects.z_index = 4090
+		_effects.z_as_relative = false; add_child(_effects); _effects.draw.connect(_draw_effects)
+	return {"ok":true,"code":"","reused":true}
+
 func configure(world: WorldGeometry) -> Dictionary:
 	if package.is_empty(): return {"ok":false,"code":"package_required"}
 	return configure_package(package,world)

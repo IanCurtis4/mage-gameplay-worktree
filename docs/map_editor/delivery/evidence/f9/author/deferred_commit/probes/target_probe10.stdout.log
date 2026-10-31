@@ -1,0 +1,16 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+TP6 kill {"kills":1,"t":4862}
+TP6 snapshot {"encounter_active":true,"enemies":[{"d":47.2,"home_ok":true,"mode":"idle","name":"Guerreiro","ok":true,"route":false,"to_home_ms":2.21,"to_player_ms":3.17},{"d":51.8,"home_ok":true,"mode":"idle","name":"Guerreiro","ok":true,"route":false,"to_home_ms":2.63,"to_player_ms":3.93}],"hp":108.0,"label":"right_after_kill","reward":false,"reward_poll_ms":-1.0}
+TP10 flush_breakdown {"campaign_command_ms":9552.23,"capture_ms":2432.11,"captured":true,"code":"","command_ok":true,"install_ms":168.9,"installed_ok":true,"requested":true}
+TP9 host_replaced {"frame_ms":5823.5,"kills":1,"t":22937}
+TP9 long_frame {"dt_ms":5823.5,"kills":1,"t":22941}
+TP6 snapshot {"encounter_active":true,"enemies":[{"d":47.2,"home_ok":true,"mode":"idle","name":"Guerreiro","ok":true,"route":false,"to_home_ms":1.39,"to_player_ms":3.24},{"d":51.8,"home_ok":true,"mode":"idle","name":"Guerreiro","ok":true,"route":false,"to_home_ms":2.58,"to_player_ms":2.81}],"hp":108.0,"label":"after_long_frame","reward":false,"reward_poll_ms":-1.0}
+TP6 kill {"kills":2,"t":25571}
+TP6 snapshot {"encounter_active":true,"enemies":[{"d":51.8,"home_ok":true,"mode":"idle","name":"Guerreiro","ok":true,"route":false,"to_home_ms":2.3,"to_player_ms":3.86}],"hp":76.0,"label":"right_after_kill","reward":false,"reward_poll_ms":-1.0}
+TP6 kill {"kills":3,"t":28428}
+TP6 snapshot {"encounter_active":true,"enemies":[],"hp":52.0,"label":"right_after_kill","reward":false,"reward_poll_ms":-1.0}
+TP9 host_replaced {"frame_ms":19129.0,"kills":3,"t":52595}
+TP9 long_frame {"dt_ms":19129.0,"kills":3,"t":52598}
+TP6 snapshot {"encounter_active":false,"enemies":[],"hp":52.0814652666667,"label":"after_long_frame","reward":false,"reward_poll_ms":-1.0}
+TP6_DONE {"alive":true,"kills":3}

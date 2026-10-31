@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+TP6 long_frame {"dt_ms":16844.7,"kills":0,"t":18923}
+TP6 snapshot {"encounter_active":true,"enemies":[{"d":54.3,"home_ok":true,"mode":"idle","name":"Guerreiro","ok":true,"route":false,"to_home_ms":1.96,"to_player_ms":2.41},{"d":45.7,"home_ok":true,"mode":"idle","name":"Guerreiro","ok":true,"route":false,"to_home_ms":3.19,"to_player_ms":2.53}],"hp":148.0,"label":"after_long_frame","reward":false,"reward_poll_ms":-1.0}
+TP6 long_frame {"dt_ms":17004.3,"kills":0,"t":38512}
+TP6 snapshot {"encounter_active":true,"enemies":[{"d":54.3,"home_ok":true,"mode":"idle","name":"Guerreiro","ok":true,"route":false,"to_home_ms":1.34,"to_player_ms":2.13}],"hp":116.0,"label":"after_long_frame","reward":false,"reward_poll_ms":-1.0}
+TP6 long_frame {"dt_ms":17259.0,"kills":0,"t":58375}
+TP6 snapshot {"encounter_active":true,"enemies":[],"hp":108.0,"label":"after_long_frame","reward":false,"reward_poll_ms":-1.0}
+TP6_DONE {"alive":true,"kills":0}

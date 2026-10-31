@@ -314,7 +314,7 @@ func revive(controller: RunController, barrier: SnapshotTickBarrier, death_event
 func finish(controller: RunController, barrier: SnapshotTickBarrier, outcome: String, source: String, request_id: String, expected_revision: int) -> Dictionary:
 	return campaign_command(controller, barrier, {"kind": "finish", "outcome": outcome, "source": source}, request_id, expected_revision)
 
-func campaign_command(controller: RunController, barrier: SnapshotTickBarrier, command: Dictionary, request_id: String, expected_revision: int) -> Dictionary:
+func campaign_command(controller: RunController, barrier: SnapshotTickBarrier, command: Dictionary, request_id: String, expected_revision: int, frozen_cut: Dictionary = {}) -> Dictionary:
 	if not _pending.is_empty(): return _fail(&"recovery_required")
 	if not _valid_campaign_command(command): return _fail(&"invalid_payload")
 	if controller == null or controller.persistent_facade != facade or barrier == null or not barrier.owns(controller): return _fail(&"tick_barrier_required")
@@ -340,7 +340,8 @@ func campaign_command(controller: RunController, barrier: SnapshotTickBarrier, c
 	var lock := profile.expedition_for_character(controller.run_state.character_id)
 	if entering and lock != null: return _fail(&"expedition_conflict")
 	if not entering and (lock == null or lock.expedition_id != id): return _fail(&"invalid_session")
-	var cut := SnapshotRegistry.new().capture(controller, barrier)
+	# A cut taken under this same held barrier is identical to a fresh capture.
+	var cut := frozen_cut if frozen_cut.get("ok", false) and frozen_cut.get("snapshot") is Dictionary else SnapshotRegistry.new().capture(controller, barrier)
 	if not cut["ok"]: return cut
 	var registry := SnapshotRegistry.new()
 	var restored := registry.restore(cut["snapshot"], facade)
@@ -423,6 +424,10 @@ func _apply_campaign(host: RunController, command: Dictionary) -> Dictionary:
 		return host.campaign_runtime.configure(host, command["expedition_id"], manifest, command["rules"])
 	var runtime := host.campaign_runtime
 	var state := runtime.state
+	if kind in ["travel", "finish", "revive"] and runtime.pending_events.any(func(event: Dictionary) -> bool: return event["kind"] == "mob_death"):
+		# Deaths deferred to the end of combat are applied before any other command.
+		var flushed := _apply_campaign(host, {"kind": "events", "events": runtime.pending_events.duplicate(true)})
+		if not flushed["ok"]: return flushed
 	if kind == "events":
 		for event: Dictionary in command.get("events", []):
 			var result: Dictionary
