@@ -1,7 +1,33 @@
 # Retomada F9 —30/10/2026
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint37 — rampa sob a saída final e diário de campanha (J1–J2)
+## Checkpoint38 — gravação em segundo plano, coleta automática, leash e fundo temático
+
+31/10/2026. Mesmo checkout/branch/fixture. Base 3a12a2a4; código e documentação
+em commits próprios. Papéis inalterados.
+
+- Pedido humano: gravar o perfil em segundo plano; recompensas (drops e XP)
+  automáticas; inimigos fora do leash recuperam HP aos poucos ignorando aggro;
+  fundo em parallax com o tema do mapa; estudo de arquitetura de fase (respondido
+  no chat para validação, sem contrato ainda).
+- Gravação: o perfil é escrito numa tarefa do WorkerThreadPool; o efeito do diário
+  é publicado quando o resultado durável chega. Pior quadro na gravação das
+  mortes 43,6 ms (antes 382–433 ms).
+- Coleta: entrada `collect` no diário (tickets entregues, sessão e digest de
+  posses depois); `main._auto_collect` coleta tudo fora de combate; regras de
+  posse aceitam essa entrada como registro material.
+- Leash: mob voltando para casa (aggro já ignorado) ou parado ferido recupera o
+  HP total em 4 s (`EnemyActor.LEASH_RECOVERY_SECONDS`). O teste E06 que fixava
+  "o retorno preserva o dano" foi atualizado para a nova regra.
+- Fundo: `ExpeditionBackdrop` (CanvasLayer -100, fora do snapshot) desenha céu e
+  três faixas em parallax por bioma (forest, ruin, desert, meadow).
+- GameplayNative63, CampaignJournal16, demais etapas e legados E06/E07 PASS.
+
+Pendente: validação humana do estudo de fase; gravar mortes na hora; J3
+(ondas/respawn); aceite humano.
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint37 — rampa sob a saída final e diário de campanha (J1–J2)
 
 31/10/2026. Mesmo checkout/branch/fixture. Base bdb8657d; código e documentação
 em commits próprios. Papéis inalterados.
@@ -25,7 +51,6 @@ em commits próprios. Papéis inalterados.
 
 Pendente: tirar os ~0,4 s restantes (escrita assíncrona ou cache da validação
 do checkpoint inalterado); J3; aceite humano.
-<!-- /f9-patrol-gameplay-active -->
 
 ## Histórico checkpoint36 — rotas em segundo plano
 

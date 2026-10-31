@@ -91,7 +91,7 @@ depois da aplicação". A segunda metade vira teste diferencial obrigatório.
 - Ordem: respondida em 31/10 — grafo de navegação primeiro (checkpoint35,
   contracts/f9_navigation_graph.md), depois o diário.
 
-## Implementado no checkpoint38 (J1 + J2)
+## Implementado no checkpoint37 (J1 + J2)
 
 31/10/2026, Sol/Astra (Claude Opus). Base bdb8657d.
 
@@ -133,3 +133,43 @@ registro).
 
 Próximo: escrita assíncrona do perfil (tirar os 0,4 s do quadro) ou cache da
 validação do checkpoint inalterado; depois J3 (ondas/respawn).
+
+## Implementado no checkpoint38 (escrita em segundo plano e coleta pelo diário)
+
+31/10/2026, Sol/Astra (Claude Opus). Base 3a12a2a4. Pedido humano: "Grave o
+perfil em segundo plano"; recompensas (drops e XP) devem chegar ao personagem
+sozinhas, sem o botão que travava o jogo e coletava uma morte por vez.
+
+- `ProfileFacade.commit_expedition_candidate_async`: a mesma escrita do
+  `ProfileStore` roda numa tarefa do WorkerThreadPool sobre uma cópia isolada do
+  candidato; a operação fica em andamento (qualquer outra recebe
+  `save_in_progress`) até `poll_async_commit()` devolver o mesmo resultado público
+  da chamada síncrona. Liberar o facade aguarda a tarefa.
+- `ExpeditionService`: `journal_events`/`journal_collect` aceitam `background`;
+  `poll_background()` publica o efeito só depois do resultado durável. Escrita
+  incerta continua congelando o jogo até a recuperação.
+- `main`: o efeito é resolvido sob a barreira (mesmo quadro), a barreira é
+  liberada e o jogo segue enquanto a thread grava; `_process` consulta o
+  resultado. Uma captura pedida nesse meio espera a gravação terminar. Headless e
+  `RAGRPG_SYNC_SAVE=1` gravam de forma síncrona; `RAGRPG_BACKGROUND_SAVE=1` força
+  a thread (teste).
+- Coleta: novo tipo de entrada `collect` com os tickets entregues (e a instância
+  de carta de cada um), a sessão de recompensas e o digest de posses depois das
+  concessões. As concessões ficam no próprio perfil; a reaplicação só retira os
+  tickets da fila e atualiza o estado da run a partir do perfil.
+  - `ExpeditionAssetLock.effective_session()`/`effective_owner_digest()`: valem os
+    da última coleta do diário, ou os do checkpoint.
+  - `CharacterAssets`: XP e posses só avançam com um checkpoint material novo ou
+    com exatamente uma entrada nova de coleta que nomeia o digest resultante.
+  - `main._auto_collect`: fora de combate, sem oferta aberta, sem mortes
+    pendentes e sem gravação em curso, todos os tickets de mob da fila vão numa
+    entrada. Recusa: nova tentativa em 5 s; o botão do painel continua como via
+    explícita.
+
+Medido (GameplayNative, headless, thread forçada): pior quadro durante a
+gravação das mortes 43,6 ms (382–433 ms síncrono; 11,5–13,3 s antes do diário).
+Drop e XP coletados sozinhos numa segunda entrada; base + diário reaplicado
+reproduz os tickets entregues.
+
+Com a escrita fora do quadro, o próximo passo natural é gravar cada morte na
+hora (fim do adiamento) e levar ondas/respawn ao diário (J3).
