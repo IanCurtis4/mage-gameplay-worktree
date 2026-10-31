@@ -167,7 +167,7 @@ func run() -> void:
 	check("base_plus_journal_restores_delivered_rewards",replayed_collect.ok and not replayed_collect.root.reward_service.has_uncollected() and replayed_collect.root.reward_service._tickets == host.reward_service._tickets)
 	if replayed_collect.ok: replayed_collect.root.free()
 	var backdrop: Node = host.get_node_or_null("ExpeditionBackdrop")
-	check("themed_parallax_backdrop_follows_stage_biome",backdrop is CanvasLayer and backdrop.layer < 0 and backdrop.biome == backdrop.theme_id(String(host.expedition_view.geometry._stage.get("biome",""))) and backdrop.get_child_count() >= 4)
+	check("themed_parallax_backdrop_follows_stage_biome",backdrop is CanvasLayer and backdrop.layer < 0 and backdrop.biome == backdrop.theme_id(String(host.expedition_view.geometry._stage.get("biome",""))) and backdrop.get_child_count() >= 4 and backdrop.get_node_or_null("Ground") != null and not backdrop._textures.is_empty() and backdrop._textures.values().all(func(item: Variant) -> bool: return item is Texture2D))
 	await capture("gameplay_combat")
 	var old_directory: String = app.session.directory; var old_hash: String = app.session.session.candidate_hash
 	var restarted := await app.restart()
