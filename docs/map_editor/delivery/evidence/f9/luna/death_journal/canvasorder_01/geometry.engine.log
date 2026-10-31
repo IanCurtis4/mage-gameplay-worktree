@@ -1,0 +1,52 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_ORDER_CHECK actor_on_low_ramp_draws_after_own_ground true
+F9_ORDER_CHECK ordering_does_not_mutate_geometry true
+F9_ORDER_CHECK wall_behind_sprite_is_not_overlay true
+F9_ORDER_CHECK foreground_wall_stays_in_front true
+F9_ORDER_CHECK projected_bridge_occludes_lower_actor true
+F9_ORDER_CHECK actor_on_bridge_draws_after_its_cap true
+F9_ORDER_CHECK array_order_is_not_presentation_identity true
+F9_ORDER_CHECK cold_order_tracks_all_pairs true
+F9_ORDER_CHECK stationary_order_reuses_verified_records true
+F9_ORDER_CHECK movement_updates_only_affected_pairs true
+F9_ORDER_CHECK incremental_order_matches_cold_rebuild true
+F9_ORDER_CHECK inplace_source_change_cannot_mutate_cache_snapshot true
+F9_ORDER_CHECK malformed_cap_returns_diagnostic true
+F9_ORDER_CHECK duplicate_id_rejected true
+F9_ORDER_CHECK nan_anchor_rejected true
+F9_ORDER_CHECK cycle_is_explicit_without_partial_cache true
+F9_ORDER_CHECK piercing_prop_gets_no_cap_verdict true
+F9_ORDER_CHECK ramp_prop_and_walker_order_without_cycle true
+F9_ORDER_CHECK live_apply_breaks_a_cycle_instead_of_keeping_stale_order true
+F9_ORDER_CHECK item_budget_rejects_whole_operation true
+F9_ORDER_CHECK same_geometry_new_nodes_receive_cached_order true
+F9_ORDER_CHECK closed_negative_and_positive_bucket_boundaries true
+F9_ORDER_CHECK large_and_distant_rectangles_use_bounded_overflow true
+F9_ORDER_CHECK seeded_projected_pairs_equal_exhaustive_oracle true
+F9_ORDER_CHECK reordered_input_reuses_spatial_index true
+F9_ORDER_CHECK many_moving_items_equal_exhaustive_oracle true
+F9_ORDER_CHECK touching_rectangles_keep_closed_constraint true
+F9_ORDER_CHECK leaving_neighbor_removes_stale_constraint true
+F9_ORDER_CHECK entering_neighbor_adds_new_constraint true
+F9_ORDER_CHECK removed_and_added_ids_rebuild_spatial_index true
+F9_ORDER_CHECK invalid_update_keeps_all_spatial_cache_atomic true
+F9_ORDER_CHECK 8192_separated_items_avoid_exhaustive_pair_budget true
+F9_ORDER_SPARSE_METRICS {"cold_usec":567170,"items":8192,"ok":true,"pairs":0,"scope":"CPU only"}
+F9_ORDER_CHECK unchanged_constraints_and_priority_reuse_order true
+F9_ORDER_CHECK priority_crossing_rebuilds_exact_order true
+F9_ORDER_CHECK changed_constraints_same_result_skip_node_reordering true
+F9_ORDER_CHECK many_priority_inversions_equal_exhaustive_oracle true
+F9_ORDER_CHECK external_actor_more_than4096_static_items_resolve true
+F9_ORDER_CHECK external_actor_hierarchy_and_execution_order_preserved true
+F9_ORDER_CHECK external_actor_has_strict_z_between_static_runs true
+F9_ORDER_CHECK static_relative_order_matches_shared_topology true
+F9_ORDER_CHECK duplicate_external_observation_deduplicates_and_reuses_order true
+F9_ORDER_CHECK external_order_preserves_world_point_profile_and_geometry true
+F9_ORDER_CHECK invalid_external_observation_fails_without_reordering true
+F9_ORDER_METRICS {"actor_items":64,"cold_ok":true,"cold_pairs":12076,"cold_usec":68599,"cpu":"Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz","ground_items":512,"items":576,"one_actor_update_ok":true,"one_actor_update_usec":25733,"one_actor_updated_pairs":38,"scope":"CPU order only; no rendering/FPS claim","warm_samples_usec":[2727,3374,2670,2849,2874,3483,3008]}
+F9_ORDER_CHECK benchmark_small_cold_warm_moving_orders_valid true
+F9_ORDER_CHECK benchmark_representative_cold_warm_moving_orders_valid true
+F9_ORDER_CHECK benchmark_stress_cold_warm_moving_orders_valid true
+F9_ORDER_SCALING_METRICS {"cpu":"Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz","engine":"4.7.2-stable (official)","scenarios":[{"actor_items":8,"all_actors_move_pairs":[174,174,174,174,174,174,174],"all_actors_move_samples_usec":[2547,1403,2006,1879,1799,1740,1766],"cold_samples_usec":[8546,5703,5730],"items":72,"ok":true,"one_actor_move_pairs":[19,19,19,19,19,19,19],"one_actor_move_samples_usec":[2001,563,519,513,500,504,495],"scenario":"small","terrain_items":64,"warm_samples_usec":[333,311,424,312,478,390,540]},{"actor_items":64,"all_actors_move_pairs":[2132,2132,2132,2132,2148,2148,2148],"all_actors_move_samples_usec":[32174,13401,20332,19888,14736,15916,15069],"cold_samples_usec":[70934,64798,71148],"items":576,"ok":true,"one_actor_move_pairs":[23,23,23,23,23,23,23],"one_actor_move_samples_usec":[24231,4895,3569,3246,3654,4714,3884],"scenario":"representative","terrain_items":512,"warm_samples_usec":[2905,2716,2856,4383,2744,2678,2607]},{"actor_items":128,"all_actors_move_pairs":[4297,4297,4267,4267,4231,4231,4231],"all_actors_move_samples_usec":[151649,50913,44985,38397,39559,40355,34920],"cold_samples_usec":[308840,274164,289060],"items":2176,"ok":true,"one_actor_move_pairs":[16,16,16,16,16,16,16],"one_actor_move_samples_usec":[144793,17198,15433,20529,19151,15291,17868],"scenario":"stress","terrain_items":2048,"warm_samples_usec":[13651,15464,18218,19661,13282,14011,19116]}],"scope":"CPU order only; inputs prebuilt, no render/FPS/whole-UI latency claim"}
+F9_ORDER_RESULT {"checks":[{"id":"actor_on_low_ramp_draws_after_own_ground","ok":true},{"id":"ordering_does_not_mutate_geometry","ok":true},{"id":"wall_behind_sprite_is_not_overlay","ok":true},{"id":"foreground_wall_stays_in_front","ok":true},{"id":"projected_bridge_occludes_lower_actor","ok":true},{"id":"actor_on_bridge_draws_after_its_cap","ok":true},{"id":"array_order_is_not_presentation_identity","ok":true},{"id":"cold_order_tracks_all_pairs","ok":true},{"id":"stationary_order_reuses_verified_records","ok":true},{"id":"movement_updates_only_affected_pairs","ok":true},{"id":"incremental_order_matches_cold_rebuild","ok":true},{"id":"inplace_source_change_cannot_mutate_cache_snapshot","ok":true},{"id":"malformed_cap_returns_diagnostic","ok":true},{"id":"duplicate_id_rejected","ok":true},{"id":"nan_anchor_rejected","ok":true},{"id":"cycle_is_explicit_without_partial_cache","ok":true},{"id":"piercing_prop_gets_no_cap_verdict","ok":true},{"id":"ramp_prop_and_walker_order_without_cycle","ok":true},{"id":"live_apply_breaks_a_cycle_instead_of_keeping_stale_order","ok":true},{"id":"item_budget_rejects_whole_operation","ok":true},{"id":"same_geometry_new_nodes_receive_cached_order","ok":true},{"id":"closed_negative_and_positive_bucket_boundaries","ok":true},{"id":"large_and_distant_rectangles_use_bounded_overflow","ok":true},{"id":"seeded_projected_pairs_equal_exhaustive_oracle","ok":true},{"id":"reordered_input_reuses_spatial_index","ok":true},{"id":"many_moving_items_equal_exhaustive_oracle","ok":true},{"id":"touching_rectangles_keep_closed_constraint","ok":true},{"id":"leaving_neighbor_removes_stale_constraint","ok":true},{"id":"entering_neighbor_adds_new_constraint","ok":true},{"id":"removed_and_added_ids_rebuild_spatial_index","ok":true},{"id":"invalid_update_keeps_all_spatial_cache_atomic","ok":true},{"id":"8192_separated_items_avoid_exhaustive_pair_budget","ok":true},{"id":"unchanged_constraints_and_priority_reuse_order","ok":true},{"id":"priority_crossing_rebuilds_exact_order","ok":true},{"id":"changed_constraints_same_result_skip_node_reordering","ok":true},{"id":"many_priority_inversions_equal_exhaustive_oracle","ok":true},{"id":"external_actor_more_than4096_static_items_resolve","ok":true},{"id":"external_actor_hierarchy_and_execution_order_preserved","ok":true},{"id":"external_actor_has_strict_z_between_static_runs","ok":true},{"id":"static_relative_order_matches_shared_topology","ok":true},{"id":"duplicate_external_observation_deduplicates_and_reuses_order","ok":true},{"id":"external_order_preserves_world_point_profile_and_geometry","ok":true},{"id":"invalid_external_observation_fails_without_reordering","ok":true},{"id":"benchmark_small_cold_warm_moving_orders_valid","ok":true},{"id":"benchmark_representative_cold_warm_moving_orders_valid","ok":true},{"id":"benchmark_stress_cold_warm_moving_orders_valid","ok":true}],"count":46,"ok":true}

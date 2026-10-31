@@ -98,6 +98,20 @@ func run_action(command: Dictionary) -> Dictionary:
 	request = "f7_action_%d" % Time.get_ticks_usec()
 	service = ExpeditionService.new(host.persistent_facade)
 	message.text = "Gravando a expedição…"
+	# Checkpoint39: reviving on the current stage is one journal entry, without
+	# capturing the world; anything else keeps the full transaction below.
+	if intent["kind"] == "revive" and host.has_method("try_journal_revive"):
+		var quick: Dictionary = host.try_journal_revive(intent["event_id"])
+		if quick.get("pending", false):
+			while is_instance_valid(host) and host.expedition_save_busy(): await get_tree().process_frame
+			quick = {"ok": is_instance_valid(host) and host.player.is_alive(), "error_code": &"" if is_instance_valid(host) and host.player.is_alive() else &"save_failed"}
+		if quick.get("ok", false):
+			busy = false; uncertain = false; intent.clear(); message.text = ""
+			return quick
+		if quick.get("read_only", false):
+			busy = false; uncertain = true
+			message.text = ExpeditionPresentation.error_text(quick.get("error_code", &"unknown"))
+			return quick
 	var requested := host.request_memory_snapshot()
 	if not requested["ok"]: return _finish(requested)
 	var captured: Dictionary = await host.memory_snapshot_ready

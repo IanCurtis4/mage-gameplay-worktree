@@ -1,0 +1,65 @@
+extends SceneTree
+## Diagnostic (Sol, checkpoint39), windowed: backdrop screenshots, then the player's
+## death and revive with the background save on; worst frame of each and the pose.
+const Launcher = preload("res://scripts/map_authoring/preview/gameplay_launcher.gd")
+const App = preload("res://scripts/map_authoring/preview/gameplay_app.gd")
+const View = preload("res://scripts/world/expedition_geometry_view.gd")
+var out_dir := ""
+func _initialize() -> void: run.call_deferred()
+func shot(file_name: String) -> void:
+	await RenderingServer.frame_post_draw
+	var image := root.get_texture().get_image()
+	if image != null: image.save_png(out_dir.path_join(file_name))
+	print("DP shot "+file_name+" "+str(image != null))
+func frames(count: int) -> void:
+	for index: int in count: await process_frame
+# Waits for cond while recording the longest frame.
+func watch(cond: Callable, limit_ms: int) -> Dictionary:
+	var t0 := Time.get_ticks_msec(); var last := Time.get_ticks_usec(); var worst := 0.0; var count := 0
+	while not cond.call() and Time.get_ticks_msec()-t0 < limit_ms:
+		await process_frame
+		var dt := (Time.get_ticks_usec()-last)/1000.0; last = Time.get_ticks_usec(); worst = maxf(worst,dt); count += 1
+	return {"done":cond.call(),"ms":Time.get_ticks_msec()-t0,"worst_frame_ms":snappedf(worst,0.1),"frames":count}
+func run() -> void:
+	var path := ""
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--candidate="): path = arg.trim_prefix("--candidate=")
+		if arg.begins_with("--out="): out_dir = arg.trim_prefix("--out=")
+	var candidate: Variant = bytes_to_var(FileAccess.get_file_as_bytes(path))
+	var created := Launcher.create_session(candidate)
+	var window := Launcher.create_window(created.path) if created.ok else {"ok":false}
+	var app := App.new(); app.quit_on_close = false; app.hold_start = true; root.add_child(app); current_scene = app
+	var opened: Dictionary = await app.open_window_async(window.path)
+	var started: Dictionary = await app._start_with_gate() if opened.ok else {"ok":false}
+	if not started.ok: print("DP start_failed "+JSON.stringify({"opened":opened,"started":started})); quit(1); return
+	var main = app.host; var player: PlayerActor = main.player
+	for e: CombatActor in main.enemies: e.process_mode = Node.PROCESS_MODE_DISABLED  # probe only: no combat
+	app.begin()
+	await frames(30)
+	var backdrop: Node = main.get_node_or_null("ExpeditionBackdrop")
+	print("DP backdrop "+JSON.stringify({"biome":backdrop.biome if backdrop != null else "","children":backdrop.get_child_count() if backdrop != null else 0,"textures":backdrop._textures.size() if backdrop != null else 0}))
+	await shot("backdrop_start.png")
+	var start_pos: Vector3 = player.world_point().position
+	main.spatial_pointer_move(View.project(start_pos+Vector3(260,0,140)))
+	await watch(func() -> bool: return not player.world_motion.has_route() and main._pending_world_click.is_empty(),6000)
+	await shot("backdrop_moved.png")
+	# Death: the save runs in the background; the frame loop must keep going.
+	player.health.current_hp = 0.0; player.health._death_emitted = true
+	var died_at := Time.get_ticks_msec()
+	main._on_player_died(player)
+	var died: Dictionary = await watch(func() -> bool: return main.campaign_runtime.state.lifecycle == "recovering" and not main.expedition_save_busy(),60000)
+	var lock = main.persistent_facade.current_profile().expedition_for_character(main.run_state.character_id)
+	died["same_host"] = app.host == main; died["journal"] = lock.journal.size() if lock != null else -1; died["dead_pose"] = player.character_animation.state.dead; died["paused"] = paused
+	print("DP death "+JSON.stringify(died)+" since_call_ms="+str(Time.get_ticks_msec()-died_at))
+	await shot("dead.png")
+	var panel: Node = main.ui_root.get_node("ExpeditionStatus")
+	var t0 := Time.get_ticks_msec(); var worst := {"v":0.0}; var last := {"v":Time.get_ticks_usec()}
+	var meter := func() -> void:
+		var dt: float = (Time.get_ticks_usec()-last.v)/1000.0; last.v = Time.get_ticks_usec(); worst.v = maxf(worst.v,dt)
+	process_frame.connect(meter)
+	var revived: Dictionary = await panel.run_action({"kind":"revive","event_id":main.campaign_runtime.state.current_death_id})
+	process_frame.disconnect(meter)
+	print("DP revive "+JSON.stringify({"ok":revived.get("ok",false),"code":String(revived.get("error_code","")),"ms":Time.get_ticks_msec()-t0,"worst_frame_ms":snappedf(worst.v,0.1),"same_host":app.host == main,"alive":app.host.player.is_alive(),"dead_pose":app.host.player.character_animation.state.dead,"lifecycle":String(app.host.campaign_runtime.state.lifecycle),"paused":paused,"journal":app.host.persistent_facade.current_profile().expedition_for_character(app.host.run_state.character_id).journal.size()}))
+	await frames(20)
+	await shot("revived.png")
+	print("DP_DONE"); quit(0)

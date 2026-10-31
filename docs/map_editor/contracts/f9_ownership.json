@@ -3137,6 +3137,18 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 file (checkpoint38 parallax backdrop)",
       "base_sha256": "d8bf568bf5976c945d544c197db09df43ac24d76586780399a3209f90f24ab87"
+    },
+    {
+      "path": "scripts/core/combat_animation_state.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer for checkpoint39 (death and revive through the journal, revive pose); base is HEAD blob",
+      "base_sha256": "a1914fbdf10e8e22ababac290749427b19ed9a9a71ef7ec6e8770ba07de9ad5c"
+    },
+    {
+      "path": "scripts/core/expedition/campaign/expedition_death_recovery.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer for checkpoint39 (death and revive through the journal, revive pose); base is HEAD blob",
+      "base_sha256": "cd6f2d3a45e69010ee3514feae6ea64a58cf33d2269df31e95d281ff213030ac"
     }
   ],
   "read_only_shared": [
@@ -4163,6 +4175,49 @@
         "legacy_E07_F1_spatial_suites": 24
       },
       "decision_change": "E06 \"return preserves damage\" replaced by the human rule: out-of-leash return recovers HP gradually",
+      "known_unrelated_failure": "tests/e07_f1_presentation_test.gd 1/37; E04 swordsman 4/93; LibraryNative 2 AX command-count checks (not rerun here)"
+    },
+    "death_revive_journal_and_backdrop_art": {
+      "state": "validated_increment_F9_still_open",
+      "base": "4edafa3a",
+      "human_report": "31/10: dying still froze the screen for seconds while saving; after reviving the character came back with the dead sprite; the backdrop showed a bluish-gray background instead of a forest; answered the phase-study conflicts",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "contract": "docs/map_editor/contracts/f9_campaign_journal.md",
+      "phase_decisions": "docs/map_editor/contracts/f10_phase_architecture.md",
+      "files": [
+        "scripts/core/expedition/expedition_service.gd",
+        "scripts/core/expedition/persistence/expedition_journal_codec.gd",
+        "scripts/main.gd",
+        "scripts/ui/expedition/expedition_status_panel.gd",
+        "scripts/core/combat_animation_state.gd",
+        "scripts/core/expedition/campaign/expedition_death_recovery.gd",
+        "scripts/world/expedition_backdrop.gd",
+        "tools/map_editor_completion/run.ps1"
+      ],
+      "test_files": [
+        "tests/map_editor_campaign_journal_test.gd",
+        "tests/map_editor_gameplay_ui_test.gd",
+        "tests/e07_f7_actions_test.gd"
+      ],
+      "scope": "player_death events in journal death entries and a journal revive entry (death id and wave clock after the penalty), both written in the background on the same host with replay on load; revive clears the death animation state; backdrop painted with the biome ground tile and two parallax layers of library props with haze",
+      "measurements": {
+        "windowed_death_worst_frame_ms": 20.8,
+        "windowed_death_durable_ms": 485,
+        "windowed_revive_worst_frame_ms": 20.0,
+        "windowed_revive_ms": 639
+      },
+      "validation": {
+        "GameplayNative": 63,
+        "CampaignJournal": 19,
+        "CanvasOrder": 46,
+        "RuntimeView": 12,
+        "NavigationAsync": 18,
+        "WorldRewardPoll": 10,
+        "GameplayGate": 24,
+        "GameplayWindow": 33,
+        "legacy_E06_E07_F2_F7_suites": 38
+      },
+      "limits": "revive with a respawn pending on the current stage still uses the full transaction (J3)",
       "known_unrelated_failure": "tests/e07_f1_presentation_test.gd 1/37; E04 swordsman 4/93; LibraryNative 2 AX command-count checks (not rerun here)"
     }
   },

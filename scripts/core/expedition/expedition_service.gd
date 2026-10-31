@@ -211,6 +211,7 @@ func _publish(result: Dictionary, context: Dictionary) -> Dictionary:
 			var applied := _journal_apply(live, context["journal_payload"], false, holder)
 			if not applied["ok"]: return applied
 		result["journal_seq"] = lock.journal.size()
+		result["journal_kind"] = "revive" if Journal.is_revive(context["journal_payload"]) else ("collect" if Journal.is_collect(context["journal_payload"]) else "deaths")
 	if lock.lifecycle == &"suspended" and context.has("source"):
 		var suspended_host := context["source"].get_ref() as RunController
 		if suspended_host != null: suspended_host.snapshot_passive = true
@@ -523,7 +524,7 @@ func _apply_campaign(host: RunController, command: Dictionary) -> Dictionary:
 func journal_events(controller: RunController, barrier: SnapshotTickBarrier, events: Array, request_id: String, expected_revision: int, background: bool = false) -> Dictionary:
 	if not _pending.is_empty() or not _background.is_empty(): return _fail(&"recovery_required")
 	if controller == null or controller.persistent_facade != facade or controller.campaign_runtime == null or barrier == null or not barrier.owns(controller): return _fail(&"tick_barrier_required")
-	if events.is_empty() or events.any(func(event: Variant) -> bool: return not event is Dictionary or event.get("kind") != "mob_death"): return _fail(&"invalid_payload")
+	if events.is_empty() or events.any(func(event: Variant) -> bool: return not event is Dictionary or event.get("kind") not in ["mob_death", "player_death"]): return _fail(&"invalid_payload")
 	if not _valid_campaign_command({"kind": "events", "events": events}): return _fail(&"invalid_payload")
 	var profile := facade.current_profile()
 	if profile == null: return _fail(&"profile_unavailable")
@@ -545,8 +546,48 @@ func journal_events(controller: RunController, barrier: SnapshotTickBarrier, eve
 	if not made["ok"]: return made
 	slot.journal.append(made["entry"])
 	slot.revision += 1
+	# Checkpoint39: the player's death moves the reservation to recovery, as the
+	# full transaction does through the campaign lifecycle.
+	if events.any(func(event: Dictionary) -> bool: return event["kind"] == "player_death"): slot.lifecycle = &"recovering"
 	slot.receipts[request_id] = {"fingerprint": fingerprint, "operation": "journal", "revision": slot.revision}
 	var context := {"source": weakref(controller), "barrier": weakref(barrier), "expedition_id": id, "journal_payload": resolved["payload"]}
+	return _commit_background(candidate, request_id, expected_revision, context) if background else _commit(candidate, request_id, expected_revision, context)
+
+# Checkpoint39: reviving at the last portal without a world transaction. Only
+# when the anchor is on the current stage and the revive admits no respawn (both
+# need the full path's world capture); otherwise journal_unavailable.
+func journal_revive(controller: RunController, barrier: SnapshotTickBarrier, event_id: String, request_id: String, expected_revision: int, background: bool = false) -> Dictionary:
+	if not _pending.is_empty() or not _background.is_empty(): return _fail(&"recovery_required")
+	if controller == null or controller.persistent_facade != facade or controller.campaign_runtime == null or barrier == null or not barrier.owns(controller): return _fail(&"tick_barrier_required")
+	var profile := facade.current_profile()
+	if profile == null: return _fail(&"profile_unavailable")
+	var state := controller.campaign_runtime.state
+	var id: String = state.expedition_id
+	var fingerprint := _fingerprint("journal", id, StringName(state.manifest_data["input"]["phase_id"]), "revive:" + event_id)
+	var replay := _replay(profile, id, request_id, fingerprint)
+	if not replay.is_empty(): return replay
+	if profile.revision != expected_revision: return _fail(&"stale_revision")
+	var current := profile.expedition_for_character(controller.run_state.character_id)
+	if current == null or current.expedition_id != id or current.checkpoint.is_empty() or current.lifecycle != &"recovering" or current.journal.size() >= Journal.MAX_ENTRIES: return _fail(&"journal_unavailable")
+	if not controller.campaign_runtime.pending_events.is_empty() or controller.player.is_alive() or state.anchor.get("stage_id") != state.current_stage_id: return _fail(&"journal_unavailable")
+	var scratch := ExpeditionCampaignState.new()
+	scratch.slots = state.slots.duplicate(true); scratch.stages = state.stages.duplicate(true); scratch.policy = state.policy
+	scratch.death_events = state.death_events.duplicate(true); scratch.current_death_id = state.current_death_id; scratch.lifecycle = state.lifecycle
+	scratch.clock.started = state.clock.started; scratch.clock.remaining = state.clock.remaining; scratch.clock.interval = state.clock.interval; scratch.clock.wave_index = state.clock.wave_index
+	var checked := scratch.revive(event_id)
+	if not checked["ok"]: return checked
+	for slot: Dictionary in scratch.slots.values():
+		if slot["stage_id"] == state.current_stage_id and slot["life_state"] == "respawn_pending": return _fail(&"journal_unavailable")
+	var payload := {"kind": "revive", "event_id": event_id, "clock": [scratch.clock.started, float(scratch.clock.remaining), float(scratch.clock.interval), int(scratch.clock.wave_index)]}
+	var candidate := profile.copy_state()
+	var slot: ExpeditionAssetLock = candidate.expeditions[id]
+	var made := Journal.make_entry(slot.journal, slot.checkpoint, request_id, payload)
+	if not made["ok"]: return made
+	slot.journal.append(made["entry"])
+	slot.revision += 1
+	slot.lifecycle = &"active"
+	slot.receipts[request_id] = {"fingerprint": fingerprint, "operation": "journal", "revision": slot.revision}
+	var context := {"source": weakref(controller), "barrier": weakref(barrier), "expedition_id": id, "journal_payload": payload}
 	return _commit_background(candidate, request_id, expected_revision, context) if background else _commit(candidate, request_id, expected_revision, context)
 
 # The profile write runs on a worker thread; the live host keeps playing. The
@@ -627,7 +668,13 @@ func _journal_effects(host: RunController, events: Array) -> Dictionary:
 	scratch.slots = runtime.state.slots.duplicate(true)
 	scratch.stages = runtime.state.stages.duplicate(true)
 	var fresh: Array = []
+	var player_deaths := {}
 	for event: Dictionary in events:
+		if event["kind"] == "player_death":
+			if host.player.is_alive() or player_deaths.size() > 0: return _fail(&"invalid_death_source")
+			if not runtime.state.death_events.has(event["event_id"]) and runtime.state.lifecycle != "active": return _fail(&"invalid_death_source")
+			player_deaths[event["event_id"]] = true
+			continue
 		if not runtime.actors.has(event["slot_id"]): return _fail(&"invalid_death_source")
 		var checked := scratch.record_death(event["slot_id"], int(event["generation"]), event["event_id"])
 		if not checked["ok"]: return checked
@@ -646,7 +693,8 @@ func _journal_effects(host: RunController, events: Array) -> Dictionary:
 	var payload := {"events": events.duplicate(true), "tickets": tickets, "rng_state": host.rng.state, "next_sequence": rewards._next_sequence}
 	rewards._tickets = saved["tickets"]; rewards._events = saved["events"]; rewards._queue = saved["queue"]; rewards._next_sequence = saved["next"]; host.rng.state = saved["rng"]
 	if not failure.is_empty(): return failure
-	for event: Dictionary in payload["events"]: event["generation"] = int(event["generation"])
+	for event: Dictionary in payload["events"]:
+		if event.has("generation"): event["generation"] = int(event["generation"])
 	return {"ok": true, "payload": payload}
 
 # Same effect live (after the durable write) and on replay over the base. Idempotent.
@@ -654,9 +702,22 @@ func _journal_apply(host: RunController, payload: Dictionary, replay: bool, barr
 	var runtime := host.campaign_runtime
 	if runtime == null: return _fail(&"invalid_session")
 	if Journal.is_collect(payload): return _journal_apply_collect(host, payload, replay)
+	if Journal.is_revive(payload): return _journal_apply_revive(host, payload)
 	var disabled: Array[Node] = []
 	var applied := {}
 	for event: Dictionary in payload["events"]:
+		if event["kind"] == "player_death":
+			if host.player.is_alive():
+				if not replay: return _fail(&"invalid_death_source")
+				# Replay over a base taken while alive: the same retirement as a live death.
+				ExpeditionDeathRecovery.prepare(host)
+				host.player.health.current_hp = 0.0
+				host.player.health._death_emitted = true
+				if host.player.character_animation != null: host.player.character_animation.play(&"death")
+			var died := runtime.state.player_died(event["event_id"])
+			if not died["ok"]: return died
+			applied[event["event_id"]] = true
+			continue
 		if not runtime.actors.has(event["slot_id"]): return _fail(&"invalid_death_source")
 		var actor: EnemyActor = runtime.actors[event["slot_id"]]
 		var recorded := runtime.state.record_death(event["slot_id"], int(event["generation"]), event["event_id"])
@@ -679,10 +740,25 @@ func _journal_apply(host: RunController, payload: Dictionary, replay: bool, barr
 	host.rng.state = payload["rng_state"]
 	var kept: Array[Dictionary] = []
 	for event: Dictionary in runtime.pending_events:
-		if event["kind"] == "mob_death" and applied.has(event["event_id"]): continue
+		if event["kind"] in ["mob_death", "player_death"] and applied.has(event["event_id"]): continue
 		kept.append(event)
 	runtime.pending_events = kept
 	return {"ok": true, "disabled": disabled}
+
+# Same steps as the full revive on the current stage: penalty (the resulting
+# clock is recorded, since the live clock kept running after the base), return
+# to the last portal, approved HP/SP, and an animation that is alive again.
+func _journal_apply_revive(host: RunController, payload: Dictionary) -> Dictionary:
+	var state := host.campaign_runtime.state
+	var revived := state.revive(payload["event_id"])
+	if not revived["ok"]: return revived
+	var clock: Array = payload["clock"]
+	state.clock.started = clock[0]; state.clock.remaining = clock[1]; state.clock.interval = clock[2]; state.clock.wave_index = clock[3]
+	if revived.get("already_applied", false) and host.player.is_alive(): return {"ok": true, "disabled": [] as Array[Node]}
+	var returned := host.campaign_runtime.activate_stage(host, state.anchor["stage_id"], state.anchor)
+	if not returned["ok"]: return returned
+	ExpeditionDeathRecovery.revive(host.player, state.policy)
+	return {"ok": true, "disabled": [] as Array[Node]}
 
 # The grants are already in the profile; the run state takes them from it, the
 # tickets leave the queue in order, and the live host shows the confirmation.

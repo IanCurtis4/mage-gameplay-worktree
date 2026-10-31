@@ -90,4 +90,8 @@ static func revive(player: PlayerActor, policy: Dictionary) -> void:
 	player.health._death_emitted = false
 	player.health.current_hp = player.health.max_hp * float(policy["hp_fraction"])
 	player.current_sp = player.max_sp * float(policy["sp_fraction"])
+	# Checkpoint39: the death pose is presentation state captured with the actor;
+	# without this the revived player kept the corpse sprite.
+	if player.character_animation != null: player.character_animation.state.revive()
 	player.show()
+	player.queue_redraw()

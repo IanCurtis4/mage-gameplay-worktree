@@ -1,0 +1,7 @@
+﻿--- windowed death probe
+DP backdrop {"biome":"forest","children":4,"textures":4}
+DP shot backdrop_start.png true
+DP shot zoomed_out.png true
+DP shot backdrop_only.png true
+DP_DONE
+DONE 2026-10-31T18:44:16.2570354-03:00

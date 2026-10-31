@@ -75,14 +75,19 @@ func _run() -> void:
 	host.player.attack_cooldown = 1.25
 	host.player.health.current_hp = 0.0; host.player.health._death_emitted = true
 	host._on_player_died(host.player)
-	host = await settled(host)
-	if host == null: return
+	# Checkpoint39: the player's death is a journal entry on this same host.
+	var death_deadline := Time.get_ticks_msec() + 90000
+	while host.campaign_runtime.state.lifecycle != "recovering" and Time.get_ticks_msec() < death_deadline: await process_frame
+	paused = true
+	check(current_scene == host and host.campaign_runtime.pending_events.is_empty(), "death is journaled on the same host")
 	check(host.campaign_runtime.state.lifecycle == "recovering", "death exposes recovery rather than a new run")
 	var panel := host.ui_root.get_node("ExpeditionStatus") as ExpeditionStatusPanel
+	var dead_host := host
 	var revived: Dictionary = await panel.run_action({"kind": "revive", "event_id": host.campaign_runtime.state.current_death_id})
 	if not check(revived.get("ok", false), "UI revive uses the same expedition service"): return
 	host = current_scene as RunController; paused = true
 	check(host.player.is_alive() and host.player.health.current_hp == host.player.health.max_hp * 0.5, "approved half-HP return")
+	check(current_scene == dead_host and not host.player.character_animation.state.dead, "revive is journaled on the same host and leaves the death pose")
 	check(host.player.attack_cooldown == 1.25 and host.run_state.pending_choices == 3, "return preserves cooldown and build grants")
 	check(host.campaign_runtime.state.clock.remaining < remaining and host.campaign_runtime.state.current_stage_id == "entry", "death penalizes the existing clock and returns to last arrival")
 	print("E07 F7 actions: %d checks, %d failures" % [checks, failures])

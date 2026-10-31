@@ -1,0 +1,49 @@
+extends SceneTree
+## Diagnostic (Sol, checkpoint39), windowed: backdrop zoomed out and alone.
+const Launcher = preload("res://scripts/map_authoring/preview/gameplay_launcher.gd")
+const App = preload("res://scripts/map_authoring/preview/gameplay_app.gd")
+const View = preload("res://scripts/world/expedition_geometry_view.gd")
+var out_dir := ""
+func _initialize() -> void: run.call_deferred()
+func shot(file_name: String) -> void:
+	await RenderingServer.frame_post_draw
+	var image := root.get_texture().get_image()
+	if image != null: image.save_png(out_dir.path_join(file_name))
+	print("DP shot "+file_name+" "+str(image != null))
+func frames(count: int) -> void:
+	for index: int in count: await process_frame
+# Waits for cond while recording the longest frame.
+func watch(cond: Callable, limit_ms: int) -> Dictionary:
+	var t0 := Time.get_ticks_msec(); var last := Time.get_ticks_usec(); var worst := 0.0; var count := 0
+	while not cond.call() and Time.get_ticks_msec()-t0 < limit_ms:
+		await process_frame
+		var dt := (Time.get_ticks_usec()-last)/1000.0; last = Time.get_ticks_usec(); worst = maxf(worst,dt); count += 1
+	return {"done":cond.call(),"ms":Time.get_ticks_msec()-t0,"worst_frame_ms":snappedf(worst,0.1),"frames":count}
+func run() -> void:
+	var path := ""
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--candidate="): path = arg.trim_prefix("--candidate=")
+		if arg.begins_with("--out="): out_dir = arg.trim_prefix("--out=")
+	var candidate: Variant = bytes_to_var(FileAccess.get_file_as_bytes(path))
+	var created := Launcher.create_session(candidate)
+	var window := Launcher.create_window(created.path) if created.ok else {"ok":false}
+	var app := App.new(); app.quit_on_close = false; app.hold_start = true; root.add_child(app); current_scene = app
+	var opened: Dictionary = await app.open_window_async(window.path)
+	var started: Dictionary = await app._start_with_gate() if opened.ok else {"ok":false}
+	if not started.ok: print("DP start_failed "+JSON.stringify({"opened":opened,"started":started})); quit(1); return
+	var main = app.host; var player: PlayerActor = main.player
+	for e: CombatActor in main.enemies: e.process_mode = Node.PROCESS_MODE_DISABLED  # probe only: no combat
+	app.begin()
+	await frames(30)
+	var backdrop: Node = main.get_node_or_null("ExpeditionBackdrop")
+	print("DP backdrop "+JSON.stringify({"biome":backdrop.biome if backdrop != null else "","children":backdrop.get_child_count() if backdrop != null else 0,"textures":backdrop._textures.size() if backdrop != null else 0}))
+	await shot("backdrop_start.png")
+	var camera: Camera2D = root.get_viewport().get_camera_2d()
+	if camera != null: camera.zoom *= 0.45
+	await frames(10)
+	await shot("zoomed_out.png")
+	var view: CanvasItem = main.expedition_view
+	view.visible = false; main.ui_root.visible = false
+	await frames(5)
+	await shot("backdrop_only.png")
+	print("DP_DONE"); quit(0)

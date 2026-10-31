@@ -47,6 +47,15 @@ func trigger(name: StringName, direction: Vector2 = Vector2.ZERO, duration: floa
 	action_duration = clampf(duration, 0.14, 5.0)
 	action_remaining = action_duration
 
+## Checkpoint39: a revived actor leaves the death pose and starts from idle.
+func revive() -> void:
+	dead = false
+	death_time = 0.0
+	action_remaining = 0.0
+	hurt_remaining = 0.0
+	moving = false
+	idle_time = 0.0
+
 func advance(delta: float, displacement: Vector2) -> void:
 	var elapsed := maxf(0.0, delta)
 	if dead:

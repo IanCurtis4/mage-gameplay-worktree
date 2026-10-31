@@ -392,7 +392,6 @@ func _advance_runtime(_delta: float) -> void:
 
 func _process(_delta: float) -> void:
 	_pump_world_navigation()
-	_poll_expedition_save()
 	_auto_collect()
 	_advance_runtime(_delta)
 	_update_hud()
@@ -2705,7 +2704,7 @@ func _flush_expedition_events(allow_journal: bool = true) -> void:
 # transaction must run instead (waves, no base checkpoint, full journal, or a
 # refusal the full path reports itself).
 func _journal_flush() -> bool:
-	if not campaign_runtime.pending_events.all(func(event: Dictionary) -> bool: return event["kind"] == "mob_death"): return false
+	if not campaign_runtime.pending_events.all(func(event: Dictionary) -> bool: return event["kind"] in ["mob_death", "player_death"]): return false
 	var profile := persistent_facade.current_profile() if persistent_facade != null else null
 	var lock := profile.expedition_for_character(run_state.character_id) if profile != null else null
 	if lock == null or lock.checkpoint.is_empty() or lock.journal.size() >= ExpeditionService.Journal.MAX_ENTRIES: return false
@@ -2722,9 +2721,9 @@ func _journal_flush() -> bool:
 	# written on a worker thread and the game keeps running meanwhile.
 	var result := _expedition_transaction_service.journal_events(self, _memory_snapshot_barrier, events, request, profile.revision, _background_saves())
 	if result.get("pending", false):
-		release_memory_snapshot(); _expedition_flush_running = true; return true
+		release_memory_snapshot(); _expedition_flush_running = true; _watch_expedition_save(); return true
 	if result["ok"]:
-		release_memory_snapshot(); return true
+		release_memory_snapshot(); _settle_lifecycle(false); return true
 	if result.get("read_only", false):
 		# Uncertain write: stay frozen until the player confirms recovery.
 		_expedition_flush_running = true
@@ -2762,7 +2761,7 @@ func _auto_collect() -> void:
 	_expedition_transaction_service = ExpeditionService.new(persistent_facade)
 	var result := _expedition_transaction_service.journal_collect(self, _memory_snapshot_barrier, request, profile.revision, _background_saves())
 	if result.get("pending", false):
-		release_memory_snapshot(); _expedition_flush_running = true; return
+		release_memory_snapshot(); _expedition_flush_running = true; _watch_expedition_save(); return
 	if result.get("ok", false):
 		release_memory_snapshot(); return
 	if result.get("read_only", false):
@@ -2772,6 +2771,44 @@ func _auto_collect() -> void:
 	release_memory_snapshot()
 	_auto_collect_after_msec = Time.get_ticks_msec() + 5000
 
+# Checkpoint39: a death leaves the game paused in recovery, like the installed
+# host of the full transaction; a revive resumes it.
+func _settle_lifecycle(revived: bool) -> void:
+	if campaign_runtime == null or not is_inside_tree(): return
+	if campaign_runtime.state.lifecycle != "active": get_tree().paused = true
+	elif revived: get_tree().paused = false
+
+# The tree is paused during recovery, so the result is polled per frame even then.
+func _watch_expedition_save() -> void:
+	if is_inside_tree() and not get_tree().process_frame.is_connected(_poll_expedition_save): get_tree().process_frame.connect(_poll_expedition_save)
+
+## Checkpoint39: revive at the last portal through the journal (status panel).
+## Returns pending/ok/read_only when handled; any other refusal means the caller
+## uses the full transaction.
+func try_journal_revive(event_id: String) -> Dictionary:
+	if campaign_runtime == null or persistent_facade == null or _memory_snapshot_pending or _expedition_flush_running or expedition_save_busy() or not is_inside_tree(): return WorldSkillCast.failure(&"journal_unavailable")
+	var profile := persistent_facade.current_profile()
+	if profile == null: return WorldSkillCast.failure(&"journal_unavailable")
+	_memory_snapshot_pending = true
+	_memory_snapshot_previous_pause = get_tree().paused
+	get_tree().paused = true
+	_memory_snapshot_barrier = SnapshotTickBarrier.new()
+	if not _memory_snapshot_barrier.acquire(self)["ok"]:
+		release_memory_snapshot(); return WorldSkillCast.failure(&"journal_unavailable")
+	var request := "revive_" + event_id.sha256_text().substr(0, 56)
+	_expedition_transaction_service = ExpeditionService.new(persistent_facade)
+	var result := _expedition_transaction_service.journal_revive(self, _memory_snapshot_barrier, event_id, request, profile.revision, _background_saves())
+	if result.get("pending", false):
+		release_memory_snapshot(); _expedition_flush_running = true; _watch_expedition_save(); return result
+	if result.get("ok", false):
+		release_memory_snapshot(); _settle_lifecycle(true); return result
+	if result.get("read_only", false):
+		_expedition_flush_running = true
+		status_label.text = "A expedição está pausada; confirme a recuperação antes de continuar: %s" % result["error_code"]
+		return result
+	release_memory_snapshot()
+	return result
+
 func expedition_save_busy() -> bool:
 	return _expedition_transaction_service != null and _expedition_transaction_service.background_pending()
 
@@ -2779,8 +2816,10 @@ func _poll_expedition_save() -> void:
 	if not expedition_save_busy(): return
 	var result := _expedition_transaction_service.poll_background()
 	if result.get("pending", false): return
+	if is_inside_tree() and get_tree().process_frame.is_connected(_poll_expedition_save): get_tree().process_frame.disconnect(_poll_expedition_save)
 	if result.get("ok", false):
 		_expedition_flush_running = false
+		_settle_lifecycle(result.get("journal_kind", "") == "revive")
 		return
 	if result.get("read_only", false):
 		# Same rule as a synchronous uncertain write: freeze until recovery.
@@ -2821,6 +2860,7 @@ func _install_expedition_result(result: Dictionary) -> Dictionary:
 		# A journal entry was applied to this same host: only unfreeze it.
 		if result.has("journal_seq"):
 			release_memory_snapshot(); _expedition_flush_running = false
+			_settle_lifecycle(result.get("journal_kind", "") == "revive")
 		return result
 	var registry: SnapshotRegistry = result["registry"]
 	var copy: RunController = result["root"]

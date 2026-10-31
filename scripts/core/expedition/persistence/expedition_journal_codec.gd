@@ -5,12 +5,15 @@ extends RefCounted
 ## - deaths: validated events, issued tickets, RNG and ticket sequence after them.
 ## - collect (checkpoint38): delivered tickets with their card instance, and the
 ##   reward session and owner digest after the grants (the profile holds the grants).
+## - deaths may also carry the player's death (checkpoint39); revive (checkpoint39)
+##   names the death it answers and the wave clock after the penalty.
 const MAX_ENTRIES := 256
 const MAX_ENCODED := 262144
 const MAX_EVENTS := 512
 const PAYLOAD_KEYS := ["events","tickets","rng_state","next_sequence"]
 const COLLECT_KEYS := ["kind","delivered","session","owner_digest"]
 const MAX_DELIVERED := 512
+const REVIVE_KEYS := ["kind","event_id","clock"]
 
 static func digest(text: String) -> String:
 	return text.sha256_text()
@@ -62,17 +65,30 @@ static func is_collect(payload: Dictionary) -> bool:
 
 static func validate_payload(payload: Variant) -> Dictionary:
 	if payload is Dictionary and is_collect(payload): return _validate_collect(payload)
+	if payload is Dictionary and is_revive(payload): return _validate_revive(payload)
 	if not payload is Dictionary or payload.size() != PAYLOAD_KEYS.size() or not payload.has_all(PAYLOAD_KEYS): return fail(&"invalid_journal")
 	if not payload["events"] is Array or payload["events"].is_empty() or payload["events"].size() > MAX_EVENTS: return fail(&"invalid_journal")
 	var ids := {}
 	for event: Variant in payload["events"]:
-		if not event is Dictionary or event.size() != 4 or event.get("kind") != "mob_death" or not event.get("slot_id") is String or event["slot_id"].is_empty() or not event.get("event_id") is String or event["event_id"].is_empty() or typeof(event.get("generation")) != TYPE_INT or int(event["generation"]) < 0: return fail(&"invalid_journal")
+		if not event is Dictionary or not event.get("event_id") is String or event["event_id"].is_empty(): return fail(&"invalid_journal")
+		if event.get("kind") == "player_death":
+			if event.size() != 2: return fail(&"invalid_journal")
+		elif event.size() != 4 or event.get("kind") != "mob_death" or not event.get("slot_id") is String or event["slot_id"].is_empty() or typeof(event.get("generation")) != TYPE_INT or int(event["generation"]) < 0: return fail(&"invalid_journal")
 		if ids.has(event["event_id"]): return fail(&"invalid_journal")
 		ids[event["event_id"]] = true
 	if not payload["tickets"] is Array or payload["tickets"].size() > payload["events"].size(): return fail(&"invalid_journal")
 	for ticket: Variant in payload["tickets"]:
 		if not ticket is Dictionary or not ticket.get("ticket_id") is String or String(ticket["ticket_id"]).is_empty() or not ticket.get("event_id") is String or ticket.get("mob_ticket") != true or ticket.get("delivered") != false or not ticket.get("payload") is Dictionary: return fail(&"invalid_journal")
 	if typeof(payload["rng_state"]) != TYPE_INT or typeof(payload["next_sequence"]) != TYPE_INT or int(payload["next_sequence"]) < 1: return fail(&"invalid_journal")
+	return {"ok":true}
+
+static func is_revive(payload: Dictionary) -> bool:
+	return payload.get("kind") == "revive"
+
+static func _validate_revive(payload: Dictionary) -> Dictionary:
+	if payload.size() != REVIVE_KEYS.size() or not payload.has_all(REVIVE_KEYS) or not payload["event_id"] is String or String(payload["event_id"]).is_empty(): return fail(&"invalid_journal")
+	var clock: Variant = payload["clock"]
+	if not clock is Array or clock.size() != 4 or typeof(clock[0]) != TYPE_BOOL or typeof(clock[1]) != TYPE_FLOAT or typeof(clock[2]) != TYPE_FLOAT or typeof(clock[3]) != TYPE_INT or not is_finite(clock[1]) or not is_finite(clock[2]): return fail(&"invalid_journal")
 	return {"ok":true}
 
 static func _validate_collect(payload: Dictionary) -> Dictionary:

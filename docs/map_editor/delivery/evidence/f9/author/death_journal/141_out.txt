@@ -1,0 +1,10 @@
+﻿--- windowed death probe
+DP backdrop {"biome":"forest","children":4,"textures":4}
+DP shot backdrop_start.png true
+DP shot backdrop_moved.png true
+DP death {"dead_pose":false,"done":true,"frames":37,"journal":1,"ms":485,"paused":true,"same_host":true,"worst_frame_ms":20.8} since_call_ms=486
+DP shot dead.png true
+DP revive {"alive":true,"code":"","dead_pose":false,"journal":2,"lifecycle":"active","ms":639,"ok":true,"paused":false,"same_host":true,"worst_frame_ms":20.0}
+DP shot revived.png true
+DP_DONE
+DONE 2026-10-31T18:40:31.7749834-03:00

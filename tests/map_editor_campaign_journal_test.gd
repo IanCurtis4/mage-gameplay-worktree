@@ -57,6 +57,21 @@ func run() -> void:
 	var broken := collect.duplicate(true); broken.delivered.append(broken.delivered[0].duplicate())
 	var bad_digest := collect.duplicate(true); bad_digest.owner_digest = "x"
 	check("malformed_collection_is_refused",not Journal.validate_payload(broken).ok and not Journal.validate_payload(bad_digest).ok)
+	# Checkpoint39: the player's death rides a deaths entry; revive names it and
+	# carries the wave clock after the penalty.
+	var fall := {"events":[{"kind":"player_death","event_id":"player_death_1"}],"tickets":[],"rng_state":7,"next_sequence":1}
+	var fall_extra := fall.duplicate(true); fall_extra.events[0]["slot_id"] = "slot_0"
+	check("player_death_rides_a_deaths_entry",Journal.validate_payload(fall).ok and not Journal.validate_payload(fall_extra).ok)
+	var revive := {"kind":"revive","event_id":"player_death_1","clock":[true,12.5,30.0,2]}
+	var revived := Journal.make_entry(journal,checkpoint,"revive_%056d" % 1,revive)
+	var with_revive := journal.duplicate(true)
+	if revived.ok: with_revive.append(revived.entry)
+	var decoded_revive := Journal.validate(with_revive,checkpoint)
+	check("revive_entry_round_trips",revived.ok and decoded_revive.ok and decoded_revive.payloads[-1] == revive and Journal.effective(with_revive,{"session":{"last_committed_seq":1},"owner_digest":"d".repeat(64)}).session.last_committed_seq == 1)
+	var bad_clock := revive.duplicate(true); bad_clock.clock = [true,INF,30.0,2]
+	var short_clock := revive.duplicate(true); short_clock.clock = [true,12.5,30.0]
+	var no_death := revive.duplicate(true); no_death.event_id = ""
+	check("malformed_revive_is_refused",not Journal.validate_payload(bad_clock).ok and not Journal.validate_payload(short_clock).ok and not Journal.validate_payload(no_death).ok)
 	var full := chain(checkpoint,Journal.MAX_ENTRIES)
 	check("journal_is_bounded",full.size() == Journal.MAX_ENTRIES and Journal.make_entry(full,checkpoint,"events_%056d" % 999,payload(999)).get("error_code") == &"journal_full")
 	var ok := checks.all(func(item: Dictionary) -> bool: return item.ok)
