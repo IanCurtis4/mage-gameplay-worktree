@@ -90,3 +90,46 @@ depois da aplicação". A segunda metade vira teste diferencial obrigatório.
   gravações frequentes se elas não travarem o movimento.
 - Ordem: respondida em 31/10 — grafo de navegação primeiro (checkpoint35,
   contracts/f9_navigation_graph.md), depois o diário.
+
+## Implementado no checkpoint38 (J1 + J2)
+
+31/10/2026, Sol/Astra (Claude Opus). Base bdb8657d.
+
+- Formato: `ExpeditionAssetLock.journal`, oitavo campo do registro, presente só
+  quando não vazio. Cada entrada tem `seq` (1, 2, …), `request_id`, `payload`
+  (base64 de `var_to_bytes` sem objetos), `sha256` do payload e `prev` (o digest
+  da entrada anterior; a primeira aponta para o `sha256` do checkpoint base).
+  Limite de 256 entradas; cheio, a gravação volta ao caminho completo, que
+  compacta. Codec: `scripts/core/expedition/persistence/expedition_journal_codec.gd`.
+- O payload é o **efeito resolvido**, não um comando para rolar de novo: as
+  mortes validadas, os tickets de loot emitidos, o estado do RNG e a sequência
+  de tickets depois deles. Assim a reaplicação reproduz exatamente o loot que o
+  jogador viu.
+- Gravar (`ExpeditionService.journal_events`): valida as mortes numa cópia dos
+  slots, rola os drops no livro de recompensas vivo e restaura livro e RNG; grava
+  o perfil com a entrada nova (mesma escrita atômica, recibo `journal`); só
+  depois aplica ao host vivo (morte no estado, remoção do mob e companheiros,
+  tickets, RNG). Escrita incerta: o jogo fica congelado até a recuperação, como
+  antes.
+- Restaurar (`_restore`): base + reaplicação das entradas antes de ativar; os
+  modos de processo registrados dos mobs removidos são atualizados para o
+  registro não reativá-los.
+- Toda gravação completa (entrar, viajar, reviver, concluir, suspender, coletar,
+  equipamento) grava um base novo e zera o diário.
+- Só mortes vão ao diário. Ondas e respawn continuam no caminho completo (J3).
+- O adiamento para o fim do combate **continua**: com a escrita ainda síncrona
+  (~0,4 s), gravar a cada morte travaria o combate. Sai quando a escrita for
+  assíncrona.
+
+Medido (GameplayNative, headless): pior quadro durante a gravação das mortes
+433 ms, contra 11,5–13,3 s do caminho completo. O custo restante é a escrita do
+perfil, que relê e valida o checkpoint inteiro (descompressão e hash de ~4 MB)
+várias vezes por gravação.
+
+Provas: CampaignJournal13 (cadeia, tipos, ida e volta JSON, adulteração, ordem,
+limite) e GameplayNative59 (uma entrada por combate, mesmo host e mesma skin,
+base + diário igual ao estado vivo de campanha/recompensas/RNG, ida e volta do
+registro).
+
+Próximo: escrita assíncrona do perfil (tirar os 0,4 s do quadro) ou cache da
+validação do checkpoint inalterado; depois J3 (ondas/respawn).

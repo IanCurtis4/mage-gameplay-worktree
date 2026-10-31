@@ -1,7 +1,33 @@
 # RagRPG — handoff portátil de F9
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint36 — rotas em segundo plano
+## Checkpoint37 — rampa sob a saída final e diário de campanha (J1–J2)
+
+31/10/2026. Mesmo checkout/branch/fixture. Base bdb8657d; código e documentação
+em commits próprios. Papéis inalterados.
+
+- Pedido humano: reproduziu o sumiço sob a rampa abaixo da saída final (jogador
+  e árvore ao lado) e liberou o diário; o lag do meio do mapa sumiu.
+- Rampa: ciclo nas restrições de ordem do canvas (árvore de borda enraizada
+  dentro da projeção da rampa → rampa → jogador → árvore) fazia `apply` recusar e
+  manter os z antigos. Corpo que atravessa uma tampa não é mais "sob a tampa";
+  a apresentação ao vivo quebra ciclos em vez de congelar a ordem. Probe: 0
+  ordens recusadas (antes 103/576 passos). CanvasOrder46.
+- Diário J1–J2 (contracts/f9_campaign_journal.md): mortes do combate gravadas
+  como uma entrada encadeada no perfil, com o efeito resolvido (tickets, RNG); o
+  host não é restaurado nem trocado; restaurar = base + reaplicação. Pior quadro
+  na gravação 433 ms (antes 11,5–13,3 s). Ondas/respawn seguem no caminho
+  completo (J3); o adiamento até o fim do combate fica até a escrita ser
+  assíncrona.
+- CampaignJournal13 novo, GameplayNative59, regressões e legados E07 PASS;
+  LibraryNative falha em 2 checks de contagem de comandos AX (arquivo de teste
+  de 28/10, código não tocado aqui; a confirmar como anterior).
+
+Pendente: tirar os ~0,4 s restantes (escrita assíncrona ou cache da validação
+do checkpoint inalterado); J3; aceite humano.
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint36 — rotas em segundo plano
 
 31/10/2026. Mesmo checkout/branch/fixture. Base e8d6532a; código e documentação
 em commits próprios. Papéis inalterados. Contrato:
@@ -27,7 +53,6 @@ contracts/f9_navigation_async.md.
 
 Pendente: diário de campanha (J1–J2 primeiro, para tirar a gravação do fim do
 combate); captura da rampa; aceite humano.
-<!-- /f9-patrol-gameplay-active -->
 
 ## Histórico checkpoint35 — grafo de navegação reutilizável
 
