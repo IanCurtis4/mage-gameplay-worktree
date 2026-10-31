@@ -307,6 +307,7 @@ func _process(delta: float) -> void:
 	for skill: StringName in _mob_cooldowns:
 		_mob_cooldowns[skill] = maxf(0.0, float(_mob_cooldowns[skill]) - delta)
 	if taunt_remaining > 0.0: queue_redraw()
+	_recover_out_of_combat(delta)
 	if world_motion != null:
 		_advance_world_ai(delta)
 		return
@@ -662,6 +663,14 @@ func _refresh_world_engagement(delta: float) -> bool:
 		_sight_lost_time += maxf(0.0,delta)
 		if _sight_lost_time >= _mob_definition.sight_timeout: _begin_return()
 	return player_target_acquired
+
+## Checkpoint38: a mob returning from its leash (aggro already ignored on the
+## way) or standing idle while hurt recovers to full HP over this many seconds.
+## Chip damage from beyond the leash therefore cannot accumulate.
+const LEASH_RECOVERY_SECONDS := 4.0
+func _recover_out_of_combat(delta: float) -> void:
+	if not _uses_engagement() or not is_alive() or engagement_mode == &"engaged" or health.hp_deficit() <= 0.0 or not is_finite(delta) or delta <= 0.0: return
+	health.heal(health.max_hp * delta / LEASH_RECOVERY_SECONDS)
 
 func _begin_return() -> void:
 	if engagement_mode == &"returning": return

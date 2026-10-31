@@ -146,7 +146,7 @@ func _visibility_and_return() -> void:
 		_check(enemy.engagement_mode == &"returning" and not enemy.player_target_acquired and f["attacks"][0] == 0, "taunt, vision and damage cannot cancel mandatory return at %dHz" % hz)
 		target.global_position = Vector2(1400, 800)
 		_advance(enemy, 3.0, hz)
-		_check(enemy.global_position.distance_to(enemy.spawn_home) < 2.0 and enemy.health.current_hp == hp and f["summons"][0] == 1 and enemy.summon_used, "return preserves damage and cannot replenish summon at %dHz" % hz)
+		_check(enemy.global_position.distance_to(enemy.spawn_home) < 2.0 and enemy.health.current_hp > hp and f["summons"][0] == 1 and enemy.summon_used, "return recovers HP (checkpoint38) and cannot replenish summon at %dHz" % hz)
 		(f["owner"] as Node).free()
 
 func _hunter_and_taunt() -> void:
