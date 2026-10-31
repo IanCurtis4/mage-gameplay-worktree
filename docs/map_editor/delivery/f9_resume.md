@@ -1,7 +1,30 @@
 # Retomada F9 —30/10/2026
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint33 — travamento em combate: gravação por morte adiada e aliviada
+## Checkpoint34 — fim de fase, emenda do mapa e gravação incremental proposta
+
+31/10/2026. Mesmo checkout/branch/fixture. Base 2262b8c3; código e documentação
+em commits próprios. Papéis inalterados.
+
+- Fim de fase recusado: o estado salvo do usuário tem os 7 slots mortos e
+  `cleared_once` verdadeiro. A recusa vinha de `_at_point` (até 48 unidades do
+  ponto exato do marco), com a mesma mensagem da limpeza. Agora o painel diz qual
+  é o caso e o mapa desenha o círculo de 48 unidades no marco.
+- Lag no meio do mapa: cruzar a emenda clareira→viaduto custa 1,6 s por
+  `WorldGeometry.path`, e o clique calculava a mesma rota duas vezes (3,3 s).
+  `WorldActorMotion.adopt_route` reaproveita a rota já calculada (clique e
+  dash). O custo restante é a busca longa (grafo reutilizável).
+- Atalho de teste: o Godot agora escreve só em arquivo. Um clique no console
+  (modo de seleção do Windows) pausava o processo até apertar uma tecla.
+- Gravação incremental: contrato proposto em contracts/f9_campaign_journal.md
+  (checkpoint base + diário de eventos), aguardando decisão humana.
+- Rampa abaixo do marco final: pendente de captura de tela do usuário.
+
+Pendente: decisões do contrato do diário; grafo de navegação reutilizável;
+captura da rampa; aceite humano.
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint33 — travamento em combate: gravação por morte adiada e aliviada
 
 31/10/2026. Mesmo checkout/branch/fixture. Base 006a42ca; código a416be84 e
 686bc304; commit documental posterior. Papéis inalterados.
@@ -23,7 +46,6 @@
 Pendente: ~11 s ao fim do combate (par de restaurações do ExpeditionService,
 invariante E07 F5, exige contrato Astra); mortes de uma luta não terminada se
 perdem se o jogo fechar; grafo de navegação reutilizável; aceite humano.
-<!-- /f9-patrol-gameplay-active -->
 
 ## Histórico checkpoint32 — portão "Iniciar teste", diagnóstico de lag e mira no mundo
 
