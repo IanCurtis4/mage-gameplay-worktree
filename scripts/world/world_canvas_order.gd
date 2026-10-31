@@ -25,7 +25,12 @@ static func _caps_at(mesh: Dictionary, sprite: Dictionary) -> int:
 		var cell := {"vertices":vertices,"headroom":1.0}
 		var contact := Kernel.support_y(cell,sprite.anchor)
 		if not Kernel.contains(cell,contact): continue
-		return -1 if float(contact.y) <= float(sprite.anchor.y)+EPS+Kernel._support_roundoff(vertices,sprite.anchor) else 1
+		if float(contact.y) <= float(sprite.anchor.y)+EPS+Kernel._support_roundoff(vertices,sprite.anchor): return -1
+		# Below the cap only when the whole body fits under it (a bridge deck).
+		# A body that pierces the cap, like a tree rooted beside a ramp, gets no
+		# cap verdict: drawing the cap over it would hide what stands above it.
+		var sprite_bounds: AABB = sprite.bounds
+		return 1 if sprite_bounds.end.y <= float(contact.y)+EPS else 0
 	return 0
 
 static func _before(a: Dictionary, b: Dictionary) -> int:
@@ -117,7 +122,11 @@ static func _priority_unchanged(records: Dictionary, changed: Array, cache: Dict
 		if rank+1 < priority.size() and not _less(id,priority[rank+1],records): return false
 	return true
 
-static func solve(items: Array, cache: Dictionary = {}) -> Dictionary:
+## break_cycles is for live presentation only: when the pairwise constraints
+## contain a cycle, the lowest-priority node still waiting is released, so the
+## frame keeps a complete order (result.cycles_broken counts the releases).
+## Without it, a cycle stays an explicit failure.
+static func solve(items: Array, cache: Dictionary = {}, break_cycles: bool = false) -> Dictionary:
 	if items.size() > MAX_ITEMS: return {"ok":false,"code":"presentation_limit"}
 	var records := {}; var ids: Array[String] = []; var changed := {}
 	var previous: Dictionary = cache.get("records",{}) if cache.get("version") == 2 else {}
@@ -157,7 +166,7 @@ static func solve(items: Array, cache: Dictionary = {}) -> Dictionary:
 			else: pairs[key] = key if order < 0 else [key[1],key[0]]
 	var same_priority: bool = same_ids and _priority_unchanged(records,changed_ids,cache)
 	var reused: bool = same_priority and pairs == cache.pairs
-	var ordered: Array[String] = []; var neighbors := {}
+	var ordered: Array[String] = []; var neighbors := {}; var cycles_broken := 0
 	if reused:
 		ordered.assign(cache.order); neighbors = cache.neighbors
 	else:
@@ -169,7 +178,13 @@ static func solve(items: Array, cache: Dictionary = {}) -> Dictionary:
 		var heap: Array[String] = []
 		for id: String in ids:
 			if degree[id] == 0: _push(heap,id,records)
-		while not heap.is_empty():
+		while ordered.size() < ids.size():
+			if heap.is_empty():
+				if not break_cycles: break
+				var release := ""
+				for id: String in ids:
+					if degree[id] > 0 and (release.is_empty() or _less(id,release,records)): release = id
+				degree[release] = 0; _push(heap,release,records); cycles_broken += 1
 			var id := _pop(heap,records); ordered.append(id)
 			for other: String in next[id]:
 				degree[other] -= 1
@@ -184,7 +199,7 @@ static func solve(items: Array, cache: Dictionary = {}) -> Dictionary:
 	var snapshots := {}
 	for id: String in ids: snapshots[id] = records[id].duplicate(true) if changed.has(id) else previous[id]
 	cache.clear(); cache["version"] = 2; cache["ids"] = ids; cache["records"] = snapshots; cache["pairs"] = pairs; cache["order"] = ordered.duplicate(); cache["spatial"] = spatial; cache["neighbors"] = neighbors; cache["priority"] = priority; cache["ranks"] = ranks
-	return {"ok":true,"order":ordered,"updated_pairs":work,"constraints":pairs.size(),"unchanged":false,"order_changed":order_changed,"reused_order":reused}
+	return {"ok":true,"order":ordered,"updated_pairs":work,"constraints":pairs.size(),"unchanged":false,"order_changed":order_changed,"reused_order":reused,"cycles_broken":cycles_broken}
 
 static func world_vertices(mesh: ArrayMesh) -> Array:
 	var values: PackedFloat32Array = mesh.surface_get_arrays(0)[Mesh.ARRAY_CUSTOM0]; var result: Array = []
@@ -256,7 +271,9 @@ static func apply(root: Node2D, observed: Array = []) -> Dictionary:
 		# Only simulated/external nodes require a distinct interleaving level.
 		if dynamic_count > 1999: return {"ok":false,"code":"canvas_order_external_limit"}
 	var cache: Dictionary = root.get_meta("canvas_order_cache",{})
-	var result := solve(records,cache)
+	# A stale frame would keep an actor hidden behind a cap until it walks away:
+	# live presentation always receives a complete order.
+	var result := solve(records,cache,true)
 	if not result.ok: return result
 	root.set_meta("canvas_order_cache",cache)
 	var same_bindings: bool = root.get_meta("canvas_order_bindings",{}) == bindings

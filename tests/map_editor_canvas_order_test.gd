@@ -57,6 +57,20 @@ func run() -> void:
 	# made consistent by sorting whole drawables; refuse instead of hiding one.
 	for item: Dictionary in [a,b,c]: item.screen = Rect2(Vector2.ZERO,Vector2(100,100))
 	check("cycle_is_explicit_without_partial_cache",Ordering.solve([a,b,c],cache).get("code") == "presentation_order_ambiguous" and cache == prior)
+	# Checkpoint37 (Bosque ramp below the final exit): a tall prop rooted below a
+	# ramp cap, the player on that ramp and the prop in front of the player.
+	var long_ramp := mesh("long_ramp",[Vector3(0,0,0),Vector3(256,128,0),Vector3(256,128,384),Vector3(0,0,384)])
+	var rooted := {"id":"rooted_tree","kind":"sprite","anchor":Vector3(110,12,344),"bounds":AABB(Vector3(84,12,318),Vector3(52,226,52)),"screen":Rect2(ProjectionMath.project(Vector3(110,12,344))-Vector2(60,226),Vector2(120,234))}
+	var walker := {"id":"walker","kind":"sprite","anchor":Vector3(4,2,284),"bounds":AABB(Vector3(-16,2,264),Vector3(40,52,40)),"screen":Rect2(ProjectionMath.project(Vector3(4,2,284))-Vector2(34,52),Vector2(68,60))}
+	check("piercing_prop_gets_no_cap_verdict",Ordering._caps_at(long_ramp,rooted) == 0 and Ordering._caps_at(long_ramp,walker) == -1)
+	var ramp_scene := Ordering.solve([long_ramp,rooted,walker])
+	check("ramp_prop_and_walker_order_without_cycle",ramp_scene.ok and ramp_scene.order.find("long_ramp") < ramp_scene.order.find("walker") and ramp_scene.order.find("walker") < ramp_scene.order.find("rooted_tree"))
+	var live := Node2D.new(); var beams: Array = []
+	for item: Dictionary in [a,b,c]:
+		var node := Node2D.new(); node.set_meta("canvas_order_record",item); live.add_child(node); beams.append(node)
+	var forced := Ordering.apply(live)
+	check("live_apply_breaks_a_cycle_instead_of_keeping_stale_order",forced.ok and int(forced.get("cycles_broken",0)) > 0 and beams.all(func(node: Node2D) -> bool: return node.z_index > 0) and beams[0].z_index != beams[1].z_index and beams[1].z_index != beams[2].z_index)
+	live.free()
 	var excess: Array = []; excess.resize(8193); excess.fill(ramp)
 	check("item_budget_rejects_whole_operation",Ordering.solve(excess,cache).get("code") == "presentation_limit" and cache == prior)
 	var root := Node2D.new(); var lower_node := Node2D.new(); var upper_node := Node2D.new(); root.add_child(lower_node); root.add_child(upper_node)
