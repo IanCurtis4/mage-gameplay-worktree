@@ -6,6 +6,11 @@ const SolidPrism = preload("res://scripts/core/expedition/spatial/world_solid_pr
 const SupportPatch = preload("res://scripts/core/expedition/spatial/world_support_patch.gd")
 const EPS := 0.00001
 const NAVIGATION_MEMO_LIMIT := 32768
+## Cross-query memo of exact pair predicates (checkpoint35). Same keys and values
+## as the per-query memo; valid only for one effective geometry and full profile.
+const NAVIGATION_SHARED_MEMO_LIMIT := 262144
+var _navigation_epoch := 0
+var _navigation_shared: Dictionary = {}
 var geometry_revision := 0
 var configuration_revision := 0
 var _stage: Dictionary = {}
@@ -34,6 +39,7 @@ func configure(manifest: ExpeditionManifest, stage_id: String) -> Dictionary:
 			_temporary.clear()
 			_segments.clear()
 			_occupancy.clear()
+			_navigation_invalidate()
 			# Monotonic even when replacing a world with another revision-1 manifest.
 			geometry_revision += 1
 			configuration_revision += 1
@@ -155,7 +161,18 @@ func remove_occupant(id: String) -> void:
 func path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictionary, revision: int) -> Dictionary:
 	return _path(from,to,profile,revision,null)
 
-func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictionary, revision: int, candidate: WorldSolidSegment, lazy_graph: bool = true, trace: Dictionary = {}, memoize: bool = true) -> Dictionary:
+func _navigation_invalidate() -> void:
+	_navigation_epoch += 1; _navigation_shared = {}
+
+# One memo per effective geometry (configuration, revision, mutation epoch) and
+# full profile. It only stores the exact predicates the per-query memo stores.
+func _navigation_shared_memo(profile: Dictionary) -> Dictionary:
+	var key := [configuration_revision,geometry_revision,_navigation_epoch,ExpeditionCanonical.digest(profile)]
+	if _navigation_shared.get("key") != key:
+		_navigation_shared = {"key":key,"memo":{"point":{},"clear":{},"fraction":{},"entries":0,"hits":0,"misses":0,"peak":0,"stored":0,"released":0,"shared":true,"limit":NAVIGATION_SHARED_MEMO_LIMIT}}
+	return _navigation_shared.memo
+
+func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictionary, revision: int, candidate: WorldSolidSegment, lazy_graph: bool = true, trace: Dictionary = {}, memoize: bool = true, heuristic: bool = true) -> Dictionary:
 	if not _current(revision): return _failure(&"stale_geometry")
 	if not _profile_valid(profile): return _failure(&"invalid_profile")
 	var radius: float = profile["radius"]
@@ -175,34 +192,50 @@ func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictio
 	if lazy_graph:
 		context = _navigation_index(profile,trace,memoize)
 		if not context.ok: return _failure(&"navigation_budget_exceeded")
+		if memoize and candidate == null: context["memo"] = _navigation_shared_memo(profile)
 		var made := _navigation_surface(graph,context,from.surface_id,from,to,profile,candidate)
 		if not made.ok: return _failure(&"navigation_budget_exceeded")
+		if heuristic and context.get("inadmissible",false): return _navigation_dijkstra(from,to,profile,revision,candidate,lazy_graph,trace,memoize)
 	else:
 		var build_started := Time.get_ticks_usec() if tracing else 0
 		graph = _navigation_graph(from,to,profile,candidate)
 		if tracing: trace["build_usec"] = Time.get_ticks_usec()-build_started; trace["surfaces"] = _stage["surfaces"].size()
 	if not graph.ok: return _failure(&"navigation_budget_exceeded")
+	if heuristic and not lazy_graph and not _navigation_admissible(graph.nodes,graph.edges): return _navigation_dijkstra(from,to,profile,revision,candidate,lazy_graph,trace,memoize)
 	var memo: Dictionary = context.get("memo",{}); var query_scopes: Dictionary = context.get("query",{})
 	var nodes: Dictionary = graph.nodes; var edges: Dictionary = graph.edges; var by_surface: Dictionary = graph.by_surface
 	var distances := {"@from": 0.0}
 	var previous: Dictionary = {}
-	var frontier: Array[Dictionary] = [{"id":"@from","cost":0.0}]
+	# A* (checkpoint35): local edges cost their exact chord and portal edges
+	# ia->seam->ib, so the straight distance to @to is consistent and the first
+	# @to expansion is optimal. heuristic=false keeps the original Dijkstra order.
+	var goal: Vector3 = to.position
+	var frontier: Array[Dictionary] = [{"id":"@from","cost":(Vector3(from.position).distance_to(goal) if heuristic else 0.0),"g":0.0}]
 	var visited: Dictionary = {}; var expanded_surfaces := {}
 	while not frontier.is_empty():
 		var next := _navigation_heap_pop(frontier); var current: String = next.id
-		if visited.has(current) or float(next.cost) != float(distances[current]): continue
+		if visited.has(current) or float(next.g) != float(distances[current]): continue
 		visited[current] = true
 		if tracing: trace["expansions"] += 1
 		if current == "@to": break
 		if lazy_graph and not context.prepared.has(nodes[current]["surface_id"]):
 			var made := _navigation_surface(graph,context,nodes[current]["surface_id"],from,to,profile,candidate)
 			if not made.ok: return _failure(&"navigation_budget_exceeded")
+			if heuristic and context.get("inadmissible",false): return _navigation_dijkstra(from,to,profile,revision,candidate,lazy_graph,trace,memoize)
 		# The same visibility graph is evaluated when Dijkstra expands its source
 		# state. Unvisited cells/states need no pair tests. Candidate nodes, costs,
 		# tie order, directed portals and all geometry checks remain identical.
 		var portal_edge_count: int = edges[current].size()
+		var current_cost: float = float(distances[current])
 		for other: String in by_surface[nodes[current]["surface_id"]]:
 			if current == other: continue
+			# Exact cost before any predicate (f9_navigation_relaxation): distances
+			# only decrease, so an edge the relaxation would reject now is rejected
+			# below too. Skip only its geometry; order and cost stay identical.
+			var local_cost := Vector3(nodes[current]["position"]).distance_to(nodes[other]["position"])
+			if current_cost + local_cost + EPS >= float(distances.get(other, INF)):
+				if tracing: trace["edge_skipped"] = int(trace.get("edge_skipped",0))+1
+				continue
 			if tracing: trace["edge_tests"] += 1
 			var segment_context: Variant = {} if lazy_graph else null
 			var clear_started := Time.get_ticks_usec() if tracing else 0
@@ -214,13 +247,13 @@ func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictio
 				supported = _navigation_fraction(_cell(nodes[current]["surface_id"]),nodes[current]["position"],nodes[other]["position"],profile,memo,segment_context if segment_context != null else {}) >= 1.0-EPS
 				if tracing: trace["support_usec"] = int(trace.get("support_usec",0))+Time.get_ticks_usec()-support_started
 			if clear and supported:
-				edges[current].append({"to":other,"via":[],"connection_id":"","cost":Vector3(nodes[current]["position"]).distance_to(nodes[other]["position"])})
+				edges[current].append({"to":other,"via":[],"connection_id":"","cost":local_cost})
 		for edge: Dictionary in edges[current]:
 			var route_cost: float = float(distances[current]) + float(edge["cost"])
 			if route_cost + EPS >= float(distances.get(edge["to"], INF)): continue
 			distances[edge["to"]] = route_cost
 			previous[edge["to"]] = {"from": current, "edge": edge}
-			_navigation_heap_push(frontier,edge["to"],route_cost)
+			_navigation_heap_push(frontier,edge["to"],route_cost+(Vector3(nodes[edge["to"]]["position"]).distance_to(goal) if heuristic else 0.0),route_cost)
 		# This state is expanded once. Previous records retain their accepted
 		# edges; unselected local visibility edges need no lifetime past here.
 		if lazy_graph:
@@ -228,7 +261,8 @@ func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictio
 			var completed_surface: String = nodes[current]["surface_id"]
 			expanded_surfaces[completed_surface] = int(expanded_surfaces.get(completed_surface,0))+1
 			if expanded_surfaces[completed_surface] == by_surface[completed_surface].size():
-				_navigation_memo_release(memo,completed_surface); context.query.erase(completed_surface)
+				if not memo.get("shared",false): _navigation_memo_release(memo,completed_surface)
+				context.query.erase(completed_surface)
 	if tracing:
 		trace["total_usec"] = Time.get_ticks_usec()-query_started; trace["states"] = nodes.size()
 		trace["memo_entries"] = memo.get("entries",0); trace["memo_hits"] = memo.get("hits",0); trace["memo_misses"] = memo.get("misses",0)
@@ -242,6 +276,20 @@ func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictio
 	var route := _navigation_route(from.to_data(),steps,nodes)
 	route["cost"] = distances["@to"]
 	return _success(route)
+
+# A graph edge cheaper than its chord would make the straight-distance estimate
+# inconsistent (only synthetic graphs do this; portal edges cost ia->seam->ib).
+# The whole query is then repeated with the original Dijkstra order.
+func _navigation_dijkstra(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictionary, revision: int, candidate: WorldSolidSegment, lazy_graph: bool, trace: Dictionary, memoize: bool) -> Dictionary:
+	var result := _path(from,to,profile,revision,candidate,lazy_graph,trace,memoize,false)
+	if trace.get("enabled",false) == true: trace["heuristic_fallback"] = true
+	return result
+
+static func _navigation_admissible(nodes: Dictionary, edges: Dictionary) -> bool:
+	for state: String in edges:
+		for edge: Dictionary in edges[state]:
+			if float(edge["cost"])+EPS < Vector3(nodes[state]["position"]).distance_to(nodes[edge["to"]]["position"]): return false
+	return true
 
 func _navigation_direct(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictionary, revision: int, candidate: WorldSolidSegment) -> Dictionary:
 	# A clear straight ground route may cross any legal point of each opening.
@@ -304,6 +352,7 @@ func _navigation_surface(graph: Dictionary, context: Dictionary, id: String, fro
 		for edge: Dictionary in part.edges[state]:
 			if not graph.edges[state].has(edge): graph.edges[state].append(edge)
 	for connection: Dictionary in fresh: context.generated[connection["connection_id"]] = true
+	if not _navigation_admissible(graph.nodes,part.edges): context["inadmissible"] = true
 	# Every incident connection is now generated. Future slices cannot append
 	# another local state here. Sorting matches the original eager producer.
 	if not graph.by_surface.has(id): graph.by_surface[id] = []
@@ -466,7 +515,7 @@ static func _navigation_memo_get(memo: Dictionary, family: String, surface: Stri
 	return value
 
 static func _navigation_memo_put(memo: Dictionary, family: String, surface: String, a: Vector3, b: Vector3, value: Variant) -> void:
-	if memo.is_empty() or int(memo.entries) >= NAVIGATION_MEMO_LIMIT: return
+	if memo.is_empty() or int(memo.entries) >= int(memo.get("limit",NAVIGATION_MEMO_LIMIT)): return
 	var surfaces: Dictionary = memo[family]
 	if not surfaces.has(surface): surfaces[surface] = {}
 	if not surfaces[surface].has(a): surfaces[surface][a] = {}
@@ -542,8 +591,8 @@ static func _navigation_route(start: Dictionary, steps: Array[Dictionary], nodes
 static func _navigation_heap_before(a: Dictionary, b: Dictionary) -> bool:
 	return float(a.cost) < float(b.cost) if a.cost != b.cost else str(a.id) < str(b.id)
 
-static func _navigation_heap_push(heap: Array[Dictionary], id: String, cost: float) -> void:
-	heap.append({"id":id,"cost":cost}); var index := heap.size()-1
+static func _navigation_heap_push(heap: Array[Dictionary], id: String, cost: float, g: float = NAN) -> void:
+	heap.append({"id":id,"cost":cost,"g":(cost if is_nan(g) else g)}); var index := heap.size()-1
 	while index > 0:
 		var parent := (index-1)>>1
 		if not _navigation_heap_before(heap[index],heap[parent]): break
@@ -1002,6 +1051,7 @@ func insert_segment(id: String, segment: WorldSolidSegment, revision: int) -> Di
 	var valid := can_insert_segment(id,segment,revision)
 	if not valid["ok"]: return valid
 	_segments[id] = segment.snapshot()
+	_navigation_invalidate()
 	geometry_revision += 1
 	return _success()
 
@@ -1021,9 +1071,12 @@ func insert_obstacle(id: String, volume: AABB, revision: int) -> Dictionary:
 			if path(origin, destination, occupant["profile"], revision)["ok"]:
 				protected.append({"from": origin, "to": destination, "profile": occupant["profile"]})
 	_temporary[id] = volume
+	# The protection paths below run at the SAME revision with the new volume.
+	_navigation_invalidate()
 	for route: Dictionary in protected:
 		if not path(route["from"], route["to"], route["profile"], revision)["ok"]:
 			_temporary.erase(id)
+			_navigation_invalidate()
 			return _failure(&"would_disconnect")
 	geometry_revision += 1
 	return _success()
@@ -1031,6 +1084,7 @@ func insert_obstacle(id: String, volume: AABB, revision: int) -> Dictionary:
 func remove_obstacle(id: String, revision: int) -> Dictionary:
 	if not _current(revision): return _failure(&"stale_geometry")
 	if not _temporary.erase(id) and not _segments.erase(id): return _failure(&"unknown_obstacle")
+	_navigation_invalidate()
 	geometry_revision += 1
 	return _success()
 

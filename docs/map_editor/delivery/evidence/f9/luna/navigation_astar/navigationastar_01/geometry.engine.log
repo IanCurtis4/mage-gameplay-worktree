@@ -1,0 +1,36 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_ASTAR_CASE {"astar_edge_tests":390,"astar_expansions":20,"astar_usec":167432,"dijkstra_edge_tests":4754,"dijkstra_expansions":240,"dijkstra_usec":787588,"direct":false,"fallback":false,"id":"port_r0.25_forward","ok":true}
+F9_ASTAR_CASE {"astar_edge_tests":1363,"astar_expansions":62,"astar_usec":268800,"dijkstra_edge_tests":4753,"dijkstra_expansions":236,"dijkstra_usec":776926,"direct":false,"fallback":false,"id":"port_r0.25_reverse","ok":true}
+F9_ASTAR_CASE {"astar_edge_tests":1430,"astar_expansions":72,"astar_usec":274828,"dijkstra_edge_tests":4002,"dijkstra_expansions":216,"dijkstra_usec":670913,"direct":false,"fallback":false,"id":"port_r2.0_forward","ok":true}
+F9_ASTAR_CASE {"astar_edge_tests":2143,"astar_expansions":106,"astar_usec":400794,"dijkstra_edge_tests":3992,"dijkstra_expansions":212,"dijkstra_usec":668658,"direct":false,"fallback":false,"id":"port_r2.0_reverse","ok":true}
+F9_ASTAR_CASE {"astar_edge_tests":869,"astar_expansions":64,"astar_usec":219260,"dijkstra_edge_tests":2147,"dijkstra_expansions":158,"dijkstra_usec":434816,"direct":false,"fallback":false,"id":"port_r8.0_forward","ok":true}
+F9_ASTAR_CASE {"astar_edge_tests":1376,"astar_expansions":96,"astar_usec":291520,"dijkstra_edge_tests":2139,"dijkstra_expansions":156,"dijkstra_usec":423853,"direct":false,"fallback":false,"id":"port_r8.0_reverse","ok":true}
+F9_ASTAR_CASE {"astar_edge_tests":378,"astar_expansions":49,"astar_usec":101753,"dijkstra_edge_tests":378,"dijkstra_expansions":49,"dijkstra_usec":97672,"direct":false,"fallback":false,"id":"port_r20.0_forward","ok":false}
+F9_ASTAR_CASE {"astar_edge_tests":334,"astar_expansions":41,"astar_usec":90618,"dijkstra_edge_tests":334,"dijkstra_expansions":41,"dijkstra_usec":89007,"direct":false,"fallback":false,"id":"port_r20.0_reverse","ok":false}
+F9_ASTAR_CASE {"astar_edge_tests":869,"astar_expansions":64,"astar_usec":209135,"dijkstra_edge_tests":2147,"dijkstra_expansions":158,"dijkstra_usec":433545,"direct":false,"fallback":false,"id":"one_way_forward","ok":true}
+F9_ASTAR_CASE {"astar_edge_tests":974,"astar_expansions":65,"astar_usec":209052,"dijkstra_edge_tests":974,"dijkstra_expansions":65,"dijkstra_usec":191152,"direct":false,"fallback":false,"id":"one_way_reverse","ok":false}
+F9_ASTAR_CHECK organic_terrain_publishes true
+F9_ASTAR_CASE {"astar_edge_tests":49919,"astar_expansions":814,"astar_usec":10549897,"dijkstra_edge_tests":82368,"dijkstra_expansions":1535,"dijkstra_usec":16669400,"direct":false,"fallback":false,"id":"organic_0_31","ok":true}
+F9_ASTAR_CASE {"astar_edge_tests":49396,"astar_expansions":812,"astar_usec":10267839,"dijkstra_edge_tests":82368,"dijkstra_expansions":1535,"dijkstra_usec":16069428,"direct":false,"fallback":false,"id":"organic_31_0","ok":true}
+F9_ASTAR_CASE {"astar_edge_tests":0,"astar_expansions":0,"astar_usec":3127,"dijkstra_edge_tests":0,"dijkstra_expansions":0,"dijkstra_usec":3214,"direct":true,"fallback":false,"id":"organic_0_16","ok":true}
+F9_ASTAR_CASE {"astar_edge_tests":0,"astar_expansions":0,"astar_usec":3188,"dijkstra_edge_tests":0,"dijkstra_expansions":0,"dijkstra_usec":3356,"direct":true,"fallback":false,"id":"organic_8_24","ok":true}
+F9_ASTAR_CASE {"astar_edge_tests":8858,"astar_expansions":134,"astar_usec":2055861,"dijkstra_edge_tests":82032,"dijkstra_expansions":1515,"dijkstra_usec":16968745,"direct":false,"fallback":false,"id":"organic_10_30","ok":true}
+F9_ASTAR_CHECK astar_keeps_dijkstra_outcome_and_error true
+F9_ASTAR_CHECK astar_cost_matches_dijkstra true
+F9_ASTAR_CHECK astar_routes_walk_with_canonical_body false
+F9_ASTAR_CHECK astar_never_expands_more_states true
+F9_ASTAR_CHECK astar_expands_fewer_states_on_real_detours true
+F9_ASTAR_CHECK inconsistent_synthetic_graph_falls_back_to_dijkstra true
+F9_ASTAR_CHECK shared_memo_second_query_is_identical true
+F9_ASTAR_CHECK shared_memo_second_query_only_hits true
+F9_ASTAR_CHECK other_query_and_profile_equal_fresh_world true
+F9_ASTAR_CHECK wall_inserts_without_occupants true
+F9_ASTAR_CHECK obstacle_insert_invalidates_shared_memo true
+F9_ASTAR_CHECK obstacle_remove_invalidates_shared_memo false
+F9_ASTAR_CHECK segment_insert_invalidates_shared_memo true
+F9_ASTAR_CHECK speculative_segment_never_reads_or_writes_shared_memo true
+F9_ASTAR_CHECK reconfigure_invalidates_shared_memo false
+F9_ASTAR_CHECK protection_refuses_disconnecting_wall_with_warm_memo true
+F9_ASTAR_CHECK refused_wall_leaves_route_identical true
+F9_ASTAR_RESULT {"checks":[{"id":"organic_terrain_publishes","ok":true},{"id":"astar_keeps_dijkstra_outcome_and_error","ok":true},{"id":"astar_cost_matches_dijkstra","ok":true},{"id":"astar_routes_walk_with_canonical_body","ok":false},{"id":"astar_never_expands_more_states","ok":true},{"id":"astar_expands_fewer_states_on_real_detours","ok":true},{"id":"inconsistent_synthetic_graph_falls_back_to_dijkstra","ok":true},{"id":"shared_memo_second_query_is_identical","ok":true},{"id":"shared_memo_second_query_only_hits","ok":true},{"id":"other_query_and_profile_equal_fresh_world","ok":true},{"id":"wall_inserts_without_occupants","ok":true},{"id":"obstacle_insert_invalidates_shared_memo","ok":true},{"id":"obstacle_remove_invalidates_shared_memo","ok":false},{"id":"segment_insert_invalidates_shared_memo","ok":true},{"id":"speculative_segment_never_reads_or_writes_shared_memo","ok":true},{"id":"reconfigure_invalidates_shared_memo","ok":false},{"id":"protection_refuses_disconnecting_wall_with_warm_memo","ok":true},{"id":"refused_wall_leaves_route_identical","ok":true}],"count":18,"ok":false}

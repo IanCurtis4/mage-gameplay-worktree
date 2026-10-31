@@ -1,0 +1,18 @@
+﻿RUN walk 2026-10-31T11:45:48.9799234-03:00
+restored; matches worktree: True
+WP step {"click_ok":true,"code":"","i":1,"ms":318,"pos":"(265.7148, 0.0, 654.2861)","surface":"clearing/c_1c58e1b8efb1df2f_3_7_4_13","worst_ms":36.8}
+WP step {"click_ok":true,"code":"","i":2,"ms":0,"pos":"(265.7148, 0.0, 654.2861)","surface":"clearing/c_1c58e1b8efb1df2f_3_7_4_13","worst_ms":0.0}
+WP step {"click_ok":true,"code":"","i":3,"ms":961,"pos":"(477.1436, 0.0, 682.8574)","surface":"clearing/c_1c58e1b8efb1df2f_7_6_1_14","worst_ms":35.1}
+WP step {"click_ok":true,"code":"","i":4,"ms":470,"pos":"(582.8574, 0.0, 697.1436)","surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":42.3}
+WP step {"click_ok":true,"code":"","i":5,"ms":460,"pos":"(688.5723, 0.0, 711.4287)","surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":27.8}
+WP step {"click_ok":true,"code":"","i":6,"ms":502,"pos":"(794.2861, 0.0, 725.7148)","surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":36.3}
+WP step {"click_ok":true,"code":"","i":7,"ms":451,"pos":"(900.0, 0.0, 740.0)","surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":28.7}
+WP step {"click_ok":true,"code":"","i":8,"ms":489,"pos":"(1005.715, 0.0, 754.2861)","surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":37.7}
+WP step {"click_ok":true,"code":"","i":9,"ms":482,"pos":"(1111.429, 0.0, 768.5723)","surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":39.3}
+WP step {"click_ok":false,"code":"occluded_surface","i":10,"ms":0,"pos":"(1111.429, 0.0, 768.5723)","surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":0.0}
+WP step {"click_ok":false,"code":"occluded_surface","i":11,"ms":0,"pos":"(1111.429, 0.0, 768.5723)","surface":"clearing/c_1c58e1b8efb1df2f_8_1_12_19","worst_ms":0.0}
+F9_SLOW_PATH 763.2 ms from (1111.429, 0.0, 768.5723) to (1428.572, 0.0, 811.4287) ok=true | main.gd:4086 spatial_pointer_move < walk_probe3.gd:26 run
+WP step {"click_ok":true,"code":"","i":12,"ms":1478,"pos":"(1428.572, 0.0, 811.4287)","surface":"overpass/c_e33596bc5a5c9222_0_0_4_10","worst_ms":55.7}
+WP step {"click_ok":true,"code":"","i":13,"ms":465,"pos":"(1534.286, 0.0, 825.7148)","surface":"overpass/c_e33596bc5a5c9222_0_0_4_10","worst_ms":37.3}
+WP step {"click_ok":true,"code":"","i":14,"ms":483,"pos":"(1640.0, 0.0, 840.0)","surface":"overpass/c_e33596bc5a5c9222_0_0_4_10","worst_ms":32.1}
+DONE 2026-10-31T11:49:18.4664009-03:00

@@ -1,0 +1,29 @@
+extends SceneTree
+## Checkpoint35: seam crossing clearing->overpass on the Bosque dump, traced cold/warm.
+func _initialize() -> void: _run.call_deferred()
+func q(world: WorldGeometry, a: ExpeditionWorldPoint, b: ExpeditionWorldPoint, profile: Dictionary, heuristic: bool, label: String) -> void:
+	var trace := {"enabled":true}; var t := Time.get_ticks_usec()
+	var r := world._path(a,b,profile,world.geometry_revision,null,true,trace,true,heuristic)
+	var row := {"label":label,"ms":(Time.get_ticks_usec()-t)/1000.0,"ok":r.ok,"code":String(r.get("error_code",""))}
+	for k: String in ["direct","direct_usec","build_usec","clear_usec","support_usec","surfaces","states","expansions","edge_tests","edge_skipped","memo_hits","memo_misses","memo_entries","total_usec"]: row[k] = trace.get(k)
+	print("F9_CORE3 "+JSON.stringify(row))
+func _run() -> void:
+	var path := ""
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--world="): path = arg.trim_prefix("--world=")
+	var data: Variant = bytes_to_var(FileAccess.get_file_as_bytes(path))
+	var manifest := ExpeditionManifest.new(); manifest._data = data.manifest
+	var world := WorldGeometry.new(); world.configure(manifest,data.stage_id)
+	var a := ExpeditionWorldPoint.create(data.stage_id,"clearing/c_1c58e1b8efb1df2f_8_1_12_19",Vector3(1111.429,0,768.5723))
+	var b := ExpeditionWorldPoint.create(data.stage_id,"overpass/c_e33596bc5a5c9222_0_0_4_10",Vector3(1428.572,0,811.4287))
+	print("F9_CORE3_PROFILE "+JSON.stringify(data.traversal)+" surfaces "+str(world._stage.surfaces.size())+" connections "+str(world._stage.connections.size())+" volumes "+str(world._stage.volumes.size())+" prisms "+str(world._stage.get("solid_prisms",[]).size()))
+	q(world,a,b,data.traversal,true,"astar_cold"); q(world,a,b,data.traversal,true,"astar_warm")
+	var a2 := ExpeditionWorldPoint.create(data.stage_id,a.surface_id,Vector3(1080,0,760))
+	q(world,a2,b,data.traversal,true,"astar_other_origin")
+	var plain := WorldGeometry.new(); plain.configure(manifest,data.stage_id)
+	q(plain,a,b,data.traversal,false,"dijkstra_cold")
+	var raw := WorldGeometry.new(); raw.configure(manifest,data.stage_id)
+	var trace := {"enabled":true}; var t := Time.get_ticks_usec()
+	var r := raw._path(a,b,data.traversal,raw.geometry_revision,null,true,trace,false,true)
+	print("F9_CORE3 "+JSON.stringify({"label":"astar_no_memo","ms":(Time.get_ticks_usec()-t)/1000.0,"ok":r.ok,"build_usec":trace.get("build_usec"),"clear_usec":trace.get("clear_usec"),"support_usec":trace.get("support_usec"),"expansions":trace.get("expansions"),"edge_tests":trace.get("edge_tests"),"surfaces":trace.get("surfaces"),"states":trace.get("states")}))
+	quit(0)

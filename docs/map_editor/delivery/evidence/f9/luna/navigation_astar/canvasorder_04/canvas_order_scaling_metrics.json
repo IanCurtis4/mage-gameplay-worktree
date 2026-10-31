@@ -1,0 +1,178 @@
+{
+	"cpu": "Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz",
+	"engine": "4.7.2-stable (official)",
+	"scenarios": [
+		{
+			"actor_items": 8,
+			"all_actors_move_pairs": [
+				174,
+				174,
+				174,
+				174,
+				174,
+				174,
+				174
+			],
+			"all_actors_move_samples_usec": [
+				5344,
+				1638,
+				1425,
+				1660,
+				1668,
+				1653,
+				1634
+			],
+			"cold_samples_usec": [
+				6046,
+				5641,
+				5892
+			],
+			"items": 72,
+			"ok": true,
+			"one_actor_move_pairs": [
+				19,
+				19,
+				19,
+				19,
+				19,
+				19,
+				19
+			],
+			"one_actor_move_samples_usec": [
+				3026,
+				755,
+				714,
+				717,
+				704,
+				721,
+				718
+			],
+			"scenario": "small",
+			"terrain_items": 64,
+			"warm_samples_usec": [
+				319,
+				465,
+				1258,
+				1259,
+				495,
+				340,
+				308
+			]
+		},
+		{
+			"actor_items": 64,
+			"all_actors_move_pairs": [
+				2132,
+				2132,
+				2132,
+				2132,
+				2148,
+				2148,
+				2148
+			],
+			"all_actors_move_samples_usec": [
+				56949,
+				28594,
+				19552,
+				20154,
+				33808,
+				18051,
+				27931
+			],
+			"cold_samples_usec": [
+				83755,
+				86473,
+				113770
+			],
+			"items": 576,
+			"ok": true,
+			"one_actor_move_pairs": [
+				23,
+				23,
+				23,
+				23,
+				23,
+				23,
+				23
+			],
+			"one_actor_move_samples_usec": [
+				34473,
+				6152,
+				4128,
+				5495,
+				6440,
+				4574,
+				8627
+			],
+			"scenario": "representative",
+			"terrain_items": 512,
+			"warm_samples_usec": [
+				2695,
+				2522,
+				2514,
+				3959,
+				3882,
+				4072,
+				5082
+			]
+		},
+		{
+			"actor_items": 128,
+			"all_actors_move_pairs": [
+				4297,
+				4297,
+				4267,
+				4267,
+				4231,
+				4231,
+				4231
+			],
+			"all_actors_move_samples_usec": [
+				160151,
+				34662,
+				34408,
+				33401,
+				55236,
+				38130,
+				34549
+			],
+			"cold_samples_usec": [
+				529487,
+				398004,
+				446053
+			],
+			"items": 2176,
+			"ok": true,
+			"one_actor_move_pairs": [
+				16,
+				16,
+				16,
+				16,
+				16,
+				16,
+				16
+			],
+			"one_actor_move_samples_usec": [
+				127604,
+				14117,
+				14961,
+				16874,
+				18889,
+				16484,
+				15818
+			],
+			"scenario": "stress",
+			"terrain_items": 2048,
+			"warm_samples_usec": [
+				14839,
+				12462,
+				14110,
+				14369,
+				14834,
+				14457,
+				12829
+			]
+		}
+	],
+	"scope": "CPU order only; inputs prebuilt, no render/FPS/whole-UI latency claim"
+}

@@ -1,0 +1,47 @@
+﻿ M scripts/core/expedition/spatial/world_geometry.gd
+ M tools/map_editor_completion/run.ps1
+?? data/map_authoring/sanctuary_woods.map.json.bak
+?? data/map_authoring/sanctuary_woods.population.json.bak
+?? data/map_authoring/sanctuary_woods_clearing.source.json.bak
+?? data/map_authoring/sanctuary_woods_overpass.source.json.bak
+?? docs/map_editor/delivery/evidence/f9/luna/navigation_astar/
+?? tests/map_editor_navigation_astar_test.gd
+?? tests/map_editor_navigation_astar_test.gd.uid
+RUN NavigationAstar import 2026-10-31T11:03:08.2747677-03:00
+F9 NavigationAstar: True
+F9_ASTAR_CASE {"astar_edge_tests":175,"astar_expansions":20,"astar_usec":111177,"dijkstra_edge_tests":667,"dijkstra_expansions":240,"dijkstra_usec":225519,"direct":false,"fallback":false,"id":"port_r0.25_forward","ok":true,"walk":{"astar":true,"dijkstra":true,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":329,"astar_expansions":62,"astar_usec":150334,"dijkstra_edge_tests":608,"dijkstra_expansions":236,"dijkstra_usec":212963,"direct":false,"fallback":false,"id":"port_r0.25_reverse","ok":true,"walk":{"astar":true,"dijkstra":true,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":257,"astar_expansions":72,"astar_usec":154783,"dijkstra_edge_tests":496,"dijkstra_expansions":216,"dijkstra_usec":182887,"direct":false,"fallback":false,"id":"port_r2.0_forward","ok":true,"walk":{"astar":true,"dijkstra":true,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":384,"astar_expansions":106,"astar_usec":160627,"dijkstra_edge_tests":461,"dijkstra_expansions":212,"dijkstra_usec":180659,"direct":false,"fallback":false,"id":"port_r2.0_reverse","ok":true,"walk":{"astar":true,"dijkstra":true,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":124,"astar_expansions":64,"astar_usec":92477,"dijkstra_edge_tests":286,"dijkstra_expansions":158,"dijkstra_usec":140060,"direct":false,"fallback":false,"id":"port_r8.0_forward","ok":true,"walk":{"astar":true,"dijkstra":true,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":210,"astar_expansions":96,"astar_usec":131892,"dijkstra_edge_tests":241,"dijkstra_expansions":156,"dijkstra_usec":155757,"direct":false,"fallback":false,"id":"port_r8.0_reverse","ok":true,"walk":{"astar":true,"dijkstra":true,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":76,"astar_expansions":49,"astar_usec":56222,"dijkstra_edge_tests":59,"dijkstra_expansions":49,"dijkstra_usec":49005,"direct":false,"fallback":false,"id":"port_r20.0_forward","ok":false,"walk":{}}
+F9_ASTAR_CASE {"astar_edge_tests":42,"astar_expansions":41,"astar_usec":45677,"dijkstra_edge_tests":34,"dijkstra_expansions":41,"dijkstra_usec":43657,"direct":false,"fallback":false,"id":"port_r20.0_reverse","ok":false,"walk":{}}
+F9_ASTAR_CASE {"astar_edge_tests":124,"astar_expansions":64,"astar_usec":110723,"dijkstra_edge_tests":290,"dijkstra_expansions":158,"dijkstra_usec":153210,"direct":false,"fallback":false,"id":"one_way_forward","ok":true,"walk":{"astar":true,"dijkstra":true,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":75,"astar_expansions":65,"astar_usec":79489,"dijkstra_edge_tests":93,"dijkstra_expansions":65,"dijkstra_usec":63831,"direct":false,"fallback":false,"id":"one_way_reverse","ok":false,"walk":{}}
+F9_ASTAR_CASE {"astar_edge_tests":3279,"astar_expansions":814,"astar_usec":1634556,"dijkstra_edge_tests":4656,"dijkstra_expansions":1535,"dijkstra_usec":2004239,"direct":false,"fallback":false,"id":"organic_0_31","ok":true,"walk":{"astar":true,"dijkstra":true,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":3153,"astar_expansions":812,"astar_usec":1500235,"dijkstra_edge_tests":4809,"dijkstra_expansions":1535,"dijkstra_usec":2211657,"direct":false,"fallback":false,"id":"organic_31_0","ok":true,"walk":{"astar":true,"dijkstra":true,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":0,"astar_expansions":0,"astar_usec":3108,"dijkstra_edge_tests":0,"dijkstra_expansions":0,"dijkstra_usec":3157,"direct":true,"fallback":false,"id":"organic_0_16","ok":true,"walk":{"astar":false,"dijkstra":false,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":0,"astar_expansions":0,"astar_usec":4482,"dijkstra_edge_tests":0,"dijkstra_expansions":0,"dijkstra_usec":4118,"direct":true,"fallback":false,"id":"organic_8_24","ok":true,"walk":{"astar":false,"dijkstra":false,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":1080,"astar_expansions":134,"astar_usec":661894,"dijkstra_edge_tests":4914,"dijkstra_expansions":1515,"dijkstra_usec":2017370,"direct":false,"fallback":false,"id":"organic_10_30","ok":true,"walk":{"astar":true,"dijkstra":true,"same_points":true}}
+F9_ASTAR_CHECK astar_keeps_dijkstra_outcome_and_error true
+F9_ASTAR_RESULT {"checks":[{"id":"organic_terrain_publishes","ok":true},{"id":"astar_keeps_dijkstra_outcome_and_error","ok":true},{"id":"astar_cost_matches_dijkstra","ok":true},{"id":"astar_routes_walk_with_canonical_body","ok":true},{"id":"astar_never_expands_more_states","ok":true},{"id":"astar_expands_fewer_states_on_real_detours","ok":true},{"id":"inconsistent_synthetic_graph_falls_back_to_dijkstra","ok":true},{"id":"shared_memo_second_query_is_identical","ok":true},{"id":"shared_memo_second_query_only_hits","ok":true},{"id":"other_query_and_profile_equal_fresh_world","ok":true},{"id":"wal
+RUN NavigationLazy 2026-10-31T11:03:58.7792171-03:00
+
+F9 NavigationLazy: True
+RUN NavigationDense 2026-10-31T11:04:13.6163822-03:00
+F9 NavigationDense: True
+RUN NavigationContext 2026-10-31T11:05:10.2143738-03:00
+F9 NavigationContext: True
+RUN core2 2026-10-31T11:05:28.7209849-03:00
+F9_CORE2_STEP astar_first {"cost":1562.01485443115,"edge_tests":1617,"expansions":21,"memo_entries":8039,"memo_hits":155,"memo_misses":8039,"ms":1178.343,"ok":true,"surfaces":5}
+F9_CORE2_STEP astar_second {"cost":1562.01485443115,"edge_tests":1617,"expansions":21,"memo_entries":8039,"memo_hits":8349,"memo_misses":8039,"ms":103.998,"ok":true,"surfaces":5}
+F9_CORE2_STEP astar_reverse {"cost":1562.01485443115,"edge_tests":4096,"expansions":77,"memo_entries":14130,"memo_hits":14561,"memo_misses":14130,"ms":834.049,"ok":true,"surfaces":5}
+F9_CORE2_STEP dijkstra_first {"cost":1562.01485443115,"edge_tests":21730,"expansions":3220,"ms":8092.183,"ok":true,"surfaces":53}
+F9_CORE2_RESULT {"astar_first":{"cost":1562.01485443115,"edge_tests":1617,"expansions":21,"memo_entries":8039,"memo_hits":155,"memo_misses":8039,"ms":1178.343,"ok":true,"surfaces":5},"astar_reverse":{"cost":1562.01485443115,"edge_tests":4096,"expansions":77,"memo_entries":14130,"memo_hits":14561,"memo_misses":14130,"ms":834.049,"ok":true,"surfaces":5},"astar_second":{"cost":1562.01485443115,"edge_tests":1617,"expansions":21,"memo_entries":8039,"memo_hits":8349,"memo_misses":8039,"ms":103.998,"ok":true,"surfaces":5},"cost_delta":0.0,"debug_build":true,"dijkstra_first":{"cost":1562.01485443115,"edge_tests":21730,"expansions":3220,"ms":8092.183,"ok":true,"surfaces":53},"engine":"4.7.2-stable (official)","second_identical":true}
+RUN walk 2026-10-31T11:05:43.5762447-03:00
+restored; matches worktree: True
+WP start_failed
+DONE 2026-10-31T11:08:16.8919675-03:00
+
+

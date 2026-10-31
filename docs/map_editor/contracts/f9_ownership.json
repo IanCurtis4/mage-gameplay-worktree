@@ -3035,6 +3035,18 @@
       "owner": "Sol F9",
       "previous_owner": "E07 runtime; sequential transfer for completion hint / route reuse only (checkpoint34); base is HEAD blob",
       "base_sha256": "ce03ff299004510b21714438b00ab8ab8912b4352af4a46d36be55a3374835dc"
+    },
+    {
+      "path": "tests/map_editor_navigation_astar_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint35 navigation graph)",
+      "base_sha256": "0140d81a0cbdc959c58a2f5597b6f668b6b23026625743bbfea4e48a06e745f1"
+    },
+    {
+      "path": "tests/map_editor_navigation_astar_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint35 navigation graph)",
+      "base_sha256": "b73974058099744f3da6a3bff7e77784a5bff7c093b24c2864a58861ce1e65cb"
     }
   ],
   "read_only_shared": [
@@ -3805,6 +3817,57 @@
         "FieldsNative": 73,
         "SurfacePick": 24
       }
+    },
+    "navigation_graph": {
+      "state": "validated_increment_F9_still_open",
+      "base": "11c67b2a",
+      "human_report": "31/10: lag at the map crossing makes the test unplayable; do the reusable navigation graph before the campaign journal",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "contract": "docs/map_editor/contracts/f9_navigation_graph.md",
+      "files": [
+        "scripts/core/expedition/spatial/world_geometry.gd",
+        "scripts/core/expedition/snapshot/runtime_manifest.json",
+        "tools/map_editor_completion/run.ps1"
+      ],
+      "test_files": [
+        "tests/map_editor_navigation_astar_test.gd"
+      ],
+      "finding": "every WorldGeometry.path rebuilt and discarded its exact predicate memo, and plain Dijkstra expanded every state cheaper than the route (Bosque home->entry 57.9 s, 3220 expansions, 53 surfaces)",
+      "scope": "cross-query memo of the same exact point/clear/fraction predicates keyed by configuration/geometry revision, mutation epoch and profile digest (speculative candidate queries excluded); A* with straight 3D distance, consistent because local edges cost the chord and portal edges ia->seam->ib, with a full Dijkstra retry if any materialized edge is cheaper than its chord; exact pre-predicate rejection of non-relaxable local edges; both new fields omitted from snapshot schema",
+      "measurements": {
+        "bosque_home_entry_cold_ms": 1178,
+        "bosque_home_entry_warm_ms": 104,
+        "bosque_home_entry_dijkstra_ms_before": 57929,
+        "seam_click_first_ms_before": 1611,
+        "seam_click_first_ms": 763,
+        "seam_warm_ms": 80,
+        "cost_delta": 0.0
+      },
+      "validation": {
+        "NavigationAstar": 18,
+        "NavigationLazy": 24,
+        "NavigationDense": 5,
+        "NavigationContext": 11,
+        "GameplayNative": 55,
+        "CandidateBatch": 18,
+        "PopulationPlanner": 20,
+        "PopulationReachability": 27,
+        "SurfacePick": 24,
+        "Batch": 36,
+        "Ports": 92,
+        "Geometry": 46,
+        "Organic": 15,
+        "WorldTargeting": 16,
+        "WorldRewardPoll": 10,
+        "GameplayGate": 24,
+        "GameplayControls": 29,
+        "GameplayWindow": 33,
+        "GameplayCli": 18,
+        "CanvasOrder": 43,
+        "RuntimeView": 12,
+        "FieldsNative": 73
+      },
+      "known_unrelated_failure": "tests/e07_f1_presentation_test.gd 1/37 coincident seam ambiguity, untouched code, present before this checkpoint"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

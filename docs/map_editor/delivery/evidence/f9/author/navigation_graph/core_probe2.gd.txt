@@ -1,0 +1,30 @@
+extends SceneTree
+## Checkpoint35: long Bosque home->entry path, A* + shared memo vs the original Dijkstra order.
+func _initialize() -> void: _run.call_deferred()
+func _run() -> void:
+	var path := ""
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--world="): path = arg.trim_prefix("--world=")
+	var out := {"debug_build":OS.is_debug_build(),"engine":Engine.get_version_info().string}
+	var data: Variant = bytes_to_var(FileAccess.get_file_as_bytes(path))
+	if not data is Dictionary: out["error"] = "dump_missing"; print("F9_CORE2_RESULT "+JSON.stringify(out)); quit(1); return
+	var manifest := ExpeditionManifest.new(); manifest._data = data.manifest
+	var home := ExpeditionWorldPoint.create(data.home.stage_id,data.home.surface_id,data.home.position)
+	var entry := ExpeditionWorldPoint.create(data.entry.stage_id,data.entry.surface_id,data.entry.position)
+	var world := WorldGeometry.new(); world.configure(manifest,data.stage_id)
+	var routes := {}
+	for pass_id: String in ["astar_first","astar_second","astar_reverse"]:
+		var trace := {"enabled":true}; var t := Time.get_ticks_usec()
+		var a := entry if pass_id == "astar_reverse" else home; var b := home if pass_id == "astar_reverse" else entry
+		var route := world._path(a,b,data.traversal,world.geometry_revision,null,true,trace)
+		out[pass_id] = {"ms":(Time.get_ticks_usec()-t)/1000.0,"ok":route.ok,"cost":route.data.cost if route.ok else null,"expansions":trace.get("expansions",0),"edge_tests":trace.get("edge_tests",0),"surfaces":trace.get("surfaces",0),"memo_hits":trace.get("memo_hits",0),"memo_misses":trace.get("memo_misses",0),"memo_entries":trace.get("memo_entries",0)}
+		routes[pass_id] = route
+		print("F9_CORE2_STEP "+pass_id+" "+JSON.stringify(out[pass_id]))
+	out["second_identical"] = routes.astar_second == routes.astar_first
+	var plain := WorldGeometry.new(); plain.configure(manifest,data.stage_id)
+	var trace := {"enabled":true}; var t := Time.get_ticks_usec()
+	var route := plain._path(home,entry,data.traversal,plain.geometry_revision,null,true,trace,true,false)
+	out["dijkstra_first"] = {"ms":(Time.get_ticks_usec()-t)/1000.0,"ok":route.ok,"cost":route.data.cost if route.ok else null,"expansions":trace.get("expansions",0),"edge_tests":trace.get("edge_tests",0),"surfaces":trace.get("surfaces",0)}
+	print("F9_CORE2_STEP dijkstra_first "+JSON.stringify(out.dijkstra_first))
+	if route.ok and routes.astar_first.ok: out["cost_delta"] = absf(float(route.data.cost)-float(routes.astar_first.data.cost))
+	print("F9_CORE2_RESULT "+JSON.stringify(out)); quit(0)

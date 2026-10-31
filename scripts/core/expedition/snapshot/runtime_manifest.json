@@ -594,7 +594,9 @@
       "_occupancy"
     ],
     "omitted": {
-      "_support_index": "derived read-only support topology; empty after restore, lazily rebuilt from _stage on first query"
+      "_support_index": "derived read-only support topology; empty after restore, lazily rebuilt from _stage on first query",
+      "_navigation_epoch": "derived cache epoch for the cross-query navigation memo; restarts at 0 with an empty memo",
+      "_navigation_shared": "derived cross-query navigation predicate memo keyed by revisions, epoch and profile; empty after restore, refilled by queries"
     }
   },
   "res://scripts/core/expedition/spatial/world_ground_field.gd": {
