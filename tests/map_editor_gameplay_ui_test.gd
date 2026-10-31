@@ -121,14 +121,33 @@ func run() -> void:
 	deadline = Time.get_ticks_msec()+12000
 	while is_instance_valid(enemy) and enemy.is_alive() and is_instance_valid(app.host) and Time.get_ticks_msec() < deadline: await process_frame
 	check("real_attack_changes_enemy_health",damage.actual_damage > 0.0)
-	# Deaths are committed once combat ends (checkpoint33), not on the killing frame.
+	# Deaths are committed once combat ends (checkpoint33), not on the killing frame;
+	# since checkpoint37 as one journal entry on this same host (no world capture).
 	deadline = Time.get_ticks_msec()+30000
-	while Time.get_ticks_msec() < deadline and not (is_instance_valid(app.host) and app.host.campaign_runtime != null and app.host.campaign_runtime.state.slots.guard.initial_resolved): await process_frame
+	var journal_frame_ms := 0.0; var frame_clock := Time.get_ticks_usec()
+	while Time.get_ticks_msec() < deadline and not (is_instance_valid(app.host) and app.host.campaign_runtime != null and app.host.campaign_runtime.state.slots.guard.initial_resolved):
+		await process_frame
+		journal_frame_ms = maxf(journal_frame_ms,(Time.get_ticks_usec()-frame_clock)/1000.0); frame_clock = Time.get_ticks_usec()
+	print("F9_GAMEPLAY_JOURNAL_FRAME_MS "+str(snappedf(journal_frame_ms,0.1)))
 	check("real_combat_resolves_population_slot",is_instance_valid(app.host) and app.host.campaign_runtime.state.slots.guard.initial_resolved)
 	await process_frame
 	var cleared_panel := app.host.ui_root.get_node_or_null("ExpeditionStatus") as ExpeditionStatusPanel if is_instance_valid(app.host) else null
 	check("completion_hint_points_to_marker_after_clear",cleared_panel != null and cleared_panel.completion_hint().begins_with("Fique dentro do círculo"))
-	check("transaction_host_reuses_authored_skin",is_instance_valid(app.host) and app.host != host and app.host.expedition_view is View and is_instance_valid(app.host.expedition_view.skin) and app.host.expedition_view.skin.get_instance_id() == skin_before and app.host.expedition_view.skin.get_parent() == app.host.expedition_view)
+	var journal_lock := app.facade.current_profile().expedition_for_character(app.facade.current_profile().selected_character_id)
+	check("death_commits_as_one_journal_entry",journal_lock != null and journal_lock.journal.size() == 1 and journal_lock.receipts.values().any(func(receipt: Dictionary) -> bool: return receipt["operation"] == "journal"))
+	check("journal_keeps_live_host_and_skin",is_instance_valid(app.host) and app.host == host and app.host.expedition_view.skin.get_instance_id() == skin_before and not app.host.enemies.has(enemy) and not enemy.visible and enemy.process_mode == Node.PROCESS_MODE_DISABLED and not app.host.get_tree().paused)
+	check("journal_commit_frame_stays_short",journal_frame_ms < 1500.0)
+	var reread: Dictionary = ExpeditionAssetLock.from_record(JSON.parse_string(JSON.stringify(journal_lock.to_record()))) if journal_lock != null else {"ok":false}
+	check("journal_survives_the_profile_json_round_trip",reread.ok and reread.lock.journal == journal_lock.journal and reread.lock.to_record().size() == 8)
+	var replayed := ExpeditionService.new(app.facade)._restore(journal_lock) if journal_lock != null else {"ok":false}
+	var same_replay := false
+	if replayed.ok:
+		var copy: RunController = replayed.root
+		var copy_enemy: EnemyActor = copy.campaign_runtime.actors.get("guard")
+		var stable: String = replayed.entities.stable_for(copy_enemy.get_instance_id()) if copy_enemy != null else ""
+		same_replay = copy.campaign_runtime.state.slots == host.campaign_runtime.state.slots and copy.campaign_runtime.state.stages == host.campaign_runtime.state.stages and copy.reward_service._tickets == host.reward_service._tickets and copy.reward_service._queue == host.reward_service._queue and copy.reward_service._next_sequence == host.reward_service._next_sequence and copy.rng.state == ExpeditionService.Journal.decode(journal_lock.journal,journal_lock.checkpoint).payloads[0].rng_state and copy.enemies.size() == host.enemies.size() and copy.campaign_runtime.pending_events == host.campaign_runtime.pending_events and copy_enemy != null and not copy_enemy.visible and int(replayed.snapshot.objects[stable].node.mode) == Node.PROCESS_MODE_DISABLED
+		copy.free()
+	check("base_plus_journal_restores_live_campaign_state",same_replay)
 	await capture("gameplay_combat")
 	var old_directory: String = app.session.directory; var old_hash: String = app.session.session.candidate_hash
 	var restarted := await app.restart()

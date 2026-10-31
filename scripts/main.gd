@@ -2667,6 +2667,7 @@ func _advance_expedition_runtime(delta: float) -> void:
 
 func _flush_expedition_events() -> void:
 	if campaign_runtime == null or _expedition_flush_running or campaign_runtime.pending_events.is_empty() or _memory_snapshot_pending: return
+	if _journal_flush(): return
 	_expedition_flush_running = true
 	var saved_status := status_label.text
 	status_label.text = "Salvando a expedição…"
@@ -2689,6 +2690,35 @@ func _flush_expedition_events() -> void:
 	else:
 		status_label.text = "A expedição está pausada; confirme a recuperação antes de continuar: %s" % result["error_code"]
 
+# Checkpoint37 (J2): deaths alone are written as one journal entry, in the same
+# frame, without capturing or replacing the world. Returns false when the full
+# transaction must run instead (waves, no base checkpoint, full journal, or a
+# refusal the full path reports itself).
+func _journal_flush() -> bool:
+	if not campaign_runtime.pending_events.all(func(event: Dictionary) -> bool: return event["kind"] == "mob_death"): return false
+	var profile := persistent_facade.current_profile() if persistent_facade != null else null
+	var lock := profile.expedition_for_character(run_state.character_id) if profile != null else null
+	if lock == null or lock.checkpoint.is_empty() or lock.journal.size() >= ExpeditionService.Journal.MAX_ENTRIES: return false
+	_memory_snapshot_pending = true
+	_memory_snapshot_previous_pause = get_tree().paused
+	get_tree().paused = true
+	_memory_snapshot_barrier = SnapshotTickBarrier.new()
+	if not _memory_snapshot_barrier.acquire(self)["ok"]:
+		release_memory_snapshot(); return false
+	var events := campaign_runtime.pending_events.duplicate(true)
+	var request := "events_" + ExpeditionCanonical.digest({"kind": "events", "events": events}).substr(0, 56)
+	_expedition_transaction_service = ExpeditionService.new(persistent_facade)
+	var result := _expedition_transaction_service.journal_events(self, _memory_snapshot_barrier, events, request, profile.revision)
+	if result["ok"]:
+		release_memory_snapshot(); return true
+	if result.get("read_only", false):
+		# Uncertain write: stay frozen until the player confirms recovery.
+		_expedition_flush_running = true
+		status_label.text = "A expedição está pausada; confirme a recuperação antes de continuar: %s" % result["error_code"]
+		return true
+	release_memory_snapshot()
+	return false
+
 func reconcile_expedition_transaction(request_id: String) -> Dictionary:
 	if _expedition_transaction_service == null: return WorldSkillCast.failure(&"invalid_transaction")
 	var result := _expedition_transaction_service.reconcile(request_id)
@@ -2709,7 +2739,11 @@ func retry_expedition_events() -> Dictionary:
 	return {"ok": true, "queued": true}
 
 func _install_expedition_result(result: Dictionary) -> Dictionary:
-	if not result.has("root"): return result
+	if not result.has("root"):
+		# A journal entry was applied to this same host: only unfreeze it.
+		if result.has("journal_seq"):
+			release_memory_snapshot(); _expedition_flush_running = false
+		return result
 	var registry: SnapshotRegistry = result["registry"]
 	var copy: RunController = result["root"]
 	var parent := get_parent()

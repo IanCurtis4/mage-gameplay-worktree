@@ -3065,6 +3065,48 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 file (checkpoint36 background navigation)",
       "base_sha256": "2a0fc6583a10015887404f392ab3ccf055d96245fafe196c4e803a1a1facb893"
+    },
+    {
+      "path": "scripts/core/expedition/ownership/expedition_asset_lock.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer for checkpoint37 (canvas cycles / campaign journal); base is HEAD blob",
+      "base_sha256": "b0b0433ff0b16db7aebc80d0a044b22e4b1b5cac3a550bc476ac2c0c40a92204"
+    },
+    {
+      "path": "scripts/core/expedition/snapshot/snapshot_tick_barrier.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer for checkpoint37 (canvas cycles / campaign journal); base is HEAD blob",
+      "base_sha256": "f531eee6adea22ad60fde0e2bce6c7b30c285705d39b4eea1e9998e1a01fe442"
+    },
+    {
+      "path": "tests/e07_f7_actions_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer for checkpoint37 (canvas cycles / campaign journal); base is HEAD blob",
+      "base_sha256": "731a15229fd7e5ef1e92a041da0c964516773847c85dd81dde014338cb00d933"
+    },
+    {
+      "path": "scripts/core/expedition/persistence/expedition_journal_codec.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint37 campaign journal)",
+      "base_sha256": "7b03e373a50ba750ba22ae8faab6ca3f32efe815f01427b9c145bf30bf950bac"
+    },
+    {
+      "path": "scripts/core/expedition/persistence/expedition_journal_codec.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint37 campaign journal)",
+      "base_sha256": "6edbd58099b97ff25c7a64a8d7bacbb89cc632cf19c1e5c27a6d7c8c6257e640"
+    },
+    {
+      "path": "tests/map_editor_campaign_journal_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint37 campaign journal)",
+      "base_sha256": "5e631d827787e238cafe3904d1668b79b653db42d56459093d3196a4b2e2be70"
+    },
+    {
+      "path": "tests/map_editor_campaign_journal_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint37 campaign journal)",
+      "base_sha256": "76bc67634204765fb5e2062f2bee4a8a5a9b602643251b8c7bebc778df4964b8"
     }
   ],
   "read_only_shared": [
@@ -3947,6 +3989,94 @@
         "E07_legacy_suites": 30
       },
       "known_unrelated_failure": "tests/e07_f1_presentation_test.gd 1/37 coincident seam ambiguity, untouched code"
+    },
+    "canvas_cycles": {
+      "state": "validated_increment_F9_still_open",
+      "base": "bdb8657d",
+      "human_report": "31/10: player and the tree beside it vanish under the ramp below the final exit, reappear a few steps later; pathing fine",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "files": [
+        "scripts/world/world_canvas_order.gd",
+        "tools/map_editor_completion/run.ps1"
+      ],
+      "test_files": [
+        "tests/map_editor_canvas_order_test.gd"
+      ],
+      "finding": "render probe on the same route: 103/576 steps had a constraint cycle (border tree rooted inside the ramp footprint -> ramp -> player -> tree); apply refused and kept the previous z indices",
+      "scope": "a sprite is below a cap only when its whole body fits under it; a piercing body gets no cap verdict; solve() still refuses cycles by default, apply() releases the lowest-priority waiting node so live frames always get a complete order",
+      "measurements": {
+        "order_failures_before": 103,
+        "order_failures_after": 0,
+        "wrong_overlays_after": 0
+      },
+      "validation": {
+        "CanvasOrder": 46
+      }
+    },
+    "campaign_journal": {
+      "state": "validated_increment_F9_still_open",
+      "base": "bdb8657d",
+      "human_report": "31/10: start the campaign journal; compact only at safe points until saving is asynchronous; living mobs after a crash goes to the tester",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "contract": "docs/map_editor/contracts/f9_campaign_journal.md",
+      "files": [
+        "scripts/core/expedition/persistence/expedition_journal_codec.gd",
+        "scripts/core/expedition/ownership/expedition_asset_lock.gd",
+        "scripts/core/expedition/expedition_service.gd",
+        "scripts/core/expedition/snapshot/snapshot_tick_barrier.gd",
+        "scripts/main.gd",
+        "tools/map_editor_completion/run.ps1"
+      ],
+      "test_files": [
+        "tests/map_editor_campaign_journal_test.gd",
+        "tests/map_editor_gameplay_ui_test.gd",
+        "tests/e07_f7_actions_test.gd"
+      ],
+      "finding": "the end-of-combat save captured, restored, re-captured and re-restored the whole world and replaced the host (11.5-13.3 s)",
+      "scope": "J1-J2: hash-chained journal of resolved death effects (deaths, issued tickets, RNG and ticket sequence) over the base checkpoint; live effect applied only after the durable write; restore replays before activation; any full transaction writes a new base and clears it; waves/respawn still full (J3); end-of-combat deferral kept until the write is asynchronous",
+      "measurements": {
+        "end_of_combat_save_ms_before": [
+          11463,
+          13326
+        ],
+        "journal_commit_worst_frame_ms": 433.5
+      },
+      "validation": {
+        "CampaignJournal": 13,
+        "GameplayNative": 59,
+        "CanvasOrder": 46,
+        "NavigationAsync": 18,
+        "NavigationAstar": 18,
+        "Shadows": 28,
+        "ShadowsNative": 90,
+        "BiomeProps": 30,
+        "BiomePropsNative": 23,
+        "Borders": 93,
+        "BordersNative": 32,
+        "Library": 50,
+        "Viewport": 20,
+        "ViewportNative": 52,
+        "NavigationLazy": 24,
+        "NavigationDense": 5,
+        "NavigationContext": 11,
+        "CandidateBatch": 18,
+        "PopulationPlanner": 20,
+        "PopulationReachability": 27,
+        "SurfacePick": 24,
+        "Batch": 36,
+        "Ports": 92,
+        "Geometry": 46,
+        "Organic": 15,
+        "WorldTargeting": 16,
+        "WorldRewardPoll": 10,
+        "GameplayGate": 24,
+        "GameplayControls": 29,
+        "GameplayWindow": 33,
+        "GameplayCli": 18,
+        "RuntimeView": 12,
+        "FieldsNative": 73
+      },
+      "known_unrelated_failure": "tests/e07_f1_presentation_test.gd 1/37 coincident seam ambiguity; LibraryNative 2 AX command-count checks (test file from 28/10, editor library code untouched here)"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

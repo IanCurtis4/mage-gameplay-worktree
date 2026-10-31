@@ -1,0 +1,36 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_JOURNAL_CHECK three_entries_chain_from_the_base_checkpoint true
+F9_JOURNAL_CHECK payloads_decode_with_exact_types true
+F9_JOURNAL_CHECK profile_json_round_trip_restores_integers true
+F9_JOURNAL_CHECK another_base_breaks_the_chain true
+F9_JOURNAL_CHECK tampered_payload_is_refused true
+F9_JOURNAL_CHECK reordered_entries_are_refused true
+F9_JOURNAL_CHECK missing_middle_entry_is_refused true
+F9_JOURNAL_CHECK unknown_entry_field_is_refused true
+F9_JOURNAL_CHECK only_mob_deaths_are_journaled true
+F9_JOURNAL_CHECK duplicate_death_in_one_entry_is_refused true
+F9_JOURNAL_CHECK delivered_ticket_cannot_be_journaled true
+ERROR: Condition "!p_allow_objects" is true. Returning: ERR_UNAUTHORIZED
+   at: decode_variant (core/io/marshalls.cpp:718)
+   GDScript backtrace (most recent call first):
+       [0] validate (res://scripts/core/expedition/persistence/expedition_journal_codec.gd:46)
+       [1] run (res://tests/map_editor_campaign_journal_test.gd:46)
+ERROR: Error when trying to decode Variant.
+   at: decode_variant (core/io/marshalls.cpp:860)
+   GDScript backtrace (most recent call first):
+       [0] validate (res://scripts/core/expedition/persistence/expedition_journal_codec.gd:46)
+       [1] run (res://tests/map_editor_campaign_journal_test.gd:46)
+ERROR: Error when trying to decode Variant.
+   at: decode_variant (core/io/marshalls.cpp:907)
+   GDScript backtrace (most recent call first):
+       [0] validate (res://scripts/core/expedition/persistence/expedition_journal_codec.gd:46)
+       [1] run (res://tests/map_editor_campaign_journal_test.gd:46)
+ERROR: Error when trying to decode Variant.
+   at: decode_variant (core/io/marshalls.cpp:860)
+   GDScript backtrace (most recent call first):
+       [0] validate (res://scripts/core/expedition/persistence/expedition_journal_codec.gd:46)
+       [1] run (res://tests/map_editor_campaign_journal_test.gd:46)
+F9_JOURNAL_CHECK encoded_objects_are_never_decoded true
+F9_JOURNAL_CHECK journal_is_bounded true
+F9_JOURNAL_RESULT {"checks":[{"id":"three_entries_chain_from_the_base_checkpoint","ok":true},{"id":"payloads_decode_with_exact_types","ok":true},{"id":"profile_json_round_trip_restores_integers","ok":true},{"id":"another_base_breaks_the_chain","ok":true},{"id":"tampered_payload_is_refused","ok":true},{"id":"reordered_entries_are_refused","ok":true},{"id":"missing_middle_entry_is_refused","ok":true},{"id":"unknown_entry_field_is_refused","ok":true},{"id":"only_mob_deaths_are_journaled","ok":true},{"id":"duplicate_death_in_one_entry_is_refused","ok":true},{"id":"delivered_ticket_cannot_be_journaled","ok":true},{"id":"encoded_objects_are_never_decoded","ok":true},{"id":"journal_is_bounded","ok":true}],"count":13,"ok":true}

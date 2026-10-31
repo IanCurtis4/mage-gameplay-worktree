@@ -1,0 +1,4 @@
+ERROR: explicit output directory required
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/e07_f5_native_probe.gd:4)

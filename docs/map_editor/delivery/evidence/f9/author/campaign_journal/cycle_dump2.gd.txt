@@ -1,0 +1,29 @@
+
+static var _f9_dumped := 0
+static func _f9_cycle(ids: Array, ordered: Array, next: Dictionary, records: Dictionary) -> void:
+	if _f9_dumped >= 3: return
+	_f9_dumped += 1
+	var done := {}
+	for id: String in ordered: done[id] = true
+	var start := ""
+	for id: String in ids:
+		if not done.has(id): start = id; break
+	# Every remaining node has a remaining predecessor: walking backwards repeats.
+	var incoming := {}
+	for id: String in ids:
+		if done.has(id): continue
+		for other: String in next[id]:
+			if not done.has(other):
+				if not incoming.has(other): incoming[other] = []
+				incoming[other].append(id)
+	var seen := {}; var path: Array = []; var cursor := start
+	while not seen.has(cursor) and incoming.has(cursor):
+		seen[cursor] = path.size(); path.append(cursor)
+		cursor = incoming[cursor][0]
+	var cycle: Array = path.slice(int(seen.get(cursor,0)))
+	cycle.reverse()
+	var rows: Array = []
+	for index: int in cycle.size():
+		var a: Dictionary = records[cycle[index]]; var b: Dictionary = records[cycle[(index+1)%cycle.size()]]
+		rows.append({"id":cycle[index].substr(0,24),"kind":a.kind,"bounds":str(a.bounds),"anchor":str(a.anchor),"caps":a.get("caps",[]).size(),"to_next_before":_before(a,b),"caps_at":(_caps_at(a,b) if a.kind == "mesh" and b.kind == "sprite" else (_caps_at(b,a) if b.kind == "mesh" and a.kind == "sprite" else 9))})
+	print("F9_CYCLE "+JSON.stringify({"remaining":ids.size()-ordered.size(),"cycle":rows}))

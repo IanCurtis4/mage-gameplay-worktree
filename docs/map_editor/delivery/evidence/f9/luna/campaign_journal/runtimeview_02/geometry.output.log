@@ -1,0 +1,15 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_RUNTIME_VIEW_CHECK actual_map_package_compiles true
+F9_RUNTIME_VIEW_CHECK shared_renderer_constructs_world_and_drawables true
+F9_RUNTIME_VIEW_CHECK renderer_does_not_mutate_passive_package true
+F9_RUNTIME_VIEW_CHECK real_actor_binds_original_world true
+F9_RUNTIME_VIEW_CHECK renderer_accepts_existing_world_with_matching_geometry true
+F9_RUNTIME_VIEW_CHECK renderer_keeps_actor_hierarchy_point_and_health true
+F9_RUNTIME_VIEW_CHECK renderer_stays_out_of_simulated_snapshot_graph true
+F9_RUNTIME_VIEW_CHECK mismatched_world_rejected_without_losing_previous_view true
+F9_RUNTIME_VIEW_CHECK malformed_package_rejected_without_partial_view true
+F9_RUNTIME_VIEW_CHECK temporary_world_state_does_not_rewrite_base_skin true
+F9_RUNTIME_VIEW_CHECK shared_view_creates_no_authoring_controls true
+F9_RUNTIME_VIEW_CHECK clear_releases_only_presentation true
+F9_RUNTIME_VIEW_RESULT {"checks":[{"id":"actual_map_package_compiles","ok":true},{"id":"shared_renderer_constructs_world_and_drawables","ok":true},{"id":"renderer_does_not_mutate_passive_package","ok":true},{"id":"real_actor_binds_original_world","ok":true},{"id":"renderer_accepts_existing_world_with_matching_geometry","ok":true},{"id":"renderer_keeps_actor_hierarchy_point_and_health","ok":true},{"id":"renderer_stays_out_of_simulated_snapshot_graph","ok":true},{"id":"mismatched_world_rejected_without_losing_previous_view","ok":true},{"id":"malformed_package_rejected_without_partial_view","ok":true},{"id":"temporary_world_state_does_not_rewrite_base_skin","ok":true},{"id":"shared_view_creates_no_authoring_controls","ok":true},{"id":"clear_releases_only_presentation","ok":true}],"count":12,"ok":true}

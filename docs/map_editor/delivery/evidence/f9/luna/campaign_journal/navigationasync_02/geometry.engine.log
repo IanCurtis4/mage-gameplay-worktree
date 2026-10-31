@@ -1,0 +1,22 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_ASYNC_CHECK sync_default_answers_immediately_with_path true
+F9_ASYNC_CHECK detour_is_searched_in_background true
+F9_ASYNC_CHECK background_answer_equals_path true
+F9_ASYNC_CHECK owner_receives_the_delivery_once true
+F9_ASYNC_CHECK straight_route_is_immediate true
+F9_ASYNC_CHECK invalid_input_is_immediate true
+F9_ASYNC_CHECK higher_priority_runs_before_queued_lower true
+F9_ASYNC_CHECK cancelled_request_is_never_answered true
+F9_ASYNC_CHECK mutation_during_task_reports_stale true
+F9_ASYNC_CHECK next_request_sees_the_mutation true
+F9_ASYNC_CHECK actor_keeps_route_then_joins_answer_where_it_stands true
+F9_ASYNC_CHECK joined_route_walks_to_destination true
+F9_ASYNC_CHECK cancel_drops_the_pending_route true
+F9_ASYNC_CHECK finished_callback_gets_the_adopted_route true
+F9_ASYNC_CHECK long_search_answer_equals_path true
+F9_ASYNC_CHECK main_loop_never_waits_for_the_search true
+F9_ASYNC_CHECK snapshot_schema_covers_transient_fields true
+F9_ASYNC_CHECK freeing_geometry_with_task_in_flight_is_safe true
+F9_ASYNC_METRICS {"organic":{"call_usec":5058,"compute_usec":1741358,"settle":{"frames":255,"ms":1746,"settled":true,"worst_pump_usec":41}},"port":{"call_usec":4132,"compute_usec":100575,"settle":{"frames":18,"ms":104,"settled":true,"worst_pump_usec":47}}}
+F9_ASYNC_RESULT {"checks":[{"id":"sync_default_answers_immediately_with_path","ok":true},{"id":"detour_is_searched_in_background","ok":true},{"id":"background_answer_equals_path","ok":true},{"id":"owner_receives_the_delivery_once","ok":true},{"id":"straight_route_is_immediate","ok":true},{"id":"invalid_input_is_immediate","ok":true},{"id":"higher_priority_runs_before_queued_lower","ok":true},{"id":"cancelled_request_is_never_answered","ok":true},{"id":"mutation_during_task_reports_stale","ok":true},{"id":"next_request_sees_the_mutation","ok":true},{"id":"actor_keeps_route_then_joins_answer_where_it_stands","ok":true},{"id":"joined_route_walks_to_destination","ok":true},{"id":"cancel_drops_the_pending_route","ok":true},{"id":"finished_callback_gets_the_adopted_route","ok":true},{"id":"long_search_answer_equals_path","ok":true},{"id":"main_loop_never_waits_for_the_search","ok":true},{"id":"snapshot_schema_covers_transient_fields","ok":true},{"id":"freeing_geometry_with_task_in_flight_is_safe","ok":true}],"count":18,"ok":true}

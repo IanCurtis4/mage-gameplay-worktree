@@ -1,0 +1,57 @@
+﻿RUN GameplayNative import 2026-10-31T15:19:50.5084119-03:00
+
+F9 CampaignJournal: True
+RUN GameplayNative 2026-10-31T15:20:21.6802082-03:00
+F9 GameplayNative: True
+F9_GAMEPLAY_JOURNAL_FRAME_MS 381.7
+RUN CanvasOrder 2026-10-31T15:21:48.4493433-03:00
+F9 CanvasOrder: True
+--- legacy
+candidates (44): tests/e07_f1_actor_integration_test.gd, tests/e07_f1_adversarial_test.gd, tests/e07_f1_area_cast_test.gd, tests/e07_f1_birth_collect_test.gd, tests/e07_f1_cast_test.gd, tests/e07_f1_chain_test.gd, tests/e07_f1_channels_test.gd, tests/e07_f1_composition_test.gd, tests/e07_f1_consumer_test.gd, tests/e07_f1_echo_test.gd, tests/e07_f1_ember_test.gd, tests/e07_f1_fields_test.gd, tests/e07_f1_geometer_full_test.gd, tests/e07_f1_geometer_trace_test.gd, tests/e07_f1_geometry_test.gd, tests/e07_f1_guard_travel_test.gd, tests/e07_f1_hunter_cover_test.gd, tests/e07_f1_hunter_traps_test.gd, tests/e07_f1_ice_test.gd, tests/e07_f1_non_planar_test.gd, tests/e07_f1_pilot_scene_test.gd, tests/e07_f1_presentation_test.gd, tests/e07_f1_sentinel_area_test.gd, tests/e07_f1_sentinel_direct_test.gd, tests/e07_f2_ownership_test.gd, tests/e07_f3_action_matrix_test.gd, tests/e07_f3_continuation_test.gd, tests/e07_f3_lifecycle_test.gd, tests/e07_f3_mob_state_test.gd, tests/e07_f3_snapshot_test.gd, tests/e07_f4_alt_isolation_test.gd, tests/e07_f4_compatibility_test.gd, tests/e07_f4_controller_test.gd, tests/e07_f4_durable_test.gd, tests/e07_f4_fault_test.gd, tests/e07_f5_build_test.gd, tests/e07_f5_death_kits_test.gd, tests/e07_f5_native_probe.gd, tests/e07_f5_population_test.gd, tests/e07_f5_recovery_test.gd, tests/e07_f6_runtime_test.gd, tests/e07_f6_snapshot_test.gd, tests/e07_f7_actions_test.gd, tests/e07_f7_presentation_test.gd
+LEGACY tests/e07_f1_actor_integration_test.gd :: E07 F1 actor integration: 193 checks, 0 failures
+LEGACY tests/e07_f1_adversarial_test.gd :: E07 F1 adversarial/flat: 29 checks, 0 failures
+LEGACY tests/e07_f1_area_cast_test.gd :: E07 F1 area casts: 59 checks, 0 failures
+LEGACY tests/e07_f1_birth_collect_test.gd :: E07 F1 birth and collection: 210 checks, 0 failures
+LEGACY tests/e07_f1_cast_test.gd :: E07 F1 casts: 113 checks, 0 failures
+LEGACY tests/e07_f1_chain_test.gd :: E07 F1 chains: 121 checks, 0 failures
+LEGACY tests/e07_f1_channels_test.gd :: E07 F1 channels: 32 checks, 0 failures
+LEGACY tests/e07_f1_composition_test.gd :: E07 F1 compositions: 299 checks, 0 failures; recipes=27
+LEGACY tests/e07_f1_consumer_test.gd :: E07 F1 consumers: 133 checks, 0 failures
+LEGACY tests/e07_f1_echo_test.gd :: E07 F1 echoes: 271 checks, 0 failures
+LEGACY tests/e07_f1_ember_test.gd :: E07 F1 ember: 102 checks, 0 failures
+LEGACY tests/e07_f1_fields_test.gd :: E07 F1 ground fields: 499 checks, 0 failures
+LEGACY tests/e07_f1_geometer_full_test.gd :: E07 F1 Geometer full: 1160 checks, 0 failures
+LEGACY tests/e07_f1_geometer_trace_test.gd :: E07 F1 Geometer trace: 400 checks, 0 failures
+LEGACY tests/e07_f1_geometry_test.gd :: E07 F1 geometry: 33 checks, 0 failures; seed=711 manifest=2e6232a2f5c2bbe6add8aa0a2645201ad14271b89d39765978b055ecfa2c3eed
+LEGACY tests/e07_f1_guard_travel_test.gd :: E07 F1 guard and travel: 293 checks, 0 failures
+LEGACY tests/e07_f1_hunter_cover_test.gd :: E07 F1 Hunter cover: 235 checks, 0 failures
+LEGACY tests/e07_f1_hunter_traps_test.gd :: E07 F1 Hunter traps: 631 checks, 0 failures
+LEGACY tests/e07_f1_ice_test.gd :: E07 F1 Ice Wall: 262 checks, 0 failures
+LEGACY tests/e07_f1_non_planar_test.gd :: E07 F1 non-planar fields: 311 checks, 0 failures
+LEGACY tests/e07_f1_pilot_scene_test.gd :: E07 F1 native pilot scene: 102 checks, 0 failures; identities=10; presentation=logical_assembly_only; D05_visual_separate
+LEGACY tests/e07_f1_presentation_test.gd :: E07 F1 presentation: 37 checks, 1 failures; native scene, projection, click, preview, marker, occlusion
+LEGACY tests/e07_f1_sentinel_area_test.gd :: E07 F1 Sentinel areas: 433 checks, 0 failures
+LEGACY tests/e07_f1_sentinel_direct_test.gd :: E07 F1 Sentinel direct: 364 checks, 0 failures
+LEGACY tests/e07_f2_ownership_test.gd :: E07 F2 e07_f2_ownership_test.gd: 45 checks, 0 failures
+LEGACY tests/e07_f3_action_matrix_test.gd :: E07 F3 action matrix: 2004 checks, 0 failures; scenarios=21
+LEGACY tests/e07_f3_continuation_test.gd :: E07 F3 continuation: 2743 checks, 0 failures; scenarios=30
+LEGACY tests/e07_f3_lifecycle_test.gd :: E07 F3 lifecycle: 90 checks, 0 failures
+LEGACY tests/e07_f3_mob_state_test.gd :: E07 F3 mob state: 372 checks, 0 failures; scenarios=4
+LEGACY tests/e07_f3_snapshot_test.gd :: E07 F3 snapshot: 50 checks, 0 failures
+LEGACY tests/e07_f4_alt_isolation_test.gd :: E07 F4 e07_f4_alt_isolation_test.gd: 16 checks, 0 failures
+LEGACY tests/e07_f4_compatibility_test.gd :: E07 F4 e07_f4_compatibility_test.gd: 16 checks, 0 failures
+LEGACY tests/e07_f4_controller_test.gd :: E07 F4 e07_f4_controller_test.gd: 11 checks, 0 failures
+LEGACY tests/e07_f4_durable_test.gd :: E07 F4 e07_f4_durable_test.gd: 28 checks, 0 failures
+LEGACY tests/e07_f4_fault_test.gd :: E07 F4 e07_f4_fault_test.gd: 53 checks, 0 failures
+LEGACY tests/e07_f5_build_test.gd :: E07 F5 e07_f5_build_test.gd: 32 checks, 0 failures
+LEGACY tests/e07_f5_death_kits_test.gd :: E07 F5 death kits: 191 checks, 0 failures
+LEGACY tests/e07_f5_native_probe.gd :: 
+LEGACY tests/e07_f5_population_test.gd :: E07 F5 population: 40 checks, 0 failures
+LEGACY tests/e07_f5_recovery_test.gd :: E07 F5 e07_f5_recovery_test.gd: 33 checks, 0 failures
+LEGACY tests/e07_f6_runtime_test.gd :: E07 F5 e07_f6_runtime_test.gd: 33 checks, 0 failures
+LEGACY tests/e07_f6_snapshot_test.gd :: E07 F5 e07_f6_snapshot_test.gd: 40 checks, 0 failures
+LEGACY tests/e07_f7_actions_test.gd :: 
+LEGACY tests/e07_f7_presentation_test.gd :: E07 F7 presentation: 10 checks, 0 failures
+DONE 2026-10-31T15:37:25.4232283-03:00
+
+

@@ -1,0 +1,24 @@
+﻿RUN GameplayNative import 2026-10-31T14:32:51.9718811-03:00
+F9 GameplayNative: True
+F9_GAMEPLAY_JOURNAL_FRAME_MS 433.5
+--- legacy
+candidates (18): tests/e07_f2_ownership_test.gd, tests/e07_f3_continuation_test.gd, tests/e07_f3_lifecycle_test.gd, tests/e07_f3_snapshot_test.gd, tests/e07_f4_alt_isolation_test.gd, tests/e07_f4_compatibility_test.gd, tests/e07_f4_controller_test.gd, tests/e07_f4_durable_test.gd, tests/e07_f4_fault_test.gd, tests/e07_f5_build_test.gd, tests/e07_f5_completion_test.gd, tests/e07_f5_death_kits_test.gd, tests/e07_f5_native_probe.gd, tests/e07_f5_population_test.gd, tests/e07_f5_recovery_test.gd, tests/e07_f6_snapshot_test.gd, tests/e07_f7_flow_test.gd, tests/e07_f7_presentation_test.gd
+LEGACY tests/e07_f2_ownership_test.gd :: E07 F2 e07_f2_ownership_test.gd: 45 checks, 0 failures
+LEGACY tests/e07_f3_continuation_test.gd :: E07 F3 continuation: 2743 checks, 0 failures; scenarios=30
+LEGACY tests/e07_f3_lifecycle_test.gd :: E07 F3 lifecycle: 90 checks, 0 failures
+LEGACY tests/e07_f3_snapshot_test.gd :: E07 F3 snapshot: 50 checks, 0 failures
+LEGACY tests/e07_f4_alt_isolation_test.gd :: E07 F4 e07_f4_alt_isolation_test.gd: 16 checks, 0 failures
+LEGACY tests/e07_f4_compatibility_test.gd :: E07 F4 e07_f4_compatibility_test.gd: 16 checks, 0 failures
+LEGACY tests/e07_f4_controller_test.gd :: E07 F4 e07_f4_controller_test.gd: 11 checks, 0 failures
+LEGACY tests/e07_f4_durable_test.gd :: E07 F4 e07_f4_durable_test.gd: 28 checks, 0 failures
+LEGACY tests/e07_f4_fault_test.gd :: E07 F4 e07_f4_fault_test.gd: 53 checks, 0 failures
+LEGACY tests/e07_f5_build_test.gd :: E07 F5 e07_f5_build_test.gd: 32 checks, 0 failures
+LEGACY tests/e07_f5_completion_test.gd :: E07 F5 e07_f5_completion_test.gd: 39 checks, 0 failures
+LEGACY tests/e07_f5_death_kits_test.gd :: E07 F5 death kits: 191 checks, 0 failures
+LEGACY tests/e07_f5_native_probe.gd :: 
+LEGACY tests/e07_f5_population_test.gd :: E07 F5 population: 40 checks, 0 failures
+LEGACY tests/e07_f5_recovery_test.gd :: E07 F5 e07_f5_recovery_test.gd: 33 checks, 0 failures
+LEGACY tests/e07_f6_snapshot_test.gd :: E07 F5 e07_f6_snapshot_test.gd: 40 checks, 0 failures
+LEGACY tests/e07_f7_flow_test.gd :: E07 F7 flow: PASS (23 assertions, opaque selection/visible/isometric camera/enter/lobby locks/closed portal/usable uncertain recovery/resume/install/activate)
+LEGACY tests/e07_f7_presentation_test.gd :: E07 F7 presentation: 10 checks, 0 failures
+DONE 2026-10-31T14:45:01.6469216-03:00

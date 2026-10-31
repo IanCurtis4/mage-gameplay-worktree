@@ -13,6 +13,16 @@ func settled(previous: RunController) -> RunController:
 	if not check(current_scene != previous, "event published a confirmed replacement"): return null
 	paused = true
 	return current_scene as RunController
+# Checkpoint37: mob deaths alone are one campaign journal entry applied to this
+# same host; the other events below still publish a confirmed replacement.
+func journaled(host: RunController, slot: String) -> bool:
+	var deadline := Time.get_ticks_msec() + 90000
+	while (host.campaign_runtime.state.slots[slot]["life_state"] != "dead" or not host.campaign_runtime.pending_events.is_empty()) and Time.get_ticks_msec() < deadline: await process_frame
+	if not check(current_scene == host and host.campaign_runtime.state.slots[slot]["life_state"] == "dead" and host.campaign_runtime.pending_events.is_empty(), "death is journaled on the same host"): return false
+	var lock := host.persistent_facade.current_profile().expedition_for_character(host.run_state.character_id)
+	if not check(lock != null and not lock.journal.is_empty(), "death entry is durable in the journal"): return false
+	paused = true
+	return true
 func move_to(host: RunController, record: Dictionary) -> bool:
 	var motion := host.player.world_motion
 	var point := ExpeditionPopulationPlanner.point(record)
@@ -36,8 +46,7 @@ func _run() -> void:
 		var actor: EnemyActor = host.campaign_runtime.actors[slot]
 		actor.health.current_hp = 0.0; actor.health._death_emitted = true
 		host._on_enemy_died(actor)
-		host = await settled(host)
-		if host == null: return
+		if not await journaled(host, slot): return
 	check(host.campaign_runtime.state.stages["entry"]["cleared_once"], "complete manifest death events open the entry portals")
 	host.combat_participation.observe({}, 6.0)
 	if not check(not host.encounter_active, "canonical out-of-combat fixture window"): return

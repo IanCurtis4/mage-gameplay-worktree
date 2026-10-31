@@ -1,0 +1,21 @@
+﻿RUN CampaignJournal import 2026-10-31T15:39:41.7969245-03:00
+
+F9 CampaignJournal: True
+LEGACY tests/e07_f7_actions_test.gd :: E07 F7 actions: 27 checks, 0 failures
+LEGACY tests/e07_f5_fault_test.gd :: E07 F5 e07_f5_fault_test.gd: 20 checks, 0 failures
+LEGACY tests/e06_tx_loot_test.gd :: E06 TX3 loot: 49 checks, 0 failures
+LEGACY tests/e05_training_boss_test.gd :: E05 treino de boss: PASS (17 checks)
+LEGACY tests/e05_geometer_geometry_integration_test.gd :: Geometer geometry integration: 46 checks, 0 failures
+LEGACY tests/e04_archer_foliage_shelter_rank_integration_test.gd :: E04 Abrigo de Folhagem por rank: PASS (62 checks)
+LEGACY tests/e04_archer_integrated_closure_test.gd :: E04 Arqueiro integrado: PASS (87 checks)
+LEGACY tests/e04_mage_ice_wall_rank_integration_test.gd :: E04 MG7 Parede de Gelo: PASS (78 checks)
+LEGACY tests/e04_mage_integrated_closure_test.gd :: E04 Mago integrado: PASS (106 checks)
+LEGACY tests/e04_swordsman_integrated_closure_test.gd :: E04 Espadachim integrado: FAIL (4 de 93)
+   ERROR: Falha SWI: dois presets manuais persistem
+      at: push_error (core/variant/variant_utility.cpp:1023)
+   ERROR: Falha SWI: reload preserva arrays legados ativos distintos
+      at: push_error (core/variant/variant_utility.cpp:1023)
+LEGACY tests/e04_swordsman_shield_wall_rank_integration_test.gd :: E04 SW1 Parede de Escudos: PASS (88 checks)
+DONE 2026-10-31T15:43:46.0455742-03:00
+
+

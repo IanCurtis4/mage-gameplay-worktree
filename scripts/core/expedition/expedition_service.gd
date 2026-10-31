@@ -1,6 +1,7 @@
 class_name ExpeditionService
 extends RefCounted
 ## Transaction coordinator. ProfileStore remains the only durable writer.
+const Journal = preload("res://scripts/core/expedition/persistence/expedition_journal_codec.gd")
 var facade: ProfileFacade
 var _pending: Dictionary = {}
 
@@ -50,6 +51,7 @@ func commit_cut(controller: RunController, snapshot: Dictionary, expedition_id: 
 	var packed := ExpeditionCheckpointCodec.pack(snapshot,ExpeditionCheckpointCodec.owner_digest(candidate,slot.character_id),profile.reward_session)
 	if not packed["ok"]: return packed
 	slot.checkpoint = packed["checkpoint"]
+	slot.journal = []
 	slot.receipts[request_id] = {"fingerprint":fingerprint,"operation":operation,"revision":slot.revision}
 	candidate.expeditions[expedition_id] = slot
 	if suspend: candidate.reward_session = null
@@ -100,6 +102,7 @@ func collect(controller: RunController, barrier: SnapshotTickBarrier, ticket_id:
 	var packed := ExpeditionCheckpointCodec.pack(after["snapshot"],ExpeditionCheckpointCodec.owner_digest(candidate,lock.character_id),candidate.reward_session)
 	if not packed["ok"]: return packed
 	lock.checkpoint = packed["checkpoint"]
+	lock.journal = []
 	lock.receipts[request_id] = {"fingerprint":fingerprint,"operation":"collect","revision":lock.revision}
 	candidate.expeditions[lock.expedition_id] = lock
 	return _commit(candidate,request_id,expected_revision,{"source":weakref(controller),"expedition_id":lock.expedition_id,"ticket_id":ticket_id,"grant":prepared})
@@ -165,6 +168,11 @@ func _restore(lock: ExpeditionAssetLock) -> Dictionary:
 		if host == null or host.run_state.character_id != lock.character_id or host.run_state.run_id != lock.checkpoint["session"]["run_id"]:
 			result["root"].free()
 			return _fail(&"invalid_session")
+		if not lock.journal.is_empty():
+			var replayed := _journal_replay(result, lock)
+			if not replayed["ok"]:
+				result["root"].free()
+				return replayed
 		if host.campaign_runtime != null: host.campaign_runtime.state.lifecycle = "recovering" if _unrevived_death(host) else String(lock.lifecycle)
 		result["registry"] = registry
 	return result
@@ -194,6 +202,13 @@ func _publish(result: Dictionary, context: Dictionary) -> Dictionary:
 		result["registry"] = context["staged_registry"]
 		var previous := context["source"].get_ref() as RunController
 		if previous != null: previous.snapshot_passive = true
+	if context.has("journal_payload"):
+		var live := context["source"].get_ref() as RunController
+		if live != null:
+			var holder: SnapshotTickBarrier = context["barrier"].get_ref() if context.has("barrier") else null
+			var applied := _journal_apply(live, context["journal_payload"], false, holder)
+			if not applied["ok"]: return applied
+		result["journal_seq"] = lock.journal.size()
 	if lock.lifecycle == &"suspended" and context.has("source"):
 		var suspended_host := context["source"].get_ref() as RunController
 		if suspended_host != null: suspended_host.snapshot_passive = true
@@ -267,6 +282,7 @@ func change_build(controller: RunController, barrier: SnapshotTickBarrier, inten
 	var packed := ExpeditionCheckpointCodec.pack(after["snapshot"], ExpeditionCheckpointCodec.owner_digest(candidate, lock.character_id), candidate.reward_session)
 	if not packed["ok"]: final_world["root"].free(); return packed
 	lock.checkpoint = packed["checkpoint"]
+	lock.journal = []
 	lock.receipts[request_id] = {"fingerprint": fingerprint, "operation": "build", "revision": lock.revision}
 	candidate.expeditions[lock.expedition_id] = lock
 	return _commit(candidate, request_id, int(intent["profile_revision"]), {"source": weakref(controller), "expedition_id": lock.expedition_id, "inplace_build": true, "prepared_build": prepared, "staged": final_world})
@@ -383,6 +399,7 @@ func campaign_command(controller: RunController, barrier: SnapshotTickBarrier, c
 	var packed := ExpeditionCheckpointCodec.pack(after["snapshot"], ExpeditionCheckpointCodec.owner_digest(candidate, slot.character_id), profile.reward_session)
 	if not packed["ok"]: final_world["root"].free(); return packed
 	slot.checkpoint = packed["checkpoint"]
+	slot.journal = []
 	slot.receipts[request_id] = {"fingerprint": fingerprint, "operation": "campaign", "revision": slot.revision}
 	candidate.expeditions[id] = slot
 	if state.lifecycle == "suspended": candidate.reward_session = null
@@ -445,21 +462,7 @@ func _apply_campaign(host: RunController, command: Dictionary) -> Dictionary:
 					if actor.is_alive(): return _fail(&"invalid_death_source")
 					var ticket := host.reward_service.issue_mob_drop(actor)
 					if not ticket["ok"]: return ticket
-					# The finite companion follows its dead owner, without rewards or
-					# affecting the required population. Keep tombstones for snapshot.
-					for companion: CombatActor in host.enemies.duplicate():
-						if companion is EnemyActor and companion.is_summoned and companion.summoner_id == actor.get_instance_id():
-							host.enemies.erase(companion)
-							if companion.world_motion != null: companion.world_motion.release()
-							companion.health.current_hp = 0.0
-							companion.health._death_emitted = true
-							companion.hide()
-							companion.process_mode = Node.PROCESS_MODE_DISABLED
-					host._world_pending_companions.erase(actor.get_instance_id())
-					if actor.world_motion != null: actor.world_motion.release()
-					host.enemies.erase(actor)
-					actor.hide()
-					actor.process_mode = Node.PROCESS_MODE_DISABLED
+					_remove_dead_mob(host, actor)
 			if not result["ok"]: return result
 		runtime.pending_events.clear()
 		return {"ok": true}
@@ -510,6 +513,145 @@ func _apply_campaign(host: RunController, command: Dictionary) -> Dictionary:
 		host.run_state.runtime_revision += 1
 		return {"ok": true}
 	return _fail(&"invalid_payload")
+
+# Checkpoint37 (J2): mob deaths become one small journal entry instead of a full
+# world transaction. Effects are resolved on the live host and rolled back,
+# written durably, and only then applied to the live host. Nothing is restored
+# and the host is not replaced. Restoring the base replays the same payloads.
+func journal_events(controller: RunController, barrier: SnapshotTickBarrier, events: Array, request_id: String, expected_revision: int) -> Dictionary:
+	if not _pending.is_empty(): return _fail(&"recovery_required")
+	if controller == null or controller.persistent_facade != facade or controller.campaign_runtime == null or barrier == null or not barrier.owns(controller): return _fail(&"tick_barrier_required")
+	if events.is_empty() or events.any(func(event: Variant) -> bool: return not event is Dictionary or event.get("kind") != "mob_death"): return _fail(&"invalid_payload")
+	if not _valid_campaign_command({"kind": "events", "events": events}): return _fail(&"invalid_payload")
+	var profile := facade.current_profile()
+	if profile == null: return _fail(&"profile_unavailable")
+	var state := controller.campaign_runtime.state
+	var id: String = state.expedition_id
+	var phase := StringName(state.manifest_data["input"]["phase_id"])
+	var fingerprint := _fingerprint("journal", id, phase, ExpeditionCanonical.encode(events))
+	var replay := _replay(profile, id, request_id, fingerprint)
+	if not replay.is_empty(): return replay
+	if profile.revision != expected_revision: return _fail(&"stale_revision")
+	if profile.reward_session == null or profile.reward_session["run_id"] != controller.run_state.run_id or profile.reward_session["character_id"] != controller.run_state.character_id: return _fail(&"invalid_session")
+	var current := profile.expedition_for_character(controller.run_state.character_id)
+	if current == null or current.expedition_id != id or current.checkpoint.is_empty() or current.lifecycle not in [&"active", &"recovering"]: return _fail(&"invalid_session")
+	var resolved := _journal_effects(controller, events)
+	if not resolved["ok"]: return resolved
+	var candidate := profile.copy_state()
+	var slot: ExpeditionAssetLock = candidate.expeditions[id]
+	var made := Journal.make_entry(slot.journal, slot.checkpoint, request_id, resolved["payload"])
+	if not made["ok"]: return made
+	slot.journal.append(made["entry"])
+	slot.revision += 1
+	slot.receipts[request_id] = {"fingerprint": fingerprint, "operation": "journal", "revision": slot.revision}
+	return _commit(candidate, request_id, expected_revision, {"source": weakref(controller), "barrier": weakref(barrier), "expedition_id": id, "journal_payload": resolved["payload"]})
+
+# Validates the deaths on a scratch copy of the slot data and rolls the drops on
+# the live reward ledger, then restores the ledger and RNG exactly.
+func _journal_effects(host: RunController, events: Array) -> Dictionary:
+	var runtime := host.campaign_runtime
+	var scratch := ExpeditionCampaignState.new()
+	scratch.slots = runtime.state.slots.duplicate(true)
+	scratch.stages = runtime.state.stages.duplicate(true)
+	var fresh: Array = []
+	for event: Dictionary in events:
+		if not runtime.actors.has(event["slot_id"]): return _fail(&"invalid_death_source")
+		var checked := scratch.record_death(event["slot_id"], int(event["generation"]), event["event_id"])
+		if not checked["ok"]: return checked
+		if checked.get("already_applied", false): continue
+		var actor: EnemyActor = runtime.actors[event["slot_id"]]
+		if actor.is_alive(): return _fail(&"invalid_death_source")
+		fresh.append(actor)
+	var rewards := host.reward_service
+	var saved := {"tickets": rewards._tickets.duplicate(true), "events": rewards._events.duplicate(true), "queue": rewards._queue.duplicate(), "next": rewards._next_sequence, "rng": host.rng.state}
+	var tickets: Array = []
+	var failure := {}
+	for actor: EnemyActor in fresh:
+		var issued := rewards.issue_mob_drop(actor)
+		if not issued["ok"]: failure = issued; break
+		tickets.append(rewards._tickets[issued["ticket_id"]].duplicate(true))
+	var payload := {"events": events.duplicate(true), "tickets": tickets, "rng_state": host.rng.state, "next_sequence": rewards._next_sequence}
+	rewards._tickets = saved["tickets"]; rewards._events = saved["events"]; rewards._queue = saved["queue"]; rewards._next_sequence = saved["next"]; host.rng.state = saved["rng"]
+	if not failure.is_empty(): return failure
+	for event: Dictionary in payload["events"]: event["generation"] = int(event["generation"])
+	return {"ok": true, "payload": payload}
+
+# Same effect live (after the durable write) and on replay over the base. Idempotent.
+func _journal_apply(host: RunController, payload: Dictionary, replay: bool, barrier: SnapshotTickBarrier = null) -> Dictionary:
+	var runtime := host.campaign_runtime
+	if runtime == null: return _fail(&"invalid_session")
+	var disabled: Array[Node] = []
+	var applied := {}
+	for event: Dictionary in payload["events"]:
+		if not runtime.actors.has(event["slot_id"]): return _fail(&"invalid_death_source")
+		var actor: EnemyActor = runtime.actors[event["slot_id"]]
+		var recorded := runtime.state.record_death(event["slot_id"], int(event["generation"]), event["event_id"])
+		if not recorded["ok"]: return recorded
+		applied[event["event_id"]] = true
+		if not host.enemies.has(actor): continue
+		if actor.is_alive():
+			if not replay: return _fail(&"invalid_death_source")
+			actor.health.current_hp = 0.0
+			actor.health._death_emitted = true
+		disabled.append_array(_remove_dead_mob(host, actor, barrier))
+	var rewards := host.reward_service
+	for ticket: Dictionary in payload["tickets"]:
+		var ticket_id: String = ticket["ticket_id"]
+		if rewards._tickets.has(ticket_id): continue
+		rewards._tickets[ticket_id] = ticket.duplicate(true)
+		rewards._events[ticket["event_id"]] = ticket_id
+		rewards._queue.append(ticket_id)
+	rewards._next_sequence = maxi(rewards._next_sequence, int(payload["next_sequence"]))
+	host.rng.state = payload["rng_state"]
+	var kept: Array[Dictionary] = []
+	for event: Dictionary in runtime.pending_events:
+		if event["kind"] == "mob_death" and applied.has(event["event_id"]): continue
+		kept.append(event)
+	runtime.pending_events = kept
+	return {"ok": true, "disabled": disabled}
+
+# Replays the journal over a restored base before anything activates it. The
+# registry would re-enable removed mobs from their recorded modes, so those
+# records are updated to the replayed state.
+func _journal_replay(restored: Dictionary, lock: ExpeditionAssetLock) -> Dictionary:
+	var decoded := Journal.decode(lock.journal, lock.checkpoint)
+	if not decoded["ok"]: return decoded
+	var host := restored["root"] as RunController
+	for payload: Dictionary in decoded["payloads"]:
+		var applied := _journal_apply(host, payload, true)
+		if not applied["ok"]: return _fail(&"journal_replay_failed")
+		for node: Node in applied["disabled"]:
+			var stable: String = restored["entities"].stable_for(node.get_instance_id())
+			if stable.is_empty() or not restored["snapshot"]["objects"].has(stable): continue
+			var record: Dictionary = restored["snapshot"]["objects"][stable]
+			if record.get("node") is Dictionary:
+				record["node"]["mode"] = Node.PROCESS_MODE_DISABLED
+				if record["node"].get("canvas") is Dictionary: record["node"]["canvas"]["visible"] = false
+	return {"ok": true}
+
+# The finite companion follows its dead owner, without rewards or affecting the
+# required population. Keep tombstones for snapshot. Returns the disabled nodes;
+# a held barrier keeps them disabled when it releases.
+func _remove_dead_mob(host: RunController, actor: EnemyActor, barrier: SnapshotTickBarrier = null) -> Array[Node]:
+	var disabled: Array[Node] = []
+	for companion: CombatActor in host.enemies.duplicate():
+		if companion is EnemyActor and companion.is_summoned and companion.summoner_id == actor.get_instance_id():
+			host.enemies.erase(companion)
+			if companion.world_motion != null: companion.world_motion.release()
+			companion.health.current_hp = 0.0
+			companion.health._death_emitted = true
+			companion.hide()
+			companion.process_mode = Node.PROCESS_MODE_DISABLED
+			disabled.append(companion)
+	host._world_pending_companions.erase(actor.get_instance_id())
+	if actor.world_motion != null: actor.world_motion.release()
+	host.enemies.erase(actor)
+	actor.hide()
+	actor.process_mode = Node.PROCESS_MODE_DISABLED
+	disabled.append(actor)
+	if barrier != null:
+		for node: Node in disabled: barrier.retain_mode(node, Node.PROCESS_MODE_DISABLED)
+	return disabled
 
 func _at_point(host: RunController, record: Dictionary) -> bool:
 	var from := host.player.world_point()

@@ -22,6 +22,11 @@ func _freeze(node: Node) -> void:
 func owns(root: Node) -> bool:
 	return held and _root != null and _root.get_ref() == root
 
+## A node the holder changed on purpose under the barrier (a mob the campaign
+## journal just removed) keeps that mode when the barrier releases.
+func retain_mode(node: Node, mode: int) -> void:
+	if _modes.has(node.get_instance_id()): _modes[node.get_instance_id()]["mode"] = mode
+
 func saved_mode(node: Node) -> int:
 	return int(_modes.get(node.get_instance_id(), {}).get("mode", node.process_mode))
 

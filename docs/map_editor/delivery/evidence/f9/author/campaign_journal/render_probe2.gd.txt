@@ -1,0 +1,110 @@
+extends SceneTree
+## Diagnostic (Sol, checkpoint37): walk to the final objective and report canvas
+## nodes drawn after the player (or a tree) although the exact view ray says they
+## are behind it.
+const Launcher = preload("res://scripts/map_authoring/preview/gameplay_launcher.gd")
+const App = preload("res://scripts/map_authoring/preview/gameplay_app.gd")
+const CanvasOrder = preload("res://scripts/world/world_canvas_order.gd")
+const ProjectionMath = preload("res://scripts/world/expedition_projection.gd")
+const VIEW := Vector3(1.0,0.85,1.0)
+var reported := {}
+func _initialize() -> void: run.call_deferred()
+# Signed view-ray parameters where the ray through p meets the triangle (t > 0 is
+# nearer the camera than p).
+static func ray_hits(tri: Array, p: Vector3) -> float:
+	var a: Vector3 = tri[0]; var b: Vector3 = tri[1]; var c: Vector3 = tri[2]
+	var n := (b-a).cross(c-a)
+	var denom := n.dot(VIEW)
+	if absf(denom) < 1e-9: return NAN
+	var t := n.dot(a-p)/denom
+	var q := p+VIEW*t
+	var sp := ProjectionMath.project(q); var sa := ProjectionMath.project(a); var sb := ProjectionMath.project(b); var sc := ProjectionMath.project(c)
+	if not Geometry2D.point_is_inside_triangle(sp,sa,sb,sc): return NAN
+	return t
+static func triangles(node: Node) -> Array:
+	var result: Array = []
+	var meshes: Array = []
+	if node is MeshInstance2D: meshes.append(node)
+	else:
+		for child: Node in node.get_children():
+			if child is MeshInstance2D: meshes.append(child)
+	for m: MeshInstance2D in meshes:
+		if not m.mesh is ArrayMesh: continue
+		var vertices := CanvasOrder.world_vertices(m.mesh)
+		var indices: PackedInt32Array = m.mesh.surface_get_arrays(0)[Mesh.ARRAY_INDEX]
+		for i: int in range(0,indices.size(),3): result.append([vertices[indices[i]],vertices[indices[i+1]],vertices[indices[i+2]]])
+	return result
+static func classify(node: Node, samples: Array) -> String:
+	var front := false; var behind := false
+	for tri: Array in triangles(node):
+		for p: Vector3 in samples:
+			var t := ray_hits(tri,p)
+			if is_nan(t): continue
+			if t > 0.05: front = true
+			elif t < -0.05: behind = true
+	return "both" if front and behind else ("front" if front else ("behind" if behind else "none"))
+func audit(main, label: String, who: Node2D, anchor: Vector3, height: float, radius: float) -> void:
+	var skin: Node2D = main.expedition_view.skin
+	var screen := ProjectionMath.project(anchor)
+	var rect := Rect2(screen-Vector2(height*0.65,height),Vector2(height*1.3,height+8))
+	var samples: Array = [anchor+Vector3(0,1,0),anchor+Vector3(0,height*0.5,0),anchor+Vector3(0,height*0.95,0)]
+	for node: Node in skin.get_children():
+		if node == who or not node is Node2D or not node.visible: continue
+		if node.z_index < who.z_index or (node.z_index == who.z_index and node.get_index() < who.get_index()): continue
+		var record: Dictionary = node.get_meta("canvas_order_record",{})
+		if record.is_empty() and node is MeshInstance2D and node.mesh is ArrayMesh: record = CanvasOrder._mesh_record(node,"")
+		if record.is_empty() or record.get("kind") != "mesh" or not Rect2(record.screen).intersects(rect): continue
+		var verdict := classify(node,samples)
+		if verdict == "behind":
+			var key := label+":"+str(node.get_instance_id())
+			if reported.has(key): continue
+			reported[key] = true
+			var sprite := {"id":"probe","kind":"sprite","anchor":anchor,"bounds":AABB(anchor-Vector3(radius,0,radius),Vector3(radius*2,height,radius*2)),"screen":rect}
+			print("RP wrong_order "+JSON.stringify({"who":label,"anchor":str(anchor),"mesh_bounds":str(record.bounds),"caps":record.caps.size(),"triangles":triangles(node).size(),"before":CanvasOrder._before(record,sprite),"caps_at":CanvasOrder._caps_at(record,sprite),"mesh_anchor":str(record.anchor),"z_mesh":node.z_index,"z_who":who.z_index,"node":String(node.get_class())+("/box" if not node is MeshInstance2D else ""),"ordering_ok":main.expedition_view.ordering.get("ok"),"ordering_code":String(main.expedition_view.ordering.get("code",""))}))
+func run() -> void:
+	var path := ""
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--candidate="): path = arg.trim_prefix("--candidate=")
+	var candidate: Variant = bytes_to_var(FileAccess.get_file_as_bytes(path))
+	var created := Launcher.create_session(candidate)
+	var window := Launcher.create_window(created.path) if created.ok else {"ok":false}
+	var app := App.new(); app.quit_on_close = false; app.hold_start = true; root.add_child(app); current_scene = app
+	var opened: Dictionary = await app.open_window_async(window.path)
+	var started: Dictionary = await app._start_with_gate() if opened.ok else {"ok":false}
+	if not started.ok: print("RP start_failed"); quit(1); return
+	var main = app.host; var player: PlayerActor = main.player
+	for e: CombatActor in main.enemies: e.process_mode = Node.PROCESS_MODE_DISABLED
+	app.begin()
+	var state = main.campaign_runtime.state
+	var goal: Dictionary = {}
+	for o: Dictionary in state.manifest_data.objectives:
+		print("RP objective "+JSON.stringify({"id":o.objective_id,"outcome":o.outcome,"stage":o.stage_id,"point":str(o.point.position),"surface":o.point.surface_id}))
+		if o.stage_id == state.current_stage_id: goal = o
+	var geo: WorldGeometry = main.expedition_view.geometry
+	var dest := ExpeditionWorldPoint.create(goal.point.stage_id,goal.point.surface_id,goal.point.position)
+	var route := geo.path(player.world_point(),dest,player.world_motion.profile(),geo.geometry_revision)
+	print("RP route "+JSON.stringify({"ok":route.ok,"points":route.data.points.size() if route.ok else 0}))
+	if not route.ok: quit(1); return
+	player.world_motion.adopt_route(route,dest,geo.geometry_revision)
+	var failures := 0; var codes := {}
+	var steps := 0; var h := float(player._sprite_visible_height)*float(player.sprite_visual_scale)
+	while player.world_motion.has_route() and steps < 4000:
+		steps += 1
+		player.world_motion.advance(4.0)
+		main.expedition_view.sync()
+		var ordering: Dictionary = main.expedition_view.ordering
+		if not ordering.get("ok",false):
+			failures += 1
+			if not codes.has(String(ordering.get("code",""))): codes[String(ordering.get("code",""))] = str(player.world_point().position)
+		if steps % 2 == 0: audit(main,"player",player,player.world_point().position,h,float(player.collision_radius))
+	print("RP walked "+JSON.stringify({"steps":steps,"at":str(player.world_point().position),"surface":player.world_point().surface_id,"reports":reported.size(),"order_failures":failures,"codes":codes}))
+	# Trees and other props near the last kilometre of the route.
+	var props := 0
+	for node: Node in main.expedition_view.skin.get_children():
+		if node is Sprite2D and node.has_meta("world_position"):
+			var anchor: Vector3 = node.get_meta("world_position")
+			if anchor.distance_to(dest.position) > 900.0: continue
+			props += 1
+			audit(main,"prop_"+str(node.get_meta("placement_id")),node,anchor,float(node.get_meta("world_height",1.0)),float(node.get_meta("footprint_radius",1.0)))
+	print("RP_DONE "+JSON.stringify({"props":props,"reports":reported.size()}))
+	quit(0)

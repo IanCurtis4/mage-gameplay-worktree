@@ -1,0 +1,11 @@
+﻿RUN CanvasOrder import 2026-10-31T14:25:00.3763416-03:00
+
+F9 CanvasOrder: True
+RP walked {"at":"(2336.0, 128.0, 192.0)","codes":{},"order_failures":0,"reports":0,"steps":576,"surface":"overpass/c_d64888db90a489ab_0_0_4_3"}
+RP_DONE {"props":56,"reports":0}
+RUN Shadows 2026-10-31T14:29:42.3080509-03:00
+F9 Shadows: False
+RUN ShadowsNative 2026-10-31T14:29:58.5876408-03:00
+RUN BiomeProps 2026-10-31T14:30:55.3118457-03:00
+RUN BiomePropsNative 2026-10-31T14:31:07.4754444-03:00
+RUN Borders 2026-10-31T14:31:43.6880788-03:00

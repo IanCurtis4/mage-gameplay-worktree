@@ -1,0 +1,36 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_ASTAR_CASE {"astar_edge_tests":175,"astar_expansions":20,"astar_usec":119818,"dijkstra_edge_tests":667,"dijkstra_expansions":240,"dijkstra_usec":248055,"direct":false,"fallback":false,"id":"port_r0.25_forward","ok":true,"walk":{"astar":true,"dijkstra":true,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":329,"astar_expansions":62,"astar_usec":172244,"dijkstra_edge_tests":608,"dijkstra_expansions":236,"dijkstra_usec":256239,"direct":false,"fallback":false,"id":"port_r0.25_reverse","ok":true,"walk":{"astar":true,"dijkstra":true,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":257,"astar_expansions":72,"astar_usec":154315,"dijkstra_edge_tests":496,"dijkstra_expansions":216,"dijkstra_usec":200101,"direct":false,"fallback":false,"id":"port_r2.0_forward","ok":true,"walk":{"astar":true,"dijkstra":true,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":384,"astar_expansions":106,"astar_usec":198330,"dijkstra_edge_tests":461,"dijkstra_expansions":212,"dijkstra_usec":202221,"direct":false,"fallback":false,"id":"port_r2.0_reverse","ok":true,"walk":{"astar":true,"dijkstra":true,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":124,"astar_expansions":64,"astar_usec":378345,"dijkstra_edge_tests":286,"dijkstra_expansions":158,"dijkstra_usec":164822,"direct":false,"fallback":false,"id":"port_r8.0_forward","ok":true,"walk":{"astar":true,"dijkstra":true,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":210,"astar_expansions":96,"astar_usec":167466,"dijkstra_edge_tests":241,"dijkstra_expansions":156,"dijkstra_usec":146094,"direct":false,"fallback":false,"id":"port_r8.0_reverse","ok":true,"walk":{"astar":true,"dijkstra":true,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":76,"astar_expansions":49,"astar_usec":64227,"dijkstra_edge_tests":59,"dijkstra_expansions":49,"dijkstra_usec":51139,"direct":false,"fallback":false,"id":"port_r20.0_forward","ok":false,"walk":{}}
+F9_ASTAR_CASE {"astar_edge_tests":42,"astar_expansions":41,"astar_usec":62956,"dijkstra_edge_tests":34,"dijkstra_expansions":41,"dijkstra_usec":45212,"direct":false,"fallback":false,"id":"port_r20.0_reverse","ok":false,"walk":{}}
+F9_ASTAR_CASE {"astar_edge_tests":124,"astar_expansions":64,"astar_usec":124594,"dijkstra_edge_tests":290,"dijkstra_expansions":158,"dijkstra_usec":212297,"direct":false,"fallback":false,"id":"one_way_forward","ok":true,"walk":{"astar":true,"dijkstra":true,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":75,"astar_expansions":65,"astar_usec":163883,"dijkstra_edge_tests":93,"dijkstra_expansions":65,"dijkstra_usec":170869,"direct":false,"fallback":false,"id":"one_way_reverse","ok":false,"walk":{}}
+F9_ASTAR_CHECK organic_terrain_publishes true
+F9_ASTAR_CASE {"astar_edge_tests":3279,"astar_expansions":814,"astar_usec":1734695,"dijkstra_edge_tests":4656,"dijkstra_expansions":1535,"dijkstra_usec":2777036,"direct":false,"fallback":false,"id":"organic_0_31","ok":true,"walk":{"astar":true,"dijkstra":true,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":3153,"astar_expansions":812,"astar_usec":1639369,"dijkstra_edge_tests":4809,"dijkstra_expansions":1535,"dijkstra_usec":2217404,"direct":false,"fallback":false,"id":"organic_31_0","ok":true,"walk":{"astar":true,"dijkstra":true,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":0,"astar_expansions":0,"astar_usec":3153,"dijkstra_edge_tests":0,"dijkstra_expansions":0,"dijkstra_usec":3179,"direct":true,"fallback":false,"id":"organic_0_16","ok":true,"walk":{"astar":false,"dijkstra":false,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":0,"astar_expansions":0,"astar_usec":3483,"dijkstra_edge_tests":0,"dijkstra_expansions":0,"dijkstra_usec":4842,"direct":true,"fallback":false,"id":"organic_8_24","ok":true,"walk":{"astar":false,"dijkstra":false,"same_points":true}}
+F9_ASTAR_CASE {"astar_edge_tests":1080,"astar_expansions":134,"astar_usec":627891,"dijkstra_edge_tests":4914,"dijkstra_expansions":1515,"dijkstra_usec":2288737,"direct":false,"fallback":false,"id":"organic_10_30","ok":true,"walk":{"astar":true,"dijkstra":true,"same_points":true}}
+F9_ASTAR_CHECK astar_keeps_dijkstra_outcome_and_error true
+F9_ASTAR_CHECK astar_cost_matches_dijkstra true
+F9_ASTAR_CHECK astar_routes_walk_with_canonical_body true
+F9_ASTAR_CHECK astar_never_expands_more_states true
+F9_ASTAR_CHECK astar_expands_fewer_states_on_real_detours true
+F9_ASTAR_CHECK inconsistent_synthetic_graph_falls_back_to_dijkstra true
+F9_ASTAR_CHECK shared_memo_second_query_is_identical true
+F9_ASTAR_CHECK shared_memo_second_query_only_hits true
+F9_ASTAR_CHECK other_query_and_profile_equal_fresh_world true
+F9_ASTAR_CHECK wall_inserts_without_occupants true
+F9_ASTAR_CHECK obstacle_insert_invalidates_shared_memo true
+F9_ASTAR_CHECK obstacle_remove_invalidates_shared_memo true
+F9_ASTAR_CHECK segment_insert_invalidates_shared_memo true
+F9_ASTAR_CHECK speculative_segment_never_reads_or_writes_shared_memo true
+F9_ASTAR_CHECK reconfigure_invalidates_shared_memo true
+F9_ASTAR_CHECK protection_refuses_disconnecting_wall_with_warm_memo true
+F9_ASTAR_CHECK refused_wall_leaves_route_identical true
+F9_ASTAR_RESULT {"checks":[{"id":"organic_terrain_publishes","ok":true},{"id":"astar_keeps_dijkstra_outcome_and_error","ok":true},{"id":"astar_cost_matches_dijkstra","ok":true},{"id":"astar_routes_walk_with_canonical_body","ok":true},{"id":"astar_never_expands_more_states","ok":true},{"id":"astar_expands_fewer_states_on_real_detours","ok":true},{"id":"inconsistent_synthetic_graph_falls_back_to_dijkstra","ok":true},{"id":"shared_memo_second_query_is_identical","ok":true},{"id":"shared_memo_second_query_only_hits","ok":true},{"id":"other_query_and_profile_equal_fresh_world","ok":true},{"id":"wall_inserts_without_occupants","ok":true},{"id":"obstacle_insert_invalidates_shared_memo","ok":true},{"id":"obstacle_remove_invalidates_shared_memo","ok":true},{"id":"segment_insert_invalidates_shared_memo","ok":true},{"id":"speculative_segment_never_reads_or_writes_shared_memo","ok":true},{"id":"reconfigure_invalidates_shared_memo","ok":true},{"id":"protection_refuses_disconnecting_wall_with_warm_memo","ok":true},{"id":"refused_wall_leaves_route_identical","ok":true}],"count":18,"ok":true}

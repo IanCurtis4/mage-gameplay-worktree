@@ -1,0 +1,10 @@
+﻿RP objective {"id":"shrine_completion","outcome":"phase_completion","point":"(2336.0, 128.0, 192.0)","stage":"map_preview","surface":"overpass/c_d64888db90a489ab_0_0_4_3"}
+RP route {"ok":true,"points":27}
+RP wrong_order {"anchor":"(1799.454, 3.726929, 284.0)","before":-1,"caps":1,"caps_at":-1,"mesh_anchor":"(1920.0, 64.0, 192.0)","mesh_bounds":"[P: (1792.0, 0.0, 0.0), S: (256.0, 128.0, 384.0)]","node":"MeshInstance2D","triangles":12,"who":"player","z_mesh":11,"z_who":8}
+RP wrong_order {"anchor":"(2055.312, 128.0, 247.0909)","before":-1,"caps":1,"caps_at":-1,"mesh_anchor":"(2304.0, 128.0, 192.0)","mesh_bounds":"[P: (2048.0, 128.0, 0.0), S: (512.0, 0.0, 384.0)]","node":"MeshInstance2D","triangles":24,"who":"player","z_mesh":17,"z_who":10}
+RP walked {"at":"(2336.0, 128.0, 192.0)","reports":2,"steps":576,"surface":"overpass/c_d64888db90a489ab_0_0_4_3"}
+
+RP_DONE {"props":56,"reports":2}
+DONE 2026-10-31T14:03:21.9107884-03:00
+
+
