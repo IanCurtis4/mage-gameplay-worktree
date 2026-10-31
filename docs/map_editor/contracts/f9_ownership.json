@@ -2993,6 +2993,30 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 file (checkpoint32 world targeting; engine-generated in shared fixture)",
       "base_sha256": "6a7124370169fc114dd46e0397ba6cd9fa64146a9f0bc6861163b21dbfcb2b37"
+    },
+    {
+      "path": "scripts/world/reward_pickup.gd",
+      "owner": "Sol F9",
+      "previous_owner": "E07 runtime; sequential transfer for exact poll prefilter only (checkpoint33); base is HEAD blob",
+      "base_sha256": "d4bcce14755bf9627ae2d30a6802246c0cd52c5d21943200e784f6dff5661986"
+    },
+    {
+      "path": "scripts/core/expedition/spatial/world_effect_area.gd",
+      "owner": "Sol F9",
+      "previous_owner": "E07 runtime; sequential transfer for exact poll prefilter only (checkpoint33); base is HEAD blob",
+      "base_sha256": "89e09c01c0b41bac11a207f01b61562c2638bbe3d167cca9a898395f3916f698"
+    },
+    {
+      "path": "tests/map_editor_world_reward_poll_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint33 reward poll)",
+      "base_sha256": "10bd7f2a4701dd180c2555f6b88b8b9aab426a85fb150c8d88b72475341755f7"
+    },
+    {
+      "path": "tests/map_editor_world_reward_poll_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint33 reward poll)",
+      "base_sha256": "cd5af1b1ae69f030a8fde9cd81690a9b02171650b9df1f666c65e56f05c6f45f"
     }
   ],
   "read_only_shared": [
@@ -3672,6 +3696,38 @@
       },
       "probes": "Bosque real: static 36/40 sprite samples hit with old circle, 7/7 visible; moving centre clicks 1729/1729; click to first damage 25 ms",
       "limits": "GameplayNative ground-move step disables smart lock for that click only; E04 swordsman 4/93 preset failures identical on HEAD; human acceptance pending"
+    },
+    "world_reward_poll": {
+      "state": "validated_increment_F9_still_open",
+      "base": "006a42ca",
+      "human_request": "31/10: stacked enemies hard to click; opening Augments lags to ~0.1 FPS without opening",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "files": [
+        "scripts/world/reward_pickup.gd",
+        "scripts/core/expedition/spatial/world_effect_area.gd",
+        "scripts/main.gd",
+        "scripts/world/expedition_geometry_view.gd",
+        "tools/map_editor_completion/run.ps1"
+      ],
+      "test_files": [
+        "tests/map_editor_world_reward_poll_test.gd",
+        "tests/map_editor_world_reward_poll_test.gd.uid"
+      ],
+      "scope": "exact straight-distance prefilter (WorldEffectArea.may_reach) before ground_connected queries in reward polling and contains_actor; no reward path polling while combat refuses collection; pt-BR feedback when Augments are refused in combat; deterministic front-most tie-break for exactly stacked bodies",
+      "test_expected_checks": 10,
+      "validation": {
+        "WorldRewardPoll": 10,
+        "WorldTargeting": 16,
+        "GameplayNative": 52,
+        "GameplayGate": 24,
+        "GameplayControls": 29,
+        "GameplayWindow": 33,
+        "FieldsNative": 73,
+        "RuntimeView": 12,
+        "SurfacePick": 24
+      },
+      "finding": "each campaign mob death commits a full expedition transaction (3 world captures, 2 restores, host reinstall) costing ~17-18 s per kill on the Bosque; this, not picking, freezes combat; decision pending",
+      "limits": "per-kill transaction cost unchanged in this increment"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

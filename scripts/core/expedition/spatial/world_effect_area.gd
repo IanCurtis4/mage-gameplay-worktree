@@ -34,8 +34,16 @@ func query(target: CombatActor, radius: float, shape: Dictionary = {}) -> Dictio
 	if _rule == &"ground_connected": captured["traversal"] = _profile.duplicate(true)
 	return geometry.query_attack(captured,_anchor,target.world_point(),geometry.geometry_revision)
 
+## Exact pre-filter: any route or line costs at least the straight distance, so a
+## target farther than the range can never hit. Avoids a full path per poll.
+func may_reach(target: CombatActor, radius: float) -> bool:
+	if _anchor == null or not is_instance_valid(target) or target.world_motion == null: return false
+	var point := target.world_point()
+	return point != null and point.stage_id == _anchor.stage_id and _anchor.position.distance_to(point.position) <= radius + WorldGeometry.EPS
+
 func contains_actor(target: CombatActor, radius: float) -> bool:
 	if not is_instance_valid(target) or target.world_motion == null: return false
+	if not may_reach(target,radius+float(target.world_motion.profile()["radius"])): return false
 	var result := query(target,radius+float(target.world_motion.profile()["radius"]))
 	return result["ok"] and result["data"]["hit"]
 

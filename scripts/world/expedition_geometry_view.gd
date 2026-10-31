@@ -114,7 +114,7 @@ func sync() -> void:
 ## Same radii as flat BattleTargeting so both modes honor the "Trava inteligente" preference alike.
 func actor_at(canvas_point: Vector2, candidates: Array[CombatActor], previous: CombatActor = null, assist: bool = false) -> CombatActor:
 	var direct: CombatActor; var direct_distance := INF; var direct_tie := false
-	var nearby: CombatActor; var nearby_distance := INF; var nearby_tie := false
+	var nearby: CombatActor; var nearby_distance := INF
 	var lock_ok := false; var previous_inside := false
 	for actor: CombatActor in candidates:
 		if not _pickable(actor): continue
@@ -126,16 +126,21 @@ func actor_at(canvas_point: Vector2, candidates: Array[CombatActor], previous: C
 		if not inside and not (assist and distance <= LOCK_RADIUS): continue
 		if not _actor_visible(actor,foot): continue
 		if inside:
-			if distance < direct_distance-WorldGeometry.EPS: direct = actor; direct_distance = distance; direct_tie = false
+			# Exact ties (stacked bodies) resolve to the one drawn in front, then the lower id.
+			if distance < direct_distance-WorldGeometry.EPS or (absf(distance-direct_distance) <= WorldGeometry.EPS and _in_front(actor,direct)):
+				direct_tie = direct != null and absf(distance-direct_distance) <= WorldGeometry.EPS; direct = actor; direct_distance = distance
 			elif absf(distance-direct_distance) <= WorldGeometry.EPS: direct_tie = true
 		if actor == previous: lock_ok = distance <= LOCK_RADIUS; previous_inside = inside
 		if assist and distance <= ASSIST_RADIUS:
-			if distance < nearby_distance-WorldGeometry.EPS: nearby = actor; nearby_distance = distance; nearby_tie = false
-			elif absf(distance-nearby_distance) <= WorldGeometry.EPS: nearby_tie = true
-	if direct != null: return direct if not direct_tie else (previous if previous_inside else null)
+			if distance < nearby_distance-WorldGeometry.EPS or (absf(distance-nearby_distance) <= WorldGeometry.EPS and _in_front(actor,nearby)): nearby = actor; nearby_distance = distance
+	if direct != null: return direct if not direct_tie or not previous_inside else previous
 	if not assist: return null
 	if lock_ok: return previous
-	return null if nearby_tie else nearby
+	return nearby
+func _in_front(actor: CombatActor, other: CombatActor) -> bool:
+	if other == null: return true
+	if actor.global_position.y != other.global_position.y: return actor.global_position.y > other.global_position.y
+	return actor.get_instance_id() < other.get_instance_id()
 func _pickable(actor: CombatActor) -> bool:
 	return is_instance_valid(actor) and actor.is_alive() and actor.visible and actor.world_motion != null and actor.world_motion.geometry == geometry and actor.world_motion.is_current_world()
 func _actor_visible(actor: CombatActor, foot: Vector2) -> bool:

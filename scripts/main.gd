@@ -67,6 +67,7 @@ const ARENA_OBSTACLES: Array[Rect2] = [
 	Rect2(390, 700, 185, 105),
 ]
 const TARGET_ASSIST_RADIUS := BattleTargeting.ASSIST_RADIUS
+const AUGMENT_COMBAT_TEXT := "Augments só podem ser escolhidos fora de combate."
 const TARGET_DIRECT_PADDING := BattleTargeting.DIRECT_PADDING
 const ACTOR_BODY_OFFSET := BattleTargeting.BODY_OFFSET
 const DEFENDER_WATCH_DIRECT_MELEE_IDS := [
@@ -394,7 +395,8 @@ func _process(_delta: float) -> void:
 	if get_tree().paused or _reward_retry_pending or reward == null or not is_instance_valid(reward):
 		return
 	if player.world_motion != null:
-		if reward.can_collect_world(player,48.0): _collect_reward()
+		# Collection is refused in combat; polling then would only pay a ground path per frame.
+		if not encounter_active and reward.can_collect_world(player,48.0): _collect_reward()
 	elif player.global_position.distance_to(reward.global_position) <= 48.0:
 		_collect_reward()
 
@@ -463,6 +465,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 		if auxiliary and event.keycode == KEY_F8 and not run_finished and run_state.can_open_choice(encounter_active):
 			_open_augment_menu()
+			return
+		if auxiliary and event.keycode == KEY_F8 and not run_finished and encounter_active and run_state.pending_choices > 0:
+			status_label.text = AUGMENT_COMBAT_TEXT
 			return
 		if get_tree().paused or not player.is_alive() or run_finished:
 			return
@@ -2534,6 +2539,7 @@ func _open_augment_menu() -> void:
 		return
 	var offer_result := run_state.open_offer(encounter_active and not _admin_offer_override, rng)
 	if not offer_result["ok"]:
+		if offer_result.get("error_code") == &"encounter_active": status_label.text = AUGMENT_COMBAT_TEXT
 		return
 	var offer: Array[AugmentDefinition] = []
 	offer.assign(offer_result["definitions"])
