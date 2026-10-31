@@ -60,7 +60,7 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 11 export limpo/dependências/API | F8 | release técnico existe; ampliar aos consumidores F9 | pendente |
 | 12 área temática/fluxo humano sem código | validação, F8 | mapa Terra viaAX com2peças/trilha/colina/ponte/47props/emenda e bordas/contexto runtime florestais; fluxo humano/área final faltam | checkpoint26: fonte45.615B, lote AX4/2 e consumidor12 corpo20x32/84apoios PASS; sem App/caminhada/combate/FPS do Bosque |
 | 12 clareira/rampa/platô/ponte/rota inferior/santuário/emenda | validação, F8 | amostra técnica existente; demonstrar produto final | pendente |
-| 12 disperso/grupo/patrulha/interação | validação, F8 | Bosque: 3 dispersos, grupo de 3, guarda fixo com patrulha `alley_watch` e `shrine_completion`, todos via AX; App abre e patrulha anda no jogo | checkpoint30: patrol AX 211s PASS, janela ativa 138s, guarda chegou ao 1º ponto; checkpoint31 portão "Iniciar teste" (GameplayGate24); checkpoint32 mira por corpo desenhado + trava inteligente (WorldTargeting16); lag de rota longa (55–87 s) aguarda grafo reutilizável; aceite humano pendente |
+| 12 disperso/grupo/patrulha/interação | validação, F8 | Bosque: 3 dispersos, grupo de 3, guarda fixo com patrulha `alley_watch` e `shrine_completion`, todos via AX; App abre e patrulha anda no jogo | checkpoint30: patrol AX 211s PASS, janela ativa 138s, guarda chegou ao 1º ponto; checkpoint31 portão "Iniciar teste" (GameplayGate24); checkpoint32 mira por corpo desenhado + trava inteligente (WorldTargeting16); lag de rota longa (55–87 s) aguarda grafo reutilizável; checkpoint33 gravação por morte adiada ao fim do combate (11,2 s em vez de 17–19 s por morte); aceite humano pendente |
 
 Medições antigas não certificam mudanças F9. Limites defensivos medidos não são
 requisitos adiados; exclusões explícitas continuam as do contrato (campanha,
@@ -183,3 +183,12 @@ passou a usar o corpo desenhado e a mesma trava inteligente do modo plano
 (WorldTargeting16 PASS; `collision_radius` intacto).
 [Portão](delivery/evidence/f9/author/gameplay_gate/consolidation.md) ·
 [Mira](delivery/evidence/f9/author/world_targeting/consolidation.md).
+
+Checkpoint33 (31/10, Sol/Astra Opus): a pedido humano (cliques perdidos em
+inimigos amontoados, Augments a ~0,1 FPS), medido que cada morte de inimigo
+gravava a expedição inteira (17–19 s). Decisão humana "Adiar + aliviar": a
+gravação durável ocorre uma vez ao fim do combate, reaproveitando a captura e a
+pele autorada (11,2 s no Bosque). Pré-filtro exato nas consultas de
+recompensa/área e aviso de Augments fora de combate. WorldRewardPoll10 e
+GameplayNative53 PASS.
+[Consolidação](delivery/evidence/f9/author/deferred_commit/consolidation.md).

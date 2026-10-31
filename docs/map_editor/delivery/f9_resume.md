@@ -1,7 +1,31 @@
 # Retomada F9 —30/10/2026
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint32 — portão "Iniciar teste", diagnóstico de lag e mira no mundo
+## Checkpoint33 — travamento em combate: gravação por morte adiada e aliviada
+
+31/10/2026. Mesmo checkout/branch/fixture. Base 006a42ca; código a416be84 e
+686bc304; commit documental posterior. Papéis inalterados.
+
+- Pedido humano: inimigos amontoados impossíveis de clicar; Augments a ~0,1 FPS.
+  Medido: a seleção funciona (2095 amostras empilhadas, 0 falhas). A causa era a
+  transação completa da expedição a cada morte de inimigo (17–19 s; captura
+  2,4 s, restauração 2,2 s, pack 1,1 s, pele 5,8 s) com troca de host.
+- Decisão humana "Adiar + aliviar": mortes pendentes até o fim do combate, uma
+  gravação com aviso "Salvando a expedição…"; captura sob barreira reaproveitada
+  e pele autorada reaproveitada no host restaurado. Bosque: 3 mortes sem quadro
+  longo e uma gravação de 11,2 s no fim.
+- Também: pré-filtro exato de distância antes de consultas `ground_connected`
+  (recompensa/áreas), sem polling em combate, aviso de Augments fora de combate,
+  empate de corpos empilhados resolvido para o da frente.
+- WorldRewardPoll10 novo, GameplayNative53 e demais etapas/legados PASS.
+  Consolidação: evidence/f9/author/deferred_commit/consolidation.md.
+
+Pendente: ~11 s ao fim do combate (par de restaurações do ExpeditionService,
+invariante E07 F5, exige contrato Astra); mortes de uma luta não terminada se
+perdem se o jogo fechar; grafo de navegação reutilizável; aceite humano.
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint32 — portão "Iniciar teste", diagnóstico de lag e mira no mundo
 
 30/10/2026. Mesmo checkout `.tools/map-editor-m5`, branch `codex/map-editor-f9`.
 Base 7452c2fc; um commit de código por checkpoint (31, 32) e um documental.
@@ -32,7 +56,6 @@ Astra, depois fatias Sol/Terra com diferenciais); `start()` na principal;
 validação duplicada no `prepare`; worker GUI 180 s; demais linhas da matriz. Sem
 playtest/save pessoal/master/push/F10. Atalhos: `claude_bridge/Jogar Bosque -
 novo teste.cmd` (abre parado em "Iniciar teste") e `… - retomar.cmd`.
-<!-- /f9-patrol-gameplay-active -->
 
 ## Histórico checkpoint30 — patrulha autorada; Bosque abre e roda no jogo
 
