@@ -166,6 +166,7 @@ func _draw_effects() -> void:
 		_effects.draw_line(center-Vector2(0,10),center+Vector2(0,10),tint,1,true)
 	for index: int in range(1,route.size()): _effects.draw_line(project(route[index-1]["position"]),project(route[index]["position"]),tint,2,true)
 	if controller == null: return
+	_draw_objective_rings(controller)
 	_draw_flights(controller)
 	if controller.geometer_casting != null and controller.geometer_casting.is_world_bound():
 		var spatial := controller.geometer_casting.construction as WorldGeometerConstruction
@@ -174,6 +175,19 @@ func _draw_effects() -> void:
 			_effects.draw_circle(project(vertices[index].position),5,Color("ffe49d"))
 			if index > 0: _effects.draw_line(project(vertices[index-1].position),project(vertices[index].position),Color("ffe49d"),3,true)
 		if vertices.size() == 3: _draw_triangle_closing_edge(vertices)
+## Ground circle where an objective accepts the player (ExpeditionService._at_point: 48).
+const OBJECTIVE_REACH := 48.0
+func _draw_objective_rings(host: RunController) -> void:
+	if host.campaign_runtime == null: return
+	var state := host.campaign_runtime.state
+	for objective: Dictionary in state.manifest_data["objectives"]:
+		if objective["stage_id"] != state.current_stage_id: continue
+		var center: Vector3 = objective["point"]["position"]
+		var ring := PackedVector2Array()
+		for index: int in 33:
+			var angle := TAU*index/32.0
+			ring.append(project(center+Vector3(cos(angle),0,sin(angle))*OBJECTIVE_REACH))
+		_effects.draw_polyline(ring,Color("ffe49d"),2.0,true)
 func _draw_triangle_closing_edge(vertices: Array) -> void:
 	_effects.draw_line(project(vertices[2].position),project(vertices[0].position),Color("ffe49d"),3,true)
 func point_visible(point: Vector3) -> bool:

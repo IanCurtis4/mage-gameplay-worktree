@@ -36,6 +36,18 @@ func plan(destination: ExpeditionWorldPoint, revision: int) -> Dictionary:
 	_cursor = 1
 	_route_revision = revision
 	return result
+## Installs a route the caller already computed with geometry.path for this exact
+## point and profile at `revision`, instead of searching the same route twice.
+## Anything else (moved point, other revision, empty route) falls back to plan().
+func adopt_route(result: Dictionary, destination: ExpeditionWorldPoint, revision: int) -> Dictionary:
+	if not result.get("ok",false): return result
+	if geometry == null or not is_current_world() or revision != geometry.geometry_revision: return plan(destination,revision)
+	var points: Array = result["data"].get("points",[])
+	if points.is_empty() or _point == null or Vector3(points[0]["position"]).distance_to(_point.position) > WorldGeometry.EPS or points[0]["surface_id"] != _point.surface_id: return plan(destination,revision)
+	_route = points.duplicate(true)
+	_cursor = 1
+	_route_revision = revision
+	return result
 func plan_ground_line(heading: Vector3, distance: float, revision: int) -> Dictionary:
 	if not is_current_world(): return _failure(&"world_reconfigured")
 	var result := geometry.trace_ground(_point,heading,distance,_profile,revision)

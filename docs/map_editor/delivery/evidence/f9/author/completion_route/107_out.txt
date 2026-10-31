@@ -1,0 +1,12 @@
+﻿base 7452c2fc :: 
+ERROR: stale fixture
+   at: push_error (core/variant/variant_utility.cpp:1023)
+restored scripts/main.gd : True
+restored scripts/world/expedition_geometry_view.gd : True
+restored scripts/actors/player_actor.gd : True
+restored scripts/core/expedition/spatial/world_actor_motion.gd : True
+restored scripts/ui/expedition/expedition_status_panel.gd : True
+restored scripts/actors/combat_actor.gd : True
+restored scripts/world/reward_pickup.gd : True
+restored scripts/core/expedition/spatial/world_effect_area.gd : True
+restored scripts/core/expedition/expedition_service.gd : True

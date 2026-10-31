@@ -3023,6 +3023,18 @@
       "owner": "Sol F9",
       "previous_owner": "E07 runtime; sequential transfer for deferred commit / skin reuse only (checkpoint33); base is HEAD blob",
       "base_sha256": "67cca732165e5b066a1ece8eaace5b5522e58db0d72847b4ba1864639a2fd3c6"
+    },
+    {
+      "path": "scripts/ui/expedition/expedition_status_panel.gd",
+      "owner": "Sol F9",
+      "previous_owner": "E07 runtime; sequential transfer for completion hint / route reuse only (checkpoint34); base is HEAD blob",
+      "base_sha256": "ff45c027cd0b92dbb402b237c0927a5e04ea3e6b74f79594fa29d46b39fce241"
+    },
+    {
+      "path": "scripts/actors/player_actor.gd",
+      "owner": "Sol F9",
+      "previous_owner": "E07 runtime; sequential transfer for completion hint / route reuse only (checkpoint34); base is HEAD blob",
+      "base_sha256": "ce03ff299004510b21714438b00ab8ab8912b4352af4a46d36be55a3374835dc"
     }
   ],
   "read_only_shared": [
@@ -3761,6 +3773,38 @@
         "per_kill_freeze_ms_before": "17000-19000"
       },
       "risk": "deaths of an unfinished fight are lost if the process dies during that fight"
+    },
+    "completion_and_seam_route": {
+      "state": "validated_increment_F9_still_open",
+      "base": "2262b8c3",
+      "human_report": "31/10: phase end refused after killing everything; first-visit lag mid-map; launcher stalled until Ctrl+C",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "files": [
+        "scripts/ui/expedition/expedition_status_panel.gd",
+        "scripts/world/expedition_geometry_view.gd",
+        "scripts/core/expedition/spatial/world_actor_motion.gd",
+        "scripts/actors/player_actor.gd",
+        "scripts/main.gd",
+        "tools/map_editor_completion/run.ps1"
+      ],
+      "test_files": [
+        "tests/map_editor_gameplay_ui_test.gd"
+      ],
+      "finding": "saved state had all 7 slots dead and cleared_once true; completion_unmet came from _at_point (48 units from the exact marker) sharing the cleanup message; crossing the clearing/overpass seam costs 1.6 s per path and pointer move planned it twice",
+      "scope": "status panel tells cleanup vs marker distance (pending deaths count as resolved); 48-unit ring drawn at objectives; WorldActorMotion.adopt_route installs an already computed route for the same point/profile/revision (click and dash), falling back to plan()",
+      "validation": {
+        "GameplayNative": 55,
+        "WorldTargeting": 16,
+        "WorldRewardPoll": 10,
+        "GameplayGate": 24,
+        "GameplayControls": 29,
+        "GameplayWindow": 33,
+        "GameplayCli": 18,
+        "CanvasOrder": 43,
+        "RuntimeView": 12,
+        "FieldsNative": 73,
+        "SurfacePick": 24
+      }
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

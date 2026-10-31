@@ -4086,7 +4086,7 @@ func spatial_pointer_move(point: Vector2) -> Dictionary:
 	var route := expedition_view.geometry.path(player.world_point(),destination,player.world_motion.profile(),result["geometry_revision"])
 	if route["ok"]:
 		player.cancel_active_cast(); player.target = null
-		route = player.move_world_to(destination,result["geometry_revision"])
+		route = player.world_motion.adopt_route(route,destination,result["geometry_revision"])
 		expedition_view.indicate(destination,route["ok"],route["data"].get("points",[]))
 	else: expedition_view.indicate(destination,false)
 	status_label.text = "Movendo pela superfície" if route["ok"] else "Destino sem caminho transitável."

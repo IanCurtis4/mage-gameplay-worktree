@@ -112,6 +112,8 @@ func run() -> void:
 	await process_frame
 	host = app.host; enemy = host.enemies[0]
 	var skin_before: int = host.expedition_view.skin.get_instance_id()
+	var status_panel := host.ui_root.get_node_or_null("ExpeditionStatus") as ExpeditionStatusPanel
+	check("completion_hint_names_living_blockers",status_panel != null and status_panel.completion_hint().begins_with("Ainda há inimigos"))
 	var damage := DamageProbe.new(); app.add_child(damage)
 	enemy.health.damage_applied.connect(damage.record)
 	var attack := host.spatial_pointer_move(View.project(enemy.world_point().position)+Vector2(0,-24))
@@ -124,6 +126,8 @@ func run() -> void:
 	while Time.get_ticks_msec() < deadline and not (is_instance_valid(app.host) and app.host.campaign_runtime != null and app.host.campaign_runtime.state.slots.guard.initial_resolved): await process_frame
 	check("real_combat_resolves_population_slot",is_instance_valid(app.host) and app.host.campaign_runtime.state.slots.guard.initial_resolved)
 	await process_frame
+	var cleared_panel := app.host.ui_root.get_node_or_null("ExpeditionStatus") as ExpeditionStatusPanel if is_instance_valid(app.host) else null
+	check("completion_hint_points_to_marker_after_clear",cleared_panel != null and cleared_panel.completion_hint().begins_with("Fique dentro do círculo"))
 	check("transaction_host_reuses_authored_skin",is_instance_valid(app.host) and app.host != host and app.host.expedition_view is View and is_instance_valid(app.host.expedition_view.skin) and app.host.expedition_view.skin.get_instance_id() == skin_before and app.host.expedition_view.skin.get_parent() == app.host.expedition_view)
 	await capture("gameplay_combat")
 	var old_directory: String = app.session.directory; var old_hash: String = app.session.session.candidate_hash

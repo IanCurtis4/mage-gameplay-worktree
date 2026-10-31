@@ -3009,7 +3009,7 @@ func use_world_dash(destination: ExpeditionWorldPoint, revision: int) -> bool:
 	if world_motion == null or class_id != &"swordsman" or is_rooted() or not _can_pay_skill(&"dash"): return false
 	var route := world_motion.geometry.path(world_motion.point(),destination,world_motion.profile(),revision)
 	if not route["ok"] or float(route["data"]["cost"]) > skill_range(&"dash"): return false
-	var planned := world_motion.plan(destination,revision)
+	var planned := world_motion.adopt_route(route,destination,revision)
 	if not planned["ok"]: return false
 	_spend(&"dash")
 	_stop_world_travel()

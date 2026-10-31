@@ -1,0 +1,37 @@
+extends SceneTree
+## Diagnostic (Sol, checkpoint34): read the user's suspended Bosque state (slots, clear flags, pending events).
+const App = preload("res://scripts/map_authoring/preview/gameplay_app.gd")
+func _initialize() -> void: run.call_deferred()
+func run() -> void:
+	var path := ""
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--session="): path = arg.trim_prefix("--session=")
+	var app := App.new(); app.quit_on_close = false; root.add_child(app); current_scene = app
+	var opened: Dictionary = await app.open_async(path)
+	print("SP opened "+JSON.stringify({"ok":opened.ok,"code":String(opened.get("code",""))}))
+	if not opened.ok: quit(1); return
+	print("SP app "+JSON.stringify({"claimed":app.claimed,"busy":app.busy,"facade":app.facade != null,"host":is_instance_valid(app.host),"status":app.status}))
+	if app.facade == null:
+		app.facade = ProfileFacade.new(ProfileStore.new(app.session.directory.path_join("profile"),ProfileCatalog.pilot()))
+		var po: Dictionary = app.facade.open_profile()
+		print("SP facade_open "+str(po.ok))
+	var profile = app.facade.current_profile()
+	var lock = profile.expedition_for_character(profile.selected_character_id)
+	if lock == null: print("SP no_lock"); quit(1); return
+	var inspected: Dictionary = ExpeditionService.new(app.facade)._restore(lock)
+	if not inspected.ok: print("SP restore_failed "+String(inspected.get("error_code",""))); quit(1); return
+	var restored = inspected.root
+	var host = restored
+	var state = host.campaign_runtime.state
+	var rows: Array = []
+	for id: String in state.slots:
+		var s: Dictionary = state.slots[id]
+		var actor = host.campaign_runtime.actors.get(id)
+		rows.append({"id":id,"life":s.life_state,"gen":s.generation,"resolved":s.initial_resolved,"blocks":s.blocks_clear,"trash":s.trash,"stage":s.stage_id,"actor_alive":actor.is_alive() if is_instance_valid(actor) else null})
+	print("SP slots "+JSON.stringify(rows))
+	print("SP stages "+JSON.stringify(state.stages))
+	print("SP pending "+JSON.stringify(host.campaign_runtime.pending_events))
+	print("SP objectives "+JSON.stringify(state.objectives)+" lifecycle "+String(state.lifecycle))
+	print("SP player "+str(host.player.world_point().position))
+	for o: Dictionary in state.manifest_data.objectives: print("SP objective_def "+JSON.stringify({"id":o.objective_id,"outcome":o.outcome,"required":o.required,"point":str(o.point.position)}))
+	quit(0)

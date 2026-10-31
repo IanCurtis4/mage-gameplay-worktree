@@ -1,0 +1,19 @@
+﻿backup done
+session restored
+SP opened {"code":"","ok":true}
+SP app {"busy":false,"claimed":true,"facade":false,"host":false,"status":"ready"}
+SP facade_open true
+SP slots [{"actor_alive":false,"blocks":true,"gen":0,"id":"alley_guard","life":"dead","resolved":true,"stage":"map_preview","trash":true},{"actor_alive":false,"blocks":true,"gen":0,"id":"slot_297da45e94b3dc24f576d5e288acd7002e1f4a81","life":"dead","resolved":true,"stage":"map_preview","trash":true},{"actor_alive":false,"blocks":true,"gen":0,"id":"slot_3fa5680f129a671cfaf7561f287b2dbaeeef50ed","life":"dead","resolved":true,"stage":"map_preview","trash":true},{"actor_alive":false,"blocks":true,"gen":0,"id":"slot_4780c394e81e0c43a07a441c03fccc7607571d7b","life":"dead","resolved":true,"stage":"map_preview","trash":true},{"actor_alive":false,"blocks":true,"gen":0,"id":"slot_92097df2d2e2386a557e8c6497581666fdec56ec","life":"dead","resolved":true,"stage":"map_preview","trash":true},{"actor_alive":false,"blocks":true,"gen":0,"id":"slot_b039a81834959f2546d76cfd5b6cb8a0171be480","life":"dead","resolved":true,"stage":"map_preview","trash":true},{"actor_alive":false,"blocks":true,"gen":0,"id":"slot_d6d3911757d6c84ebd1f8a92ee90cb49feba7c66","life":"dead","resolved":true,"stage":"map_preview","trash":true}]
+SP stages {"map_preview":{"cleared_once":true,"visited":true}}
+SP pending []
+SP objectives {} lifecycle suspended
+SP player (2297.124, 128.0, 679.3145)
+SP objective_def {"id":"shrine_completion","outcome":"phase_completion","point":"(2336.0, 128.0, 192.0)","required":true}
+WARNING: 11 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 1629 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 66 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
+ERROR: Pages in use exist at exit in PagedAllocator: N12VariantPools11BucketSmallE
+   at: ~PagedAllocator (./core/templates/paged_allocator.h:170)

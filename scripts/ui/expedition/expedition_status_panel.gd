@@ -129,7 +129,8 @@ func _finish(result: Dictionary) -> Dictionary:
 			message.text = "Recompensa confirmada."
 	else:
 		uncertain = result.get("read_only", false)
-		message.text = ExpeditionPresentation.error_text(result.get("error_code", &"unknown"))
+		var code: StringName = result.get("error_code", &"unknown")
+		message.text = completion_hint() if code == &"completion_unmet" and intent.get("kind") == "finish" else ExpeditionPresentation.error_text(code)
 		# A known eligibility error has no pending writer intent. Resume the
 		# unchanged world so the player can approach the portal/leave combat.
 		if not uncertain:
@@ -138,6 +139,19 @@ func _finish(result: Dictionary) -> Dictionary:
 	last_actions = ""
 	refresh()
 	return result
+
+## completion_unmet covers both "stage not cleared" and "not on the marker";
+## tell the player which one. Deaths waiting for the end-of-combat save count.
+func completion_hint() -> String:
+	var runtime := host.campaign_runtime
+	var state := runtime.state
+	if not state.stages[state.current_stage_id]["cleared_once"]:
+		for id: String in state.slots:
+			var slot: Dictionary = state.slots[id]
+			if slot["stage_id"] != state.current_stage_id or not slot["blocks_clear"] or slot["initial_resolved"]: continue
+			if runtime.pending_events.any(func(event: Dictionary) -> bool: return event["kind"] == "mob_death" and event["slot_id"] == id): continue
+			return "Ainda há inimigos vivos que bloqueiam a saída deste estágio."
+	return "Fique dentro do círculo do marco ◆ da saída final para concluir."
 
 func retry() -> Dictionary:
 	if busy: return BuildEffectCatalog.failure(&"save_in_progress")

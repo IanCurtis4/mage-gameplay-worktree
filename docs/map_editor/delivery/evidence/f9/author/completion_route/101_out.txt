@@ -1,0 +1,4 @@
+﻿backup done
+session restored
+SP opened {"code":"","ok":true}
+SP app {"busy":false,"claimed":true,"facade":false,"host":false,"status":"ready"}
