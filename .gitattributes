@@ -22,3 +22,6 @@ docs/map_editor/delivery/evidence/f9/terra/area_forest_borders/** -text
 docs/map_editor/delivery/evidence/f9/author/encounter_authoring/** -text
 docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/** -text
 docs/map_editor/delivery/evidence/f9/terra/area_encounters/** -text
+
+# Checkpoint41: build-time asset manifest (release dependency hashes).
+data/map_authoring/asset_manifest.json text eol=lf

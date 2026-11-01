@@ -1,0 +1,22 @@
+﻿IMPORT 2026-10-31T22:28:38.1196917-03:00
+   import: True
+   M8_SELECTED_PASS
+
+ASSET_MANIFEST_RESULT {"entries":27,"ok":true,"output":"C:\\Users\\JoÃ£o 
+Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\asset_manifest.json"}
+STAGE AssetManifest :: F9 AssetManifest: False :: 8s
+   SCRIPT ERROR: Parse Error: Cannot infer the type of "covered" variable because the value doesn't have a set type.
+   ERROR: Failed to load script "res://tests/map_editor_asset_manifest_test.gd" with error "Parse error".
+   [31;1mException: [0mC:\Users\João Pedro\Documents\ChatGPT\RagRPG\.tools\map-editor-m5\tools\map_editor_completion\run.ps1:152[0m
+STAGE Objects :: F9 Objects: True :: 26s
+STAGE Borders :: F9 Borders: True :: 129s
+STAGE Materials :: F9 Materials: True :: 14s
+STAGE Content :: F9 Content: True :: 56s
+RUNNER Release :: exit=0 :: 66s
+   import: True
+   export_release: True
+   release: True
+   M8_SELECTED_PASS
+DONE 2026-10-31T22:33:58.1006231-03:00
+
+

@@ -3,6 +3,7 @@ extends RefCounted
 ## Passive project catalog. Every returned value is a copy, never mutable catalog state.
 const Reader = preload("res://scripts/map_authoring/io/strict_json.gd")
 const Canonical = preload("res://scripts/core/expedition/generation/canonical.gd")
+const Assets = preload("res://scripts/map_authoring/assets/asset_manifest.gd")
 const PATH := "res://data/map_authoring/prop_catalog.json"
 const FIELDS := ["definition_id","revision","name","category","biome_ids","sprite_path","sprite_sha256","pivot_uv","world_height","footprint_radius","body_box_xyz","max_slope_degrees","allowed_rotations","rotation_mode","capabilities","origin"]
 
@@ -22,8 +23,9 @@ static func load_catalog() -> Dictionary:
 		var item: Dictionary = value
 		if not item.definition_id is String or item.definition_id.is_empty() or definitions.has(item.definition_id) or item.revision != 1 or not item.name is String or not item.category is String: return failure("object_catalog_invalid")
 		if not item.sprite_path is String or not item.sprite_path.begins_with("res://assets/art/map_authoring/props/") or ".." in item.sprite_path or "\\" in item.sprite_path or not item.sprite_path.ends_with(".png"): return failure("object_catalog_invalid",item.definition_id)
-		if not FileAccess.file_exists(item.sprite_path): return failure("object_asset_missing",item.definition_id)
-		if FileAccess.get_sha256(item.sprite_path) != item.sprite_sha256: return failure("object_dependency_changed",item.definition_id)
+		var sprite_digest := Assets.sha256(item.sprite_path)
+		if sprite_digest.is_empty(): return failure("object_asset_missing",item.definition_id)
+		if sprite_digest != item.sprite_sha256: return failure("object_dependency_changed",item.definition_id)
 		if not _numbers(item.pivot_uv,2) or not _numbers(item.body_box_xyz,6) or not _positive(item.world_height) or not _positive(item.footprint_radius) or not _positive(item.max_slope_degrees) or item.max_slope_degrees > 45: return failure("object_catalog_invalid",item.definition_id)
 		for v: float in item.pivot_uv:
 			if v < 0 or v > 1: return failure("object_catalog_invalid",item.definition_id)

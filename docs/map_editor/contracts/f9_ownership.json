@@ -3173,6 +3173,48 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 file (checkpoint40 journal waves test)",
       "base_sha256": "f1f2ed8c0c5e6acb495c334fcfda88d33c26dc00f1ca93fe94f2150c63486efb"
+    },
+    {
+      "path": "scripts/map_authoring/assets/asset_manifest.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint41 asset manifest)",
+      "base_sha256": "3ca7602bcdd9f350340dc2a399a3d7413dcfe86d8a12b7152fa3ffd9aa6af4d4"
+    },
+    {
+      "path": "scripts/map_authoring/assets/asset_manifest.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint41 asset manifest)",
+      "base_sha256": "89f82b78f2d8c6f402768f896b91b01fecf3f191e0bc461edda453a294dcec3a"
+    },
+    {
+      "path": "data/map_authoring/asset_manifest.json",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint41 asset manifest)",
+      "base_sha256": "1815f49d838fcc28387d19715198d8aaca031ea0ddb08ca691935bfb3e49f5b2"
+    },
+    {
+      "path": "tools/map_editor_assets/build_manifest.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint41 asset manifest)",
+      "base_sha256": "786c882bf6696a4604a885aed6557d68533a03c4f578ef137b77b863b9ad5e93"
+    },
+    {
+      "path": "tools/map_editor_assets/build_manifest.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint41 asset manifest)",
+      "base_sha256": "bdffd65d433174eb52dc2c2e675ee3304234ccbda74e43d1782cadff93a58d02"
+    },
+    {
+      "path": "tests/map_editor_asset_manifest_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint41 asset manifest)",
+      "base_sha256": "0790d43396539935144f0432348b2771826a0e89d5e6b01547cd30d4042ff479"
+    },
+    {
+      "path": "tests/map_editor_asset_manifest_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint41 asset manifest)",
+      "base_sha256": "d3efb20cb91fbecf45c71f5a9f93dfd0269731c7b8ae64cf647214f89e4cbd6a"
     }
   ],
   "read_only_shared": [
@@ -4286,6 +4328,48 @@
       },
       "limits": "journal compaction near 256 entries still uses a full transaction at a safe point; automatic collection of 7 drops shows 60-75 ms frames",
       "known_unrelated_failure": "tests/e07_f1_presentation_test.gd 1/37; E04 swordsman 4/93; LibraryNative 2 AX command-count checks (not rerun here)"
+    },
+    "closure_matrix_baseline_and_release_assets": {
+      "state": "validated_increment_F9_still_open",
+      "base": "0ce15143",
+      "human_report": "31/10: continue to the editor matrix; the human believed it was near done and asked for an own assessment of what is missing",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "contract": "docs/map_editor/f9_closure_matrix.md",
+      "files": [
+        "scripts/map_authoring/assets/asset_manifest.gd",
+        "scripts/map_authoring/terrain/terrain_material.gd",
+        "scripts/map_authoring/composition/border_profile_catalog.gd",
+        "scripts/map_authoring/objects/object_compiler.gd",
+        "scripts/map_authoring/objects/prop_catalog.gd",
+        "data/map_authoring/asset_manifest.json",
+        "data/map_authoring/representative.rpp",
+        "tools/map_editor_assets/build_manifest.gd",
+        "tools/map_editor_completion/run.ps1",
+        "tools/map_editor_document/run.ps1",
+        ".gitattributes"
+      ],
+      "test_files": [
+        "tests/map_editor_asset_manifest_test.gd",
+        "tests/map_editor_library_ui_test.gd"
+      ],
+      "scope": "closure traceability matrix; baseline regression; exported builds validate package dependencies through a build-time asset manifest; representative release package recompiled; stale LibraryNative AX counts and M1 isolated fixture updated",
+      "validation": {
+        "F9_stages_pass": 56,
+        "F9_stages_total": 58,
+        "LibraryNative_after_fix": true,
+        "RoundedResume": "chained to RoundedNative session",
+        "M1": true,
+        "M2": true,
+        "M3": true,
+        "M4": true,
+        "M5": true,
+        "M6": true,
+        "M7": true,
+        "M8_Core": true,
+        "M8_Release_after_fix": true,
+        "AssetManifest": 7
+      },
+      "known_open": "see f9_closure_matrix packages P2-P8"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

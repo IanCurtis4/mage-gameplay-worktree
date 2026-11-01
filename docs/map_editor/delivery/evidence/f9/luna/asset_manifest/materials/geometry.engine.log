@@ -1,0 +1,38 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_MATERIAL_CHECK four_named_materials true
+F9_MATERIAL_CHECK four_tiles_and_imports_are_hashed true
+F9_MATERIAL_CHECK renderer_dependency_has_new_revision true
+F9_MATERIAL_CHECK four_mask_source_compiles true
+F9_MATERIAL_CHECK four_masks_survive_compilation true
+F9_MATERIAL_CHECK package_dependencies_revalidate true
+F9_MATERIAL_CHECK compilation_preserves_source true
+F9_MATERIAL_CHECK sand_paint_independent_weights true
+F9_MATERIAL_CHECK paint_keeps_heights true
+F9_MATERIAL_CHECK paint_outside_stamp_unchanged true
+F9_MATERIAL_CHECK stone_half_strength_oracle true
+F9_MATERIAL_CHECK every_painted_weight_vector_is_normalized true
+F9_MATERIAL_CHECK four_material_stroke_is_pointer_density_independent true
+F9_MATERIAL_CHECK preview_and_commit_use_same_paint true
+F9_MATERIAL_CHECK locked_layer_rejects_paint true
+F9_MATERIAL_CHECK protected_region_keeps_all_masks true
+F9_MATERIAL_CHECK connector_exclusion_keeps_all_masks true
+F9_MATERIAL_CHECK implicit_grass_can_be_painted_sand true
+F9_MATERIAL_CHECK implicit_unpainted_region_stays_grass true
+F9_MATERIAL_CHECK unknown_brush_material_rejected true
+F9_MATERIAL_CHECK unknown_compiler_material_rejected true
+F9_MATERIAL_CHECK four_material_edit_undo true
+F9_MATERIAL_CHECK four_material_edit_redo true
+F9_MATERIAL_CHECK paint_roundtrip_is_exact true
+F9_MATERIAL_CHECK legacy_two_mask_ratio_is_preserved true
+F9_MATERIAL_CHECK all_four_weights_reach_mesh true
+F9_MATERIAL_CHECK custom_world_channels_cover_every_vertex true
+F9_MATERIAL_CHECK world_xyz_is_not_projected_uv true
+F9_MATERIAL_CHECK world_data_transforms_once true
+F9_MATERIAL_CHECK material_normal_rotates_with_geometry true
+F9_MATERIAL_CHECK world_uv_tracks_transformed_position true
+F9_MATERIAL_CHECK mesh_declares_custom_float_formats true
+F9_MATERIAL_CHECK source_survives_paint_and_render true
+F9_MATERIAL_CHECK negative_display_depth_stays_above_background true
+F9_MATERIAL_CHECK display_depth_preserves_order_and_object_offset true
+F9_MATERIAL_RESULT {"checks":[{"id":"four_named_materials","ok":true},{"id":"four_tiles_and_imports_are_hashed","ok":true},{"id":"renderer_dependency_has_new_revision","ok":true},{"id":"four_mask_source_compiles","ok":true},{"id":"four_masks_survive_compilation","ok":true},{"id":"package_dependencies_revalidate","ok":true},{"id":"compilation_preserves_source","ok":true},{"id":"sand_paint_independent_weights","ok":true},{"id":"paint_keeps_heights","ok":true},{"id":"paint_outside_stamp_unchanged","ok":true},{"id":"stone_half_strength_oracle","ok":true},{"id":"every_painted_weight_vector_is_normalized","ok":true},{"id":"four_material_stroke_is_pointer_density_independent","ok":true},{"id":"preview_and_commit_use_same_paint","ok":true},{"id":"locked_layer_rejects_paint","ok":true},{"id":"protected_region_keeps_all_masks","ok":true},{"id":"connector_exclusion_keeps_all_masks","ok":true},{"id":"implicit_grass_can_be_painted_sand","ok":true},{"id":"implicit_unpainted_region_stays_grass","ok":true},{"id":"unknown_brush_material_rejected","ok":true},{"id":"unknown_compiler_material_rejected","ok":true},{"id":"four_material_edit_undo","ok":true},{"id":"four_material_edit_redo","ok":true},{"id":"paint_roundtrip_is_exact","ok":true},{"id":"legacy_two_mask_ratio_is_preserved","ok":true},{"id":"all_four_weights_reach_mesh","ok":true},{"id":"custom_world_channels_cover_every_vertex","ok":true},{"id":"world_xyz_is_not_projected_uv","ok":true},{"id":"world_data_transforms_once","ok":true},{"id":"material_normal_rotates_with_geometry","ok":true},{"id":"world_uv_tracks_transformed_position","ok":true},{"id":"mesh_declares_custom_float_formats","ok":true},{"id":"source_survives_paint_and_render","ok":true},{"id":"negative_display_depth_stays_above_background","ok":true},{"id":"display_depth_preserves_order_and_object_offset","ok":true}],"count":35,"ok":true}

@@ -1,5 +1,6 @@
 @tool
 extends RefCounted
+const Assets = preload("res://scripts/map_authoring/assets/asset_manifest.gd")
 const Catalog = preload("res://scripts/map_authoring/objects/prop_catalog.gd")
 const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
 const Metadata = preload("res://scripts/map_authoring/objects/object_schema.gd")
@@ -49,9 +50,10 @@ static func compile(source: Dictionary, terrain: Dictionary, manifest: Expeditio
 		objects.append(record)
 		assets[definition.sprite_path] = {"definition_id":definition.definition_id+"_sprite","revision":1,"path":definition.sprite_path,"sha256":definition.sprite_sha256}
 		var import_path: String = definition.sprite_path+".import"
-		if not FileAccess.file_exists(import_path): return Catalog.failure("object_asset_missing",definition.definition_id)
-		assets[import_path] = {"definition_id":definition.definition_id+"_sprite_import","revision":1,"path":import_path,"sha256":FileAccess.get_sha256(import_path)}
-	var output_dependencies: Array = [{"definition_id":"prop_catalog_json","revision":int(catalog.revision),"path":Catalog.PATH,"sha256":FileAccess.get_sha256(Catalog.PATH)}]
+		var import_digest := Assets.sha256(import_path)
+		if import_digest.is_empty(): return Catalog.failure("object_asset_missing",definition.definition_id)
+		assets[import_path] = {"definition_id":definition.definition_id+"_sprite_import","revision":1,"path":import_path,"sha256":import_digest}
+	var output_dependencies: Array = [{"definition_id":"prop_catalog_json","revision":int(catalog.revision),"path":Catalog.PATH,"sha256":Assets.sha256(Catalog.PATH)}]
 	var keys: Array = assets.keys(); keys.sort()
 	for path: String in keys: output_dependencies.append(assets[path])
 	return {"ok":true,"objects":objects,"volumes":volumes,"dependencies":output_dependencies}
@@ -111,7 +113,7 @@ static func validate_dependencies(dependencies: Array, material_dependencies: Ar
 		seen[dependency.path] = true
 		if dependency in material_dependencies: continue
 		if dependency.path != Catalog.PATH and (not dependency.path.begins_with("res://assets/art/map_authoring/props/") or (not dependency.path.ends_with(".png") and not dependency.path.ends_with(".png.import")) or ".." in dependency.path or "\\" in dependency.path): return false
-		if not FileAccess.file_exists(dependency.path) or FileAccess.get_sha256(dependency.path) != dependency.sha256: return false
+		if Assets.sha256(dependency.path) != dependency.sha256: return false
 	return true
 
 static func validate_records(records: Variant) -> bool:

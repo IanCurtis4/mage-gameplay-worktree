@@ -1,0 +1,31 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+F9_OBJECT_UI_CHECK native_shell true
+F9_OBJECT_UI_CHECK stable_open_action true
+F9_OBJECT_UI_CHECK native_objects_window true
+F9_OBJECT_UI_CHECK catalog_thumbnails true
+F9_OBJECT_UI_CHECK mipmaps_imported true
+F9_OBJECT_UI_CHECK place_tree_from_controls true
+F9_OBJECT_UI_CHECK place_rock_from_controls true
+F9_OBJECT_UI_CHECK place_shrub_from_controls true
+F9_OBJECT_UI_CHECK same_source_shared_with_main_screen true
+F9_OBJECT_UI_CHECK actual_sprites_rendered true
+F9_OBJECT_UI_CHECK undo_native true
+F9_OBJECT_UI_CHECK redo_native true
+F9_OBJECT_UI_CHECK alpha_selection_picks_tree true
+F9_OBJECT_UI_CHECK lock_from_native_panel true
+F9_OBJECT_UI_CHECK locked_native_move_rejected true
+F9_OBJECT_UI_CHECK unlock_from_native_panel true
+F9_OBJECT_UI_CHECK scatter_preview true
+F9_OBJECT_UI_CHECK native_confirmation true
+F9_OBJECT_UI_CHECK scatter_confirmed_once true
+F9_OBJECT_UI_CHECK capture_objects true
+F9_OBJECT_UI_CHECK native_headless_package true
+F9_OBJECT_UI_CHECK composition_with_occupied_center true
+F9_OBJECT_UI_CHECK composition_sprites_preserved true
+F9_OBJECT_UI_CHECK free_spawn_around_center_object true
+F9_OBJECT_UI_CHECK capture_objects_map true
+F9_OBJECTS_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"stable_open_action","ok":true},{"id":"native_objects_window","ok":true},{"id":"catalog_thumbnails","ok":true},{"id":"mipmaps_imported","ok":true},{"id":"place_tree_from_controls","ok":true},{"id":"place_rock_from_controls","ok":true},{"id":"place_shrub_from_controls","ok":true},{"id":"same_source_shared_with_main_screen","ok":true},{"id":"actual_sprites_rendered","ok":true},{"id":"undo_native","ok":true},{"id":"redo_native","ok":true},{"id":"alpha_selection_picks_tree","ok":true},{"id":"lock_from_native_panel","ok":true},{"id":"locked_native_move_rejected","ok":true},{"id":"unlock_from_native_panel","ok":true},{"id":"scatter_preview","ok":true},{"id":"native_confirmation","ok":true},{"id":"scatter_confirmed_once","ok":true},{"id":"capture_objects","ok":true},{"id":"native_headless_package","ok":true},{"id":"composition_with_occupied_center","ok":true},{"id":"composition_sprites_preserved","ok":true},{"id":"free_spawn_around_center_object","ok":true},{"id":"capture_objects_map","ok":true}],"count":25,"ok":true}

@@ -5,6 +5,7 @@ const REVISION := "terrain_material_v2"
 const Partition = preload("res://scripts/map_authoring/compiler/terrain_partition.gd")
 const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
 const ProjectionView = preload("res://scripts/world/expedition_geometry_view.gd")
+const Assets = preload("res://scripts/map_authoring/assets/asset_manifest.gd")
 const SHADER_PATH := "res://scripts/map_authoring/terrain/terrain_material.gdshader"
 const GRASS_PATH := "res://assets/art/map_authoring/grass_tile.png"
 const EARTH_PATH := "res://assets/art/map_authoring/earth_tile.png"
@@ -21,8 +22,9 @@ static func dependencies() -> Array:
 	paths.sort()
 	var result: Array = []
 	for path: String in paths:
-		if not FileAccess.file_exists(path): return []
-		result.append({"definition_id":path.get_file().replace(".","_"),"revision":2 if path == SHADER_PATH else 1,"sha256":FileAccess.get_sha256(path),"path":path})
+		var digest := Assets.sha256(path)
+		if digest.is_empty(): return []
+		result.append({"definition_id":path.get_file().replace(".","_"),"revision":2 if path == SHADER_PATH else 1,"sha256":digest,"path":path})
 	return result
 
 static func material(selected: bool = true) -> ShaderMaterial:

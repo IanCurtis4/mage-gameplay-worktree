@@ -1,0 +1,12 @@
+﻿STAGE LibraryNative :: F9 LibraryNative: True :: 67s
+RUNNER map_editor_candidateRelease :: exit=1 :: 48s
+   [31;1m[0m[36;1m[36;1m  66 | [0m …   if(-not $m8Pass){Write-Output $m8Text; [36;1mthrow ('M8 failed: '+$Name)[0m}[0m
+   [31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m     | [31;1m                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+   [31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m     | [31;1mM8 failed: release[0m
+   ! release: False
+   ! M8_RELEASE_RESULT {"checks":[{"id":"load","ok":false}],"code":"package_invalid","count":1,"ok":false}
+RUNNER map_editor_document :: exit=0 :: 73s
+   restart_pending: True
+   headless_ui: True
+   M1_ALL_PASS
+DONE 2026-10-31T22:23:41.8121963-03:00

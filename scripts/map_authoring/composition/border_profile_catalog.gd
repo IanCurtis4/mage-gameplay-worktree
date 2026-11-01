@@ -4,6 +4,7 @@ extends RefCounted
 ## never provide executable resources or substitute this catalog at runtime.
 const Reader = preload("res://scripts/map_authoring/io/strict_json.gd")
 const Props = preload("res://scripts/map_authoring/objects/prop_catalog.gd")
+const Assets = preload("res://scripts/map_authoring/assets/asset_manifest.gd")
 const PATH := "res://data/map_authoring/border_profiles.json"
 const WATER_PATH := "res://assets/art/map_authoring/water_tile.png"
 const BORDER_SHADER := "res://scripts/map_authoring/terrain/border_material.gdshader"
@@ -74,6 +75,7 @@ static func dependencies(definition: Dictionary) -> Dictionary:
 	paths.sort()
 	var result: Array = []
 	for path: String in paths:
-		if not FileAccess.file_exists(path): return fail("profile_asset_missing",definition.profile_id)
-		result.append({"definition_id":labels.get(path,path.get_file().replace(".","_")),"revision":prop_revision if path == Props.PATH else 1,"path":path,"sha256":FileAccess.get_sha256(path)})
+		var digest := Assets.sha256(path)
+		if digest.is_empty(): return fail("profile_asset_missing",definition.profile_id)
+		result.append({"definition_id":labels.get(path,path.get_file().replace(".","_")),"revision":prop_revision if path == Props.PATH else 1,"path":path,"sha256":digest})
 	return {"ok":true,"dependencies":result}

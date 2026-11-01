@@ -1,0 +1,12 @@
+﻿STAGE AssetManifest(import) :: F9 AssetManifest: True
+STAGE ObjectsNative :: F9 ObjectsNative: True :: 47s
+STAGE BordersNative :: F9 BordersNative: True :: 51s
+STAGE GameplayNative :: F9 GameplayNative: True :: 100s
+STAGE CandidateBatch :: F9 CandidateBatch: True :: 15s
+STAGE Library :: F9 Library: True :: 14s
+RUNNER Release :: exit=0 :: 66s
+   import: True
+   export_release: True
+   release: True
+   M8_SELECTED_PASS
+DONE 2026-10-31T22:39:57.2434482-03:00

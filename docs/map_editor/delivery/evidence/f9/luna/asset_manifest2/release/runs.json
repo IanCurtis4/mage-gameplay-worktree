@@ -1,0 +1,83 @@
+[
+  {
+    "started_utc": "2026-11-01T01:38:58.2335533Z",
+    "exit_code": 0,
+    "finished_utc": "2026-11-01T01:39:08.8603932Z",
+    "output_sha256": "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "result": null,
+    "timed_out": false,
+    "name": "import",
+    "aborted": false,
+    "ok": true
+  },
+  {
+    "started_utc": "2026-11-01T01:39:08.8990693Z",
+    "exit_code": 0,
+    "finished_utc": "2026-11-01T01:39:38.8629940Z",
+    "output_sha256": "F323F285C8A2661CE85B4E3269E59D66EB206D128386DF7E1B9F3D811C3EB4D0",
+    "arguments": [
+      "--headless",
+      "--export-release",
+      "Windows Desktop",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\m8_release\\RagRPG-Map-Candidate.exe"
+    ],
+    "result": null,
+    "timed_out": false,
+    "name": "export_release",
+    "aborted": false,
+    "ok": true
+  },
+  {
+    "started_utc": "2026-11-01T01:39:38.8758196Z",
+    "exit_code": 0,
+    "finished_utc": "2026-11-01T01:39:50.5556402Z",
+    "output_sha256": "D11AD44F4850FF30A9A98E80BF62997421C72919AC0453BB22A453A8968A11B9",
+    "arguments": [
+      "--",
+      "--m8-probe"
+    ],
+    "result": {
+      "checks": [
+        {
+          "id": "new_release_process",
+          "ok": true
+        },
+        {
+          "id": "immutable_package",
+          "ok": true
+        },
+        {
+          "id": "seven_real_actors",
+          "ok": true
+        },
+        {
+          "id": "patrol_bound",
+          "ok": true
+        },
+        {
+          "id": "traverse_0.0",
+          "ok": true
+        },
+        {
+          "id": "traverse_40.0",
+          "ok": true
+        }
+      ],
+      "count": 6,
+      "engine": "4.7.2-stable (official)",
+      "ok": true,
+      "package_hash": "caa109fd3444ba7976aa951c8a6cd1dc9fc7ddda0914540c45de43c306f473c5",
+      "source_hash": "a208ac25d0ca039b22d1a7c7c4537ee4bf04f66ee0f747bfe07cd82fd9d07870"
+    },
+    "timed_out": false,
+    "name": "release",
+    "aborted": false,
+    "ok": true
+  }
+]
