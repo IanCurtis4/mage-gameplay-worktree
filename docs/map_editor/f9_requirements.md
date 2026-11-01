@@ -275,3 +275,8 @@ Checkpoint48 (1/11, Sol/Astra Opus): P5 pacote do Bosque publicado e fixado na
 lista de mapas, ponto de consumo `map_release.gd` documentado em consumption.md
 (ReleaseApi11) e release em instalação limpa abrindo o Bosque pela API
 (release_bosque 8/8).
+
+Checkpoint49 (1/11, Sol/Astra Opus): P6a roteiro guiado entre as telas (barra de
+etapas, próximo passo pelos produtores, atualização entre etapas revisada com um
+desfazer, diagnóstico que abre a tela dona) e AX `<tela>/workflow/*`
+(Workflow12, WorkflowNative23).

@@ -88,14 +88,14 @@ pente-fino de F10 revisita. Nenhuma prova, guard, limite ou quota foi reduzido.
 | F9-05 | diff e contradição antes do commit | comprovado | slots WFC; variação regional com diff por amostra e objeto e déficit de espalhamento (checkpoint43); suporte perdido ou alterado e déficit de encontros apontam a entidade (checkpoint44); conflitos do intercâmbio listados com base/atual/proposta antes de qualquer commit (checkpoint45) | — |
 | F9-06 | biblioteca, busca, miniaturas, categorias, presets, favoritos | comprovado | Library50/Native53, 73b6ee8 | — |
 | F9-06 | minimapa, árvore de objetos, camadas | comprovado | 6d72972 20/52/53/28 | — |
-| F9-06 | overlays, foco, atalhos, diagnóstico localizado | parcial | Viewport20/Native52 | diagnóstico integrado ao fluxo final (P6) |
-| F9-07 | AX: IDs, ações parametrizadas, estado | parcial | terreno, objetos, contexto, composição, encontros, patrulha (checkpoints 23–30); variação regional `terrain/synthesis/*` (checkpoint43) e `map`/`population`/`patrol` `/synthesis/*` (checkpoint44); intercâmbio `<tela>/exchange/{export,review,apply}` (checkpoint45) | UX guiada entre telas (P6) |
-| F9-07 | UX coerente e guiada, fluxo humano inteiro | **falta** | menus e seletores por tela | roteiro guiado entre telas, sem código (P6) |
+| F9-06 | overlays, foco, atalhos, diagnóstico localizado | comprovado | Viewport20/Native52; no roteiro, o problema de uma etapa abre a tela dona com a entidade focada (WorkflowNative23, checkpoint49) | — |
+| F9-07 | AX: IDs, ações parametrizadas, estado | comprovado | terreno, objetos, contexto, composição, encontros, patrulha (checkpoints 23–30); variação regional `terrain/synthesis/*` (checkpoint43) e `map`/`population`/`patrol` `/synthesis/*` (checkpoint44); intercâmbio `<tela>/exchange/{export,review,apply}` (checkpoint45); roteiro `<tela>/workflow/*` com o mesmo estado da GUI (checkpoint49) | — |
+| F9-07 | UX coerente e guiada, fluxo humano inteiro | comprovado tecnicamente | barra de etapas em todas as telas, próximo passo pelos produtores, atualização entre etapas revisada e com um desfazer (Workflow12, WorkflowNative23, checkpoint49) | publicar pelo roteiro (P6b); aceite humano (P7) |
 | F9-07 | histórico, hash, confirmação, modos | comprovado | entregue em F8; M1 PASS depois de corrigir a fixture do runner (job 155) | — |
 | F9-08 | biomas, espécies, chances, pesos, reservas | parcial | Content28/Native30, EncounterAuthoring27/25 | conferir chances nos fluxos integrados (P7) |
 | F9-08 | raro manual, exceção por instância, quest passiva | comprovado | entregue em F8; M4 PASS na regressão de base (job 154) | — |
 | F9-08 | bioma no manifesto final | comprovado | 4e3a3788, MapBiome15/13 | — |
-| F9-08 | stale entre revisões e reconciliação sem perda | comprovado | snapshots separados; a variação regional religa cada marcador pela família da camada e posição e reserva todo slot que fica (checkpoint44); o intercâmbio combina base/atual/proposta sem perder mudanças locais e reconfere o plano (checkpoint45) | — |
+| F9-08 | stale entre revisões e reconciliação sem perda | comprovado | snapshots separados; a variação regional religa cada marcador pela família da camada e posição e reserva todo slot que fica (checkpoint44); o intercâmbio combina base/atual/proposta sem perder mudanças locais e reconfere o plano (checkpoint45); o roteiro leva peça, mapa e encontros adiante com os marcadores seguindo sua posição e o plano reconferido (checkpoint49) | — |
 | F9-09 | GUI/AX/CLI equivalentes | parcial | composição, contexto, encontros, patrulhas, compilação, Store; variação regional na peça (checkpoint43) e na raiz de mapa, encontros e patrulhas (checkpoint44); intercâmbio de três vias com o mesmo hash (checkpoint45); bundle v2 com assets (checkpoint47) | — |
 | F9-09 | diff, preview, undo, proteção espacial, rebase | comprovado | export/revisão/aplicação com diff; três vias por identidade, campo e amostra com a máscara comum; conflitos com escolha explícita; proteção atual prevalece (ExchangeMerge13, ExchangeMergeNative10, checkpoint45) | — |
 | F9-09 | assets passivos, ambiente limpo, segurança | comprovado | manifesto de assets no build (checkpoint41); bundle v2 com manifesto passivo, área controlada, adulteração e ambiente diferente recusados, nenhum arquivo transportado (ExchangeAssets12, checkpoint47) | — |
@@ -129,7 +129,7 @@ pente-fino de F10 revisita. Nenhuma prova, guard, limite ou quota foi reduzido.
    e os guias.
 5. **P5 — export release (F9-11).** (checkpoint48: pacote do Bosque, lista de mapas publicados, `map_release.gd`, consumption.md, release em instalação limpa) Release limpo com os pacotes F9 e API de
    consumo documentada.
-6. **P6 — UX guiada e oclusão (F9-01/06/07).** Fluxo entre telas, diagnóstico
+6. **P6 — UX guiada e oclusão (F9-01/06/07).** (checkpoint49: P6a roteiro guiado e diagnóstico no fluxo) Fluxo entre telas, diagnóstico
    localizado no fluxo, prova de oclusão.
 7. **P7 — área final e aceite (F9-12).** Conferir a amostra no Bosque, geração com
    pins e intercâmbio na área, roteiro humano, aceite.

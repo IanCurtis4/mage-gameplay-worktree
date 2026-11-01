@@ -1,7 +1,38 @@
 # RagRPG — handoff portátil de F9
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint48 — release com o Bosque e ponto de consumo (P5)
+## Checkpoint49 — roteiro guiado entre as telas (P6a)
+
+1/11/2026. Mesmo checkout/branch/fixture. Base 36ca0f52; código e documentação
+em commits próprios. Papéis inalterados. Contrato: contracts/f9_guided_flow.md.
+
+- Pedido humano: seguir para o P6; manter o instalador `.tools/godot.zip`.
+  Escolhas humanas: barra de etapas nas telas; publicar no jogo como etapa final
+  com confirmação (P6b); levar o esmaecimento de oclusão ao jogo (P6c).
+- Faixa "Roteiro do mapa" no topo das telas de terreno, composição, encontros e
+  patrulhas: Peça, Mapa, Encontros, Patrulhas e Teste com estado (pronta, a
+  fazer, desatualizada, a revisar, em andamento, com problema, aguarda a
+  anterior, não aberta, opcional) e "Próximo passo" pelos produtores de cada tela
+  (compilar, abrir a próxima tela, começar o mapa com a peça aberta, preparar e
+  aplicar o plano, testar). Fora dos menus; visível em UX e AX.
+- Levar uma etapa adiante (`workflow/carry_forward.gd`), em segundo plano e com
+  revisão: a peça atual troca seus snapshots no mapa; o mapa atual entra nos
+  encontros com cada marcador seguindo sua posição do mapa e assentando no novo
+  chão, plano reconferido com os mesmos slots; os encontros atuais entram nas
+  patrulhas com as rotas e os pontos seguindo. Aplicar é um desfazer e só vale
+  sobre a base revisada.
+- Diagnóstico no fluxo: posição removida, camada perdida ou slot ausente nomeiam o
+  marcador ou a rota; "Mostrar o problema" abre a tela dona e foca a entidade.
+- AX `<tela>/workflow/{state,next,apply,discard,show,open}` sobre o mesmo modelo.
+- Workflow12, WorkflowNative23 e as etapas das telas (job 211) PASS; runners M2–M7
+  headless e M6/M7 nativos PASS. Os nativos antigos de M2, M4, M5 e M8 falham
+  igual na base 36ca0f52 (jobs 213/215): expectativas defasadas, migradas no P6d.
+
+Pendente: P6b (publicar no jogo pelo roteiro), P6c (oclusão no jogo e prova no
+Bosque), P6d (migração do M3Native24); aceite humano.
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint48 — release com o Bosque e ponto de consumo (P5)
 
 1/11/2026. Mesmo checkout/branch/fixture. Base 40b50290; código e documentação
 em commits próprios. Papéis inalterados. Guia: consumption.md.
@@ -26,8 +57,7 @@ em commits próprios. Papéis inalterados. Guia: consumption.md.
 - ReleaseApi 11/11 (lista, pinos, frescor da fonte, manifesto como cópia,
   adulteração, publicação por hash sem sobrescrita, export, preparação).
 
-Pendente: P6 (UX guiada entre telas, diagnóstico localizado, oclusão); aceite humano.
-<!-- /f9-patrol-gameplay-active -->
+Próximo: P6 (UX guiada entre telas, diagnóstico localizado, oclusão), iniciado no checkpoint49.
 
 ## Histórico checkpoint47 — assets no intercâmbio, fontes de skills e segunda limpeza (P4)
 
