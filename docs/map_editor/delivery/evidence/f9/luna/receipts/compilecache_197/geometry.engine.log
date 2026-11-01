@@ -1,0 +1,14 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_CACHE_CHECK cache_is_opt_in true
+F9_CACHE_CHECK miss_compiles_and_stores true
+F9_CACHE_CHECK hit_returns_the_same_package true
+F9_CACHE_CHECK tampered_entry_is_recompiled true
+F9_CACHE_CHECK source_and_environment_select_the_key true
+F9_CACHE_CHECK changed_inputs_change_the_key true
+F9_CACHE_CHECK foreign_entry_is_refused true
+F9_CACHE_CHECK population_hit_returns_the_same_package true
+F9_CACHE_CHECK hits_are_faster_than_compiles true
+F9_CACHE_CHECK cache_is_bounded true
+F9_CACHE_METRICS {"map_cold_ms":440.768,"map_hit_ms":232.102,"population_cold_ms":3370.336,"population_hit_ms":261.418}
+F9_CACHE_RESULT {"checks":[{"id":"cache_is_opt_in","ok":true},{"id":"miss_compiles_and_stores","ok":true},{"id":"hit_returns_the_same_package","ok":true},{"id":"tampered_entry_is_recompiled","ok":true},{"id":"source_and_environment_select_the_key","ok":true},{"id":"changed_inputs_change_the_key","ok":true},{"id":"foreign_entry_is_refused","ok":true},{"id":"population_hit_returns_the_same_package","ok":true},{"id":"hits_are_faster_than_compiles","ok":true},{"id":"cache_is_bounded","ok":true}],"count":10,"ok":true}

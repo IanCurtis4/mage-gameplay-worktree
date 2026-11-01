@@ -3383,6 +3383,54 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 file (checkpoint45 three-way exchange)",
       "base_sha256": "ac0ba95283446cf5b6ac1ecea19e76dea2767b503daf7752af27b5750f51c6b5"
+    },
+    {
+      "path": "scripts/map_authoring/synthesis/receipt_schema.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint46 synthesis receipts)",
+      "base_sha256": "05c2da9728bb7e533fbf18ab9dbcfe0c3222644c7eb78cf066c2002a5b595794"
+    },
+    {
+      "path": "scripts/map_authoring/synthesis/receipts.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint46 synthesis receipts)",
+      "base_sha256": "a41cf2367294b8080bc30043c6310222e5429473e08475cb53b1ca05fa08f718"
+    },
+    {
+      "path": "scripts/map_authoring/synthesis/receipts_view.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint46 synthesis receipts)",
+      "base_sha256": "94a0e5330889b4d4d1bf59b07cc822da24f219d25691b09a921e59934818ba7e"
+    },
+    {
+      "path": "tests/map_editor_synthesis_receipts_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint46 synthesis receipts)",
+      "base_sha256": "4e8dba0cd67fcee0e9e68222da2cd742b0702db3d26cace672a2ea62854c233a"
+    },
+    {
+      "path": "scripts/map_authoring/synthesis/receipt_schema.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint46 synthesis receipts)",
+      "base_sha256": "998b37b84b182040d0db00480abc4d3108ae953da93dc36e86e5e8a54b4a22f8"
+    },
+    {
+      "path": "scripts/map_authoring/synthesis/receipts.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint46 synthesis receipts)",
+      "base_sha256": "032618490616adda50b91203b8c8429be600c2b9f0b00757c17ddf40247bbb99"
+    },
+    {
+      "path": "scripts/map_authoring/synthesis/receipts_view.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint46 synthesis receipts)",
+      "base_sha256": "f34ab0e4754494b6df0eb856104ebbd025f987224a5e9de18ea9eeffaf86ea5d"
+    },
+    {
+      "path": "tests/map_editor_synthesis_receipts_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint46 synthesis receipts)",
+      "base_sha256": "c5e1b75a8267c4536729c61dcd53c07da12038510e5fd450c5cc758b91b66692"
     }
   ],
   "read_only_shared": [
@@ -4735,6 +4783,65 @@
       },
       "test_update": "tests/map_editor_exchange_test.gd base_diverged now expects exchange_conflict (same field changed on both sides): still refused, now with an explicit choice",
       "limits": "conflict choices are per change path; ordered waypoint lists stay whole-list changes; assets in the bundle are P4"
+    },
+    "synthesis_receipts_p3d": {
+      "state": "validated_increment_F9_still_open",
+      "base": "99dff335",
+      "human_report": "01/11: let us go to P3d now",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "contract": "docs/map_editor/contracts/f9_regional_synthesis.md",
+      "files": [
+        "scripts/map_authoring/synthesis/receipt_schema.gd",
+        "scripts/map_authoring/synthesis/receipts.gd",
+        "scripts/map_authoring/synthesis/receipts_view.gd",
+        "scripts/map_authoring/synthesis/regional_synthesis.gd",
+        "scripts/map_authoring/synthesis/root_synthesis.gd",
+        "scripts/map_authoring/synthesis/synthesis_section.gd",
+        "scripts/map_authoring/synthesis/root_synthesis_section.gd",
+        "scripts/map_authoring/synthesis/headless.gd",
+        "scripts/map_authoring/document/source_schema.gd",
+        "scripts/map_authoring/composition/map_document.gd",
+        "scripts/map_authoring/population/population_document.gd",
+        "scripts/map_authoring/patrol/patrol_document.gd",
+        "addons/ragrpg_map_editor/presentation.gd",
+        "tools/map_editor_completion/run.ps1"
+      ],
+      "test_files": [
+        "tests/map_editor_synthesis_receipts_test.gd",
+        "tests/map_editor_regional_synthesis_ui_test.gd",
+        "tests/map_editor_root_synthesis_ui_test.gd",
+        "tests/map_editor_library_ui_test.gd"
+      ],
+      "scope": "optional root-only synthesis_receipts extension validated by a common helper in the piece, map, population and patrol readers (nested is receipts_nested); closed receipt with request, request/base/dependencies/result content hashes and counts, no self-reference; passive write-once ledger of bases with bounded retention; deterministic replay reporting later edits and changed dependencies; passive replay bundle; receipts list, replay and bundle in every variation tool, AX <screen>/synthesis/{receipts,replay,replay_bundle,replay_import}, CLI replay/bundle",
+      "validation": {
+        "SynthesisReceipts": 11,
+        "RegionalSynthesis": 12,
+        "RegionalSynthesisNative": 16,
+        "RootSynthesis": 12,
+        "RootSynthesisNative": 11,
+        "ExchangeMerge": 13,
+        "LibraryNative": 53,
+        "Objects": 53,
+        "Materials": 35,
+        "Authoring": 30,
+        "Content": 28,
+        "CompositionAX": 31,
+        "EncounterAuthoring": 27,
+        "PopulationPlanner": 20,
+        "GameplayNative": 63,
+        "AssetManifest": 7,
+        "CompileCache": 10,
+        "M1": true,
+        "M2": true,
+        "M3": true,
+        "M4": true,
+        "M5": true,
+        "M6": true,
+        "M7": true,
+        "M7Native": true,
+        "M8Core": true
+      },
+      "limits": "at most 32 receipts per document (oldest dropped); ledger at most 64 files / 128 MB of copies under .godot; generation documents carry the whole map with its receipts; replay never rebuilds later human edits"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

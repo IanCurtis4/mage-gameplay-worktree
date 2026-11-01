@@ -1,0 +1,33 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_AX_AUTHORING_CHECK real_shell_mounts_piece_and_terrain_presentations true
+F9_AX_AUTHORING_CHECK closed_semantic_command_surface_is_advertised true
+F9_AX_AUTHORING_CHECK ax_command_refuses_ux_mode_without_mutation true
+F9_AX_AUTHORING_CHECK ax_mode_is_explicitly_entered true
+F9_AX_AUTHORING_CHECK new_piece_uses_explicit_identity true
+F9_AX_AUTHORING_CHECK grid_proposal_is_pure_and_valid true
+F9_AX_AUTHORING_CHECK first_grid_is_committed_through_document_session true
+F9_AX_AUTHORING_CHECK duplicate_ids_fail_without_history_or_source_change true
+F9_AX_AUTHORING_CHECK non_finite_grid_values_fail_without_history true
+F9_AX_AUTHORING_CHECK unknown_fields_caps_and_cross_namespace_ids_are_rejected true
+F9_AX_AUTHORING_CHECK second_grid_and_explicit_selection_are_committed true
+F9_AX_AUTHORING_CHECK ax_brush_stroke_routes_through_existing_brush_producer true
+F9_AX_AUTHORING_CHECK protected_region_refuses_intersecting_bridge_without_partial_history true
+F9_AX_AUTHORING_CHECK bridge_is_created_on_existing_layer true
+F9_AX_AUTHORING_CHECK canonical_walk_connector_is_upserted true
+F9_AX_AUTHORING_CHECK no_op_lock_and_connector_upsert_do_not_add_history true
+F9_AX_AUTHORING_CHECK locked_source_rejects_bridge_new_existing_and_transferred_connector_without_partial_history true
+F9_AX_AUTHORING_CHECK connector_reference_failure_preserves_document true
+F9_AX_AUTHORING_CHECK protection_requires_existing_region true
+F9_AX_AUTHORING_CHECK layer_selection_changes_editor_target_without_source_revision true
+F9_AX_AUTHORING_CHECK ax_undo_redo_round_trips_exact_semantic_source true
+F9_AX_AUTHORING_CHECK undo_reports_empty_history_without_mutation true
+F9_AX_AUTHORING_CHECK document_name_is_semantic_and_undoable true
+F9_AX_AUTHORING_CHECK piece_save_uses_canonical_store_and_hash true
+F9_AX_AUTHORING_CHECK failed_save_with_pending_title_preserves_document_and_history true
+F9_AX_AUTHORING_CHECK save_conflict_preserves_external_file_and_local_draft true
+F9_AX_AUTHORING_CHECK dirty_open_requires_confirmation_then_restores_external_source true
+F9_AX_AUTHORING_CHECK confirmed_dirty_new_refuses_pending_recovery_without_discard true
+F9_AX_AUTHORING_CHECK dirty_new_confirmation_preserves_and_recovers_autosaved_draft true
+F9_AX_AUTHORING_CHECK malformed_document_command_is_rejected_without_history_change true
+F9_AX_AUTHORING_RESULT {"bridge_source_hash":"2f8cc257ea6340a1ada841960fa5af9af7dfd118944351ffa3c921dc8e4d7359","checks":[{"id":"real_shell_mounts_piece_and_terrain_presentations","ok":true},{"id":"closed_semantic_command_surface_is_advertised","ok":true},{"id":"ax_command_refuses_ux_mode_without_mutation","ok":true},{"id":"ax_mode_is_explicitly_entered","ok":true},{"id":"new_piece_uses_explicit_identity","ok":true},{"id":"grid_proposal_is_pure_and_valid","ok":true},{"id":"first_grid_is_committed_through_document_session","ok":true},{"id":"duplicate_ids_fail_without_history_or_source_change","ok":true},{"id":"non_finite_grid_values_fail_without_history","ok":true},{"id":"unknown_fields_caps_and_cross_namespace_ids_are_rejected","ok":true},{"id":"second_grid_and_explicit_selection_are_committed","ok":true},{"id":"ax_brush_stroke_routes_through_existing_brush_producer","ok":true},{"id":"protected_region_refuses_intersecting_bridge_without_partial_history","ok":true},{"id":"bridge_is_created_on_existing_layer","ok":true},{"id":"canonical_walk_connector_is_upserted","ok":true},{"id":"no_op_lock_and_connector_upsert_do_not_add_history","ok":true},{"id":"locked_source_rejects_bridge_new_existing_and_transferred_connector_without_partial_history","ok":true},{"id":"connector_reference_failure_preserves_document","ok":true},{"id":"protection_requires_existing_region","ok":true},{"id":"layer_selection_changes_editor_target_without_source_revision","ok":true},{"id":"ax_undo_redo_round_trips_exact_semantic_source","ok":true},{"id":"undo_reports_empty_history_without_mutation","ok":true},{"id":"document_name_is_semantic_and_undoable","ok":true},{"id":"piece_save_uses_canonical_store_and_hash","ok":true},{"id":"failed_save_with_pending_title_preserves_document_and_history","ok":true},{"id":"save_conflict_preserves_external_file_and_local_draft","ok":true},{"id":"dirty_open_requires_confirmation_then_restores_external_source","ok":true},{"id":"confirmed_dirty_new_refuses_pending_recovery_without_discard","ok":true},{"id":"dirty_new_confirmation_preserves_and_recovers_autosaved_draft","ok":true},{"id":"malformed_document_command_is_rejected_without_history_change","ok":true}],"count":30,"expected_count":30,"first_grid_hash":"5c81e5cea88b9090c77b3f27e09c6646a107c1525698ff621a5d0b082ade9dbd","ok":true,"run_id":"13308677","source_path":"C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project/.godot/f9_ax_authoring/roundtrip_piece_13308677.json"}

@@ -23,6 +23,7 @@ const Catalog = preload("res://scripts/map_authoring/objects/prop_catalog.gd")
 const Objects = preload("res://scripts/map_authoring/objects/object_operations.gd")
 const Compiler = preload("res://scripts/map_authoring/objects/object_compiler.gd")
 const Metadata = preload("res://scripts/map_authoring/objects/object_schema.gd")
+const Receipts = preload("res://scripts/map_authoring/synthesis/receipts.gd")
 const REVISION := "regional_v1"
 const REQUEST_KEYS := ["algorithm_revision","seed_text","base_hash","target","selection","channels","preserve"]
 const TERRAIN_MODES := ["preserve","relief"]
@@ -317,11 +318,16 @@ static func prepare(source: Dictionary, request: Dictionary, cancellation: Calla
 	if cancellation.is_valid() and cancellation.call(0.9): return fail("cancelled")
 	var proposal := Objects._proposal(source,data)
 	if not proposal.ok: return proposal
-	var compiled := Terrain.compile(proposal.data)
+	# Checkpoint46 (P3d): the receipt goes in at the root (a piece inside a map
+	# root gets none); the integral source hash is taken after it.
+	var final_source: Dictionary = proposal.data
+	if not extra.get("nested",false):
+		Receipts.attach(final_source,Receipts.make("piece",request,proposal.data,{"terrain_samples":terrain_changed.size(),"material_samples":material_changed.size(),"objects_added":added.size(),"objects_removed":removed.size()},REVISION))
+	var compiled := Terrain.compile(final_source)
 	if not compiled.ok: return compiled
 	var polygon_points: Array = []
 	for point: Vector2 in built.selection: polygon_points.append([point.x,point.y])
-	return {"ok":true,"code":"","algorithm_revision":REVISION,"base_hash":request.base_hash,"request_hash":request_hash(request),"source":proposal.data,"source_hash":proposal.output_hash,"compiled_hash":compiled.output_hash,"package":compiled.package,
+	return {"ok":true,"code":"","algorithm_revision":REVISION,"base_hash":request.base_hash,"request_hash":request_hash(request),"source":final_source,"source_hash":Schema.semantic_hash(final_source),"compiled_hash":compiled.output_hash,"package":compiled.package,
 		"diff":{"layer_id":layer.layer_id,"selection_hash":Schema.semantic_hash({"polygon_xz":polygon_points}),"terrain_samples":terrain_changed,"material_samples":material_changed,"objects_added":added,"objects_removed":removed},
 		"diagnostics":[],"metrics":{"free_samples":built.free_count,"samples":built.free.size(),"elapsed_ms":(Time.get_ticks_usec()-started)/1000.0}}
 
@@ -330,9 +336,12 @@ static func apply(proposal: Dictionary, session: RefCounted, expected_hash: Stri
 	if not proposal.get("ok",false) or session == null or session.document() == null: return fail("synthesis_stale_proposal")
 	var current: String = session.document().semantic_hash()
 	if current != expected_hash or current != proposal.base_hash: return fail("base_diverged")
+	# The base goes to the passive ledger first, so the receipt can be replayed.
+	var stored := Receipts.store("piece",session.document().to_data())
 	var applied: Dictionary = session.apply(proposal.source)
 	if not applied.ok: return applied
 	applied["proposal_hash"] = proposal.source_hash
+	applied["ledger"] = stored
 	return applied
 
 # Same blend as Brush "material": weights move toward the material by alpha.

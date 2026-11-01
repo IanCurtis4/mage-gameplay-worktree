@@ -9,6 +9,7 @@ const Synthesis = preload("res://scripts/map_authoring/synthesis/regional_synthe
 const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 const Catalog = preload("res://scripts/map_authoring/objects/prop_catalog.gd")
 const Preferences = preload("res://scripts/map_authoring/library/editor_preferences.gd")
+const ReceiptsView = preload("res://scripts/map_authoring/synthesis/receipts_view.gd")
 const MATERIALS := {"earth":"Terra","grass":"Grama","sand":"Areia","stone":"Pedra"}
 var panel: Control
 var region: OptionButton
@@ -30,6 +31,7 @@ var replace: CheckBox
 var job: RefCounted
 var _job_request: Dictionary = {}
 var pending: Dictionary = {}
+var receipts: VBoxContainer
 
 func setup(owner_panel: Control) -> void:
 	panel = owner_panel; name = "RegionalSynthesis"
@@ -67,6 +69,8 @@ func setup(owner_panel: Control) -> void:
 	var actions := HFlowContainer.new(); add_child(actions)
 	for entry: Array in [["Prévia regional",preview],["Aplicar variação",apply_pending],["Descartar prévia",discard],["Cancelar variação",cancel]]:
 		panel._button(actions,entry[0],entry[1]).set_meta("authoring_keep_visible",true)
+	# Checkpoint46 (P3d): receipts and replay of the variations of this piece.
+	receipts = ReceiptsView.new(); add_child(receipts); receipts.setup("piece",_source)
 
 func cancel() -> void:
 	if job != null: job.cancel()
@@ -92,6 +96,7 @@ func refresh() -> void:
 		if item.region_id == previous: region.select(region.item_count-1)
 	# The canvas now shows the open source again, so a preview is no longer on screen.
 	pending = {}
+	if receipts != null: receipts.refresh()
 
 ## The request the fields describe, on the open source and selected layer.
 func gui_request() -> Dictionary:
@@ -156,9 +161,10 @@ static func summary(proposal: Dictionary) -> Dictionary:
 	return result
 
 func authoring_commands() -> Array:
-	return [{"id":"terrain/synthesis/request","parameters":{}},{"id":"terrain/synthesis/preview","parameters":{"request":"regional_request"}},{"id":"terrain/synthesis/apply","parameters":{"proposal_hash":"sha256"}},{"id":"terrain/synthesis/discard","parameters":{}}]
+	return [{"id":"terrain/synthesis/request","parameters":{}},{"id":"terrain/synthesis/preview","parameters":{"request":"regional_request"}},{"id":"terrain/synthesis/apply","parameters":{"proposal_hash":"sha256"}},{"id":"terrain/synthesis/discard","parameters":{}}]+(receipts.commands("terrain") if receipts != null else [])
 
 func ax_command(id: String, parameters: Dictionary) -> Dictionary:
+	if id.trim_prefix("terrain/synthesis/") in ['receipts', 'replay', 'replay_bundle', 'replay_import'] and id.begins_with("terrain/synthesis/"): return receipts.command(id.trim_prefix("terrain/synthesis/"),parameters)
 	if id == "terrain/synthesis/request":
 		if not parameters.is_empty(): return {"ok":false,"code":"arguments_invalid"}
 		return {"ok":true,"request":gui_request()}

@@ -29,7 +29,10 @@ static func validate(data: Variant) -> Dictionary:
 	var errors: Array = []
 	var root_fields := ROOT.duplicate(); if data is Dictionary and data.has("context"): root_fields.context = "object"
 	if data is Dictionary and data.has("borders"): root_fields.borders = "object"
+	# Checkpoint46 (P3d): receipts only at the root map, never inside a snapshot.
+	if data is Dictionary and data.has("synthesis_receipts"): root_fields.synthesis_receipts = "array"
 	Schema._shape(data,root_fields,"map",errors)
+	if errors.is_empty() and data.has("synthesis_receipts") and not load("res://scripts/map_authoring/synthesis/receipt_schema.gd").valid(data.synthesis_receipts): return Schema.result(false,"receipts_invalid")
 	if not errors.is_empty(): return Schema.result(false,"map_invalid",errors)
 	if data.schema_version != 1: return Schema.result(false,"map_version_unsupported")
 	if data.mode not in ["manual","recipe"]: return Schema.result(false,"map_mode_unsupported")
@@ -37,6 +40,7 @@ static func validate(data: Variant) -> Dictionary:
 	var pieces: Dictionary = {}; var instances: Dictionary = {}; var links: Dictionary = {}
 	for piece: Variant in data.pieces:
 		if not piece is Dictionary or piece.size() != 2 or not Schema._type(piece.get("piece_hash"),"hash") or not piece.get("source") is Dictionary: return Schema.result(false,"piece_invalid")
+		if piece.source.has("synthesis_receipts"): return Schema.result(false,"receipts_nested")
 		var source := Schema.read(JSON.stringify(piece.source,"",true,true).to_utf8_buffer())
 		if not source.ok or not source.valid: return Schema.result(false,"piece_source_invalid",source.get("diagnostics",[]))
 		if source.output_hash != piece.piece_hash: return Schema.result(false,"piece_hash_mismatch")

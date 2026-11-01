@@ -24,13 +24,18 @@ static func read(bytes: PackedByteArray) -> Dictionary:
 	var decoded := StrictJSON.new().decode(bytes)
 	return validate(decoded.value) if decoded.ok else Schema.result(false,decoded.code)
 static func recipe_hash(data: Dictionary) -> String:
-	var copy := data.duplicate(true); copy.slots = []; copy.plan_hash = ""; return hash_source(copy)
+	# Checkpoint46 (P3d): receipts are not part of the recipe a plan realizes.
+	var copy := data.duplicate(true); copy.slots = []; copy.plan_hash = ""; copy.erase("synthesis_receipts"); return hash_source(copy)
 static func validate(data: Variant) -> Dictionary:
-	var errors: Array = []; Schema._shape(data,ROOT,"population",errors)
+	var root_fields := ROOT.duplicate()
+	if data is Dictionary and data.has("synthesis_receipts"): root_fields.synthesis_receipts = "array"
+	var errors: Array = []; Schema._shape(data,root_fields,"population",errors)
+	if errors.is_empty() and data.has("synthesis_receipts") and not load("res://scripts/map_authoring/synthesis/receipt_schema.gd").valid(data.synthesis_receipts): return Schema.result(false,"receipts_invalid")
 	if not errors.is_empty(): return Schema.result(false,"population_invalid",errors)
 	if data.schema_version != 1: return Schema.result(false,"population_version")
 	if data.map.size() > 1 or data.entrance.size() > 1 or data.brushes.size() > 16 or data.exclusions.size() > 64 or data.interactions.size() > 64 or data.slots.size() > 128: return Schema.result(false,"population_limit")
 	if not data.map.is_empty():
+		if data.map[0] is Dictionary and data.map[0].has("synthesis_receipts"): return Schema.result(false,"receipts_nested")
 		var checked := Map.validate(data.map[0])
 		if not checked.ok: return checked
 	for entry: Variant in data.entrance: Schema._shape(entry,ANCHOR,"entrance",errors)

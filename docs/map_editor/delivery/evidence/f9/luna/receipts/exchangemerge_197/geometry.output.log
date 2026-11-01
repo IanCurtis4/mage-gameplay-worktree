@@ -1,0 +1,16 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_MERGE_CHECK fixture_exports true
+F9_MERGE_CHECK disjoint_samples_compose true
+F9_MERGE_CHECK equal_changes_agree true
+F9_MERGE_CHECK conflict_is_reported_without_mutation true
+F9_MERGE_CHECK explicit_choice_resolves true
+F9_MERGE_CHECK unknown_choice_is_refused true
+F9_MERGE_CHECK remove_versus_edit true
+F9_MERGE_CHECK broken_reference_refuses true
+F9_MERGE_CHECK current_protection_prevails true
+F9_MERGE_CHECK protected_region_guards_only_its_samples true
+F9_MERGE_CHECK population_plan_is_recertified true
+F9_MERGE_CHECK merged_apply_is_one_undo true
+F9_MERGE_CHECK merged_piece_reapply_is_noop true
+F9_MERGE_RESULT {"checks":[{"id":"fixture_exports","ok":true},{"id":"disjoint_samples_compose","ok":true},{"id":"equal_changes_agree","ok":true},{"id":"conflict_is_reported_without_mutation","ok":true},{"id":"explicit_choice_resolves","ok":true},{"id":"unknown_choice_is_refused","ok":true},{"id":"remove_versus_edit","ok":true},{"id":"broken_reference_refuses","ok":true},{"id":"current_protection_prevails","ok":true},{"id":"protected_region_guards_only_its_samples","ok":true},{"id":"population_plan_is_recertified","ok":true},{"id":"merged_apply_is_one_undo","ok":true},{"id":"merged_piece_reapply_is_noop","ok":true}],"count":13,"ok":true}

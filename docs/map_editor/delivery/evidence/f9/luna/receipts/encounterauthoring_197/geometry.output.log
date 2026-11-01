@@ -1,0 +1,30 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_ENCOUNTER_CHECK real_population_and_patrol_fixtures_validate true
+F9_ENCOUNTER_CHECK catalog_options_are_real_and_catalog_is_immutable true
+F9_ENCOUNTER_CHECK population_proposal_is_pure_and_reports_identity_hash true
+F9_ENCOUNTER_CHECK unknown_nested_field_rejected true
+F9_ENCOUNTER_CHECK nested_nan_rejected true
+F9_ENCOUNTER_CHECK invalid_nested_last_candidate_leaves_original_untouched true
+F9_ENCOUNTER_CHECK missing_brush_reference_is_rejected true
+F9_ENCOUNTER_CHECK manual_slot_requires_fixed_true true
+F9_ENCOUNTER_CHECK fixed_manual_slot_is_added_as_explicit_identity true
+F9_ENCOUNTER_CHECK brush_removal_requires_confirmation_and_removes_dependent_slots true
+F9_ENCOUNTER_CHECK population_noop_adds_no_history true
+F9_ENCOUNTER_CHECK population_apply_undo_redo_are_whole_document true
+F9_ENCOUNTER_CHECK slot_removal_requires_positive_confirmation_and_tracks_id true
+F9_ENCOUNTER_CHECK canonical_plan_preview_is_pure_and_bound_to_base true
+F9_ENCOUNTER_CHECK canonical_plan_rejects_stale_source true
+F9_ENCOUNTER_CHECK applied_plan_compiles_canonically true
+F9_ENCOUNTER_CHECK population_store_new_save_open_roundtrip true
+F9_ENCOUNTER_CHECK population_store_conflict_preserves_saved_bytes true
+F9_ENCOUNTER_CHECK patrol_route_upsert_is_pure_and_hash_identified true
+F9_ENCOUNTER_CHECK new_waypoint_appends_and_fractional_edit_preserves_existing_order true
+F9_ENCOUNTER_CHECK waypoint_order_move_and_boundary_are_deterministic true
+F9_ENCOUNTER_CHECK waypoint_invalid_direction_and_nested_nan_are_rejected true
+F9_ENCOUNTER_CHECK waypoint_remove_confirmation_and_duplicate_point_rejection true
+F9_ENCOUNTER_CHECK exclusive_slot_assignment_is_enforced true
+F9_ENCOUNTER_CHECK patrol_session_undo_redo_restore_complete_route true
+F9_ENCOUNTER_CHECK patrol_store_roundtrip_and_external_conflict true
+F9_ENCOUNTER_CHECK patrol_compiler_accepts_authored_route true
+F9_ENCOUNTER_RESULT {"checks":[{"id":"real_population_and_patrol_fixtures_validate","ok":true},{"id":"catalog_options_are_real_and_catalog_is_immutable","ok":true},{"id":"population_proposal_is_pure_and_reports_identity_hash","ok":true},{"id":"unknown_nested_field_rejected","ok":true},{"id":"nested_nan_rejected","ok":true},{"id":"invalid_nested_last_candidate_leaves_original_untouched","ok":true},{"id":"missing_brush_reference_is_rejected","ok":true},{"id":"manual_slot_requires_fixed_true","ok":true},{"id":"fixed_manual_slot_is_added_as_explicit_identity","ok":true},{"id":"brush_removal_requires_confirmation_and_removes_dependent_slots","ok":true},{"id":"population_noop_adds_no_history","ok":true},{"id":"population_apply_undo_redo_are_whole_document","ok":true},{"id":"slot_removal_requires_positive_confirmation_and_tracks_id","ok":true},{"id":"canonical_plan_preview_is_pure_and_bound_to_base","ok":true},{"id":"canonical_plan_rejects_stale_source","ok":true},{"id":"applied_plan_compiles_canonically","ok":true},{"id":"population_store_new_save_open_roundtrip","ok":true},{"id":"population_store_conflict_preserves_saved_bytes","ok":true},{"id":"patrol_route_upsert_is_pure_and_hash_identified","ok":true},{"id":"new_waypoint_appends_and_fractional_edit_preserves_existing_order","ok":true},{"id":"waypoint_order_move_and_boundary_are_deterministic","ok":true},{"id":"waypoint_invalid_direction_and_nested_nan_are_rejected","ok":true},{"id":"waypoint_remove_confirmation_and_duplicate_point_rejection","ok":true},{"id":"exclusive_slot_assignment_is_enforced","ok":true},{"id":"patrol_session_undo_redo_restore_complete_route","ok":true},{"id":"patrol_store_roundtrip_and_external_conflict","ok":true},{"id":"patrol_compiler_accepts_authored_route","ok":true}],"count":27,"expected_count":27,"ok":true}

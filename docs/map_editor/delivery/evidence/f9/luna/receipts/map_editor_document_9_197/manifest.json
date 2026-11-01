@@ -1,0 +1,1477 @@
+{
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+  "engine": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+  "runs": [
+    {
+      "output_sha256": "691FB62AE17AB4E795C0A274087ECA325F08F7E6902B331E3379543F63A38E44",
+      "exit_code": 0,
+      "result": null,
+      "finished_utc": "2026-11-01T14:16:57.2686525Z",
+      "timed_out": false,
+      "name": "import",
+      "deliberately_terminated": false,
+      "started_utc": "2026-11-01T14:16:37.8653618Z",
+      "ok": true,
+      "arguments": [
+        "--headless",
+        "--editor",
+        "--import",
+        "--quit"
+      ]
+    },
+    {
+      "output_sha256": "E3540287126E64252635C94DFA87F20BF22097F03D5BBFCB15BDA94A2B5AC2D7",
+      "exit_code": 0,
+      "result": {
+        "checks": [
+          {
+            "id": "full_source_roundtrip",
+            "ok": true
+          },
+          {
+            "id": "copy_boundary",
+            "ok": true
+          },
+          {
+            "id": "set_order_hash",
+            "ok": true
+          },
+          {
+            "id": "sequence_order_hash",
+            "ok": true
+          },
+          {
+            "id": "canonical_numeric_oracle",
+            "ok": true
+          },
+          {
+            "id": "canonical_unicode_oracle",
+            "ok": true
+          },
+          {
+            "id": "sha256_oracle",
+            "ok": true
+          },
+          {
+            "id": "duplicate_key_7",
+            "ok": true
+          },
+          {
+            "id": "duplicate_key_8",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_9",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_10",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_11",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_12",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_13",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_14",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_15",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_16",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_17",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_18",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_19",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_20",
+            "ok": true
+          },
+          {
+            "id": "non_finite",
+            "ok": true
+          },
+          {
+            "id": "bounded_depth",
+            "ok": true
+          },
+          {
+            "id": "bounded_string",
+            "ok": true
+          },
+          {
+            "id": "bounded_bytes",
+            "ok": true
+          },
+          {
+            "id": "utf8_strict_25",
+            "ok": true
+          },
+          {
+            "id": "utf8_strict_26",
+            "ok": true
+          },
+          {
+            "id": "utf8_strict_27",
+            "ok": true
+          },
+          {
+            "id": "utf8_strict_28",
+            "ok": true
+          },
+          {
+            "id": "surrogate_strict_29",
+            "ok": true
+          },
+          {
+            "id": "surrogate_strict_30",
+            "ok": true
+          },
+          {
+            "id": "surrogate_strict_31",
+            "ok": true
+          },
+          {
+            "id": "surrogate_pair",
+            "ok": true
+          },
+          {
+            "id": "token_budget",
+            "ok": true
+          },
+          {
+            "id": "unknown_version",
+            "ok": true
+          },
+          {
+            "id": "unknown_field",
+            "ok": true
+          },
+          {
+            "id": "typed_bool",
+            "ok": true
+          },
+          {
+            "id": "typed_integer",
+            "ok": true
+          },
+          {
+            "id": "invalid_draft_readable",
+            "ok": true
+          },
+          {
+            "id": "duplicate_ids",
+            "ok": true
+          },
+          {
+            "id": "broken_reference",
+            "ok": true
+          },
+          {
+            "id": "dependency_reference",
+            "ok": true
+          },
+          {
+            "id": "entity_limit",
+            "ok": true
+          },
+          {
+            "id": "clean_baseline",
+            "ok": true
+          },
+          {
+            "id": "edit_atomic",
+            "ok": true
+          },
+          {
+            "id": "undo",
+            "ok": true
+          },
+          {
+            "id": "redo",
+            "ok": true
+          },
+          {
+            "id": "reject_without_mutation",
+            "ok": true
+          },
+          {
+            "id": "redo_branch_cleared",
+            "ok": true
+          },
+          {
+            "id": "replace_rejection",
+            "ok": true
+          },
+          {
+            "id": "identity_stable",
+            "ok": true
+          },
+          {
+            "id": "duplicate_layer_graph",
+            "ok": true
+          },
+          {
+            "id": "duplicate_internal_references",
+            "ok": true
+          },
+          {
+            "id": "duplicate_atomic_undo",
+            "ok": true
+          },
+          {
+            "id": "duplicate_missing_rejected",
+            "ok": true
+          },
+          {
+            "id": "save_roundtrip",
+            "ok": true
+          },
+          {
+            "id": "overwrite_requires_hash",
+            "ok": true
+          },
+          {
+            "id": "save_backup",
+            "ok": true
+          },
+          {
+            "id": "autosave",
+            "ok": true
+          },
+          {
+            "id": "external_edit",
+            "ok": true
+          },
+          {
+            "id": "recovery_divergence",
+            "ok": true
+          },
+          {
+            "id": "interruption_original_intact",
+            "ok": true
+          },
+          {
+            "id": "pending_preserved",
+            "ok": true
+          },
+          {
+            "id": "concurrent_writer_rejected",
+            "ok": true
+          },
+          {
+            "id": "truncated_pending_rejected",
+            "ok": true
+          },
+          {
+            "id": "missing_directory",
+            "ok": true
+          },
+          {
+            "id": "truncated_file",
+            "ok": true
+          },
+          {
+            "id": "draft_saved",
+            "ok": true
+          },
+          {
+            "id": "recovery_kind_safe",
+            "ok": true
+          },
+          {
+            "id": "io_length_limit",
+            "ok": true
+          }
+        ],
+        "count": 70,
+        "ok": true
+      },
+      "finished_utc": "2026-11-01T14:16:59.3121658Z",
+      "timed_out": false,
+      "name": "document",
+      "deliberately_terminated": false,
+      "started_utc": "2026-11-01T14:16:57.3261576Z",
+      "ok": true,
+      "arguments": [
+        "--headless",
+        "--script",
+        "res://tests/map_editor_document_test.gd"
+      ]
+    },
+    {
+      "output_sha256": "CFBF5FA524724C3707CDA2ED161D588DA0EED8848E0FDCC00FE809AB37093DEC",
+      "exit_code": 0,
+      "result": {
+        "byte_hash": "ab7b65c47701e7eca2df9f896abda68a4e56053081d77893d6773668684022c7",
+        "code": "",
+        "diagnostics": [],
+        "expected_byte_hash": "",
+        "input_hash": "2783ea2307eccb76a765153c6f437c99afc6ae62c85aa36e9fffb847c696e30f",
+        "ok": true,
+        "output_hash": "2783ea2307eccb76a765153c6f437c99afc6ae62c85aa36e9fffb847c696e30f",
+        "valid": true
+      },
+      "finished_utc": "2026-11-01T14:16:59.7086044Z",
+      "timed_out": false,
+      "name": "cli_create",
+      "deliberately_terminated": false,
+      "started_utc": "2026-11-01T14:16:59.3183172Z",
+      "ok": true,
+      "arguments": [
+        "--headless",
+        "--script",
+        "res://scripts/map_authoring/io/headless.gd",
+        "--",
+        "create",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\m1\\map_editor_document_9_197\\.godot\\cli.json",
+        "cli_piece"
+      ]
+    },
+    {
+      "output_sha256": "9D428709D2E92211DCE194EA91EF1622AC442D0689DEE162FD582BEF943834AB",
+      "exit_code": 0,
+      "result": {
+        "byte_hash": "ab7b65c47701e7eca2df9f896abda68a4e56053081d77893d6773668684022c7",
+        "code": "",
+        "diagnostics": [],
+        "input_hash": "2783ea2307eccb76a765153c6f437c99afc6ae62c85aa36e9fffb847c696e30f",
+        "ok": true,
+        "output_hash": "2783ea2307eccb76a765153c6f437c99afc6ae62c85aa36e9fffb847c696e30f",
+        "valid": true
+      },
+      "finished_utc": "2026-11-01T14:17:00.1389740Z",
+      "timed_out": false,
+      "name": "cli_validate",
+      "deliberately_terminated": false,
+      "started_utc": "2026-11-01T14:16:59.7224858Z",
+      "ok": true,
+      "arguments": [
+        "--headless",
+        "--script",
+        "res://scripts/map_authoring/io/headless.gd",
+        "--",
+        "validate",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\m1\\map_editor_document_9_197\\.godot\\cli.json"
+      ]
+    },
+    {
+      "output_sha256": "CFBF5FA524724C3707CDA2ED161D588DA0EED8848E0FDCC00FE809AB37093DEC",
+      "exit_code": 0,
+      "result": {
+        "byte_hash": "ab7b65c47701e7eca2df9f896abda68a4e56053081d77893d6773668684022c7",
+        "code": "",
+        "diagnostics": [],
+        "expected_byte_hash": "",
+        "input_hash": "2783ea2307eccb76a765153c6f437c99afc6ae62c85aa36e9fffb847c696e30f",
+        "ok": true,
+        "output_hash": "2783ea2307eccb76a765153c6f437c99afc6ae62c85aa36e9fffb847c696e30f",
+        "valid": true
+      },
+      "finished_utc": "2026-11-01T14:17:00.5520623Z",
+      "timed_out": false,
+      "name": "cli_copy",
+      "deliberately_terminated": false,
+      "started_utc": "2026-11-01T14:17:00.1521320Z",
+      "ok": true,
+      "arguments": [
+        "--headless",
+        "--script",
+        "res://scripts/map_authoring/io/headless.gd",
+        "--",
+        "copy",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\m1\\map_editor_document_9_197\\.godot\\cli.json",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\m1\\map_editor_document_9_197\\.godot\\cli_copy.json",
+        "absent"
+      ]
+    },
+    {
+      "output_sha256": "F7209365324E35083B190A4AAA366ECC93BB5851D0FC6B1428FDD5AD08C52C5F",
+      "exit_code": -1,
+      "result": {
+        "ok": true,
+        "output_hash": "610de968f415cf5c5561ff851ebba816af4337852f2891a0198c26766aa48df3"
+      },
+      "finished_utc": "2026-11-01T14:17:00.9287494Z",
+      "timed_out": false,
+      "name": "interruption",
+      "deliberately_terminated": true,
+      "started_utc": "2026-11-01T14:17:00.5585549Z",
+      "ok": true,
+      "arguments": [
+        "--headless",
+        "--script",
+        "res://tests/map_editor_document_test.gd",
+        "--",
+        "--interruption"
+      ]
+    },
+    {
+      "output_sha256": "C4F340B9CC524A587506AE3A88E601E61E48FD860096D970B8A4F3501A74F4E5",
+      "exit_code": 0,
+      "result": {
+        "byte_hash": "4bec82ca3c0620ae1e2fcb6b20cfef587ca41f315bc55ded68bb99fcb4b3a2a1",
+        "code": "",
+        "diagnostics": [],
+        "expected_byte_hash": "",
+        "input_hash": "610de968f415cf5c5561ff851ebba816af4337852f2891a0198c26766aa48df3",
+        "ok": true,
+        "output_hash": "610de968f415cf5c5561ff851ebba816af4337852f2891a0198c26766aa48df3",
+        "valid": true
+      },
+      "finished_utc": "2026-11-01T14:17:01.3183238Z",
+      "timed_out": false,
+      "name": "restart_recover",
+      "deliberately_terminated": false,
+      "started_utc": "2026-11-01T14:17:00.9395218Z",
+      "ok": true,
+      "arguments": [
+        "--headless",
+        "--script",
+        "res://scripts/map_authoring/io/headless.gd",
+        "--",
+        "recover",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\m1\\map_editor_document_9_197\\.godot\\interruption.json",
+        "autosave",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\m1\\map_editor_document_9_197\\.godot\\recovered.json"
+      ]
+    },
+    {
+      "output_sha256": "C4F340B9CC524A587506AE3A88E601E61E48FD860096D970B8A4F3501A74F4E5",
+      "exit_code": 0,
+      "result": {
+        "byte_hash": "4bec82ca3c0620ae1e2fcb6b20cfef587ca41f315bc55ded68bb99fcb4b3a2a1",
+        "code": "",
+        "diagnostics": [],
+        "expected_byte_hash": "",
+        "input_hash": "610de968f415cf5c5561ff851ebba816af4337852f2891a0198c26766aa48df3",
+        "ok": true,
+        "output_hash": "610de968f415cf5c5561ff851ebba816af4337852f2891a0198c26766aa48df3",
+        "valid": true
+      },
+      "finished_utc": "2026-11-01T14:17:01.7069439Z",
+      "timed_out": false,
+      "name": "restart_pending",
+      "deliberately_terminated": false,
+      "started_utc": "2026-11-01T14:17:01.3265891Z",
+      "ok": true,
+      "arguments": [
+        "--headless",
+        "--script",
+        "res://scripts/map_authoring/io/headless.gd",
+        "--",
+        "recover",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\m1\\map_editor_document_9_197\\.godot\\interruption.json",
+        "pending",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\m1\\map_editor_document_9_197\\.godot\\recovered_pending.json"
+      ]
+    },
+    {
+      "output_sha256": "5BFFA95A5AE95202E69A88D73D202BEE10F777B2EE7A9A116E7AA4A226784735",
+      "exit_code": 0,
+      "result": {
+        "checks": [
+          {
+            "id": "global_sentinel_committed",
+            "ok": true
+          },
+          {
+            "id": "plugin_enabled_0",
+            "ok": true
+          },
+          {
+            "id": "focus_0",
+            "ok": true
+          },
+          {
+            "id": "shell_add_0",
+            "ok": true
+          },
+          {
+            "id": "shell_duplicate_0",
+            "ok": true
+          },
+          {
+            "id": "shell_lock_0",
+            "ok": true
+          },
+          {
+            "id": "shell_rename_0",
+            "ok": true
+          },
+          {
+            "id": "shell_history_0",
+            "ok": true
+          },
+          {
+            "id": "undo_button_0",
+            "ok": true
+          },
+          {
+            "id": "redo_button_0",
+            "ok": true
+          },
+          {
+            "id": "shell_save_0",
+            "ok": true
+          },
+          {
+            "id": "shell_autosave_0",
+            "ok": true
+          },
+          {
+            "id": "shell_reject_open_0",
+            "ok": true
+          },
+          {
+            "id": "shell_reopen_0",
+            "ok": true
+          },
+          {
+            "id": "save_commits_name_0",
+            "ok": true
+          },
+          {
+            "id": "new_requires_preservation_0",
+            "ok": true
+          },
+          {
+            "id": "new_preserves_draft_0",
+            "ok": true
+          },
+          {
+            "id": "recovery_copy_0",
+            "ok": true
+          },
+          {
+            "id": "plugin_freed_0",
+            "ok": true
+          },
+          {
+            "id": "plugin_enabled_1",
+            "ok": true
+          },
+          {
+            "id": "focus_1",
+            "ok": true
+          },
+          {
+            "id": "shell_add_1",
+            "ok": true
+          },
+          {
+            "id": "shell_duplicate_1",
+            "ok": true
+          },
+          {
+            "id": "shell_lock_1",
+            "ok": true
+          },
+          {
+            "id": "shell_rename_1",
+            "ok": true
+          },
+          {
+            "id": "shell_history_1",
+            "ok": true
+          },
+          {
+            "id": "undo_button_1",
+            "ok": true
+          },
+          {
+            "id": "redo_button_1",
+            "ok": true
+          },
+          {
+            "id": "shell_save_1",
+            "ok": true
+          },
+          {
+            "id": "shell_autosave_1",
+            "ok": true
+          },
+          {
+            "id": "shell_reject_open_1",
+            "ok": true
+          },
+          {
+            "id": "shell_reopen_1",
+            "ok": true
+          },
+          {
+            "id": "save_commits_name_1",
+            "ok": true
+          },
+          {
+            "id": "new_requires_preservation_1",
+            "ok": true
+          },
+          {
+            "id": "new_preserves_draft_1",
+            "ok": true
+          },
+          {
+            "id": "recovery_copy_1",
+            "ok": true
+          },
+          {
+            "id": "plugin_freed_1",
+            "ok": true
+          },
+          {
+            "id": "global_history_preserved",
+            "ok": true
+          },
+          {
+            "id": "global_undo_preserved",
+            "ok": true
+          },
+          {
+            "id": "global_redo_preserved",
+            "ok": true
+          }
+        ],
+        "count": 40,
+        "ok": true
+      },
+      "finished_utc": "2026-11-01T14:17:43.7067937Z",
+      "timed_out": false,
+      "name": "headless_ui",
+      "deliberately_terminated": false,
+      "started_utc": "2026-11-01T14:17:01.7143638Z",
+      "ok": true,
+      "arguments": [
+        "--headless",
+        "--editor"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "sha256": "625EB89631A1E9D73F8E9A15849C4E6F81E00CE3E6E6096A81C43D18D8F8721B",
+      "path": "scripts/map_authoring/agent/ax_session.gd"
+    },
+    {
+      "sha256": "4A17CFD576B95806D2C1278DDF796F024FF18E501E63A2B5BDADC6C47F21306D",
+      "path": "scripts/map_authoring/agent/ax_session.gd.uid"
+    },
+    {
+      "sha256": "3CA7602BCDD9F350340DC2A399A3D7413DCFE86D8A12B7152FA3FFD9AA6AF4D4",
+      "path": "scripts/map_authoring/assets/asset_manifest.gd"
+    },
+    {
+      "sha256": "89F82B78F2D8C6F402768F896B91B01FECF3F191E0BC461EDDA453A294DCEC3A",
+      "path": "scripts/map_authoring/assets/asset_manifest.gd.uid"
+    },
+    {
+      "sha256": "DB277E597D1EEDC99BF88214ED06BE5A272E7D5CEDE1C5CE12730F960BD324CF",
+      "path": "scripts/map_authoring/compiler/compile_cache.gd"
+    },
+    {
+      "sha256": "67A272D4B3C024522DA60F7E18CD9B77CFDB13A28B173F8FE92600DF9583F61A",
+      "path": "scripts/map_authoring/compiler/compile_cache.gd.uid"
+    },
+    {
+      "sha256": "24018CCB4A278ACBE4FFB54F317C3198C25A4AD1C8A21682F013BD89FFF6252B",
+      "path": "scripts/map_authoring/compiler/headless.gd"
+    },
+    {
+      "sha256": "EF98967AD1C40A23CA3F1D51CAEEEA96EE53472504497EC00F6CC463E4280C05",
+      "path": "scripts/map_authoring/compiler/headless.gd.uid"
+    },
+    {
+      "sha256": "DBC654F02543ABA90D8D8B5562B6E2AD097C0F6B4A0F7E51655FA708ED46B64B",
+      "path": "scripts/map_authoring/compiler/terrain_compiler.gd"
+    },
+    {
+      "sha256": "7397D65F9E5F280DDB52F313401CEA1BB0A6D05967F1DAD35D5A75882897E1E5",
+      "path": "scripts/map_authoring/compiler/terrain_compiler.gd.uid"
+    },
+    {
+      "sha256": "5A59D144BF8115B4DADB49F23089D801BEB8487846EB79E7E52930687DEC22A4",
+      "path": "scripts/map_authoring/compiler/terrain_partition.gd"
+    },
+    {
+      "sha256": "5A6EC4B38E3D67FB49394B0713ABF86B23B0446FA2ED803805C3745898C270D8",
+      "path": "scripts/map_authoring/compiler/terrain_partition.gd.uid"
+    },
+    {
+      "sha256": "489DF61511A499C0C820FBC997F2A333E27B1BA0F101E25C8315709177C284B0",
+      "path": "scripts/map_authoring/compiler/terrain_topology.gd"
+    },
+    {
+      "sha256": "3BE96DC103DDE328C38EFDE8729552A50EA0983A33CA9E31741A5B37FE5531D2",
+      "path": "scripts/map_authoring/compiler/terrain_topology.gd.uid"
+    },
+    {
+      "sha256": "EEBC64334F1ADB1022BDC320023B34EE7906AB6083F34F3BA71E88D6288D68BC",
+      "path": "scripts/map_authoring/composition/border_geometry.gd"
+    },
+    {
+      "sha256": "F3AA7A1E4DD257C208CFD623EBA368321DE4A15F57AAE96A911FDE505CEF3634",
+      "path": "scripts/map_authoring/composition/border_geometry.gd.uid"
+    },
+    {
+      "sha256": "37C158E94F6FB82F2E895BBDF756D6AD09A2CC6DD54C7DD38378E1265942E29D",
+      "path": "scripts/map_authoring/composition/border_operations.gd"
+    },
+    {
+      "sha256": "63D2393745CBA1BF3F970AE50A95C08FBEE366F188A876C6A65818485E608628",
+      "path": "scripts/map_authoring/composition/border_operations.gd.uid"
+    },
+    {
+      "sha256": "03C6987D369ABDE9D4E0A8A9CF2874BC2CBAF114FA97199DE49A769198746C89",
+      "path": "scripts/map_authoring/composition/border_profile_catalog.gd"
+    },
+    {
+      "sha256": "5F96B79039C1D262852CFA2147C2622015B82A69295A28111D4998E060D0A265",
+      "path": "scripts/map_authoring/composition/border_profile_catalog.gd.uid"
+    },
+    {
+      "sha256": "4CA85C30F5325C1D95D4AA91FA7206AEBE4B8AE346A10A5AA0DF80CBA762B93B",
+      "path": "scripts/map_authoring/composition/border_spans.gd"
+    },
+    {
+      "sha256": "14517D5BA4365149EB76A450C6BB0E906872ADFD8D93BD4ADE343D4FB6C06CB8",
+      "path": "scripts/map_authoring/composition/border_spans.gd.uid"
+    },
+    {
+      "sha256": "982C16AF00C235E727E2EF84DDC09E6B0AF28057CAC352CB0BEBA935B1452727",
+      "path": "scripts/map_authoring/composition/border_union.gd"
+    },
+    {
+      "sha256": "6D09F9A08FDFECFC3780D3042A2F4FC8E6090F6FEFCCC624C4A6942F5DA54C5C",
+      "path": "scripts/map_authoring/composition/border_union.gd.uid"
+    },
+    {
+      "sha256": "1025469AC7C733BE36BE4457F74D500A069979F8CC2976179765FDE3E806B5F7",
+      "path": "scripts/map_authoring/composition/headless.gd"
+    },
+    {
+      "sha256": "F99B89667A50C64015CEF0CB9810CF892E8817009417060F813634531AD19791",
+      "path": "scripts/map_authoring/composition/headless.gd.uid"
+    },
+    {
+      "sha256": "00AEEFD635D5B322DF9151CE5E51974D9014BC14F6BA04636B1045AECE3C61A2",
+      "path": "scripts/map_authoring/composition/map_compiler.gd"
+    },
+    {
+      "sha256": "225A7B659F0E3956DA7BF40A4288BD877F7C09C61FDD65740095E6C86C4FD274",
+      "path": "scripts/map_authoring/composition/map_compiler.gd.uid"
+    },
+    {
+      "sha256": "FD4E789F7EBB508DCAA5823E435697FAE4285B49DCF1B50E6C6AD13F843D76B3",
+      "path": "scripts/map_authoring/composition/map_document.gd"
+    },
+    {
+      "sha256": "CC885B62A848192DF6F6826B6EFC5BDA82F0FA3DB010B736FE094962521B2751",
+      "path": "scripts/map_authoring/composition/map_document.gd.uid"
+    },
+    {
+      "sha256": "45FD52CCEA5D043382947776F5C8DA83AF8EBB943721785A7EC3132FF76F9418",
+      "path": "scripts/map_authoring/composition/map_operations.gd"
+    },
+    {
+      "sha256": "9125B007BD436A9F8DE298F391379DE1F1EF86DD3409F0C600657896AB7AAA21",
+      "path": "scripts/map_authoring/composition/map_operations.gd.uid"
+    },
+    {
+      "sha256": "EE5F4D6BFB73FDCD937B485C58638A28B6CF196BA57BE127A0264D8889C9BD26",
+      "path": "scripts/map_authoring/composition/map_panel.gd"
+    },
+    {
+      "sha256": "3AFF0A338D2500BC7A2531114E9DA8A3010177D1E87582D340007071A2785DB5",
+      "path": "scripts/map_authoring/composition/map_panel.gd.uid"
+    },
+    {
+      "sha256": "868D0ABF9EF4795CB18E5AC562CA1BD6BC6E6D82B7D46DDF8CE9F48E9DF8C839",
+      "path": "scripts/map_authoring/composition/map_session.gd"
+    },
+    {
+      "sha256": "6E1A28FD001581B1A6CE5567C2AB8CEC8AC5729D3128423CE678CCAD011D6C76",
+      "path": "scripts/map_authoring/composition/map_session.gd.uid"
+    },
+    {
+      "sha256": "E4FA1DBB60305B0EB0F8AE4DD6C616CE9FFBA62C53AB92FD9D3B0A706B7F2C33",
+      "path": "scripts/map_authoring/composition/map_store.gd"
+    },
+    {
+      "sha256": "A06C4DF2E222ECB1574C38CC663A772B6414853FF287FE639CF4A120E8A8E319",
+      "path": "scripts/map_authoring/composition/map_store.gd.uid"
+    },
+    {
+      "sha256": "EBAC3311B2CB26909E6FB445E56D7BE338539E47E280847E2DD13CABE30EA958",
+      "path": "scripts/map_authoring/context/context_operations.gd"
+    },
+    {
+      "sha256": "943D4E6486A30303F083CEFCA4CAA646257B21051DB0B54375788F62D3B045CC",
+      "path": "scripts/map_authoring/context/context_operations.gd.uid"
+    },
+    {
+      "sha256": "E51097395EC168B57F81A1BD87BCDDAFD8F0ED1B36BAFD5BA5E56DD8EEFD26D2",
+      "path": "scripts/map_authoring/context/context_panel.gd"
+    },
+    {
+      "sha256": "55681AF63C008726F470901EFDA65A467B2C1B0B5FAE5DB80E790788B0C1B03F",
+      "path": "scripts/map_authoring/context/context_panel.gd.uid"
+    },
+    {
+      "sha256": "E8339D0F3E45D270B4A0F56328DA35918FBD3BB1FD099756EA234581487D5068",
+      "path": "scripts/map_authoring/context/map_context_panel.gd"
+    },
+    {
+      "sha256": "C9F08236DE0DE180AC74EEE4AE62ACF3D25C83BEAC63F3394AFBEE80F5B25B20",
+      "path": "scripts/map_authoring/context/map_context_panel.gd.uid"
+    },
+    {
+      "sha256": "0BA3B5663738827C7EEC5ED7AB2B70E3AF458224CF461EFF8CC13FAE905BD41C",
+      "path": "scripts/map_authoring/context/piece_context.gd"
+    },
+    {
+      "sha256": "6C23258930DD19D4B83E07D87CA148E9739EE3966E2FD3FC5E732B2D5A4A8D6A",
+      "path": "scripts/map_authoring/context/piece_context.gd.uid"
+    },
+    {
+      "sha256": "72F794AD6887081768D34C2893646C4FE0775945793034DF46813B9CD7D99D66",
+      "path": "scripts/map_authoring/context/population_context.gd"
+    },
+    {
+      "sha256": "EDF813850D80106E2BEFA7DF063920FE8C4E5B0B71928DE05CA2257CE85AF354",
+      "path": "scripts/map_authoring/context/population_context.gd.uid"
+    },
+    {
+      "sha256": "8547C4D3BED0C62EB9CDB68B04A364A4C09118B23B1ECFBE424FA7D84C189606",
+      "path": "scripts/map_authoring/document/document_session.gd"
+    },
+    {
+      "sha256": "5160B1636698EAC7FEEBED66EAE391E5A41A5B2017E26DA43A2FA4B64981A918",
+      "path": "scripts/map_authoring/document/document_session.gd.uid"
+    },
+    {
+      "sha256": "2758159451C2AEA8C386AD45DF7C7A5A1FA65B8151588968B97A1D3363852754",
+      "path": "scripts/map_authoring/document/source_document.gd"
+    },
+    {
+      "sha256": "09B91C385B8BC09CB2253CCC471D860F811D41D6E74A7D36FA191DCA4B9D35F6",
+      "path": "scripts/map_authoring/document/source_document.gd.uid"
+    },
+    {
+      "sha256": "1C1491992A3EBDCAEDB94F29909F5D04142EB2B9C73822732CCE467019606637",
+      "path": "scripts/map_authoring/document/source_schema.gd"
+    },
+    {
+      "sha256": "B80A7CAD5747C44EDAA213661E0E4052A714273AE3F17D3F39ECFDC0049284BF",
+      "path": "scripts/map_authoring/document/source_schema.gd.uid"
+    },
+    {
+      "sha256": "788FFDA974D45B800033078A2612C2FE9058AF39AFA71B05D8E509F2DD691404",
+      "path": "scripts/map_authoring/exchange/exchange_ax.gd"
+    },
+    {
+      "sha256": "908A3C707B2544C003AD9C3AD7B7A1F127FE215AE3D610BC00EAAEDDA2EBECA1",
+      "path": "scripts/map_authoring/exchange/exchange_ax.gd.uid"
+    },
+    {
+      "sha256": "AE586036CC96BF5234FF540CFFF330F2C0D37D0C89908BDB6917BE8769800B99",
+      "path": "scripts/map_authoring/exchange/exchange_panel.gd"
+    },
+    {
+      "sha256": "49D3705C4739E43C5D5C7CE56BD1B6CEC9B2C49A894D06A0E38190462517DE27",
+      "path": "scripts/map_authoring/exchange/exchange_panel.gd.uid"
+    },
+    {
+      "sha256": "EDF184C93EE718932A4DABA6812785014976B7CB0B66F27FC28A7331B0089D19",
+      "path": "scripts/map_authoring/exchange/exchange.gd"
+    },
+    {
+      "sha256": "0EAFB02D5A482770531EED4B5166D6618A9E9FB60C3EF3E2FC07929C2562FAF8",
+      "path": "scripts/map_authoring/exchange/exchange.gd.uid"
+    },
+    {
+      "sha256": "F81FBCE1C81AD3E5C5FCA062666A5E8DD897DC4EA6B04F310FACDC083610F348",
+      "path": "scripts/map_authoring/exchange/headless.gd"
+    },
+    {
+      "sha256": "566599D23C0B369C192C1FB5AED977D2F968FB850B129AB6D815439C52D719EF",
+      "path": "scripts/map_authoring/exchange/headless.gd.uid"
+    },
+    {
+      "sha256": "8EF7D97056FFF097245DD5E202008D3D9A31F8F8CCC6616278B089022002DB69",
+      "path": "scripts/map_authoring/generation/assembler_adapter.gd"
+    },
+    {
+      "sha256": "11CCBF0B70D9992CB48A4924600B1FC5419266141339AAD8BB370579C6B3192F",
+      "path": "scripts/map_authoring/generation/assembler_adapter.gd.uid"
+    },
+    {
+      "sha256": "67910B54CC2A6BDF631D543D8A8BE02BEA98F5B2B1984281390BB36B61954748",
+      "path": "scripts/map_authoring/generation/generation_document.gd"
+    },
+    {
+      "sha256": "DC12469546560E786ECDFD262E77623623E910AFB90ED4FD92D33AE35A22B9CB",
+      "path": "scripts/map_authoring/generation/generation_document.gd.uid"
+    },
+    {
+      "sha256": "6389265D5B1FA21DDAF03E4AE6785334BEC0F7DF5E76491D77A312E97B4B8BE2",
+      "path": "scripts/map_authoring/generation/generation_panel.gd"
+    },
+    {
+      "sha256": "36CE316803DE7A3E1F0EB6DF10D9E791AA09E07E2276F81642AEF1F47B8570B2",
+      "path": "scripts/map_authoring/generation/generation_panel.gd.uid"
+    },
+    {
+      "sha256": "78A1CF18A4A551D67E97790D3354664DD1A9E71ED9BF02783216AD7D1EE82B3B",
+      "path": "scripts/map_authoring/generation/generation_solver.gd"
+    },
+    {
+      "sha256": "E4ADB48E2CFC84F7A57C9645DAE87D7C0D9C42755D106AE7648EBDF57FD5E0FB",
+      "path": "scripts/map_authoring/generation/generation_solver.gd.uid"
+    },
+    {
+      "sha256": "A564DDC64D685329269C247A0BBE7F4055A3F5214D2DC716FDE892CEBD77DFB9",
+      "path": "scripts/map_authoring/generation/generation_store.gd"
+    },
+    {
+      "sha256": "A10CB3668AAF5C5B0368E8EB28BE6CE115C99E6656DF7A8664A1FDE47B793E4D",
+      "path": "scripts/map_authoring/generation/generation_store.gd.uid"
+    },
+    {
+      "sha256": "5EFF52EA6B8858B8E5434924E2A49F89B035F72B994E900B79721B090731A72D",
+      "path": "scripts/map_authoring/generation/headless.gd"
+    },
+    {
+      "sha256": "A2D772C0065FF8E59DFEECD5061382336C46522E831D87CFEF2A89176FE1135E",
+      "path": "scripts/map_authoring/generation/headless.gd.uid"
+    },
+    {
+      "sha256": "78A0A16744ED67F77418FEBB7E5779180622F12283A057889E9693848DFD0120",
+      "path": "scripts/map_authoring/io/decimal_float.gd"
+    },
+    {
+      "sha256": "5D8987F99083A4C8195F050225E110E1EDC91A90362BA5E22A10285DDBE36090",
+      "path": "scripts/map_authoring/io/decimal_float.gd.uid"
+    },
+    {
+      "sha256": "D63D967C81D5869DF5CC7205256804802AAA75B2169F2CAD6E7371812D463F36",
+      "path": "scripts/map_authoring/io/headless.gd"
+    },
+    {
+      "sha256": "828861B2D95F3DF43FAF5E8225B53C7B6F17CC71DA38C6CE1FCB80A3ED311393",
+      "path": "scripts/map_authoring/io/headless.gd.uid"
+    },
+    {
+      "sha256": "A0161B881684189AA4C5BA5FB20A22FBF2ECD18677296F959673E8B078C820EA",
+      "path": "scripts/map_authoring/io/source_store.gd"
+    },
+    {
+      "sha256": "AC6ADBABBB658B75435ABA957C800DB4ADDEB4113C494CEA05B8990E84E63ADC",
+      "path": "scripts/map_authoring/io/source_store.gd.uid"
+    },
+    {
+      "sha256": "6130EE253A48EF982F2109C5D6C32149CE265D765A4DD3AFA1D6648F12D1661C",
+      "path": "scripts/map_authoring/io/strict_json.gd"
+    },
+    {
+      "sha256": "901514965C63BD7DA411FC7EBF0E54B1A4FA41067D1FCDE9D81CE2D6A17EA957",
+      "path": "scripts/map_authoring/io/strict_json.gd.uid"
+    },
+    {
+      "sha256": "080F2641C3D415520A5CB8E374E0AAA37E8A7BC7E3D1554F8FC951A7D0C23BB8",
+      "path": "scripts/map_authoring/library/editor_preferences.gd"
+    },
+    {
+      "sha256": "A32AC3AAB29F2F028B9F35C13F3CC78B03A958BD46B9A26902D66079D1208FC5",
+      "path": "scripts/map_authoring/library/editor_preferences.gd.uid"
+    },
+    {
+      "sha256": "44A62CE4D9B8DC72714C947B6A5340677FCE2AC9104AD8D88DF4C3EAD62BD759",
+      "path": "scripts/map_authoring/library/library_model.gd"
+    },
+    {
+      "sha256": "DE600C655AF4B8D4A1BAFC51EA2E1B8C73C0208DF919670479CF21E2B70828BB",
+      "path": "scripts/map_authoring/library/library_model.gd.uid"
+    },
+    {
+      "sha256": "2BFAAA1E0D2D3679490B9E568B5648C7893EDB32105E4D9BC4D5FEF55B51ECD4",
+      "path": "scripts/map_authoring/library/library_panel.gd"
+    },
+    {
+      "sha256": "F66327C5A46F48B26BCB993C51940E5B94EE0C63713F6A7B58DD3CBB4BD67359",
+      "path": "scripts/map_authoring/library/library_panel.gd.uid"
+    },
+    {
+      "sha256": "07023FDDDB962A9FF0703E565AB071E773D9583F9F0FCC5D3F18AA0F0871CF51",
+      "path": "scripts/map_authoring/objects/object_compiler.gd"
+    },
+    {
+      "sha256": "863B3EC186289F8513771C9A8DE48AD8A4963602141F3C6AB458D79765B25D0A",
+      "path": "scripts/map_authoring/objects/object_compiler.gd.uid"
+    },
+    {
+      "sha256": "632516D3D19067E9FB608A52C2997128E128A6E3E2758C9B733FEA7EB22840E1",
+      "path": "scripts/map_authoring/objects/object_operations.gd"
+    },
+    {
+      "sha256": "27405000800208CF94B17FA9CF74D497D2BD42BDC06930F19685F9FA498B335B",
+      "path": "scripts/map_authoring/objects/object_operations.gd.uid"
+    },
+    {
+      "sha256": "E063DE71634B44B4282981815FE1085682E6706847BAA7EDEBE812DF8C4DE06A",
+      "path": "scripts/map_authoring/objects/object_panel.gd"
+    },
+    {
+      "sha256": "9C2557C51FF49A9B6EA637963568A5AFBDDE9CC884FEA624A5078F8AD4EEE714",
+      "path": "scripts/map_authoring/objects/object_panel.gd.uid"
+    },
+    {
+      "sha256": "C6DB77778EA10D7BA95D500E170F15BCFFE08DA9BB8D181DFE2358032BCFB1D0",
+      "path": "scripts/map_authoring/objects/object_schema.gd"
+    },
+    {
+      "sha256": "11ECC9024C62005D9FB367E9E2CEB225D770BEF39BE6AE2EA0CAD5D0D976599B",
+      "path": "scripts/map_authoring/objects/object_schema.gd.uid"
+    },
+    {
+      "sha256": "0678F7E0997CA351B5455ABE878FA138D0F6E2230CC1DF40ABA977AADEEBE4BD",
+      "path": "scripts/map_authoring/objects/object_view.gd"
+    },
+    {
+      "sha256": "EBA8600C8B440904C2DF9AF94263B8C066996184AEB7A00D265F069FCCDCD51C",
+      "path": "scripts/map_authoring/objects/object_view.gd.uid"
+    },
+    {
+      "sha256": "94BE0AB10C86F6C74FEBBB6DDD61D4A309EDD3589A283EE62C816EA77D53A193",
+      "path": "scripts/map_authoring/objects/prop_catalog.gd"
+    },
+    {
+      "sha256": "C966B785580110B1E7C6ADB0BE7ADFAFAE300E12AA92069BA4586CA07BA4C577",
+      "path": "scripts/map_authoring/objects/prop_catalog.gd.uid"
+    },
+    {
+      "sha256": "E25E607CF720139689EE2B75CC4DFFACD098703459925DB05DA8C678BFBAC32B",
+      "path": "scripts/map_authoring/patrol/headless.gd"
+    },
+    {
+      "sha256": "9B6D99CF659051989A95AA33C81DA3CF92EAC559035FC267F3EDB4133E7DBC54",
+      "path": "scripts/map_authoring/patrol/headless.gd.uid"
+    },
+    {
+      "sha256": "2DA46BDDE20E60069AEB59EDB10F2799A7757D0A5BE5EA21682F42A852CE36F8",
+      "path": "scripts/map_authoring/patrol/patrol_canvas.gd"
+    },
+    {
+      "sha256": "D21154D56E81719374B4DA041AFDCDD4F5E6FC74F169E7DD877B60A6C2C51483",
+      "path": "scripts/map_authoring/patrol/patrol_canvas.gd.uid"
+    },
+    {
+      "sha256": "C230C50F611ACC6DA867A2174FEAF301BCE76D76F0FBE56AB7562FF1FD60865B",
+      "path": "scripts/map_authoring/patrol/patrol_compiler.gd"
+    },
+    {
+      "sha256": "D5758BB91D5763FFE3F2D765F7FE46E2E4BD936619D8B50B2C8D5C84E79A68B1",
+      "path": "scripts/map_authoring/patrol/patrol_compiler.gd.uid"
+    },
+    {
+      "sha256": "4646D6CED2A60497FE1D7A7E3F9ECA91FCAFF0B7C9ECB26473D321BF92EBE7A2",
+      "path": "scripts/map_authoring/patrol/patrol_document.gd"
+    },
+    {
+      "sha256": "BAB9788A6C751928B522FE32A5E3B217ADC0EE4860138D02A68025B422CAC7A2",
+      "path": "scripts/map_authoring/patrol/patrol_document.gd.uid"
+    },
+    {
+      "sha256": "7AC6DED1D7721F77AD421825D63701C6D8C13BE349ED9CAF068BCAA7648678A8",
+      "path": "scripts/map_authoring/patrol/patrol_operations.gd"
+    },
+    {
+      "sha256": "0163CDA8436F597B84EF822AA75818144719E4371A4B6AD2DB35B2BD32371267",
+      "path": "scripts/map_authoring/patrol/patrol_operations.gd.uid"
+    },
+    {
+      "sha256": "37F3B8099F884AF8EEFAA33A2B51739B880735FD5C5A2EA3A7DF8CDBF5F255B8",
+      "path": "scripts/map_authoring/patrol/patrol_panel.gd"
+    },
+    {
+      "sha256": "E1E4EA42DD68ED483088761076824DC041BBFBD1B815604BB0258376780676A2",
+      "path": "scripts/map_authoring/patrol/patrol_panel.gd.uid"
+    },
+    {
+      "sha256": "55A703EA646F19AA7EDDF0807079BDE987D6288097849EE01F148530AE6D30A0",
+      "path": "scripts/map_authoring/patrol/patrol_preview.gd"
+    },
+    {
+      "sha256": "6E37E0449CD7871A35FAB71A9EEC151018D462EE240358D070165E20B92343A8",
+      "path": "scripts/map_authoring/patrol/patrol_preview.gd.uid"
+    },
+    {
+      "sha256": "8D0F67D302D3F8A6BB724B67F877249ECECD87871DF6E0D28506BBCECF258EED",
+      "path": "scripts/map_authoring/patrol/patrol_session.gd"
+    },
+    {
+      "sha256": "1FC9BEC02451F86D396ADE5FE52599B4727CA54803542F0B696E85653010421F",
+      "path": "scripts/map_authoring/patrol/patrol_session.gd.uid"
+    },
+    {
+      "sha256": "4BBE89FAFF31CF2CF78BDC15693FD7B0BE7206A0169926618721E309A682C415",
+      "path": "scripts/map_authoring/patrol/patrol_store.gd"
+    },
+    {
+      "sha256": "BEC283BB6F62E77155D7CBF1361C54F551E2CE64D75F4ACE486F1A8475F05BE5",
+      "path": "scripts/map_authoring/patrol/patrol_store.gd.uid"
+    },
+    {
+      "sha256": "C51FAACFD908C90E39717DC73B333D87BEDF840C2E73F54B9889E80239A78412",
+      "path": "scripts/map_authoring/patrol/worker_headless.gd"
+    },
+    {
+      "sha256": "F8F77C4EE274B81B46C006D843692747AF74606999BCC2C57114C89D6E19AC8E",
+      "path": "scripts/map_authoring/patrol/worker_headless.gd.uid"
+    },
+    {
+      "sha256": "B70DC14C3FEDFA20A3824D53B8B2325E5C5679A85ACC79B5EDA2A8C97A172EFD",
+      "path": "scripts/map_authoring/population/headless.gd"
+    },
+    {
+      "sha256": "8CD7B73E6589B6E07909F7A1E27CBFB1B6C4D3817629DD0F95622E8E02496CF6",
+      "path": "scripts/map_authoring/population/headless.gd.uid"
+    },
+    {
+      "sha256": "BE7EFFDE7A9DDED2B1C83B2AA0BFD4C1D9D49754F413AD09AB206D8525C1EFA9",
+      "path": "scripts/map_authoring/population/population_canvas.gd"
+    },
+    {
+      "sha256": "947A8C89F50AF0E7413E1120077CCA0876BB228CEB03A13B98B07DCDF9D818F1",
+      "path": "scripts/map_authoring/population/population_canvas.gd.uid"
+    },
+    {
+      "sha256": "CF58EA12CBDB8610348A3480C282279AEC0C44483CDF2FA9F9224AF69A8E3271",
+      "path": "scripts/map_authoring/population/population_catalog.gd"
+    },
+    {
+      "sha256": "CC1CAEC469D67F18EFA79F6BBD701C5D5C25A7FF18B588EDE9AEBD41354E57DB",
+      "path": "scripts/map_authoring/population/population_catalog.gd.uid"
+    },
+    {
+      "sha256": "7D230B548C95EB1A216382766982367673093DDFBEE7C441D1A9349D8F7856D7",
+      "path": "scripts/map_authoring/population/population_compiler.gd"
+    },
+    {
+      "sha256": "9946A9A8DAA3316971855ADD3BCB066FE11CDF4096B321F2629A83C197BC3DE9",
+      "path": "scripts/map_authoring/population/population_compiler.gd.uid"
+    },
+    {
+      "sha256": "62EFF42D0DA1E62A0F870B6DAA5AE61D8D66251D3C1E1DB321725B91632D1CA2",
+      "path": "scripts/map_authoring/population/population_document.gd"
+    },
+    {
+      "sha256": "B7CDEA254D1F2ECAF35478958A47BF016FA449917E5FD54BBF0F6554444E3900",
+      "path": "scripts/map_authoring/population/population_document.gd.uid"
+    },
+    {
+      "sha256": "AC0492CE3EC798D5CEB13FACABA30868CC007B8A2CBB4647303C24AA2FFCBE8F",
+      "path": "scripts/map_authoring/population/population_operations.gd"
+    },
+    {
+      "sha256": "AC93A4F9ECE3BB7F3F9C89222C0B90417D93E320779EFF57A0D6EFF7E59EA85D",
+      "path": "scripts/map_authoring/population/population_operations.gd.uid"
+    },
+    {
+      "sha256": "7815AE8DC7722CD577B629A3B1E40F043BE55B7420B71EE97E7994B3A8FAC3A4",
+      "path": "scripts/map_authoring/population/population_panel.gd"
+    },
+    {
+      "sha256": "3FDF8782C3B5ECF608E05573B538A66C3277B4C05A5C19DCB3A5375CBC0625CE",
+      "path": "scripts/map_authoring/population/population_panel.gd.uid"
+    },
+    {
+      "sha256": "2643A0EC91586E576BE22C2A6223727910C4EC628D63AB0E4BDD9A987B7DF75B",
+      "path": "scripts/map_authoring/population/population_session.gd"
+    },
+    {
+      "sha256": "573ED71DC895358090122B27AAD2D79802FD76D5A40D670746DF91D49823CCA9",
+      "path": "scripts/map_authoring/population/population_session.gd.uid"
+    },
+    {
+      "sha256": "E791AAF38A997870E276F73B9E198B48DCF78386A1998E7C3B8A160D5F32EDC8",
+      "path": "scripts/map_authoring/population/population_store.gd"
+    },
+    {
+      "sha256": "5AB2884B933E50BB2C652CE94B769A1DE98EF9098B4C4CA3D73C94BBF5081BDE",
+      "path": "scripts/map_authoring/population/population_store.gd.uid"
+    },
+    {
+      "sha256": "719CD8D71BEBC003AF5AEF542D966927D60C9F398C6F425BEE9481963393374C",
+      "path": "scripts/map_authoring/population/population_worker.gd"
+    },
+    {
+      "sha256": "57BE4477BCE097A9A5D1735DD819D2DD59AB91283F92E2D7B3E5A52AAF7651F2",
+      "path": "scripts/map_authoring/population/population_worker.gd.uid"
+    },
+    {
+      "sha256": "20279756B91A0C7E8A34BE72016E20AC139B02E26FED5157F44BB5B533538C86",
+      "path": "scripts/map_authoring/population/worker_headless.gd"
+    },
+    {
+      "sha256": "D3969C6F9CF81092BE876EAE4881911F647F16E47BE3335DBC13076F5A701D43",
+      "path": "scripts/map_authoring/population/worker_headless.gd.uid"
+    },
+    {
+      "sha256": "6364ED99C0835232885EDA02098FC99D1C04747A8073E1CEBCD47AB6FBFC0EC2",
+      "path": "scripts/map_authoring/preview/gameplay_app.gd"
+    },
+    {
+      "sha256": "675304B103DDD52DE70C91B074A928EF4B5B6306FBF9C88F811CE7456056FFD7",
+      "path": "scripts/map_authoring/preview/gameplay_app.gd.uid"
+    },
+    {
+      "sha256": "E16DF1107EBF53F2450AA910783196591E5BF5AFA0C52B7718F9C0763E62420C",
+      "path": "scripts/map_authoring/preview/gameplay_candidate.gd"
+    },
+    {
+      "sha256": "1BD08E6217AB61BD89B6FBEB23357C05432E4FBBD9E6BD6F59D86BCFE6B6AB76",
+      "path": "scripts/map_authoring/preview/gameplay_candidate.gd.uid"
+    },
+    {
+      "sha256": "13FDFB7CCA398AF9FEF5ADB1BBED35355383C364E8786E577553F6776D1BB108",
+      "path": "scripts/map_authoring/preview/gameplay_cli.gd"
+    },
+    {
+      "sha256": "03EF57C14FB895F4AC974C55D4DDC6842C6E555994F8CC1F7B3F80C1128CA4F7",
+      "path": "scripts/map_authoring/preview/gameplay_cli.gd.uid"
+    },
+    {
+      "sha256": "DAB9FD609686FBC97F4D58F2189AB91DA1697BFE189A954C705EFD21AEF36895",
+      "path": "scripts/map_authoring/preview/gameplay_launcher.gd"
+    },
+    {
+      "sha256": "09710B4E744E5D5687B83CDDBE8A43D7114DB7D75F33B3BE21A4E0F214F0F86F",
+      "path": "scripts/map_authoring/preview/gameplay_launcher.gd.uid"
+    },
+    {
+      "sha256": "B06F8F02E2AE661F88F078EE7305A559B8F4374D61BDF66CFBB621D60DB1497E",
+      "path": "scripts/map_authoring/preview/gameplay_protocol.gd"
+    },
+    {
+      "sha256": "BA1420633EFB1288979414C00B49F1C0F067BC691ABBF72B15B188538EB076E3",
+      "path": "scripts/map_authoring/preview/gameplay_protocol.gd.uid"
+    },
+    {
+      "sha256": "53198DD9471E2DDB10CEE2129D1C3C377B8338BF1F6F09EC608F7CB783868B52",
+      "path": "scripts/map_authoring/preview/gameplay_tools.gd"
+    },
+    {
+      "sha256": "09993B3F18788BCA9B7BB47318931D26842B68D4C69AAD57657AB02AADEC9860",
+      "path": "scripts/map_authoring/preview/gameplay_tools.gd.uid"
+    },
+    {
+      "sha256": "27E64BC0930FF75B87EB22AA46509DCB556AB944F084F51AEBB02C7357F80ED3",
+      "path": "scripts/map_authoring/preview/map_canvas.gd"
+    },
+    {
+      "sha256": "E86B434112CD1FC70C1CDEB403A2AA24172DC89DAAB270C5DFD2B284BF096702",
+      "path": "scripts/map_authoring/preview/map_canvas.gd.uid"
+    },
+    {
+      "sha256": "486FD1F9957CBF3BD0BA4FEBAAB3D4A4D55EC4EC3E666D351025BC5D4D460D26",
+      "path": "scripts/map_authoring/preview/viewport_tools.gd"
+    },
+    {
+      "sha256": "1F17CF69FAFAB62A1653BA21E2E3D5E1D64ACE9C9C1EA3B369AF13970D586E17",
+      "path": "scripts/map_authoring/preview/viewport_tools.gd.uid"
+    },
+    {
+      "sha256": "1A00079A93F4D81D7FAF51E1A914F2AC0CDC4989BDD04EAF7A80FB4BDA74BBCC",
+      "path": "scripts/map_authoring/synthesis/headless.gd"
+    },
+    {
+      "sha256": "3E7ED413E603FFF4AB5CE8A6DBBE10967926AB0BB8A557F71CAA2D04FA7DCB6C",
+      "path": "scripts/map_authoring/synthesis/headless.gd.uid"
+    },
+    {
+      "sha256": "05C2DA9728BB7E533FBF18AB9DBCFE0C3222644C7EB78CF066C2002A5B595794",
+      "path": "scripts/map_authoring/synthesis/receipt_schema.gd"
+    },
+    {
+      "sha256": "94A0E5330889B4D4D1BF59B07CC822DA24F219D25691B09A921E59934818BA7E",
+      "path": "scripts/map_authoring/synthesis/receipts_view.gd"
+    },
+    {
+      "sha256": "A41CF2367294B8080BC30043C6310222E5429473E08475CB53B1CA05FA08F718",
+      "path": "scripts/map_authoring/synthesis/receipts.gd"
+    },
+    {
+      "sha256": "03B20C35FD3805C74215A7EFBEE5843F66167C08EAA898293AB7488F5DCC592E",
+      "path": "scripts/map_authoring/synthesis/regional_synthesis.gd"
+    },
+    {
+      "sha256": "A76FA1BFF54145D5AD89097CC6C9A8D532595D4741062B44FDC44F9A36F15828",
+      "path": "scripts/map_authoring/synthesis/regional_synthesis.gd.uid"
+    },
+    {
+      "sha256": "EA701E25431CF3515B8DAF1C84FA41DC58F341A0F2D409194BF38CA1D81CE84E",
+      "path": "scripts/map_authoring/synthesis/root_synthesis_section.gd"
+    },
+    {
+      "sha256": "75D89D1728D719FBE612F9E8C70DAD7C9EDD75B3F969A48F80F79C3D8F63F60F",
+      "path": "scripts/map_authoring/synthesis/root_synthesis_section.gd.uid"
+    },
+    {
+      "sha256": "713B9E5FDD50A91DA147AA421BF1CC13189509A2AF79CE60CC1B684024382FF1",
+      "path": "scripts/map_authoring/synthesis/root_synthesis.gd"
+    },
+    {
+      "sha256": "46700EBFF638BF2C7EE67CB91ED1FD6CB503DE4D3D1107950EC2502F25E39081",
+      "path": "scripts/map_authoring/synthesis/root_synthesis.gd.uid"
+    },
+    {
+      "sha256": "3CDF296F0F23ACE0A43EDF958B780836669ED2E98A2FBD1EC17A247E76633ACF",
+      "path": "scripts/map_authoring/synthesis/synthesis_section.gd"
+    },
+    {
+      "sha256": "F5376D52DB2AC48DF155F581EB59B4FD0BA23D5FA2AB6B2890F5865B322692F3",
+      "path": "scripts/map_authoring/synthesis/synthesis_section.gd.uid"
+    },
+    {
+      "sha256": "DA63233FCB4400F0316AD93A81319E7C57C94FE51B737207343092A26FE69357",
+      "path": "scripts/map_authoring/terrain/border_material.gdshader"
+    },
+    {
+      "sha256": "A99CB0CA1DA4B83A4D686F0FF3117A7956A7F4BD4FB6AD92BAF99EFCEF7B524A",
+      "path": "scripts/map_authoring/terrain/border_material.gdshader.uid"
+    },
+    {
+      "sha256": "2EE26A0ECD1BFEAFE7E67E3FF3D1BBE6410C9B86C6C2E351CE3BD8905933FB4C",
+      "path": "scripts/map_authoring/terrain/brush.gd"
+    },
+    {
+      "sha256": "2B91E7BF3691BE40C3D977EE685137295680450F0C7129CDA9AFFF91F1C3680F",
+      "path": "scripts/map_authoring/terrain/brush.gd.uid"
+    },
+    {
+      "sha256": "A3B96F2AB197474A2F057BD56D6DBAD55DB1BF0BB15378E35F88AF1F44764DD1",
+      "path": "scripts/map_authoring/terrain/organic_example.gd"
+    },
+    {
+      "sha256": "29C388493A46D2B4775DDA8458CF81D6D2668A6877EB11F04B63C036319C5E04",
+      "path": "scripts/map_authoring/terrain/organic_example.gd.uid"
+    },
+    {
+      "sha256": "140B71DECCDADA4CE408242E84A3A07F0C9FA51378B046BF17CBEC249DC31902",
+      "path": "scripts/map_authoring/terrain/terrain_canvas.gd"
+    },
+    {
+      "sha256": "A4A7145462A66339B5F3AA5594E077395B0206F45EFE3C22333D843C9D724ED4",
+      "path": "scripts/map_authoring/terrain/terrain_canvas.gd.uid"
+    },
+    {
+      "sha256": "E63E672AB6DB62DFBDFAED5390F5432E8CCC03C7D476DA6FB243C0CD94A29651",
+      "path": "scripts/map_authoring/terrain/terrain_material.gd"
+    },
+    {
+      "sha256": "398567B662483B699563CB165DAE37DE8154D3637E445A8AF75B2910E5AE343C",
+      "path": "scripts/map_authoring/terrain/terrain_material.gd.uid"
+    },
+    {
+      "sha256": "4FC421755B44F57F3E7FA7718AD2FC5A4027135C66ACC8B22DE2F62F7FE192C5",
+      "path": "scripts/map_authoring/terrain/terrain_material.gdshader"
+    },
+    {
+      "sha256": "1E316164FA09EC832C7CA9C2CBB2F2B3ACE8610236C092DDF0F3C91EF7FE38C0",
+      "path": "scripts/map_authoring/terrain/terrain_material.gdshader.uid"
+    },
+    {
+      "sha256": "1556601D49997CCEA32223A250C499314B817EA9F32CDB9BF6A0D1DD94393614",
+      "path": "scripts/map_authoring/terrain/terrain_operations.gd"
+    },
+    {
+      "sha256": "33BB2DB63300752AB1477BF13747935E070B385C81E170229F115AA083D8777A",
+      "path": "scripts/map_authoring/terrain/terrain_operations.gd.uid"
+    },
+    {
+      "sha256": "577555B17BE192E99BC9A0406981BE07747272F20CB443D782C942D46D5D2B1C",
+      "path": "scripts/map_authoring/terrain/terrain_panel.gd"
+    },
+    {
+      "sha256": "875D8971F481E83D09CBDD2D0D61054CE1C42EFEC47D9D1E05F435B9D152AECA",
+      "path": "scripts/map_authoring/terrain/terrain_panel.gd.uid"
+    },
+    {
+      "sha256": "A690DA7180427640931053B889B198050ECFA0AF3740341FBE04B1E0381184DD",
+      "path": "scripts/map_authoring/terrain/water_material.gdshader"
+    },
+    {
+      "sha256": "25C77948EF5154E200CF715C2468DDED33F37C819314F799F1DE60B3BE561CAC",
+      "path": "scripts/map_authoring/terrain/water_material.gdshader.uid"
+    },
+    {
+      "sha256": "CDC955F1A180B748AD40C3431279E049EAD047691E69A701F9998DE92C6AAC88",
+      "path": "addons/ragrpg_map_editor/export_plugin.gd"
+    },
+    {
+      "sha256": "99AB0746019585E85D176ED091AAEDF43B2C8C3F055D19525796CF08012C707E",
+      "path": "addons/ragrpg_map_editor/export_plugin.gd.uid"
+    },
+    {
+      "sha256": "74742D2B3B52C2A2A710C5D920CE5153DD71A8A110C516DF306099F05567F235",
+      "path": "addons/ragrpg_map_editor/plugin.cfg"
+    },
+    {
+      "sha256": "90656AC5FE15017BB9084156ADE8E8D7304C4088631A43C80148B428EC759DDB",
+      "path": "addons/ragrpg_map_editor/plugin.gd"
+    },
+    {
+      "sha256": "1462F0027051C125835E8CE4A098A580B3B9150643E72440EC7C14EDDCA15161",
+      "path": "addons/ragrpg_map_editor/plugin.gd.uid"
+    },
+    {
+      "sha256": "BD07826952DFC5DE577FB56631D08BD8EA69DD8D42EAB60D04403A06F5D89663",
+      "path": "addons/ragrpg_map_editor/presentation.gd"
+    },
+    {
+      "sha256": "DFECFF37ADC84C8765D14A5A9410F80518EB3FA6AC4D1CE473803E2FE8D592DB",
+      "path": "addons/ragrpg_map_editor/presentation.gd.uid"
+    },
+    {
+      "sha256": "AF3064F5E0B156BB8AE31DC0F45E6E1F033FAF586D2A5AABE7E03399B7FF9B2C",
+      "path": "addons/ragrpg_map_editor/shell.gd"
+    },
+    {
+      "sha256": "043E0FC4213B5C4CE8E85E7307FA05DF8CBED2F01FF22CD45CA0EEA071ABB5C2",
+      "path": "addons/ragrpg_map_editor/shell.gd.uid"
+    },
+    {
+      "sha256": "D1442458818760B0444D33A8262BE638CE0F28AABA640147088B4A55C3B4CE76",
+      "path": "tests/map_editor_document_test.gd"
+    },
+    {
+      "sha256": "90DD92DA5DD4393F1B51FD9935AAB5455A44112B2130B8DD1B5F1026D3117E14",
+      "path": "tests/map_editor_document_ui_test.gd"
+    },
+    {
+      "sha256": "729C67CA614279B48AFEC4B0C5A6ABB7BCA47B6B78FADDEB1E00611A2B4D8742",
+      "path": "tools/map_editor_document/run.ps1"
+    }
+  ]
+}

@@ -12,6 +12,7 @@ const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 const Catalog = preload("res://scripts/map_authoring/objects/prop_catalog.gd")
 const Preferences = preload("res://scripts/map_authoring/library/editor_preferences.gd")
 const Canvas = preload("res://scripts/map_authoring/terrain/terrain_canvas.gd")
+const ReceiptsView = preload("res://scripts/map_authoring/synthesis/receipts_view.gd")
 const MATERIALS := {"earth":"Terra","grass":"Grama","sand":"Areia","stone":"Pedra"}
 var panel: Control
 var kind := ""
@@ -44,6 +45,7 @@ var preview_canvas: Control
 var job: RefCounted
 var _job_request: Dictionary = {}
 var pending: Dictionary = {}
+var receipts: VBoxContainer
 
 ## kind: "map" | "population" | "patrol"; screen: the AX prefix of the panel.
 func setup(owner_panel: Control, root_kind: String, screen_id: String) -> void:
@@ -101,6 +103,8 @@ func setup(owner_panel: Control, root_kind: String, screen_id: String) -> void:
 	progress_bar = ProgressBar.new(); progress_bar.custom_minimum_size.x = 150; actions.add_child(progress_bar)
 	status = Label.new(); status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; body.add_child(status)
 	preview_canvas = Canvas.new(); preview_canvas.custom_minimum_size.y = 240; preview_canvas.mouse_filter = Control.MOUSE_FILTER_IGNORE; preview_canvas.visible = false; body.add_child(preview_canvas)
+	# Checkpoint46 (P3d): receipts and replay of the variations of this root.
+	receipts = ReceiptsView.new(); body.add_child(receipts); receipts.setup(kind,_root)
 
 func _choice(parent: Node, caption: String, items: Array) -> OptionButton:
 	var label := Label.new(); label.text = caption; parent.add_child(label)
@@ -136,6 +140,7 @@ func refresh() -> void:
 	if panel == null or panel.session == null: return
 	if not pending.is_empty() and pending.base_hash != _hash():
 		pending = {}; preview_canvas.visible = false
+	if receipts != null: receipts.refresh()
 	var previous := _selected(instance_choice)
 	instance_choice.clear()
 	var map := _map()
@@ -231,9 +236,10 @@ static func summary(proposal: Dictionary) -> Dictionary:
 	return result
 
 func authoring_commands() -> Array:
-	return [{"id":screen+"/synthesis/request","parameters":{}},{"id":screen+"/synthesis/preview","parameters":{"request":"regional_root_request"}},{"id":screen+"/synthesis/apply","parameters":{"proposal_hash":"sha256"}},{"id":screen+"/synthesis/discard","parameters":{}}]
+	return [{"id":screen+"/synthesis/request","parameters":{}},{"id":screen+"/synthesis/preview","parameters":{"request":"regional_root_request"}},{"id":screen+"/synthesis/apply","parameters":{"proposal_hash":"sha256"}},{"id":screen+"/synthesis/discard","parameters":{}}]+(receipts.commands(screen) if receipts != null else [])
 
 func ax_command(id: String, parameters: Dictionary) -> Dictionary:
+	if id.begins_with(screen+"/synthesis/") and id.trim_prefix(screen+"/synthesis/") in ['receipts', 'replay', 'replay_bundle', 'replay_import']: return receipts.command(id.trim_prefix(screen+"/synthesis/"),parameters)
 	if id == screen+"/synthesis/request":
 		if not parameters.is_empty(): return {"ok":false,"code":"arguments_invalid"}
 		return {"ok":true,"request":gui_request()}

@@ -86,6 +86,12 @@ func run() -> void:
 	section.pending = gui
 	button(section,"Aplicar variação").pressed.emit(); await frames()
 	var applied: bool = PopulationDocument.hash_source(panel.session.data) == gui.source_hash and panel.session.can_undo()
+	# Checkpoint46 (P3d): the receipt is at the encounter root and replays.
+	presentation.set_mode("ax")
+	var receipts: Dictionary = presentation.ax_invoke("population/synthesis/receipts")
+	var replay: Dictionary = presentation.ax_invoke("population/synthesis/replay",{"index":0})
+	presentation.set_mode("ux")
+	check("root_receipt_replays",receipts.get("ok",false) and receipts.receipts.size() == 1 and receipts.receipts[0].kind == "population" and replay.get("reproduced",false) and replay.get("current_is_result",false))
 	panel.session.undo(); await frames()
 	check("gui_apply_is_one_undo",applied and PopulationDocument.hash_source(panel.session.data) == base_hash and not panel.session.can_undo())
 	panel.session.replace(built.population); await frames()

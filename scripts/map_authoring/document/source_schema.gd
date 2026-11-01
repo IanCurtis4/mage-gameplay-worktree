@@ -30,6 +30,8 @@ static func read(bytes: PackedByteArray) -> Dictionary:
 	var errors: Array = []
 	var root_fields := ROOT.duplicate(); if data.has("context"): root_fields.context = "object"
 	if data.has("objects"): root_fields.objects = "object"
+	# Checkpoint46 (P3d): optional receipts of regional variations (root only).
+	if data.has("synthesis_receipts"): root_fields.synthesis_receipts = "array"
 	_shape(data, root_fields, "$", errors)
 	if errors.is_empty() and data.schema_version != 1:
 		output.code = "source_version_unsupported"
@@ -113,6 +115,7 @@ static func validate(data: Dictionary) -> Array:
 	if data.has("context"):
 		var checked := Context.validate(data.context,data.regions,load("res://scripts/map_authoring/document/source_schema.gd"))
 		if not checked.ok: errors.append_array(checked.diagnostics)
+	if data.has("synthesis_receipts") and not load("res://scripts/map_authoring/synthesis/receipt_schema.gd").valid(data.synthesis_receipts): _issue(errors, "receipts_invalid", "synthesis_receipts")
 	if data.units != "e07_world": _issue(errors, "source_units_unsupported", "units")
 	var ids: Dictionary = {}
 	for collection: String in IDS:

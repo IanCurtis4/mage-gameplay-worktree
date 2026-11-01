@@ -92,6 +92,24 @@ func run() -> void:
 	button(section,"Aplicar variação").pressed.emit(); await frames()
 	var applied_hash: String = shell.session.document().semantic_hash()
 	check("gui_apply_commits_the_preview",applied_hash != base_hash and Schema.semantic_hash(_without_revision(shell.session.document().to_data())) == Schema.semantic_hash(_without_revision(gui.source)) and section.pending.is_empty())
+	# Checkpoint46 (P3d): the applied variation left one receipt; GUI, AX and the
+	# CLI replay it on the stored base without touching the piece.
+	var view: Node = section.receipts
+	var listed: bool = view.receipts_list.item_count == 1
+	button(view,"Reproduzir recibo").pressed.emit(); await frames()
+	var gui_replay: bool = view.replay_status.text.begins_with("Reproduz exatamente")
+	presentation.set_mode("ax")
+	var ax_replay: Dictionary = presentation.ax_invoke("terrain/synthesis/replay",{"index":0})
+	presentation.set_mode("ux")
+	check("receipt_is_listed_and_replays",listed and gui_replay and ax_replay.get("reproduced",false) and ax_replay.get("current_is_result",false) and shell.session.document().semantic_hash() == applied_hash)
+	var varied_path := folder.path_join("varied_"+Crypto.new().generate_random_bytes(4).hex_encode()+".source.json")
+	var varied_writer := FileAccess.open(varied_path,FileAccess.WRITE); varied_writer.store_string(JSON.stringify(shell.session.document().to_data(),"\t",true,true)); varied_writer.close()
+	var replay_output: Array = []
+	OS.execute(OS.get_executable_path(),["--headless","--path",ProjectSettings.globalize_path("res://"),"--script","res://scripts/map_authoring/synthesis/headless.gd","--","replay",varied_path,"1"],replay_output,true)
+	var cli_replay: Dictionary = {}
+	for line: String in "\n".join(replay_output).split("\n"):
+		if line.begins_with("MAP_SYNTHESIS_REPLAY "): cli_replay = JSON.parse_string(line.trim_prefix("MAP_SYNTHESIS_REPLAY "))
+	check("cli_replays_the_same_receipt",cli_replay.get("reproduced",false) and cli_replay.get("result_content_hash","") == ax_replay.get("result_content_hash","-"))
 	shell.session.undo(); await frames()
 	check("one_undo_restores_the_piece",shell.session.document().semantic_hash() == base_hash and not shell.session.can_undo())
 	# 5. Cancel and stale preview leave the piece alone.

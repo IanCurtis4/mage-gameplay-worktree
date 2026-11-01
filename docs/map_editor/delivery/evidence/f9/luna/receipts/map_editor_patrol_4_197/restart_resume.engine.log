@@ -1,0 +1,24 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+M5_RESTART_CHECK compiled restart source true
+M5_RESTART_CHECK new process unpacked wait true
+M5_RESTART_CHECK new process restored wait true
+M5_RESTART_CHECK exact state before tick wait true
+M5_RESTART_CHECK same next tick as uninterrupted wait true
+M5_RESTART_CHECK new process unpacked travel true
+M5_RESTART_CHECK new process restored travel true
+M5_RESTART_CHECK exact state before tick travel true
+M5_RESTART_CHECK same next tick as uninterrupted travel true
+M5_RESTART_CHECK new process unpacked blocked true
+M5_RESTART_CHECK new process restored blocked true
+M5_RESTART_CHECK exact state before tick blocked true
+M5_RESTART_CHECK same next tick as uninterrupted blocked true
+M5_RESTART_CHECK new process unpacked aggro true
+M5_RESTART_CHECK new process restored aggro true
+M5_RESTART_CHECK exact state before tick aggro true
+M5_RESTART_CHECK same next tick as uninterrupted aggro true
+M5_RESTART_CHECK new process reopens canonical profile true
+M5_RESTART_CHECK new process resumes durable campaign true
+M5_RESTART_CHECK durable patrol wait and cursor exact true
+M5_RESTART_CHECK durable generation claims and single actor true
+M5_RESTART_RESULT {"checks":[{"id":"compiled restart source","ok":true},{"id":"new process unpacked wait","ok":true},{"id":"new process restored wait","ok":true},{"id":"exact state before tick wait","ok":true},{"id":"same next tick as uninterrupted wait","ok":true},{"id":"new process unpacked travel","ok":true},{"id":"new process restored travel","ok":true},{"id":"exact state before tick travel","ok":true},{"id":"same next tick as uninterrupted travel","ok":true},{"id":"new process unpacked blocked","ok":true},{"id":"new process restored blocked","ok":true},{"id":"exact state before tick blocked","ok":true},{"id":"same next tick as uninterrupted blocked","ok":true},{"id":"new process unpacked aggro","ok":true},{"id":"new process restored aggro","ok":true},{"id":"exact state before tick aggro","ok":true},{"id":"same next tick as uninterrupted aggro","ok":true},{"id":"new process reopens canonical profile","ok":true},{"id":"new process resumes durable campaign","ok":true},{"id":"durable patrol wait and cursor exact","ok":true},{"id":"durable generation claims and single actor","ok":true}],"count":21,"ok":true}

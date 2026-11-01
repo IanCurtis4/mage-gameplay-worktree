@@ -28,6 +28,7 @@ const Population = preload("res://scripts/map_authoring/population/population_co
 const PatrolDocument = preload("res://scripts/map_authoring/patrol/patrol_document.gd")
 const PatrolCompiler = preload("res://scripts/map_authoring/patrol/patrol_compiler.gd")
 const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
+const Receipts = preload("res://scripts/map_authoring/synthesis/receipts.gd")
 const KINDS := ["map","population","patrol"]
 const ENCOUNTER_MODES := ["preserve","regenerate"]
 const PATROL_MODES := ["preserve"]
@@ -228,7 +229,7 @@ static func prepare(kind: String, root: Dictionary, request: Dictionary, cancell
 	var snapshots_added: Array = []; var snapshots_removed: Array = []
 	var before_hash: String = instance.piece_hash
 	if piece_changes(request):
-		var piece := Piece.prepare(snapshot.source,local_request,func(progress: float) -> bool: return stop.call(0.05+0.35*progress),{"discs":discs,"segments":segments})
+		var piece := Piece.prepare(snapshot.source,local_request,func(progress: float) -> bool: return stop.call(0.05+0.35*progress),{"discs":discs,"segments":segments,"nested":true})
 		if not piece.ok: return piece
 		piece_diff = piece.diff
 		var after_hash: String = piece.source_hash
@@ -241,6 +242,9 @@ static func prepare(kind: String, root: Dictionary, request: Dictionary, cancell
 		if not referenced:
 			map.pieces = map.pieces.filter(func(entry: Dictionary) -> bool: return entry.piece_hash != before_hash); snapshots_removed.append(before_hash)
 	if stop.call(0.45): return Piece.fail("cancelled")
+	# Checkpoint46 (P3d): a map root is final here; its receipt goes in before the
+	# compilation that certifies it.
+	if kind == "map": Receipts.attach(data,Receipts.make(kind,request,data,_summary(piece_diff,[],[],[]),Piece.REVISION))
 	var after: Dictionary = index(map,stop) if piece_changes(request) else base
 	if not after.ok: return after
 	# Reconcile every anchor of the varied layer by family and position.
@@ -276,6 +280,7 @@ static func prepare(kind: String, root: Dictionary, request: Dictionary, cancell
 			if Piece._find(population.slots,"slot_id",slot.slot_id).is_empty(): slots_added.append(slot.slot_id)
 		population.slots = redrawn.data.slots; population.plan_hash = redrawn.data.plan_hash
 	if stop.call(0.7): return Piece.fail("cancelled")
+	if kind != "map": Receipts.attach(data,Receipts.make(kind,request,data,_summary(piece_diff,slots_added,removed,remapped),Piece.REVISION))
 	# Compile the whole final root before offering it.
 	var final := validate_root(kind,data)
 	if not final.ok: return final
@@ -288,14 +293,19 @@ static func prepare(kind: String, root: Dictionary, request: Dictionary, cancell
 		"diff":{"instance_id":instance.instance_id,"layer_id":request.target.layer_id,"piece_hash_before":before_hash,"piece_hash_after":instance.piece_hash,"piece":piece_diff,"snapshots_added":snapshots_added,"snapshots_removed":snapshots_removed,"anchors_remapped":remapped,"anchors_resettled":resettled,"slots_removed":removed,"slots_added":slots_added},
 		"diagnostics":[] if planned or kind == "map" else [{"code":"plan_stale","severity":"warning","entity_id":"","field":"plan_hash","message":"Os encontros ainda não têm plano realizado; só o mapa foi compilado."}],"metrics":{"elapsed_ms":(Time.get_ticks_usec()-started)/1000.0,"protected_bodies":discs.size(),"protected_legs":segments.size()}}
 
+static func _summary(piece_diff: Dictionary, added: Array, removed: Array, remapped: Array) -> Dictionary:
+	return {"terrain_samples":piece_diff.get("terrain_samples",[]).size(),"material_samples":piece_diff.get("material_samples",[]).size(),"objects_added":piece_diff.get("objects_added",[]).size(),"objects_removed":piece_diff.get("objects_removed",[]).size(),"slots_added":added.size(),"slots_removed":removed.size(),"anchors_remapped":remapped.size()}
+
 ## Commits the proposal as one undoable change of the open root, after the base check.
 static func apply(proposal: Dictionary, session: RefCounted, expected_hash: String) -> Dictionary:
 	if not proposal.get("ok",false) or session == null: return fail("synthesis_stale_proposal")
 	var current := root_hash(proposal.kind,session.data)
 	if current != expected_hash or current != proposal.base_hash: return fail("base_diverged")
+	var stored := Receipts.store(proposal.kind,session.data)
 	var applied: Dictionary = session.apply(proposal.source)
 	if not applied.ok: return applied
 	applied["proposal_hash"] = proposal.source_hash
+	applied["ledger"] = stored
 	return applied
 
 # Background preparation for the GUI (same prepare(), on copies).

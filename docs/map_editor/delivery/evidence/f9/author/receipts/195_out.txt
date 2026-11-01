@@ -1,0 +1,15 @@
+﻿HEAD 99dff335
+STAGE SynthesisReceipts :: F9 SynthesisReceipts: False (78s)
+
+F9_RECEIPT_CHECK apply_stores_the_base_and_replay_reproduces false
+STAGE RegionalSynthesis :: F9 RegionalSynthesis: True (29s)
+STAGE RootSynthesis :: F9 RootSynthesis: True (106s)
+F9_ROOT_SYNTH_METRICS 
+{"map_ms":7892,"patrol_ms":18090,"plan_ms":1335,"population_preserve_ms":7161,"population_regenerate_ms":29199}
+STAGE ExchangeMerge :: F9 ExchangeMerge: True (30s)
+STAGE RegionalSynthesisNative :: F9 RegionalSynthesisNative: True (82s)
+STAGE RootSynthesisNative :: F9 RootSynthesisNative: True (103s)
+STAGE LibraryNative :: F9 LibraryNative: True (50s)
+DONE
+
+

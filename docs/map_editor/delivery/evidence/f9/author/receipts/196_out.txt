@@ -1,0 +1,5 @@
+﻿HEAD 99dff335
+STAGE SynthesisReceipts :: F9 SynthesisReceipts: True (71s)
+STAGE RegionalSynthesisNative :: F9 RegionalSynthesisNative: True (95s)
+STAGE RootSynthesisNative :: F9 RootSynthesisNative: True (120s)
+DONE

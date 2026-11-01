@@ -18,12 +18,16 @@ static func read(bytes: PackedByteArray) -> Dictionary:
 	var result := JSONReader.new().decode(bytes)
 	return validate(result.value) if result.ok else Schema.result(false,result.code)
 static func validate(raw: Variant) -> Dictionary:
-	var errors: Array = []; Schema._shape(raw,ROOT,"patrols",errors)
+	var root_fields := ROOT.duplicate()
+	if raw is Dictionary and raw.has("synthesis_receipts"): root_fields.synthesis_receipts = "array"
+	var errors: Array = []; Schema._shape(raw,root_fields,"patrols",errors)
+	if errors.is_empty() and raw.has("synthesis_receipts") and not load("res://scripts/map_authoring/synthesis/receipt_schema.gd").valid(raw.synthesis_receipts): return Schema.result(false,"receipts_invalid")
 	if not errors.is_empty(): return Schema.result(false,"patrol_invalid",errors)
 	if raw.schema_version != 1: return Schema.result(false,"patrol_version")
 	if raw.population.size() > 1 or raw.patrols.size() > 16: return Schema.result(false,"patrol_limit")
 	var slots: Dictionary = {}
 	if not raw.population.is_empty():
+		if raw.population[0] is Dictionary and raw.population[0].has("synthesis_receipts"): return Schema.result(false,"receipts_nested")
 		var checked := Population.validate(raw.population[0])
 		if not checked.ok: return checked
 		for slot: Dictionary in raw.population[0].slots: slots[slot.slot_id] = true
