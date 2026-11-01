@@ -1,0 +1,16 @@
+﻿HEAD c95f1a3c
+STAGE RootSynthesis :: F9 RootSynthesis: True (127s)
+
+F9_ROOT_SYNTH_METRICS 
+{"map_ms":7673,"patrol_ms":18779,"plan_ms":1238,"population_preserve_ms":7132,"population_regenerate_ms":29542}
+STAGE RootSynthesisNative :: F9 RootSynthesisNative: True (109s)
+STAGE RegionalSynthesisNative :: F9 RegionalSynthesisNative: True (77s)
+STAGE CompositionAX :: F9 CompositionAX: True (17s)
+STAGE CompositionAXNative :: F9 CompositionAXNative: True (18s)
+STAGE EncounterAuthoringNative :: F9 EncounterAuthoringNative: True (29s)
+STAGE MapBiomeNative :: F9 MapBiomeNative: True (21s)
+STAGE LibraryNative :: F9 LibraryNative: True (45s)
+STAGE GameplayEditorNative :: F9 GameplayEditorNative: True (82s)
+DONE
+
+

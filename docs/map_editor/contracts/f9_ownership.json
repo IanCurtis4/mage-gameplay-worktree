@@ -3299,6 +3299,54 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 file (checkpoint43 regional synthesis)",
       "base_sha256": "4a50d85440a88d7dfe9fb7dd4d35a0af54e9e9571c1829f70b406d5ab4749410"
+    },
+    {
+      "path": "scripts/map_authoring/synthesis/root_synthesis.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint44 regional synthesis roots)",
+      "base_sha256": "1923e2b908eaad2361f91519ebc524887399e5f23ae1ead717da632c4db74b4c"
+    },
+    {
+      "path": "scripts/map_authoring/synthesis/root_synthesis_section.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint44 regional synthesis roots)",
+      "base_sha256": "f8799c4ef3b6650759ba8686b7058f0bc7d3a415ede25dfa43b89420763b48d1"
+    },
+    {
+      "path": "tests/map_editor_root_synthesis_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint44 regional synthesis roots)",
+      "base_sha256": "9135883ded184b085f2e2fe95560180cecda5af11202b3e83155eacf46cacb1f"
+    },
+    {
+      "path": "tests/map_editor_root_synthesis_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint44 regional synthesis roots)",
+      "base_sha256": "78eaeab649411015ad6f0fecdb1c583034319fb59e4b580910e960d3b5565046"
+    },
+    {
+      "path": "scripts/map_authoring/synthesis/root_synthesis.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint44 regional synthesis roots)",
+      "base_sha256": "46700ebff638bf2c7ee67cb91ed1fd6cb503de4d3d1107950ec2502f25e39081"
+    },
+    {
+      "path": "scripts/map_authoring/synthesis/root_synthesis_section.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint44 regional synthesis roots)",
+      "base_sha256": "75d89d1728d719fbe612f9e8c70dad7c9edd75b3f969a48f80f79c3d8f63f60f"
+    },
+    {
+      "path": "tests/map_editor_root_synthesis_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint44 regional synthesis roots)",
+      "base_sha256": "117c4c9f08a47f0387f3bd5d9c7f3008c4f36a6440c24212b7c601ab6ab280f9"
+    },
+    {
+      "path": "tests/map_editor_root_synthesis_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint44 regional synthesis roots)",
+      "base_sha256": "a322f75cbd876346ff3ab76f9b878644d938a3880cee132739f4da351851e3bd"
     }
   ],
   "read_only_shared": [
@@ -4561,6 +4609,60 @@
       },
       "limits": "piece only; no budget field yet; map instances, encounters, patrols, receipts/replay and three-way exchange are P3b-P3d",
       "f10_deferrals": "by human decision 01/11: test start() on the main thread, regional cache inside a piece, journal compaction near 256 entries, multi-drop auto collect hitch, RoundedResume chained to RoundedNative"
+    },
+    "regional_synthesis_p3b": {
+      "state": "validated_increment_F9_still_open",
+      "base": "c95f1a3c",
+      "human_report": "01/11: we can continue to P3b then",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "contract": "docs/map_editor/contracts/f9_regional_synthesis.md",
+      "files": [
+        "scripts/map_authoring/synthesis/root_synthesis.gd",
+        "scripts/map_authoring/synthesis/root_synthesis_section.gd",
+        "scripts/map_authoring/synthesis/regional_synthesis.gd",
+        "scripts/map_authoring/synthesis/headless.gd",
+        "scripts/map_authoring/population/population_compiler.gd",
+        "scripts/map_authoring/population/worker_headless.gd",
+        "scripts/map_authoring/composition/map_panel.gd",
+        "scripts/map_authoring/population/population_panel.gd",
+        "scripts/map_authoring/patrol/patrol_panel.gd",
+        "addons/ragrpg_map_editor/presentation.gd",
+        "tools/map_editor_completion/run.ps1"
+      ],
+      "test_files": [
+        "tests/map_editor_root_synthesis_test.gd",
+        "tests/map_editor_root_synthesis_ui_test.gd"
+      ],
+      "scope": "regional variation of one map instance with map, population or patrol as root: new piece snapshot for that instance only, encounter bodies and patrol legs protected, anchors reconciled by layer family and position, scoped PopulationCompiler.regenerate (keep/within/redraw) so only free slots inside the selection are redrawn, whole root compiled before the proposal; tool window on the map, encounter and patrol screens, AX <screen>/synthesis/*, CLI for every root",
+      "validation": {
+        "RootSynthesis": 12,
+        "RootSynthesisNative": 10,
+        "RegionalSynthesis": 12,
+        "RegionalSynthesisNative": 14,
+        "PopulationPlanner": 20,
+        "EncounterAuthoring": 27,
+        "EncounterAuthoringNative": 25,
+        "CompositionAX": 31,
+        "CompositionAXNative": 13,
+        "MapBiomeNative": 13,
+        "LibraryNative": 53,
+        "GameplayEditorNative": 22,
+        "M3": true,
+        "M4": true,
+        "M5": true,
+        "M6": true,
+        "M7": true
+      },
+      "bosque_measurement": {
+        "root": "patrol",
+        "region": "woods_clearing",
+        "elapsed_ms": 320109,
+        "terrain_samples": 1,
+        "anchors_remapped": 3,
+        "anchors_resettled": 1,
+        "cache": "off"
+      },
+      "limits": "patrol routes are preserve only; conservative bodies (slots 48, other anchors 24) leave few free samples in small regions full of encounters; receipts/replay and three-way exchange are P3c-P3d"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

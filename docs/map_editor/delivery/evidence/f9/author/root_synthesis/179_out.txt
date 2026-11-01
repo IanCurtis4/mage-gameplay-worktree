@@ -1,0 +1,19 @@
+﻿BCOST read true 
+BCOST slot alley_guard alley_patrol overpass/c_e33596bc5a5c9222_0_0_4_10 [1640, 0, 960] fixed=true
+BCOST slot slot_297da45e94b3dc24f576d5e288acd7002e1f4a81 west_group overpass/c_e33596bc5a5c9222_0_0_4_10 [1576.0, 0.0, 984.0] fixed=false
+BCOST slot slot_3fa5680f129a671cfaf7561f287b2dbaeeef50ed clearing_dispersed clearing/c_1c58e1b8efb1df2f_3_7_4_13 [424.0, 0.0, 568.0] fixed=false
+BCOST slot slot_4780c394e81e0c43a07a441c03fccc7607571d7b west_group overpass/c_e33596bc5a5c9222_0_0_4_10 [1512.0, 0.0, 984.0] fixed=false
+BCOST slot slot_92097df2d2e2386a557e8c6497581666fdec56ec clearing_dispersed clearing/c_1c58e1b8efb1df2f_3_7_4_13 [344.0, 0.0, 568.0] fixed=false
+BCOST slot slot_b039a81834959f2546d76cfd5b6cb8a0171be480 clearing_dispersed clearing/c_1c58e1b8efb1df2f_3_7_4_13 [440.0, 0.0, 728.0] fixed=false
+BCOST slot slot_d6d3911757d6c84ebd1f8a92ee90cb49feba7c66 west_group overpass/c_e33596bc5a5c9222_0_0_4_10 [1512.0, 0.0, 1048.0] fixed=false
+BCOST brush clearing_dispersed clearing/c_1c58e1b8efb1df2f_3_7_4_13 [384, 0, 640] r=160 q=3
+BCOST brush west_group overpass/c_e33596bc5a5c9222_0_0_4_10 [1580, 0, 1080] r=120 q=3
+BCOST brush alley_patrol overpass/c_e33596bc5a5c9222_0_0_4_10 [1640, 0, 960] r=80 q=1
+BCOST inter shrine_completion overpass/c_d64888db90a489ab_0_0_4_3 [2336, 128, 192]
+BCOST excl 0 entrance [{ "position_xyz": [160, 0, 640], "surface_id": "clearing/c_1c58e1b8efb1df2f_2_6_1_14" }]
+BCOST map true 27218ms
+BCOST prepare true 42913ms
+BCOST regenerate true  100050ms {"added":[],"changed":[],"preserved":["alley_guard","slot_297da45e94b3dc24f576d5e288acd7002e1f4a81","slot_3fa5680f129a671cfaf7561f287b2dbaeeef50ed","slot_4780c394e81e0c43a07a441c03fccc7607571d7b","slot_92097df2d2e2386a557e8c6497581666fdec56ec","slot_b039a81834959f2546d76cfd5b6cb8a0171be480","slot_d6d3911757d6c84ebd1f8a92ee90cb49feba7c66"],"removed":[]}
+BCOST pcompile true  132469ms
+BCOST patrol true  125574ms
+DONE

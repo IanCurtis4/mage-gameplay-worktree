@@ -1,6 +1,7 @@
 @tool
 extends VBoxContainer
 const Document = preload("res://scripts/map_authoring/composition/map_document.gd")
+const RootSynthesisSection = preload("res://scripts/map_authoring/synthesis/root_synthesis_section.gd")
 const Session = preload("res://scripts/map_authoring/composition/map_session.gd")
 const Compiler = preload("res://scripts/map_authoring/composition/map_compiler.gd")
 const Store = preload("res://scripts/map_authoring/composition/map_store.gd")
@@ -117,7 +118,10 @@ func _ready() -> void:
 	context_panel = preload("res://scripts/map_authoring/context/map_context_panel.gd").mount(self,session)
 	preload("res://scripts/map_authoring/preview/viewport_tools.gd").mount(canvas,"map")
 	gameplay_tools = preload("res://scripts/map_authoring/preview/gameplay_tools.gd").mount(self,"map","map",func() -> Dictionary: return session.data,func() -> Dictionary: return result.get("package",{}) if result.get("ok",false) else {},func() -> String: return Document.hash_source(session.data))
+	# Checkpoint44 (F9-05, P3b): regional variation of one instance; its own AX provider.
+	synthesis = RootSynthesisSection.new(); add_child(synthesis); synthesis.setup(self,"map","map"); synthesis.refresh()
 	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"map",func() -> Dictionary: return session.data,canvas)
+var synthesis: VBoxContainer
 func _button(parent: Node, text: String, action: Callable) -> Button:
 	var button := Button.new(); button.text = text; button.pressed.connect(action); parent.add_child(button); return button
 func open_population() -> void:
@@ -265,6 +269,7 @@ func _valid_path(path: String) -> bool:
 	return not path.strip_edges().is_empty() and not path.to_utf8_buffer().has(0)
 func refresh() -> void:
 	if job != null: job.cancel()
+	if synthesis != null: synthesis.refresh()
 	result = {}; canvas.clear(); instances.clear(); links.clear(); port_a.clear(); port_b.clear(); surface.clear(); surface.add_item("Todas as superfícies visíveis"); _endpoints.clear()
 	name_edit.text = session.data.name
 	canvas.selected_instance = ""

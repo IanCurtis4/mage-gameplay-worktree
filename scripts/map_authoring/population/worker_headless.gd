@@ -17,7 +17,7 @@ func _run() -> void:
 			"compile":
 				if request.get("source") is Dictionary: result = Compiler.compile(request.source)
 			"regenerate":
-				if request.get("source") is Dictionary: result = Compiler.regenerate(request.source)
+				if request.get("source") is Dictionary: result = Compiler.regenerate(request.source,Callable(),request.get("scope",{}) if request.get("scope",{}) is Dictionary else {"invalid":true})
 			"validate":
 				if request.get("package_path") is String:
 					var candidate: Variant = bytes_to_var(FileAccess.get_file_as_bytes(request.package_path))

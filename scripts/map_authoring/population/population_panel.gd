@@ -1,6 +1,7 @@
 @tool
 extends VBoxContainer
 const Document = preload("res://scripts/map_authoring/population/population_document.gd")
+const RootSynthesisSection = preload("res://scripts/map_authoring/synthesis/root_synthesis_section.gd")
 const Session = preload("res://scripts/map_authoring/population/population_session.gd")
 const Compiler = preload("res://scripts/map_authoring/population/population_compiler.gd")
 const Catalog = preload("res://scripts/map_authoring/population/population_catalog.gd")
@@ -119,7 +120,10 @@ func _ready() -> void:
 	var timer := Timer.new(); timer.wait_time = 10; timer.autostart = true; timer.timeout.connect(preserve_draft); add_child(timer); refresh()
 	preload("res://scripts/map_authoring/preview/viewport_tools.gd").mount(canvas,"population")
 	gameplay_tools = preload("res://scripts/map_authoring/preview/gameplay_tools.gd").mount(self,"population","population",func() -> Dictionary: return session.data,func() -> Dictionary: return result.get("package",{}) if result.get("ok",false) else {},func() -> String: return Document.hash_source(session.data))
+	# Checkpoint44 (F9-05, P3b): regional variation of one instance; its own AX provider.
+	synthesis = RootSynthesisSection.new(); add_child(synthesis); synthesis.setup(self,"population","population"); synthesis.refresh()
 	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"population",func() -> Dictionary: return session.data,canvas)
+var synthesis: VBoxContainer
 func _button(parent: Node, text: String, action: Callable) -> Button:
 	var button := Button.new(); button.text = text; button.pressed.connect(action); parent.add_child(button); return button
 func _label(parent: Node, text: String) -> void:
@@ -226,6 +230,7 @@ func _surfaces() -> void:
 	for cell: Dictionary in canvas.package.get("manifest",{}).get("stages",[{}])[0].get("surfaces",[]): surface.add_item(cell.surface_id)
 func refresh() -> void:
 	if job != null: job.cancel()
+	if synthesis != null: synthesis.refresh()
 	result = {}; proposal = {}; _proposal_signature = ""; showing_proposal = false; canvas.preview_diff = {}; canvas.stop_test(); canvas.encounters = {}; canvas.source = session.data.duplicate(true)
 	name_edit.text = session.data.name
 	if session.data.map.is_empty(): canvas.clear()

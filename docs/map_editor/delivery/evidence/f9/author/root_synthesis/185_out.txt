@@ -1,0 +1,23 @@
+﻿HEAD c95f1a3c
+STAGE RootSynthesis :: F9 RootSynthesis: True (128s)
+STAGE RootSynthesisNative :: F9 RootSynthesisNative: False (67s)
+
+F9_ROOT_SYNTH_UI_CHECK instance_layer_and_region_are_listed false
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+   at: texture_2d_get (drivers/gles3/storage/texture_storage.cpp:1557)
+SCRIPT ERROR: Cannot call method 'save_png' on a null value.
+   at: capture (res://addons/f9_root_synthesis_driver/plugin.gd:18)
+STAGE RegionalSynthesisNative :: F9 RegionalSynthesisNative: False (33s)
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "d" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://f9_probe/target_probe6.gd:58)
+ERROR: Failed to load script "res://f9_probe/target_probe6.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+RUNNER map_editor_composition :: exit=0 :: 41s
+RUNNER map_editor_population :: exit=0 :: 93s
+RUNNER map_editor_patrol :: exit=0 :: 199s
+RUNNER map_editor_generation :: exit=0 :: 62s
+RUNNER map_editor_exchange :: exit=0 :: 84s
+verification failed; no commit
+
+

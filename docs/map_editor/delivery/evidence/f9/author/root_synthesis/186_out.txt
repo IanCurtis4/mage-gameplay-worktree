@@ -1,0 +1,12 @@
+﻿HEAD c95f1a3c
+STAGE RootSynthesisNative :: F9 RootSynthesisNative: False (89s)
+
+F9_ROOT_SYNTH_UI_CHECK instance_layer_and_region_are_listed false
+F9_ROOT_SYNTH_UI_CHECK capture_root_variation_preview false
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+ERROR: Condition "data.is_empty()" is true. Returning: Ref<Image>()
+   at: texture_2d_get (drivers/gles3/storage/texture_storage.cpp:1557)
+STAGE RegionalSynthesisNative :: F9 RegionalSynthesisNative: True (78s)
+DONE
+
+

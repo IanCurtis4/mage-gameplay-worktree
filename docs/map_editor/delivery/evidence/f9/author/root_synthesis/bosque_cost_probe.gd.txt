@@ -1,0 +1,26 @@
+extends SceneTree
+const Patrol = preload("res://scripts/map_authoring/patrol/patrol_document.gd")
+const PatrolCompiler = preload("res://scripts/map_authoring/patrol/patrol_compiler.gd")
+const Population = preload("res://scripts/map_authoring/population/population_compiler.gd")
+const Maps = preload("res://scripts/map_authoring/composition/map_compiler.gd")
+func _initialize() -> void:
+	var raw := FileAccess.get_file_as_bytes("res://data/map_authoring/sanctuary_woods.patrol.json")
+	var read := Patrol.read(raw)
+	print("BCOST read ",read.ok," ",read.get("code",""))
+	var root: Dictionary = read.data
+	var pop: Dictionary = root.population[0]
+	for s: Dictionary in pop.slots: print("BCOST slot ",s.slot_id," ",s.brush_id," ",s.surface_id," ",s.position_xyz," fixed=",s.fixed)
+	for b: Dictionary in pop.brushes: print("BCOST brush ",b.brush_id," ",b.surface_id," ",b.center_xyz," r=",b.radius," q=",b.quantity)
+	for i: Dictionary in pop.interactions: print("BCOST inter ",i.interaction_id," ",i.surface_id," ",i.position_xyz)
+	print("BCOST excl ",pop.exclusions.size()," entrance ",pop.entrance)
+	var t := Time.get_ticks_msec()
+	var m := Maps.compile(pop.map[0]); print("BCOST map ",m.ok," ",Time.get_ticks_msec()-t,"ms")
+	t = Time.get_ticks_msec()
+	var c := Population.prepare(pop); print("BCOST prepare ",c.ok," ",Time.get_ticks_msec()-t,"ms")
+	t = Time.get_ticks_msec()
+	var r := Population.regenerate(pop); print("BCOST regenerate ",r.ok," ",r.get("code","")," ",Time.get_ticks_msec()-t,"ms ",JSON.stringify(r.get("diff",{})))
+	t = Time.get_ticks_msec()
+	var p := Population.compile(pop); print("BCOST pcompile ",p.ok," ",p.get("code","")," ",Time.get_ticks_msec()-t,"ms")
+	t = Time.get_ticks_msec()
+	var q := PatrolCompiler.compile(root); print("BCOST patrol ",q.ok," ",q.get("code","")," ",Time.get_ticks_msec()-t,"ms")
+	quit(0)

@@ -1,0 +1,19 @@
+{
+  "RootSynthesis": 12,
+  "RootSynthesisNative": 10,
+  "RegionalSynthesis": 12,
+  "RegionalSynthesisNative": 14,
+  "PopulationPlanner": 20,
+  "EncounterAuthoring": 27,
+  "EncounterAuthoringNative": 25,
+  "CompositionAX": 31,
+  "CompositionAXNative": 13,
+  "MapBiomeNative": 13,
+  "LibraryNative": 53,
+  "GameplayEditorNative": 22,
+  "M3": true,
+  "M4": true,
+  "M5": true,
+  "M6": true,
+  "M7": true
+}

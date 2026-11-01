@@ -1,6 +1,7 @@
 @tool
 extends VBoxContainer
 const Document = preload("res://scripts/map_authoring/patrol/patrol_document.gd")
+const RootSynthesisSection = preload("res://scripts/map_authoring/synthesis/root_synthesis_section.gd")
 const Compiler = preload("res://scripts/map_authoring/patrol/patrol_compiler.gd")
 const Store = preload("res://scripts/map_authoring/patrol/patrol_store.gd")
 const Session = preload("res://scripts/map_authoring/patrol/patrol_session.gd")
@@ -75,7 +76,10 @@ func _ready() -> void:
 	var timer := Timer.new(); timer.wait_time = 10; timer.autostart = true; timer.timeout.connect(preserve_draft); add_child(timer)
 	preload("res://scripts/map_authoring/preview/viewport_tools.gd").mount(canvas,"patrol")
 	gameplay_tools = preload("res://scripts/map_authoring/preview/gameplay_tools.gd").mount(self,"patrol","patrol",func() -> Dictionary: return session.data,func() -> Dictionary: return result.get("package",{}) if result.get("ok",false) else {},func() -> String: return Document.hash_source(session.data))
+	# Checkpoint44 (F9-05, P3b): regional variation of one instance; its own AX provider.
+	synthesis = RootSynthesisSection.new(); add_child(synthesis); synthesis.setup(self,"patrol","patrol"); synthesis.refresh()
 	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"patrol",func() -> Dictionary: return session.data,canvas)
+var synthesis: VBoxContainer
 func button(parent: Node, caption: String, callback: Callable) -> void:
 	var b := Button.new(); b.text = caption; b.pressed.connect(callback); parent.add_child(b)
 func _new_draft() -> void:
@@ -173,6 +177,7 @@ func changed() -> void:
 	result = {}; refresh(); status.text = "Alterações pendentes de compilação."
 func refresh() -> void:
 	if routes == null: return
+	if synthesis != null: synthesis.refresh()
 	name_edit.text = session.data.name
 	var selected := routes.get_selected_items(); var index := selected[0] if not selected.is_empty() else 0
 	routes.clear()

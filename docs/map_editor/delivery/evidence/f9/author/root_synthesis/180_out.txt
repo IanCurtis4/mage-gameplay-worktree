@@ -1,0 +1,21 @@
+﻿HEAD c95f1a3c
+STAGE RootSynthesis :: F9 RootSynthesis: False (140s)
+
+F9_ROOT_SYNTH_METRICS 
+{"map_ms":8173,"patrol_ms":19702,"plan_ms":1348,"population_preserve_ms":7568,"population_regenerate_ms":30673}
+F9_ROOT_SYNTH_CHECK fixture_plans_and_compiles false
+F9_ROOT_SYNTH_CHECK cancel_refuses_without_mutation true
+F9_ROOT_SYNTH_METRICS 
+{"map_ms":8173,"patrol_ms":19702,"plan_ms":1348,"population_preserve_ms":7568,"population_regenerate_ms":30673}
+F9_ROOT_SYNTH_RESULT {"checks":[{"id":"fixture_plans_and_compiles","ok":false},{"id":"requests_are_closed_per_root","ok
+":true},{"id":"map_variation_is_a_new_snapshot_for_one_instance","ok":true},{"id":"an_unreferenced_snapshot_is_dropped"
+,"ok":true},{"id":"preserved_encounters_keep_every_slot","ok":true},{"id":"anchors_follow_their_layer_not_the_nearest_f
+loor","ok":true},{"id":"bodies_keep_their_height","ok":true},{"id":"same_request_same_hash","ok":true},{"id":"regenerat
+e_redraws_only_free_slots_inside","ok":true},{"id":"patrol_slot_and_legs_stay","ok":true},{"id":"apply_is_one_undo_per_
+root","ok":true},{"id":"cancel_refuses_without_mutation","ok":true}],"count":12,"ok":false}
+STAGE RegionalSynthesis :: F9 RegionalSynthesis: True (28s)
+STAGE PopulationPlanner :: F9 PopulationPlanner: True (14s)
+STAGE EncounterAuthoring :: F9 EncounterAuthoring: True (18s)
+DONE
+
+

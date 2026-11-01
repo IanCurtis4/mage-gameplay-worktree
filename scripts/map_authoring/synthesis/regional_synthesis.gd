@@ -1,6 +1,8 @@
 @tool
 extends RefCounted
-## Checkpoint43 (F9-05, P3a): regional synthesis inside one piece. A passive request
+## Checkpoint43 (F9-05, P3a): regional synthesis inside one piece. Checkpoint44
+## (P3b): map, population and patrol roots pass encounter bodies and patrol legs
+## as extra protections (synthesis/root_synthesis.gd). A passive request
 ## names a layer, a selection (an existing region of that layer or a polygon in its
 ## local coordinates), a seed and one recipe or "preserve" per channel (terrain,
 ## materials, objects). prepare() builds the whole new source on a copy, compiles
@@ -160,7 +162,9 @@ static func noise(seed_text: String, channel: String, x: float, z: float, featur
 	return total/norm if norm > 0.0 else 0.0
 
 ## The mask for one layer: selection polygon, protections and per-sample verdicts.
-static func mask(data: Dictionary, request: Dictionary, staying: Array = []) -> Dictionary:
+## staying: discs {center, radius, id} in piece coordinates; segments: capsules
+## {a, b, radius, id} (patrol legs) that must keep the terrain under them.
+static func mask(data: Dictionary, request: Dictionary, staying: Array = [], segments: Array = []) -> Dictionary:
 	var layer := _find(data.layers,"layer_id",request.target.layer_id)
 	if layer.is_empty(): return fail("source_reference_missing",request.target.layer_id,"target")
 	if layer.locked: return fail("layer_locked",layer.layer_id,"target")
@@ -195,9 +199,22 @@ static func mask(data: Dictionary, request: Dictionary, staying: Array = []) -> 
 			if ok:
 				for disc: Dictionary in discs:
 					if _disk_touches(disc.center,float(disc.radius),influence): ok = false; break
+			if ok:
+				for segment: Dictionary in segments:
+					if _segment_touches(segment.a,segment.b,float(segment.radius),influence): ok = false; break
 			free.append(ok)
 			if ok: count += 1
-	return {"ok":true,"layer":layer,"selection":selection,"protections":protections,"discs":discs,"free":free,"free_count":count}
+	return {"ok":true,"layer":layer,"selection":selection,"protections":protections,"discs":discs,"segments":segments,"free":free,"free_count":count}
+
+# A capsule (segment a-b widened by radius) touches the polygon.
+static func _segment_touches(a: Vector2, b: Vector2, radius: float, polygon: PackedVector2Array) -> bool:
+	if Geometry2D.is_point_in_polygon(a,polygon) or Geometry2D.is_point_in_polygon(b,polygon): return true
+	for i: int in polygon.size():
+		var p := polygon[i]; var q := polygon[(i+1)%polygon.size()]
+		if Geometry2D.segment_intersects_segment(a,b,p,q) != null: return true
+		var gap := minf(minf(Geometry2D.get_closest_point_to_segment(a,p,q).distance_to(a),Geometry2D.get_closest_point_to_segment(b,p,q).distance_to(b)),minf(Geometry2D.get_closest_point_to_segment(p,a,b).distance_to(p),Geometry2D.get_closest_point_to_segment(q,a,b).distance_to(q)))
+		if gap < radius: return true
+	return false
 
 # Distance from a point to the nearest boundary the change must fade into.
 static func _edge_distance(at: Vector2, built: Dictionary) -> float:
@@ -208,10 +225,13 @@ static func _edge_distance(at: Vector2, built: Dictionary) -> float:
 		var polygon: PackedVector2Array = protection.polygon
 		for i: int in polygon.size(): best = minf(best,Geometry2D.get_closest_point_to_segment(at,polygon[i],polygon[(i+1)%polygon.size()]).distance_to(at))
 	for disc: Dictionary in built.discs: best = minf(best,maxf(0.0,at.distance_to(disc.center)-float(disc.radius)))
+	for segment: Dictionary in built.get("segments",[]): best = minf(best,maxf(0.0,Geometry2D.get_closest_point_to_segment(at,segment.a,segment.b).distance_to(at)-float(segment.radius)))
 	return best
 
-## Builds the proposal; never mutates the session.
-static func prepare(source: Dictionary, request: Dictionary, cancellation: Callable = Callable()) -> Dictionary:
+## Builds the proposal; never mutates the session. extra (from a map, population
+## or patrol root): {"discs":[...], "segments":[...]} in piece coordinates for
+## encounter bodies and patrol legs that stay on this piece.
+static func prepare(source: Dictionary, request: Dictionary, cancellation: Callable = Callable(), extra: Dictionary = {}) -> Dictionary:
 	var started := Time.get_ticks_usec()
 	var checked := validate_request(request)
 	if not checked.ok: return checked
@@ -239,7 +259,7 @@ static func prepare(source: Dictionary, request: Dictionary, cancellation: Calla
 				if _disk_touches(center,radius,protection.polygon): replaceable = false; break
 		if replaceable: removed.append(placement.placement_id)
 		elif on_layer: staying.append({"center":center,"radius":radius,"id":placement.placement_id})
-	var built := mask(data,request,staying)
+	var built := mask(data,request,staying+extra.get("discs",[]),extra.get("segments",[]))
 	if not built.ok: return built
 	var layer: Dictionary = built.layer
 	var spacing := float(layer.sample_spacing)
@@ -345,6 +365,9 @@ static func _scatter(data: Dictionary, request: Dictionary, built: Dictionary, c
 		if blocked: continue
 		for disc: Dictionary in built.discs:
 			if p.distance_to(disc.center) < radius+float(disc.radius)+spacing: blocked = true; break
+		if blocked: continue
+		for segment: Dictionary in built.segments:
+			if Geometry2D.get_closest_point_to_segment(p,segment.a,segment.b).distance_to(p) < radius+float(segment.radius)+spacing: blocked = true; break
 		if blocked: continue
 		for other: Dictionary in data.placements:
 			if _layer_of(data,other.surface_id) != built.layer.layer_id: continue

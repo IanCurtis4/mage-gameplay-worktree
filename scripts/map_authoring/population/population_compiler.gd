@@ -235,8 +235,37 @@ static func pool(source: Dictionary, context: Dictionary, brush: Dictionary, can
 	var quota := int(brush.quantity) if brush.quota_mode == "count" else int(floor(count*STEP*STEP*brush.density/10000.0))
 	if quota > 128: return fail("population_limit",brush.brush_id)
 	return {"ok":true,"candidates":candidates,"quota":quota,"sampled_area":count*STEP*STEP,"profile":profile,"rejected":rejected}
-static func regenerate(source: Dictionary, cancel: Callable = Callable()) -> Dictionary:
-	if Engine.is_editor_hint(): return Worker.request({"operation":"regenerate","source":source},cancel)
+## Checkpoint44 (F9-05/08, P3b): optional scope for a regional variation.
+## keep: non-fixed slot IDs reserved exactly like pins (validated first, counted in
+## their brush quota, published unchanged with fixed=false); within: {"family",
+## "polygon_xz"} restricts new candidates to that layer family, body fully inside
+## the polygon; redraw=false draws nothing (the kept plan is only re-certified, a
+## missing slot is a deficit). An empty scope is the plain regeneration it always was.
+static func valid_scope(scope: Variant) -> bool:
+	if not scope is Dictionary: return false
+	for key: Variant in scope:
+		if key not in ["keep","within","redraw"]: return false
+	if not scope.get("redraw",true) is bool: return false
+	var keep: Variant = scope.get("keep",[])
+	if not Schema._type(keep,"strings") or keep.size() > 128: return false
+	if scope.has("within"):
+		var within: Variant = scope.within
+		if not within is Dictionary or within.size() != 2 or not within.get("family") is String or not Schema._type(within.get("polygon_xz"),"points2") or within.polygon_xz.size() < 3 or within.polygon_xz.size() > 256: return false
+	return true
+static func _within(point: ExpeditionWorldPoint, radius: float, context: Dictionary, within: Dictionary) -> bool:
+	if within.is_empty(): return true
+	if context.families.get(point.surface_id,point.surface_id) != within.family: return false
+	var polygon := PackedVector2Array()
+	for pair: Array in within.polygon_xz: polygon.append(Vector2(float(pair[0]),float(pair[1])))
+	var at := Vector2(point.position.x,point.position.z)
+	if not Geometry2D.is_point_in_polygon(at,polygon): return false
+	for i: int in polygon.size():
+		if Geometry2D.get_closest_point_to_segment(at,polygon[i],polygon[(i+1)%polygon.size()]).distance_to(at) < radius: return false
+	return true
+static func regenerate(source: Dictionary, cancel: Callable = Callable(), scope: Dictionary = {}) -> Dictionary:
+	if not valid_scope(scope): return fail("scope_invalid")
+	if Engine.is_editor_hint(): return Worker.request({"operation":"regenerate","source":source,"scope":scope} if not scope.is_empty() else {"operation":"regenerate","source":source},cancel)
+	var keep: Array = scope.get("keep",[]); var within: Dictionary = scope.get("within",{}); var redraw: bool = scope.get("redraw",true)
 	var context := prepare(source,cancel)
 	if not context.ok: return context
 	var original_hash := Document.hash_source(source)
@@ -245,9 +274,10 @@ static func regenerate(source: Dictionary, cancel: Callable = Callable()) -> Dic
 	if not authored.ok: return authored
 	source = authored.data
 	var realized: Array = []; var occupied: Array = []; var metrics: Array = []
-	# All pins reserve space before any brush draws candidates.
+	# All pins (and slots kept by a regional scope) reserve space before any brush
+	# draws candidates.
 	for slot: Dictionary in _sorted(source.slots,"slot_id"):
-		if not slot.fixed: continue
+		if not slot.fixed and slot.slot_id not in keep: continue
 		var valid := validate_slot(source,context,slot,occupied,cancel)
 		if not valid.ok: return valid
 		realized.append(slot.duplicate(true)); occupied.append(valid.reservation)
@@ -259,6 +289,8 @@ static func regenerate(source: Dictionary, cancel: Callable = Callable()) -> Dic
 			if slot.brush_id == brush.brush_id: fixed += 1
 		if fixed > sampled.quota: return fail("fixed_excess",brush.brush_id,{"requested":sampled.quota,"realized":fixed})
 		var candidates: Array = sampled.candidates; var stream: String = brush.seed+":"+str(int(brush.round))+":"+brush.brush_id
+		if not within.is_empty(): candidates = candidates.filter(func(point: ExpeditionWorldPoint) -> bool: return _within(point,sampled.profile.radius,context,within))
+		if not redraw: candidates = []
 		candidates.sort_custom(func(a: ExpeditionWorldPoint,b: ExpeditionWorldPoint) -> bool: return (stream+Canonical.encode(a.position)).sha256_text() < (stream+Canonical.encode(b.position)).sha256_text())
 		var cluster := vector(brush.center_xyz)
 		if brush.mode == "concentrated" and not candidates.is_empty(): cluster = candidates[0].position

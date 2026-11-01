@@ -1,0 +1,19 @@
+extends SceneTree
+## Checkpoint44 measurement: regional variation on the real Bosque (patrol root),
+## relief inside the woods_clearing region of the clearing piece, encounters and
+## patrols preserved. Cache off: every compile is real.
+const Root = preload("res://scripts/map_authoring/synthesis/root_synthesis.gd")
+const Piece = preload("res://scripts/map_authoring/synthesis/regional_synthesis.gd")
+const Patrol = preload("res://scripts/map_authoring/patrol/patrol_document.gd")
+func _initialize() -> void:
+	OS.set_environment("RAGRPG_COMPILE_CACHE","0")
+	var root: Dictionary = Patrol.read(FileAccess.get_file_as_bytes("res://data/map_authoring/sanctuary_woods.patrol.json")).data
+	var map: Dictionary = root.population[0].map[0]
+	var clearing := Piece._find(map.instances,"instance_id","clearing")
+	var request := {"algorithm_revision":Piece.REVISION,"seed_text":"17","base_hash":Root.root_hash("patrol",root),"target":{"instance_id":"clearing","piece_hash":clearing.piece_hash,"layer_id":"a_ground"},"selection":{"region_id":"woods_clearing"},
+		"channels":{"terrain":{"mode":"relief","amplitude":32.0,"feature_size":256.0,"roughness":0.5,"falloff":64.0},"materials":{"mode":"patches","material":"earth","coverage":0.4,"feature_size":192.0},"objects":{"mode":"preserve"},"encounters":{"mode":"preserve"},"patrols":{"mode":"preserve"}},"preserve":{"entity_ids":[],"region_ids":[]}}
+	var t := Time.get_ticks_msec()
+	var proposal := Root.prepare("patrol",root,request)
+	var shown := proposal.duplicate(true); shown.erase("source")
+	print("BROOT ",Time.get_ticks_msec()-t,"ms ",JSON.stringify(shown).left(3000))
+	quit(0)
