@@ -1,7 +1,31 @@
 # Retomada F9 —30/10/2026
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint39 — morte sem trava, retorno sem pose de morto, fundo com a arte do bioma
+## Checkpoint40 — diário J3: ondas, respawn e mortes gravadas na hora
+
+31/10/2026. Mesmo checkout/branch/fixture. Base 65bb6ce2; código e documentação
+em commits próprios. Papéis inalterados.
+
+- Pedido humano: seguir com F9 fechando o diário antes da matriz do editor.
+- Ondas: entrada `wave` (relógio, slots esperando respawn, nascimentos admitidos)
+  em vez da transação completa; o retorno também leva e admite nascimentos.
+  Ao vivo, os nascimentos entram numa fila e nascem um por quadro.
+- Mortes de mob: gravadas na hora fora de combate e no máximo a cada 2 s em
+  combate (antes só no fim do combate, perdidas se o jogo fechasse). Se o diário
+  recusar em combate, esperam o fim do combate, nunca a transação completa.
+  Eventos que chegam durante uma gravação vão logo depois dela.
+- Drops: pool elegível memorizado no `MobLootResolver` (~28 ms por morte antes).
+- Bosque em janela: 7 mortes de uma vez sem quadro acima de 40 ms na gravação
+  (antes 214 ms); a onda que traz os 7 de volta, 42 ms de pior quadro (antes
+  ~11 s de transação completa). Base + diário reaplicado igual ao vivo.
+- Teste novo `e07_f5_waves_journal_test` (36), CampaignJournal22, GameplayNative63
+  (morte gravada durante o combate, pior quadro 14 ms) e legados E06/E07 PASS.
+
+Pendente: compactação do diário perto do limite (256 entradas); ~60–75 ms na
+coleta automática de muitos drops; matriz do editor F9-01..12; aceite humano.
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint39 — morte sem trava, retorno sem pose de morto, fundo com a arte do bioma
 
 31/10/2026. Mesmo checkout/branch/fixture. Base 4edafa3a; código e documentação
 em commits próprios. Papéis inalterados.
@@ -27,7 +51,6 @@ em commits próprios. Papéis inalterados.
 
 Pendente: gravar cada morte de mob na hora; J3 (ondas/respawn, inclusive retorno
 com respawn pendente); contrato de F10; aceite humano.
-<!-- /f9-patrol-gameplay-active -->
 
 ## Histórico checkpoint38 — gravação em segundo plano, coleta automática, leash e fundo temático
 

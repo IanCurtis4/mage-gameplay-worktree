@@ -206,3 +206,51 @@ volto, eu volto com o sprite de morto".
 
 Fora deste passo: retorno com onda/respawn pendente no estágio (J3) e gravar
 cada morte de mob na hora.
+
+## Implementado no checkpoint40 (J3: ondas e respawn; mortes gravadas na hora)
+
+31/10/2026, Sol/Astra (Claude Opus). Pedido humano: fechar o diário antes da
+matriz do editor ("Fechar o diário primeiro").
+
+- Entrada `wave`: o relógio de ondas, todos os slots que esperam respawn (em
+  qualquer estágio, com a onda de cada um) e os nascimentos admitidos agora no
+  estágio atual, com a geração nova. A decisão de nascer usa a mesma consulta de
+  ocupação de `admit_pending` nos mundos vivos e a mesma ordem dos slots; um lar
+  ao alcance de um nascimento já decidido na mesma passada espera, como
+  `admit_pending` veria o recém-nascido.
+- `journal_events` aceita `wave` junto com mortes: mortes numa entrada, a onda
+  em outra, uma única gravação. Onda sem ninguém esperando sai da fila sem
+  gravar nada.
+- Retorno: a entrada `revive` passa a levar as mesmas duas listas e admite os
+  nascimentos que o retorno libera. Antes, um respawn pendente no estágio fazia o
+  retorno cair na transação completa. A entrada `revive` de três chaves
+  (checkpoint39) continua válida.
+- Aplicação: marca os slots mortos como pendentes, avança a geração e cria o ator
+  com `spawn_slot(..., force)`. A legalidade do lar é checada; a ocupação não,
+  porque já foi decidida quando a entrada foi escrita. A reaplicação cria tudo de
+  uma vez e toma o relógio gravado. Ao vivo, o relógio continuou correndo durante
+  a gravação e fica como está, e os nascimentos entram numa fila
+  (`ExpeditionCampaignRuntime.birth_queue`, transitória) e nascem um por quadro:
+  cada ator custa ~21 ms (45 ms o primeiro). Até nascer, o slot continua
+  esperando no estado, então uma captura nesse meio fica coerente; a fila fica
+  fora do snapshot e de novas decisões de nascimento.
+- Mortes de mob: deixam de esperar o fim do combate. Fora de combate vão ao
+  diário na hora; em combate, no máximo uma entrada a cada 2 s
+  (`DEATH_JOURNAL_INTERVAL_MSEC`). Se o diário recusar durante o combate (cheio,
+  sem base), as mortes continuam esperando o fim do combate, nunca a transação
+  completa no meio da luta. Eventos que chegam durante uma gravação em segundo
+  plano (morte do jogador inclusive) vão logo depois dela.
+- Drop de mob: `MobLootResolver._item_pool` passa a memorizar o pool elegível por
+  (categoria, qualidade, nível). O resolver é imutável depois de criado, então o
+  pool é função pura da chave. Antes, cada drop validava todos os pools duas
+  vezes: ~28 ms por morte no Bosque.
+
+Medido em janela no Bosque (probe de onda, perfil descartável): 7 mortes de uma
+vez numa entrada, antes 214 ms no quadro da gravação, agora abaixo de 40 ms; a
+onda que traz os 7 de volta, antes da fila 186–200 ms, agora 42 ms de pior
+quadro (antes do diário, transação completa de ~11 s). Mesmo host; base + diário
+reaplicado dá os mesmos slots. Restam ~60–75 ms no início e no fim da coleta
+automática de 7 drops.
+
+Fora deste passo: compactação do diário. Com 256 entradas, a próxima gravação
+volta à transação completa (base nova), num ponto seguro.

@@ -229,3 +229,9 @@ diário, gravados em segundo plano no mesmo host (pior quadro 20,8 ms e 20,0 ms 
 janela); o retorno limpa a pose de morto; o fundo usa a arte do bioma (bosque de
 carvalhos no forest). Decisões de fase em
 [f10_phase_architecture](contracts/f10_phase_architecture.md).
+
+Checkpoint40 (31/10, Sol/Astra Opus): ondas e respawn pelo diário (J3), com
+nascimentos um por quadro; o retorno admite nascimentos; mortes de mob gravadas
+na hora (em combate, no máximo a cada 2 s); pool de drop memorizado. Bosque: onda
+de 7 nascimentos com pior quadro 42 ms (antes ~11 s). Ver
+[contrato do diário](contracts/f9_campaign_journal.md).
