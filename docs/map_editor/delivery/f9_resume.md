@@ -1,7 +1,35 @@
 # Retomada F9 —30/10/2026
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint47 — assets no intercâmbio, fontes de skills e segunda limpeza (P4)
+## Checkpoint48 — release com o Bosque e ponto de consumo (P5)
+
+1/11/2026. Mesmo checkout/branch/fixture. Base 40b50290; código e documentação
+em commits próprios. Papéis inalterados. Guia: consumption.md.
+
+- Pedido humano: seguir para o P5.
+- Pacote do Bosque publicado e commitado: `data/map_authoring/sanctuary_woods.rpp`
+  (1,4 MB, pacote f3cdb460…, fonte 58df5d63…), compilado pela CLI do produtor sem
+  cache em ~3 min; os bytes são idênticos aos do pacote de 31/10 (compilação
+  determinística).
+- Lista de mapas publicados `data/map_authoring/release_packages.json` (formato
+  fechado, pinos de pacote/fonte/revisão) e o ponto de consumo
+  `scripts/map_authoring/release/map_release.gd`: `packages`, `entry`,
+  `load_package`, `manifest`, `prepare` (só no jogo) e `freshness` (autoria).
+  Pacote diferente do fixado, adulterado ou entrada insegura são recusados com
+  diagnóstico em português.
+- Release limpo: a etapa `Release` do candidato copia o executável e o `.pck` para
+  uma pasta nova fora do projeto, com perfil novo e diretório de trabalho nela, e
+  abre o Bosque pela API: pacote fixado, 7 atores reais, patrulha, preparação de
+  gameplay pelas autoridades do jogo e caminhada até o santuário
+  (`release_bosque` 8/8, ~2 min; `release` representativo 6/6). O jogo só criou
+  cache de shaders no perfil novo.
+- ReleaseApi 11/11 (lista, pinos, frescor da fonte, manifesto como cópia,
+  adulteração, publicação por hash sem sobrescrita, export, preparação).
+
+Pendente: P6 (UX guiada entre telas, diagnóstico localizado, oclusão); aceite humano.
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint47 — assets no intercâmbio, fontes de skills e segunda limpeza (P4)
 
 1/11/2026. Mesmo checkout/branch/fixture. Base 42ca1c38; código e documentação
 em commits próprios. Papéis inalterados. Guia: exchange.md.
@@ -28,8 +56,7 @@ em commits próprios. Papéis inalterados. Guia: exchange.md.
   recibos). Sem instalar cópias.
 - ExchangeAssets12; ExchangeMerge, ExchangeMergeNative e M7 headless/nativo PASS.
 
-Pendente: P5 (release com o Bosque e API de consumo); aceite humano.
-<!-- /f9-patrol-gameplay-active -->
+Próximo: P5 (release com o Bosque e API de consumo), feito no checkpoint48.
 
 ## Histórico checkpoint46 — recibos e replay das variações (P3d; fecha o P3)
 

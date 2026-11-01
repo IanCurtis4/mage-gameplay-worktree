@@ -71,13 +71,13 @@ pente-fino de F10 revisita. Nenhuma prova, guard, limite ou quota foi reduzido.
 | F9-01 | seleção, inspector, grupo, camadas, travas | comprovado | checkpoint de objetos, Objects53 | — |
 | F9-01 | snap, assentamento, inclinação | comprovado | Objects53 (ponte, piso travado) | — |
 | F9-01 | decoração, corpo, ataque/LoS, oclusão | parcial | movimento/ataque; contato e ordem de desenho 04a7dfc; CanvasOrder46 | prova final de oclusão na área real (P6) |
-| F9-01 | scatter, exclusões, undo, roundtrip, export | parcial | 53+25 checks | export no pipeline final (P5) |
+| F9-01 | scatter, exclusões, undo, roundtrip, export | comprovado | 53+25 checks; o Bosque com seus objetos espalhados abre no executável exportado (release_bosque 8/8, checkpoint48) | — |
 | F9-02 | relevo suave, silhueta | comprovado tecnicamente | Gauss17/512, Organic15, Rounded19/20 | aceite visual humano (P7) |
 | F9-02 | caminho, cobertura, encosta, pintura | comprovado tecnicamente | ef88996 35/20/46, Materials | aceite visual humano (P7) |
 | F9-02 | penhasco, faces não caminháveis | comprovado | Cliff61, Ports92 | — |
 | F9-03 | floresta, deserto, planície, ruína | comprovado | Borders93/Native32, MapBiome15/13 | aceite visual humano (P7) |
-| F9-03 | transições, dono, abertura, frestas | comprovado | d3c0e25 | export final (P5) |
-| F9-03 | ausência de perfil/asset | parcial | Borders93 (diagnóstico); no intercâmbio, asset ausente ou diferente é nomeado antes de compilar (checkpoint47) | release em ambiente limpo (P5) |
+| F9-03 | transições, dono, abertura, frestas | comprovado | d3c0e25; o pacote do Bosque, com emendas e bordas, abre no executável exportado (checkpoint48) | — |
+| F9-03 | ausência de perfil/asset | comprovado | Borders93 (diagnóstico); no intercâmbio, asset ausente ou diferente é nomeado antes de compilar (checkpoint47); instalação limpa só com executável e `.pck` e perfil novo valida e abre o Bosque (release_bosque 8/8, checkpoint48) | — |
 | F9-04 | largura útil M3-NAV-01, rampas 400/160 e 400/200 | comprovado | ce7bd59 46 checks | — |
 | F9-04 | abertura larga, suporte contínuo, massa | comprovado | e6fdf43, 270ff3a, Ports92 | — |
 | F9-04 | precisão, escala, corpo, folga | comprovado | 270ff3a/e6fdf43, SurfacePick24 | sem garantia universal de escala (limite declarado) |
@@ -107,7 +107,7 @@ pente-fino de F10 revisita. Nenhuma prova, guard, limite ou quota foi reduzido.
 | F9-11 | pacote imutável, revisão, consumo sem código | comprovado | 7f723ac 22/18/52/33/49 | — |
 | F9-11 | preview real, apresentação de jogo | comprovado | GameplayNative63, checkpoints 30–40 | — |
 | F9-11 | restart, continuidade, compatibilidade | comprovado | 581dae4, diário J1–J3 | — |
-| F9-11 | export release limpo, dependências, API documentada | parcial | release M8 volta a passar (checkpoint41: pacote representativo recompilado e manifesto de assets) | release com o pacote do Bosque e ponto de consumo documentado para os próximos épicos (P5) |
+| F9-11 | export release limpo, dependências, API documentada | comprovado | release M8 (checkpoint41); pacote do Bosque fixado em `release_packages.json`, ponto de consumo `map_release.gd` e consumption.md (ReleaseApi11); release em instalação limpa pela API (release_bosque 8/8, checkpoint48) | — |
 | F9-12 | área temática (Bosque do Santuário) | parcial | 2 peças, trilha, colina, rampas, platôs, ponte e rota inferior, santuário, emenda, 47 props, população, patrulha; jogado pelo humano | conferir cada item da amostra no mapa final; geração com pins e intercâmbio em clone na área (P7) |
 | F9-12 | fluxo humano completo sem código, aceite | **falta** | — | roteiro humano e aceite (P7) |
 | — | teste histórico M3Native24 (preview retirado) | **falta** | baseline auditada no checkpoint25 | migrar o tooling (P6, junto da UX) |
@@ -127,7 +127,7 @@ pente-fino de F10 revisita. Nenhuma prova, guard, limite ou quota foi reduzido.
 4. **P4 — assets e fontes de skills (F9-01/03/09).** (checkpoint47: bundle v2 com manifesto de assets, revisões reais, fonte da skill de mapas) Manifesto de assets no bundle,
    ambiente limpo, rejeição de adulteração; atualizar `skills/ragrpg-mapdelivery`
    e os guias.
-5. **P5 — export release (F9-11).** Release limpo com os pacotes F9 e API de
+5. **P5 — export release (F9-11).** (checkpoint48: pacote do Bosque, lista de mapas publicados, `map_release.gd`, consumption.md, release em instalação limpa) Release limpo com os pacotes F9 e API de
    consumo documentada.
 6. **P6 — UX guiada e oclusão (F9-01/06/07).** Fluxo entre telas, diagnóstico
    localizado no fluxo, prova de oclusão.

@@ -270,3 +270,8 @@ Checkpoint47 (1/11, Sol/Astra Opus): P4 bundle de intercâmbio v2 com manifesto
 passivo de assets (hash, tipo, direitos, origem), área controlada, adulteração e
 ambiente diferente recusados com os arquivos nomeados, revisões reais dos
 compiladores e fonte da skill de mapas atualizada (ExchangeAssets12).
+
+Checkpoint48 (1/11, Sol/Astra Opus): P5 pacote do Bosque publicado e fixado na
+lista de mapas, ponto de consumo `map_release.gd` documentado em consumption.md
+(ReleaseApi11) e release em instalação limpa abrindo o Bosque pela API
+(release_bosque 8/8).

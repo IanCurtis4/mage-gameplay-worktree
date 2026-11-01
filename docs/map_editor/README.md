@@ -97,6 +97,8 @@ chat F8, conforme orientação humana nesta conversa.
 - [Arquitetura, dados e ferramentas](architecture.md).
 - [Pacotes, dependências e prompts de despacho](execution.md).
 - [Validação, aceites e registro desta entrega](validation.md).
+- [Consumo dos mapas publicados (F9-11)](consumption.md): pacote `.rpp`, lista
+  de mapas, API `map_release.gd`, compatibilidade e publicação.
 - [Retificação humana: peças/células e terreno](contracts/terrain_piece_semantics.md):
   precedência sobre a interpretação anterior de escala e aparência do F2.
 - [Composição manual/algorítmica e barreiras de bioma](contracts/map_composition_and_seams.md):
