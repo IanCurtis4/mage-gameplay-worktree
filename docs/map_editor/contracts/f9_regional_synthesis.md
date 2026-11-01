@@ -58,6 +58,25 @@ e patrol, com a ferramenta "Variação regional…" nas três telas, AX
   compilado e a proposta avisa.
 - Rotas: preservadas; mudar rota continua na tela de patrulhas.
 
+Checkpoint45 (P3c): intercâmbio de três vias em `exchange/exchange.gd`.
+
+- Máscara comum: `RegionalSynthesis.protected_samples` decide, para a variação e
+  para o intercâmbio, quais amostras uma região protegida guarda. `Exchange.guards`
+  guarda a grade e a lista de proteções da camada, essas amostras (altura e
+  `#weights/<i>`, a mistura efetiva) e os objetos cujo footprint toca a região;
+  camada travada continua inteira.
+- `Exchange.prepare(pedido, proposta, atual, cancelamento, escolhas)`: com a fonte
+  igual à base, comportamento anterior. Fonte divergente: `merge()` compara pelo
+  diff fino (identidade, campo, amostra; `/revision` de peça e `/plan_hash` ficam
+  com a versão atual). Mudança da proposta sem mudança local sobreposta entra;
+  igual dos dois lados é concordância; sobreposta (mesmo caminho, pai ou filho,
+  ou a mesma mistura de amostra) é conflito `value`; mudança que toca proteção
+  nova ou alterada da atual é `protection` (só "current"); lugar que não existe
+  mais é `structure`. Escolhas desconhecidas são recusadas. A fonte combinada
+  passa pelo leitor (referência rompida → `exchange_merge_invalid`), o plano de
+  encontros é reconferido com o escopo `redraw=false` e a raiz é compilada.
+- Sem nada a aplicar depois das escolhas, o resultado é `already_applied`.
+
 ## Autoridade e unidade de aplicação
 
 Serviço de proposta regional sobre a fonte raiz aberta, kind piece/map/population/

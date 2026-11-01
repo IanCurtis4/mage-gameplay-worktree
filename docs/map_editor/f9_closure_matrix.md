@@ -85,19 +85,19 @@ pente-fino de F10 revisita. Nenhuma prova, guard, limite ou quota foi reduzido.
 | F9-05 | mesma peça, manual, seed, contexto | comprovado | entregue em F8; M6 PASS na regressão de base (job 154) | — |
 | F9-05 | síntese/regeneração interna real por região | parcial | dentro de uma peça: relevo, materiais e objetos; proposta compilada, uma aplicação, um undo; GUI/AX/CLI com o mesmo hash (RegionalSynthesis12, RegionalSynthesisNative14, checkpoint43); uma posição do mapa com snapshot próprio, com mapa, encontros ou patrulhas como raiz (RootSynthesis12, RootSynthesisNative10, checkpoint44) | recibo e replay (P3d) |
 | F9-05 | proteção de terreno, props, encontros, patrulhas, pins | parcial | pins de instância; na variação regional: regiões protegidas e preservadas, aberturas, objetos travados ou preservados e o footprint de quem fica (checkpoint43); entrada, saídas, slots e trechos de patrulha protegem o chão; slots fixos e de patrulha nunca são redistribuídos (checkpoint44) | pins de instância do modo por seed na máscara (P3d) |
-| F9-05 | diff e contradição antes do commit | parcial | slots WFC; variação regional com diff por amostra e objeto e déficit de espalhamento (checkpoint43); suporte perdido ou alterado e déficit de encontros apontam a entidade (checkpoint44) | comparação de três vias no intercâmbio (P3c) |
+| F9-05 | diff e contradição antes do commit | parcial | slots WFC; variação regional com diff por amostra e objeto e déficit de espalhamento (checkpoint43); suporte perdido ou alterado e déficit de encontros apontam a entidade (checkpoint44); conflitos do intercâmbio listados com base/atual/proposta antes de qualquer commit (checkpoint45) | — |
 | F9-06 | biblioteca, busca, miniaturas, categorias, presets, favoritos | comprovado | Library50/Native53, 73b6ee8 | — |
 | F9-06 | minimapa, árvore de objetos, camadas | comprovado | 6d72972 20/52/53/28 | — |
 | F9-06 | overlays, foco, atalhos, diagnóstico localizado | parcial | Viewport20/Native52 | diagnóstico integrado ao fluxo final (P6) |
-| F9-07 | AX: IDs, ações parametrizadas, estado | parcial | terreno, objetos, contexto, composição, encontros, patrulha (checkpoints 23–30); variação regional `terrain/synthesis/*` (checkpoint43) e `map`/`population`/`patrol` `/synthesis/*` (checkpoint44) | AX do intercâmbio de três vias (P3c) |
+| F9-07 | AX: IDs, ações parametrizadas, estado | parcial | terreno, objetos, contexto, composição, encontros, patrulha (checkpoints 23–30); variação regional `terrain/synthesis/*` (checkpoint43) e `map`/`population`/`patrol` `/synthesis/*` (checkpoint44); intercâmbio `<tela>/exchange/{export,review,apply}` (checkpoint45) | UX guiada entre telas (P6) |
 | F9-07 | UX coerente e guiada, fluxo humano inteiro | **falta** | menus e seletores por tela | roteiro guiado entre telas, sem código (P6) |
 | F9-07 | histórico, hash, confirmação, modos | comprovado | entregue em F8; M1 PASS depois de corrigir a fixture do runner (job 155) | — |
 | F9-08 | biomas, espécies, chances, pesos, reservas | parcial | Content28/Native30, EncounterAuthoring27/25 | conferir chances nos fluxos integrados (P7) |
 | F9-08 | raro manual, exceção por instância, quest passiva | comprovado | entregue em F8; M4 PASS na regressão de base (job 154) | — |
 | F9-08 | bioma no manifesto final | comprovado | 4e3a3788, MapBiome15/13 | — |
-| F9-08 | stale entre revisões e reconciliação sem perda | parcial | snapshots separados, reimportação limitada; a variação regional religa cada marcador pela família da camada e posição, sem piso mais próximo, e reserva todo slot que fica (checkpoint44) | reconciliação entre revisões no intercâmbio (P3c) |
-| F9-09 | GUI/AX/CLI equivalentes | parcial | composição, contexto, encontros, patrulhas, compilação, Store; variação regional na peça (checkpoint43) e na raiz de mapa, encontros e patrulhas (checkpoint44) | intercâmbio de três vias e bundle (P3c/P4) |
-| F9-09 | diff, preview, undo, proteção espacial, rebase | parcial | export/revisão/aplicação com diff; base divergente é recusada inteira | comparação base/atual/proposta por campo/amostra e máscara (P3) |
+| F9-08 | stale entre revisões e reconciliação sem perda | comprovado | snapshots separados; a variação regional religa cada marcador pela família da camada e posição e reserva todo slot que fica (checkpoint44); o intercâmbio combina base/atual/proposta sem perder mudanças locais e reconfere o plano (checkpoint45) | — |
+| F9-09 | GUI/AX/CLI equivalentes | parcial | composição, contexto, encontros, patrulhas, compilação, Store; variação regional na peça (checkpoint43) e na raiz de mapa, encontros e patrulhas (checkpoint44); intercâmbio de três vias com o mesmo hash (checkpoint45) | bundle com assets (P4) |
+| F9-09 | diff, preview, undo, proteção espacial, rebase | comprovado | export/revisão/aplicação com diff; três vias por identidade, campo e amostra com a máscara comum; conflitos com escolha explícita; proteção atual prevalece (ExchangeMerge13, ExchangeMergeNative10, checkpoint45) | — |
 | F9-09 | assets passivos, ambiente limpo, segurança | parcial | manifesto de assets no build: o release valida as dependências dos pacotes sem os PNGs crus (checkpoint41) | assets no bundle de intercâmbio, área controlada, rejeição de adulteração no import (P4) |
 | F9-09 | fontes de skills e guias | **falta** | 5 skills versionadas em `skills/` | atualizar as fontes para o editor F9, sem instalar (P4) |
 | F9-10 | autosave, backup, pending, conflito | comprovado | entregue em F1/F3; M1 PASS (job 155) | — |
@@ -120,7 +120,7 @@ pente-fino de F10 revisita. Nenhuma prova, guard, limite ou quota foi reduzido.
 2. **P2 — responsividade do editor e do teste (F9-10).** (checkpoint42: memo nos lotes de conectividade, cache verificável, intercâmbio fora da interface; `start()` do teste e cache regional movidos para F10 em 1/11) Tirar `start()` do
    quadro principal, prévia e commit em segundo plano com cancelamento e progresso,
    cache regional verificável, campanha de medição.
-3. **P3 — síntese regional e reconciliação (F9-05/07/08/09).** (checkpoint43: P3a, variação dentro de uma peça; checkpoint44: P3b, mapa/encontros/patrulhas; faltam P3c intercâmbio e P3d recibo) Implementar o
+3. **P3 — síntese regional e reconciliação (F9-05/07/08/09).** (checkpoint43: P3a, variação dentro de uma peça; checkpoint44: P3b, mapa/encontros/patrulhas; checkpoint45: P3c, intercâmbio de três vias; falta P3d recibo) Implementar o
    contrato já preparado: proposta regional sobre a fonte, máscara comum, uma
    aplicação atômica, undo único, diff de três vias no intercâmbio, reconciliação
    de encontros e patrulhas. É o maior pacote.

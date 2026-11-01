@@ -26,9 +26,15 @@ da tela de origem. Desfazer/refazer e salvar continuam nela. Fechar/cancelar/rej
 não altera a autoria; o original exportado continua disponível em disco.
 
 Se a fonte mudar durante a validação ou antes do commit, o editor recusa stale.
-Uma fonte diferente da base recebe `base_diverged`; não há merge automático.
-Reconciliar significa revisar as mudanças humanas, exportar novo pedido e obter
-nova proposta. Repetir proposta já aplicada é no-op sem nova ação de undo.
+Checkpoint45: uma fonte diferente da base é combinada em três vias (base, atual,
+proposta) por identidade, campo e amostra. Mudanças disjuntas entram; a mesma
+mudança dos dois lados vale uma vez; mudança sobreposta aparece como conflito com
+os três valores e precisa de escolha ("Manter a versão atual" ou "Usar a
+proposta") e de "Revalidar com as escolhas". Proteção que a versão atual
+acrescentou prevalece; remoção contra edição e referência rompida recusam. A fonte
+combinada é validada, o plano de encontros é reconferido sem sortear e tudo é
+compilado antes de aplicar. Repetir proposta já aplicada é no-op sem nova ação de
+undo.
 Não há publicação por importação. A geração importa o pedido e valida seu mapa,
 sem executar/ativar WFC; gerar variantes continua sendo uma ação explícita F6.
 
@@ -39,7 +45,13 @@ res://scripts/map_authoring/exchange/headless.gd --`. Operações:
 
 - `export <kind> <fonte.json> <permissoes.json> <pedido.rpx>`
 - `propose <pedido.rpx> <candidate.json> <proposta.rpx>`
-- `review <pedido.rpx> <proposta.rpx> <fonte_atual.json>`
+- `review <pedido.rpx> <proposta.rpx> <fonte_atual.json> [<escolhas.json>]`
+- `merge <pedido.rpx> <proposta.rpx> <fonte_atual.json> <saida.json> [<escolhas.json>]`
+  grava a fonte combinada num arquivo novo (nunca sobrescreve).
+
+Escolhas: `{"/layers/@chao/heights/20":"current"}`, chave = caminho do conflito.
+AX da tela: `<tela>/exchange/export`, `review` e `apply` (com
+`expected_current_hash`), sobre o mesmo serviço e o mesmo estado da janela.
 
 Kinds: `piece`, `map`, `population`, `patrol`, `generation`. Arquivo de permissões:
 `{"sections":["name"],"ids":[],"protected_paths":[],"max_changes":256}`.
@@ -74,10 +86,12 @@ ter ticket idêntico; alterações de permissões são recusadas mesmo com hash 
 Diff usa `/colecao/@id/campo` para entidades e valores completos para arrays
 numéricos/ordenados. IDs opcionais restringem a entidade alterada; mudanças em
 campos globais não têm entidade e são recusadas quando IDs estão restritos.
-Caminhos protegidos usam esse mesmo formato. Camadas travadas ou com regiões
-protegidas preservam a camada inteira conservadoramente; regiões referenciadas,
-slots fixos e placements de pins são protegidos, inclusive remoção da trava.
-Essa política não promete uma máscara espacial de permissões subcamada.
+Caminhos protegidos usam esse mesmo formato. Camadas travadas preservam a camada
+inteira. Checkpoint45: numa camada com regiões protegidas ficam guardados a grade,
+a lista de proteções, as próprias regiões, as amostras cuja influência toca uma
+delas (altura e mistura de materiais) e os objetos cujo footprint as toca; o resto
+da camada pode mudar. É a mesma máscara da variação regional. Slots fixos e
+placements de pins continuam protegidos, inclusive remoção da trava.
 
 Limites do leitor comum:16MiB, profundidade32, string65536,2000000 tokens; brief8192,
 corpus32 seeds signed64 textuais,32 seções,128 IDs/caminhos,2048 diferenças.

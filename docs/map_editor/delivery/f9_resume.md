@@ -1,7 +1,38 @@
 # Retomada F9 —30/10/2026
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint44 — variação regional no mapa, nos encontros e nas patrulhas (P3b)
+## Checkpoint45 — intercâmbio de três vias (P3c)
+
+1/11/2026. Mesmo checkout/branch/fixture. Base a183b845; código e documentação
+em commits próprios. Papéis inalterados. Contratos:
+contracts/f9_regional_synthesis.md (seção "Estado") e exchange.md.
+
+- Pedido humano: começar o P3c.
+- Fonte que mudou depois do pedido exportado não é mais recusada inteira: base,
+  versão atual e proposta são comparadas por identidade, campo e amostra (alturas
+  e mistura de materiais uma a uma). Mudanças disjuntas se combinam; a mesma
+  mudança dos dois lados vale uma vez; o resto é conflito com escolha explícita
+  ("manter a atual" ou "usar a proposta") e nova validação. Proteção nova da
+  versão atual prevalece; remoção contra edição e referência rompida recusam.
+  A fonte combinada é validada e compilada; a proposta continua conferida contra
+  o próprio relatório.
+- Máscara comum com a variação regional: região protegida guarda a grade da
+  camada, a lista de proteções, as amostras cuja influência a toca (altura e
+  mistura) e os objetos que a tocam; antes travava a camada inteira.
+- Encontros: depois da combinação o plano é reconferido sem sortear (escopo do
+  P3b); `plan_hash` só muda depois de validado.
+- Tela de intercâmbio: conflitos com base/atual/proposta, escolha por conflito,
+  "Revalidar com as escolhas" e resumo da combinação. AX
+  `<tela>/exchange/{export,review,apply}`; CLI `merge` (fonte combinada num
+  arquivo novo) e `review` com escolhas.
+- ExchangeMerge13 e ExchangeMergeNative10 (editor real: GUI, AX e CLI com o
+  mesmo hash, um undo). M7 headless e nativo PASS; o check de base divergente
+  passou a esperar `exchange_conflict` (o mesmo campo mudado dos dois lados).
+
+Pendente: P3d (recibo e replay); aceite humano.
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint44 — variação regional no mapa, nos encontros e nas patrulhas (P3b)
 
 1/11/2026. Mesmo checkout/branch/fixture. Base c95f1a3c; código e documentação
 em commits próprios. Papéis inalterados. Contrato:
@@ -30,8 +61,7 @@ contracts/f9_regional_synthesis.md (seção "Estado").
   PopulationPlanner, EncounterAuthoring(Native), CompositionAX(Native),
   MapBiomeNative, LibraryNative e GameplayEditorNative PASS. Bosque real (patrulhas abertas, relevo na região woods_clearing da clareira, sem cache): proposta em 320 s; só 1 amostra pôde mudar porque os 3 slots da região e o raio conservador ocupam quase toda a área; 3 slots religados ao piso novo e 1 centro de pincel reassentado.
 
-Pendente: P3c (intercâmbio de três vias), P3d (recibo e replay); aceite humano.
-<!-- /f9-patrol-gameplay-active -->
+Próximo: P3c (intercâmbio de três vias), feito no checkpoint45.
 
 ## Histórico checkpoint43 — variação regional dentro de uma peça (P3a)
 

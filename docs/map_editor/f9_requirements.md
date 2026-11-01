@@ -256,3 +256,8 @@ Checkpoint44 (1/11, Sol/Astra Opus): P3b variação regional de uma posição do
 com mapa, encontros ou patrulhas como raiz: snapshot novo só para a instância,
 marcadores religados por camada e posição, corpos e rotas protegidos, encontros
 redistribuídos só dentro da região (RootSynthesis12, RootSynthesisNative10).
+
+Checkpoint45 (1/11, Sol/Astra Opus): P3c intercâmbio de três vias por identidade,
+campo e amostra, com a máscara comum da variação regional, conflitos com escolha
+explícita, proteção atual prevalecendo e plano de encontros reconferido
+(ExchangeMerge13, ExchangeMergeNative10).
