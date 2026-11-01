@@ -1,7 +1,33 @@
 # RagRPG — handoff portátil de F9
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint41 — matriz de fechamento, regressão de base e release
+## Checkpoint42 — responsividade do editor (P2)
+
+1/11/2026. Mesmo checkout/branch/fixture. Base a08d0185; código e documentação
+em commits próprios. Papéis inalterados. Contrato:
+contracts/f9_editor_responsiveness.md.
+
+- Pedido humano: seguir com o P2 e limpar o que ocupava o HD. Limpeza: ~1,4 GB
+  de artefatos gerados (fixtures antigas, export de teste, sessões de 27–30/10,
+  patches já aplicados); 8,3 → 9,7 GB livres.
+- Medido: a compilação dos encontros do Bosque levava 165 s e a das patrulhas
+  180 s, no limite de 180 s do processo de trabalho do editor. Cada lote de
+  conectividade reconstruía os predicados de navegação do zero.
+- Lote de conectividade usa o memo de predicados do mundo (mesmos valores):
+  lotes seguintes de ~11,5 s para ~2,3 s.
+- Cache verificável de mapa e encontros (opt-in, ligado pelo plugin do editor;
+  testes compilam de verdade): encontros 96,5 s na primeira vez e 4,8 s sem
+  mudança; patrulhas 9,8 s quando só a rota muda.
+- Intercâmbio: prévia da base e aplicação compilam fora da thread da interface.
+  Jobs de trabalho não deixam mais sobras em .godot/map_authoring/jobs.
+- CompileCache10 novo; navegação/população, GameplayNative, AssetManifest e
+  runners M3–M7 PASS.
+
+Pendente: `start()` do teste no quadro principal; P3 (síntese regional e
+reconciliação); aceite humano.
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint41 — matriz de fechamento, regressão de base e release
 
 31/10/2026. Mesmo checkout/branch/fixture. Base 0ce15143; código, testes e
 documentação em commits próprios. Papéis inalterados.
@@ -20,7 +46,6 @@ documentação em commits próprios. Papéis inalterados.
 
 Próximo: P2 (responsividade do editor e do teste), depois P3 (síntese regional
 e reconciliação).
-<!-- /f9-patrol-gameplay-active -->
 
 ## Histórico checkpoint40 — diário J3: ondas, respawn e mortes gravadas na hora
 

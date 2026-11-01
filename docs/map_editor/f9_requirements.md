@@ -240,3 +240,8 @@ Checkpoint41 (31/10, Sol/Astra Opus): [matriz de fechamento](f9_closure_matrix.m
 com rastreabilidade F9-01..12 e pacotes P1–P8. Regressão de base 56/58 + M2–M8;
 LibraryNative e M1 atualizados; release M8 volta a passar com manifesto de
 assets no build (AssetManifest7) e pacote representativo recompilado.
+
+Checkpoint42 (1/11, Sol/Astra Opus): P2 responsividade. Lote de conectividade com
+o memo de predicados, cache verificável de mapa/encontros e intercâmbio fora da
+interface: encontros do Bosque 165 s → 96,5 s (4,8 s sem mudança), patrulhas
+180 s → 9,8 s. Ver [responsividade](contracts/f9_editor_responsiveness.md).

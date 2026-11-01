@@ -86,9 +86,9 @@ não têm implementação, ou a têm só em parte. São os pacotes P2–P7 abaix
 | F9-09 | assets passivos, ambiente limpo, segurança | parcial | manifesto de assets no build: o release valida as dependências dos pacotes sem os PNGs crus (checkpoint41) | assets no bundle de intercâmbio, área controlada, rejeição de adulteração no import (P4) |
 | F9-09 | fontes de skills e guias | **falta** | 5 skills versionadas em `skills/` | atualizar as fontes para o editor F9, sem instalar (P4) |
 | F9-10 | autosave, backup, pending, conflito | comprovado | entregue em F1/F3; M1 PASS (job 155) | — |
-| F9-10 | cancelamento, progresso, stale, atomicidade | parcial | threads em compiladores, população, patrulha, geração, intercâmbio | commit e prévia ainda síncronos (F7); "Iniciar teste" ainda roda `start()` no quadro principal (31,8 s medidos no checkpoint31) (P2) |
-| F9-10 | cache e invalidação regional | **falta** | ausência registrada | cache verificável por região (P2) |
-| F9-10 | medição pequeno/representativo/estresse | parcial | lote canônico, NavigationDense5 | campanha de medição frio/quente com limites honestos (P2) |
+| F9-10 | cancelamento, progresso, stale, atomicidade | parcial | threads em compiladores, população, patrulha, geração; intercâmbio compila a prévia da base e a aplicação fora da interface (checkpoint42) | "Iniciar teste" ainda monta o mundo no quadro principal, atrás da tela de carregamento (8 s com pacote pronto) |
+| F9-10 | cache e invalidação regional | parcial | cache verificável de mapa e encontros por pacote (CompileCache10, checkpoint42) | invalidação dentro de uma peça (só as células tocadas) |
+| F9-10 | medição pequeno/representativo/estresse | comprovado | representativa e Bosque, frio/quente, antes/depois ([responsividade](contracts/f9_editor_responsiveness.md)); NavigationDense5 para estresse | — |
 | F9-11 | pacote imutável, revisão, consumo sem código | comprovado | 7f723ac 22/18/52/33/49 | — |
 | F9-11 | preview real, apresentação de jogo | comprovado | GameplayNative63, checkpoints 30–40 | — |
 | F9-11 | restart, continuidade, compatibilidade | comprovado | 581dae4, diário J1–J3 | — |
@@ -100,9 +100,9 @@ não têm implementação, ou a têm só em parte. São os pacotes P2–P7 abaix
 
 ## Pacotes propostos, em ordem
 
-1. **P1 — regressão integral.** Todas as etapas F9 e os runners M1–M8 (job 154).
+1. **P1 — regressão integral.** (feito no checkpoint41) Todas as etapas F9 e os runners M1–M8 (job 154).
    Fecha as linhas "regressão" que passarem; migra o M3Native24.
-2. **P2 — responsividade do editor e do teste (F9-10).** Tirar `start()` do
+2. **P2 — responsividade do editor e do teste (F9-10).** (checkpoint42: memo nos lotes de conectividade, cache verificável, intercâmbio fora da interface; resta o `start()` do teste) Tirar `start()` do
    quadro principal, prévia e commit em segundo plano com cancelamento e progresso,
    cache regional verificável, campanha de medição.
 3. **P3 — síntese regional e reconciliação (F9-05/07/08/09).** Implementar o
