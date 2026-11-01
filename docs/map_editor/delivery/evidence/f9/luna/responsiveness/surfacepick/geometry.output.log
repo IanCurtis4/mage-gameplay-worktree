@@ -1,0 +1,27 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_PICK_CHECK canonical_f1_fixture_assembles true
+F9_PICK_CHECK planar_connected_edge_resolves_to_lexical_owner true
+F9_PICK_CHECK projected_camera_ray_on_planar_edge_resolves_with_existing_tolerance true
+F9_PICK_CHECK inclined_connected_edge_returns_real_non_coplanar_support true
+F9_PICK_CHECK inclined_edge_keeps_neighbor_plane_normal_available true
+F9_PICK_CHECK projected_camera_ray_on_inclined_edge_resolves_with_existing_tolerance true
+F9_PICK_CHECK body_twenty_by_thirty_two_walks_across_resolved_inclined_seam true
+F9_PICK_CHECK surface_visible_and_link_iteration_order_do_not_change_owner true
+F9_PICK_CHECK multi_face_vertex_connected_through_local_openings_resolves true
+F9_PICK_CHECK multi_face_owner_is_stable_when_all_iteration_orders_reverse true
+F9_PICK_CHECK unlinked_touching_equal_height_faces_remain_ambiguous true
+F9_PICK_CHECK coplanar_interior_overlap_remains_ambiguous true
+F9_PICK_CHECK unlinked_third_coplanar_candidate_keeps_tie_ambiguous true
+F9_PICK_CHECK linked_but_remote_opening_does_not_resolve_tie true
+F9_PICK_CHECK disabled_connection_does_not_resolve_tie true
+F9_PICK_CHECK one_way_connection_does_not_resolve_tie true
+F9_PICK_CHECK incompatible_connector_kinds_do_not_resolve_tie true
+F9_PICK_CHECK nonwalk_opening_does_not_resolve_tie true
+F9_PICK_CHECK near_t_values_with_distinct_hit_positions_remain_ambiguous true
+F9_PICK_CHECK single_visible_interior_surface_still_resolves true
+F9_PICK_CHECK nearest_visible_support_remains_the_first_hit true
+F9_PICK_CHECK stale_revision_is_rejected true
+F9_PICK_CHECK zero_direction_ray_is_rejected true
+F9_PICK_CHECK hidden_upper_slab_still_occludes_lower_visible_floor true
+F9_PICK_RESULT {"checks":[{"detail":"","id":"canonical_f1_fixture_assembles","ok":true},{"detail":"","id":"planar_connected_edge_resolves_to_lexical_owner","ok":true},{"detail":"","id":"projected_camera_ray_on_planar_edge_resolves_with_existing_tolerance","ok":true},{"detail":"","id":"inclined_connected_edge_returns_real_non_coplanar_support","ok":true},{"detail":"","id":"inclined_edge_keeps_neighbor_plane_normal_available","ok":true},{"detail":"","id":"projected_camera_ray_on_inclined_edge_resolves_with_existing_tolerance","ok":true},{"detail":"","id":"body_twenty_by_thirty_two_walks_across_resolved_inclined_seam","ok":true},{"detail":"","id":"surface_visible_and_link_iteration_order_do_not_change_owner","ok":true},{"detail":"","id":"multi_face_vertex_connected_through_local_openings_resolves","ok":true},{"detail":"","id":"multi_face_owner_is_stable_when_all_iteration_orders_reverse","ok":true},{"detail":"","id":"unlinked_touching_equal_height_faces_remain_ambiguous","ok":true},{"detail":"","id":"coplanar_interior_overlap_remains_ambiguous","ok":true},{"detail":"","id":"unlinked_third_coplanar_candidate_keeps_tie_ambiguous","ok":true},{"detail":"","id":"linked_but_remote_opening_does_not_resolve_tie","ok":true},{"detail":"","id":"disabled_connection_does_not_resolve_tie","ok":true},{"detail":"","id":"one_way_connection_does_not_resolve_tie","ok":true},{"detail":"","id":"incompatible_connector_kinds_do_not_resolve_tie","ok":true},{"detail":"","id":"nonwalk_opening_does_not_resolve_tie","ok":true},{"detail":"","id":"near_t_values_with_distinct_hit_positions_remain_ambiguous","ok":true},{"detail":"","id":"single_visible_interior_surface_still_resolves","ok":true},{"detail":"","id":"nearest_visible_support_remains_the_first_hit","ok":true},{"detail":"","id":"stale_revision_is_rejected","ok":true},{"detail":"","id":"zero_direction_ray_is_rejected","ok":true},{"detail":"","id":"hidden_upper_slab_still_occludes_lower_visible_floor","ok":true}],"count":24,"ok":true}

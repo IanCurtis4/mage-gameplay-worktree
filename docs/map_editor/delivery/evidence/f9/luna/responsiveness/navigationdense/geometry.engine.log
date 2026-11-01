@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_DENSE_CHECK historic_dense_source_publishes_without_bypass true
+F9_DENSE_CHECK historic_target_4.0_route true
+F9_DENSE_CASE {"elapsed_usec":1931571,"target_z":4.0,"trace":{"build_usec":1308695,"clear_usec":316350,"direct_usec":6924,"edge_skipped":28749,"edge_tests":3036,"enabled":true,"expansions":740,"members_usec":122669,"memo_entries":17251,"memo_hits":1377,"memo_misses":17251,"memo_peak":17251,"memo_released":0,"memo_stored":17251,"states":1776,"support_usec":173421,"surfaces":31,"total_usec":1908117}}
+F9_DENSE_CHECK historic_target_95.0_route true
+F9_DENSE_CASE {"elapsed_usec":20585,"target_z":95.0,"trace":{"build_usec":0,"direct":true,"direct_usec":20131,"edge_tests":0,"enabled":true,"expansions":0,"surfaces":0,"total_usec":20132}}
+F9_DENSE_CHECK detour_and_direct_fast_path_are_both_exercised true
+F9_DENSE_CHECK query_preserves_world true
+F9_DENSE_RESULT {"checks":[{"id":"historic_dense_source_publishes_without_bypass","ok":true},{"id":"historic_target_4.0_route","ok":true},{"id":"historic_target_95.0_route","ok":true},{"id":"detour_and_direct_fast_path_are_both_exercised","ok":true},{"id":"query_preserves_world","ok":true}],"count":5,"ok":true}

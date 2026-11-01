@@ -1,0 +1,32 @@
+extends SceneTree
+## Checkpoint42 (F9-10): cold/warm cost of the editor compile chain on three
+## inputs: small (one sample piece), representative (2-piece sample) and the
+## Bosque do Santuário (real AX content). Headless, compiles inline.
+const Exchange = preload("res://scripts/map_authoring/exchange/exchange.gd")
+const Terrain = preload("res://scripts/map_authoring/compiler/terrain_compiler.gd")
+const Maps = preload("res://scripts/map_authoring/composition/map_compiler.gd")
+const Population = preload("res://scripts/map_authoring/population/population_compiler.gd")
+const Patrols = preload("res://scripts/map_authoring/patrol/patrol_compiler.gd")
+var report := {}
+func _initialize() -> void: run.call_deferred()
+func ms(t: int) -> float: return snappedf((Time.get_ticks_usec()-t)/1000.0,0.1)
+func measure(label: String, patrol: Dictionary) -> void:
+	var map: Dictionary = patrol.population[0].map[0]
+	var rounds: Array = []
+	for round: int in 2:
+		var row := {"pieces":[]}
+		for piece: Dictionary in map.pieces:
+			var t := Time.get_ticks_usec(); var built := Terrain.compile(piece.source); row.pieces.append({"ok":built.ok,"ms":ms(t)})
+		var t2 := Time.get_ticks_usec(); var compiled := Maps.compile(map); row["map_ms"] = ms(t2); row["map_ok"] = compiled.ok
+		var t3 := Time.get_ticks_usec(); var population := Population.compile(patrol.population[0]); row["population_ms"] = ms(t3); row["population_ok"] = population.ok
+		var t4 := Time.get_ticks_usec(); var routes := Patrols.compile(patrol); row["patrol_ms"] = ms(t4); row["patrol_ok"] = routes.ok
+		var t5 := Time.get_ticks_usec(); var read := Exchange.read("patrol",patrol); row["exchange_read_ms"] = ms(t5); row["exchange_read_ok"] = read.ok
+		rounds.append(row)
+	report[label] = {"pieces":map.pieces.size(),"rounds":rounds}
+	print("COST "+label+" "+JSON.stringify(report[label]))
+func run() -> void:
+	for item: Array in [["representative","res://data/map_authoring/representative_patrol.json"],["bosque","res://data/map_authoring/sanctuary_woods.patrol.json"]]:
+		var loaded := Exchange.load_json(item[1])
+		if not loaded.ok: print("COST "+item[0]+" load_failed "+str(loaded.get("code",""))); continue
+		measure(item[0], loaded.data)
+	print("COST_DONE "+JSON.stringify(report)); quit(0)

@@ -1,5 +1,6 @@
 @tool
 extends RefCounted
+const Cache = preload("res://scripts/map_authoring/compiler/compile_cache.gd")
 const Document = preload("res://scripts/map_authoring/population/population_document.gd")
 const Catalog = preload("res://scripts/map_authoring/population/population_catalog.gd")
 const MapCompiler = preload("res://scripts/map_authoring/composition/map_compiler.gd")
@@ -331,8 +332,20 @@ static func validate_slot(source: Dictionary, context: Dictionary, slot: Diction
 	if code != "": return fail(code,slot.slot_id,{},point.position)
 	if not _separated(point,spec.profile.radius,brush.spacing,occupied): return fail("population_overlap",slot.slot_id,{},point.position)
 	return {"ok":true,"reservation":{"point":point,"radius":spec.profile.radius,"spacing":brush.spacing},"rule":spec.rule}
+# Checkpoint42 (F9-10): the worker process (and headless tools) reuse a verified
+# cached package for an unchanged population under the same environment.
 static func compile(source: Dictionary, cancel: Callable = Callable()) -> Dictionary:
 	if Engine.is_editor_hint(): return Worker.request({"operation":"compile","source":source},cancel)
+	var source_hash := Document.hash_source(source) if Cache.enabled() and Document.validate(source).ok else ""
+	var cache_key := Cache.key("population",REVISION,source_hash)
+	if not cache_key.is_empty():
+		var hit := Cache.fetch("population",cache_key,source_hash)
+		if hit.ok and validate_package(hit.package): return {"ok":true,"code":"","diagnostics":[],"input_hash":source_hash,"output_hash":hit.package.package_hash,"package":hit.package,"cache":"hit"}
+	var result := _compile_uncached(source,cancel)
+	if result.ok and not cache_key.is_empty(): Cache.store("population",cache_key,result.package)
+	return result
+
+static func _compile_uncached(source: Dictionary, cancel: Callable = Callable()) -> Dictionary:
 	var context := prepare(source,cancel)
 	if not context.ok: return context
 	if source.plan_hash != Document.recipe_hash(source): return fail("plan_stale")

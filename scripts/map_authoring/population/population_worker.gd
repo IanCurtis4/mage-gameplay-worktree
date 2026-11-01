@@ -23,7 +23,15 @@ static func request(payload: Dictionary, cancel: Callable = Callable()) -> Dicti
 	var reader := FileAccess.open(response_path,FileAccess.READ)
 	if reader == null or reader.get_length() > 32*1024*1024: return failure("worker_io")
 	var result: Variant = bytes_to_var(reader.get_buffer(reader.get_length()))
+	reader.close()
+	discard(root)
 	if not result is Dictionary or not result.get("ok") is bool: return failure("worker_invalid_response")
 	return result
+# Checkpoint42: a finished job leaves nothing behind (each kept ~1 MB under
+# .godot/map_authoring/jobs). Failed jobs keep their logs for diagnosis.
+static func discard(root: String) -> void:
+	for name: String in DirAccess.get_files_at(root): DirAccess.remove_absolute(root.path_join(name))
+	DirAccess.remove_absolute(root)
+
 static func failure(code: String) -> Dictionary:
 	return {"ok":false,"code":code,"diagnostics":[{"code":code,"entity_id":"","field":"worker","message":{"cancelled":"Operação cancelada.","worker_timeout":"O trabalho atingiu o limite de três minutos.","worker_error":"O processo de validação relatou um erro; consulte o log em .godot/map_authoring/jobs."}.get(code,"Não foi possível concluir o processo de validação local."),"severity":"error"}]}

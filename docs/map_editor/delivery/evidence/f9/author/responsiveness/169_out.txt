@@ -1,0 +1,36 @@
+﻿STAGE CompileCache :: F9 CompileCache: False :: 43s
+   F9_CACHE_METRICS {"map_cold_ms":287.568,"map_hit_ms":235.836,"population_cold_ms":3609.102,"population_hit_ms":270.871}
+   [31;1mException: [0mC:\Users\João Pedro\Documents\ChatGPT\RagRPG\.tools\map-editor-m5\tools\map_editor_completion\run.ps1:156[0m
+STAGE Ports :: F9 Ports: True :: 196s
+STAGE Batch :: F9 Batch: True :: 15s
+STAGE NavigationLazy :: F9 NavigationLazy: True :: 16s
+STAGE NavigationDense :: F9 NavigationDense: True :: 57s
+STAGE NavigationContext :: F9 NavigationContext: True :: 19s
+STAGE PopulationReachability :: F9 PopulationReachability: True :: 17s
+STAGE PopulationPlanner :: F9 PopulationPlanner: True :: 14s
+STAGE CandidateBatch :: F9 CandidateBatch: True :: 13s
+STAGE NavigationAstar :: F9 NavigationAstar: True :: 31s
+STAGE NavigationAsync :: F9 NavigationAsync: True :: 18s
+STAGE Geometry :: F9 Geometry: True :: 16s
+STAGE SurfacePick :: F9 SurfacePick: True :: 12s
+STAGE GameplayNative :: F9 GameplayNative: True :: 92s
+STAGE AssetManifest :: F9 AssetManifest: True :: 14s
+RUNNER map_editor_composition :: exit=0 :: 41s
+   document_regression: True
+   M3_ALL_PASS
+RUNNER map_editor_population :: exit=0 :: 99s
+   document_regression: True
+   M4_ALL_PASS
+RUNNER map_editor_patrol :: exit=0 :: 203s
+   cli_b: True
+   M5_ALL_PASS
+RUNNER map_editor_generation :: exit=0 :: 58s
+   cli_b: True
+   M6_ALL_PASS
+RUNNER map_editor_exchange :: exit=0 :: 76s
+   cli_invalid_review: True
+   M7_ALL_PASS
+--- cost probe (memo; cache cold then hit)
+COST representative {"pieces":2,"rounds":[{"exchange_read_ms":12.8,"exchange_read_ok":true,"map_ms":566.6,"map_ok":true,"patrol_ms":549.4,"patrol_ok":true,"pieces":[{"ms":70.2,"ok":true},{"ms":63.3,"ok":true}],"population_ms":3383.4,"population_ok":true},{"exchange_read_ms":13.9,"exchange_read_ok":true,"map_ms":219.1,"map_ok":true,"patrol_ms":567.8,"patrol_ok":true,"pieces":[{"ms":70.0,"ok":true},{"ms":64.1,"ok":true}],"population_ms":248.9,"population_ok":true}]}
+COST bosque {"pieces":2,"rounds":[{"exchange_read_ms":75.6,"exchange_read_ok":true,"map_ms":25869.4,"map_ok":true,"patrol_ms":9755.7,"patrol_ok":true,"pieces":[{"ms":792.3,"ok":true},{"ms":341.8,"ok":true}],"population_ms":96530.0,"population_ok":true},{"exchange_read_ms":96.1,"exchange_read_ok":true,"map_ms":4289.4,"map_ok":true,"patrol_ms":9828.8,"patrol_ok":true,"pieces":[{"ms":854.4,"ok":true},{"ms":348.4,"ok":true}],"population_ms":4810.6,"population_ok":true}]}
+DONE 2026-11-01T00:49:22.7725310-03:00

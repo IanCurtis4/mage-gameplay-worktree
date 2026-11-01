@@ -15,6 +15,7 @@ const BorderCatalog = preload("res://scripts/map_authoring/composition/border_pr
 const BorderOperations = preload("res://scripts/map_authoring/composition/border_operations.gd")
 const BorderSpans = preload("res://scripts/map_authoring/composition/border_spans.gd")
 const BorderGeometry = preload("res://scripts/map_authoring/composition/border_geometry.gd")
+const Cache = preload("res://scripts/map_authoring/compiler/compile_cache.gd")
 const REVISION := "map_composition_v5"
 const EPS := 0.0001
 var _thread: Thread
@@ -60,7 +61,21 @@ static func _center(cell: Dictionary) -> Vector3:
 	for vertex: Vector3 in cell.vertices: center += vertex
 	return center/float(cell.vertices.size())
 
+# Checkpoint42 (F9-10): an unchanged map under the same environment comes from the
+# verified compile cache; anything else compiles and is stored when it succeeds.
 static func compile(source: Dictionary, cancellation: Callable = Callable()) -> Dictionary:
+	var source_hash := Document.hash_source(source) if source is Dictionary and Cache.enabled() else ""
+	var cache_key := Cache.key("map",REVISION,source_hash)
+	if not cache_key.is_empty():
+		var started := Time.get_ticks_usec()
+		var hit := Cache.fetch("map",cache_key,source_hash)
+		if hit.ok and Document.validate(source).ok and validate_package(hit.package):
+			return {"ok":true,"code":"","diagnostics":Context.warnings(source),"input_hash":source_hash,"output_hash":hit.package.package_hash,"package":hit.package,"metrics":{"elapsed_ms":(Time.get_ticks_usec()-started)/1000.0,"navigation":{},"cache":"hit"}}
+	var result := _compile_uncached(source,cancellation)
+	if result.ok and not cache_key.is_empty(): Cache.store("map",cache_key,result.package)
+	return result
+
+static func _compile_uncached(source: Dictionary, cancellation: Callable = Callable()) -> Dictionary:
 	var started := Time.get_ticks_usec()
 	var validated := Document.validate(source)
 	if not validated.ok: return validated

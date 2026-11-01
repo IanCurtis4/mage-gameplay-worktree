@@ -3,9 +3,11 @@ param(
     [Parameter(Mandatory)][string]$EvidenceDirectory,
     [switch]$SkipImport,
     [string]$ResumeSession="",
-    [ValidateSet('Geometry','Objects','ObjectsNative','Mesh','Relief','Ports','Batch','Materials','MaterialsNative','Scale','Cliff','CliffNative','BiomeProps','BiomePropsNative','Borders','BordersNative','Shadows','ShadowsNative','CanvasOrder','Library','LibraryNative','Viewport','ViewportNative','RuntimeView','GameplayNative','GameplayWindow','GameplayControls','GameplayEditorNative','GameplayCli','FieldsNative','Organic','NavigationLazy','NavigationDense','NavigationContext','Rounded','RoundedNative','SnapshotDensity','RoundedResume','SurfacePick','Authoring','AuthoringNative','Content','ContentNative','CompositionAX','CompositionAXNative','MapBiome','MapBiomeNative','EncounterAuthoring','EncounterAuthoringNative','PopulationReachability','PopulationPlanner','CandidateBatch','GameplayGate','WorldTargeting','WorldRewardPoll','NavigationAstar','NavigationAsync','CampaignJournal','AssetManifest')][string]$Stage='Geometry'
+    [ValidateSet('Geometry','Objects','ObjectsNative','Mesh','Relief','Ports','Batch','Materials','MaterialsNative','Scale','Cliff','CliffNative','BiomeProps','BiomePropsNative','Borders','BordersNative','Shadows','ShadowsNative','CanvasOrder','Library','LibraryNative','Viewport','ViewportNative','RuntimeView','GameplayNative','GameplayWindow','GameplayControls','GameplayEditorNative','GameplayCli','FieldsNative','Organic','NavigationLazy','NavigationDense','NavigationContext','Rounded','RoundedNative','SnapshotDensity','RoundedResume','SurfacePick','Authoring','AuthoringNative','Content','ContentNative','CompositionAX','CompositionAXNative','MapBiome','MapBiomeNative','EncounterAuthoring','EncounterAuthoringNative','PopulationReachability','PopulationPlanner','CandidateBatch','GameplayGate','WorldTargeting','WorldRewardPoll','NavigationAstar','NavigationAsync','CampaignJournal','AssetManifest','CompileCache')][string]$Stage='Geometry'
 )
 $ErrorActionPreference='Stop'
+# Checkpoint42: every test compiles for real; the editor cache is opt-in.
+$env:RAGRPG_COMPILE_CACHE='0'
 $f9Root=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 if([IO.Path]::GetFullPath((git -C $f9Root rev-parse --show-toplevel)) -ne [IO.Path]::GetFullPath($f9Root)){throw 'Use the source checkout runner.'}
 $f9Evidence=[IO.Path]::GetFullPath($EvidenceDirectory)
@@ -36,6 +38,7 @@ $f9Info.RedirectStandardOutput=$true; $f9Info.RedirectStandardError=$true
 $f9Info.Environment['APPDATA']=Join-Path $f9Fixture '.godot/discardable_profile'
 $f9Info.Environment['LOCALAPPDATA']=$f9Info.Environment['APPDATA']
 $f9Info.Environment['F9_EVIDENCE']=$f9Evidence
+$f9Info.Environment['RAGRPG_COMPILE_CACHE']='0'
 if($Stage -eq 'RoundedResume'){
     if([string]::IsNullOrEmpty($ResumeSession) -or -not (Test-Path -LiteralPath $ResumeSession -PathType Leaf)){throw 'Provide the existing disposable gameplay session.'}
     $f9Info.Environment['F9_RESUME_SESSION']=[IO.Path]::GetFullPath($ResumeSession)
@@ -52,6 +55,7 @@ if($Stage -eq 'WorldTargeting'){$f9Script='res://tests/map_editor_world_targetin
 if($Stage -eq 'WorldRewardPoll'){$f9Script='res://tests/map_editor_world_reward_poll_test.gd';$f9Marker='F9_REWARD_POLL_RESULT'}
 if($Stage -eq 'NavigationAstar'){$f9Script='res://tests/map_editor_navigation_astar_test.gd';$f9Marker='F9_ASTAR_RESULT'}
 if($Stage -eq 'NavigationAsync'){$f9Script='res://tests/map_editor_navigation_async_test.gd';$f9Marker='F9_ASYNC_RESULT'}
+if($Stage -eq 'CompileCache'){$f9Script='res://tests/map_editor_compile_cache_test.gd';$f9Marker='F9_CACHE_RESULT'}
 if($Stage -eq 'AssetManifest'){$f9Script='res://tests/map_editor_asset_manifest_test.gd';$f9Marker='F9_ASSET_RESULT'}
 if($Stage -eq 'CampaignJournal'){$f9Script='res://tests/map_editor_campaign_journal_test.gd';$f9Marker='F9_JOURNAL_RESULT'}
 if($Stage -eq 'PopulationReachability'){$f9Script='res://tests/map_editor_population_reachability_test.gd';$f9Marker='F9_POPULATION_REACHABILITY_RESULT'}
@@ -119,7 +123,7 @@ $f9EngineText=Get-Content -LiteralPath (Join-Path $f9Evidence 'geometry.engine.l
 $f9Match=[regex]::Match($f9Text,'(?m)^'+$f9Marker+' (.+)$')
 $f9Result=if($f9Match.Success){ConvertFrom-Json $f9Match.Groups[1].Value}else{$null}
 $f9Pass=-not $f9Timeout -and -not $f9Aborted -and $f9Process.ExitCode -eq 0 -and $null -ne $f9Result -and $f9Result.ok -and $f9Result.count -gt 0 -and @($f9Result.checks).Count -eq $f9Result.count -and @($f9Result.checks | Where-Object {-not $_.ok}).Count -eq 0 -and $f9Text -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:' -and $f9EngineText -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:'
-$f9Expected=@{AssetManifest=7;CampaignJournal=22;NavigationAsync=18;NavigationAstar=18;WorldRewardPoll=10;WorldTargeting=16;GameplayGate=24;CandidateBatch=18;PopulationPlanner=20;PopulationReachability=27;Geometry=46;Objects=53;ObjectsNative=25;Mesh=34;Relief=58;Ports=92;Batch=36;Materials=35;MaterialsNative=20;Scale=46;Cliff=61;CliffNative=17;BiomeProps=30;BiomePropsNative=23;Borders=93;BordersNative=32;Shadows=28;ShadowsNative=90;CanvasOrder=46;Library=50;LibraryNative=53;Viewport=20;ViewportNative=52;RuntimeView=12;GameplayNative=63;GameplayWindow=33;GameplayControls=29;GameplayEditorNative=22;GameplayCli=18;FieldsNative=73;Organic=15;NavigationLazy=24;NavigationDense=5;NavigationContext=11;Rounded=19;RoundedNative=20;SnapshotDensity=33;RoundedResume=13;SurfacePick=24;Authoring=30;AuthoringNative=15;Content=28;ContentNative=30;CompositionAX=31;CompositionAXNative=13;MapBiome=15;MapBiomeNative=13;EncounterAuthoring=27;EncounterAuthoringNative=25}
+$f9Expected=@{CompileCache=10;AssetManifest=7;CampaignJournal=22;NavigationAsync=18;NavigationAstar=18;WorldRewardPoll=10;WorldTargeting=16;GameplayGate=24;CandidateBatch=18;PopulationPlanner=20;PopulationReachability=27;Geometry=46;Objects=53;ObjectsNative=25;Mesh=34;Relief=58;Ports=92;Batch=36;Materials=35;MaterialsNative=20;Scale=46;Cliff=61;CliffNative=17;BiomeProps=30;BiomePropsNative=23;Borders=93;BordersNative=32;Shadows=28;ShadowsNative=90;CanvasOrder=46;Library=50;LibraryNative=53;Viewport=20;ViewportNative=52;RuntimeView=12;GameplayNative=63;GameplayWindow=33;GameplayControls=29;GameplayEditorNative=22;GameplayCli=18;FieldsNative=73;Organic=15;NavigationLazy=24;NavigationDense=5;NavigationContext=11;Rounded=19;RoundedNative=20;SnapshotDensity=33;RoundedResume=13;SurfacePick=24;Authoring=30;AuthoringNative=15;Content=28;ContentNative=30;CompositionAX=31;CompositionAXNative=13;MapBiome=15;MapBiomeNative=13;EncounterAuthoring=27;EncounterAuthoringNative=25}
 $f9Pass=$f9Pass -and $f9Result.count -eq $f9Expected[$Stage]
 $f9PreviewExit=$null
 if($Stage -eq 'GameplayCli'){

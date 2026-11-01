@@ -1,5 +1,7 @@
 param([Parameter(Mandatory)][string]$GodotPath,[Parameter(Mandatory)][string]$EvidenceDirectory,[switch]$Native,[string]$ReuseFixture = '',[switch]$UIOnly)
 $ErrorActionPreference = 'Stop'
+# Checkpoint42: every test compiles for real; the editor cache is opt-in.
+$env:RAGRPG_COMPILE_CACHE='0'
 $m4Root = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $m4Evidence = [IO.Path]::GetFullPath($EvidenceDirectory)
 if (Test-Path -LiteralPath $m4Evidence) { throw 'Use an absent evidence directory.' }

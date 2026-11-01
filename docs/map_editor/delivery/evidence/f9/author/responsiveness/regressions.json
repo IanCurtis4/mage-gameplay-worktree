@@ -1,0 +1,22 @@
+{
+  "CompileCache": 10,
+  "Ports": 92,
+  "Batch": 36,
+  "NavigationLazy": 24,
+  "NavigationDense": 5,
+  "NavigationContext": 11,
+  "PopulationReachability": 27,
+  "PopulationPlanner": 20,
+  "CandidateBatch": 18,
+  "NavigationAstar": 18,
+  "NavigationAsync": 18,
+  "Geometry": 46,
+  "SurfacePick": 24,
+  "GameplayNative": 63,
+  "AssetManifest": 7,
+  "M3": true,
+  "M4": true,
+  "M5": true,
+  "M6": true,
+  "M7": true
+}

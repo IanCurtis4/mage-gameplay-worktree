@@ -81,7 +81,7 @@ Revise as diferenças e a prévia antes de confirmar. Aplicar permite desfazer n
 	if kind == "piece": before_canvas.mouse_filter = Control.MOUSE_FILTER_IGNORE; after_canvas.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	status = Label.new(); status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; add_child(status); status.text = "Nenhuma proposta aplicada."
 	dialog = FileDialog.new(); dialog.access = FileDialog.ACCESS_FILESYSTEM; dialog.filters = PackedStringArray(["*.rpx ; Bundle de autoria"]); dialog.file_selected.connect(file_selected); add_child(dialog)
-	confirmation = ConfirmationDialog.new(); confirmation.dialog_text = "Aplicar as diferenças revisadas como uma ação desfazível?"; confirmation.confirmed.connect(apply_result); add_child(confirmation)
+	confirmation = ConfirmationDialog.new(); confirmation.dialog_text = "Aplicar as diferenças revisadas como uma ação desfazível?"; confirmation.confirmed.connect(apply_async); add_child(confirmation)
 func button(parent: Node, text: String, callback: Callable) -> Button:
 	var control := Button.new(); control.text = text; control.pressed.connect(callback); parent.add_child(control); return control
 func field(parent: Node, text: String, value: String) -> LineEdit:
@@ -113,12 +113,21 @@ func review() -> void:
 	cancel()
 	if request.is_empty() or proposal.is_empty(): show_result(Exchange.fail("exchange_request_required")); return
 	var source: Dictionary = get_source.call(); var local := request.duplicate(true); var incoming := proposal.duplicate(true)
-	job_kind = "review"; mutex.lock(); cancelled = false; mutex.unlock(); job = Thread.new(); job.start(func() -> Dictionary: return Exchange.prepare(local,incoming,source,is_cancelled)); status.text = "Validando a proposta em cópia…"
+	job_kind = "review"; mutex.lock(); cancelled = false; mutex.unlock(); job = Thread.new()
+	# Checkpoint42 (F9-10): the base preview compiles in the same job, not on the UI.
+	var base_kind := kind
+	job.start(func() -> Dictionary:
+		var result := Exchange.prepare(local,incoming,source,is_cancelled)
+		if result.ok and not is_cancelled(): result["base_package"] = Exchange.build(base_kind,local.ticket.base,is_cancelled).get("package",{})
+		return result)
+	status.text = "Validando a proposta em cópia…"
 func _process(_delta: float) -> void:
 	if job == null or job.is_alive(): return
 	var result: Dictionary = job.wait_to_finish(); job = null
 	if cancelled: show_result(Exchange.fail("cancelled")); return
 	if not result.ok: show_result(result); return
+	if job_kind == "apply":
+		finish_apply(result); return
 	if job_kind == "export":
 		var saved := Exchange.save_json(export_path,result.bundle)
 		if not saved.ok: show_result(saved); return
@@ -129,7 +138,7 @@ func _process(_delta: float) -> void:
 		prepared = result; differences.clear()
 		for change: Dictionary in result.diff: differences.add_item({"replace":"Alterar","add":"Adicionar","remove":"Remover"}[change.operation]+" · "+change.path)
 		apply_button.disabled = result.already_applied
-		preview(before_canvas,request.ticket.base,Exchange.build(kind,request.ticket.base).get("package",{}))
+		preview(before_canvas,request.ticket.base,result.get("base_package",{}))
 		preview(after_canvas,result.source,result.package)
 		status.text = "%d diferenças · %s · hash compilado %s"%[result.diff.size(),"já aplicada" if result.already_applied else "pronta para revisão",result.output_hash]
 func summarize_request() -> void:
@@ -157,6 +166,28 @@ func apply_result() -> Dictionary:
 	var result := Exchange.apply_to(request,proposal,current,commit_source)
 	show_result(result); apply_button.disabled = true
 	return result
+# Checkpoint42 (F9-10): the confirmation button applies like apply_result (same
+# recheck and compilation of the proposal), with the compilation on a worker
+# thread; the commit itself and the stale check stay on the UI thread.
+# apply_result() remains the synchronous path used by AX/tests.
+func apply_async() -> void:
+	if prepared.is_empty() or request.is_empty() or proposal.is_empty(): show_result(Exchange.fail("exchange_review_required")); return
+	if job != null: return
+	var current: Dictionary = get_source.call()
+	var checked := Exchange.read(kind,current)
+	if not checked.ok or checked.output_hash != prepared.current_hash: show_result(Exchange.fail("stale_source")); return
+	var local := request.duplicate(true); var incoming := proposal.duplicate(true); var snapshot := current.duplicate(true)
+	apply_button.disabled = true
+	job_kind = "apply"; mutex.lock(); cancelled = false; mutex.unlock(); job = Thread.new()
+	job.start(func() -> Dictionary: return Exchange.prepare(local,incoming,snapshot,is_cancelled))
+	status.text = "Compilando a proposta para aplicar…"
+func finish_apply(result: Dictionary) -> void:
+	if not result.ok or result.get("already_applied",false): show_result(result); return
+	var current: Dictionary = get_source.call()
+	var checked := Exchange.read(kind,current)
+	if not checked.ok or checked.output_hash != result.current_hash: show_result(Exchange.fail("stale_source")); return
+	var applied: Dictionary = commit_source.call(result.source.duplicate(true))
+	show_result(result if applied.ok else applied); apply_button.disabled = true
 func is_cancelled(_progress: float = 0.0) -> bool:
 	mutex.lock(); var value := cancelled; mutex.unlock(); return value
 func cancel() -> void:

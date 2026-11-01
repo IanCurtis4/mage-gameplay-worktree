@@ -1,0 +1,19 @@
+extends SceneTree
+## Checkpoint42: phase breakdown of the connectivity batches the Bosque population
+## compile issues (interactions, slots, pools), with the shared memo.
+const Exchange = preload("res://scripts/map_authoring/exchange/exchange.gd")
+const Population = preload("res://scripts/map_authoring/population/population_compiler.gd")
+func _initialize() -> void: run.call_deferred()
+func run() -> void:
+	var loaded := Exchange.load_json("res://data/map_authoring/sanctuary_woods.patrol.json")
+	var source: Dictionary = loaded.data.population[0]
+	var context: Dictionary = Population.prepare(source)
+	if not context.ok: print("BPHASE prepare_failed"); quit(1); return
+	var rows: Array = []
+	for slot: Dictionary in Population._sorted(source.slots,"slot_id"):
+		var targets: Array[ExpeditionWorldPoint] = [Population.anchor(slot)]
+		var t := Time.get_ticks_usec()
+		var checked: Dictionary = context.world.connectivity_batch(context.entry,targets,Population.PROFILE,context.world.geometry_revision)
+		var m: Dictionary = checked.get("data",{}).get("metrics",{})
+		rows.append({"slot":slot.slot_id.substr(0,12),"ms":(Time.get_ticks_usec()-t)/1000.0,"ok":checked.ok,"phase_usec":m.get("phase_usec",{}),"memo":context.world._navigation_shared.get("memo",{}).get("entries",0),"hits":context.world._navigation_shared.get("memo",{}).get("hits",0)})
+	print("BPHASE "+JSON.stringify(rows)); quit(0)

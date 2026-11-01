@@ -1,5 +1,7 @@
 param([Parameter(Mandatory)][string]$GodotPath,[Parameter(Mandatory)][string]$EvidenceDirectory,[switch]$Native,[string]$ReuseFixture='',[switch]$UIOnly)
 $ErrorActionPreference='Stop'
+# Checkpoint42: every test compiles for real; the editor cache is opt-in.
+$env:RAGRPG_COMPILE_CACHE='0'
 $m6Root=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $m6GitRoot=git -C $m6Root rev-parse --show-toplevel
 if($LASTEXITCODE -ne 0 -or [IO.Path]::GetFullPath($m6GitRoot) -ne [IO.Path]::GetFullPath($m6Root)){throw 'Invoke this runner only from the source checkout; a fixture runner would create a nested copy.'}

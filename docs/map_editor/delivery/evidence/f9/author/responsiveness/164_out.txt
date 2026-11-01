@@ -1,0 +1,3 @@
+﻿FREE 9,7 GB
+PCOST {"map_compile_ms":26980.8,"planner_ms":13459.7,"planner_ok":true,"pool_detail":[["alley_patrol",24283.4,true],["clearing_dispersed",2467.2,true],["west_group",41029.9,true]],"pools_ms":67780.7,"prepare_ms":45564.1,"prepare_ok":true,"reservations_ms":0.0,"slot_detail":[["alley_guard",11717.6,true],["slot_297da45e94b3dc24f576d5e288acd7002e1f4a81",11424.2,true],["slot_3fa5680f129a671cfaf7561f287b2dbaeeef50ed",81.8,true],["slot_4780c394e81e0c43a07a441c03fccc7607571d7b",11526.3,true],["slot_92097df2d2e2386a557e8c6497581666fdec56ec",80.4,true],["slot_b039a81834959f2546d76cfd5b6cb8a0171be480",94.8,true],["slot_d6d3911757d6c84ebd1f8a92ee90cb49feba7c66",12596.0,true]],"slots_ms":47521.4,"surfaces":84}
+DONE 2026-11-01T00:03:11.6236997-03:00

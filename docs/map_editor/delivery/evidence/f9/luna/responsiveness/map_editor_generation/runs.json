@@ -1,0 +1,435 @@
+[
+  {
+    "aborted": false,
+    "output_sha256": "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "result": null,
+    "timed_out": false,
+    "finished_utc": "2026-11-01T03:44:37.9924509Z",
+    "started_utc": "2026-11-01T03:44:29.1064110Z",
+    "exit_code": 0,
+    "name": "import",
+    "ok": true
+  },
+  {
+    "aborted": false,
+    "output_sha256": "5683E98544532A10735DF958F3976719F8D5437591B6B225E2ED41CEEDA28E95",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_generation_test.gd"
+    ],
+    "result": {
+      "checks": [
+        {
+          "id": "schema",
+          "ok": true
+        },
+        {
+          "id": "opt_in_required",
+          "ok": true
+        },
+        {
+          "id": "generates",
+          "ok": true
+        },
+        {
+          "id": "unchanged_authorship",
+          "ok": true
+        },
+        {
+          "id": "package_valid",
+          "ok": true
+        },
+        {
+          "id": "same_authority",
+          "ok": true
+        },
+        {
+          "id": "pin_exact",
+          "ok": true
+        },
+        {
+          "id": "fixed_transforms_links",
+          "ok": true
+        },
+        {
+          "id": "snapshot_unchanged",
+          "ok": true
+        },
+        {
+          "id": "repeat",
+          "ok": true
+        },
+        {
+          "id": "order_hash",
+          "ok": true
+        },
+        {
+          "id": "order_result",
+          "ok": true
+        },
+        {
+          "id": "seed_valid_0",
+          "ok": true
+        },
+        {
+          "id": "seed_repeat_0",
+          "ok": true
+        },
+        {
+          "id": "assembler_real_0",
+          "ok": true
+        },
+        {
+          "id": "seed_valid_-1",
+          "ok": true
+        },
+        {
+          "id": "seed_repeat_-1",
+          "ok": true
+        },
+        {
+          "id": "assembler_real_-1",
+          "ok": true
+        },
+        {
+          "id": "seed_valid_9223372036854775807",
+          "ok": true
+        },
+        {
+          "id": "seed_repeat_9223372036854775807",
+          "ok": true
+        },
+        {
+          "id": "assembler_real_9223372036854775807",
+          "ok": true
+        },
+        {
+          "id": "seed_valid_-9223372036854775808",
+          "ok": true
+        },
+        {
+          "id": "seed_repeat_-9223372036854775808",
+          "ok": true
+        },
+        {
+          "id": "assembler_real_-9223372036854775808",
+          "ok": true
+        },
+        {
+          "id": "seed_valid_1",
+          "ok": true
+        },
+        {
+          "id": "seed_repeat_1",
+          "ok": true
+        },
+        {
+          "id": "assembler_real_1",
+          "ok": true
+        },
+        {
+          "id": "seed_valid_2",
+          "ok": true
+        },
+        {
+          "id": "seed_repeat_2",
+          "ok": true
+        },
+        {
+          "id": "assembler_real_2",
+          "ok": true
+        },
+        {
+          "id": "seed_valid_3",
+          "ok": true
+        },
+        {
+          "id": "seed_repeat_3",
+          "ok": true
+        },
+        {
+          "id": "assembler_real_3",
+          "ok": true
+        },
+        {
+          "id": "seed_valid_4",
+          "ok": true
+        },
+        {
+          "id": "seed_repeat_4",
+          "ok": true
+        },
+        {
+          "id": "assembler_real_4",
+          "ok": true
+        },
+        {
+          "id": "two_real_variants",
+          "ok": true
+        },
+        {
+          "id": "allowed_rotation_works",
+          "ok": true
+        },
+        {
+          "id": "cyclic_graph_global_validation",
+          "ok": true
+        },
+        {
+          "id": "assembler_cycle_explicit",
+          "ok": true
+        },
+        {
+          "id": "seed_overflow",
+          "ok": true
+        },
+        {
+          "id": "seed_reject_-9223372036854775809",
+          "ok": true
+        },
+        {
+          "id": "seed_reject_01",
+          "ok": true
+        },
+        {
+          "id": "seed_reject_-0",
+          "ok": true
+        },
+        {
+          "id": "seed_reject_1.0",
+          "ok": true
+        },
+        {
+          "id": "seed_reject_+1",
+          "ok": true
+        },
+        {
+          "id": "seed_reject_",
+          "ok": true
+        },
+        {
+          "id": "unknown_field",
+          "ok": true
+        },
+        {
+          "id": "future_version",
+          "ok": true
+        },
+        {
+          "id": "future_algorithm",
+          "ok": true
+        },
+        {
+          "id": "zero_candidates",
+          "ok": true
+        },
+        {
+          "id": "nonfinite",
+          "ok": true
+        },
+        {
+          "id": "rotation_integer",
+          "ok": true
+        },
+        {
+          "id": "weight_positive",
+          "ok": true
+        },
+        {
+          "id": "pin_reference",
+          "ok": true
+        },
+        {
+          "id": "selection_duplicate",
+          "ok": true
+        },
+        {
+          "id": "domain_duplicate",
+          "ok": true
+        },
+        {
+          "id": "option_duplicate",
+          "ok": true
+        },
+        {
+          "id": "incompatible_pin",
+          "ok": true
+        },
+        {
+          "id": "error_has_context",
+          "ok": true
+        },
+        {
+          "id": "no_partial_proposal",
+          "ok": true
+        },
+        {
+          "id": "outside_selection_exact",
+          "ok": true
+        },
+        {
+          "id": "all_pinned",
+          "ok": true
+        },
+        {
+          "id": "quota_forces_variant",
+          "ok": true
+        },
+        {
+          "id": "impossible_quota",
+          "ok": true
+        },
+        {
+          "id": "diversity",
+          "ok": true
+        },
+        {
+          "id": "diversity_limit",
+          "ok": true
+        },
+        {
+          "id": "global_budget",
+          "ok": true
+        },
+        {
+          "id": "cancel_no_output",
+          "ok": true
+        },
+        {
+          "id": "global_validation_backtracks",
+          "ok": true
+        },
+        {
+          "id": "backtrack_budget",
+          "ok": true
+        },
+        {
+          "id": "validation_budget",
+          "ok": true
+        },
+        {
+          "id": "global_reject_not_local_success",
+          "ok": true
+        },
+        {
+          "id": "connector_rotation_contradiction",
+          "ok": true
+        },
+        {
+          "id": "apply_one_action",
+          "ok": true
+        },
+        {
+          "id": "undo_map",
+          "ok": true
+        },
+        {
+          "id": "redo_map",
+          "ok": true
+        },
+        {
+          "id": "stale_apply",
+          "ok": true
+        },
+        {
+          "id": "failure_not_applied",
+          "ok": true
+        },
+        {
+          "id": "tampered_proposal_rejected",
+          "ok": true
+        },
+        {
+          "id": "stale_worker",
+          "ok": true
+        },
+        {
+          "id": "cancel_worker",
+          "ok": true
+        },
+        {
+          "id": "save",
+          "ok": true
+        },
+        {
+          "id": "roundtrip",
+          "ok": true
+        },
+        {
+          "id": "conflict_preserves",
+          "ok": true
+        },
+        {
+          "id": "pending_preserved",
+          "ok": true
+        },
+        {
+          "id": "duplicate_json_rejected",
+          "ok": true
+        },
+        {
+          "id": "assembler_unsupported",
+          "ok": true
+        },
+        {
+          "id": "assembler_preserves_authoring_or_fails",
+          "ok": true
+        }
+      ],
+      "count": 89,
+      "ok": true,
+      "package_hash": "7aa4bee9c7211bf404c0d20e7070de909f3a5c35bad7d492ef8169d2bb8f1dfb"
+    },
+    "timed_out": false,
+    "finished_utc": "2026-11-01T03:45:06.5113039Z",
+    "started_utc": "2026-11-01T03:44:38.0389188Z",
+    "exit_code": 0,
+    "name": "generation",
+    "ok": true
+  },
+  {
+    "aborted": false,
+    "output_sha256": "A9234AAB4EA6793E368BBBA74957E3D72AFFC1CA9DAAD54469F1E98EC9E02A1D",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://scripts/map_authoring/generation/headless.gd",
+      "--",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m6_samples\\generation.json",
+      "--experimental-wfc"
+    ],
+    "result": null,
+    "timed_out": false,
+    "finished_utc": "2026-11-01T03:45:11.7935484Z",
+    "started_utc": "2026-11-01T03:45:06.5164072Z",
+    "exit_code": 0,
+    "name": "cli_a",
+    "ok": true
+  },
+  {
+    "aborted": false,
+    "output_sha256": "A9234AAB4EA6793E368BBBA74957E3D72AFFC1CA9DAAD54469F1E98EC9E02A1D",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://scripts/map_authoring/generation/headless.gd",
+      "--",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m6_samples\\generation.json",
+      "--experimental-wfc"
+    ],
+    "result": null,
+    "timed_out": false,
+    "finished_utc": "2026-11-01T03:45:16.9835379Z",
+    "started_utc": "2026-11-01T03:45:11.7966213Z",
+    "exit_code": 0,
+    "name": "cli_b",
+    "ok": true
+  }
+]

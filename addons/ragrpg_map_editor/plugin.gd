@@ -7,6 +7,9 @@ var shell: Control
 var exporter: EditorExportPlugin
 
 func _enter_tree() -> void:
+	# Checkpoint42 (F9-10): the editor and the worker processes it spawns reuse the
+	# verified compile cache, unless the environment already decided (tests set 0).
+	if OS.get_environment("RAGRPG_COMPILE_CACHE").is_empty(): OS.set_environment("RAGRPG_COMPILE_CACHE","1")
 	Preferences.install_storage(func(fallback: Dictionary) -> Variant: return EditorInterface.get_editor_settings().get_project_metadata(Preferences.SECTION,Preferences.KEY,fallback),_write_preferences,_recover_preferences)
 	exporter = Export.new(); add_export_plugin(exporter)
 	shell = Shell.new()

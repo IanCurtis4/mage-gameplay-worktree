@@ -3215,6 +3215,30 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 file (checkpoint41 asset manifest)",
       "base_sha256": "d3efb20cb91fbecf45c71f5a9f93dfd0269731c7b8ae64cf647214f89e4cbd6a"
+    },
+    {
+      "path": "scripts/map_authoring/compiler/compile_cache.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint42 compile cache)",
+      "base_sha256": "db277e597d1eedc99bf88214ed06be5a272e7d5cede1c5ce12730f960bd324cf"
+    },
+    {
+      "path": "scripts/map_authoring/compiler/compile_cache.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint42 compile cache)",
+      "base_sha256": "67a272d4b3c024522da60f7e18cd9b77cfdb13a28b173f8fe92600df9583f61a"
+    },
+    {
+      "path": "tests/map_editor_compile_cache_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint42 compile cache)",
+      "base_sha256": "9e44fa25eefe2ccbb19a8fbae278dd99abee8adee62da8c1290f85dc64aa3dd7"
+    },
+    {
+      "path": "tests/map_editor_compile_cache_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint42 compile cache)",
+      "base_sha256": "23350276f5f71823789fd51b997ac82eb4484e10e9424a7c75ca7e15f718be1e"
     }
   ],
   "read_only_shared": [
@@ -4370,6 +4394,83 @@
         "AssetManifest": 7
       },
       "known_open": "see f9_closure_matrix packages P2-P8"
+    },
+    "editor_responsiveness_p2": {
+      "state": "validated_increment_F9_still_open",
+      "base": "a08d0185",
+      "human_report": "01/11: go to P2; also clean outdated packages and patches because the disk is running out",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "contract": "docs/map_editor/contracts/f9_editor_responsiveness.md",
+      "files": [
+        "scripts/core/expedition/spatial/world_connectivity_batch.gd",
+        "scripts/map_authoring/compiler/compile_cache.gd",
+        "scripts/map_authoring/composition/map_compiler.gd",
+        "scripts/map_authoring/population/population_compiler.gd",
+        "scripts/map_authoring/population/population_worker.gd",
+        "scripts/map_authoring/patrol/patrol_compiler.gd",
+        "scripts/map_authoring/exchange/exchange_panel.gd",
+        "addons/ragrpg_map_editor/plugin.gd",
+        "tools/map_editor_completion/run.ps1",
+        "tools/map_editor_candidate/run.ps1",
+        "tools/map_editor_composition/run.ps1",
+        "tools/map_editor_document/run.ps1",
+        "tools/map_editor_exchange/run.ps1",
+        "tools/map_editor_generation/run.ps1",
+        "tools/map_editor_patrol/run.ps1",
+        "tools/map_editor_population/run.ps1",
+        "tools/map_editor_terrain/run.ps1"
+      ],
+      "test_files": [
+        "tests/map_editor_compile_cache_test.gd"
+      ],
+      "scope": "connectivity batches reuse the owner shared predicate memo; verifiable opt-in compile cache for map and population packages; exchange preview/apply compile off the UI thread; worker job directories removed after use",
+      "measurements": {
+        "bosque_population_ms_before": [
+          164812.0,
+          168501.5
+        ],
+        "bosque_population_ms_cold_after": 96530.0,
+        "bosque_population_ms_hit": 4810.6,
+        "bosque_patrol_ms_before": [
+          180202.2,
+          180759.1
+        ],
+        "bosque_patrol_ms_after": 9755.7,
+        "bosque_map_ms_cold": 25869.4,
+        "bosque_map_ms_hit": 4289.4,
+        "batch_after_first_ms_before": [
+          7300,
+          11500
+        ],
+        "batch_after_first_ms_after": [
+          2097,
+          2655
+        ]
+      },
+      "validation": {
+        "CompileCache": 10,
+        "Ports": 92,
+        "Batch": 36,
+        "NavigationLazy": 24,
+        "NavigationDense": 5,
+        "NavigationContext": 11,
+        "PopulationReachability": 27,
+        "PopulationPlanner": 20,
+        "CandidateBatch": 18,
+        "NavigationAstar": 18,
+        "NavigationAsync": 18,
+        "Geometry": 46,
+        "SurfacePick": 24,
+        "GameplayNative": 63,
+        "AssetManifest": 7,
+        "M3": true,
+        "M4": true,
+        "M5": true,
+        "M6": true,
+        "M7": true
+      },
+      "limits": "test start() still builds the world on the main thread behind the loading gate; cache granularity is the package, not a region inside a piece",
+      "disk_cleanup": "about 1.4 GB of generated artefacts removed with the human delete approval (old fixtures, test export, 27-30/10 play sessions, applied bridge patches); 8.3 -> 9.7 GB free"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

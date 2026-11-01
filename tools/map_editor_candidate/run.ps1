@@ -1,5 +1,7 @@
 param([Parameter(Mandatory)][string]$GodotPath,[Parameter(Mandatory)][string]$EvidenceDirectory,[string]$ReuseFixture='',[ValidateSet('Import','Candidate','Context','Core','Native','Release','All')][string]$Stage='All')
 $ErrorActionPreference='Stop'
+# Checkpoint42: every test compiles for real; the editor cache is opt-in.
+$env:RAGRPG_COMPILE_CACHE='0'
 $m8Root=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $m8GitRoot=git -C $m8Root rev-parse --show-toplevel
 if($LASTEXITCODE -ne 0 -or [IO.Path]::GetFullPath($m8GitRoot) -ne [IO.Path]::GetFullPath($m8Root)){throw 'Invoke this runner only from the source checkout; a fixture runner would create a nested copy.'}

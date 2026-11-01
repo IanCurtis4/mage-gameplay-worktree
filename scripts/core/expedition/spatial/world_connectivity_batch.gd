@@ -57,6 +57,15 @@ static func tick(ctx: Dictionary, metric: String = "operations", amount: int = 1
 	if cancelled: ctx.error_code = &"cancelled"; return false
 	return true
 
+# Checkpoint42 (F9-10): wall time per phase in metrics.phase_usec (diagnostic only;
+# metrics already carry elapsed_ms and are never part of a proof).
+static func _enter(ctx: Dictionary, phase: String) -> void:
+	var now := Time.get_ticks_usec()
+	var spent: Dictionary = ctx.metrics.get("phase_usec",{})
+	var previous := String(ctx.get("phase","prepare"))
+	spent[previous] = int(spent.get(previous,0)) + now - int(ctx.get("phase_started",ctx.started))
+	ctx.metrics["phase_usec"] = spent; ctx["phase_started"] = now; ctx.phase = phase
+
 static func failed(world: WorldGeometry, ctx: Dictionary, code: StringName = &"") -> Dictionary:
 	if code.is_empty(): code = ctx.get("error_code",&"invalid_support")
 	return {"ok":false,"error_code":code,"geometry_revision":world.geometry_revision,"data":{"phase":ctx.get("phase","prepare"),"metrics":ctx.get("metrics",{}).duplicate(true)}}
@@ -163,6 +172,7 @@ static func execute(world: WorldGeometry, root: ExpeditionWorldPoint, targets: A
 	if not tick(ctx,"storage_bytes",source_signature.storage*3+profile_signature.storage*3,true): return failed(world,ctx)
 	ctx.metrics["snapshot_storage_units"] = ctx.metrics.storage_bytes
 	var shadow := _shadow(world)
+	ctx["memo"] = world._navigation_shared_memo(traversal)
 	if not shadow._point_valid(start,traversal.radius,traversal.height): return failed(world,ctx,&"invalid_support")
 	var nodes := {"@root":start.to_data()}; var ids: Array[String] = []; var points: Dictionary = {"@root":start}
 	for target: ExpeditionWorldPoint in captured:
@@ -178,7 +188,7 @@ static func execute(world: WorldGeometry, root: ExpeditionWorldPoint, targets: A
 	for id: String in sorted: ordered_nodes[id] = nodes[id]
 	nodes = ordered_nodes
 	var pairs: Array = []; var direct_edges: Dictionary = {}; var trusted_direct: Dictionary = {}; var all_direct := true
-	ctx.phase = "direct"
+	_enter(ctx,"direct")
 	for id: String in sorted:
 		if id == "@root": continue
 		for outward: bool in [true,false]:
@@ -203,8 +213,11 @@ static func execute(world: WorldGeometry, root: ExpeditionWorldPoint, targets: A
 			trusted_direct[a][b] = edge
 	var graph := {"ok":true,"nodes":nodes,"edges":{},"by_surface":{}}
 	if not all_direct:
-		ctx.phase = "construct"
-		graph = shadow._navigation_graph(start,start,traversal,null,nodes,pairs,ctx)
+		_enter(ctx,"construct")
+		# Checkpoint42 (F9-10): reuse the exact predicates (point/clear/fraction) the
+		# owner already memoized for this geometry and profile. Each batch used to
+		# rebuild them from nothing (~11 s per batch on the Bosque population).
+		graph = shadow._navigation_graph(start,start,traversal,null,nodes,pairs,ctx,{"memo":ctx.memo})
 		if not graph.ok: return failed(world,ctx)
 	else:
 		for id: String in nodes: graph.edges[id] = []
@@ -218,14 +231,14 @@ static func execute(world: WorldGeometry, root: ExpeditionWorldPoint, targets: A
 			# Incidence/predecessor records retain the immutable edge by reference.
 			if not tick(ctx,"storage_bytes",512): return failed(world,ctx)
 			incoming[edge.to].append({"source":id,"edge":edge})
-	ctx.phase = "outward"
+	_enter(ctx,"outward")
 	var outward := _search(shadow,graph,incoming,ids,traversal,ctx,false,all_direct)
 	if not outward.ok: return failed(world,ctx)
-	ctx.phase = "inward"
+	_enter(ctx,"inward")
 	var inward := _search(shadow,graph,incoming,ids,traversal,ctx,true,all_direct)
 	if not inward.ok: return failed(world,ctx)
 	var results: Array = []; var all_reachable := true
-	ctx.phase = "witnesses"
+	_enter(ctx,"witnesses")
 	for index: int in ids.size():
 		var id := ids[index]; var out: bool = outward.visited.has(id); var back: bool = inward.visited.has(id)
 		all_reachable = all_reachable and out and back
@@ -245,10 +258,11 @@ static func execute(world: WorldGeometry, root: ExpeditionWorldPoint, targets: A
 				release_scratch(ctx,scratch_mark)
 		results.append({"input_index":index,"point":captured[index].to_data(),"node_id":id,"outward_reachable":out,"inward_reachable":back})
 		if not reserve(ctx,results[-1]): return failed(world,ctx)
-	ctx.phase = "publish"
+	_enter(ctx,"publish")
 	if not tick(ctx,"operations",1,true): return failed(world,ctx)
 	var after := signature(world)
 	if not after.ok or after.hash != ctx.snapshot_hash or not world._current(revision) or world.configuration_revision != ctx.configuration: return failed(world,ctx,&"stale_geometry")
+	_enter(ctx,"done")
 	ctx.metrics["elapsed_ms"] = (Time.get_ticks_usec()-int(ctx.started))/1000.0
 	var data := {"complete":true,"all_reachable":all_reachable,"configuration_revision":ctx.configuration,"profile_hash":ctx.profile_hash,"profile":traversal,"graph_revision":REVISION,"snapshot_hash":ctx.snapshot_hash,"targets":results,"states":graph.nodes,"outward_previous":outward.previous,"inward_previous":inward.previous,"metrics":ctx.metrics}
 	return world._success(data)
@@ -302,7 +316,10 @@ static func _search(world: WorldGeometry, graph: Dictionary, incoming: Dictionar
 				# Cache keys retain state IDs; their string backing is owned by nodes.
 				if not tick(ctx,"storage_bytes",128): return {"ok":false}
 				var from: Dictionary = graph.nodes[a]; var to: Dictionary = graph.nodes[b]
-				cached[b] = world._clear_path_segment(from.position,to.position,profile,null,from.surface_id) and world._support_segment_fraction(world._cell(from.surface_id),from.position,to.position,profile) >= 1.0-WorldGeometry.EPS
+				# Checkpoint42: same predicates through the owner's shared memo
+				# (_navigation_clear/_fraction wrap exactly these two calls).
+				var memo: Dictionary = ctx.get("memo",{})
+				cached[b] = world._navigation_clear(from.position,to.position,profile,null,from.surface_id,memo) and world._navigation_fraction(world._cell(from.surface_id),from.position,to.position,profile,memo) >= 1.0-WorldGeometry.EPS
 			else: ctx.metrics["visibility_cache_hits"] = int(ctx.metrics.get("visibility_cache_hits",0))+1
 			if not cached[b]: continue
 			var edge := {"to":b,"via":[],"connection_id":"","cost":Vector3(graph.nodes[a].position).distance_to(graph.nodes[b].position)}

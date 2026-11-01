@@ -1,0 +1,39 @@
+extends SceneTree
+## Checkpoint42 (F9-10): where the 165 s of the Bosque population compile go.
+## Repeats PopulationCompiler.compile step by step with timers (same calls).
+const Exchange = preload("res://scripts/map_authoring/exchange/exchange.gd")
+const Population = preload("res://scripts/map_authoring/population/population_compiler.gd")
+const Maps = preload("res://scripts/map_authoring/composition/map_compiler.gd")
+const Context = preload("res://scripts/map_authoring/context/population_context.gd")
+func _initialize() -> void: run.call_deferred()
+func ms(t: int) -> float: return snappedf((Time.get_ticks_usec()-t)/1000.0,0.1)
+func run() -> void:
+	var loaded := Exchange.load_json("res://data/map_authoring/sanctuary_woods.patrol.json")
+	var source: Dictionary = loaded.data.population[0]
+	var report := {}
+	var t := Time.get_ticks_usec(); var built := Maps.compile(source.map[0]); report["map_compile_ms"] = ms(t)
+	t = Time.get_ticks_usec(); var context := Population.prepare(source); report["prepare_ms"] = ms(t); report["prepare_ok"] = context.ok
+	if not context.ok: print("PCOST "+JSON.stringify(report)); quit(1); return
+	report["surfaces"] = context.manifest._data.stages[0].surfaces.size()
+	t = Time.get_ticks_usec(); var required := Context.check_reservations(source,context); report["reservations_ms"] = ms(t)
+	var occupied: Array = []; var rules := {}; var slot_ms: Array = []
+	t = Time.get_ticks_usec()
+	for slot: Dictionary in Population._sorted(source.slots,"slot_id"):
+		var ts := Time.get_ticks_usec()
+		var checked := Population.validate_slot(source,context,slot,occupied)
+		slot_ms.append([slot.slot_id,ms(ts),checked.ok])
+		if not checked.ok: break
+		occupied.append(checked.reservation); rules[slot.slot_id] = checked.rule
+		var point := Population.anchor(slot); var socket_id: String = "population_"+slot.slot_id
+		context.manifest._data.stages[0].sockets.append({"socket_id":socket_id,"surface_id":point.surface_id,"position":point.position,"kind":"population","tags":[]})
+		context.manifest._data.population.slots.append({"slot_id":slot.slot_id,"stage_id":"map_preview","species_id":slot.species_id,"occurrence_category":slot.category,"origin_id":slot.origin_id,"instance_id":point.surface_id.get_slice("/",0),"socket_id":socket_id,"required_tags":[],"respawn_policy_id":"ruins_respawn","reward_policy_id":"ruins_rewards","blocks_clear":true,"home":point.to_data()})
+		context.manifest._data.witnesses["population/"+slot.slot_id] = {"point":point.to_data()}
+	report["slots_ms"] = ms(t); report["slot_detail"] = slot_ms
+	var brush_ms: Array = []
+	t = Time.get_ticks_usec()
+	for brush: Dictionary in Population._sorted(source.brushes,"brush_id"):
+		var tb := Time.get_ticks_usec(); var sampled := Population.pool(source,context,brush); brush_ms.append([brush.brush_id,ms(tb),sampled.ok])
+	report["pools_ms"] = ms(t); report["pool_detail"] = brush_ms
+	t = Time.get_ticks_usec(); var planned := ExpeditionPopulationPlanner.build(context.manifest,context.catalog,rules); report["planner_ms"] = ms(t); report["planner_ok"] = planned.ok
+	if not planned.ok: report["planner_code"] = str(planned.get("error_code",""))
+	print("PCOST "+JSON.stringify(report)); quit(0)

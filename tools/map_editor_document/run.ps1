@@ -4,6 +4,8 @@ param(
     [switch]$Native
 )
 $ErrorActionPreference = 'Stop'
+# Checkpoint42: every test compiles for real; the editor cache is opt-in.
+$env:RAGRPG_COMPILE_CACHE='0'
 $m1Root = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $m1Evidence = [IO.Path]::GetFullPath($EvidenceDirectory)
 # Checkpoint41: the fixture now carries the whole runtime; keep it out of the

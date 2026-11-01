@@ -103,6 +103,7 @@ static func request(payload: Dictionary, cancel: Callable = Callable()) -> Dicti
 	var log_text := FileAccess.get_file_as_string(root.path_join("engine.log")) if FileAccess.file_exists(root.path_join("engine.log")) else ""
 	if "SCRIPT ERROR:" in log_text or "ERROR:" in log_text or not FileAccess.file_exists(output): return fail("worker_incomplete")
 	var bytes := FileAccess.get_file_as_bytes(output)
+	Worker.discard(root)
 	if bytes.size() > 8*1024*1024: return fail("patrol_limit")
 	var result: Variant = bytes_to_var(bytes)
 	return result if result is Dictionary and result.get("ok") is bool else fail("worker_incomplete")
