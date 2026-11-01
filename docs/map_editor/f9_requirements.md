@@ -261,3 +261,7 @@ Checkpoint45 (1/11, Sol/Astra Opus): P3c intercâmbio de três vias por identida
 campo e amostra, com a máscara comum da variação regional, conflitos com escolha
 explícita, proteção atual prevalecendo e plano de encontros reconferido
 (ExchangeMerge13, ExchangeMergeNative10).
+
+Checkpoint46 (1/11, Sol/Astra Opus): P3d recibos na raiz de cada variação
+(pedido, base, dependências, resultado sem recibos), livro passivo de bases e
+replay determinístico com pacote de transporte; fecha o P3 (SynthesisReceipts11).

@@ -77,6 +77,35 @@ Checkpoint45 (P3c): intercâmbio de três vias em `exchange/exchange.gd`.
   encontros é reconferido com o escopo `redraw=false` e a raiz é compilada.
 - Sem nada a aplicar depois das escolhas, o resultado é `already_applied`.
 
+Checkpoint46 (P3d): recibos e replay (`synthesis/receipts.gd`,
+`synthesis/receipt_schema.gd`, `synthesis/receipts_view.gd`).
+
+- Extensão opcional `synthesis_receipts` só no documento raiz (peça, mapa,
+  encontros, patrulhas); validada pelo helper comum nos quatro leitores; dentro de
+  snapshot de peça do mapa ou do mapa de encontros/patrulhas é `receipts_nested`.
+  Fontes sem a extensão mantêm o hash; nada é normalizado ao abrir.
+- Recibo fechado: `receipt_version`, `algorithm_revision`, `kind`, `request` (o
+  pedido inteiro, nunca a fonte), `request_hash`, `base_hash` (raiz inteira da
+  base), `dependencies_hash` (prop_catalog, asset_manifest, border_profiles e
+  revisões de terreno, mapa, encontros, patrulha e síntese), `result_content_hash`
+  (raiz sem os recibos e, na peça, sem o contador `revision`) e `summary`
+  (contagens). O `source_hash` integral é calculado depois de inserir o recibo e
+  não é gravado nele. Até 32 recibos (o mais antigo sai), 64 KiB cada.
+  `recipe_hash` dos encontros ignora os recibos.
+- Livro de revisões: `apply()` grava antes do commit uma cópia da base em
+  `.godot/map_authoring/ledger/<base_hash>.json` (escrita única, conferida na
+  leitura; até 64 arquivos/128 MB, os mais antigos saem; só cópias, nunca as fontes
+  ou backups do usuário). O CLI grava a base quando escreve a proposta.
+- `replay()` refaz o pedido sobre a base: `reproduced` compara o
+  `result_content_hash`; `dependencies_changed` e `current_is_result` (o documento
+  ainda é o resultado ou foi editado depois) são informados, nunca corrigidos;
+  base ausente é `replay_base_missing`. Pacote de replay
+  `{replay_version, kind, receipt, base, bundle_hash}` transporta a base; importar
+  só valida e guarda a cópia, reproduzir é ação explícita.
+- O documento de geração por seed leva o mapa inteiro (recibos inclusos); um
+  resultado WFC aplicado conserva os recibos do mapa, e o replay informa que o
+  documento mudou depois da variação.
+
 ## Autoridade e unidade de aplicação
 
 Serviço de proposta regional sobre a fonte raiz aberta, kind piece/map/population/
@@ -194,4 +223,4 @@ de triângulo/footprint/segmento cruzando máscara; duas instâncias; ponte/pass
 reserva/raro fixo; slot referenciado por patrulha; divergência entre revisões;
 cancelamento/falha sem mutação; undo único; replay com base ausente; bundle/asset
 adulterado rejeitado; medição de preparo/compilação/diff/aplicação preservada.
-Este contrato só declara concluído o recorte da seção "Estado".
+Este contrato declara concluídos os recortes da seção "Estado" (P3a–P3d).

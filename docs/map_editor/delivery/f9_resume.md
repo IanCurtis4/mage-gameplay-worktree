@@ -1,7 +1,36 @@
 # Retomada F9 —30/10/2026
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint45 — intercâmbio de três vias (P3c)
+## Checkpoint46 — recibos e replay das variações (P3d; fecha o P3)
+
+1/11/2026. Mesmo checkout/branch/fixture. Base 99dff335; código e documentação
+em commits próprios. Papéis inalterados. Contrato:
+contracts/f9_regional_synthesis.md (seção "Estado").
+
+- Pedido humano: seguir para o P3d.
+- Toda proposta de variação leva um recibo na raiz (peça, mapa, encontros ou
+  patrulhas, nunca dentro de um snapshot): o pedido fechado, os hashes da base,
+  das dependências (catálogos, manifesto de assets, revisões dos compiladores e
+  do algoritmo) e do resultado sem os recibos. O hash integral é calculado depois
+  de inserir o recibo e não fica dentro dele; fontes antigas sem recibo mantêm o
+  hash. No máximo 32 recibos por documento (os mais antigos saem).
+- Ao aplicar, a base vai para um livro passivo de revisões
+  (`.godot/map_authoring/ledger`, só cópias, no máximo 64 arquivos/128 MB) e o
+  recibo pode ser reproduzido: mesmo pedido sobre a mesma base dá o mesmo hash.
+  Edições posteriores e dependências mudadas aparecem no resultado; base ausente
+  é diagnóstico, resolvido com o pacote de replay (recibo + base, passivo).
+- Telas: lista "Recibos das variações aplicadas" nas ferramentas de variação
+  (terreno, mapa, encontros, patrulhas), "Reproduzir recibo", "Exportar recibo e
+  base…", "Reproduzir de um pacote…". AX `<tela>/synthesis/{receipts,replay,
+  replay_bundle,replay_import}`; CLI `replay` e `bundle`.
+- SynthesisReceipts11, RegionalSynthesisNative16 e RootSynthesisNative11 (GUI,
+  AX e CLI reproduzem o mesmo recibo); suítes de documento, terreno, composição,
+  encontros, patrulha, geração e intercâmbio PASS.
+
+Pendente: P4 (assets no bundle e fontes de skills); aceite humano.
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint45 — intercâmbio de três vias (P3c)
 
 1/11/2026. Mesmo checkout/branch/fixture. Base a183b845; código e documentação
 em commits próprios. Papéis inalterados. Contratos:
@@ -29,8 +58,7 @@ contracts/f9_regional_synthesis.md (seção "Estado") e exchange.md.
   mesmo hash, um undo). M7 headless e nativo PASS; o check de base divergente
   passou a esperar `exchange_conflict` (o mesmo campo mudado dos dois lados).
 
-Pendente: P3d (recibo e replay); aceite humano.
-<!-- /f9-patrol-gameplay-active -->
+Próximo: P3d (recibo e replay), feito no checkpoint46.
 
 ## Histórico checkpoint44 — variação regional no mapa, nos encontros e nas patrulhas (P3b)
 
