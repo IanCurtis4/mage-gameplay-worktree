@@ -251,3 +251,8 @@ Checkpoint43 (1/11, Sol/Astra Opus): P3a variação regional dentro de uma peça
 com o mesmo hash (RegionalSynthesis12, RegionalSynthesisNative14). Pendências
 menores de F9-10/11 movidas para F10 por decisão humana; ver a
 [matriz](f9_closure_matrix.md).
+
+Checkpoint44 (1/11, Sol/Astra Opus): P3b variação regional de uma posição do mapa
+com mapa, encontros ou patrulhas como raiz: snapshot novo só para a instância,
+marcadores religados por camada e posição, corpos e rotas protegidos, encontros
+redistribuídos só dentro da região (RootSynthesis12, RootSynthesisNative10).

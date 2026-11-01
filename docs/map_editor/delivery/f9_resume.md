@@ -1,7 +1,39 @@
 # Retomada F9 —30/10/2026
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint43 — variação regional dentro de uma peça (P3a)
+## Checkpoint44 — variação regional no mapa, nos encontros e nas patrulhas (P3b)
+
+1/11/2026. Mesmo checkout/branch/fixture. Base c95f1a3c; código e documentação
+em commits próprios. Papéis inalterados. Contrato:
+contracts/f9_regional_synthesis.md (seção "Estado").
+
+- Pedido humano: seguir para o P3b.
+- `synthesis/root_synthesis.gd`: a variação de uma peça vale para uma posição do
+  mapa, com o mapa, os encontros ou as patrulhas abertos. A peça variada vira um
+  snapshot novo e só aquela instância troca de `piece_hash`; as outras posições da
+  mesma peça, vínculos, bordas e contexto ficam. Snapshot sem uso sai.
+- Encontros e rotas: entrada, saídas, slots e trechos de patrulha da camada
+  protegem o chão sob eles. Depois da variação, cada marcador é religado ao piso
+  novo da mesma camada e posição (nunca ao piso mais próximo); corpo que mudaria
+  de altura recusa a proposta apontando o marcador; centros de pincel são
+  reassentados e aparecem no diff.
+- "Redistribuir os soltos dentro da região": o planejador reserva todos os slots
+  que ficam (fixos, de patrulha, fora da região) e só sorteia o que falta dentro
+  da seleção. Em "preservar", o plano é só reconferido no mapa novo. O
+  `plan_hash` muda só depois do plano final validado; a raiz inteira é compilada
+  antes da prévia.
+- Telas de mapa, encontros e patrulhas: "Variação regional…" (janela própria,
+  prévia em segundo plano com a peça variada e o resumo da reconciliação). AX
+  `<tela>/synthesis/*`; o CLI aceita peça, mapa, encontros ou patrulhas.
+- RootSynthesis12 (duas salas com a mesma peça) e RootSynthesisNative10 (editor
+  real: GUI, AX e CLI com o mesmo hash, um undo). RegionalSynthesis(Native),
+  PopulationPlanner, EncounterAuthoring(Native), CompositionAX(Native),
+  MapBiomeNative, LibraryNative e GameplayEditorNative PASS. Bosque real (patrulhas abertas, relevo na região woods_clearing da clareira, sem cache): proposta em 320 s; só 1 amostra pôde mudar porque os 3 slots da região e o raio conservador ocupam quase toda a área; 3 slots religados ao piso novo e 1 centro de pincel reassentado.
+
+Pendente: P3c (intercâmbio de três vias), P3d (recibo e replay); aceite humano.
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint43 — variação regional dentro de uma peça (P3a)
 
 1/11/2026. Mesmo checkout/branch/fixture. Base 81ab8ddf; código e documentação
 em commits próprios. Papéis inalterados. Contrato:
@@ -30,9 +62,7 @@ contracts/f9_regional_synthesis.md (seção "Estado").
   real: GUI, AX e CLI com o mesmo hash, um undo, cancelamento e prévia velha sem
   mutação). LibraryNative, AuthoringNative e Authoring PASS.
 
-Pendente: P3b (instância de mapa, encontros e patrulhas), P3c (intercâmbio de
-três vias), P3d (recibo e replay); aceite humano.
-<!-- /f9-patrol-gameplay-active -->
+Próximo: P3b (instância de mapa, encontros e patrulhas), feito no checkpoint44.
 
 ## Histórico checkpoint42 — responsividade do editor (P2)
 

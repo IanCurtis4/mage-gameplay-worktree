@@ -29,8 +29,34 @@ e o CLI `synthesis/headless.gd`, todos no mesmo serviço.
   (`terrain_samples`, `material_samples`, `objects_added`, `objects_removed`,
   `selection_hash`) e métricas. `apply()` exige o hash atual igual ao da prévia e
   faz uma única `session.apply`.
-- Fora deste recorte: orçamento explícito no pedido, instância compartilhada em
-  mapa, encontros e patrulhas, recibo/replay e intercâmbio de três vias (P3b–P3d).
+- Fora deste recorte: orçamento explícito no pedido, recibo/replay e intercâmbio
+  de três vias (P3c–P3d).
+
+Checkpoint44 (P3b): `synthesis/root_synthesis.gd` para as raízes map, population
+e patrol, com a ferramenta "Variação regional…" nas três telas, AX
+`map|population|patrol/synthesis/{request,preview,apply,discard}` e o mesmo CLI.
+
+- Pedido da raiz: o da peça com `target` = {`instance_id`, `piece_hash`,
+  `layer_id`} e os canais `encounters` (preserve/regenerate, raízes population e
+  patrol) e `patrols` (só preserve, raiz patrol). Seleção em coordenadas da peça.
+- Instância: a peça variada entra como snapshot novo em `map.pieces`; só a
+  instância alvo troca `piece_hash`. Instâncias, vínculos, bordas e contexto não
+  mudam; o snapshot antigo fica enquanto alguma instância o usar.
+- Proteção: o corpo (raio conservador) de entrada, saídas, interações, slots e
+  pontos de patrulha da camada e os trechos de patrulha como cápsulas entram na
+  máscara da peça.
+- Reconciliação: cada marcador da camada variada é religado à célula da mesma
+  família (instância + camada) sob a sua posição; corpo cuja altura mudaria
+  recusa com `synthesis_support_changed`; sem piso, `synthesis_support_lost`;
+  centros de pincel e exclusão são reassentados e listados no diff.
+- Encontros: com plano realizado, `PopulationCompiler.regenerate` recebe um
+  escopo: todo slot que fica é reservado e validado antes; "regenerate" sorteia
+  só candidatos da família com o corpo dentro da seleção; "preserve" não sorteia
+  (cota maior vira déficit). Slots fixos, de site temático e de patrulha nunca
+  são redistribuídos. `plan_hash` só muda depois do plano validado; a raiz é
+  compilada inteira antes da proposta. Sem plano realizado, só o mapa é
+  compilado e a proposta avisa.
+- Rotas: preservadas; mudar rota continua na tela de patrulhas.
 
 ## Autoridade e unidade de aplicação
 
