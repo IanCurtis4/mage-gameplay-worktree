@@ -116,23 +116,28 @@ func run() -> void:
 	check("completion_hint_names_living_blockers",status_panel != null and status_panel.completion_hint().begins_with("Ainda há inimigos"))
 	var damage := DamageProbe.new(); app.add_child(damage)
 	enemy.health.damage_applied.connect(damage.record)
+	# Checkpoint38: the profile write runs on a worker thread (forced here; headless
+	# runs default to the synchronous write, which e07_f7_actions keeps covering).
+	# Checkpoint40: set before the fight, since deaths are written at once.
+	OS.set_environment("RAGRPG_BACKGROUND_SAVE","1")
+	var journal_frame_ms := 0.0; var frame_clock := Time.get_ticks_usec(); var saw_background := false; var in_combat := false
 	var attack := host.spatial_pointer_move(View.project(enemy.world_point().position)+Vector2(0,-24))
 	check("pointer_selects_actual_enemy_for_combat",attack.ok and host.player.target == enemy)
 	deadline = Time.get_ticks_msec()+12000
-	while is_instance_valid(enemy) and enemy.is_alive() and is_instance_valid(app.host) and Time.get_ticks_msec() < deadline: await process_frame
+	while is_instance_valid(enemy) and enemy.is_alive() and is_instance_valid(app.host) and Time.get_ticks_msec() < deadline:
+		await process_frame
+		frame_clock = Time.get_ticks_usec()
 	check("real_attack_changes_enemy_health",damage.actual_damage > 0.0)
-	# Deaths are committed once combat ends (checkpoint33), not on the killing frame;
-	# since checkpoint37 as one journal entry on this same host (no world capture).
+	# Deaths are one journal entry on this same host (checkpoint37), written at once
+	# in the background (checkpoint40; before, at the end of combat).
 	deadline = Time.get_ticks_msec()+30000
-	# Checkpoint38: the profile write runs on a worker thread (forced here; headless
-	# runs default to the synchronous write, which e07_f7_actions keeps covering).
-	OS.set_environment("RAGRPG_BACKGROUND_SAVE","1")
-	var journal_frame_ms := 0.0; var frame_clock := Time.get_ticks_usec(); var saw_background := false
 	while Time.get_ticks_msec() < deadline and not (is_instance_valid(app.host) and app.host.campaign_runtime != null and app.host.campaign_runtime.state.slots.guard.initial_resolved and not app.host.expedition_save_busy()):
 		await process_frame
 		journal_frame_ms = maxf(journal_frame_ms,(Time.get_ticks_usec()-frame_clock)/1000.0); frame_clock = Time.get_ticks_usec()
 		saw_background = saw_background or (is_instance_valid(app.host) and app.host.expedition_save_busy())
+		in_combat = in_combat or (is_instance_valid(app.host) and app.host.expedition_save_busy() and app.host.encounter_active)
 	print("F9_GAMEPLAY_JOURNAL_FRAME_MS "+str(snappedf(journal_frame_ms,0.1)))
+	print("F9_GAMEPLAY_DEATH_WRITTEN_IN_COMBAT "+str(in_combat))
 	check("real_combat_resolves_population_slot",is_instance_valid(app.host) and app.host.campaign_runtime.state.slots.guard.initial_resolved)
 	await process_frame
 	var cleared_panel := app.host.ui_root.get_node_or_null("ExpeditionStatus") as ExpeditionStatusPanel if is_instance_valid(app.host) else null

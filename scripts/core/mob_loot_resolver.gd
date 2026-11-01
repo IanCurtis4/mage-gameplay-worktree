@@ -8,6 +8,11 @@ var _strict_quality_pools := false
 var _recipe_revision_id: StringName = &"catalog_v1"
 var _power_ruleset_id: StringName = &"legacy_unscaled"
 var _cardless_base_ids: Array[StringName] = []
+# Checkpoint40: eligible pools memoized per (category, quality, level). The
+# resolver is immutable after create (copied catalog, copied profiles), so a pool
+# is a pure function of its key. Derived data, never serialized. Each mob drop
+# validated every quality pool twice (~28 ms per kill on the Bosque).
+var _pool_memo: Dictionary = {}
 static func create(catalog: BuildEffectCatalog, table: MobLootTable) -> Dictionary:
 	if catalog == null or table == null or table.profiles.is_empty():
 		return BuildEffectCatalog.failure(&"invalid_loot_table")
@@ -100,6 +105,8 @@ func roll(occurrence: MobOccurrence, uniforms: Array, equipment_factor: float = 
 	var card: StringName = mob.card_id if mob.id not in _cardless_base_ids and _passes(float(uniforms[4]), float(row["card_chance"]) * card_factor) else &""
 	return {"ok": true, "equipment_drops": drops, "card_id": card, "mob_base_id": mob.id, "category_id": occurrence.category_id, "occurrence_id": occurrence.occurrence_id}
 func _item_pool(category: StringName, quality: StringName, level: int = 0) -> Dictionary:
+	var key := "%s|%s|%d" % [category, quality, level]
+	if _pool_memo.has(key): return _pool_memo[key]
 	var result: Dictionary = {}
 	for raw_id: Variant in _profiles[category]["equipment_weights"]:
 		var id := StringName(raw_id)
@@ -107,6 +114,7 @@ func _item_pool(category: StringName, quality: StringName, level: int = 0) -> Di
 		if level > 0 and not EquipmentEligibilityRules.level_allowed(EquipmentEligibilityRules.for_resource(item),level): continue
 		if (not _strict_quality_pools or item.quality_id == quality) and _catalog.validate_equipment_quality(item, quality)["ok"]:
 			result[id] = _profiles[category]["equipment_weights"][raw_id]
+	_pool_memo[key] = result
 	return result
 static func minimum_quality(category: StringName, quality: StringName) -> StringName:
 	var floor_quality: StringName = FLOORS.get(category, &"common")

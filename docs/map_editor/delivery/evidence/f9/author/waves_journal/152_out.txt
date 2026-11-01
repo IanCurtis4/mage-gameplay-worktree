@@ -1,0 +1,55 @@
+﻿RUN GameplayNative import 2026-10-31T20:52:58.8497163-03:00
+F9 GameplayNative: True
+F9_GAMEPLAY_JOURNAL_FRAME_MS 14.0
+F9_GAMEPLAY_DEATH_WRITTEN_IN_COMBAT true
+RUN CampaignJournal 2026-10-31T20:54:46.6006294-03:00
+F9 CampaignJournal: True
+RUN RuntimeView 2026-10-31T20:54:57.9460747-03:00
+F9 RuntimeView: True
+RUN WorldRewardPoll 2026-10-31T20:55:12.3667887-03:00
+F9 WorldRewardPoll: True
+--- legacy
+candidates (18)
+LEGACY tests/e07_f5_waves_journal_test.gd :: E07 F5 e07_f5_waves_journal_test.gd: 36 checks, 0 failures
+   E07 F5 e07_f5_waves_journal_test.gd: 36 checks, 0 failures
+LEGACY tests/e06_gameplay_ai_test.gd :: E06 gameplay AI: 73 checks, 0 failures
+   E06 gameplay AI: 73 checks, 0 failures
+LEGACY tests/e06_tx_loot_test.gd :: E06 TX3 loot: 49 checks, 0 failures
+   E06 TX3 loot: 49 checks, 0 failures
+LEGACY tests/e07_f1_birth_collect_test.gd :: E07 F1 birth and collection: 210 checks, 0 failures
+   E07 F1 birth and collection: 210 checks, 0 failures
+LEGACY tests/e07_f1_consumer_test.gd :: E07 F1 consumers: 133 checks, 0 failures
+   E07 F1 consumers: 133 checks, 0 failures
+LEGACY tests/e07_f3_mob_state_test.gd :: E07 F3 mob state: 372 checks, 0 failures; scenarios=4
+   E07 F3 mob state: 372 checks, 0 failures; scenarios=4
+LEGACY tests/e07_f5_build_test.gd :: E07 F5 e07_f5_build_test.gd: 32 checks, 0 failures
+   E07 F5 e07_f5_build_test.gd: 32 checks, 0 failures
+LEGACY tests/e07_f5_campaign_test.gd :: E07 F5 e07_f5_campaign_test.gd: 28 checks, 0 failures
+   E07 F5 e07_f5_campaign_test.gd: 28 checks, 0 failures
+LEGACY tests/e07_f5_completion_test.gd :: E07 F5 e07_f5_completion_test.gd: 39 checks, 0 failures
+   E07 F5 e07_f5_completion_test.gd: 39 checks, 0 failures
+LEGACY tests/e07_f5_death_kits_test.gd :: E07 F5 death kits: 191 checks, 0 failures
+   E07 F5 death kits: 191 checks, 0 failures
+LEGACY tests/e07_f5_fault_test.gd :: E07 F5 e07_f5_fault_test.gd: 20 checks, 0 failures
+   E07 F5 e07_f5_fault_test.gd: 20 checks, 0 failures
+LEGACY tests/e07_f5_population_test.gd :: E07 F5 population: 40 checks, 0 failures
+   E07 F5 population: 40 checks, 0 failures
+LEGACY tests/e07_f5_quest_test.gd :: E07 F5 e07_f5_quest_test.gd: 21 checks, 0 failures
+   E07 F5 e07_f5_quest_test.gd: 21 checks, 0 failures
+LEGACY tests/e07_f5_recovery_test.gd :: E07 F5 e07_f5_recovery_test.gd: 33 checks, 0 failures
+   E07 F5 e07_f5_recovery_test.gd: 33 checks, 0 failures
+LEGACY tests/e07_f5_reward_test.gd :: E07 F5 rewards: 6 checks, 0 failures
+   E07 F5 rewards: 6 checks, 0 failures
+LEGACY tests/e07_f5_waves_test.gd :: E07 F5 e07_f5_waves_test.gd: 37 checks, 0 failures
+   E07 F5 e07_f5_waves_test.gd: 37 checks, 0 failures
+LEGACY tests/e07_f6_snapshot_test.gd :: E07 F5 e07_f6_snapshot_test.gd: 40 checks, 0 failures
+   E07 F5 e07_f6_snapshot_test.gd: 40 checks, 0 failures
+LEGACY tests/e07_f7_actions_test.gd :: E07 F7 actions: 28 checks, 0 failures
+   E07 F7 actions: 28 checks, 0 failures
+--- windowed wave probe
+WV slow_frames [{"after":{"busy":true,"flush":true,"pending":0,"uncollected":true},"before":{"busy":false,"flush":false,"pending":0,"uncollected":true},"dt":74.7},{"after":{"busy":false,"flush":false,"pending":0,"uncollected":false},"before":{"busy":true,"flush":true,"pending":0,"uncollected":true},"dt":62.5}]
+WV deaths {"cleared_once":true,"clock_started":true,"done":true,"frames":0,"journal":2,"killed":7,"ms":0,"same_host":true,"trash":7,"worst_frame_ms":0.0}
+WV wave {"alive_enemies":7,"births":7,"done":true,"frames":53,"journal_kinds":["deaths","collect","wave"],"ms":823,"same_host":true,"waiting":0,"wave_index":1,"worst_frame_ms":42.1}
+WV replay {"code":"","ms":3387,"ok":true,"same_slots":true}
+WV_DONE
+DONE 2026-10-31T21:11:09.1068786-03:00

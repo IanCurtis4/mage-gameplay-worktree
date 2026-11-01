@@ -1,0 +1,7 @@
+﻿LEGACY tests/e07_f5_waves_journal_test.gd :: E07 F5 e07_f5_waves_journal_test.gd: 36 checks, 1 failures
+   ERROR: base + journal replays the revive and its births
+      at: push_error (core/variant/variant_utility.cpp:1023)
+   replay differs {"copy":{"entry_boss":{"base_xp":10,"blocks_clear":true,"deaths":{"0":"death_occ_b22c61c0e8e92654b2a91e81755bcaea81bd2c90b1b4ab6c4d3358aa4efd"},"generation":0,"home":{"position":"(320.0, 320.0, 1600.0)","stage_id":"entry","surface_id":"entry/shrine/surface/floor"},"initial_resolved":true,"instance_id":"shrine","job_xp":8,"life_state":"dead","occurrence_category":"boss","origin_id":"trial_stage_1","pending_wave":0,"required_tags":["shrine"],"respawn_policy_id":"fixture_respawn","reward_policy_id":"fixture_reward","slot_id":"entry_boss","socket_id":"boss","species_id":"test_beast_
+LEGACY tests/e07_f5_waves_test.gd :: E07 F5 e07_f5_waves_test.gd: 37 checks, 0 failures
+LEGACY tests/e07_f5_recovery_test.gd :: E07 F5 e07_f5_recovery_test.gd: 33 checks, 0 failures
+DONE 2026-10-31T20:24:20.3147889-03:00

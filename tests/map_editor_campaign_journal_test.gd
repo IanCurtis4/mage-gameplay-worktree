@@ -72,6 +72,22 @@ func run() -> void:
 	var short_clock := revive.duplicate(true); short_clock.clock = [true,12.5,30.0]
 	var no_death := revive.duplicate(true); no_death.event_id = ""
 	check("malformed_revive_is_refused",not Journal.validate_payload(bad_clock).ok and not Journal.validate_payload(short_clock).ok and not Journal.validate_payload(no_death).ok)
+	# Checkpoint40 (J3): a wave names every waiting slot and the births it admits.
+	var wave_entry := {"kind":"wave","clock":[true,30.0,30.0,3],"pending":[{"slot_id":"slot_a","pending_wave":3},{"slot_id":"slot_b","pending_wave":2}],"admitted":[{"slot_id":"slot_a","generation":2}]}
+	var waved := Journal.make_entry(journal,checkpoint,"wave_%056d" % 1,wave_entry)
+	var with_wave := journal.duplicate(true)
+	if waved.ok: with_wave.append(waved.entry)
+	var decoded_wave := Journal.validate(with_wave,checkpoint)
+	check("wave_entry_round_trips",waved.ok and decoded_wave.ok and decoded_wave.payloads[-1] == wave_entry and Journal.is_wave(decoded_wave.payloads[-1]))
+	var stranger := wave_entry.duplicate(true); stranger.admitted = [{"slot_id":"slot_c","generation":1}]
+	var empty_wave := wave_entry.duplicate(true); empty_wave.pending = []; empty_wave.admitted = []
+	var twice_born := wave_entry.duplicate(true); twice_born.admitted.append({"slot_id":"slot_a","generation":2})
+	var unborn := wave_entry.duplicate(true); unborn.admitted = [{"slot_id":"slot_a","generation":0}]
+	check("malformed_wave_is_refused",not Journal.validate_payload(stranger).ok and not Journal.validate_payload(empty_wave).ok and not Journal.validate_payload(twice_born).ok and not Journal.validate_payload(unborn).ok)
+	var revive_births := {"kind":"revive","event_id":"player_death_1","clock":[true,12.5,30.0,2],"pending":[{"slot_id":"slot_a","pending_wave":2}],"admitted":[{"slot_id":"slot_a","generation":1}]}
+	var revive_no_births := revive_births.duplicate(true); revive_no_births.pending = []; revive_no_births.admitted = []
+	var revive_bad := revive_births.duplicate(true); revive_bad.admitted = [{"slot_id":"slot_z","generation":1}]
+	check("revive_carries_its_births",Journal.validate_payload(revive_births).ok and Journal.validate_payload(revive_no_births).ok and not Journal.validate_payload(revive_bad).ok)
 	var full := chain(checkpoint,Journal.MAX_ENTRIES)
 	check("journal_is_bounded",full.size() == Journal.MAX_ENTRIES and Journal.make_entry(full,checkpoint,"events_%056d" % 999,payload(999)).get("error_code") == &"journal_full")
 	var ok := checks.all(func(item: Dictionary) -> bool: return item.ok)

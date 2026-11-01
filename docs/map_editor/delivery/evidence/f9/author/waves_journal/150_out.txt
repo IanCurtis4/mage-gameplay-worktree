@@ -1,0 +1,25 @@
+﻿RUN GameplayNative import 2026-10-31T20:37:47.0652167-03:00
+F9 GameplayNative: True
+F9_GAMEPLAY_JOURNAL_FRAME_MS 14.4
+F9_GAMEPLAY_DEATH_WRITTEN_IN_COMBAT true
+RUN CampaignJournal 2026-10-31T20:39:46.7565991-03:00
+F9 CampaignJournal: True
+--- legacy
+candidates (5)
+LEGACY tests/e07_f5_waves_journal_test.gd :: E07 F5 e07_f5_waves_journal_test.gd: 36 checks, 0 failures
+   E07 F5 e07_f5_waves_journal_test.gd: 36 checks, 0 failures
+LEGACY tests/e07_f5_death_kits_test.gd :: E07 F5 death kits: 191 checks, 0 failures
+   E07 F5 death kits: 191 checks, 0 failures
+LEGACY tests/e07_f5_recovery_test.gd :: E07 F5 e07_f5_recovery_test.gd: 33 checks, 0 failures
+   E07 F5 e07_f5_recovery_test.gd: 33 checks, 0 failures
+LEGACY tests/e07_f5_waves_test.gd :: E07 F5 e07_f5_waves_test.gd: 37 checks, 0 failures
+   E07 F5 e07_f5_waves_test.gd: 37 checks, 0 failures
+LEGACY tests/e07_f7_actions_test.gd :: E07 F7 actions: 28 checks, 0 failures
+   E07 F7 actions: 28 checks, 0 failures
+--- windowed wave probe
+WV slow_frames [{"after":{"busy":true,"flush":true,"pending":7,"uncollected":false},"before":{"busy":false,"flush":false,"pending":7,"uncollected":false},"dt":214.6},{"after":{"busy":true,"flush":true,"pending":0,"uncollected":true},"before":{"busy":false,"flush":false,"pending":0,"uncollected":true},"dt":70.7},{"after":{"busy":false,"flush":false,"pending":0,"uncollected":false},"before":{"busy":true,"flush":true,"pending":0,"uncollected":true},"dt":57.7}]
+WV deaths {"cleared_once":true,"clock_started":true,"done":true,"frames":0,"journal":2,"killed":7,"ms":0,"same_host":true,"trash":7,"worst_frame_ms":0.0}
+WV wave {"alive_enemies":7,"births":7,"done":true,"frames":48,"journal_kinds":["deaths","collect","wave"],"ms":825,"same_host":true,"waiting":0,"wave_index":1,"worst_frame_ms":53.6}
+WV replay {"code":"","ms":3268,"ok":true,"same_slots":true}
+WV_DONE
+DONE 2026-10-31T20:48:07.2587431-03:00

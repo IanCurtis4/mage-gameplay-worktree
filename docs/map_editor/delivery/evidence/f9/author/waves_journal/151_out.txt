@@ -1,0 +1,8 @@
+﻿--- windowed wave probe
+WV death_profile {"barrier_acquire_us":10,"drop_us":[28110,26836,28257,28357,26852,27607,27508],"effects_ok":true,"effects_us":202412}
+WV slow_frames [{"after":{"busy":true,"flush":true,"pending":0,"uncollected":true},"before":{"busy":false,"flush":false,"pending":0,"uncollected":true},"dt":71.8},{"after":{"busy":false,"flush":false,"pending":0,"uncollected":false},"before":{"busy":true,"flush":true,"pending":0,"uncollected":true},"dt":57.4},{"after":{"busy":false,"flush":false,"pending":0,"uncollected":false},"before":{"busy":false,"flush":false,"pending":0,"uncollected":false},"dt":48.8}]
+WV deaths {"cleared_once":true,"clock_started":true,"done":true,"frames":0,"journal":2,"killed":7,"ms":0,"same_host":true,"trash":7,"worst_frame_ms":0.0}
+WV wave {"alive_enemies":7,"births":7,"done":true,"frames":51,"journal_kinds":["deaths","collect","wave"],"ms":870,"same_host":true,"waiting":0,"wave_index":1,"worst_frame_ms":64.0}
+WV replay {"code":"","ms":3292,"ok":true,"same_slots":true}
+WV_DONE
+DONE 2026-10-31T20:51:34.8526358-03:00

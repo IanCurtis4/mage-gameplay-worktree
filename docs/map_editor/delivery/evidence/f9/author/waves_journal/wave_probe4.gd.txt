@@ -1,0 +1,89 @@
+extends SceneTree
+## Diagnostic (Sol, checkpoint40), windowed: clear the Bosque stage through the
+## journal, then force a wave; worst frame, births on the same host, replay.
+const Launcher = preload("res://scripts/map_authoring/preview/gameplay_launcher.gd")
+const App = preload("res://scripts/map_authoring/preview/gameplay_app.gd")
+const View = preload("res://scripts/world/expedition_geometry_view.gd")
+var out_dir := ""
+func _initialize() -> void: run.call_deferred()
+func shot(file_name: String) -> void:
+	await RenderingServer.frame_post_draw
+	var image := root.get_texture().get_image()
+	if image != null: image.save_png(out_dir.path_join(file_name))
+	print("WV shot "+file_name+" "+str(image != null))
+func frames(count: int) -> void:
+	for index: int in count: await process_frame
+# Waits for cond while recording the longest frame.
+func watch(cond: Callable, limit_ms: int) -> Dictionary:
+	var t0 := Time.get_ticks_msec(); var last := Time.get_ticks_usec(); var worst := 0.0; var count := 0
+	while not cond.call() and Time.get_ticks_msec()-t0 < limit_ms:
+		await process_frame
+		var dt := (Time.get_ticks_usec()-last)/1000.0; last = Time.get_ticks_usec(); worst = maxf(worst,dt); count += 1
+	return {"done":cond.call(),"ms":Time.get_ticks_msec()-t0,"worst_frame_ms":snappedf(worst,0.1),"frames":count}
+func run() -> void:
+	var path := ""
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--candidate="): path = arg.trim_prefix("--candidate=")
+		if arg.begins_with("--out="): out_dir = arg.trim_prefix("--out=")
+	var candidate: Variant = bytes_to_var(FileAccess.get_file_as_bytes(path))
+	var created := Launcher.create_session(candidate)
+	var window := Launcher.create_window(created.path) if created.ok else {"ok":false}
+	var app := App.new(); app.quit_on_close = false; app.hold_start = true; root.add_child(app); current_scene = app
+	var opened: Dictionary = await app.open_window_async(window.path)
+	var started: Dictionary = await app._start_with_gate() if opened.ok else {"ok":false}
+	if not started.ok: print("WV start_failed "+JSON.stringify({"opened":opened,"started":started})); quit(1); return
+	var main = app.host; var player: PlayerActor = main.player
+	for e: CombatActor in main.enemies: e.process_mode = Node.PROCESS_MODE_DISABLED  # probe only: no combat
+	app.begin()
+	await frames(30)
+	var runtime = main.campaign_runtime; var state = runtime.state
+	var stage: String = state.current_stage_id
+	var killed := 0
+	for slot_id: String in runtime.actors:
+		var actor: EnemyActor = runtime.actors[slot_id]
+		if not is_instance_valid(actor) or not actor.is_alive() or state.slots[slot_id]["stage_id"] != stage: continue
+		actor.health.current_hp = 0.0; actor.health._death_emitted = true
+		main._on_enemy_died(actor); killed += 1
+	# Per-frame trace of the slow frames after the kills: which phase was running.
+	var trace: Array = []
+	var t_start := Time.get_ticks_msec(); var last_us := Time.get_ticks_usec()
+	while Time.get_ticks_msec()-t_start < 4000:
+		var before := {"pending":runtime.pending_events.size(),"busy":main.expedition_save_busy(),"flush":main._expedition_flush_running,"uncollected":main.reward_service.has_uncollected()}
+		await process_frame
+		var dt := (Time.get_ticks_usec()-last_us)/1000.0; last_us = Time.get_ticks_usec()
+		if dt > 40.0: trace.append({"dt":snappedf(dt,0.1),"before":before,"after":{"pending":runtime.pending_events.size(),"busy":main.expedition_save_busy(),"flush":main._expedition_flush_running,"uncollected":main.reward_service.has_uncollected()}})
+	print("WV slow_frames "+JSON.stringify(trace))
+	var cleared: Dictionary = await watch(func() -> bool: return runtime.pending_events.is_empty() and not main.expedition_save_busy() and not main._expedition_flush_running,60000)
+	var lock = main.persistent_facade.current_profile().expedition_for_character(main.run_state.character_id)
+	var trash := 0
+	for slot: Dictionary in state.slots.values():
+		if slot["stage_id"] == stage and slot["trash"]: trash += 1
+	cleared["killed"] = killed; cleared["trash"] = trash; cleared["cleared_once"] = state.stages[stage]["cleared_once"]; cleared["clock_started"] = state.clock.started; cleared["journal"] = lock.journal.size(); cleared["same_host"] = app.host == main
+	print("WV deaths "+JSON.stringify(cleared))
+	state.clock.remaining = 0.05
+	var before_gen := {}
+	for slot_id: String in state.slots: before_gen[slot_id] = int(state.slots[slot_id]["generation"])
+	var born_check := func() -> bool:
+		if main.expedition_save_busy() or main._expedition_flush_running or not runtime.pending_events.is_empty() or not runtime.birth_queue.is_empty(): return false
+		for slot_id: String in state.slots:
+			if state.slots[slot_id]["stage_id"] == stage and state.slots[slot_id]["trash"] and int(state.slots[slot_id]["generation"]) > before_gen[slot_id]: return true
+		return false
+	var waved: Dictionary = await watch(born_check,60000)
+	for e: CombatActor in main.enemies: e.process_mode = Node.PROCESS_MODE_DISABLED
+	var births := 0; var waiting := 0
+	for slot_id: String in state.slots:
+		if int(state.slots[slot_id]["generation"]) > before_gen[slot_id]: births += 1
+		if state.slots[slot_id]["life_state"] == "respawn_pending": waiting += 1
+	lock = main.persistent_facade.current_profile().expedition_for_character(main.run_state.character_id)
+	var payloads: Array = ExpeditionService.Journal.decode(lock.journal,lock.checkpoint).get("payloads",[])
+	var kinds: Array = payloads.map(func(p: Dictionary) -> String: return "wave" if ExpeditionService.Journal.is_wave(p) else ("revive" if ExpeditionService.Journal.is_revive(p) else ("collect" if ExpeditionService.Journal.is_collect(p) else "deaths")))
+	waved["births"] = births; waved["waiting"] = waiting; waved["same_host"] = app.host == main; waved["journal_kinds"] = kinds; waved["wave_index"] = state.clock.wave_index; waved["alive_enemies"] = main.enemies.filter(func(a: CombatActor) -> bool: return a.is_alive()).size()
+	print("WV wave "+JSON.stringify(waved))
+	var t0 := Time.get_ticks_msec()
+	var replayed: Dictionary = ExpeditionService.new(main.persistent_facade)._restore(lock)
+	var same := false
+	if replayed.get("ok",false):
+		same = replayed.root.campaign_runtime.state.slots == state.slots and replayed.root.campaign_runtime.actors.keys() == runtime.actors.keys()
+		replayed.root.free()
+	print("WV replay "+JSON.stringify({"ok":replayed.get("ok",false),"code":String(replayed.get("error_code","")),"same_slots":same,"ms":Time.get_ticks_msec()-t0}))
+	print("WV_DONE"); quit(0)

@@ -1,0 +1,5 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F7 migration boundary: open keys=["ok", "error_code", "read_only"]; preview keys=["ok", "plan", "plan_digest", "complete"]; plan keys=["warnings", "preserved_fields", "historical_changes", "policy_revision", "source_digest", "source_revision", "profile_id", "destinations", "suggestions", "references", "removals", "missing", "gold_initial", "characters", "assets"]
+F7 migration boundary: source unchanged=true; current_profile=null; legacy characters exposed=false
+E07 F7 migration: PASS (16 assertions; opaque modal/original missing-roster boundary resolved)

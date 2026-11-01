@@ -132,6 +132,9 @@ var _pending_world_click: Dictionary = {}
 ## Earliest time for the next automatic collection after a refusal (checkpoint38).
 ## Transient; omitted from snapshots.
 var _auto_collect_after_msec := 0
+# Checkpoint40: during combat, mob deaths go to the journal at most once per interval.
+const DEATH_JOURNAL_INTERVAL_MSEC := 2000
+var _death_flush_after_msec := 0
 var _world_companion_attempts: Dictionary[int, bool] = {}
 var _world_pending_companions: Dictionary[int, WeakRef] = {}
 var reward: RewardPickup
@@ -2305,10 +2308,10 @@ func _on_enemy_died(actor: CombatActor) -> void:
 		if not slot_id.is_empty():
 			var slot: Dictionary = campaign_runtime.state.slots[slot_id]
 			campaign_runtime.pending_events.append({"kind": "mob_death", "slot_id": slot_id, "generation": slot["generation"], "event_id": "death_" + actor.occurrence.occurrence_id})
-			# Durable commit waits for the end of combat (one transaction per fight,
-			# not per kill). The dead actor stays a tombstone; valid() admits it
-			# while its mob_death event is pending, and snapshots carry the queue.
-			if not encounter_active: _flush_expedition_events.call_deferred()
+			# Checkpoint40: written at once through the journal (in combat, at most
+			# once per DEATH_JOURNAL_INTERVAL_MSEC). The dead actor stays a tombstone;
+			# valid() admits it while its mob_death event is pending.
+			if _death_flush_due(): _flush_expedition_events.call_deferred()
 			return
 		if actor is EnemyActor and actor.is_summoned:
 			enemies.erase(actor)
@@ -2660,12 +2663,17 @@ func _advance_expedition_runtime(delta: float) -> void:
 			links[enemy.occurrence.occurrence_id if enemy.occurrence != null else "companion"] = true
 	combat_participation.observe(links, delta)
 	encounter_active = combat_participation.active()
-	if not encounter_active and not _expedition_flush_running and campaign_runtime.pending_events.any(func(event: Dictionary) -> bool: return event["kind"] == "mob_death"):
+	if _death_flush_due() and not _expedition_flush_running and campaign_runtime.pending_events.any(func(event: Dictionary) -> bool: return event["kind"] == "mob_death"):
 		_flush_expedition_events.call_deferred()
 	var wave := campaign_runtime.state.advance(delta)
 	var pending_safe := false
-	for slot: Dictionary in campaign_runtime.state.slots.values():
-		if slot["stage_id"] != campaign_runtime.state.current_stage_id or slot["life_state"] != "respawn_pending": continue
+	# Checkpoint40: births decided by the journal arrive one per frame.
+	if not campaign_runtime.birth_queue.is_empty():
+		var born := campaign_runtime.drain_births(self, 1)
+		if not born["ok"]: push_warning("expedition birth refused: %s" % born.get("error_code", ""))
+	for slot_id: String in campaign_runtime.state.slots:
+		var slot: Dictionary = campaign_runtime.state.slots[slot_id]
+		if slot["stage_id"] != campaign_runtime.state.current_stage_id or slot["life_state"] != "respawn_pending" or campaign_runtime.birth_queued(slot_id): continue
 		var world: WorldGeometry = campaign_runtime.worlds[slot["stage_id"]]
 		var query := world.position_query(ExpeditionPopulationPlanner.point(slot["home"]), slot["traversal"], world.geometry_revision)
 		if query["ok"] and query["data"]["occupants"].is_empty(): pending_safe = true; break
@@ -2677,6 +2685,9 @@ func _advance_expedition_runtime(delta: float) -> void:
 func _flush_expedition_events(allow_journal: bool = true) -> void:
 	if campaign_runtime == null or _expedition_flush_running or campaign_runtime.pending_events.is_empty() or _memory_snapshot_pending: return
 	if allow_journal and _journal_flush(): return
+	# The full transaction stops the game; mob deaths alone still wait for the end
+	# of combat when the journal cannot take them (full journal, no base).
+	if encounter_active and campaign_runtime.pending_events.all(func(event: Dictionary) -> bool: return event["kind"] == "mob_death"): return
 	_expedition_flush_running = true
 	var saved_status := status_label.text
 	status_label.text = "Salvando a expedição…"
@@ -2704,7 +2715,7 @@ func _flush_expedition_events(allow_journal: bool = true) -> void:
 # transaction must run instead (waves, no base checkpoint, full journal, or a
 # refusal the full path reports itself).
 func _journal_flush() -> bool:
-	if not campaign_runtime.pending_events.all(func(event: Dictionary) -> bool: return event["kind"] in ["mob_death", "player_death"]): return false
+	if not campaign_runtime.pending_events.all(func(event: Dictionary) -> bool: return event["kind"] in ["mob_death", "player_death", "wave"]): return false
 	var profile := persistent_facade.current_profile() if persistent_facade != null else null
 	var lock := profile.expedition_for_character(run_state.character_id) if profile != null else null
 	if lock == null or lock.checkpoint.is_empty() or lock.journal.size() >= ExpeditionService.Journal.MAX_ENTRIES: return false
@@ -2716,6 +2727,7 @@ func _journal_flush() -> bool:
 		release_memory_snapshot(); return false
 	var events := campaign_runtime.pending_events.duplicate(true)
 	var request := "events_" + ExpeditionCanonical.digest({"kind": "events", "events": events}).substr(0, 56)
+	_death_flush_after_msec = Time.get_ticks_msec() + DEATH_JOURNAL_INTERVAL_MSEC
 	_expedition_transaction_service = ExpeditionService.new(persistent_facade)
 	# Checkpoint38: the effect is resolved under the barrier, the profile is
 	# written on a worker thread and the game keeps running meanwhile.
@@ -2809,6 +2821,16 @@ func try_journal_revive(event_id: String) -> Dictionary:
 	release_memory_snapshot()
 	return result
 
+# Checkpoint40: out of combat at once; in combat once per interval.
+func _death_flush_due() -> bool:
+	return not encounter_active or Time.get_ticks_msec() >= _death_flush_after_msec
+
+# Events queued while a background write ran (a death, a wave) go next.
+func _flush_queued_events() -> void:
+	if campaign_runtime == null or campaign_runtime.pending_events.is_empty(): return
+	if campaign_runtime.pending_events.all(func(event: Dictionary) -> bool: return event["kind"] == "mob_death") and not _death_flush_due(): return
+	_flush_expedition_events.call_deferred()
+
 func expedition_save_busy() -> bool:
 	return _expedition_transaction_service != null and _expedition_transaction_service.background_pending()
 
@@ -2820,6 +2842,7 @@ func _poll_expedition_save() -> void:
 	if result.get("ok", false):
 		_expedition_flush_running = false
 		_settle_lifecycle(result.get("journal_kind", "") == "revive")
+		_flush_queued_events()
 		return
 	if result.get("read_only", false):
 		# Same rule as a synchronous uncertain write: freeze until recovery.

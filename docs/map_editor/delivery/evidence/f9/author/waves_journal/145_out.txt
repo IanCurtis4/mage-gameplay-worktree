@@ -1,0 +1,6 @@
+﻿--- windowed wave probe
+WV deaths {"cleared_once":true,"clock_started":true,"done":true,"frames":28,"journal":1,"killed":7,"ms":601,"same_host":true,"trash":7,"worst_frame_ms":214.4}
+WV wave {"alive_enemies":7,"births":7,"done":true,"frames":80,"journal_kinds":["deaths","collect","wave"],"ms":1341,"same_host":true,"waiting":0,"wave_index":1,"worst_frame_ms":185.6}
+WV replay {"code":"","ms":3300,"ok":true,"same_slots":true}
+WV_DONE
+DONE 2026-10-31T20:04:43.7286728-03:00

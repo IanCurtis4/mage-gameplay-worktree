@@ -204,14 +204,17 @@ func _publish(result: Dictionary, context: Dictionary) -> Dictionary:
 		result["registry"] = context["staged_registry"]
 		var previous := context["source"].get_ref() as RunController
 		if previous != null: previous.snapshot_passive = true
-	if context.has("journal_payload"):
+	if context.has("journal_payload") or context.has("journal_payloads"):
+		var payloads: Array = context["journal_payloads"] if context.has("journal_payloads") else [context["journal_payload"]]
 		var live := context["source"].get_ref() as RunController
 		if live != null:
 			var holder: SnapshotTickBarrier = context["barrier"].get_ref() if context.has("barrier") else null
-			var applied := _journal_apply(live, context["journal_payload"], false, holder)
-			if not applied["ok"]: return applied
+			for payload: Dictionary in payloads:
+				var applied := _journal_apply(live, payload, false, holder)
+				if not applied["ok"]: return applied
 		result["journal_seq"] = lock.journal.size()
-		result["journal_kind"] = "revive" if Journal.is_revive(context["journal_payload"]) else ("collect" if Journal.is_collect(context["journal_payload"]) else "deaths")
+		var last: Dictionary = payloads[-1]
+		result["journal_kind"] = "revive" if Journal.is_revive(last) else ("collect" if Journal.is_collect(last) else ("wave" if Journal.is_wave(last) else "deaths"))
 	if lock.lifecycle == &"suspended" and context.has("source"):
 		var suspended_host := context["source"].get_ref() as RunController
 		if suspended_host != null: suspended_host.snapshot_passive = true
@@ -524,7 +527,7 @@ func _apply_campaign(host: RunController, command: Dictionary) -> Dictionary:
 func journal_events(controller: RunController, barrier: SnapshotTickBarrier, events: Array, request_id: String, expected_revision: int, background: bool = false) -> Dictionary:
 	if not _pending.is_empty() or not _background.is_empty(): return _fail(&"recovery_required")
 	if controller == null or controller.persistent_facade != facade or controller.campaign_runtime == null or barrier == null or not barrier.owns(controller): return _fail(&"tick_barrier_required")
-	if events.is_empty() or events.any(func(event: Variant) -> bool: return not event is Dictionary or event.get("kind") not in ["mob_death", "player_death"]): return _fail(&"invalid_payload")
+	if events.is_empty() or events.any(func(event: Variant) -> bool: return not event is Dictionary or event.get("kind") not in ["mob_death", "player_death", "wave"]): return _fail(&"invalid_payload")
 	if not _valid_campaign_command({"kind": "events", "events": events}): return _fail(&"invalid_payload")
 	var profile := facade.current_profile()
 	if profile == null: return _fail(&"profile_unavailable")
@@ -538,20 +541,72 @@ func journal_events(controller: RunController, barrier: SnapshotTickBarrier, eve
 	if profile.reward_session == null or profile.reward_session["run_id"] != controller.run_state.run_id or profile.reward_session["character_id"] != controller.run_state.character_id: return _fail(&"invalid_session")
 	var current := profile.expedition_for_character(controller.run_state.character_id)
 	if current == null or current.expedition_id != id or current.checkpoint.is_empty() or current.lifecycle not in [&"active", &"recovering"]: return _fail(&"invalid_session")
-	var resolved := _journal_effects(controller, events)
-	if not resolved["ok"]: return resolved
+	# Checkpoint40 (J3): deaths first, then the wave in its own entry, in one write.
+	var deaths: Array = events.filter(func(event: Dictionary) -> bool: return event["kind"] != "wave")
+	var payloads: Array = []
+	if not deaths.is_empty():
+		var resolved := _journal_effects(controller, deaths)
+		if not resolved["ok"]: return resolved
+		payloads.append(resolved["payload"])
+	if deaths.size() < events.size():
+		var births := _births(controller, state.slots, state.current_stage_id)
+		if not births["pending"].is_empty(): payloads.append({"kind": "wave", "clock": _clock_record(state), "pending": births["pending"], "admitted": births["admitted"]})
+	if payloads.is_empty():
+		# Nothing waits to respawn: the wave intent leaves the queue without a write.
+		_drop_waves(controller, int(state.clock.wave_index))
+		return {"ok": true, "durable": false, "journal_kind": "none"}
 	var candidate := profile.copy_state()
 	var slot: ExpeditionAssetLock = candidate.expeditions[id]
-	var made := Journal.make_entry(slot.journal, slot.checkpoint, request_id, resolved["payload"])
-	if not made["ok"]: return made
-	slot.journal.append(made["entry"])
+	for payload: Dictionary in payloads:
+		var made := Journal.make_entry(slot.journal, slot.checkpoint, request_id, payload)
+		if not made["ok"]: return made
+		slot.journal.append(made["entry"])
 	slot.revision += 1
 	# Checkpoint39: the player's death moves the reservation to recovery, as the
 	# full transaction does through the campaign lifecycle.
 	if events.any(func(event: Dictionary) -> bool: return event["kind"] == "player_death"): slot.lifecycle = &"recovering"
 	slot.receipts[request_id] = {"fingerprint": fingerprint, "operation": "journal", "revision": slot.revision}
-	var context := {"source": weakref(controller), "barrier": weakref(barrier), "expedition_id": id, "journal_payload": resolved["payload"]}
+	var context := {"source": weakref(controller), "barrier": weakref(barrier), "expedition_id": id, "journal_payloads": payloads}
 	return _commit_background(candidate, request_id, expected_revision, context) if background else _commit(candidate, request_id, expected_revision, context)
+
+# J3: every slot waiting to respawn (any stage) with its wave, and the births the
+# current stage admits now: the occupancy query of admit_pending on the live
+# worlds, in the same slot order. A home within reach of a birth decided earlier
+# in the same pass waits, as admit_pending would see that newborn. Read-only.
+func _births(host: RunController, slots: Dictionary, stage_id: String) -> Dictionary:
+	var runtime := host.campaign_runtime
+	var pending: Array = []
+	var admitted: Array = []
+	var born: Array = []
+	for id: String in slots:
+		var slot: Dictionary = slots[id]
+		# A birth already decided and queued on this host belongs to its entry.
+		if slot["life_state"] != "respawn_pending" or runtime.birth_queued(id): continue
+		pending.append({"slot_id": id, "pending_wave": int(slot.get("pending_wave", 0))})
+		if slot["stage_id"] != stage_id or not runtime.worlds.has(stage_id): continue
+		var world: WorldGeometry = runtime.worlds[stage_id]
+		var home := ExpeditionPopulationPlanner.point(slot["home"])
+		var radius := float(slot["traversal"].get("radius", 0.0))
+		var queried := world.position_query(home, slot["traversal"], world.geometry_revision)
+		if not queried["ok"] or not queried["data"]["occupants"].is_empty(): continue
+		if born.any(func(other: Array) -> bool: return home.position.distance_to(other[0]) < radius + float(other[1])): continue
+		born.append([home.position, radius])
+		admitted.append({"slot_id": id, "generation": int(slot["generation"]) + 1})
+	return {"pending": pending, "admitted": admitted}
+
+static func _clock_record(state: ExpeditionCampaignState) -> Array:
+	return [bool(state.clock.started), float(state.clock.remaining), float(state.clock.interval), int(state.clock.wave_index)]
+
+static func _set_clock(state: ExpeditionCampaignState, clock: Array) -> void:
+	state.clock.started = clock[0]; state.clock.remaining = clock[1]; state.clock.interval = clock[2]; state.clock.wave_index = clock[3]
+
+# Wave intents up to this wave are answered by the entry; later ones stay queued.
+static func _drop_waves(host: RunController, wave_index: int) -> void:
+	var kept: Array[Dictionary] = []
+	for event: Dictionary in host.campaign_runtime.pending_events:
+		if event["kind"] == "wave" and int(event.get("wave_index", 0)) <= wave_index: continue
+		kept.append(event)
+	host.campaign_runtime.pending_events = kept
 
 # Checkpoint39: reviving at the last portal without a world transaction. Only
 # when the anchor is on the current stage and the revive admits no respawn (both
@@ -569,16 +624,16 @@ func journal_revive(controller: RunController, barrier: SnapshotTickBarrier, eve
 	if profile.revision != expected_revision: return _fail(&"stale_revision")
 	var current := profile.expedition_for_character(controller.run_state.character_id)
 	if current == null or current.expedition_id != id or current.checkpoint.is_empty() or current.lifecycle != &"recovering" or current.journal.size() >= Journal.MAX_ENTRIES: return _fail(&"journal_unavailable")
-	if not controller.campaign_runtime.pending_events.is_empty() or controller.player.is_alive() or state.anchor.get("stage_id") != state.current_stage_id: return _fail(&"journal_unavailable")
+	if controller.campaign_runtime.pending_events.any(func(event: Dictionary) -> bool: return event["kind"] != "wave") or controller.player.is_alive() or state.anchor.get("stage_id") != state.current_stage_id: return _fail(&"journal_unavailable")
 	var scratch := ExpeditionCampaignState.new()
 	scratch.slots = state.slots.duplicate(true); scratch.stages = state.stages.duplicate(true); scratch.policy = state.policy
 	scratch.death_events = state.death_events.duplicate(true); scratch.current_death_id = state.current_death_id; scratch.lifecycle = state.lifecycle
 	scratch.clock.started = state.clock.started; scratch.clock.remaining = state.clock.remaining; scratch.clock.interval = state.clock.interval; scratch.clock.wave_index = state.clock.wave_index
 	var checked := scratch.revive(event_id)
 	if not checked["ok"]: return checked
-	for slot: Dictionary in scratch.slots.values():
-		if slot["stage_id"] == state.current_stage_id and slot["life_state"] == "respawn_pending": return _fail(&"journal_unavailable")
-	var payload := {"kind": "revive", "event_id": event_id, "clock": [scratch.clock.started, float(scratch.clock.remaining), float(scratch.clock.interval), int(scratch.clock.wave_index)]}
+	# Checkpoint40 (J3): the births the revive admits travel in the same entry.
+	var births := _births(controller, scratch.slots, state.current_stage_id)
+	var payload := {"kind": "revive", "event_id": event_id, "clock": _clock_record(scratch), "pending": births["pending"], "admitted": births["admitted"]}
 	var candidate := profile.copy_state()
 	var slot: ExpeditionAssetLock = candidate.expeditions[id]
 	var made := Journal.make_entry(slot.journal, slot.checkpoint, request_id, payload)
@@ -702,7 +757,8 @@ func _journal_apply(host: RunController, payload: Dictionary, replay: bool, barr
 	var runtime := host.campaign_runtime
 	if runtime == null: return _fail(&"invalid_session")
 	if Journal.is_collect(payload): return _journal_apply_collect(host, payload, replay)
-	if Journal.is_revive(payload): return _journal_apply_revive(host, payload)
+	if Journal.is_revive(payload): return _journal_apply_revive(host, payload, replay)
+	if Journal.is_wave(payload): return _journal_apply_wave(host, payload, replay)
 	var disabled: Array[Node] = []
 	var applied := {}
 	for event: Dictionary in payload["events"]:
@@ -748,17 +804,72 @@ func _journal_apply(host: RunController, payload: Dictionary, replay: bool, barr
 # Same steps as the full revive on the current stage: penalty (the resulting
 # clock is recorded, since the live clock kept running after the base), return
 # to the last portal, approved HP/SP, and an animation that is alive again.
-func _journal_apply_revive(host: RunController, payload: Dictionary) -> Dictionary:
+func _journal_apply_revive(host: RunController, payload: Dictionary, replay: bool) -> Dictionary:
 	var state := host.campaign_runtime.state
 	var revived := state.revive(payload["event_id"])
 	if not revived["ok"]: return revived
-	var clock: Array = payload["clock"]
-	state.clock.started = clock[0]; state.clock.remaining = clock[1]; state.clock.interval = clock[2]; state.clock.wave_index = clock[3]
+	_set_clock(state, payload["clock"])
 	if revived.get("already_applied", false) and host.player.is_alive(): return {"ok": true, "disabled": [] as Array[Node]}
+	var waiting: Array = payload.get("pending", [])
+	var born: Array = payload.get("admitted", [])
+	var marked := _journal_mark_pending(state, waiting, born)
+	if not marked["ok"]: return marked
 	var returned := host.campaign_runtime.activate_stage(host, state.anchor["stage_id"], state.anchor)
 	if not returned["ok"]: return returned
 	ExpeditionDeathRecovery.revive(host.player, state.policy)
+	var admitted := _journal_admit(host, born, replay)
+	if not admitted["ok"]: return admitted
+	_drop_waves(host, int(state.clock.wave_index))
 	return {"ok": true, "disabled": [] as Array[Node]}
+
+# J3: the recorded wave. Replay takes the recorded clock; the live clock kept
+# running during the write and stays as it is.
+func _journal_apply_wave(host: RunController, payload: Dictionary, replay: bool) -> Dictionary:
+	var state := host.campaign_runtime.state
+	if replay: _set_clock(state, payload["clock"])
+	var marked := _journal_mark_pending(state, payload["pending"], payload["admitted"])
+	if not marked["ok"]: return marked
+	var admitted := _journal_admit(host, payload["admitted"], replay)
+	if not admitted["ok"]: return admitted
+	_drop_waves(host, int(payload["clock"][3]))
+	return {"ok": true, "disabled": [] as Array[Node]}
+
+# Dead slots named by the entry wait to respawn. Idempotent: a slot this entry
+# already brought back is accepted; any other state is a mismatch.
+func _journal_mark_pending(state: ExpeditionCampaignState, pending: Array, admitted: Array) -> Dictionary:
+	var born := {}
+	for item: Dictionary in admitted: born[item["slot_id"]] = int(item["generation"])
+	for item: Dictionary in pending:
+		var id: String = item["slot_id"]
+		if not state.slots.has(id): return _fail(&"invalid_respawn")
+		var slot: Dictionary = state.slots[id]
+		if slot["life_state"] == "dead":
+			slot["life_state"] = "respawn_pending"
+			slot["pending_wave"] = int(item["pending_wave"])
+		elif slot["life_state"] != "respawn_pending" and (not born.has(id) or int(slot["generation"]) < born[id]):
+			return _fail(&"invalid_respawn")
+	return {"ok": true}
+
+# Births decided by the entry, in order: the same generation step and actor as
+# admit_pending, without a second occupancy decision. Replay creates them at once;
+# the live host queues them, one per frame.
+func _journal_admit(host: RunController, admitted: Array, replay: bool) -> Dictionary:
+	var runtime := host.campaign_runtime
+	for item: Dictionary in admitted:
+		var id: String = item["slot_id"]
+		var slot: Dictionary = runtime.state.slots[id]
+		if slot["life_state"] != "respawn_pending":
+			if int(slot["generation"]) >= int(item["generation"]): continue
+			return _fail(&"invalid_respawn")
+		if int(slot["generation"]) + 1 != int(item["generation"]): return _fail(&"stale_entity_generation")
+		if not replay:
+			runtime.queue_birth(id, int(item["generation"]))
+			continue
+		var stepped := runtime.state.admit_respawn(id)
+		if not stepped["ok"]: return stepped
+		var spawned := runtime.spawn_slot(host, id, true)
+		if not spawned["ok"]: return spawned
+	return {"ok": true}
 
 # The grants are already in the profile; the run state takes them from it, the
 # tickets leave the queue in order, and the live host shows the confirmation.

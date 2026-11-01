@@ -1,0 +1,5 @@
+ERROR: base + journal replays the revive and its births
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/fixtures/e07/f5/suite.gd:10)
+       [1] _run (res://tests/e07_f5_waves_journal_test.gd:81)

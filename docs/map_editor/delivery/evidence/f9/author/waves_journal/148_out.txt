@@ -1,0 +1,70 @@
+﻿RUN GameplayNative import 2026-10-31T20:13:34.4295438-03:00
+F9 GameplayNative: True
+F9_GAMEPLAY_JOURNAL_FRAME_MS 14.4
+F9_GAMEPLAY_DEATH_WRITTEN_IN_COMBAT true
+RUN CampaignJournal 2026-10-31T20:15:24.7811565-03:00
+F9 CampaignJournal: True
+RUN RuntimeView 2026-10-31T20:15:36.8655579-03:00
+F9 RuntimeView: True
+RUN WorldRewardPoll 2026-10-31T20:15:51.8166562-03:00
+F9 WorldRewardPoll: True
+RUN GameplayGate 2026-10-31T20:16:20.1868544-03:00
+F9 GameplayGate: True
+--- legacy
+candidates (25)
+LEGACY tests/e07_f5_waves_journal2_test.gd :: 
+   ERROR: Attempt to open script 'res://tests/e07_f5_waves_journal2_test.gd' resulted in error 'File not found'.
+   ERROR: Failed loading resource: res://tests/e07_f5_waves_journal2_test.gd.
+   ERROR: Can't load script: res://tests/e07_f5_waves_journal2_test.gd
+LEGACY tests/e06_gameplay_ai_test.gd :: E06 gameplay AI: 73 checks, 0 failures
+   E06 gameplay AI: 73 checks, 0 failures
+LEGACY tests/e07_f3_action_matrix_test.gd :: E07 F3 action matrix: 2004 checks, 0 failures; scenarios=21
+   E07 F3 action matrix: 2004 checks, 0 failures; scenarios=21
+LEGACY tests/e07_f3_continuation_test.gd :: E07 F3 continuation: 2743 checks, 0 failures; scenarios=30
+   E07 F3 continuation: 2743 checks, 0 failures; scenarios=30
+LEGACY tests/e07_f3_lifecycle_test.gd :: E07 F3 lifecycle: 90 checks, 0 failures
+   E07 F3 lifecycle: 90 checks, 0 failures
+LEGACY tests/e07_f3_mob_state_test.gd :: E07 F3 mob state: 372 checks, 0 failures; scenarios=4
+   E07 F3 mob state: 372 checks, 0 failures; scenarios=4
+LEGACY tests/e07_f3_snapshot_test.gd :: E07 F3 snapshot: 50 checks, 0 failures
+   E07 F3 snapshot: 50 checks, 0 failures
+LEGACY tests/e07_f5_build_test.gd :: E07 F5 e07_f5_build_test.gd: 32 checks, 0 failures
+   E07 F5 e07_f5_build_test.gd: 32 checks, 0 failures
+LEGACY tests/e07_f5_campaign_test.gd :: E07 F5 e07_f5_campaign_test.gd: 28 checks, 0 failures
+   E07 F5 e07_f5_campaign_test.gd: 28 checks, 0 failures
+LEGACY tests/e07_f5_completion_test.gd :: E07 F5 e07_f5_completion_test.gd: 39 checks, 0 failures
+   E07 F5 e07_f5_completion_test.gd: 39 checks, 0 failures
+LEGACY tests/e07_f5_death_kits_test.gd :: E07 F5 death kits: 191 checks, 0 failures
+   E07 F5 death kits: 191 checks, 0 failures
+LEGACY tests/e07_f5_fault_test.gd :: E07 F5 e07_f5_fault_test.gd: 20 checks, 0 failures
+   E07 F5 e07_f5_fault_test.gd: 20 checks, 0 failures
+LEGACY tests/e07_f5_population_test.gd :: E07 F5 population: 40 checks, 0 failures
+   E07 F5 population: 40 checks, 0 failures
+LEGACY tests/e07_f5_quest_test.gd :: E07 F5 e07_f5_quest_test.gd: 21 checks, 0 failures
+   E07 F5 e07_f5_quest_test.gd: 21 checks, 0 failures
+LEGACY tests/e07_f5_recovery_test.gd :: E07 F5 e07_f5_recovery_test.gd: 33 checks, 0 failures
+   E07 F5 e07_f5_recovery_test.gd: 33 checks, 0 failures
+LEGACY tests/e07_f5_reward_test.gd :: E07 F5 rewards: 6 checks, 0 failures
+   E07 F5 rewards: 6 checks, 0 failures
+LEGACY tests/e07_f5_waves_test.gd :: E07 F5 e07_f5_waves_test.gd: 37 checks, 0 failures
+   E07 F5 e07_f5_waves_test.gd: 37 checks, 0 failures
+LEGACY tests/e07_f6_runtime_test.gd :: E07 F5 e07_f6_runtime_test.gd: 33 checks, 0 failures
+   E07 F5 e07_f6_runtime_test.gd: 33 checks, 0 failures
+LEGACY tests/e07_f6_snapshot_test.gd :: E07 F5 e07_f6_snapshot_test.gd: 40 checks, 0 failures
+   E07 F5 e07_f6_snapshot_test.gd: 40 checks, 0 failures
+LEGACY tests/e07_f6_threat_test.gd :: E07 F6 threat: 43 checks, 0 failures
+   E07 F6 threat: 43 checks, 0 failures
+LEGACY tests/e07_f7_actions_test.gd :: E07 F7 actions: 28 checks, 0 failures
+   E07 F7 actions: 28 checks, 0 failures
+LEGACY tests/e07_f7_authoring_test.gd :: E07 F7 authoring: 26 checks, 0 failures
+   E07 F7 authoring: 26 checks, 0 failures
+LEGACY tests/e07_f7_flow_test.gd :: E07 F7 flow: PASS (23 assertions, opaque selection/visible/isometric camera/enter/lobby locks/closed portal/usable uncertain recovery/resume/install/activate)
+LEGACY tests/e07_f7_migration_boundary_test.gd :: E07 F7 migration: PASS (16 assertions; opaque modal/original missing-roster boundary resolved)
+LEGACY tests/e07_f7_presentation_test.gd :: E07 F7 presentation: 10 checks, 0 failures
+   E07 F7 presentation: 10 checks, 0 failures
+--- windowed wave probe
+WV deaths {"cleared_once":true,"clock_started":true,"done":true,"frames":35,"journal":1,"killed":7,"ms":683,"same_host":true,"trash":7,"worst_frame_ms":228.5}
+WV wave {"alive_enemies":7,"births":7,"done":true,"frames":96,"journal_kinds":["deaths","collect","wave"],"ms":1689,"same_host":true,"waiting":0,"wave_index":1,"worst_frame_ms":77.9}
+WV replay {"code":"","ms":3843,"ok":true,"same_slots":true}
+WV_DONE
+DONE 2026-10-31T20:35:56.1376057-03:00

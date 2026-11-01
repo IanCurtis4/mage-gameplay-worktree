@@ -864,7 +864,9 @@
       "_power_ruleset_id",
       "_cardless_base_ids"
     ],
-    "omitted": {}
+    "omitted": {
+      "_pool_memo": "derived memo of eligible loot pools (checkpoint40); rebuilt on demand from the immutable catalog and profiles"
+    }
   },
   "res://scripts/core/mob_occurrence.gd": {
     "revision": 1,
@@ -1441,7 +1443,8 @@
       "_expedition_flush_running": "ephemeral scheduling guard; durable campaign pending_events is authoritative",
       "expedition_entry_mode": "construction-only switch; restored hosts are passive and never rerun startup",
       "_pending_world_click": "transient background ground-click route (checkpoint36); dropped on restore",
-      "_auto_collect_after_msec": "transient retry delay of the automatic reward collection (checkpoint38)"
+      "_auto_collect_after_msec": "transient retry delay of the automatic reward collection (checkpoint38)",
+      "_death_flush_after_msec": "transient pacing of the in-combat death journal entries (checkpoint40)"
     },
     "omitted_signals": {
       "memory_snapshot_ready": "out-of-graph capture result consumer, emitted only after capture"
@@ -1930,7 +1933,9 @@
     }
   },
   "res://scripts/core/expedition/campaign/expedition_campaign_runtime.gd": {
-    "omitted": {},
+    "omitted": {
+      "birth_queue": "transient live queue of journal births (checkpoint40); queued slots still wait in state, so a capture stays consistent"
+    },
     "revision": 1,
     "fields": [
       "state",

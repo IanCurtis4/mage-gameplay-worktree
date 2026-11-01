@@ -7,6 +7,9 @@ extends RefCounted
 ##   reward session and owner digest after the grants (the profile holds the grants).
 ## - deaths may also carry the player's death (checkpoint39); revive (checkpoint39)
 ##   names the death it answers and the wave clock after the penalty.
+## - wave (checkpoint40, J3): the wave clock, every slot waiting to respawn with its
+##   wave, and the slots born now with their new generation. Revive carries the same
+##   two lists from checkpoint40 on (the three-key revive stays readable).
 const MAX_ENTRIES := 256
 const MAX_ENCODED := 262144
 const MAX_EVENTS := 512
@@ -14,6 +17,9 @@ const PAYLOAD_KEYS := ["events","tickets","rng_state","next_sequence"]
 const COLLECT_KEYS := ["kind","delivered","session","owner_digest"]
 const MAX_DELIVERED := 512
 const REVIVE_KEYS := ["kind","event_id","clock"]
+const REVIVE_WAVE_KEYS := ["kind","event_id","clock","pending","admitted"]
+const WAVE_KEYS := ["kind","clock","pending","admitted"]
+const MAX_SLOTS := 512
 
 static func digest(text: String) -> String:
 	return text.sha256_text()
@@ -66,6 +72,7 @@ static func is_collect(payload: Dictionary) -> bool:
 static func validate_payload(payload: Variant) -> Dictionary:
 	if payload is Dictionary and is_collect(payload): return _validate_collect(payload)
 	if payload is Dictionary and is_revive(payload): return _validate_revive(payload)
+	if payload is Dictionary and is_wave(payload): return _validate_wave(payload)
 	if not payload is Dictionary or payload.size() != PAYLOAD_KEYS.size() or not payload.has_all(PAYLOAD_KEYS): return fail(&"invalid_journal")
 	if not payload["events"] is Array or payload["events"].is_empty() or payload["events"].size() > MAX_EVENTS: return fail(&"invalid_journal")
 	var ids := {}
@@ -86,10 +93,37 @@ static func is_revive(payload: Dictionary) -> bool:
 	return payload.get("kind") == "revive"
 
 static func _validate_revive(payload: Dictionary) -> Dictionary:
-	if payload.size() != REVIVE_KEYS.size() or not payload.has_all(REVIVE_KEYS) or not payload["event_id"] is String or String(payload["event_id"]).is_empty(): return fail(&"invalid_journal")
-	var clock: Variant = payload["clock"]
-	if not clock is Array or clock.size() != 4 or typeof(clock[0]) != TYPE_BOOL or typeof(clock[1]) != TYPE_FLOAT or typeof(clock[2]) != TYPE_FLOAT or typeof(clock[3]) != TYPE_INT or not is_finite(clock[1]) or not is_finite(clock[2]): return fail(&"invalid_journal")
+	var legacy := payload.size() == REVIVE_KEYS.size() and payload.has_all(REVIVE_KEYS)
+	if not legacy and not (payload.size() == REVIVE_WAVE_KEYS.size() and payload.has_all(REVIVE_WAVE_KEYS)): return fail(&"invalid_journal")
+	if not payload["event_id"] is String or String(payload["event_id"]).is_empty() or not _valid_clock(payload["clock"]): return fail(&"invalid_journal")
+	if not legacy and not _valid_births(payload["pending"],payload["admitted"]): return fail(&"invalid_journal")
 	return {"ok":true}
+
+static func is_wave(payload: Dictionary) -> bool:
+	return payload.get("kind") == "wave"
+
+static func _validate_wave(payload: Dictionary) -> Dictionary:
+	if payload.size() != WAVE_KEYS.size() or not payload.has_all(WAVE_KEYS) or not _valid_clock(payload["clock"]): return fail(&"invalid_journal")
+	if not _valid_births(payload["pending"],payload["admitted"]) or payload["pending"].is_empty(): return fail(&"invalid_journal")
+	return {"ok":true}
+
+# [started, remaining, interval, wave_index]
+static func _valid_clock(clock: Variant) -> bool:
+	return clock is Array and clock.size() == 4 and typeof(clock[0]) == TYPE_BOOL and typeof(clock[1]) == TYPE_FLOAT and typeof(clock[2]) == TYPE_FLOAT and typeof(clock[3]) == TYPE_INT and is_finite(clock[1]) and is_finite(clock[2]) and int(clock[3]) >= 0
+
+# pending: [{slot_id, pending_wave}] waiting after the entry; admitted: [{slot_id,
+# generation}] born now, each one among the pending.
+static func _valid_births(pending: Variant, admitted: Variant) -> bool:
+	if not pending is Array or not admitted is Array or pending.size() > MAX_SLOTS or admitted.size() > pending.size(): return false
+	var waiting := {}
+	for item: Variant in pending:
+		if not item is Dictionary or item.size() != 2 or not item.get("slot_id") is String or String(item["slot_id"]).is_empty() or typeof(item.get("pending_wave")) != TYPE_INT or int(item["pending_wave"]) < 0 or waiting.has(item["slot_id"]): return false
+		waiting[item["slot_id"]] = true
+	var born := {}
+	for item: Variant in admitted:
+		if not item is Dictionary or item.size() != 2 or not item.get("slot_id") is String or not waiting.has(item["slot_id"]) or born.has(item["slot_id"]) or typeof(item.get("generation")) != TYPE_INT or int(item["generation"]) < 1: return false
+		born[item["slot_id"]] = true
+	return true
 
 static func _validate_collect(payload: Dictionary) -> Dictionary:
 	if payload.size() != COLLECT_KEYS.size() or not payload.has_all(COLLECT_KEYS): return fail(&"invalid_journal")

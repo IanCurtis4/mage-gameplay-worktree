@@ -9,6 +9,10 @@ var records: Dictionary = {}
 var actors: Dictionary = {}
 var pending_events: Array[Dictionary] = []
 var death_serial := 0
+# Checkpoint40 (J3): births a journal entry decided, created on the live host one
+# per frame (one actor costs ~20 ms). Transient: until created the slot still
+# waits (respawn_pending), so a capture taken meanwhile stays consistent.
+var birth_queue: Array[Dictionary] = []
 
 func configure(host: RunController, id: String, manifest: ExpeditionManifest, rules: Dictionary) -> Dictionary:
 	var created := ExpeditionCampaignState.create(id, host.run_state.character_id, manifest, host.run_state.effect_catalog().mob_catalog(), rules)
@@ -125,13 +129,15 @@ func activate_stage(host: RunController, stage_id: String, arrival: Dictionary) 
 	host.active_bounds = screen_bounds.grow(64.0)
 	return {"ok": true}
 
-func spawn_slot(host: RunController, slot_id: String) -> Dictionary:
+# force (checkpoint40, J3): a journal birth already decided by its durable entry;
+# legality is still checked, occupancy is not (it was checked when deciding).
+func spawn_slot(host: RunController, slot_id: String, force: bool = false) -> Dictionary:
 	var slot: Dictionary = state.slots[slot_id]
 	var world: WorldGeometry = worlds[slot["stage_id"]]
 	var profile: Dictionary = slot["traversal"]
 	var home := ExpeditionPopulationPlanner.point(slot["home"])
 	var legal := world.position_query(home, profile, world.geometry_revision)
-	if not legal["ok"] or not legal["data"]["occupants"].is_empty(): return BuildEffectCatalog.failure(&"destination_unsafe")
+	if not legal["ok"] or (not force and not legal["data"]["occupants"].is_empty()): return BuildEffectCatalog.failure(&"destination_unsafe")
 	var actor := EnemyActor.new()
 	var checked := actor.configure_occurrence(state.occurrence(slot_id), host.run_state.effect_catalog().mob_catalog(), host.navigation, host.player)
 	if not checked["ok"]: actor.free(); return checked
@@ -168,6 +174,28 @@ func admit_pending(host: RunController) -> Dictionary:
 		state.admit_respawn(id)
 		var spawned := spawn_slot(host, id)
 		if not spawned["ok"]: return spawned
+	return {"ok": true}
+
+func queue_birth(slot_id: String, generation: int) -> void:
+	if not birth_queued(slot_id): birth_queue.append({"slot_id": slot_id, "generation": generation})
+
+func birth_queued(slot_id: String) -> bool:
+	return birth_queue.any(func(item: Dictionary) -> bool: return item["slot_id"] == slot_id)
+
+# Creates up to count queued births. A slot that no longer waits on the current
+# stage at that generation is dropped (a later wave decides it again).
+func drain_births(host: RunController, count: int = 1) -> Dictionary:
+	while count > 0 and not birth_queue.is_empty():
+		var item: Dictionary = birth_queue.pop_front()
+		var id: String = item["slot_id"]
+		if not state.slots.has(id): continue
+		var slot: Dictionary = state.slots[id]
+		if slot["life_state"] != "respawn_pending" or slot["stage_id"] != state.current_stage_id or int(slot["generation"]) + 1 != int(item["generation"]): continue
+		var stepped := state.admit_respawn(id)
+		if not stepped["ok"]: return stepped
+		var spawned := spawn_slot(host, id, true)
+		if not spawned["ok"]: return spawned
+		count -= 1
 	return {"ok": true}
 
 func slot_for_actor(actor: CombatActor) -> String:

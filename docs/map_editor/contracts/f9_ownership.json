@@ -3149,6 +3149,30 @@
       "owner": "Sol F9",
       "previous_owner": "sequential transfer for checkpoint39 (death and revive through the journal, revive pose); base is HEAD blob",
       "base_sha256": "cd6f2d3a45e69010ee3514feae6ea64a58cf33d2269df31e95d281ff213030ac"
+    },
+    {
+      "path": "scripts/core/expedition/campaign/expedition_campaign_runtime.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer for checkpoint40 (journal births, memoized loot pools); base is HEAD blob",
+      "base_sha256": "af3cb4ec584b16148744050caa44a8a31d1c6fe12a238b5bf0f8be37c89854aa"
+    },
+    {
+      "path": "scripts/core/mob_loot_resolver.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer for checkpoint40 (journal births, memoized loot pools); base is HEAD blob",
+      "base_sha256": "fd64420d2b8a92fdc97b9931ca4b74a96978ae85e57a2cab1f291abf995ee7ef"
+    },
+    {
+      "path": "tests/e07_f5_waves_journal_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint40 journal waves test)",
+      "base_sha256": "29d7e10879a8406232b5564ad867d30aac93cc828a99469b50fc1bb22f01f5f3"
+    },
+    {
+      "path": "tests/e07_f5_waves_journal_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint40 journal waves test)",
+      "base_sha256": "f1f2ed8c0c5e6acb495c334fcfda88d33c26dc00f1ca93fe94f2150c63486efb"
     }
   ],
   "read_only_shared": [
@@ -4218,6 +4242,49 @@
         "legacy_E06_E07_F2_F7_suites": 38
       },
       "limits": "revive with a respawn pending on the current stage still uses the full transaction (J3)",
+      "known_unrelated_failure": "tests/e07_f1_presentation_test.gd 1/37; E04 swordsman 4/93; LibraryNative 2 AX command-count checks (not rerun here)"
+    },
+    "journal_waves_respawn_immediate_deaths": {
+      "state": "validated_increment_F9_still_open",
+      "base": "65bb6ce2",
+      "human_report": "31/10: continue F9; chose to close the campaign journal (waves/respawn, revive with respawn pending, immediate mob deaths) before the editor matrix",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "contract": "docs/map_editor/contracts/f9_campaign_journal.md",
+      "files": [
+        "scripts/core/expedition/expedition_service.gd",
+        "scripts/core/expedition/persistence/expedition_journal_codec.gd",
+        "scripts/core/expedition/campaign/expedition_campaign_runtime.gd",
+        "scripts/core/mob_loot_resolver.gd",
+        "scripts/core/expedition/snapshot/runtime_manifest.json",
+        "scripts/main.gd",
+        "tools/map_editor_completion/run.ps1"
+      ],
+      "test_files": [
+        "tests/e07_f5_waves_journal_test.gd",
+        "tests/map_editor_campaign_journal_test.gd",
+        "tests/map_editor_gameplay_ui_test.gd"
+      ],
+      "scope": "journal wave entries (clock, waiting slots, admitted births) and revive births; live births queued one per frame, replay creates them at once; mob deaths journaled at once (in combat at most every 2 s, never a full transaction mid-fight); events queued during a background write flushed after it; memoized eligible loot pools",
+      "measurements": {
+        "windowed_seven_deaths_write_frame_ms_before_memo": 214.6,
+        "windowed_seven_deaths_write_frame_ms_after": "<40",
+        "windowed_wave_seven_births_worst_frame_ms_before_queue": 200.4,
+        "windowed_wave_seven_births_worst_frame_ms": 42.1,
+        "spawn_ms_per_actor": 21,
+        "mob_drop_ms_before_memo": 28,
+        "gameplaynative_death_in_combat_worst_frame_ms": 14.0
+      },
+      "validation": {
+        "GameplayNative": 63,
+        "CampaignJournal": 22,
+        "RuntimeView": 12,
+        "WorldRewardPoll": 10,
+        "GameplayGate": 24,
+        "GameplayWindow": 33,
+        "e07_f5_waves_journal_test": 36,
+        "legacy_E06_E07_F2_F7_suites": 39
+      },
+      "limits": "journal compaction near 256 entries still uses a full transaction at a safe point; automatic collection of 7 drops shows 60-75 ms frames",
       "known_unrelated_failure": "tests/e07_f1_presentation_test.gd 1/37; E04 swordsman 4/93; LibraryNative 2 AX command-count checks (not rerun here)"
     }
   },

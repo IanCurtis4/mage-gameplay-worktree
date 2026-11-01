@@ -1,0 +1,6 @@
+ERROR: Attempt to open script 'res://tests/e07_f5_waves_journal2_test.gd' resulted in error 'File not found'.
+   at: load_source_code (modules/gdscript/gdscript.cpp:1139)
+ERROR: Failed loading resource: res://tests/e07_f5_waves_journal2_test.gd.
+   at: _load (core/io/resource_loader.cpp:317)
+ERROR: Can't load script: res://tests/e07_f5_waves_journal2_test.gd
+   at: start (main/main.cpp:4370)
