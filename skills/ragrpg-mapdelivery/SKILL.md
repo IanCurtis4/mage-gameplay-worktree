@@ -81,22 +81,52 @@ Documento apenas: conferir referências/coerência e declarar gameplay não exec
 Playtest/merge/arquivamento seguem WORKFLOW e a autorização concreta da tarefa.
 
 
-## Intercâmbio no editor de mapas F7
+## Intercâmbio no editor de mapas F9
 
-Use piece/map para terreno, materiais existentes, props autorizados e composição.
-Leia `docs/map_editor/exchange.md` no checkout autorizado para schema, CLI e limites.
-Receba o pedido `.rpx` exportado pela pessoa, preserve-o byte a byte e trabalhe
-numa cópia de `files[source.json].data`. Não edite ticket, base, permissões ou
-relatório para ampliar o escopo. Declare o hash do pedido/base e os IDs que vai
-alterar. As seções/IDs e caminhos protegidos são autorização local; camadas
-travadas, regiões protegidas, slots fixos e pins permanecem conservados.
+Use piece/map/population/patrol para terreno, materiais existentes, props
+autorizados, composição, encontros e rotas. Leia `docs/map_editor/exchange.md` e
+`docs/map_editor/contracts/f9_regional_synthesis.md` no checkout autorizado para
+schema, CLI, limites e máscara de proteção.
+
+Receba o pedido `.rpx` exportado pela pessoa (bundle v2: `source.json`,
+`report.json` e `assets.json`), preserve-o byte a byte e trabalhe numa cópia de
+`files[source.json].data`. Não edite ticket, base, permissões, relatório ou
+manifesto de assets para ampliar o escopo. Declare o hash do pedido/base e os IDs
+que vai alterar. Seções/IDs e caminhos protegidos são autorização local; camadas
+travadas, slots fixos e pins ficam inteiros; numa camada com região protegida
+ficam guardadas a grade, a lista de proteções, as amostras cuja influência toca a
+região (altura e mistura de materiais) e os objetos que a tocam. O resto da
+camada pode mudar.
+
+Assets: o pacote só declara (caminho, hash, tipo, base de direitos e registro de
+origem), nunca traz arquivos. Use apenas assets e props que o projeto já tem com o
+mesmo conteúdo; asset novo entra pelo fluxo de arte/assets com registro de origem
+(ragrpg-art), não pelo intercâmbio. Arquivo fora de `assets/art/map_authoring`,
+dos catálogos ou dos shaders do editor, ou de formato diferente de PNG,
+importação, shader e catálogo, é recusado.
 
 Produza candidate.json estrito e rode a CLI versionada `propose <pedido.rpx>
 <candidate.json> <proposta.rpx>` com o Godot contratado. O produtor valida/compila;
 falha conserva o original, sem scripts/cenas, paths absolutos/traversal ou
-reparo silencioso. Confira `review <pedido.rpx> <proposta.rpx> <fonte_atual.json>`
-e entregue proposta, diff, hashes e limitações. Base divergente exige novo pedido
-exportado/reconciliação humana explícita. A pessoa importa a proposta no editor,
-compara Antes/Proposta e confirma uma ação desfazível. Não sobrescreva a fonte
-humana, não publique nem ative o WFC por inferência. A mesma autoridade atende
-GUI/CLI. Essa adaptação da fonte versionada não sincroniza cópias instaladas.
+reparo silencioso. Confira `review <pedido.rpx> <proposta.rpx> <fonte_atual.json>
+[<escolhas.json>]` e entregue proposta, diff, hashes e limitações.
+
+Se a fonte da pessoa mudou depois do pedido, o editor combina base, atual e
+proposta por identidade, campo e amostra. Mudanças disjuntas entram; conflitos
+voltam com base/atual/proposta e só a pessoa escolhe ("manter a atual" ou "usar a
+proposta"); proteção nova da versão atual prevalece. Não tente contornar um
+conflito reescrevendo a base ou o pedido: entregue a proposta e descreva os
+conflitos esperados. `merge <pedido> <proposta> <atual> <saída.json> [<escolhas>]`
+grava a combinação num arquivo novo, sem tocar a fonte.
+
+Variação regional: para relevo, manchas de material ou espalhamento de objetos
+dentro de uma região, prefira o serviço do editor (ferramenta "Variação
+regional", AX `<tela>/synthesis/*` ou a CLI
+`res://scripts/map_authoring/synthesis/headless.gd`) a editar amostras à mão. O
+pedido é fechado (seed, região, receita ou "preservar" por canal) e cada variação
+aplicada deixa um recibo reproduzível (`replay`/`bundle` na mesma CLI).
+
+A pessoa importa a proposta no editor, compara Antes/Proposta e confirma uma ação
+desfazível. Não sobrescreva a fonte humana, não publique nem ative o WFC por
+inferência. A mesma autoridade atende GUI/AX/CLI. Esta adaptação da fonte
+versionada não sincroniza nem instala cópias da skill.

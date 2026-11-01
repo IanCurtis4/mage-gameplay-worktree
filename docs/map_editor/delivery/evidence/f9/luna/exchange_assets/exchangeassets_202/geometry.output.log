@@ -1,0 +1,15 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_ASSETS_CHECK revisions_are_the_real_compilers true
+F9_ASSETS_CHECK piece_exports_v2 true
+F9_ASSETS_CHECK manifest_names_every_asset_with_rights true
+F9_ASSETS_CHECK no_asset_bytes_travel true
+F9_ASSETS_CHECK v2_proposal_roundtrip true
+F9_ASSETS_CHECK tampered_manifest_is_refused true
+F9_ASSETS_CHECK unsafe_assets_are_refused true
+F9_ASSETS_CHECK v1_shape_is_refused true
+F9_ASSETS_CHECK v1_version_is_refused true
+F9_ASSETS_CHECK different_asset_is_named true
+F9_ASSETS_CHECK missing_asset_is_named true
+F9_ASSETS_CHECK patrol_bundle_declares_map_assets true
+F9_ASSETS_RESULT {"checks":[{"id":"revisions_are_the_real_compilers","ok":true},{"id":"piece_exports_v2","ok":true},{"id":"manifest_names_every_asset_with_rights","ok":true},{"id":"no_asset_bytes_travel","ok":true},{"id":"v2_proposal_roundtrip","ok":true},{"id":"tampered_manifest_is_refused","ok":true},{"id":"unsafe_assets_are_refused","ok":true},{"id":"v1_shape_is_refused","ok":true},{"id":"v1_version_is_refused","ok":true},{"id":"different_asset_is_named","ok":true},{"id":"missing_asset_is_named","ok":true},{"id":"patrol_bundle_declares_map_assets","ok":true}],"count":12,"ok":true}

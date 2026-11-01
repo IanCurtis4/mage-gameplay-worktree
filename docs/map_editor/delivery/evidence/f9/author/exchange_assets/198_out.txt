@@ -1,0 +1,900 @@
+﻿FREE 8,7 GB
+== top level RagRPG
+     676,7 MB  RagRPG\.git
+       7,3 MB  RagRPG\.godot
+   2.565,2 MB  RagRPG\.tools
+      65,5 MB  RagRPG\addons
+     239,8 MB  RagRPG\assets
+     571,5 MB  RagRPG\build
+       1,3 MB  RagRPG\content
+       0,0 MB  RagRPG\data
+     104,7 MB  RagRPG\docs
+       0,2 MB  RagRPG\resources
+       0,0 MB  RagRPG\scenes
+       2,1 MB  RagRPG\scripts
+       0,0 MB  RagRPG\skills
+       2,9 MB  RagRPG\tests
+       0,4 MB  RagRPG\tools
+       0,0 MB  RagRPG\.gitattributes
+       0,0 MB  RagRPG\.gitignore
+       0,0 MB  RagRPG\AGENTS.md
+       0,0 MB  RagRPG\export_presets.cfg
+       0,0 MB  RagRPG\project.godot
+       0,0 MB  RagRPG\README.history_2026_10_17.md
+       0,0 MB  RagRPG\README.md
+== .tools
+       7,8 MB  RagRPG\.tools\claude_bridge
+     172,7 MB  RagRPG\.tools\godot
+   2.302,2 MB  RagRPG\.tools\map-editor-m5
+       0,0 MB  RagRPG\.tools\admin_verify.log
+       0,0 MB  RagRPG\.tools\cleanup_recovery.ps1
+       0,0 MB  RagRPG\.tools\e012_catalog_review.gd
+       0,0 MB  RagRPG\.tools\e012_review_probe.gd
+       0,0 MB  RagRPG\.tools\e013a_review_probe.gd
+       0,0 MB  RagRPG\.tools\e013b_review_probe.gd
+       0,0 MB  RagRPG\.tools\e01_review_probe.gd
+       0,0 MB  RagRPG\.tools\e03_b_catalog_probe.gd
+       0,0 MB  RagRPG\.tools\e03_c1_dot_probe.gd
+       0,0 MB  RagRPG\.tools\e03_c2_focus_probe.gd
+       0,0 MB  RagRPG\.tools\e04_menu_fix_verify.log
+       0,0 MB  RagRPG\.tools\e04_mgi_review.log
+       0,0 MB  RagRPG\.tools\e04_playtest_verify.log
+       0,0 MB  RagRPG\.tools\e04_review_verify.log
+       0,0 MB  RagRPG\.tools\e05_defender_r2.log
+       0,0 MB  RagRPG\.tools\e05_defender_r3.log
+       0,0 MB  RagRPG\.tools\e05_defender_review.log
+       0,0 MB  RagRPG\.tools\e05_s1a_import.log
+       0,0 MB  RagRPG\.tools\e05_s1a_review.log
+       0,0 MB  RagRPG\.tools\e05_s1b_review.log
+       0,0 MB  RagRPG\.tools\e05_s1c_review.log
+       0,0 MB  RagRPG\.tools\e05_sp1_review.log
+       0,0 MB  RagRPG\.tools\feedback-final.zip
+       0,0 MB  RagRPG\.tools\feedback_probe.gd
+      82,0 MB  RagRPG\.tools\godot.zip
+       0,0 MB  RagRPG\.tools\halos_import.log
+       0,0 MB  RagRPG\.tools\icewall_preload_verify.log
+       0,0 MB  RagRPG\.tools\mage_corrected_verify.log
+       0,0 MB  RagRPG\.tools\mage_playtest_runtime_verify.log
+       0,0 MB  RagRPG\.tools\mage_playtest_verify.log
+       0,0 MB  RagRPG\.tools\mage_review_verify.log
+       0,1 MB  RagRPG\.tools\original-choice.png
+       0,0 MB  RagRPG\.tools\prepare_user_defender.gd
+       0,0 MB  RagRPG\.tools\readability_astra_verify.log
+       0,0 MB  RagRPG\.tools\review-candidate.zip
+       0,0 MB  RagRPG\.tools\review-original.zip
+       0,0 MB  RagRPG\.tools\review.log
+       0,0 MB  RagRPG\.tools\run_review.ps1
+       0,0 MB  RagRPG\.tools\souls_astra_verify.log
+       0,0 MB  RagRPG\.tools\soul_orb_review.log
+       0,0 MB  RagRPG\.tools\spiritualist_astra_verify.log
+       0,0 MB  RagRPG\.tools\spirit_frame.png
+       0,0 MB  RagRPG\.tools\spread_astra_verify.log
+       0,0 MB  RagRPG\.tools\sw_review.log
+       0,0 MB  RagRPG\.tools\training_astra_verify.log
+== claude_bridge
+       1,0 MB  RagRPG\.tools\claude_bridge\data
+       0,3 MB  RagRPG\.tools\claude_bridge\done
+       0,0 MB  RagRPG\.tools\claude_bridge\inbox
+       1,8 MB  RagRPG\.tools\claude_bridge\outbox
+       1,9 MB  RagRPG\.tools\claude_bridge\plays
+       2,7 MB  RagRPG\.tools\claude_bridge\probe
+       0,0 MB  RagRPG\.tools\claude_bridge\Jogar Bosque - novo teste.cmd
+       0,0 MB  RagRPG\.tools\claude_bridge\Jogar Bosque - retomar.cmd
+       0,0 MB  RagRPG\.tools\claude_bridge\lib_ax.ps1
+       0,0 MB  RagRPG\.tools\claude_bridge\play_bosque.ps1
+       0,0 MB  RagRPG\.tools\claude_bridge\play_bosque_v2.ps1
+       0,0 MB  RagRPG\.tools\claude_bridge\start_bridge.cmd
+       0,0 MB  RagRPG\.tools\claude_bridge\watcher.ps1
+== bridge data
+       0,0 MB  RagRPG\.tools\claude_bridge\data\c48
+       0,0 MB  RagRPG\.tools\claude_bridge\data\c49
+       0,5 MB  RagRPG\.tools\claude_bridge\data\c52
+       0,2 MB  RagRPG\.tools\claude_bridge\data\c54
+       0,1 MB  RagRPG\.tools\claude_bridge\data\c55
+       0,0 MB  RagRPG\.tools\claude_bridge\data\c56
+       0,0 MB  RagRPG\.tools\claude_bridge\data\c57
+       0,0 MB  RagRPG\.tools\claude_bridge\data\c58
+       0,0 MB  RagRPG\.tools\claude_bridge\data\c59
+       0,0 MB  RagRPG\.tools\claude_bridge\data\terra
+       0,0 MB  RagRPG\.tools\claude_bridge\data\patrol_author.request.json
+       0,0 MB  RagRPG\.tools\claude_bridge\data\patrol_compile.request.json
+       0,0 MB  RagRPG\.tools\claude_bridge\data\patrol_compile_launch.request.json
+       0,0 MB  RagRPG\.tools\claude_bridge\data\patrol_compile_launch_hold.request.json
+       0,0 MB  RagRPG\.tools\claude_bridge\data\population_update_apply.request.json
+       0,0 MB  RagRPG\.tools\claude_bridge\data\population_update_preview.request.json
+== worktree .godot
+       1,0 MB  RagRPG\.tools\map-editor-m5\.godot\discardable_profile
+       0,5 MB  RagRPG\.tools\map-editor-m5\.godot\editor
+       0,1 MB  RagRPG\.tools\map-editor-m5\.godot\f9_biome_draft
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\f9_cliff_draft
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\f9_material_draft
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\f9_organic_draft
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\f9_port_draft
+       0,6 MB  RagRPG\.tools\map-editor-m5\.godot\f9_shadow_draft
+      73,9 MB  RagRPG\.tools\map-editor-m5\.godot\imported
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\map_authoring
+     920,5 MB  RagRPG\.tools\map-editor-m5\.godot\verification
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\.gdignore
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\cliff_core_parse.err
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\cliff_core_parse.out
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\cliff_map_repro.err
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\cliff_map_repro.out
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\cliff_map_repro_before.err
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\cliff_map_repro_before.out
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\cliff_parse.err
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\cliff_parse.out
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\extension_list.cfg
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\f9_eager_world_geometry.gd.txt
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\f9_path_pre_batch.gd.txt
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\f9_port_compare.py
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\f9_probe.py
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\global_script_class_cache.cfg
+       0,1 MB  RagRPG\.tools\map-editor-m5\.godot\uid_cache.bin
+== .godot/verification
+     602,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1
+     318,5 MB  RagRPG\.tools\map-editor-m5\.godot\verification\m1
+     318,5 MB  RagRPG\.tools\map-editor-m5\.godot\verification\m1\map_editor_document_9_197
+== fixture .godot
+      10,5 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\discardable_profile
+       0,7 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\editor
+       0,3 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\exported
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f1_visual_fixture
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_ax_authoring
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_ax_composition
+       0,1 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_encounter_authoring
+       0,1 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_exchange_merge
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_map_biome
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_probe_profile
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_root_synthesis_cli
+       0,1 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_synthesis_cli
+      28,2 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\imported
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_008fd77a52
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_02d58baa84
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_1026e54233
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_16a873c048
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_19eede69ba
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_276c44fc3a
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_29b529452c
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_52bde4bf73
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_740903cbc8
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_7a174879f3
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_7ca3ed8f5d
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_7d9ca8476a
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_8574159131
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_8ef05c2954
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_a7b6f585a0
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_a92e7f1951
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_ad74ef3e5b
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_b0a72d8a7e
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_bbf2457608
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_c3af711353
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_c8ab1985ac
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_d08d806129
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_d59df35697
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_dcee1910ce
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_df3ac4e88c
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_e66d3c624c
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m3_fd494cbb55
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_034a9fc009
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_103b543015
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_1d4dbdd739
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_24e9552588
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_262ae2783d
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_382f8face0
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_387ff2c85e
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_3aaa79c958
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_4099445bcf
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_449afe75d4
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_4db90abd4f
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_5dc28a7540
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_6b922a77f1
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_7751694675
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_7ddb084077
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_80fabc7c7e
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_9975575e6e
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_b2ae5515c8
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_b40c857ae7
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_bc91442f01
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_c187a66a73
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_cb69e325f3
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_d43383449d
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_d543751c3e
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_dadfb8ad9d
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_ead6cd69e2
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_eea09d2d58
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m4_test_efd91dcda7
+       0,4 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m5_restart
+       0,2 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m5_samples
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m6_samples
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m7_cli_25c06765311d4ff5ad911150a99ab9c4
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m7_cli_293251c9d76a4f128f56d8ae80f672c3
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m7_cli_3bdc3097a1d44d4cbeb09334dd2c8add
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m7_cli_7fdf6892797445b0856bb30e5a508a92
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m7_cli_a7059d3888ba434ebe526445c3a6778e
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m7_cli_a9102e33bcab454785452190e3e6b911
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m7_cli_d7c30a5599eb4cd3b7c5f7be717445aa
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m7_cli_dc16b971510745cd8ba46a29a0734b72
+       0,2 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m7_samples
+       0,6 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\m8_samples
+      71,6 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring
+     128,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_document_fixture
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\population_compile_01
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\population_compile_02
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\population_diagnostic_01
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\population_diagnostic_02
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\population_measure_01
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\port_compare_profile
+       6,2 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\profile
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\rounded_hill_evidence
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\rounded_hill_resume_evidence
+       2,6 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\shader_cache
+      48,9 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\verification
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\.gdignore
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\cliff_map_repro.gd
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\cliff_map_repro.var
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\extension_list.cfg
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f1_composition_evidence.json
+       0,1 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f1_inventory.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_ax_capture_probe.gd
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_ax_connectivity_probe.gd
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_ax_normal_probe.gd
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_decorated_source_consumer.gd
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_encounter_native_diagnostic.gd
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_line_diagnostic.gd
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_map_source_consumer.gd
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_map_source_consumer_forest.gd
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_numeric_array_probe.gd
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_population_case.gd
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_port_cost.gd
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_port_small_cost.gd
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_spatial_case.gd
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_spatial_stats.gd
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_terra_source_consumer_test.gd
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\f9_terra_source_consumer_test_02.gd
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\global_script_class_cache.cfg
+       0,1 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\large_piece_03438f012812fd06.json
+       0,1 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\large_piece_29c2a7be8785c73e.json
+       0,1 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\large_piece_6105af098bc7f7ab.json
+       0,1 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\large_piece_7aaadab16b55d36a.json
+       0,1 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\large_piece_d3989917f67e9a3b.json
+       0,1 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\large_piece_e6b373f8200f9d6f.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\organic_probe.gd
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\scene_groups_cache.cfg
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_measurements.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_scale_measurements.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_04dff0f5ae244754.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_08c3eb79a789067f.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_0b5aaf19ca10a4ad.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_13391acc74e92533.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_1cf856d942e1dd1c.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_2623e198e099982a.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_26650cc337c523a0.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_3015084ed88c1a63.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_31a759cc26cb3e0d.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_3d1eb2cdf99c1ecc.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_50c5bc0ff85e322e.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_5941ed70fdd6ab1f.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_599e9b54fef3b8d0.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_66578998895065e6.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_6cb61321fc2d94b3.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_7a19f192c71f5fec.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_7e1543e4612d0e80.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_87cd2322c7b9d135.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_93a1c142d077164f.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_aa747c12d3f21c27.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_b441e158e3521286.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_bddac5f023f8256b.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_bea590cc4f1cb9e5.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_ceea0d9f03e7d8f1.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_d27e8afe4717ea8d.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\terrain_source_fb0892dc6431ca9e.json
+       0,1 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\uid_cache.bin
+       0,1 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\cache
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\jobs
+       1,4 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\ledger
+       0,9 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\library
+      67,8 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\play
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\biome_props.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_015f4d6b503e05e31790dce9.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_01922e304ccf6a58f1ef2d6d.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_04cd9f5931d63693aac82e2a.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_054e36765754d91dc48b7d0e.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_05f4f32d5d02d897717ea2e6.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_05f4f32d5d02d897717ea2e6.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_06219a7b9546fc1966711a27.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_06d3e7e7421be40107cf3073.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_06f7a86fcb2af7e502f950f3.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_07128989b6ddfccbd203dcb4.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_075c096ef843827996324743.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_075c096ef843827996324743.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_08346629cfeaeabba63c1d35.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_08346629cfeaeabba63c1d35.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_0888f0518a612a3848a86e10.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_0bb775b688cc9eebd8a93197.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_0bb775b688cc9eebd8a93197.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_0bbe741ce3fe16a8ab9e0a3f.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_0bbe741ce3fe16a8ab9e0a3f.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_0ceb87645f0ec6daa646ab63.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_0ee2d608c0755ed453f46559.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_0f0eefe7dc64ccd983e5f78d.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_0f7f9a15792fe5b8008f6b58.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_0f7f9a15792fe5b8008f6b58.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_0fee22b0309db9ac99f8da55.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_0fee22b0309db9ac99f8da55.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_10996dab62a46abc19f7bf06.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_110f515f07c0ba3945bf0be9.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_11a746099043b8d6a66e1672.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_11a746099043b8d6a66e1672.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_1429e819cf4ab27a1caa83fd.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_1600bfaf482f811fb1690270.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_1600bfaf482f811fb1690270.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_17389a308edc5ff4e06c6691.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_17389a308edc5ff4e06c6691.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_1817a76602d9d0b9f885ddb1.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_18ed8fb5395cfa451b622c55.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_190f97c44a6af7ec0a404b07.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_190f97c44a6af7ec0a404b07.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_1912325a5a7b7b7c8939f81e.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_1c6a912dc07b7c3dd97911c6.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_1d53412780fd01ac1db4ce21.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_1d53412780fd01ac1db4ce21.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_1dfe745df5798b44d7047d69.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_1fc104c014ad050d79ffbd1e.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_20211afb754020e62d72f62d.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_203343173902e1d67790779c.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_21bcb2afe8eacf4405ad9baa.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_21c5196ca293e9282aaafc84.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_27557cef18ccaa7f054dc41c.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_27557cef18ccaa7f054dc41c.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_27aba18b06709897907feaa7.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_27aba18b06709897907feaa7.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_29e09c17c84ce5add5ad58f4.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_2a83ab0dda3fe24dfa303537.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_2a83ab0dda3fe24dfa303537.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_2a8bb4a9cb16f9cd31300484.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_2d38f2a11c064fda6a7dc6e9.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_2ddfed87a8fbc7fa10486ed4.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_2e6f76f230719d6461ed910d.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_35ad34622e71bc729f5f9710.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_364898c62d4ac828761482e1.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_36802d5ee8accceaf6fc469b.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_36802d5ee8accceaf6fc469b.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_38257613aa36a54aeddfaf8a.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_387dfc14977efcbe63059408.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_387dfc14977efcbe63059408.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_3ec2a186f8905bc10f7c94b8.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_3fb64d98c971746ff7027574.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_4031bcf765574c298cef5689.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_417c762d185009903cab8bf1.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_47b887f2d3667d517f089a2c.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_48b7325b9f4cb8685ce3550d.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_49c9f7b9a2ac6aa6234913e5.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_4a1ebe4676e01eaf06390ea6.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_4b3327114892921227fe4bbd.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_4b3327114892921227fe4bbd.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_4c877d165d6aa10de94aa779.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_4d9ef244f838ab1a56b73720.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_4e2f69d5df05f704b8cfb4a0.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_4ed8c1f60b0499ae079a9d86.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_505dc3fe940350f529c3bfa3.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_52be4a9c6ce40cead57e6844.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_52be4a9c6ce40cead57e6844.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_53703690def535077166bdf8.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_5473a7566940d10725f95fcf.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_5473a7566940d10725f95fcf.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_55f9d3bce50a2a496258d6ff.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_5ddcb97fc224764091efb6ce.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_5fab41933947f8ba6576f3fa.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_61f131fe0d710396116980f8.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_6386b49b1d638f123c1bf7ef.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_6550fce8a51c2358ddcc2d97.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_68b3d6fb8c3f4fca2af3c0dc.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_68c68fc31478121494af4c34.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_6ab958792b81586c5d01566e.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_6b74afd957aca638850c6adc.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_6b74afd957aca638850c6adc.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_6d35f4978138456be67c6251.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_6ff309d8958e89e60dc9ba79.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_6ff309d8958e89e60dc9ba79.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_79ac4ccaf08316cb0600fe78.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_7a3c11bc92d0a66143ec0e7e.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_7a3c11bc92d0a66143ec0e7e.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_7bac4dd9a94e5dda1e849a70.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_84303e3febeb590839470966.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_8990cc4168bf4406394705a7.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_8a502c467532fc1cdecec014.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_8a502c467532fc1cdecec014.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_8d6fbc692351d230ecfc85a6.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_8ed0b14d62acf417cb6680bd.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_8f56d58a0d438a4fe179c1b3.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_8f97833caacd1b6c9ec2ed3f.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_9126a0aab91827fcee96bdfd.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_91a96bb990b60379ff9f98d9.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_926e78826c6b0afb6bd8880c.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_95b0b624101e167a1b9a64ec.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_989e34aedfd5f1c5c0d5c999.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_9bc5c00e5300c6cbb705f00e.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_9ee5cf616b7a7264aae5a2d4.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_9ef8c15a13f85d57989dd096.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_a2c77b799157a2ba5ddb0ab9.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_a50f60ba788300d98b8ec1ed.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_a6f56e08d7da5efe4a6d3fb6.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_aa03c0c5b8af70649fd95b09.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_aa44bcdeabcf924917f0e986.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_aa44bcdeabcf924917f0e986.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_ad3d744aba530ca7c524b945.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_b159c8354fc37f49ef8b4360.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_b23d91b5af9a175345ce73c8.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_b4228fe4cd6a41f43ab5490a.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_b4c7e8a8f8d5220958d75f63.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_b512acfcb8e3c9978fcc41b5.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_b69fc09383ee8d4b1ceff784.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_b69fc09383ee8d4b1ceff784.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_b8ef9459482dd4cc42b3cd88.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_beedf3dc47081c38ca9791d3.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_bf635d80e5c43f44da37abf9.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_bf635d80e5c43f44da37abf9.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_bf897e824e9be8f9cc742dcb.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_bf897e824e9be8f9cc742dcb.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_c273f0a56eeba92be2358d95.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_c379dc6871b45285b8cd910e.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_c3f06dc1a9eda6f63ebb332a.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_c4331e0c0ab7625444f432c9.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_c4331e0c0ab7625444f432c9.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_c612d5ff610f75d421d7e3d1.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_c998340199d1a8c01948f2b6.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_d2f2e15c12d415980523c3a3.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_d316f7f5d5bd47be82f43b9a.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_d444fea2a658789578daf84c.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_d444fea2a658789578daf84c.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_d72dd6239a42db575709a975.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_da3e668150c546e9e14a4edc.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_da3e668150c546e9e14a4edc.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_dc766f38354f7c4563905e5a.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_dcdd8df4e128b82d0cf49e55.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_dcdd8df4e128b82d0cf49e55.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_ddccf2c6ae8cb8f0f8ef2cba.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_deddc5daa515208ec6cad5b5.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_dfd053052bc5f367093f4613.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_dfd053052bc5f367093f4613.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_e31d804e3e5cb2e72ccb19ce.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_e341c7b9dbb6f18b99396f06.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_e84fe1fc8592bdcd68067eae.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_e905df8c47a7e50ae2820bb2.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_e905df8c47a7e50ae2820bb2.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_e9559e1172161752ba78a17c.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_e9559e1172161752ba78a17c.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_ec21ae915d0a2cf5f8c53aa1.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_ed3f0b634855861c6c4a68f3.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_edec2b6c37ad8d68af8edf48.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_edec2b6c37ad8d68af8edf48.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_efe8a693562c83bc60b54f75.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_efe8a693562c83bc60b54f75.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_f7188fb187e8c7b0e40a8347.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_f7379b31b464f95c1c4bfe2f.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_f7d3835f507972c49e7d9df1.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_f964f54046a585b400fe1e11.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_f9b5a1d4c299f57d7c5f5548.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_fab978e2e06520a79dc40d6f.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_fdba1b076c9fbe3f0d1f0a09.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_fdba1b076c9fbe3f0d1f0a09.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_feaceb32a4fdeda7d54d3fc8.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_feaceb32a4fdeda7d54d3fc8.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\composition_ff73b59b7f6a42e5f3db6f1c.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\content_2d72c2ccb3df3001.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\content_2d72c2ccb3df3001.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\content_307f0534aa5ffd9d.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\content_307f0534aa5ffd9d.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\content_5049723d969e35ef.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\content_5049723d969e35ef.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\content_7e2716c6bc2453e6.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\content_7e2716c6bc2453e6.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\content_7ef60e4818b74e86.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\content_7ef60e4818b74e86.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\content_c32391bce6a32093.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\content_c32391bce6a32093.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\content_c6b1b996873d0273.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\content_c6b1b996873d0273.json.autosave
+       0,1 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_019cb23217b8f3f2cb163eee.json
+       0,1 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_019cb23217b8f3f2cb163eee.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_06bb202a6a0742e16ec798fd.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_06bb202a6a0742e16ec798fd.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_07ac2224897a3c59c06cc6eb.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_0beec130dead74175256617b.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_0c0018d4c3af340800d93717.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_0cd866857ba4a7de27a5072e.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_100a97d05812724eed5da430.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_100a97d05812724eed5da430.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_1a0ab73e8a1fad80d1908ac6.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_1b963dedbffde1c6b30f39a4.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_20b8206d7a609d05720502bf.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_28b69a463795e6ee10724bb6.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_2a787f876257db4c7957198a.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_2d52e433e3ded5bfe517678f.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_2d52e433e3ded5bfe517678f.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_34132c9566956eff980e5a93.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_3a0509ddd6110b63dc21c433.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_3ac3b810d8e199dd13ed51ed.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_3b10926888f1cbf55f156482.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_3b10926888f1cbf55f156482.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_3d32e804c3dcf2632fa557fa.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_40fdc996dcb2bc8ca877cc3d.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_4424050fb6b64030c3b3470b.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_48711367baefeb78229b6731.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_499e56f0c8d9ed796c336b47.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_4c96833464fae14b994155ba.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_4ce539461362444a0b884ba4.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_5134d2eb2f2dad2febaa482d.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_5985d3781a0ebe4ed44c7b18.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_5985d3781a0ebe4ed44c7b18.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_5b0ea1b700042c02c6618a5f.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_5b1a9851c6d67531e65c32d8.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_5d0fb17220926b172d822acc.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_5d3bf8485cb19aa7e88c5f13.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_6485982c69c66c6ff2df27d3.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_6beadd81bf938bbdddd20211.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_6cf8092200c2317efe8f0def.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_7129bba754d6d35bdee06c2e.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_75d709bacdd504527deab38d.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_75d709bacdd504527deab38d.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_75d9d26c09d4ce035b2c5123.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_75d9d26c09d4ce035b2c5123.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_782b27ddd69a7bea7ef6465a.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_7ccf6b9a3deb5059354d4725.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_7f2f1a6f3db5ef2bb3df2fd5.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_7f2f1a6f3db5ef2bb3df2fd5.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_82ac4649f877d12fc4d77315.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_830d2bcd6bdf598559d32c07.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_838c4e96f915fe6ec64da11a.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_838c4e96f915fe6ec64da11a.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_8a5c087309ed7550b43273b1.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_91784458c3df0c4b6e3d4ccb.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_9787c9c4661e13b695bdb2f6.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_998548188cdc568389eae9a1.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_998548188cdc568389eae9a1.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_9ac5cbc71c01320e0c1d7184.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_9bfc6fa1993934884f1cd8ef.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_9bfc6fa1993934884f1cd8ef.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_9f82e13f6f452748487f444c.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_a45208b635f09639a20159a6.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_a45208b635f09639a20159a6.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_ad24bd31331a2917b1a55cbe.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_ad62a7d9112e26a86b4dd40a.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_ad62a7d9112e26a86b4dd40a.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_b4f19423bede1232c8272d9c.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_b4f19423bede1232c8272d9c.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_bce779cef43f064d939548ec.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_c056eac8d40fc1a569b1e76c.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_c352b61fbbe02a5264233ee7.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_c377e5d2293f97538ccff3d7.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_c377e5d2293f97538ccff3d7.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_c48f9b85f5185580c06a14a4.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_c537e4fe35a8a00994a65bd3.json
+       0,1 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_c7fb6ca3df758941e6abe32f.json
+       0,1 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_c7fb6ca3df758941e6abe32f.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_c994accd9cd1248a329bbbfc.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_cf9d4256531c14b3cfed93fa.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_d2735426a4f688fc04b5b458.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_df371cdcc4be64c536fbbf90.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_e6d8d76f2a8e8939eff7a087.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_eca409ba34b0da18ca159aed.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_eca409ba34b0da18ca159aed.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_ee7bc3bc6784a6583a0cdc79.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_ee7bc3bc6784a6583a0cdc79.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_f09b47ada8dce4ae519ad673.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_f1a30865f0b1cd307d3c14fa.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_f339101775428b86f64d54a7.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_f76cb5d82cfe22cd674a51c9.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_fc3accd896993c9972f382ea.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_fc808e97558cb1a24f55b2bb.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_fc808e97558cb1a24f55b2bb.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_fd53408377b1dd138b8ff4d5.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\encounters_fd53408377b1dd138b8ff4d5.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\four_materials.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\generation_03569053d924873c340d.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\generation_a3341a352182a9b7ca2a.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\generation_b16ecb06a00b2b33023a.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\land.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\mixed_relief.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\objects_fixture.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_02b7351487a6e4b6d1a425a3.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_066d770630cfbb7f2b706123.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_09e877b7e0030168cca21f09.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_09e877b7e0030168cca21f09.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_0b5fee51ac1359dbb43f41c3.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_0dcdcb1bcf04f45312a76e8a.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_0f7a73c94983b55c47d2c481.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_0f9f42112402a097e76f643f.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_13be1c4c761827f55fabe30e.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_24dec010fb499f1785bec09b.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_268d4b97498340a52189cb0a.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_2df01253d48714dcf94f40b6.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_30e67bad8d41ef7c91b8756e.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_391309320bcb9f05b5e4617e.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_3b7381c084a1805eb26af6dd.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_3c79daf0271997f69bd81df4.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_4053e467850af31e9c2bda0d.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_473f669803cc47eae286b26b.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_474d34ad7c19b3d0fb988254.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_50aa8e9c6f651e3259a000a2.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_580080594778fd984fe170c6.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_58dbd8a66696c6c87543a36c.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_59a4195ca52b08ccfc538639.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_609e8eef6348b2262103a91d.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_6368245d67aad9c9d5ab36c0.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_66c8511c96581c1b1c3d1a0c.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_6ac6d7093a131352bd75528d.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_6d0f983aac84fd7048b98900.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_6d355a820d896096a35ada3e.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_6e7926689d6295079c66ddd5.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_6ec21fe62a863cba308a1e40.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_7325edaddeb3b8538882be0c.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_767b16cf0b5c407813e192e5.json
+       0,1 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_8421bee1fd95fb8eaae46244.json
+       0,1 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_8421bee1fd95fb8eaae46244.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_869d37ba124706f0281d7ad5.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_873b7245423b327fc40be1e5.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_8db5d567dd26998476db531d.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_8e67617e4994189ee5fd76cb.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_93b2d229a47d17c5615b973c.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_99dbe71778fb574741fe3134.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_9ed6fc5ccafb94943dceaebd.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_a1f3e793f7c566aab5959f4a.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_a3411ac90a4fb8594d5f083a.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_a9a6a27403b3da58927c0ad1.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_ab6664a38ae75307892971cf.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_ada9ec049436cdd8e97b0a91.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_ae9fb90f583f77cb667c9fe2.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_afc0d048cebbe5ac63c3fefe.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_b1ed2c89aab7427a0a5106ff.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_b7c1877ae61723eed43c8a17.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_bc01479dc8fd3d79655bf47c.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_c6ac83c11284f611a79ebfc6.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_ca1acda4ebfaa621e3694e6c.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_cb2372ac52f7133c0267c391.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_cba1378dafaf9f00ada41fa0.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_cbf93404437c47790e57d465.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_cef79cf8f5f65beed2dfc304.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_d053345c5ca03c9a4636e797.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_d34d8a8114d1b61cd329556e.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_d7cf791879b425ccb8b70634.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_da5ae9815dd84398aeb53961.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_ddf2714d271b9ef03452b614.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_dee87360e0a3d13a69b94833.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_e14dc26b82c729123a2917d4.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_e4bba61fbc0f46664e60542e.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_f57631e54c0642a45713f6bb.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_f57d565cd99c2f001891fedf.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_f57d565cd99c2f001891fedf.json.bak
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_f6558626b5efc365ebbcf732.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\patrol_ff0596ba987409a17a6a2dbe.json
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_048e9db431a3f9368bffac79.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_084cb62f8f21b722c14e36a8.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_0de2bfc7095f75ca48cc2006.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_0fc418899ca85f8082425fa6.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_13f8e2c142fc03d2e263c71a.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_145e32888e4a0316e9a71a89.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_1af7cca8e0b3f9e23a394c2c.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_1b815c983de457ca82105fad.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_1c3bc5b5fea48d8885f1ed51.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_1cf187bf7325c00875e47034.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_1e680e6d5281ad3a5b300ed5.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_24b917f973a1a962262ebc3f.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_2778dd6841318cd8804d9bc6.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_27bc9ca1695b16368461a473.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_286be2e8b9241c3e970b2869.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_296a643b9bc67fc098bc47ef.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_2a4d37c5f0a0a683c1575265.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_2d51c8a3cccf3294bff9432f.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_2fa5b3d6d37b8cc7f80f5d41.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_34f36d0b578e77d4cac7ad51.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_37a703a10fb892ba7cdf354f.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_37c258f833ac2eeff27b7fd1.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_3a63074ef6bed334a20e7e27.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_3cdb9a95acc34b3a61d419b3.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_3f53497bdbf9c4e1b6e611b9.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_3ffc2eb87adbb63cd7db2c03.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_419f53ebfb1a42a765947e77.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_435fd3a0581bb5538d4ac818.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_437c8beec12943d3ab585f2a.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_4794e84297ff6056655928b8.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_4805e90a6bb50b94c74bc781.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_48a7a65bc2c953cbc37f7769.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_4b7a668ecb9d8840ed61b2c4.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_4c6bff48156d0ce82adab139.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_4f6221909a3006762ac0bcd0.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_5093ca44ed0050311017bde0.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_51b6d07c9d69669739d534b2.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_54de06e1f0c5f0a21191e08e.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_5b830c373f164b8e7e9be443.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_5c7db13683632d1bedf62c68.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_5cf0895070ea71ae1397f13d.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_5da0cc9ea7e400ad7b54a4a9.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_5e26a3320d6e93f76666d1c8.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_5ff7e4366bb53610c2c60772.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_6059d691e40098e4d2035f8a.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_6769814ca07d492c7b278daa.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_69f6a50fa02d3afd4470a4c8.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_6c6fa50b5448554cb8975590.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_70125d277ed45b3f3032b58b.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_7066e822bf2fc83ae5cf25fc.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_74127750c6c7b779be03bf26.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_7599ea85241f83528b39ff82.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_767bdd5803125acd5bca7a12.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_76bde365d5adfc8e28d750c6.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_79d237043f650facc60472d9.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_7d2b8add22c92c92e01dc86d.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_7fd5ade7eb143f8a79557536.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_80b1bb8ffc6de3f1ad95e40e.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_87d669717120072468db3b6e.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_88eb2bbdc266af953f1bd7e7.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_89f0dea5245c7d07eafc2604.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_8a0f3396cc56862c3aad54a5.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_9151198976aee83e19d04847.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_915dca2b8ce147ef5b0aa157.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_919b1aef2860f30d0b9d5f7d.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_92e7277bdc49acedb708ec97.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_962723a487c6a61f7820855b.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_96ac1d4d7b9b2632a5365886.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_a1b244c2fb50920297f59851.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_a1bb7bf802c224e1eb4ba676.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_a69738b6633bc086e08715c5.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_ae4fb03efd0b60e1697e64c0.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_b0fa9adb6d18791fc559a523.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_b331245830d0e1a37cd74c03.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_b5a811416bac40feef450f44.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_b6eb278359ffa634ced3a4e4.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_b836017dc0c567952ec01491.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_b8569cc2c808cc57fc3adb89.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_bc1a6f076c4db7239bbd3ec0.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_c0226a1ec490f3dce27e754d.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_c3d3edbef9cdb97305908306.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_c48bd5907819a577ddbf153d.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_c52ec0c7f7361d443061c418.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_ca97d96e55ea0d83f164b02d.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_cafb31eaf7ce112bdf1fa83a.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_cb0b791d75d25bb90378af25.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_cccd11d7880389eab33949ed.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_d632a87891975ecf5ec04a21.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_d69d0a7090f7ebe71f9edb93.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_d6f19167e2c060064a3509fa.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_d764a30eb8cf40845f0a9816.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_dbe7928206bb6574d7fb3eda.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_dd8cc7d070746d23e808ca15.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_df1d2c2297673ab9cfe822ad.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_df5d1675fb57d9ce0fdbbfb2.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_df6a7613b2373bd403cd9b6e.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_df73f57b6d54891da07fd5b2.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_e5a3fb9681be4e957462e179.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_e85732ba4dd53635101bba49.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_e998defd03dc8a54f3b16938.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_ebb3c2edcbe679473bed132d.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_ebe7791c4453a0b736c9a0d5.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_ec72498dcefbe11476e736e2.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_ecb199e2e4e82a63012bda86.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_f1ef9a0f3c9e38a09dbb2d16.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_f26b4fcedabb87a6cdd35f8b.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_f4b40856430a77946b43e1b7.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_f8491ad25684377ea869305d.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_fcb1e3a851ebea2202edbd41.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\piece_ff5c80bf1086ad92e313f397.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\sanctuary_woods_clearing.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_32300350.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_32647295.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_33578300.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_33736835.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_34625564.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_35108203.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_35264249.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_35361147.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_38060419.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_38833029.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_39030845.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_39652309.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_41144779.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_42866857.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_44556808.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_46674797.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_47258058.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_48640894.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_51177486.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_51768741.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\unsaved_library_case_51868593.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\variation_room.json.autosave
+       0,0 MB  RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\viewport_bridge.json.autosave
+== untracked in worktree (git)
+?? data/map_authoring/sanctuary_woods.map.json.bak
+?? data/map_authoring/sanctuary_woods.population.json.bak
+?? data/map_authoring/sanctuary_woods_clearing.source.json.bak
+?? data/map_authoring/sanctuary_woods_overpass.source.json.bak
+?? docs/map_editor/delivery/evidence/f9/luna/canvas_cycles/biomeprops_01/
+?? docs/map_editor/delivery/evidence/f9/luna/canvas_cycles/biomepropsnative_01/
+?? docs/map_editor/delivery/evidence/f9/luna/canvas_cycles/borders_01/
+?? docs/map_editor/delivery/evidence/f9/luna/canvas_cycles/shadows_01/
+?? docs/map_editor/delivery/evidence/f9/luna/canvas_cycles/shadowsnative_01/
+?? docs/map_editor/delivery/evidence/f9/luna/exchange_merge/authoringnative_193/
+?? docs/map_editor/delivery/evidence/f9/luna/exchange_merge/compositionaxnative_193/
+?? docs/map_editor/delivery/evidence/f9/luna/exchange_merge/encounterauthoringnative_193/
+?? docs/map_editor/delivery/evidence/f9/luna/exchange_merge/exchangemerge_190/
+?? docs/map_editor/delivery/evidence/f9/luna/exchange_merge/exchangemerge_191/
+?? docs/map_editor/delivery/evidence/f9/luna/exchange_merge/exchangemerge_192/
+?? docs/map_editor/delivery/evidence/f9/luna/exchange_merge/exchangemergenative_192/
+?? docs/map_editor/delivery/evidence/f9/luna/exchange_merge/exchangemergenative_193/
+?? docs/map_editor/delivery/evidence/f9/luna/exchange_merge/librarynative_193/
+?? docs/map_editor/delivery/evidence/f9/luna/exchange_merge/map_editor_exchange_190/
+?? docs/map_editor/delivery/evidence/f9/luna/exchange_merge/map_editor_exchange_191/
+?? docs/map_editor/delivery/evidence/f9/luna/navigation_astar/batch_03/
+?? docs/map_editor/delivery/evidence/f9/luna/navigation_astar/candidatebatch_03/
+?? docs/map_editor/delivery/evidence/f9/luna/navigation_astar/populationplanner_03/
+?? docs/map_editor/delivery/evidence/f9/luna/navigation_astar/populationreachability_03/
+?? docs/map_editor/delivery/evidence/f9/luna/navigation_astar/surfacepick_03/
+?? docs/map_editor/delivery/evidence/f9/luna/root_synthesis/regionalsynthesisnative_185/
+?? docs/map_editor/delivery/evidence/f9/luna/root_synthesis/rootsynthesis_185/
+?? docs/map_editor/delivery/evidence/f9/luna/root_synthesis/rootsynthesisnative_185/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/authoring_176/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/authoring_177/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/authoringnative_176/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/authoringnative_177/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/compositionax_183/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/compositionaxnative_183/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/encounterauthoring_180/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/encounterauthoringnative_183/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/exchangemerge_195/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/gameplayeditornative_183/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/librarynative_176/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/librarynative_177/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/librarynative_183/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/librarynative_195/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/mapbiomenative_183/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/populationplanner_180/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/regional/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/regionalsynthesis/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/regionalsynthesis_175/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/regionalsynthesis_176/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/regionalsynthesis_180/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/regionalsynthesis_195/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/regionalsynthesisnative_176/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/regionalsynthesisnative_177/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/regionalsynthesisnative_183/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/regionalsynthesisnative_186/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/regionalsynthesisnative_195/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/regionalsynthesisnative_196/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/rootsynthesis_180/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/rootsynthesis_181/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/rootsynthesis_182/
+?? docs/map_editor/delivery/evidence/f9/luna/synthesis/rootsynthesis_183/
+== git objects
+git : warning: garbage found: C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.git/worktrees/map-editor-m5/refs
+No C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.tools\claude_bridge\done\198_inventory.ps1:28 caractere:3
++   git count-objects -vH
++   ~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (warning: garbag...-editor-m5/refs:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+count: 5068
+size: 129.35 MiB
+in-pack: 17282
+packs: 4
+size-pack: 545.05 MiB
+prune-packable: 0
+garbage: 1
+size-garbage: 0 bytes
+C:/Users/João Pedro/Documents/ChatGPT/RagRPG                        fba777b3 [codex/playtest]
+C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5   42ca1c38 [codex/map-editor-f9]
+== main checkout
+ M assets/art/animations/animal_companion.png.import
+ M assets/art/animations/archer_weaponless.png.import
+ M assets/art/animations/beast_master.png.import
+ M assets/art/animations/berserker_weaponless.png.import
+ M assets/art/animations/defender_weaponless.png.import
+ M assets/art/animations/elementalist_weaponless.png.import
+ M assets/art/animations/gel.png.import
+ M assets/art/animations/geometer_weaponless.png.import
+ M assets/art/animations/hunter_weaponless.png.import
+ M assets/art/animations/mage_weaponless.png.import
+ M assets/art/animations/sentinel_weaponless.png.import
+ M assets/art/animations/spiritualist_weaponless.png.import
+ M assets/art/animations/swordsman_weaponless.png.import
+ M assets/art/equipment/axe.svg.import
+ M assets/art/equipment/bow.svg.import
+DONE

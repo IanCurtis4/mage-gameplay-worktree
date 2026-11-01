@@ -3431,6 +3431,18 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 file (checkpoint46 synthesis receipts)",
       "base_sha256": "c5e1b75a8267c4536729c61dcd53c07da12038510e5fd450c5cc758b91b66692"
+    },
+    {
+      "path": "tests/map_editor_exchange_assets_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint47 exchange assets)",
+      "base_sha256": "ecf1511f288df939767ef3d5b5db406e0f31a7cf18c9018be888ee02b13c7e49"
+    },
+    {
+      "path": "tests/map_editor_exchange_assets_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint47 exchange assets)",
+      "base_sha256": "55828df50a57b6768e71ead2c4d017e1673b80cd07262987b9d4dfa3bfc0e26b"
     }
   ],
   "read_only_shared": [
@@ -4842,6 +4854,33 @@
         "M8Core": true
       },
       "limits": "at most 32 receipts per document (oldest dropped); ledger at most 64 files / 128 MB of copies under .godot; generation documents carry the whole map with its receipts; replay never rebuilds later human edits"
+    },
+    "exchange_assets_p4": {
+      "state": "validated_increment_F9_still_open",
+      "base": "42ca1c38",
+      "human_report": "01/11: continue to P4 plus a second round of cleanup of outdated items",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "contract": "docs/map_editor/exchange.md",
+      "files": [
+        "scripts/map_authoring/exchange/exchange.gd",
+        "skills/ragrpg-mapdelivery/SKILL.md",
+        "tools/map_editor_completion/run.ps1"
+      ],
+      "test_files": [
+        "tests/map_editor_exchange_assets_test.gd"
+      ],
+      "scope": "exchange bundle v2 with assets.json (passive manifest: path, sha256, kind, rights basis, provenance record; prop sprites and catalog; nested map assets for encounters/patrols); controlled asset area and formats; manifest must cover report dependencies; receiving environment checked before compiling with missing/different files named; v1 refused; real compiler revisions in tickets; ragrpg-mapdelivery skill source updated for F9 (not installed)",
+      "validation": {
+        "ExchangeAssets": 12,
+        "ExchangeMerge": 13,
+        "ExchangeMergeNative": 10,
+        "M7": true,
+        "M7Native": true,
+        "SynthesisReceipts": 11,
+        "M8Core": true
+      },
+      "cleanup": "about 0.7 GB: generated M1 fixture, document-test large drafts and old verification inside the fixture, untracked evidence of superseded runs, scratch probes at the worktree .godot root, applied bridge patches, old bridge jobs/outputs, retired probe copy, loose git objects packed (git gc, no reflog expiry). Kept: RagRPG/build, .tools/godot.zip, Bosque .bak backups, play sessions, ledger",
+      "limits": "bundles never carry asset bytes: a new asset enters through the asset/art flow with a provenance record; release in a clean environment is P5"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

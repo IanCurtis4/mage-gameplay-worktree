@@ -1,0 +1,15 @@
+﻿APROBE sprite res://assets/art/map_authoring/props/moss_boulder.png
+APROBE deps [{"definition_id":"cliff_tile_png","path":"res://assets/art/map_authoring/cliff_tile.png","revision":1,"sha256":"aa5e24d7e9fb33688051899f339e13bfc56fbfb1904d58dec123f94fc88926c7"},{"definition_id":"cliff_tile_png_import","path":"res://assets/art/map_authoring/cliff_tile.png.import","revision":1,"sha256":"fe0ef36b6f3f791b157b36a735f217bf0dfd2b49a2d4ec36a415f692b32f312d"},{"definition_id":"earth_tile_png","path":"res://assets/art/map_authoring/earth_tile.png","revision":1,"sha256":"e0f2b0f1987a1a01ec02254c14320e45de942be458d15047b6c6f0bff507c9eb"},{"definition_id":"earth_tile_png_import","path":"res://assets/art/map_authoring/earth_tile.png.import","revision":1,"sha256":"8a7fb5de02a0d061c99e6c88e875b8f5582eb83be134bb0941f6e4863c2bb117"},{"definition_id":"grass_tile_png","path":"res://assets/art/map_authoring/grass_tile.png","revision":1,"sha256":"795bec1749232e2f6c79a90a1c02aea4b44016066e29728699f6bb6729c34171"},{"definition_id":"grass_tile_png_import","path":"res://assets/art/map_authoring/grass_tile.png.import","revision":1,"sha256":"5a080026fe6e9c15a3039019ecb24607eaa4e76e00a4694b3563610d194df66b"},{"definition_id":"sand_tile_png","path":"res://assets/art/map_authoring/sand_tile.png","revision":1,"sha256":"6c8930b2cd7df987d5bfa940ccb18e9cae8ecfca85bfbb9d84ce81db432c4e9e"},{"definition_id":"sand_tile_png_import","path":"res://assets/art/map_authoring/sand_tile.png.import","revision":1,"sha256":"cf7ed2a0c76756b2504132f520640a252829165a1dad4f7ef10389de7f577a7e"},{"definition_id
+APROBE asset res://assets/art/map_authoring/cliff_tile.png aa5e24d7 local aa5e24d7 texture project_generated_output
+APROBE asset res://assets/art/map_authoring/cliff_tile.png.import fe0ef36b local fe0ef36b import project_generated_output
+APROBE asset res://assets/art/map_authoring/earth_tile.png e0f2b0f1 local e0f2b0f1 texture project_generated_output
+APROBE asset res://assets/art/map_authoring/earth_tile.png.import 8a7fb5de local 8a7fb5de import project_generated_output
+APROBE asset res://assets/art/map_authoring/grass_tile.png 795bec17 local 795bec17 texture project_generated_output
+APROBE asset res://assets/art/map_authoring/grass_tile.png.import 5a080026 local 5a080026 import project_generated_output
+APROBE asset res://assets/art/map_authoring/props/moss_boulder.png db952175 local db952175 texture project_generated_output
+APROBE asset res://assets/art/map_authoring/props/moss_boulder.png.import 19421835 local 19421835 import project_generated_output
+APROBE asset res://assets/art/map_authoring/sand_tile.png 6c8930b2 local 6c8930b2 texture project_generated_output
+APROBE asset res://assets/art/map_authoring/sand_tile.png.import cf7ed2a0 local cf7ed2a0 import project_generated_output
+APROBE asset res://data/map_authoring/prop_catalog.json 70dbf10d local 70dbf10d catalog project_source
+APROBE asset res://scripts/map_authoring/terrain/terrain_material.gdshader 4fc42175 local 4fc42175 shader project_source
+DONE

@@ -1,0 +1,40 @@
+﻿FREE before 8,67 GB
+--- removed (827 items)
+   318,5 MB  .tools\map-editor-m5\.godot\verification\m1\map_editor_document_9_197
+   128,0 MB  .tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_document_fixture
+    48,9 MB  .tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\verification
+     5,4 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\canvas_cycles\shadowsnative_01
+     1,4 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\synthesis\librarynative_195
+     1,4 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\synthesis\librarynative_183
+     1,4 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\synthesis\librarynative_177
+     1,4 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\exchange_merge\librarynative_193
+     1,3 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\synthesis\regionalsynthesisnative_177
+     1,2 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\synthesis\encounterauthoringnative_183
+     1,2 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\exchange_merge\encounterauthoringnative_193
+     1,1 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\exchange_merge\exchangemergenative_193
+     1,0 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\synthesis\rootsynthesisnative_188
+     0,9 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\synthesis\mapbiomenative_183
+     0,8 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\synthesis\synthesisreceipts_196
+     0,8 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\synthesis\synthesisreceipts_195
+     0,8 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\synthesis\rootsynthesisnative_187
+     0,8 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\synthesis\rootsynthesisnative_186
+     0,8 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\synthesis\rootsynthesis_183
+     0,8 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\synthesis\rootsynthesis_182
+     0,8 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\synthesis\rootsynthesis_181
+     0,8 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\synthesis\rootsynthesis_180
+     0,8 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\synthesis\regionalsynthesisnative_196
+     0,8 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\synthesis\regionalsynthesisnative_195
+     0,8 MB  .tools\map-editor-m5\docs\map_editor\delivery\evidence\f9\luna\synthesis\regionalsynthesisnative_186
+
+count: 0
+size: 0 bytes
+size-pack: 523.39 MiB
+size-garbage: 0 bytes
+?? data/map_authoring/sanctuary_woods.map.json.bak
+?? data/map_authoring/sanctuary_woods.population.json.bak
+?? data/map_authoring/sanctuary_woods_clearing.source.json.bak
+?? data/map_authoring/sanctuary_woods_overpass.source.json.bak
+FREE after 9,37 GB (+0,70 GB)
+DONE
+
+

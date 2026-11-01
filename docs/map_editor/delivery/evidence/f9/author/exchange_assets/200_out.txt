@@ -1,0 +1,11 @@
+﻿
+F9 ExchangeAssets: False
+F9_ASSETS_CHECK manifest_names_every_asset_with_rights false
+F9_ASSETS_CHECK different_asset_is_named false
+F9 ExchangeMerge: True
+F9 ExchangeMergeNative: True
+RUNNER map_editor_exchange native=False :: exit=0
+RUNNER map_editor_exchange native=True :: exit=1
+DONE
+
+

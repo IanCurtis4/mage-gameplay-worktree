@@ -15,10 +15,18 @@ const PatrolCompiler = preload("res://scripts/map_authoring/patrol/patrol_compil
 const Synthesis = preload("res://scripts/map_authoring/synthesis/regional_synthesis.gd")
 const Materials = preload("res://scripts/map_authoring/terrain/terrain_material.gd")
 const Props = preload("res://scripts/map_authoring/objects/prop_catalog.gd")
-const REVISION := "map_exchange_v1"
+## Checkpoint47 (P4): v2 bundles carry assets.json, the passive manifest of every
+## asset the compiled package depends on; v1 bundles are refused (re-export).
+const REVISION := "map_exchange_v2"
+const EXCHANGE_VERSION := 2
+const AssetManifest = preload("res://scripts/map_authoring/assets/asset_manifest.gd")
+const PropCatalog = preload("res://scripts/map_authoring/objects/prop_catalog.gd")
+const FILES := ["source.json","report.json","assets.json"]
+const ASSET_EXTENSIONS := [".png",".png.import",".gdshader",".json"]
 const KINDS := ["piece","map","population","patrol","generation"]
 const IDS := ["placement_id","connector_id","socket_id","region_id","slot_id","patrol_id","point_id","brush_id","exclusion_id","interaction_id","instance_id","link_id","layer_id","definition_id","piece_hash","surface_id"]
-const REVISIONS := {"piece":"map_terrain_v2","map":"map_composition_v1","population":PopulationCompiler.REVISION,"patrol":"map_patrol_v1","generation":"map_slot_wfc_v1"}
+# Checkpoint47 (P4): the real compiler revisions, read from the compilers.
+const REVISIONS := {"piece":TerrainCompiler.REVISION,"map":MapCompiler.REVISION,"population":PopulationCompiler.REVISION,"patrol":PatrolCompiler.REVISION,"generation":Generation.REVISION}
 
 static func fail(code: String) -> Dictionary:
 	return {"ok":false,"code":code,"diagnostics":[{"code":code,"message":"Intercâmbio recusado: "+code,"severity":"error"}]}
@@ -88,33 +96,34 @@ static func export_bundle(kind: String, source: Dictionary, permissions: Diction
 		if not seed_value is String or seed_value != str(seed_value.to_int()): return fail("exchange_seed")
 	var compiled := build(kind,source,cancellation)
 	if not compiled.ok: return compiled
-	var ticket := {"exchange_version":1,"compiler_revision":REVISIONS[kind],"kind":kind,"base_hash":checked.output_hash,"policy":permissions.duplicate(true),"brief":brief,"corpus":corpus.duplicate(),"base":source.duplicate(true)}
+	var ticket := {"exchange_version":EXCHANGE_VERSION,"compiler_revision":REVISIONS[kind],"kind":kind,"base_hash":checked.output_hash,"policy":permissions.duplicate(true),"brief":brief,"corpus":corpus.duplicate(),"base":source.duplicate(true)}
 	return _bundle(ticket,source,compiled)
 static func report_for(kind: String, compiled: Dictionary) -> Dictionary:
 	var package: Dictionary = compiled.package
-	return {"ok":true,"code":"","compiled_hash":compiled.output_hash,"compiler_revision":REVISIONS[kind],"dependencies":package.get("dependencies",[]),"catalog_hash":package.get("catalog_hash",package.get("population_package",{}).get("catalog_hash","")),"policy_hash":package.get("policy_hash",package.get("population_package",{}).get("policy_hash",""))}
+	return {"ok":true,"code":"","compiled_hash":compiled.output_hash,"compiler_revision":REVISIONS[kind],"dependencies":package_dependencies(kind,package),"catalog_hash":package.get("catalog_hash",package.get("population_package",{}).get("catalog_hash","")),"policy_hash":package.get("policy_hash",package.get("population_package",{}).get("policy_hash",""))}
 static func _bundle(ticket: Dictionary, source: Dictionary, compiled: Dictionary) -> Dictionary:
 	var source_hash: String = read(ticket.kind,source).output_hash
 	var report := report_for(ticket.kind,compiled)
-	var files := [{"path":"source.json","sha256":digest(source),"data":source.duplicate(true)},{"path":"report.json","sha256":digest(report),"data":report}]
-	var bundle := {"exchange_version":1,"revision":REVISION,"ticket":ticket.duplicate(true),"ticket_hash":digest(ticket),"source_hash":source_hash,"files":files}
+	var assets := assets_for(report.dependencies)
+	var files := [{"path":"source.json","sha256":digest(source),"data":source.duplicate(true)},{"path":"report.json","sha256":digest(report),"data":report},{"path":"assets.json","sha256":digest(assets),"data":assets}]
+	var bundle := {"exchange_version":EXCHANGE_VERSION,"revision":REVISION,"ticket":ticket.duplicate(true),"ticket_hash":digest(ticket),"source_hash":source_hash,"files":files}
 	bundle["bundle_hash"] = digest(bundle)
 	return {"ok":true,"code":"","bundle":bundle,"output_hash":compiled.output_hash}
 static func validate_bundle(raw: Variant) -> Dictionary:
 	if not shape(raw,["exchange_version","revision","ticket","ticket_hash","source_hash","files","bundle_hash"]): return fail("exchange_invalid")
-	if raw.exchange_version != 1 or raw.revision != REVISION: return fail("exchange_version")
+	if raw.exchange_version != EXCHANGE_VERSION or raw.revision != REVISION: return fail("exchange_version")
 	if not shape(raw.ticket,["exchange_version","compiler_revision","kind","base_hash","policy","brief","corpus","base"]): return fail("exchange_ticket")
 	var ticket: Dictionary = raw.ticket
-	if not ticket.kind is String or ticket.kind not in KINDS or ticket.exchange_version != 1 or ticket.compiler_revision != REVISIONS[ticket.kind]: return fail("exchange_version")
+	if not ticket.kind is String or ticket.kind not in KINDS or ticket.exchange_version != EXCHANGE_VERSION or ticket.compiler_revision != REVISIONS[ticket.kind]: return fail("exchange_version")
 	if not valid_policy(ticket.policy) or not ticket.brief is String or ticket.brief.length() > 8192 or not ticket.corpus is Array or ticket.corpus.size() > 32: return fail("exchange_ticket")
 	for seed_value: Variant in ticket.corpus:
 		if not seed_value is String or seed_value != str(seed_value.to_int()): return fail("exchange_seed")
-	if not raw.files is Array or raw.files.size() != 2: return fail("exchange_files")
+	if not raw.files is Array or raw.files.size() != FILES.size(): return fail("exchange_files")
 	var seen := {}; var files := {}
 	for file: Variant in raw.files:
 		if not shape(file,["path","sha256","data"]) or not file.path is String: return fail("exchange_files")
 		# An allowlist, not path normalization. No filesystem access to these names.
-		if file.path not in ["source.json","report.json"]: return fail("unsafe_bundle_path")
+		if file.path not in FILES: return fail("unsafe_bundle_path")
 		if seen.has(file.path): return fail("exchange_duplicate_file")
 		seen[file.path] = true; files[file.path] = file.data
 		if file.sha256 != digest(file.data): return fail("exchange_file_hash")
@@ -127,7 +136,87 @@ static func validate_bundle(raw: Variant) -> Dictionary:
 	if not source.ok: return source
 	if source.output_hash != raw.source_hash: return fail("exchange_source_hash")
 	if not shape(files["report.json"],["ok","code","compiled_hash","compiler_revision","dependencies","catalog_hash","policy_hash"]) or files["report.json"].ok != true or files["report.json"].compiler_revision != REVISIONS[ticket.kind]: return fail("exchange_report")
-	return {"ok":true,"code":"","ticket":ticket.duplicate(true),"source":source.data,"report":files["report.json"]}
+	var declared := check_assets(files["assets.json"],files["report.json"])
+	if not declared.ok: return declared
+	return {"ok":true,"code":"","ticket":ticket.duplicate(true),"source":source.data,"report":files["report.json"],"assets":files["assets.json"]}
+
+## Checkpoint47 (F9-01/03/09, P4): the dependencies a compiled package names,
+## nested packages included (encounters and patrols name the map's).
+static func package_dependencies(kind: String, package: Dictionary) -> Array:
+	match kind:
+		"population": return package.get("map_package",{}).get("dependencies",[])
+		"patrol": return package.get("population_package",{}).get("map_package",{}).get("dependencies",[])
+	return package.get("dependencies",[])
+
+## Passive asset manifest of a bundle: one entry per file the dependencies name
+## (textures, import settings, shaders, catalogs and the sprites of the props),
+## with the sender's content hash and the rights basis and provenance record of
+## the project's asset manifest. A bundle never carries asset bytes.
+static func assets_for(dependencies: Array) -> Dictionary:
+	var known := AssetManifest.entries_by_path()
+	var paths := {}
+	var catalog: Dictionary = {}
+	for dependency: Variant in dependencies:
+		if not dependency is Dictionary: continue
+		if dependency.get("path") is String: paths[dependency.path] = String(dependency.get("sha256",""))
+		elif dependency.get("kind","") == "prop":
+			if catalog.is_empty(): catalog = PropCatalog.load_catalog()
+			paths[PropCatalog.PATH] = AssetManifest.sha256(PropCatalog.PATH)
+			var definition: Dictionary = catalog.get("definitions",{}).get(dependency.get("definition_id",""),{})
+			var sprite: Variant = definition.get("sprite_path")
+			if sprite is String:
+				paths[sprite] = AssetManifest.sha256(sprite)
+				paths[sprite+".import"] = AssetManifest.sha256(sprite+".import")
+	var ordered: Array = paths.keys(); ordered.sort()
+	var entries: Array = []
+	for path: String in ordered:
+		var entry: Dictionary = known.get(path,{})
+		var kind := "import" if path.ends_with(".import") else ("texture" if path.ends_with(".png") else ("shader" if path.ends_with(".gdshader") else "catalog"))
+		entries.append({"path":path,"sha256":paths[path],"kind":kind,"rights_basis":String(entry.get("rights_basis","project_source")),"record":String(entry.get("record",""))})
+	return {"schema_version":AssetManifest.SCHEMA_VERSION,"entries":entries}
+
+static func _asset_area(path: String) -> bool:
+	var extension_ok := false
+	for extension: String in ASSET_EXTENSIONS:
+		if path.ends_with(extension): extension_ok = true
+	if not extension_ok: return false
+	if path in AssetManifest.EXTRA: return true
+	for root: String in AssetManifest.ROOTS:
+		if path.begins_with(root+"/"): return true
+	return false
+
+static func asset_failure(code: String, paths: Array) -> Dictionary:
+	var messages := {"exchange_assets_invalid":"O manifesto de assets do pacote está mal formado.","unsafe_asset":"O pacote declara um arquivo fora da área de assets do editor ou de um formato não permitido (só PNG, importação, shader e catálogos).","exchange_assets_incomplete":"O manifesto de assets não corresponde às dependências do relatório.","exchange_asset_missing":"Este projeto não tem assets que a proposta usa. Um pacote nunca traz arquivos: instale-os pelo fluxo de assets (com registro de origem) e revalide.","exchange_asset_mismatch":"Assets que a proposta usa têm outro conteúdo neste projeto. Alinhe os assets pelo fluxo de assets e revalide."}
+	var failure := fail(code)
+	failure.diagnostics[0].message = messages.get(code,"Intercâmbio recusado: "+code)+(" ("+", ".join(paths.slice(0,8))+")" if not paths.is_empty() else "")
+	failure.diagnostics[0]["entity_id"] = paths[0] if not paths.is_empty() else ""
+	failure["paths"] = paths
+	return failure
+
+## Shape, controlled area and coverage of the declared assets (no file access).
+static func check_assets(assets: Variant, report: Dictionary) -> Dictionary:
+	if not AssetManifest.valid(assets): return asset_failure("exchange_assets_invalid",[])
+	var declared := {}
+	for entry: Dictionary in assets.entries:
+		if not _asset_area(entry.path) or String(entry.rights_basis).is_empty(): return asset_failure("unsafe_asset",[entry.path])
+		declared[entry.path] = entry.sha256
+	for dependency: Variant in report.dependencies:
+		if not dependency is Dictionary: continue
+		if dependency.get("path") is String and declared.get(dependency.path,"") != String(dependency.get("sha256","")): return asset_failure("exchange_assets_incomplete",[dependency.path])
+		if dependency.get("kind","") == "prop" and not declared.has(PropCatalog.PATH): return asset_failure("exchange_assets_incomplete",[PropCatalog.PATH])
+	return {"ok":true}
+
+## The receiving project must have every declared asset with the same content;
+## missing and different files are named before anything compiles.
+static func check_environment(assets: Dictionary) -> Dictionary:
+	var missing: Array = []; var different: Array = []
+	for entry: Dictionary in assets.get("entries",[]):
+		var local := AssetManifest.sha256(entry.path)
+		if local.is_empty(): missing.append(entry.path)
+		elif local != entry.sha256: different.append(entry.path)
+	if not missing.is_empty(): return asset_failure("exchange_asset_missing",missing)
+	if not different.is_empty(): return asset_failure("exchange_asset_mismatch",different)
+	return {"ok":true,"count":assets.get("entries",[]).size()}
 static func propose(request: Dictionary, candidate: Dictionary) -> Dictionary:
 	var checked := validate_bundle(request)
 	if not checked.ok: return checked
@@ -154,6 +243,9 @@ static func prepare(request: Dictionary, proposal: Dictionary, current: Dictiona
 	var incoming := validate_bundle(proposal)
 	if not incoming.ok: return incoming
 	if digest(local.ticket) != digest(incoming.ticket): return fail("exchange_permission_mismatch")
+	# Checkpoint47 (P4): a clean environment first; named files, before compiling.
+	var environment := check_environment(incoming.assets)
+	if not environment.ok: return environment
 	var kind: String = local.ticket.kind
 	var checked := read(kind,current)
 	if not checked.ok: return checked
