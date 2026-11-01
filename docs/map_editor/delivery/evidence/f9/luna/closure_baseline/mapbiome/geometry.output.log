@@ -1,0 +1,18 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_MAP_BIOME_CHECK legacy_missing_and_empty_context_use_ruin_without_mutating_source true
+F9_MAP_BIOME_CHECK explicit_authoring_biome_reaches_manifest_and_changes_only_compiled_metadata true
+F9_MAP_BIOME_CHECK rehashing_cannot_make_context_and_runtime_biome_disagreement_valid true
+F9_MAP_BIOME_CHECK legacy_package_without_authoring_context_remains_valid_with_legacy_ruin_stage true
+F9_MAP_BIOME_CHECK population_preparation_consumes_the_forest_map_package_and_manifest_biome true
+F9_MAP_BIOME_CHECK 529_command_batch_cap_accepts_every_instance_pair_and_is_pure true
+F9_MAP_BIOME_CHECK batch_over_529_is_rejected_without_mutating_source true
+F9_MAP_BIOME_CHECK invalid_last_command_non_dictionary_and_unknown_fields_fail_batch_atomically true
+F9_MAP_BIOME_CHECK session_batch_applies_pending_name_and_all_commands_as_one_history_entry true
+F9_MAP_BIOME_CHECK one_undo_and_redo_restore_entire_atomic_batch_and_pending_name true
+F9_MAP_BIOME_CHECK batch_no_op_and_stale_or_invalid_batches_do_not_add_history_or_change_source true
+F9_MAP_BIOME_CHECK pending_name_is_validated_and_batch_rejects_invalid_name_without_second_history_entry true
+F9_MAP_BIOME_CHECK composition_cli_batch_reads_closed_request_and_saves_through_map_store true
+F9_MAP_BIOME_CHECK real_gui_and_ax_panels_apply_the_same_closed_border_batch_and_semantic_hash true
+F9_MAP_BIOME_CHECK ax_batch_shape_and_stale_source_reject_before_session_mutation true
+F9_MAP_BIOME_RESULT {"checks":[{"detail":{},"id":"legacy_missing_and_empty_context_use_ruin_without_mutating_source","ok":true},{"detail":{},"id":"explicit_authoring_biome_reaches_manifest_and_changes_only_compiled_metadata","ok":true},{"detail":{},"id":"rehashing_cannot_make_context_and_runtime_biome_disagreement_valid","ok":true},{"detail":{},"id":"legacy_package_without_authoring_context_remains_valid_with_legacy_ruin_stage","ok":true},{"detail":{},"id":"population_preparation_consumes_the_forest_map_package_and_manifest_biome","ok":true},{"detail":{},"id":"529_command_batch_cap_accepts_every_instance_pair_and_is_pure","ok":true},{"detail":{},"id":"batch_over_529_is_rejected_without_mutating_source","ok":true},{"detail":{},"id":"invalid_last_command_non_dictionary_and_unknown_fields_fail_batch_atomically","ok":true},{"detail":{},"id":"session_batch_applies_pending_name_and_all_commands_as_one_history_entry","ok":true},{"detail":{},"id":"one_undo_and_redo_restore_entire_atomic_batch_and_pending_name","ok":true},{"detail":{},"id":"batch_no_op_and_stale_or_invalid_batches_do_not_add_history_or_change_source","ok":true},{"detail":{},"id":"pending_name_is_validated_and_batch_rejects_invalid_name_without_second_history_entry","ok":true},{"detail":{},"id":"composition_cli_batch_reads_closed_request_and_saves_through_map_store","ok":true},{"detail":{},"id":"real_gui_and_ax_panels_apply_the_same_closed_border_batch_and_semantic_hash","ok":true},{"detail":{},"id":"ax_batch_shape_and_stale_source_reject_before_session_mutation","ok":true}],"count":15,"expected_count":15,"ok":true}

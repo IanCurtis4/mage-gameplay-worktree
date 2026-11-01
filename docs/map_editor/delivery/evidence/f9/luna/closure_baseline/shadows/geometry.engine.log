@@ -1,0 +1,31 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_SHADOW_CHECK connected_receiver_mesh_builds true
+F9_SHADOW_CHECK seam_uses_both_actual_receivers true
+F9_SHADOW_CHECK seam_projected_footprint_area1600 true
+F9_SHADOW_CHECK world_projection_applied_once true
+F9_SHADOW_CHECK radial_texture_uvs_bounded true
+F9_SHADOW_CHECK source_and_index_not_mutated true
+F9_SHADOW_CHECK edge_shadow_clips_to_real_ground true
+F9_SHADOW_CHECK edge_shadow_area960 true
+F9_SHADOW_CHECK ramp_receiver_preserves_real_height true
+F9_SHADOW_CHECK ramp_does_not_shadow_lower_floor true
+F9_SHADOW_CHECK explicit_wrong_surface_does_not_fall_to_lower_floor true
+F9_SHADOW_CHECK automatic_receiver_uses_contact_height true
+F9_SHADOW_CHECK bridge_shadow_stays_at160 true
+F9_SHADOW_CHECK real_gap_and_unlinked_neighbor_remain_unshadowed true
+F9_SHADOW_CHECK missing_receiver_is_explicit true
+F9_SHADOW_CHECK negative_radius_rejected true
+F9_SHADOW_CHECK nan_anchor_rejected true
+F9_SHADOW_CHECK missing_projection_rejected true
+F9_SHADOW_CHECK false_support_height_rejected true
+F9_SHADOW_CHECK unbounded_radius_rejected true
+F9_SHADOW_CHECK shadow_stays_positive_at_lowest_sprite_depth true
+F9_SHADOW_CHECK shadow_snapshot_bound_to_real_ramp true
+F9_SHADOW_CHECK snapshot_cache_contains_real_mesh true
+F9_SHADOW_CHECK snapshot_with_visual_cache_captures true
+F9_SHADOW_CHECK snapshot_binary_roundtrip_valid true
+F9_SHADOW_CHECK visual_toggles_do_not_change_snapshot true
+F9_SHADOW_CHECK snapshot_restores_gameplay_and_default_presentation true
+F9_SHADOW_CHECK restored_shadow_rebuilds_from_preserved_support true
+F9_SHADOW_RESULT {"checks":[{"id":"connected_receiver_mesh_builds","ok":true},{"id":"seam_uses_both_actual_receivers","ok":true},{"id":"seam_projected_footprint_area1600","ok":true},{"id":"world_projection_applied_once","ok":true},{"id":"radial_texture_uvs_bounded","ok":true},{"id":"source_and_index_not_mutated","ok":true},{"id":"edge_shadow_clips_to_real_ground","ok":true},{"id":"edge_shadow_area960","ok":true},{"id":"ramp_receiver_preserves_real_height","ok":true},{"id":"ramp_does_not_shadow_lower_floor","ok":true},{"id":"explicit_wrong_surface_does_not_fall_to_lower_floor","ok":true},{"id":"automatic_receiver_uses_contact_height","ok":true},{"id":"bridge_shadow_stays_at160","ok":true},{"id":"real_gap_and_unlinked_neighbor_remain_unshadowed","ok":true},{"id":"missing_receiver_is_explicit","ok":true},{"id":"negative_radius_rejected","ok":true},{"id":"nan_anchor_rejected","ok":true},{"id":"missing_projection_rejected","ok":true},{"id":"false_support_height_rejected","ok":true},{"id":"unbounded_radius_rejected","ok":true},{"id":"shadow_stays_positive_at_lowest_sprite_depth","ok":true},{"id":"shadow_snapshot_bound_to_real_ramp","ok":true},{"id":"snapshot_cache_contains_real_mesh","ok":true},{"id":"snapshot_with_visual_cache_captures","ok":true},{"id":"snapshot_binary_roundtrip_valid","ok":true},{"id":"visual_toggles_do_not_change_snapshot","ok":true},{"id":"snapshot_restores_gameplay_and_default_presentation","ok":true},{"id":"restored_shadow_rebuilds_from_preserved_support","ok":true}],"count":28,"ok":true}

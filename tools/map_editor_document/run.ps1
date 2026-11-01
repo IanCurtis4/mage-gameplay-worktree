@@ -6,12 +6,19 @@ param(
 $ErrorActionPreference = 'Stop'
 $m1Root = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $m1Evidence = [IO.Path]::GetFullPath($EvidenceDirectory)
-$m1Fixture = Join-Path $m1Evidence 'fixture'
+# Checkpoint41: the fixture now carries the whole runtime; keep it out of the
+# evidence directory (ignored .godot), evidence keeps only logs and receipts.
+$m1Fixture = Join-Path $m1Root ('.godot/verification/m1/' + (Split-Path -Leaf $m1Evidence))
 if (Test-Path -LiteralPath $m1Fixture) { throw 'Use a new evidence directory for every attempt.' }
 [void](New-Item -ItemType Directory -Force -Path (Join-Path $m1Fixture 'scripts'))
 [void](New-Item -ItemType Directory -Force -Path (Join-Path $m1Fixture 'addons/m1_driver'))
 [void](New-Item -ItemType Directory -Force -Path (Join-Path $m1Fixture 'tests'))
-Copy-Item -LiteralPath (Join-Path $m1Root 'scripts/map_authoring') -Destination (Join-Path $m1Fixture 'scripts') -Recurse
+# Checkpoint41: map_authoring now preloads shared runtime (geometry, expedition
+# view, catalogs); the isolated fixture takes the whole runtime, not only the editor.
+Remove-Item -LiteralPath (Join-Path $m1Fixture 'scripts') -Recurse -Force
+foreach ($m1Dir in @('scripts', 'data', 'assets', 'resources', 'content', 'scenes')) {
+    if (Test-Path -LiteralPath (Join-Path $m1Root $m1Dir)) { Copy-Item -LiteralPath (Join-Path $m1Root $m1Dir) -Destination $m1Fixture -Recurse }
+}
 Copy-Item -LiteralPath (Join-Path $m1Root 'addons/ragrpg_map_editor') -Destination (Join-Path $m1Fixture 'addons') -Recurse
 Copy-Item -LiteralPath (Join-Path $m1Root 'tests/map_editor_document_test.gd') -Destination (Join-Path $m1Fixture 'tests')
 Copy-Item -LiteralPath (Join-Path $m1Root 'tests/map_editor_document_ui_test.gd') -Destination (Join-Path $m1Fixture 'addons/m1_driver/plugin.gd')

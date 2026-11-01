@@ -1,0 +1,671 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Started Inicialização do Projeto (5 steps)[39m[0m
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Escaneando estrutura de arquivos...[39m[0m
+[  16% ] [90m[1mfirst_scan_filesystem[22m | Carregando nomes de classe globais...[39m[0m
+[  33% ] [90m[1mfirst_scan_filesystem[22m | Verificando GDExtensions...[39m[0m
+[  50% ] [90m[1mfirst_scan_filesystem[22m | Criando scripts autoload...[39m[0m
+[  66% ] [90m[1mfirst_scan_filesystem[22m | Inicializando plugins...[39m[0m
+[  83% ] [90m[1mfirst_scan_filesystem[22m | Iniciando escaneamento de arquivos...[39m[0m
+[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
+[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Started Carregando editor (5 steps)[39m[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Carregando layout do editor...[39m[0m
+[  16% ] [90m[1mloading_editor_layout[22m | Carregando abas...[39m[0m
+[92m[ DONE ][39m [1mloading_editor_layout[22m
+[0m
+M1_UI_RESULT {"checks":[{"id":"global_sentinel_committed","ok":true},{"id":"plugin_enabled_0","ok":true},{"id":"focus_0","ok":true},{"id":"shell_add_0","ok":true},{"id":"shell_duplicate_0","ok":true},{"id":"shell_lock_0","ok":true},{"id":"shell_rename_0","ok":true},{"id":"shell_history_0","ok":true},{"id":"undo_button_0","ok":true},{"id":"redo_button_0","ok":true},{"id":"shell_save_0","ok":true},{"id":"shell_autosave_0","ok":true},{"id":"shell_reject_open_0","ok":true},{"id":"shell_reopen_0","ok":true},{"id":"save_commits_name_0","ok":true},{"id":"new_requires_preservation_0","ok":true},{"id":"new_preserves_draft_0","ok":true},{"id":"recovery_copy_0","ok":true},{"id":"plugin_freed_0","ok":true},{"id":"plugin_enabled_1","ok":true},{"id":"focus_1","ok":true},{"id":"shell_add_1","ok":true},{"id":"shell_duplicate_1","ok":true},{"id":"shell_lock_1","ok":true},{"id":"shell_rename_1","ok":true},{"id":"shell_history_1","ok":true},{"id":"undo_button_1","ok":true},{"id":"redo_button_1","ok":true},{"id":"shell_save_1","ok":true},{"id":"shell_autosave_1","ok":true},{"id":"shell_reject_open_1","ok":true},{"id":"shell_reopen_1","ok":true},{"id":"save_commits_name_1","ok":true},{"id":"new_requires_preservation_1","ok":true},{"id":"new_preserves_draft_1","ok":true},{"id":"recovery_copy_1","ok":true},{"id":"plugin_freed_1","ok":true},{"id":"global_history_preserved","ok":true},{"id":"global_undo_preserved","ok":true},{"id":"global_redo_preserved","ok":true}],"count":40,"ok":true}
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/generation/fixture_geometry.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_material.gd:6)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/world/expedition_geometry_view.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_material.gd:7)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "point" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_material.gd:67)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "normal" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_material.gd:68)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "point" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_material.gd:94)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/brush.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/organic_example.gd:0)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/generation/fixture_geometry.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/compiler/terrain_compiler.gd:4)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/generation/canonical.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/compiler/terrain_compiler.gd:5)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/model/manifest.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/compiler/terrain_compiler.gd:6)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/spatial/world_solid_prism.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/compiler/terrain_compiler.gd:9)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/generation/connector_partition.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/compiler/terrain_compiler.gd:11)
+SCRIPT ERROR: Parse Error: "Manifest" is a constant but does not contain a type.
+   at: GDScript::reload (res://scripts/map_authoring/compiler/terrain_compiler.gd:481)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "y" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/compiler/terrain_compiler.gd:114)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "compile".
+   at: GDScript::reload (res://scripts/map_authoring/compiler/terrain_compiler.gd:175)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "center" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/compiler/terrain_compiler.gd:300)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "checked" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/compiler/terrain_compiler.gd:306)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "point" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/compiler/terrain_compiler.gd:336)
+SCRIPT ERROR: Parse Error: Identifier "WorldGeometry" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/compiler/terrain_compiler.gd:428)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "groups" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/compiler/terrain_compiler.gd:436)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "manifest" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/compiler/terrain_compiler.gd:485)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/world/expedition_geometry_view.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_canvas.gd:3)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/world/world_canvas_order.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_canvas.gd:8)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/world/ground_shadow.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_canvas.gd:9)
+SCRIPT ERROR: Parse Error: Could not find type "WorldGeometry" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_canvas.gd:29)
+SCRIPT ERROR: Parse Error: Could not find type "WorldGeometry" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_canvas.gd:369)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "point" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_canvas.gd:71)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "point" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_canvas.gd:77)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "point" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_canvas.gd:83)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "ray" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_canvas.gd:143)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "ordered" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_canvas.gd:218)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "preview_manifest".
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_canvas.gd:372)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "manifest" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_canvas.gd:372)
+SCRIPT ERROR: Parse Error: Identifier "WorldGeometry" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_canvas.gd:374)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "world" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_canvas.gd:377)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "ray" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_canvas.gd:390)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "pick_support".
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_canvas.gd:391)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/generation/canonical.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/objects/prop_catalog.gd:5)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/generation/canonical.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/composition/border_operations.gd:6)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "key" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/border_operations.gd:28)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_document.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/map_authoring/library/library_model.gd:0)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/world/expedition_projection.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/preview/viewport_tools.gd:4)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/model/world_point.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/preview/viewport_tools.gd:5)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/generation/fixture_geometry.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/preview/viewport_tools.gd:6)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/generation/canonical.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/preview/viewport_tools.gd:7)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/preview/viewport_tools.gd:235)
+SCRIPT ERROR: Parse Error: Could not find type "WorldGeometry" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/preview/viewport_tools.gd:248)
+SCRIPT ERROR: Parse Error: Could not find type "WorldGeometry" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/preview/viewport_tools.gd:497)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "offset" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/viewport_tools.gd:159)
+SCRIPT ERROR: Parse Error: Could not find type "WorldGeometry" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/preview/viewport_tools.gd:213)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "point" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/viewport_tools.gd:215)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "result" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/viewport_tools.gd:217)
+SCRIPT ERROR: Parse Error: Could not find type "WorldGeometry" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/preview/viewport_tools.gd:223)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "start" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/viewport_tools.gd:225)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "end" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/viewport_tools.gd:225)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/preview/viewport_tools.gd:227)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "supported" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/viewport_tools.gd:228)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "result" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/viewport_tools.gd:231)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "normal" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/viewport_tools.gd:253)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "ray" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/viewport_tools.gd:297)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_panel.gd:0)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/generation/canonical.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:5)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/generation/fixture_geometry.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:6)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/model/manifest.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:7)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/spatial/world_geometry.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:8)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/model/world_point.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:9)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/spatial/world_solid_prism.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:11)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/generation/connector_partition.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:13)
+SCRIPT ERROR: Parse Error: Could not find type "WorldGeometry" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:527)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:527)
+SCRIPT ERROR: Parse Error: "Manifest" is a constant but does not contain a type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:539)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "parent_resolved" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:101)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "child_resolved" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:102)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "offset" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:105)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "transformed" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:142)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "a" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:170)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "b" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:170)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "partition" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:173)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "manifest" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:198)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "world" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:199)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "configured" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:199)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "root" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:201)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:203)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "destination" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:206)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "certified" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:210)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "column" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:309)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "overlap" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:312)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "top" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:319)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "level" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:320)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "resolved" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:487)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "partition" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:499)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "center" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:528)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "point" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:536)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "result" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:541)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/world/expedition_geometry_view.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:4)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/generation/fixture_geometry.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:5)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/spatial/world_geometry.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:6)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/spatial/world_actor_motion.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:7)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/model/world_point.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:8)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/world/world_canvas_order.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:10)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/world/map_package_view.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:11)
+SCRIPT ERROR: Parse Error: "World" is a constant but does not contain a type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:16)
+SCRIPT ERROR: Parse Error: "Motion" is a constant but does not contain a type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:17)
+SCRIPT ERROR: Parse Error: "PackageView" is a constant but does not contain a type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:25)
+SCRIPT ERROR: Parse Error: Could not find type "WorldGeometry" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:160)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "manifest".
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:48)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "built" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:49)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "ordered" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:55)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "point" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:68)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "point" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:73)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "_walkable_point".
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:90)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "start" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:90)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "result" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:92)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "result" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:102)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "ray" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:111)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "point" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:122)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "route" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:125)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "map_model".
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:156)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "pick_support".
+   at: GDScript::reload (res://scripts/map_authoring/preview/map_canvas.gd:164)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/generation/canonical.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:7)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/model/world_point.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:8)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/generation/fixture_geometry.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:9)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:43)
+SCRIPT ERROR: Parse Error: Could not find type "MobCatalog" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:50)
+SCRIPT ERROR: Parse Error: Could not find type "WorldGeometry" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:60)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:60)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:60)
+SCRIPT ERROR: Parse Error: Could not find type "WorldGeometry" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:63)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:63)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:63)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:150)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:159)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:161)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:169)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:181)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionManifest" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:401)
+SCRIPT ERROR: Parse Error: Identifier "MobOccurrence" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:51)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "occurrence" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:51)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "checked" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:52)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "checked" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:64)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "manifest" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:85)
+SCRIPT ERROR: Parse Error: Identifier "WorldGeometry" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:90)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "world" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:90)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "configured" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:90)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "entry" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:92)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:106)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "point" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:108)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "transformed" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:146)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "entry" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:151)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:165)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:198)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "normal" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:208)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "position" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:210)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "point" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:213)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:228)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "policy".
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:231)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:261)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:261)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionWorldPoint" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:269)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "record".
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:282)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "point" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:315)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionManifest" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:342)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "point" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:348)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionPopulationPlanner" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:356)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "planned" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:356)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionCampaignState" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:392)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "state" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:392)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "parsed" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:398)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionCampaignState" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:400)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionManifest" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:403)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "result" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:403)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/generation/canonical.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_catalog.gd:3)
+SCRIPT ERROR: Parse Error: Preload file "res://data/expedition/phases/ruined_crossing.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_catalog.gd:4)
+SCRIPT ERROR: Parse Error: Could not find type "MobCatalog" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_catalog.gd:32)
+SCRIPT ERROR: Parse Error: Identifier "ProfileCatalog" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_catalog.gd:12)
+SCRIPT ERROR: Parse Error: Identifier "BuildContentLoader" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_catalog.gd:12)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "loaded" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_catalog.gd:12)
+SCRIPT ERROR: Parse Error: Could not find type "MobCatalog" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_catalog.gd:14)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "definition" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_catalog.gd:17)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "definition" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_catalog.gd:36)
+SCRIPT ERROR: Parse Error: Identifier "MobOccurrence" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_catalog.gd:42)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "occurrence" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_catalog.gd:42)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionManifest" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_catalog.gd:51)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "manifest" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_catalog.gd:51)
+SCRIPT ERROR: Parse Error: Could not resolve class "res://scripts/map_authoring/preview/map_canvas.gd".
+   at: GDScript::reload (res://scripts/map_authoring/population/population_canvas.gd:2)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionCampaignState" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_canvas.gd:11)
+SCRIPT ERROR: Parse Error: Could not resolve class "res://scripts/map_authoring/preview/map_canvas.gd".
+   at: GDScript::reload (res://scripts/map_authoring/population/population_canvas.gd:2)
+SCRIPT ERROR: Parse Error: Identifier "WorldGeometry" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_canvas.gd:16)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "manifest".
+   at: GDScript::reload (res://scripts/map_authoring/population/population_canvas.gd:16)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionPopulationPlanner" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_canvas.gd:24)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "result" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_canvas.gd:24)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "result" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_canvas.gd:31)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/patrol/enemy_patrol.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_compiler.gd:7)
+SCRIPT ERROR: Parse Error: Could not find type "ExpeditionManifest" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_compiler.gd:84)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "anchor".
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_compiler.gd:16)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "manifest" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_compiler.gd:26)
+SCRIPT ERROR: Parse Error: Identifier "WorldGeometry" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_compiler.gd:28)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "world" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_compiler.gd:28)
+SCRIPT ERROR: Parse Error: Could not find type "MobDefinition" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_compiler.gd:39)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionPopulationPlanner" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_compiler.gd:42)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "result" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_compiler.gd:42)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionCanonical" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_compiler.gd:50)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionCanonical" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_compiler.gd:54)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionCanonical" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_compiler.gd:58)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionPopulationPlanner" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_compiler.gd:74)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "planned" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_compiler.gd:74)
+SCRIPT ERROR: Parse Error: Could not find type "MobDefinition" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_compiler.gd:81)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionPopulationPlanner" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_compiler.gd:82)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionManifest" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_compiler.gd:85)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "result" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_compiler.gd:85)
+SCRIPT ERROR: Parse Error: Could not resolve class "res://scripts/map_authoring/population/population_canvas.gd".
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_canvas.gd:2)
+SCRIPT ERROR: Parse Error: Could not resolve class "res://scripts/map_authoring/population/population_canvas.gd".
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_canvas.gd:2)
+SCRIPT ERROR: Parse Error: Identifier "IdentityIds" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/preview/gameplay_tools.gd:32)
+SCRIPT ERROR: Parse Error: Identifier "IdentityIds" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/preview/gameplay_tools.gd:55)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionCanonical" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/preview/gameplay_tools.gd:102)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "key" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/preview/gameplay_tools.gd:102)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_panel.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_panel.gd:0)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/generation/fixture_geometry.gd" does not exist.
+   at: GDScript::reload (res://scripts/map_authoring/generation/generation_solver.gd:6)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionGenerationInput" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:32)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "input" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:32)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionAssembler" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:34)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionPolicyDefinition" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:37)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "policy" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:37)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionTraversalProfile" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:38)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "traversal" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:38)
+SCRIPT ERROR: Parse Error: Identifier "WorldGeometry" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:48)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "world" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:48)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "preview_manifest".
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:48)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionPartDefinition" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:50)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "part" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:50)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionSurfaceDefinition" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:52)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "surface" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:52)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionConnectorDefinition" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:54)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "connector" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:54)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "entry" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:58)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionSocketDefinition" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:60)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "socket" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:60)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionAssembler" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:68)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "assembled" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:68)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionAssembler" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:69)
+SCRIPT ERROR: Parse Error: Identifier "ExpeditionCanonical" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/generation/assembler_adapter.gd:69)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/map_authoring/generation/generation_panel.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_panel.gd:0)
+SCRIPT ERROR: Parse Error: Could not find type "WorldGeometry" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/objects/object_operations.gd:153)
+SCRIPT ERROR: Parse Error: Could not find type "WorldGeometry" in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/objects/object_operations.gd:163)
+SCRIPT ERROR: Parse Error: Identifier "WorldGeometry" not declared in the current scope.
+   at: GDScript::reload (res://scripts/map_authoring/objects/object_operations.gd:96)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "world" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/objects/object_operations.gd:96)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "preview_manifest".
+   at: GDScript::reload (res://scripts/map_authoring/objects/object_operations.gd:96)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "support".
+   at: GDScript::reload (res://scripts/map_authoring/objects/object_operations.gd:158)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/map_authoring/objects/object_panel.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://addons/ragrpg_map_editor/shell.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://addons/m1_driver/plugin.gd:0)
+ERROR: Failed to load script "res://addons/m1_driver/plugin.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: _ready (res://scripts/map_authoring/exchange/exchange_panel.gd:79)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/map_authoring/exchange/exchange_panel.gd:79)
+       [1] mount (res://scripts/map_authoring/exchange/exchange_panel.gd:41)
+       [2] _ready (res://addons/ragrpg_map_editor/shell.gd:35)
+       [3] _enter_tree (res://addons/ragrpg_map_editor/plugin.gd:13)
+       [4] _run (res://addons/m1_driver/plugin.gd:20)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: _ready (res://scripts/map_authoring/terrain/terrain_panel.gd:111)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/map_authoring/terrain/terrain_panel.gd:111)
+       [1] _ready (res://addons/ragrpg_map_editor/shell.gd:109)
+       [2] _enter_tree (res://addons/ragrpg_map_editor/plugin.gd:13)
+       [3] _run (res://addons/m1_driver/plugin.gd:20)
+SCRIPT ERROR: Invalid call. Nonexistent function 'list_options' in base 'GDScript'.
+   at: species_list (res://scripts/map_authoring/context/context_panel.gd:92)
+   GDScript backtrace (most recent call first):
+       [0] species_list (res://scripts/map_authoring/context/context_panel.gd:92)
+       [1] _ready (res://scripts/map_authoring/context/context_panel.gd:45)
+       [2] mount (res://scripts/map_authoring/context/context_panel.gd:37)
+       [3] _ready (res://addons/ragrpg_map_editor/shell.gd:134)
+       [4] _enter_tree (res://addons/ragrpg_map_editor/plugin.gd:13)
+       [5] _run (res://addons/m1_driver/plugin.gd:20)
+SCRIPT ERROR: Invalid call. Nonexistent function 'list_options' in base 'GDScript'.
+   at: species_list (res://scripts/map_authoring/context/context_panel.gd:92)
+   GDScript backtrace (most recent call first):
+       [0] species_list (res://scripts/map_authoring/context/context_panel.gd:92)
+       [1] _ready (res://scripts/map_authoring/context/context_panel.gd:57)
+       [2] mount (res://scripts/map_authoring/context/context_panel.gd:37)
+       [3] _ready (res://addons/ragrpg_map_editor/shell.gd:134)
+       [4] _enter_tree (res://addons/ragrpg_map_editor/plugin.gd:13)
+       [5] _run (res://addons/m1_driver/plugin.gd:20)
+SCRIPT ERROR: Invalid call. Nonexistent function 'list_options' in base 'GDScript'.
+   at: _ready (res://scripts/map_authoring/context/context_panel.gd:61)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/map_authoring/context/context_panel.gd:61)
+       [1] mount (res://scripts/map_authoring/context/context_panel.gd:37)
+       [2] _ready (res://addons/ragrpg_map_editor/shell.gd:134)
+       [3] _enter_tree (res://addons/ragrpg_map_editor/plugin.gd:13)
+       [4] _run (res://addons/m1_driver/plugin.gd:20)
+SCRIPT ERROR: Invalid access to property or key 'hidden_layers' on a base object of type 'Nil'.
+   at: select_layer (res://scripts/map_authoring/terrain/terrain_panel.gd:172)
+   GDScript backtrace (most recent call first):
+       [0] select_layer (res://scripts/map_authoring/terrain/terrain_panel.gd:172)
+       [1] apply_operation (res://scripts/map_authoring/terrain/terrain_panel.gd:303)
+       [2] add_layer (res://addons/ragrpg_map_editor/shell.gd:327)
+       [3] _run (res://addons/m1_driver/plugin.gd:31)
+SCRIPT ERROR: Invalid call. Nonexistent function 'fit' in base 'Nil'.
+   at: apply_operation (res://scripts/map_authoring/terrain/terrain_panel.gd:304)
+   GDScript backtrace (most recent call first):
+       [0] apply_operation (res://scripts/map_authoring/terrain/terrain_panel.gd:304)
+       [1] add_layer (res://addons/ragrpg_map_editor/shell.gd:327)
+       [2] _run (res://addons/m1_driver/plugin.gd:31)
+SCRIPT ERROR: Invalid access to property or key 'ok' on a base object of type 'Dictionary'.
+   at: _show (res://addons/ragrpg_map_editor/shell.gd:484)
+   GDScript backtrace (most recent call first):
+       [0] _show (res://addons/ragrpg_map_editor/shell.gd:484)
+       [1] add_layer (res://addons/ragrpg_map_editor/shell.gd:327)
+       [2] _run (res://addons/m1_driver/plugin.gd:31)
+SCRIPT ERROR: Invalid call. Nonexistent function 'fit' in base 'Nil'.
+   at: _accept_open (res://addons/ragrpg_map_editor/shell.gd:401)
+   GDScript backtrace (most recent call first):
+       [0] _accept_open (res://addons/ragrpg_map_editor/shell.gd:401)
+       [1] open_path (res://addons/ragrpg_map_editor/shell.gd:406)
+       [2] _run (res://addons/m1_driver/plugin.gd:56)
+SCRIPT ERROR: Invalid call. Nonexistent function 'fit' in base 'Nil'.
+   at: _accept_open (res://addons/ragrpg_map_editor/shell.gd:401)
+   GDScript backtrace (most recent call first):
+       [0] _accept_open (res://addons/ragrpg_map_editor/shell.gd:401)
+       [1] open_path (res://addons/ragrpg_map_editor/shell.gd:406)
+       [2] _run (res://addons/m1_driver/plugin.gd:65)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: _ready (res://scripts/map_authoring/exchange/exchange_panel.gd:79)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/map_authoring/exchange/exchange_panel.gd:79)
+       [1] mount (res://scripts/map_authoring/exchange/exchange_panel.gd:41)
+       [2] _ready (res://addons/ragrpg_map_editor/shell.gd:35)
+       [3] _enter_tree (res://addons/ragrpg_map_editor/plugin.gd:13)
+       [4] _run (res://addons/m1_driver/plugin.gd:20)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: _ready (res://scripts/map_authoring/terrain/terrain_panel.gd:111)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/map_authoring/terrain/terrain_panel.gd:111)
+       [1] _ready (res://addons/ragrpg_map_editor/shell.gd:109)
+       [2] _enter_tree (res://addons/ragrpg_map_editor/plugin.gd:13)
+       [3] _run (res://addons/m1_driver/plugin.gd:20)
+SCRIPT ERROR: Invalid call. Nonexistent function 'list_options' in base 'GDScript'.
+   at: species_list (res://scripts/map_authoring/context/context_panel.gd:92)
+   GDScript backtrace (most recent call first):
+       [0] species_list (res://scripts/map_authoring/context/context_panel.gd:92)
+       [1] _ready (res://scripts/map_authoring/context/context_panel.gd:45)
+       [2] mount (res://scripts/map_authoring/context/context_panel.gd:37)
+       [3] _ready (res://addons/ragrpg_map_editor/shell.gd:134)
+       [4] _enter_tree (res://addons/ragrpg_map_editor/plugin.gd:13)
+       [5] _run (res://addons/m1_driver/plugin.gd:20)
+SCRIPT ERROR: Invalid call. Nonexistent function 'list_options' in base 'GDScript'.
+   at: species_list (res://scripts/map_authoring/context/context_panel.gd:92)
+   GDScript backtrace (most recent call first):
+       [0] species_list (res://scripts/map_authoring/context/context_panel.gd:92)
+       [1] _ready (res://scripts/map_authoring/context/context_panel.gd:57)
+       [2] mount (res://scripts/map_authoring/context/context_panel.gd:37)
+       [3] _ready (res://addons/ragrpg_map_editor/shell.gd:134)
+       [4] _enter_tree (res://addons/ragrpg_map_editor/plugin.gd:13)
+       [5] _run (res://addons/m1_driver/plugin.gd:20)
+SCRIPT ERROR: Invalid call. Nonexistent function 'list_options' in base 'GDScript'.
+   at: _ready (res://scripts/map_authoring/context/context_panel.gd:61)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/map_authoring/context/context_panel.gd:61)
+       [1] mount (res://scripts/map_authoring/context/context_panel.gd:37)
+       [2] _ready (res://addons/ragrpg_map_editor/shell.gd:134)
+       [3] _enter_tree (res://addons/ragrpg_map_editor/plugin.gd:13)
+       [4] _run (res://addons/m1_driver/plugin.gd:20)
+SCRIPT ERROR: Invalid access to property or key 'hidden_layers' on a base object of type 'Nil'.
+   at: select_layer (res://scripts/map_authoring/terrain/terrain_panel.gd:172)
+   GDScript backtrace (most recent call first):
+       [0] select_layer (res://scripts/map_authoring/terrain/terrain_panel.gd:172)
+       [1] apply_operation (res://scripts/map_authoring/terrain/terrain_panel.gd:303)
+       [2] add_layer (res://addons/ragrpg_map_editor/shell.gd:327)
+       [3] _run (res://addons/m1_driver/plugin.gd:31)
+SCRIPT ERROR: Invalid call. Nonexistent function 'fit' in base 'Nil'.
+   at: apply_operation (res://scripts/map_authoring/terrain/terrain_panel.gd:304)
+   GDScript backtrace (most recent call first):
+       [0] apply_operation (res://scripts/map_authoring/terrain/terrain_panel.gd:304)
+       [1] add_layer (res://addons/ragrpg_map_editor/shell.gd:327)
+       [2] _run (res://addons/m1_driver/plugin.gd:31)
+SCRIPT ERROR: Invalid access to property or key 'ok' on a base object of type 'Dictionary'.
+   at: _show (res://addons/ragrpg_map_editor/shell.gd:484)
+   GDScript backtrace (most recent call first):
+       [0] _show (res://addons/ragrpg_map_editor/shell.gd:484)
+       [1] add_layer (res://addons/ragrpg_map_editor/shell.gd:327)
+       [2] _run (res://addons/m1_driver/plugin.gd:31)
+SCRIPT ERROR: Invalid call. Nonexistent function 'fit' in base 'Nil'.
+   at: _accept_open (res://addons/ragrpg_map_editor/shell.gd:401)
+   GDScript backtrace (most recent call first):
+       [0] _accept_open (res://addons/ragrpg_map_editor/shell.gd:401)
+       [1] open_path (res://addons/ragrpg_map_editor/shell.gd:406)
+       [2] _run (res://addons/m1_driver/plugin.gd:56)
+SCRIPT ERROR: Invalid call. Nonexistent function 'fit' in base 'Nil'.
+   at: _accept_open (res://addons/ragrpg_map_editor/shell.gd:401)
+   GDScript backtrace (most recent call first):
+       [0] _accept_open (res://addons/ragrpg_map_editor/shell.gd:401)
+       [1] open_path (res://addons/ragrpg_map_editor/shell.gd:406)
+       [2] _run (res://addons/m1_driver/plugin.gd:65)

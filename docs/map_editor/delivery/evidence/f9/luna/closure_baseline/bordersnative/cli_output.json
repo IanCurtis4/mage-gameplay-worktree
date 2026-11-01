@@ -1,0 +1,73 @@
+{
+	"barrier_profile": "ruin_envelope_v1",
+	"borders": {
+		"decorations": true,
+		"instances": [
+			{
+				"instance_id": "land",
+				"profile_id": "forest_rootbank_v1"
+			}
+		],
+		"transitions": [],
+		"version": 1
+	},
+	"document_id": "border_map",
+	"instances": [
+		{
+			"instance_id": "land",
+			"piece_hash": "9f75fdd964e044b945256fa6d7389b8b927d82dfaaa6f1a28c7309d703d45616",
+			"position_xyz": [
+				0,
+				0,
+				0
+			],
+			"rotation_quarters": 0
+		}
+	],
+	"links": [],
+	"mode": "manual",
+	"name": "Novo mapa",
+	"pieces": [
+		{
+			"piece_hash": "9f75fdd964e044b945256fa6d7389b8b927d82dfaaa6f1a28c7309d703d45616",
+			"source": {
+				"composition": null,
+				"connectors": [],
+				"dependencies": [],
+				"document_id": "border_native",
+				"layers": [
+					{
+						"columns": 2,
+						"heights": [
+							0,
+							0,
+							0,
+							0
+						],
+						"layer_id": "floor",
+						"locked": false,
+						"material_masks": {},
+						"name": "Piso",
+						"origin_xz": [
+							0,
+							0
+						],
+						"protected_regions": [],
+						"rows": 2,
+						"sample_spacing": 400
+					}
+				],
+				"name": "Peça sem título",
+				"placements": [],
+				"regions": [],
+				"revision": 1,
+				"schema_version": 1,
+				"sockets": [],
+				"special_surfaces": [],
+				"units": "e07_world"
+			}
+		}
+	],
+	"revision": 1,
+	"schema_version": 1
+}

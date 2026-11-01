@@ -1,0 +1,20 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+F9_AX_AUTHORING_UI_CHECK two_real_shells_mount_presentations_with_auxiliary_windows_initially_hidden true
+F9_AX_AUTHORING_UI_CHECK gui_grid_control_has_enabled_native_menu_entry true
+F9_AX_AUTHORING_UI_CHECK same_test_only_ramp_plateau_and_real_bridge_source_loaded true
+F9_AX_AUTHORING_UI_CHECK same_authored_ramp_bridge_fixture_compiles_headless_with_matching_package true
+F9_AX_AUTHORING_UI_CHECK compiler_rejects_disconnected_far_grid_with_route_unreachable true
+F9_AX_AUTHORING_UI_CHECK gui_and_ax_grid_share_producer_and_explicit_identity true
+F9_AX_AUTHORING_UI_CHECK piece_context_and_exchange_ax_windows_open_close_without_source_changes true
+F9_AX_AUTHORING_UI_CHECK identical_gui_ax_grid_inputs_have_identical_headless_compilation true
+F9_AX_AUTHORING_UI_CHECK gui_and_ax_bridge_use_same_semantic_operation true
+F9_AX_AUTHORING_UI_CHECK gui_and_ax_connector_share_full_canonical_parameters true
+F9_AX_AUTHORING_UI_CHECK shared_authoring_hash_matches_across_complete_gui_and_ax_sources true
+F9_AX_AUTHORING_UI_CHECK completed_grid_bridge_connector_compiles_identically_in_gui_and_ax true
+F9_AX_AUTHORING_UI_CHECK composition_ax_action_mounts_map_with_auxiliary_windows_closed_and_preserves_piece_hash true
+F9_AX_AUTHORING_UI_CHECK map_context_ax_window_closes_with_map_and_preserves_piece_hash true
+F9_AX_AUTHORING_UI_CAPTURE {"canvas_minimum":true,"canvas_size":"(1300.0, 440.0)","canvas_visible":true,"capture_written":true,"image_matches_window":true,"image_size":"(1600, 1000)","mesh_count":22,"rendered_colors":54,"visible_auxiliary_windows":false,"window_minimum":true,"window_size":"(1600, 1000)"}
+F9_AX_AUTHORING_UI_CHECK native_ax_capture_has_visible_terrain_and_real_window_dimensions true
+F9_AX_AUTHORING_UI_RESULT {"checks":[{"id":"two_real_shells_mount_presentations_with_auxiliary_windows_initially_hidden","ok":true},{"id":"gui_grid_control_has_enabled_native_menu_entry","ok":true},{"id":"same_test_only_ramp_plateau_and_real_bridge_source_loaded","ok":true},{"id":"same_authored_ramp_bridge_fixture_compiles_headless_with_matching_package","ok":true},{"id":"compiler_rejects_disconnected_far_grid_with_route_unreachable","ok":true},{"id":"gui_and_ax_grid_share_producer_and_explicit_identity","ok":true},{"id":"piece_context_and_exchange_ax_windows_open_close_without_source_changes","ok":true},{"id":"identical_gui_ax_grid_inputs_have_identical_headless_compilation","ok":true},{"id":"gui_and_ax_bridge_use_same_semantic_operation","ok":true},{"id":"gui_and_ax_connector_share_full_canonical_parameters","ok":true},{"id":"shared_authoring_hash_matches_across_complete_gui_and_ax_sources","ok":true},{"id":"completed_grid_bridge_connector_compiles_identically_in_gui_and_ax","ok":true},{"id":"composition_ax_action_mounts_map_with_auxiliary_windows_closed_and_preserves_piece_hash","ok":true},{"id":"map_context_ax_window_closes_with_map_and_preserves_piece_hash","ok":true},{"id":"native_ax_capture_has_visible_terrain_and_real_window_dimensions","ok":true}],"count":15,"expected_count":15,"ok":true,"source_hash":"bc065013267c089ee5fc22b2ef6a42edb4d0d20cfe13f304c746992e52f42c69"}

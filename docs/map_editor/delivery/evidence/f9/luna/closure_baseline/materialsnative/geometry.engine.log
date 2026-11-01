@@ -1,0 +1,27 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+F9_MATERIAL_UI_CHECK native_editor_shell true
+F9_MATERIAL_UI_CHECK four_material_choices_in_controls true
+F9_MATERIAL_UI_CHECK sand_control_uses_shared_brush true
+F9_MATERIAL_UI_CHECK stone_control_uses_shared_brush true
+F9_MATERIAL_UI_CHECK editor_applies_four_material_paint true
+F9_MATERIAL_UI_CHECK editor_undo_restores_source true
+F9_MATERIAL_UI_CHECK editor_redo_restores_paint true
+F9_MATERIAL_UI_CHECK restore_base_for_visual_oracle true
+F9_MATERIAL_UI_CHECK all_four_tiles_have_mipmaps true
+F9_MATERIAL_UI_CHECK native_canvas_uses_world_custom_channels true
+F9_MATERIAL_UI_CHECK capture_materials_palette true
+F9_MATERIAL_UI_CHECK grass_weight_with_zero_alpha_is_visible true
+F9_MATERIAL_UI_CHECK four_rendered_materials_are_distinct true
+F9_MATERIAL_UI_COLORS [(0.3011, 0.4116, 0.0933, 1.0), (0.5404, 0.3779, 0.2323, 1.0), (0.8502, 0.6366, 0.3463, 1.0), (0.5123, 0.4704, 0.4199, 1.0)]
+F9_MATERIAL_UI_CHECK slope_keeps_real_walkable_geometry true
+F9_MATERIAL_UI_CHECK capture_materials_slope true
+F9_MATERIAL_UI_CHECK slope_visibly_blends_stone true
+F9_MATERIAL_UI_CHECK slope_shading_does_not_repaint_source true
+F9_MATERIAL_UI_CHECK compiled_map_uses_same_material_dependencies true
+F9_MATERIAL_UI_CHECK composition_keeps_custom_world_attributes true
+F9_MATERIAL_UI_CHECK capture_materials_rotated_map true
+F9_MATERIAL_UI_RESULT {"checks":[{"id":"native_editor_shell","ok":true},{"id":"four_material_choices_in_controls","ok":true},{"id":"sand_control_uses_shared_brush","ok":true},{"id":"stone_control_uses_shared_brush","ok":true},{"id":"editor_applies_four_material_paint","ok":true},{"id":"editor_undo_restores_source","ok":true},{"id":"editor_redo_restores_paint","ok":true},{"id":"restore_base_for_visual_oracle","ok":true},{"id":"all_four_tiles_have_mipmaps","ok":true},{"id":"native_canvas_uses_world_custom_channels","ok":true},{"id":"capture_materials_palette","ok":true},{"id":"grass_weight_with_zero_alpha_is_visible","ok":true},{"id":"four_rendered_materials_are_distinct","ok":true},{"id":"slope_keeps_real_walkable_geometry","ok":true},{"id":"capture_materials_slope","ok":true},{"id":"slope_visibly_blends_stone","ok":true},{"id":"slope_shading_does_not_repaint_source","ok":true},{"id":"compiled_map_uses_same_material_dependencies","ok":true},{"id":"composition_keeps_custom_world_attributes","ok":true},{"id":"capture_materials_rotated_map","ok":true}],"count":20,"ok":true}

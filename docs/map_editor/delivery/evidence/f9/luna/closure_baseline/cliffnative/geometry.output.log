@@ -1,0 +1,23 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+F9_CLIFF_UI_CHECK native_editor_shell true
+F9_CLIFF_UI_CHECK mixed_relief_compiles_for_native_editor true
+F9_CLIFF_UI_CHECK draft_preview_keeps_all_faces true
+F9_CLIFF_UI_CHECK tops_and_sides_share_material_pipeline true
+F9_CLIFF_UI_CHECK capture_mixed_cliff true
+F9_CLIFF_UI_CHECK steep_real_face_visible_above_background true
+F9_CLIFF_UI_CHECK exposed_mass_side_visible_above_background true
+F9_CLIFF_UI_CHECK walking_floor_still_visible true
+F9_CLIFF_UI_CHECK render_does_not_rewrite_source true
+F9_CLIFF_UI_CHECK mixed_rotated_composition_compiles true
+F9_CLIFF_UI_CHECK capture_mixed_rotated_map true
+F9_CLIFF_UI_CHECK rotated_cliff_visible_in_composition true
+F9_CLIFF_UI_CHECK rotated_view_keeps_every_face true
+F9_CLIFF_UI_CHECK ground_and_bridge_compile_with_lower_strip true
+F9_CLIFF_UI_CHECK capture_bridge_lower_strip true
+F9_CLIFF_UI_CHECK bridge_lower_strip_uses_actual_textured_geometry true
+F9_CLIFF_UI_CHECK exposed_lower_strip_visible_above_background true
+F9_CLIFF_UI_RESULT {"checks":[{"id":"native_editor_shell","ok":true},{"id":"mixed_relief_compiles_for_native_editor","ok":true},{"id":"draft_preview_keeps_all_faces","ok":true},{"id":"tops_and_sides_share_material_pipeline","ok":true},{"id":"capture_mixed_cliff","ok":true},{"id":"steep_real_face_visible_above_background","ok":true},{"id":"exposed_mass_side_visible_above_background","ok":true},{"id":"walking_floor_still_visible","ok":true},{"id":"render_does_not_rewrite_source","ok":true},{"id":"mixed_rotated_composition_compiles","ok":true},{"id":"capture_mixed_rotated_map","ok":true},{"id":"rotated_cliff_visible_in_composition","ok":true},{"id":"rotated_view_keeps_every_face","ok":true},{"id":"ground_and_bridge_compile_with_lower_strip","ok":true},{"id":"capture_bridge_lower_strip","ok":true},{"id":"bridge_lower_strip_uses_actual_textured_geometry","ok":true},{"id":"exposed_lower_strip_visible_above_background","ok":true}],"count":17,"ok":true}
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)

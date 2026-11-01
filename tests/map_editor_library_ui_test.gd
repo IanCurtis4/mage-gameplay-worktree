@@ -43,7 +43,17 @@ func run() -> void:
 	var queried: Dictionary = panel.ax_command("objects/library/query",{"favorites_only":true})
 	check("gui_and_ax_share_favorite_query",queried.ok and queried.entries.size() == 1 and queried.entries[0].definition_id == panel.palette.get_item_metadata(0))
 	var object_presentation: Control = panel.get_node("AuthoringPresentation"); object_presentation.set_mode("ax")
-	check("object_library_commands_bound_to_ax_presentation",object_presentation.ax_snapshot().commands.size() == 11 and object_presentation.ax_invoke("objects/library/query",{"favorites_only":true}).entries == queried.entries and object_presentation.ax_invoke("objects/viewport/inspect").ok)
+	# Checkpoint41: the object screen gained placement/scatter/group commands after
+	# this test was written (checkpoints 23-24); bind to the panel's own declared
+	# commands plus the eight viewport commands instead of a frozen count of 11.
+	var object_ids: Array[String] = []
+	for command: Dictionary in object_presentation.ax_snapshot().commands: object_ids.append(str(command.get("id","")))
+	var expected_object_ids: Array[String] = []
+	for command: Dictionary in panel.authoring_commands(): expected_object_ids.append(str(command.get("id","")))
+	for suffix: String in ["inspect","focus_world","focus_entity","set_overlays","search","set_probe","probe_point","probe_los"]: expected_object_ids.append("objects/viewport/"+suffix)
+	var object_unique := object_ids.size() == object_ids.duplicate().filter(func(id: String) -> bool: return object_ids.count(id) == 1).size()
+	object_ids.sort(); expected_object_ids.sort()
+	check("object_library_commands_bound_to_ax_presentation",object_unique and object_ids == expected_object_ids and "objects/library/query" in object_ids and "objects/library/favorite" in object_ids and "objects/library/select" in object_ids and object_presentation.ax_invoke("objects/library/query",{"favorites_only":true}).entries == queried.entries and object_presentation.ax_invoke("objects/viewport/inspect").ok)
 	object_presentation.set_mode("ux")
 	check("library_controls_leave_source_and_history",shell.session.document().semantic_hash() == hash and shell.session.can_undo() == undo)
 	await capture(panel,"library_favorite_palette")
@@ -78,12 +88,13 @@ func run() -> void:
 		command_ids.append(command_id)
 		if seen_command_ids.has(command_id): command_ids_unique = false
 		seen_command_ids[command_id] = true
-	var expected_command_ids: Array[String] = ["terrain/example/organic","terrain/brush/stroke","terrain/presets/list","terrain/presets/apply","terrain/presets/save","terrain/viewport/inspect","terrain/viewport/focus_world","terrain/viewport/focus_entity","terrain/viewport/set_overlays","terrain/viewport/search","terrain/viewport/set_probe","terrain/viewport/probe_point","terrain/viewport/probe_los"]
+	# Checkpoint41: grid/layer/bridge/connector commands were added in checkpoint23.
+	var expected_command_ids: Array[String] = ["terrain/example/organic","terrain/brush/stroke","terrain/presets/list","terrain/presets/apply","terrain/presets/save","terrain/grid/create","terrain/layer/select","terrain/layer/lock","terrain/layer/protection","terrain/bridge/create","terrain/connector/upsert","terrain/connector/remove","terrain/viewport/inspect","terrain/viewport/focus_world","terrain/viewport/focus_entity","terrain/viewport/set_overlays","terrain/viewport/search","terrain/viewport/set_probe","terrain/viewport/probe_point","terrain/viewport/probe_los"]
 	command_ids.sort(); expected_command_ids.sort()
 	var preset_ids: Array[String] = []
 	if list.get("presets",[]) is Array:
 		for preset: Dictionary in list.presets: preset_ids.append(str(preset.get("id","")))
-	check("semantic_ax_commands_are_inspectable",commands.size() == 13 and command_ids_unique and command_ids == expected_command_ids and list.ok and preset_ids == ["builtin_soft_hill","builtin_smooth_ground","builtin_earth_path","builtin_rounded_hill",custom_id] and presentation.ax_invoke("terrain/viewport/inspect").ok)
+	check("semantic_ax_commands_are_inspectable",commands.size() == expected_command_ids.size() and command_ids_unique and command_ids == expected_command_ids and list.ok and preset_ids == ["builtin_soft_hill","builtin_smooth_ground","builtin_earth_path","builtin_rounded_hill",custom_id] and presentation.ax_invoke("terrain/viewport/inspect").ok)
 	terrain.radius.value = 100
 	check("ax_apply_matches_gui_preset",presentation.ax_invoke("terrain/presets/apply",{"preset_id":custom_id}).ok and terrain.radius.value == 37 and terrain.canvas.options.radius == 37)
 	var before: String = Preferences.read().hash

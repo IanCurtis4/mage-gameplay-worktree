@@ -1,0 +1,61 @@
+[
+  {
+    "result": null,
+    "ok": true,
+    "name": "import",
+    "exit_code": 0,
+    "timed_out": false,
+    "finished_utc": "2026-11-01T01:05:44.2933132Z",
+    "output_sha256": "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+    "aborted": false,
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "started_utc": "2026-11-01T01:05:34.1458764Z"
+  },
+  {
+    "result": null,
+    "ok": true,
+    "name": "export_release",
+    "exit_code": 0,
+    "timed_out": false,
+    "finished_utc": "2026-11-01T01:06:19.9884716Z",
+    "output_sha256": "B2EB43B55A51BC0C553805BF569317F398410D8F3F4A99A941FF9CE6B8F9C053",
+    "aborted": false,
+    "arguments": [
+      "--headless",
+      "--export-release",
+      "Windows Desktop",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\m8_release\\RagRPG-Map-Candidate.exe"
+    ],
+    "started_utc": "2026-11-01T01:05:44.3786952Z"
+  },
+  {
+    "result": {
+      "checks": [
+        {
+          "id": "load",
+          "ok": false
+        }
+      ],
+      "code": "package_invalid",
+      "count": 1,
+      "ok": false
+    },
+    "ok": false,
+    "name": "release",
+    "exit_code": 1,
+    "timed_out": false,
+    "finished_utc": "2026-11-01T01:06:23.7919919Z",
+    "output_sha256": "59B0924A4624C82D4EFE367AA476DA1C12704D06F9050C00E89566ED5A494BB3",
+    "aborted": false,
+    "arguments": [
+      "--",
+      "--m8-probe"
+    ],
+    "started_utc": "2026-11-01T01:06:20.0015949Z"
+  }
+]
