@@ -1,0 +1,6 @@
+{
+  "AreaAcceptance": 13,
+  "AreaVariants": 6,
+  "area_variant_metrics": {"generation_ms": 63180, "regenerate_ms": 104070, "draws": {"demo_chaser": 3007, "pilot_bulwark_species": 993}},
+  "acceptance_copy": "abrir_editor_aceite.ps1 -SoPreparar: 605 MB copy in 15 s; headless editor open with the map editor plugin: exit 0, no errors (job 230)"
+}

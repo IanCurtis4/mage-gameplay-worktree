@@ -3569,6 +3569,36 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 file (checkpoint50)",
       "base_sha256": "d71ce308f1a5e7d0e01a5bb9c996d08c5a42c44663ada6b0fc4ba6e499be37e0"
+    },
+    {
+      "path": "docs/map_editor/delivery/f9_acceptance_script.md",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint51 final area)",
+      "base_sha256": "34277a0ee2f692df11fc191d97ad455a1c14dd921cc3f99de12457a8c8f3ba1b"
+    },
+    {
+      "path": "tests/map_editor_area_acceptance_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint51 final area)",
+      "base_sha256": "8396976644c2d4657bce0213b86a7da170e90e167ff259a4f849dcc8dec48500"
+    },
+    {
+      "path": "tests/map_editor_area_variants_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint51 final area)",
+      "base_sha256": "7d24495adcbf7954979477aca901282bbb3a06abedd2bf5083afb7b4ac31bdd6"
+    },
+    {
+      "path": "tests/map_editor_area_acceptance_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint51 final area)",
+      "base_sha256": "09f4be20ee75f9a7bbe0966019ad3cc73915efc80019e2cfe9b195b5c8e39fc1"
+    },
+    {
+      "path": "tests/map_editor_area_variants_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint51 final area)",
+      "base_sha256": "d6dc30fd9c1efb0313b2408e36747ed17e39fbee2e857ff25643a7455adc36dd"
     }
   ],
   "read_only_shared": [
@@ -5168,6 +5198,38 @@
         "note": "M3 native_ui timeout raised from 60 s to the 300 s of the other native runners because it now opens the real game process; the leases left by the run killed at the old timeout (job 219) were released before job 224, session data kept"
       },
       "limits": "the test step records that the real game opened with the package, not what the person checked; occlusion uses the sprite rectangle and switches alpha at once"
+    },
+    "final_area_p7": {
+      "state": "validated_increment_F9_still_open",
+      "base": "09cbff50",
+      "human_report": "01/11: go to P7",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "contract": "docs/map_editor/delivery/f9_acceptance_script.md",
+      "files": [
+        "tools/map_editor_completion/run.ps1",
+        "docs/map_editor/delivery/f9_acceptance_script.md"
+      ],
+      "test_files": [
+        "tests/map_editor_area_acceptance_test.gd",
+        "tests/map_editor_area_variants_test.gd",
+        "tests/map_editor_area_acceptance_test.gd.uid",
+        "tests/map_editor_area_variants_test.gd.uid"
+      ],
+      "scope": "technical audit of every validation-sample item on the committed Bosque sources and released package; skill proposal reviewed, applied once and refused out of scope on a clone; seed generation with the pinned passage and a 3:1 weighted brush on clones; separate acceptance copy (.tools/f9_aceite, outside git) with its launcher; human acceptance script with a record table",
+      "validation": {
+        "AreaAcceptance": 13,
+        "AreaVariants": 6,
+        "area_variant_metrics": {
+          "generation_ms": 63180,
+          "regenerate_ms": 104070,
+          "draws": {
+            "demo_chaser": 3007,
+            "pilot_bulwark_species": 993
+          }
+        },
+        "acceptance_copy": "abrir_editor_aceite.ps1 -SoPreparar: 605 MB copy in 15 s; headless editor open with the map editor plugin: exit 0, no errors (job 230)"
+      },
+      "limits": "visual and usability acceptance is human and still pending; the species draw check covers the canonical hash draw, the Bosque plan shows both species realized"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

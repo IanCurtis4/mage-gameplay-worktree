@@ -1,0 +1,15 @@
+﻿HEAD 09cbff50
+STAGE AreaAcceptance :: F9 AreaAcceptance: False (38s)
+   SCRIPT ERROR: Parse Error: Cannot infer the type of "pillars" variable because the value doesn't have a set type.
+      at: GDScript::reload (res://tests/map_editor_area_acceptance_test.gd:97)
+   ERROR: Failed to load script "res://tests/map_editor_area_acceptance_test.gd" with error "Parse error".
+      at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+STAGE AreaVariants :: F9 AreaVariants: True (186s)
+   F9_AREA_VARIANT_CHECK area_sources_open true
+   F9_AREA_VARIANT_CHECK generation_keeps_the_pinned_passage true
+   F9_AREA_VARIANT_CHECK generation_uses_the_map_compiler true
+   F9_AREA_VARIANT_CHECK weighted_brush_realizes_in_the_bosque true
+   F9_AREA_VARIANT_CHECK species_draw_follows_the_weights true
+   F9_AREA_VARIANT_CHECK committed_bosque_untouched true
+   F9_AREA_VARIANT_RESULT {"checks":[{"id":"area_sources_open","ok":true},{"id":"generation_keeps_the_pinned_passage","ok":true},{"id":"generation_uses_the_map_compiler","ok":true},{"id":"weighted_brush_realizes_in_the_bosque","ok":true},{"id":"species_draw_follows_the_weights","ok":true},{"id":"committed_bosque_untouched","ok":true}],"count":6,"metrics":{"draws":{"demo_chaser":3007,"pilot_bulwark_species":993},"generation_ms":63180,"regenerate_ms":104070},"ok":true}
+DONE

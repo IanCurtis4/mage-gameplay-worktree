@@ -1,0 +1,16 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_AREA_CHECK sources_open_and_release_is_current true
+F9_AREA_CHECK clearing_with_two_materials_and_a_curved_path true
+F9_AREA_CHECK plateau_reached_by_ramps true
+F9_AREA_CHECK bridge_over_the_lower_route true
+F9_AREA_CHECK fork_and_dead_end true
+F9_AREA_CHECK shrine_with_pillars_and_completion true
+F9_AREA_CHECK seam_between_two_pieces true
+F9_AREA_CHECK vegetation_rock_and_trees true
+F9_AREA_CHECK dispersed_group_and_patrol true
+F9_AREA_CHECK entrance_and_existing_objective true
+F9_AREA_CHECK proposal_reviewed_and_applied_once_on_a_clone true
+F9_AREA_CHECK out_of_scope_proposal_is_refused_without_loss true
+F9_AREA_CHECK committed_bosque_untouched true
+F9_AREA_RESULT {"checks":[{"id":"sources_open_and_release_is_current","ok":true},{"id":"clearing_with_two_materials_and_a_curved_path","ok":true},{"id":"plateau_reached_by_ramps","ok":true},{"id":"bridge_over_the_lower_route","ok":true},{"id":"fork_and_dead_end","ok":true},{"id":"shrine_with_pillars_and_completion","ok":true},{"id":"seam_between_two_pieces","ok":true},{"id":"vegetation_rock_and_trees","ok":true},{"id":"dispersed_group_and_patrol","ok":true},{"id":"entrance_and_existing_objective","ok":true},{"id":"proposal_reviewed_and_applied_once_on_a_clone","ok":true},{"id":"out_of_scope_proposal_is_refused_without_loss","ok":true},{"id":"committed_bosque_untouched","ok":true}],"count":13,"ok":true}

@@ -1,0 +1,3 @@
+﻿EDITOR exit=0 32s
+LOGLINES 22
+DONE
