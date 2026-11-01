@@ -1,0 +1,17 @@
+extends SceneTree
+const Synthesis = preload("res://scripts/map_authoring/synthesis/regional_synthesis.gd")
+const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
+const SELECTION := [[640,64],[1216,64],[1216,448],[640,448]]
+func _initialize() -> void:
+	var loaded := Schema.read(FileAccess.get_file_as_bytes("res://data/map_authoring/sanctuary_woods_clearing.source.json"))
+	var base: Dictionary = loaded.data
+	print("SYNP loaded ",loaded.ok," ",loaded.valid," ",loaded.output_hash)
+	var request := {"algorithm_revision":Synthesis.REVISION,"seed_text":"17","base_hash":Schema.semantic_hash(base),"target":{"layer_id":"a_ground"},"selection":{"polygon_xz":SELECTION},"channels":{"terrain":{"mode":"relief","amplitude":48.0,"feature_size":256.0,"roughness":0.5,"falloff":96.0},"materials":{"mode":"preserve"},"objects":{"mode":"preserve"}},"preserve":{"entity_ids":[],"region_ids":[]}}
+	print("SYNP validate ",JSON.stringify(Synthesis.validate_request(request)))
+	var m := Synthesis.mask(base,request)
+	print("SYNP mask ",m.ok," free ",m.get("free_count",-1)," discs ",m.get("discs",[]).size())
+	var t := Time.get_ticks_msec()
+	var p := Synthesis.prepare(base,request)
+	var shown := p.duplicate(); shown.erase("source"); shown.erase("package")
+	print("SYNP prepare ",Time.get_ticks_msec()-t,"ms ",JSON.stringify(shown).left(3000))
+	quit(0)

@@ -7,6 +7,7 @@ const Compiler = preload("res://scripts/map_authoring/compiler/terrain_compiler.
 const Canvas = preload("res://scripts/map_authoring/terrain/terrain_canvas.gd")
 const Preferences = preload("res://scripts/map_authoring/library/editor_preferences.gd")
 const Library = preload("res://scripts/map_authoring/library/library_model.gd")
+const SynthesisSection = preload("res://scripts/map_authoring/synthesis/synthesis_section.gd")
 signal layer_selected(id: String)
 signal inspection_compiled(completed: Dictionary)
 var session: RefCounted
@@ -52,6 +53,8 @@ var preset_choice: OptionButton
 var preset_name: LineEdit
 var _applying_preset := false
 var _preferences_seen := ""
+## Checkpoint43 (F9-05): "Variação regional" section; it is its own AX provider.
+var synthesis: VBoxContainer
 
 func _ready() -> void:
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -141,6 +144,7 @@ func _ready() -> void:
 	connector_headroom = _number(connection_values,"Folga",12,8192,100)
 	_button(connection_values,"Adicionar / atualizar",save_connector)
 	_button(connection_values,"Remover",remove_connector)
+	synthesis = SynthesisSection.new(); add_child(synthesis); synthesis.setup(self)
 	var help := Label.new(); help.text = "Selecione a camada antes de pintar. Arraste: um traço; Esc/sair do quadro: cancelar. Roda: zoom · botão central: mover.\nRampa/nivelar/suavizar/material: força entre 0 e 1. Salve a peça para preservar o terreno e as conexões."
 	help.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; add_child(help)
 	for control: OptionButton in [mode,shape,material_choice]: control.item_selected.connect(func(_i: int) -> void: _options_changed())
@@ -151,7 +155,7 @@ func _ready() -> void:
 	_options_changed()
 	_refresh_presets()
 	preload("res://scripts/map_authoring/preview/viewport_tools.gd").mount(canvas,"terrain")
-	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"terrain",func() -> Dictionary: return session.document().to_data() if session != null else {},null,{"Pincel":[row,settings,preset_row],"Nova grade":[grid],"Ponte":[bridge],"Conexões":[connection_toggle,connections]})
+	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"terrain",func() -> Dictionary: return session.document().to_data() if session != null else {},null,{"Pincel":[row,settings,preset_row],"Nova grade":[grid],"Ponte":[bridge],"Conexões":[connection_toggle,connections],"Variação regional":[synthesis]})
 
 func _number(parent: Node, caption: String, low: float, high: float, value: float, step: float = 1.0) -> SpinBox:
 	var label := Label.new(); label.text = caption; parent.add_child(label)
@@ -184,6 +188,7 @@ func refresh() -> void:
 	_refresh_connectors(data)
 	result = {}
 	if job != null: job.cancel()
+	if synthesis != null: synthesis.refresh()
 	status.text = "Selecione ou adicione uma camada; compile após editar para conferir suporte e aberturas."
 
 func _options_changed() -> void:
@@ -417,6 +422,7 @@ func bake() -> void:
 	status.text = "Compilando terreno…"; result = {}; canvas.package = {}
 
 func _process(_delta: float) -> void:
+	if synthesis != null: synthesis.poll()
 	if job == null: return
 	progress_bar.value = job.progress()*100
 	if not job.ready(): return

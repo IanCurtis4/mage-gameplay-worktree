@@ -1,0 +1,28 @@
+﻿HEAD 81ab8ddf
+STAGE RegionalSynthesis :: F9 RegionalSynthesis: True (51s)
+STAGE RegionalSynthesisNative :: F9 RegionalSynthesisNative: False (20s)
+
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+SCRIPT ERROR: Parse Error: Member "material" redefined (original in native class 'VBoxContainer')
+   at: GDScript::reload (res://scripts/map_authoring/synthesis/synthesis_section.gd:22)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_panel.gd:0)
+STAGE LibraryNative :: F9 LibraryNative: False (19s)
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+SCRIPT ERROR: Parse Error: Member "material" redefined (original in native class 'VBoxContainer')
+   at: GDScript::reload (res://scripts/map_authoring/synthesis/synthesis_section.gd:22)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_panel.gd:0)
+STAGE AuthoringNative :: F9 AuthoringNative: False (14s)
+SCRIPT ERROR: Parse Error: Member "material" redefined (original in native class 'VBoxContainer')
+   at: GDScript::reload (res://scripts/map_authoring/synthesis/synthesis_section.gd:22)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_panel.gd:0)
+STAGE Authoring :: F9 Authoring: False (13s)
+SCRIPT ERROR: Parse Error: Member "material" redefined (original in native class 'VBoxContainer')
+   at: GDScript::reload (res://scripts/map_authoring/synthesis/synthesis_section.gd:22)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_panel.gd:0)
+DONE
+
+

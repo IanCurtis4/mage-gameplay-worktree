@@ -1,0 +1,26 @@
+﻿HEAD 81ab8ddf
+ELAPSED 49s
+
+F9 RegionalSynthesis: True
+F9_SYNTH_CHECK fixture_has_objects_inside_the_selection true
+F9_SYNTH_CHECK every_channel_must_be_explicit true
+F9_SYNTH_CHECK seed_and_base_are_checked true
+F9_SYNTH_CHECK relief_proposal_compiles true
+F9_SYNTH_CHECK changes_stay_inside_the_selection_and_off_protection true
+F9_SYNTH_CHECK every_other_sample_is_untouched true
+F9_SYNTH_CHECK objects_that_stay_keep_their_support true
+F9_SYNTH_CHECK same_request_same_result_other_seed_other_result true
+F9_SYNTH_CHECK material_patches_stay_in_the_mask_and_normalized true
+F9_SYNTH_CHECK scatter_replaces_only_free_objects_and_places_inside true
+F9_SYNTH_CHECK apply_is_one_undoable_change true
+F9_SYNTH_CHECK deficit_and_cancel_refuse_without_mutation true
+F9_SYNTH_RESULT {"checks":[{"id":"fixture_has_objects_inside_the_selection","ok":true},{"id":"every_channel_must_be_exp
+licit","ok":true},{"id":"seed_and_base_are_checked","ok":true},{"id":"relief_proposal_compiles","ok":true},{"id":"chang
+es_stay_inside_the_selection_and_off_protection","ok":true},{"id":"every_other_sample_is_untouched","ok":true},{"id":"o
+bjects_that_stay_keep_their_support","ok":true},{"id":"same_request_same_result_other_seed_other_result","ok":true},{"i
+d":"material_patches_stay_in_the_mask_and_normalized","ok":true},{"id":"scatter_replaces_only_free_objects_and_places_i
+nside","ok":true},{"id":"apply_is_one_undoable_change","ok":true},{"id":"deficit_and_cancel_refuse_without_mutation","o
+k":true}],"count":12,"ok":true}
+DONE
+
+

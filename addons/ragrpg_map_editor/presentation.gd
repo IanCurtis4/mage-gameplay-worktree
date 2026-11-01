@@ -26,6 +26,7 @@ const ACTION_IDS := {
 	"Importar encontros…":"import_population","Testar atores":"test_actors","Retomar teste":"resume_test","Nova rota":"add_route","Aplicar":"apply_wait","↑":"move_waypoint_up","↓":"move_waypoint_down",
 	"Remover ponto…":"remove_waypoint","Vincular slots selecionados":"assign_slots","Reimportar composição":"reimport_map","Abrir pedido…":"open_request","Salvar pedido…":"save_request",
 	"Desfazer pedido":"undo_request","Refazer pedido":"redo_request","Gerar prévia":"generate_preview","Comparar assembler atual":"compare_assembler","Aplicar proposta ao mapa":"apply_map_proposal",
+	"Prévia regional":"prepare_regional_variation","Aplicar variação":"apply_regional_variation","Descartar prévia":"discard_regional_variation","Cancelar variação":"cancel_regional_variation",
 	"Adicionar candidato":"add_candidate","Remover candidato selecionado":"remove_candidate","Definir quota da peça escolhida":"set_piece_quota","Remover quota selecionada":"remove_quota"}
 var screen: Control
 var screen_id := ""

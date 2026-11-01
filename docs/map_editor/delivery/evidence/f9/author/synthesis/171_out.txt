@@ -1,0 +1,23 @@
+﻿HEAD 81ab8ddf
+ELAPSED 29s
+
+F9 RegionalSynthesis: False
+SCRIPT ERROR: Parse Error: Cannot infer the type of "only_free" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_regional_synthesis_test.gd:55)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "outside_same" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_regional_synthesis_test.gd:63)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "footprints_kept" variable because the value doesn't have a set 
+type.
+   at: GDScript::reload (res://tests/map_editor_regional_synthesis_test.gd:69)
+ERROR: Failed to load script "res://tests/map_editor_regional_synthesis_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+\docs\map_editor\delivery\evidence\f9\luna\synthesis\regional\geometry.engine.log
+\docs\map_editor\delivery\evidence\f9\luna\synthesis\regional\geometry.output.log
+\docs\map_editor\delivery\evidence\f9\luna\synthesis\regional\runs.json
+\docs\map_editor\delivery\evidence\f9\luna\synthesis\regional\import\import.engine.log
+\docs\map_editor\delivery\evidence\f9\luna\synthesis\regional\import\import.output.log
+\docs\map_editor\delivery\evidence\f9\luna\synthesis\regional\import\manifest.json
+\docs\map_editor\delivery\evidence\f9\luna\synthesis\regional\import\runs.json
+DONE
+
+

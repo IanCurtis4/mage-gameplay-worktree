@@ -1,0 +1,5 @@
+﻿SYNP loaded true true e2172d1928ad5f83188fdba6e89b445bdf37e207af10f4e639a6b1ba44f8ad4f
+SYNP validate {"ok":true}
+SYNP mask true free 18 discs 1
+SYNP prepare 1044ms {"algorithm_revision":"regional_v1","base_hash":"e2172d1928ad5f83188fdba6e89b445bdf37e207af10f4e639a6b1ba44f8ad4f","code":"","compiled_hash":"ec809a8220b261314e106a9855b8b9aba01fe0134c9b541ef0d4c5d03290e13c","diagnostics":[],"diff":{"layer_id":"a_ground","material_samples":[],"objects_added":[],"objects_removed":[],"selection_hash":"d7b1a8da4a6da88786c982e938ceb146a2d0afd2c6aba4893808e3a58da771db","terrain_samples":[79]},"metrics":{"elapsed_ms":1043.83,"free_samples":1,"samples":441},"ok":true,"request_hash":"4eee108e8217ef4d540f1bde91460f91e34300e3ca0fd299094a94fa1f13638b","source_hash":"a6990fdaebf695eedf5343e05a8a2d55bd5ba6fea27a1967e877366ed0e5f47c"}
+DONE

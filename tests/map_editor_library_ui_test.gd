@@ -89,7 +89,8 @@ func run() -> void:
 		if seen_command_ids.has(command_id): command_ids_unique = false
 		seen_command_ids[command_id] = true
 	# Checkpoint41: grid/layer/bridge/connector commands were added in checkpoint23.
-	var expected_command_ids: Array[String] = ["terrain/example/organic","terrain/brush/stroke","terrain/presets/list","terrain/presets/apply","terrain/presets/save","terrain/grid/create","terrain/layer/select","terrain/layer/lock","terrain/layer/protection","terrain/bridge/create","terrain/connector/upsert","terrain/connector/remove","terrain/viewport/inspect","terrain/viewport/focus_world","terrain/viewport/focus_entity","terrain/viewport/set_overlays","terrain/viewport/search","terrain/viewport/set_probe","terrain/viewport/probe_point","terrain/viewport/probe_los"]
+	# Checkpoint43: the regional variation section adds terrain/synthesis/*.
+	var expected_command_ids: Array[String] = ["terrain/example/organic","terrain/brush/stroke","terrain/presets/list","terrain/presets/apply","terrain/presets/save","terrain/grid/create","terrain/layer/select","terrain/layer/lock","terrain/layer/protection","terrain/bridge/create","terrain/connector/upsert","terrain/connector/remove","terrain/synthesis/request","terrain/synthesis/preview","terrain/synthesis/apply","terrain/synthesis/discard","terrain/viewport/inspect","terrain/viewport/focus_world","terrain/viewport/focus_entity","terrain/viewport/set_overlays","terrain/viewport/search","terrain/viewport/set_probe","terrain/viewport/probe_point","terrain/viewport/probe_los"]
 	command_ids.sort(); expected_command_ids.sort()
 	var preset_ids: Array[String] = []
 	if list.get("presets",[]) is Array:

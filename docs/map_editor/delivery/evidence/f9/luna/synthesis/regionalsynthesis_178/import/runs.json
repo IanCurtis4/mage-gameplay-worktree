@@ -1,0 +1,19 @@
+[
+  {
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "result": null,
+    "aborted": false,
+    "output_sha256": "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+    "timed_out": false,
+    "name": "import",
+    "ok": true,
+    "started_utc": "2026-11-01T04:23:22.4126153Z",
+    "finished_utc": "2026-11-01T04:23:32.8919694Z",
+    "exit_code": 0
+  }
+]

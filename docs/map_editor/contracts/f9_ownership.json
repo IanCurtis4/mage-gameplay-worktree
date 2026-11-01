@@ -3239,6 +3239,66 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 file (checkpoint42 compile cache)",
       "base_sha256": "23350276f5f71823789fd51b997ac82eb4484e10e9424a7c75ca7e15f718be1e"
+    },
+    {
+      "path": "scripts/map_authoring/synthesis/regional_synthesis.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint43 regional synthesis)",
+      "base_sha256": "10c7ba49fe77d05ed696ade85ab88ae05286886502e57972453dceef04c168ab"
+    },
+    {
+      "path": "scripts/map_authoring/synthesis/synthesis_section.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint43 regional synthesis)",
+      "base_sha256": "1a1bd3e05ded7b8d4858e1358f1302a629d5641b11498d2fcf0ddf1568414f59"
+    },
+    {
+      "path": "scripts/map_authoring/synthesis/headless.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint43 regional synthesis)",
+      "base_sha256": "e042736b398e819c5a9b2c83db5504fcf66dc90f28be2b86b40faf4304b0ceef"
+    },
+    {
+      "path": "tests/map_editor_regional_synthesis_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint43 regional synthesis)",
+      "base_sha256": "479c49f52556556a3241f361b14c1c133c1c4805c0a738317b5fb364e4559114"
+    },
+    {
+      "path": "tests/map_editor_regional_synthesis_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint43 regional synthesis)",
+      "base_sha256": "66441b2b54564f40effa6da017183e488c37eb1d1b75ec8e7b547db3081b3811"
+    },
+    {
+      "path": "scripts/map_authoring/synthesis/regional_synthesis.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint43 regional synthesis)",
+      "base_sha256": "a76fa1bff54145d5ad89097cc6c9a8d532595d4741062b44fdc44f9a36f15828"
+    },
+    {
+      "path": "scripts/map_authoring/synthesis/synthesis_section.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint43 regional synthesis)",
+      "base_sha256": "f5376d52db2ac48df155f581eb59b4fd0ba23d5fa2ab6b2890f5865b322692f3"
+    },
+    {
+      "path": "scripts/map_authoring/synthesis/headless.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint43 regional synthesis)",
+      "base_sha256": "3e7ed413e603fff4ab5ce8a6dbbe10967926ab0bb8a557f71caa2d04fa7dcb6c"
+    },
+    {
+      "path": "tests/map_editor_regional_synthesis_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint43 regional synthesis)",
+      "base_sha256": "3fbe1c7667b66006b1ba909f699fe8faf4a9f83f1433b408ee6c8b4d42e548dc"
+    },
+    {
+      "path": "tests/map_editor_regional_synthesis_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint43 regional synthesis)",
+      "base_sha256": "4a50d85440a88d7dfe9fb7dd4d35a0af54e9e9571c1829f70b406d5ab4749410"
     }
   ],
   "read_only_shared": [
@@ -4471,6 +4531,36 @@
       },
       "limits": "test start() still builds the world on the main thread behind the loading gate; cache granularity is the package, not a region inside a piece",
       "disk_cleanup": "about 1.4 GB of generated artefacts removed with the human delete approval (old fixtures, test export, 27-30/10 play sessions, applied bridge patches); 8.3 -> 9.7 GB free"
+    },
+    "regional_synthesis_p3a": {
+      "state": "validated_increment_F9_still_open",
+      "base": "81ab8ddf",
+      "human_report": "01/11: record the minor pending items for F10 (final review + first complete phase); now we can start P3",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "contract": "docs/map_editor/contracts/f9_regional_synthesis.md",
+      "files": [
+        "scripts/map_authoring/synthesis/regional_synthesis.gd",
+        "scripts/map_authoring/synthesis/synthesis_section.gd",
+        "scripts/map_authoring/synthesis/headless.gd",
+        "scripts/map_authoring/terrain/terrain_panel.gd",
+        "addons/ragrpg_map_editor/presentation.gd",
+        "tools/map_editor_completion/run.ps1"
+      ],
+      "test_files": [
+        "tests/map_editor_regional_synthesis_test.gd",
+        "tests/map_editor_regional_synthesis_ui_test.gd",
+        "tests/map_editor_library_ui_test.gd"
+      ],
+      "scope": "regional synthesis inside one piece: closed passive request, common mask (influence squares, protections, connector openings, footprints of what stays), relief/material patches/object scatter recipes, compiled proposal with diff, one session.apply; terrain screen tool with background preview, AX terrain/synthesis/*, CLI headless",
+      "validation": {
+        "RegionalSynthesis": 12,
+        "RegionalSynthesisNative": 14,
+        "LibraryNative": 53,
+        "AuthoringNative": 15,
+        "Authoring": 30
+      },
+      "limits": "piece only; no budget field yet; map instances, encounters, patrols, receipts/replay and three-way exchange are P3b-P3d",
+      "f10_deferrals": "by human decision 01/11: test start() on the main thread, regional cache inside a piece, journal compaction near 256 entries, multi-drop auto collect hitch, RoundedResume chained to RoundedNative"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"
