@@ -1,7 +1,28 @@
 # RagRPG — handoff portátil de F9
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint40 — diário J3: ondas, respawn e mortes gravadas na hora
+## Checkpoint41 — matriz de fechamento, regressão de base e release
+
+31/10/2026. Mesmo checkout/branch/fixture. Base 0ce15143; código, testes e
+documentação em commits próprios. Papéis inalterados.
+
+- Pedido humano: seguir para a matriz do editor ("pode ver você mesmo o que
+  falta"). Resultado em `f9_closure_matrix.md`: o jogo do Bosque avançou, mas o
+  editor não está perto do fim. Faltam síntese regional, reconciliação,
+  transporte de assets no intercâmbio, responsividade do editor, release com o
+  Bosque e o fluxo humano guiado (pacotes P2–P8).
+- Regressão de base: 56/58 etapas F9 e M2–M8 Core PASS. Corrigidos: dois checks
+  de `LibraryNative` que contavam comandos AX antigos; a fixture isolada do M1;
+  o release M8, que recusava o pacote (pacote de 25/10 e validação que lia PNGs
+  crus ausentes no export). Manifesto de assets no build (AssetManifest7),
+  pacote representativo recompilado. Release PASS.
+- `RoundedResume` continua encadeado ao `RoundedNative` (precisa da sessão).
+
+Próximo: P2 (responsividade do editor e do teste), depois P3 (síntese regional
+e reconciliação).
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint40 — diário J3: ondas, respawn e mortes gravadas na hora
 
 31/10/2026. Mesmo checkout/branch/fixture. Base 65bb6ce2; código e documentação
 em commits próprios. Papéis inalterados.
@@ -23,7 +44,6 @@ em commits próprios. Papéis inalterados.
 
 Pendente: compactação do diário perto do limite (256 entradas); ~60–75 ms na
 coleta automática de muitos drops; matriz do editor F9-01..12; aceite humano.
-<!-- /f9-patrol-gameplay-active -->
 
 ## Histórico checkpoint39 — morte sem trava, retorno sem pose de morto, fundo com a arte do bioma
 

@@ -235,3 +235,8 @@ nascimentos um por quadro; o retorno admite nascimentos; mortes de mob gravadas
 na hora (em combate, no máximo a cada 2 s); pool de drop memorizado. Bosque: onda
 de 7 nascimentos com pior quadro 42 ms (antes ~11 s). Ver
 [contrato do diário](contracts/f9_campaign_journal.md).
+
+Checkpoint41 (31/10, Sol/Astra Opus): [matriz de fechamento](f9_closure_matrix.md)
+com rastreabilidade F9-01..12 e pacotes P1–P8. Regressão de base 56/58 + M2–M8;
+LibraryNative e M1 atualizados; release M8 volta a passar com manifesto de
+assets no build (AssetManifest7) e pacote representativo recompilado.
