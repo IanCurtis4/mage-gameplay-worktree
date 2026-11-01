@@ -91,6 +91,8 @@ cache:
 - A primeira compilação de um Bosque ainda é longa (os números "depois"). O cache
   só ajuda quando nada mudou naquele pacote.
 - "Iniciar teste" ainda monta o mundo no quadro principal, atrás da tela de
-  carregamento (8 s com pacote pronto; até ~30 s numa compilação nova).
+  carregamento (8 s com pacote pronto; até ~30 s numa compilação nova). Movido
+  para F10 por decisão humana (1/11/2026).
 - Cache regional dentro de uma peça (recompilar só as células tocadas) não foi
-  feito: a granularidade é o pacote.
+  feito: a granularidade é o pacote. Movido para F10 por decisão humana
+  (1/11/2026).

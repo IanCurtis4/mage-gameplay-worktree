@@ -47,6 +47,21 @@ checkpoints 30–40. O editor em si ainda não está perto do fim: a síntese re
 (F9-09/11), a responsividade do editor (F9-10) e o fluxo humano guiado (F9-07/12)
 não têm implementação, ou a têm só em parte. São os pacotes P2–P7 abaixo.
 
+## Movidos para F10 por decisão humana (1/11/2026)
+
+Pedido humano: "Vamos deixando essas pendências menores registradas para F10 (já
+que em teoria é um pente fino final + implementação da primeira fase completa)."
+Não são omissões de F9: são limites medidos de itens já implementados, que o
+pente-fino de F10 revisita. Nenhuma prova, guard, limite ou quota foi reduzido.
+
+| Origem | Pendência | Estado em F9 | O que F10 revisita |
+|---|---|---|---|
+| F9-10 | `start()` de "Iniciar teste" no quadro principal | atrás da tela de carregamento: 8 s com pacote pronto, até ~30 s numa compilação nova | montar o mundo fora do quadro principal ou em fatias |
+| F9-10 | cache regional dentro de uma peça | cache verificável por pacote (mapa, encontros), CompileCache10 | invalidar só as células tocadas |
+| F9-11 | compactação do diário perto de 256 entradas | a compactação grava uma transação completa de uma vez | medir e, se preciso, dividir |
+| F9-11 | coleta automática de vários drops | ~60–75 ms num quadro ao coletar 7 drops juntos | espalhar a coleta entre quadros |
+| — | `RoundedResume` encadeado ao `RoundedNative` | precisa da sessão gravada (`-ResumeSession`) | tornar a etapa independente |
+
 ## Matriz
 
 | ID | Item | Estado | Prova existente | Falta / prova exigida |
@@ -68,26 +83,26 @@ não têm implementação, ou a têm só em parte. São os pacotes P2–P7 abaix
 | F9-04 | precisão, escala, corpo, folga | comprovado | 270ff3a/e6fdf43, SurfacePick24 | sem garantia universal de escala (limite declarado) |
 | F9-04 | navegação no jogo (grafo, A*, segundo plano) | comprovado | NavigationAstar18, NavigationAsync18 | — |
 | F9-05 | mesma peça, manual, seed, contexto | comprovado | entregue em F8; M6 PASS na regressão de base (job 154) | — |
-| F9-05 | síntese/regeneração interna real por região | **falta** | só o [contrato](contracts/f9_regional_synthesis.md); nenhum código | serviço de proposta regional, máscara comum, uma aplicação atômica e undo único, GUI/AX/CLI (P3) |
-| F9-05 | proteção de terreno, props, encontros, patrulhas, pins | **falta** | só pins de instância | máscaras por região e camada (P3) |
-| F9-05 | diff e contradição antes do commit | parcial | para slots WFC | estender às regiões internas (P3) |
+| F9-05 | síntese/regeneração interna real por região | parcial | dentro de uma peça: relevo, materiais e objetos; proposta compilada, uma aplicação, um undo; GUI/AX/CLI com o mesmo hash (RegionalSynthesis12, RegionalSynthesisNative14, checkpoint43) | instância de mapa compartilhada, encontros e patrulhas (P3b); recibo e replay (P3d) |
+| F9-05 | proteção de terreno, props, encontros, patrulhas, pins | parcial | pins de instância; na variação regional: regiões protegidas e preservadas, aberturas, objetos travados ou preservados e o footprint de quem fica (checkpoint43) | encontros, patrulhas e pins na variação (P3b) |
+| F9-05 | diff e contradição antes do commit | parcial | slots WFC; variação regional com diff por amostra e objeto e déficit de espalhamento (checkpoint43) | contradição de encontros e patrulhas (P3b) |
 | F9-06 | biblioteca, busca, miniaturas, categorias, presets, favoritos | comprovado | Library50/Native53, 73b6ee8 | — |
 | F9-06 | minimapa, árvore de objetos, camadas | comprovado | 6d72972 20/52/53/28 | — |
 | F9-06 | overlays, foco, atalhos, diagnóstico localizado | parcial | Viewport20/Native52 | diagnóstico integrado ao fluxo final (P6) |
-| F9-07 | AX: IDs, ações parametrizadas, estado | parcial | terreno, objetos, contexto, composição, encontros, patrulha (checkpoints 23–30) | AX de geração regional e intercâmbio (P3) |
+| F9-07 | AX: IDs, ações parametrizadas, estado | parcial | terreno, objetos, contexto, composição, encontros, patrulha (checkpoints 23–30); variação regional `terrain/synthesis/*` (checkpoint43) | AX do intercâmbio de três vias (P3c) |
 | F9-07 | UX coerente e guiada, fluxo humano inteiro | **falta** | menus e seletores por tela | roteiro guiado entre telas, sem código (P6) |
 | F9-07 | histórico, hash, confirmação, modos | comprovado | entregue em F8; M1 PASS depois de corrigir a fixture do runner (job 155) | — |
 | F9-08 | biomas, espécies, chances, pesos, reservas | parcial | Content28/Native30, EncounterAuthoring27/25 | conferir chances nos fluxos integrados (P7) |
 | F9-08 | raro manual, exceção por instância, quest passiva | comprovado | entregue em F8; M4 PASS na regressão de base (job 154) | — |
 | F9-08 | bioma no manifesto final | comprovado | 4e3a3788, MapBiome15/13 | — |
 | F9-08 | stale entre revisões e reconciliação sem perda | **falta** | snapshots separados, reimportação limitada | reconciliação explícita por identidade (P3) |
-| F9-09 | GUI/AX/CLI equivalentes | parcial | composição, contexto, encontros, patrulhas, compilação, Store | geração regional, intercâmbio e bundle (P3/P4) |
+| F9-09 | GUI/AX/CLI equivalentes | parcial | composição, contexto, encontros, patrulhas, compilação, Store; variação regional (checkpoint43) | intercâmbio de três vias e bundle (P3c/P4) |
 | F9-09 | diff, preview, undo, proteção espacial, rebase | parcial | export/revisão/aplicação com diff; base divergente é recusada inteira | comparação base/atual/proposta por campo/amostra e máscara (P3) |
 | F9-09 | assets passivos, ambiente limpo, segurança | parcial | manifesto de assets no build: o release valida as dependências dos pacotes sem os PNGs crus (checkpoint41) | assets no bundle de intercâmbio, área controlada, rejeição de adulteração no import (P4) |
 | F9-09 | fontes de skills e guias | **falta** | 5 skills versionadas em `skills/` | atualizar as fontes para o editor F9, sem instalar (P4) |
 | F9-10 | autosave, backup, pending, conflito | comprovado | entregue em F1/F3; M1 PASS (job 155) | — |
-| F9-10 | cancelamento, progresso, stale, atomicidade | parcial | threads em compiladores, população, patrulha, geração; intercâmbio compila a prévia da base e a aplicação fora da interface (checkpoint42) | "Iniciar teste" ainda monta o mundo no quadro principal, atrás da tela de carregamento (8 s com pacote pronto) |
-| F9-10 | cache e invalidação regional | parcial | cache verificável de mapa e encontros por pacote (CompileCache10, checkpoint42) | invalidação dentro de uma peça (só as células tocadas) |
+| F9-10 | cancelamento, progresso, stale, atomicidade | parcial | threads em compiladores, população, patrulha, geração; intercâmbio compila a prévia da base e a aplicação fora da interface (checkpoint42) | "Iniciar teste" no quadro principal: movido para F10 por decisão humana (1/11) |
+| F9-10 | cache e invalidação regional | parcial | cache verificável de mapa e encontros por pacote (CompileCache10, checkpoint42) | invalidação dentro de uma peça: movida para F10 por decisão humana (1/11) |
 | F9-10 | medição pequeno/representativo/estresse | comprovado | representativa e Bosque, frio/quente, antes/depois ([responsividade](contracts/f9_editor_responsiveness.md)); NavigationDense5 para estresse | — |
 | F9-11 | pacote imutável, revisão, consumo sem código | comprovado | 7f723ac 22/18/52/33/49 | — |
 | F9-11 | preview real, apresentação de jogo | comprovado | GameplayNative63, checkpoints 30–40 | — |
@@ -102,10 +117,10 @@ não têm implementação, ou a têm só em parte. São os pacotes P2–P7 abaix
 
 1. **P1 — regressão integral.** (feito no checkpoint41) Todas as etapas F9 e os runners M1–M8 (job 154).
    Fecha as linhas "regressão" que passarem; migra o M3Native24.
-2. **P2 — responsividade do editor e do teste (F9-10).** (checkpoint42: memo nos lotes de conectividade, cache verificável, intercâmbio fora da interface; resta o `start()` do teste) Tirar `start()` do
+2. **P2 — responsividade do editor e do teste (F9-10).** (checkpoint42: memo nos lotes de conectividade, cache verificável, intercâmbio fora da interface; `start()` do teste e cache regional movidos para F10 em 1/11) Tirar `start()` do
    quadro principal, prévia e commit em segundo plano com cancelamento e progresso,
    cache regional verificável, campanha de medição.
-3. **P3 — síntese regional e reconciliação (F9-05/07/08/09).** Implementar o
+3. **P3 — síntese regional e reconciliação (F9-05/07/08/09).** (checkpoint43: P3a, variação dentro de uma peça; faltam P3b mapa/encontros/patrulhas, P3c intercâmbio, P3d recibo) Implementar o
    contrato já preparado: proposta regional sobre a fonte, máscara comum, uma
    aplicação atômica, undo único, diff de três vias no intercâmbio, reconciliação
    de encontros e patrulhas. É o maior pacote.

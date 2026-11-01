@@ -7,6 +7,31 @@ medium, somente leitura dos contratos/APIs f21709ae0065b34a534d40d5eeeff0742e07d
 Sol define os tipos executáveis e implementará. Astra não escreveu arquivos nem
 rodou Godot/testes. Não é validação do delta de navegação nem gate adicional.
 
+## Estado (checkpoint43, P3a)
+
+1/11/2026. Implementado só o recorte dentro de uma peça (kind piece):
+`scripts/map_authoring/synthesis/regional_synthesis.gd` (revisão `regional_v1`),
+a ferramenta "Variação regional" da tela de terreno
+(`synthesis/synthesis_section.gd`), AX `terrain/synthesis/{request,preview,apply,discard}`
+e o CLI `synthesis/headless.gd`, todos no mesmo serviço.
+
+- Pedido: `algorithm_revision`, `seed_text`, `base_hash`, `target.layer_id`,
+  `selection` (`region_id` da camada ou `polygon_xz` local), `channels` com
+  terrain (preserve/relief), materials (preserve/patches) e objects
+  (preserve/scatter), `preserve` (`entity_ids`, `region_ids`). Chaves fechadas;
+  canal ausente é recusado; tudo "preservar" é `synthesis_empty`.
+- Máscara: amostra livre só se o quadrado de influência (meio lado = passo) está
+  todo dentro da seleção e não toca região protegida da camada, região preservada,
+  abertura de conexão nem o footprint de objeto que fica. Polígonos de proteção
+  não mudam. Objeto travado, preservado, que cruza a borda ou toca proteção fica
+  inteiro; com `replace`, só saem os soltos totalmente dentro.
+- Saída: fonte integral, `source_hash`, `compiled_hash` (terreno compilado), diff
+  (`terrain_samples`, `material_samples`, `objects_added`, `objects_removed`,
+  `selection_hash`) e métricas. `apply()` exige o hash atual igual ao da prévia e
+  faz uma única `session.apply`.
+- Fora deste recorte: orçamento explícito no pedido, instância compartilhada em
+  mapa, encontros e patrulhas, recibo/replay e intercâmbio de três vias (P3b–P3d).
+
 ## Autoridade e unidade de aplicação
 
 Serviço de proposta regional sobre a fonte raiz aberta, kind piece/map/population/
@@ -124,4 +149,4 @@ de triângulo/footprint/segmento cruzando máscara; duas instâncias; ponte/pass
 reserva/raro fixo; slot referenciado por patrulha; divergência entre revisões;
 cancelamento/falha sem mutação; undo único; replay com base ausente; bundle/asset
 adulterado rejeitado; medição de preparo/compilação/diff/aplicação preservada.
-Este contrato não declara nenhuma dessas implementações concluída.
+Este contrato só declara concluído o recorte da seção "Estado".

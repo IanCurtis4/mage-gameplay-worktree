@@ -90,6 +90,15 @@ Escolha de produto nova deve ser apresentada antes do consumidor; correções
 contratuais continuam automáticas. Não abrir outro épico, campanha, economia,
 quest engine, multiplayer ou conversão de renderer por efeito deste pente-fino.
 
+## Recebido de F9 por decisão humana (1/11/2026)
+
+Pendências menores que o humano mandou registrar para F10, com o estado medido
+em F9: [matriz de fechamento](../f9_closure_matrix.md), seção "Movidos para F10".
+`start()` de "Iniciar teste" no quadro principal; cache regional dentro de uma
+peça; compactação do diário perto de 256 entradas; custo de coletar vários drops
+num quadro; `RoundedResume` encadeado ao `RoundedNative`. Registrar aqui não
+ativa F10: a reserva acima continua valendo.
+
 ## Evidência e conclusão
 
 Registrar revisão, achados/reprodução, correções/transferências, matriz de

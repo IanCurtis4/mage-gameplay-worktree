@@ -1,7 +1,40 @@
 # RagRPG — handoff portátil de F9
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint42 — responsividade do editor (P2)
+## Checkpoint43 — variação regional dentro de uma peça (P3a)
+
+1/11/2026. Mesmo checkout/branch/fixture. Base 81ab8ddf; código e documentação
+em commits próprios. Papéis inalterados. Contrato:
+contracts/f9_regional_synthesis.md (seção "Estado").
+
+- Pedido humano: registrar as pendências menores para F10 e começar o P3.
+  Registradas na matriz ("Movidos para F10") e em contracts/f10_final_review.md:
+  `start()` do teste, cache regional, compactação do diário, coleta de vários
+  drops, `RoundedResume` encadeado.
+- Serviço novo `scripts/map_authoring/synthesis/regional_synthesis.gd`: pedido
+  passivo fechado (revisão, seed, base, camada, região ou polígono, canais
+  terreno/materiais/objetos com "preservar" ou receita, preservações).
+  `prepare()` monta a fonte inteira numa cópia, compila e devolve proposta e diff;
+  `apply()` confere o hash e faz uma única `session.apply` (um undo).
+- Máscara: a amostra só muda se toda a sua influência estiver dentro da seleção e
+  longe de regiões protegidas ou preservadas, aberturas de conexão e do footprint
+  de todo objeto que fica. Objeto que cruza a borda ou toca proteção fica inteiro;
+  travados e preservados nunca saem.
+- Receitas: relevo por seed com transição até a borda, manchas de material (mesma
+  mistura do pincel) e espalhar objetos, opcionalmente trocando os soltos de
+  dentro, assentados no terreno novo.
+- Tela de terreno: ferramenta "Variação regional" (prévia em segundo plano com
+  progresso e cancelamento, aplicar, descartar). AX `terrain/synthesis/*`. CLI
+  `synthesis/headless.gd` (não grava a entrada nem sobrescreve a saída).
+- RegionalSynthesis12 (Bosque, clareira) e RegionalSynthesisNative14 (editor
+  real: GUI, AX e CLI com o mesmo hash, um undo, cancelamento e prévia velha sem
+  mutação). LibraryNative, AuthoringNative e Authoring PASS.
+
+Pendente: P3b (instância de mapa, encontros e patrulhas), P3c (intercâmbio de
+três vias), P3d (recibo e replay); aceite humano.
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint42 — responsividade do editor (P2)
 
 1/11/2026. Mesmo checkout/branch/fixture. Base a08d0185; código e documentação
 em commits próprios. Papéis inalterados. Contrato:
@@ -23,9 +56,8 @@ contracts/f9_editor_responsiveness.md.
 - CompileCache10 novo; navegação/população, GameplayNative, AssetManifest e
   runners M3–M7 PASS.
 
-Pendente: `start()` do teste no quadro principal; P3 (síntese regional e
-reconciliação); aceite humano.
-<!-- /f9-patrol-gameplay-active -->
+Próximo: P3 (síntese regional e reconciliação). `start()` do teste movido para
+F10 por decisão humana no checkpoint43.
 
 ## Histórico checkpoint41 — matriz de fechamento, regressão de base e release
 

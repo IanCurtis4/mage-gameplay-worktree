@@ -245,3 +245,9 @@ Checkpoint42 (1/11, Sol/Astra Opus): P2 responsividade. Lote de conectividade co
 o memo de predicados, cache verificável de mapa/encontros e intercâmbio fora da
 interface: encontros do Bosque 165 s → 96,5 s (4,8 s sem mudança), patrulhas
 180 s → 9,8 s. Ver [responsividade](contracts/f9_editor_responsiveness.md).
+
+Checkpoint43 (1/11, Sol/Astra Opus): P3a variação regional dentro de uma peça
+(terreno, materiais, objetos) com máscara, uma aplicação e um undo; GUI, AX e CLI
+com o mesmo hash (RegionalSynthesis12, RegionalSynthesisNative14). Pendências
+menores de F9-10/11 movidas para F10 por decisão humana; ver a
+[matriz](f9_closure_matrix.md).
