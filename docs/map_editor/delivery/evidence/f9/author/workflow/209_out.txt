@@ -1,0 +1,19 @@
+﻿HEAD 36ca0f52
+ELAPSED 43s
+
+F9 Workflow: True
+F9_WORKFLOW_CHECK fixture_ready true
+F9_WORKFLOW_CHECK up_to_date_and_unrelated_are_reported true
+F9_WORKFLOW_CHECK piece_replaces_its_snapshot true
+F9_WORKFLOW_CHECK anchors_follow_their_instance_and_settle true
+F9_WORKFLOW_CHECK plan_is_recertified_with_the_same_slots true
+F9_WORKFLOW_CHECK carry_is_deterministic true
+F9_WORKFLOW_CHECK waypoints_follow_and_routes_keep_slots true
+F9_WORKFLOW_CHECK removed_instance_names_the_marker true
+F9_WORKFLOW_CHECK lost_layer_names_the_marker true
+F9_WORKFLOW_CHECK missing_slot_names_the_route true
+F9_WORKFLOW_CHECK apply_is_one_undo_on_its_base true
+F9_WORKFLOW_CHECK opened_piece_matches_its_snapshot true
+DONE
+
+

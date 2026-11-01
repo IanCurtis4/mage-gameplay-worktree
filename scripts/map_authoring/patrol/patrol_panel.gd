@@ -11,7 +11,11 @@ const PopulationStore = preload("res://scripts/map_authoring/population/populati
 const IO = preload("res://scripts/map_authoring/io/source_store.gd")
 const Operations = preload("res://scripts/map_authoring/patrol/patrol_operations.gd")
 const Common = preload("res://scripts/map_authoring/population/population_operations.gd")
+const Flow = preload("res://scripts/map_authoring/workflow/authoring_flow.gd")
+const WorkflowBar = preload("res://scripts/map_authoring/workflow/workflow_bar.gd")
 var gameplay_tools: Control
+var flow: RefCounted
+var workflow_bar: VBoxContainer
 var name_edit: LineEdit
 var session := Session.new()
 var canvas: Control
@@ -78,6 +82,10 @@ func _ready() -> void:
 	gameplay_tools = preload("res://scripts/map_authoring/preview/gameplay_tools.gd").mount(self,"patrol","patrol",func() -> Dictionary: return session.data,func() -> Dictionary: return result.get("package",{}) if result.get("ok",false) else {},func() -> String: return Document.hash_source(session.data))
 	# Checkpoint44 (F9-05, P3b): regional variation of one instance; its own AX provider.
 	synthesis = RootSynthesisSection.new(); add_child(synthesis); synthesis.setup(self,"patrol","patrol"); synthesis.refresh()
+	# Checkpoint49 (F9-06/07, P6a): the guided step bar shared by the screens.
+	var owns_flow: bool = flow == null
+	if owns_flow: flow = Flow.new()
+	flow.attach("patrol",self); workflow_bar = WorkflowBar.mount(self,flow,"patrol","patrol",owns_flow)
 	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"patrol",func() -> Dictionary: return session.data,canvas)
 var synthesis: VBoxContainer
 func button(parent: Node, caption: String, callback: Callable) -> void:

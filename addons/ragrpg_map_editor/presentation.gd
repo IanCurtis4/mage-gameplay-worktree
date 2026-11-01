@@ -82,6 +82,8 @@ func build(viewport: Control) -> void:
 func _collect(node: Node) -> void:
 	for child: Node in node.get_children():
 		if child == self or child is Window: continue
+		# Checkpoint49: the step bar keeps its own buttons visible in every mode.
+		if child.get_meta("authoring_skip_collect",false): continue
 		if child != screen and child.get_node_or_null("AuthoringPresentation") != null: continue
 		if child.get_class() == "Button":
 			var button := child as Button

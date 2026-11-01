@@ -1,0 +1,50 @@
+﻿HEAD 36ca0f52
+STAGE Workflow :: F9 Workflow: True (42s)
+STAGE WorkflowNative :: F9 WorkflowNative: True (116s)
+STAGE RootSynthesis :: F9 RootSynthesis: True (109s)
+STAGE RootSynthesisNative :: F9 RootSynthesisNative: True (123s)
+STAGE ExchangeMergeNative :: F9 ExchangeMergeNative: True (47s)
+STAGE RegionalSynthesisNative :: F9 RegionalSynthesisNative: True (94s)
+STAGE GameplayEditorNative :: F9 GameplayEditorNative: True (86s)
+STAGE CompositionAX :: F9 CompositionAX: True (18s)
+STAGE CompositionAXNative :: F9 CompositionAXNative: True (18s)
+STAGE EncounterAuthoring :: F9 EncounterAuthoring: True (20s)
+STAGE EncounterAuthoringNative :: F9 EncounterAuthoringNative: True (31s)
+STAGE Authoring :: F9 Authoring: True (22s)
+STAGE AuthoringNative :: F9 AuthoringNative: True (19s)
+STAGE Content :: F9 Content: True (58s)
+STAGE ContentNative :: F9 ContentNative: True (59s)
+STAGE MapBiomeNative :: F9 MapBiomeNative: True (25s)
+STAGE ViewportNative :: F9 ViewportNative: True (57s)
+STAGE LibraryNative :: F9 LibraryNative: True (49s)
+STAGE ObjectsNative :: F9 ObjectsNative: True (46s)
+RUNNER map_editor_terrain  :: exit=0 :: 121s
+RUNNER map_editor_terrain -Native :: exit=1 :: 182s
+   ! native_ui: False
+   ! M2_UI_CHECK native_textured_meshes false
+   ! [31;1m[0m[36;1m[36;1m  66 | [0m …  (-not $m2Pass) { Write-Output $m2Text; [36;1mthrow ('M2 failed: '+$Name)[0m }[0m
+   ! [31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m     | [31;1mM2 failed: native_ui[0m
+RUNNER map_editor_composition  :: exit=0 :: 45s
+RUNNER map_editor_population  :: exit=0 :: 105s
+RUNNER map_editor_population -Native :: exit=1 :: 202s
+   ! native_ui: False
+   ! M4_UI_CHECK canonical_discardable_test false
+   ! SCRIPT ERROR: Invalid access to property or key 'stages' on a base object of type 'Nil'.
+   ! [31;1m[0m[36;1m[36;1m  77 | [0m …  (-not $m4Pass) { Write-Output $m4Text; [36;1mthrow ('M4 failed: '+$Name)[0m }[0m
+   ! [31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m     | [31;1mM4 failed: native_ui[0m
+RUNNER map_editor_patrol  :: exit=0 :: 218s
+RUNNER map_editor_patrol -Native :: exit=1 :: 407s
+   ! native_ui: False
+   ! M5_UI_CHECK native_compile_completed false
+   ! [31;1m[0m[36;1m[36;1m  67 | [0m …   if(-not $m5Pass){Write-Output $m5Text; [36;1mthrow ('M5 failed: '+$Name)[0m}[0m
+   ! [31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m     | [31;1mM5 failed: native_ui[0m
+RUNNER map_editor_generation  :: exit=0 :: 75s
+RUNNER map_editor_generation -Native :: exit=0 :: 90s
+RUNNER map_editor_exchange  :: exit=0 :: 90s
+RUNNER map_editor_exchange -Native :: exit=0 :: 173s
+RUNNER map_editor_candidate -Stage Native :: exit=1 :: 111s
+   ! native_ui: False
+   ! M8_UI_CHECK ux_terrain_dropdown false
+   ! [31;1m[0m[36;1m[36;1m  70 | [0m …   if(-not $m8Pass){Write-Output $m8Text; [36;1mthrow ('M8 failed: '+$Name)[0m}[0m
+   ! [31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m     | [31;1mM8 failed: native_ui[0m
+DONE

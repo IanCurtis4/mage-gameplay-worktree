@@ -1,0 +1,31 @@
+﻿HEAD 36ca0f52
+STASH addons/ragrpg_map_editor/presentation.gd, addons/ragrpg_map_editor/shell.gd, scripts/map_authoring/composition/map_panel.gd, scripts/map_authoring/patrol/patrol_panel.gd, scripts/map_authoring/population/population_panel.gd, tools/map_editor_completion/run.ps1
+git : warning: in the working copy of 'addons/ragrpg_map_editor/presentation.gd', LF will be replaced by CRLF the next 
+time Git touches it
+No C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.tools\claude_bridge\done\213_baseline.ps1:12 caractere:1
++ git stash push -q -m 'p6a-baseline' -- @tracked 2>&1 | Out-File -Lite ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (warning: in the... Git touches it:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+warning: in the working copy of 'addons/ragrpg_map_editor/shell.gd', LF will be replaced by CRLF the next time Git 
+touches it
+warning: in the working copy of 'addons/ragrpg_map_editor/presentation.gd', LF will be replaced by CRLF the next time 
+Git touches it
+warning: in the working copy of 'addons/ragrpg_map_editor/shell.gd', LF will be replaced by CRLF the next time Git 
+touches it
+DIRTY_AFTER_STASH 0
+BASELINE map_editor_terrain -Native :: exit=1 :: 171s
+   ! M2_UI_CHECK native_textured_meshes false
+BASELINE map_editor_population -Native :: exit=1 :: 203s
+   ! M4_UI_CHECK canonical_discardable_test false
+   ! SCRIPT ERROR: Invalid access to property or key 'stages' on a base object of type 'Nil'.
+BASELINE map_editor_patrol -Native :: exit=1 :: 238s
+   ! SCRIPT ERROR: Parse Error: The member "Panel" shadows a native class.
+   ! SCRIPT ERROR: Parse Error: Cannot call non-static function "has_method()" on the class "res://scripts/map_authoring/document/source_document.gd" directly. Make an instance instead.
+BASELINE map_editor_candidate -Stage Native :: exit=1 :: 47s
+   ! SCRIPT ERROR: Parse Error: The member "Panel" shadows a native class.
+   ! SCRIPT ERROR: Parse Error: Cannot call non-static function "has_method()" on the class "res://scripts/map_authoring/document/source_document.gd" directly. Make an instance instead.
+RESTORED addons/ragrpg_map_editor/presentation.gd, addons/ragrpg_map_editor/shell.gd, scripts/map_authoring/composition/map_panel.gd, scripts/map_authoring/patrol/patrol_panel.gd, scripts/map_authoring/population/population_panel.gd, tools/map_editor_completion/run.ps1
+STASHES 3
+DONE

@@ -1,0 +1,367 @@
+[
+	{
+		"assembler": {
+			"code": "",
+			"elapsed_total_ms": 892.627,
+			"hash": "7a33d37ae1bf64a851934df2fc8931447f94f1340452b5fdef5109d43b992991",
+			"metrics": {
+				"diagnostic": {
+					"attempts": 1,
+					"expansions": 2,
+					"seed_text": "0"
+				},
+				"elapsed_ms": 15.119,
+				"input_hash": "ee818356d4464180b62ce154ed8da1dd9e7c6b88bac268af7a2c5d78271c2c07",
+				"revision": "f0_convex_parts_v2"
+			},
+			"ok": true
+		},
+		"request_hash": "4ef7819bc4bffb0528fe4f411b85bd0512a491ddf69b40181a61df170c4a66bf",
+		"seed_text": "0",
+		"wfc": {
+			"code": "",
+			"diagnostic": {
+				"algorithm_revision": "map_slot_wfc_v1",
+				"backtracks": 0,
+				"budget": {
+					"backtracks": 128,
+					"operations": 200000,
+					"validations": 32
+				},
+				"operations": 11,
+				"region": "",
+				"rule": "global_validation",
+				"seed_text": "0",
+				"validations": 1
+			},
+			"elapsed_ms": 481.727,
+			"hash": "7aa4bee9c7211bf404c0d20e7070de909f3a5c35bad7d492ef8169d2bb8f1dfb",
+			"ok": true
+		}
+	},
+	{
+		"assembler": {
+			"code": "",
+			"elapsed_total_ms": 924.47,
+			"hash": "7a33d37ae1bf64a851934df2fc8931447f94f1340452b5fdef5109d43b992991",
+			"metrics": {
+				"diagnostic": {
+					"attempts": 1,
+					"expansions": 2,
+					"seed_text": "-1"
+				},
+				"elapsed_ms": 14.803,
+				"input_hash": "efba031b47ff4ba0cd8014850f70dd0a9023f7e0f36e20ec099339a4167b5f2a",
+				"revision": "f0_convex_parts_v2"
+			},
+			"ok": true
+		},
+		"request_hash": "ab595f3da0d5842e4e284e120c9f0045f7e7d74b91ed2e221b4476542f0bd549",
+		"seed_text": "-1",
+		"wfc": {
+			"code": "",
+			"diagnostic": {
+				"algorithm_revision": "map_slot_wfc_v1",
+				"backtracks": 0,
+				"budget": {
+					"backtracks": 128,
+					"operations": 200000,
+					"validations": 32
+				},
+				"operations": 11,
+				"region": "",
+				"rule": "global_validation",
+				"seed_text": "-1",
+				"validations": 1
+			},
+			"elapsed_ms": 505.012,
+			"hash": "7aa4bee9c7211bf404c0d20e7070de909f3a5c35bad7d492ef8169d2bb8f1dfb",
+			"ok": true
+		}
+	},
+	{
+		"assembler": {
+			"code": "",
+			"elapsed_total_ms": 964.954,
+			"hash": "7aa4bee9c7211bf404c0d20e7070de909f3a5c35bad7d492ef8169d2bb8f1dfb",
+			"metrics": {
+				"diagnostic": {
+					"attempts": 1,
+					"expansions": 2,
+					"seed_text": "9223372036854775807"
+				},
+				"elapsed_ms": 13.095,
+				"input_hash": "267fa0db43a824a66f5fac70962c3ebfa43eb9a785fe5364e646ddc5f8398eb1",
+				"revision": "f0_convex_parts_v2"
+			},
+			"ok": true
+		},
+		"request_hash": "80398f084984bce20651c5c7eaafe7e9c9b2c3a0abd1d00ed892ad63a2d2601f",
+		"seed_text": "9223372036854775807",
+		"wfc": {
+			"code": "",
+			"diagnostic": {
+				"algorithm_revision": "map_slot_wfc_v1",
+				"backtracks": 0,
+				"budget": {
+					"backtracks": 128,
+					"operations": 200000,
+					"validations": 32
+				},
+				"operations": 11,
+				"region": "",
+				"rule": "global_validation",
+				"seed_text": "9223372036854775807",
+				"validations": 1
+			},
+			"elapsed_ms": 494.92,
+			"hash": "7a33d37ae1bf64a851934df2fc8931447f94f1340452b5fdef5109d43b992991",
+			"ok": true
+		}
+	},
+	{
+		"assembler": {
+			"code": "",
+			"elapsed_total_ms": 951.325,
+			"hash": "7aa4bee9c7211bf404c0d20e7070de909f3a5c35bad7d492ef8169d2bb8f1dfb",
+			"metrics": {
+				"diagnostic": {
+					"attempts": 1,
+					"expansions": 2,
+					"seed_text": "-9223372036854775808"
+				},
+				"elapsed_ms": 17.452,
+				"input_hash": "c4096c44744230bb8fa5c05cb6e2854d1ece158cc79fd3f252bfb323169a802f",
+				"revision": "f0_convex_parts_v2"
+			},
+			"ok": true
+		},
+		"request_hash": "f7cb5921a1774152367fc001189f3d11f62caaebbedba653496b7b7cb26443a4",
+		"seed_text": "-9223372036854775808",
+		"wfc": {
+			"code": "",
+			"diagnostic": {
+				"algorithm_revision": "map_slot_wfc_v1",
+				"backtracks": 0,
+				"budget": {
+					"backtracks": 128,
+					"operations": 200000,
+					"validations": 32
+				},
+				"operations": 11,
+				"region": "",
+				"rule": "global_validation",
+				"seed_text": "-9223372036854775808",
+				"validations": 1
+			},
+			"elapsed_ms": 471.904,
+			"hash": "7aa4bee9c7211bf404c0d20e7070de909f3a5c35bad7d492ef8169d2bb8f1dfb",
+			"ok": true
+		}
+	},
+	{
+		"assembler": {
+			"code": "",
+			"elapsed_total_ms": 913.827,
+			"hash": "7aa4bee9c7211bf404c0d20e7070de909f3a5c35bad7d492ef8169d2bb8f1dfb",
+			"metrics": {
+				"diagnostic": {
+					"attempts": 1,
+					"expansions": 2,
+					"seed_text": "1"
+				},
+				"elapsed_ms": 11.98,
+				"input_hash": "7ea3ffc6c58e34e4e58de295dd148c42f002a95f25d2d56f5a315ca1d87412fd",
+				"revision": "f0_convex_parts_v2"
+			},
+			"ok": true
+		},
+		"request_hash": "0596a6241428ed47b0b3be47f074d79dcd489b473583f7581dc4f7d158f59ef3",
+		"seed_text": "1",
+		"wfc": {
+			"code": "",
+			"diagnostic": {
+				"algorithm_revision": "map_slot_wfc_v1",
+				"backtracks": 0,
+				"budget": {
+					"backtracks": 128,
+					"operations": 200000,
+					"validations": 32
+				},
+				"operations": 11,
+				"region": "",
+				"rule": "global_validation",
+				"seed_text": "1",
+				"validations": 1
+			},
+			"elapsed_ms": 487.999,
+			"hash": "7a33d37ae1bf64a851934df2fc8931447f94f1340452b5fdef5109d43b992991",
+			"ok": true
+		}
+	},
+	{
+		"assembler": {
+			"code": "",
+			"elapsed_total_ms": 888.761,
+			"hash": "7a33d37ae1bf64a851934df2fc8931447f94f1340452b5fdef5109d43b992991",
+			"metrics": {
+				"diagnostic": {
+					"attempts": 1,
+					"expansions": 2,
+					"seed_text": "2"
+				},
+				"elapsed_ms": 12.929,
+				"input_hash": "c7808564f4ce90fefeafb0169ac55a76670d6f24aaa0ed29f5fd8549978a2c6d",
+				"revision": "f0_convex_parts_v2"
+			},
+			"ok": true
+		},
+		"request_hash": "5b250512bb0b9422ef889602ee0bd5491dab2425eb8dd4aff482a09dd1b79e27",
+		"seed_text": "2",
+		"wfc": {
+			"code": "",
+			"diagnostic": {
+				"algorithm_revision": "map_slot_wfc_v1",
+				"backtracks": 0,
+				"budget": {
+					"backtracks": 128,
+					"operations": 200000,
+					"validations": 32
+				},
+				"operations": 11,
+				"region": "",
+				"rule": "global_validation",
+				"seed_text": "2",
+				"validations": 1
+			},
+			"elapsed_ms": 471.516,
+			"hash": "7aa4bee9c7211bf404c0d20e7070de909f3a5c35bad7d492ef8169d2bb8f1dfb",
+			"ok": true
+		}
+	},
+	{
+		"assembler": {
+			"code": "",
+			"elapsed_total_ms": 900.816,
+			"hash": "7a33d37ae1bf64a851934df2fc8931447f94f1340452b5fdef5109d43b992991",
+			"metrics": {
+				"diagnostic": {
+					"attempts": 1,
+					"expansions": 2,
+					"seed_text": "3"
+				},
+				"elapsed_ms": 14.31,
+				"input_hash": "e16093405762be40f928628d7451ddeb0754b61f1f1d4ff5289d43aa8d2a9d6d",
+				"revision": "f0_convex_parts_v2"
+			},
+			"ok": true
+		},
+		"request_hash": "cd1a1a0492b28207287543bdd727d52905d19e523a010ede8e9970b166ccc4fa",
+		"seed_text": "3",
+		"wfc": {
+			"code": "",
+			"diagnostic": {
+				"algorithm_revision": "map_slot_wfc_v1",
+				"backtracks": 0,
+				"budget": {
+					"backtracks": 128,
+					"operations": 200000,
+					"validations": 32
+				},
+				"operations": 11,
+				"region": "",
+				"rule": "global_validation",
+				"seed_text": "3",
+				"validations": 1
+			},
+			"elapsed_ms": 486.23,
+			"hash": "7aa4bee9c7211bf404c0d20e7070de909f3a5c35bad7d492ef8169d2bb8f1dfb",
+			"ok": true
+		}
+	},
+	{
+		"assembler": {
+			"code": "",
+			"elapsed_total_ms": 901.027,
+			"hash": "7a33d37ae1bf64a851934df2fc8931447f94f1340452b5fdef5109d43b992991",
+			"metrics": {
+				"diagnostic": {
+					"attempts": 1,
+					"expansions": 2,
+					"seed_text": "4"
+				},
+				"elapsed_ms": 11.052,
+				"input_hash": "449467cb417f106f2b97fa32a629cdea3a9fce24f4a9bb245fb835ce624dadee",
+				"revision": "f0_convex_parts_v2"
+			},
+			"ok": true
+		},
+		"request_hash": "e96aa2617f185a53d86843962b3347e72bc789e772dee5c7ab51c79f6c34e3bc",
+		"seed_text": "4",
+		"wfc": {
+			"code": "",
+			"diagnostic": {
+				"algorithm_revision": "map_slot_wfc_v1",
+				"backtracks": 0,
+				"budget": {
+					"backtracks": 128,
+					"operations": 200000,
+					"validations": 32
+				},
+				"operations": 11,
+				"region": "",
+				"rule": "global_validation",
+				"seed_text": "4",
+				"validations": 1
+			},
+			"elapsed_ms": 469.507,
+			"hash": "7a33d37ae1bf64a851934df2fc8931447f94f1340452b5fdef5109d43b992991",
+			"ok": true
+		}
+	},
+	{
+		"assembler": {
+			"code": "assembler_unsupported",
+			"ok": false
+		},
+		"case": "four_room_cycle",
+		"request_hash": "2d604f61f6989515bef992f2df3efc07e3a55a63167dc7881d5c56eaaee92e42",
+		"wfc": {
+			"code": "",
+			"ok": true
+		}
+	},
+	{
+		"assembler": {
+			"code": "contradiction",
+			"ok": false
+		},
+		"case": "pin_conflict",
+		"request_hash": "b67ba8afa4b257f1b74f0d0b34ed337e4b34080b118f569b2a0a80c7f904973b",
+		"wfc": {
+			"code": "contradiction",
+			"ok": false
+		}
+	},
+	{
+		"assembler": {
+			"code": "assembler_constraint"
+		},
+		"case": "impossible_quota",
+		"request_hash": "f77bb3eb8869f0ac80f76278a6263fcabff898e4ef2958cdc0555e2a298a280c",
+		"wfc": {
+			"code": "contradiction"
+		}
+	},
+	{
+		"assembler": {
+			"code": "assembler_constraint",
+			"ok": false
+		},
+		"case": "authored_position_999",
+		"request_hash": "054c02376f01c7c3219223f5c3bd832d6cceacb0a7f518036c19701b4c7646ec",
+		"wfc": {
+			"code": "contradiction"
+		}
+	}
+]

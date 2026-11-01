@@ -1,0 +1,20 @@
+﻿HEAD 36ca0f52
+ELAPSED 141s
+
+F9 WorkflowNative: True
+F9_WORKFLOW_UI_CHECK refused_carry_names_the_marker true
+F9_WORKFLOW_UI_CHECK ax_refuses_other_steps_and_shows true
+F9_WORKFLOW_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"bar_on_the_terrain_screen","ok":true},{"id":"ne
+xt_opens_the_composition","ok":true},{"id":"map_step_asks_to_compile","ok":true},{"id":"map_compiled_through_the_bar","
+ok":true},{"id":"encounters_open_with_the_map","ok":true},{"id":"empty_encounters_ask_for_marks","ok":true},{"id":"enco
+unters_compiled_through_the_bar","ok":true},{"id":"flow_reaches_the_game_test","ok":true},{"id":"capture_workflow_patro
+ls_ready","ok":true},{"id":"changed_piece_marks_the_map_stale","ok":true},{"id":"carry_runs_in_the_background","ok":tru
+e},{"id":"capture_workflow_review_piece","ok":true},{"id":"piece_carry_is_reviewed_and_one_undo","ok":true},{"id":"enco
+unters_become_stale","ok":true},{"id":"map_carried_into_encounters","ok":true},{"id":"encounters_carried_into_patrols",
+"ok":true},{"id":"refused_carry_names_the_marker","ok":true},{"id":"problem_opens_the_owning_screen","ok":true},{"id":"
+capture_workflow_problem_focused","ok":true},{"id":"ax_reads_the_same_state","ok":true},{"id":"ax_refuses_other_steps_a
+nd_shows","ok":true},{"id":"bar_stays_visible_in_ux_and_out_of_menus","ok":true}],"count":23,"ok":true}
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+DONE
+
+

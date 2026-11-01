@@ -1,0 +1,31 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_AX_CONTENT_CHECK ux_mode_refuses_agent_mutation true
+F9_AX_CONTENT_CHECK real_objects_window_and_semantic_commands true
+F9_AX_CONTENT_CHECK catalog_and_selection_are_editor_state true
+F9_AX_CONTENT_CHECK gui_ax_place_same_identity_and_source true
+F9_AX_CONTENT_CHECK move_settles_on_explicit_upper_surface true
+F9_AX_CONTENT_CHECK translate_rotate_share_gui_producer true
+F9_AX_CONTENT_CHECK duplicate_rejects_outside_support_and_returns_new_identity true
+F9_AX_CONTENT_CHECK group_lock_and_hide_apply_to_members true
+F9_AX_CONTENT_CHECK explicit_group_unlock_and_ungroup true
+F9_AX_CONTENT_CHECK individual_lock_rejects_without_partial_history true
+F9_AX_CONTENT_CHECK hidden_editor_object_remains_in_publication true
+F9_AX_CONTENT_CHECK no_op_and_remove_undo_redo_are_atomic true
+F9_AX_CONTENT_CHECK unknown_fields_duplicate_ids_and_selection_are_rejected true
+F9_AX_CONTENT_CHECK source_layer_lock_blocks_transfer_from_special_surface true
+F9_AX_CONTENT_CHECK region_protection_blocks_prop_footprint true
+F9_AX_CONTENT_CHECK passive_catalog_options_use_registered_occurrences true
+F9_AX_CONTENT_CHECK context_gui_form_and_ax_share_rules_producer true
+F9_AX_CONTENT_CHECK area_and_catalog_reservation_match_between_gui_ax true
+F9_AX_CONTENT_CHECK context_rejects_region_collision_catalog_and_inverted_rect true
+F9_AX_CONTENT_CHECK area_source_layer_lock_prevents_remove_and_transfer true
+F9_AX_CONTENT_CHECK area_transfer_preserves_protection_on_new_owner true
+F9_AX_CONTENT_CHECK area_removal_cleans_protection_references true
+F9_AX_CONTENT_CHECK socket_uses_canonical_surface_compiler true
+F9_AX_CONTENT_CHECK socket_lock_prevents_mutation true
+F9_AX_CONTENT_CHECK socket_remove_and_undo_restore_marker true
+F9_AX_CONTENT_CHECK scatter_discard_restores_view_without_source_mutation true
+F9_AX_CONTENT_CHECK scatter_review_hash_apply_undo_and_stale_are_guarded true
+F9_AX_CONTENT_CHECK store_roundtrip_preserves_real_authoring_source true
+F9_AX_CONTENT_RESULT {"checks":[{"detail":{"code":"ax_mode_required","ok":false},"id":"ux_mode_refuses_agent_mutation","ok":true},{"detail":{},"id":"real_objects_window_and_semantic_commands","ok":true},{"detail":{},"id":"catalog_and_selection_are_editor_state","ok":true},{"detail":{"ax":"","gui":""},"id":"gui_ax_place_same_identity_and_source","ok":true},{"detail":{"ax":""},"id":"move_settles_on_explicit_upper_surface","ok":true},{"detail":{"rotate":"","translate":""},"id":"translate_rotate_share_gui_producer","ok":true},{"detail":[],"id":"duplicate_rejects_outside_support_and_returns_new_identity","ok":true},{"detail":{},"id":"group_lock_and_hide_apply_to_members","ok":true},{"detail":{},"id":"explicit_group_unlock_and_ungroup","ok":true},{"detail":{},"id":"individual_lock_rejects_without_partial_history","ok":true},{"detail":[],"id":"hidden_editor_object_remains_in_publication","ok":true},{"detail":{},"id":"no_op_and_remove_undo_redo_are_atomic","ok":true},{"detail":{},"id":"unknown_fields_duplicate_ids_and_selection_are_rejected","ok":true},{"detail":{},"id":"source_layer_lock_blocks_transfer_from_special_surface","ok":true},{"detail":{},"id":"region_protection_blocks_prop_footprint","ok":true},{"detail":{},"id":"passive_catalog_options_use_registered_occurrences","ok":true},{"detail":[],"id":"context_gui_form_and_ax_share_rules_producer","ok":true},{"detail":{},"id":"area_and_catalog_reservation_match_between_gui_ax","ok":true},{"detail":{},"id":"context_rejects_region_collision_catalog_and_inverted_rect","ok":true},{"detail":{},"id":"area_source_layer_lock_prevents_remove_and_transfer","ok":true},{"detail":{},"id":"area_transfer_preserves_protection_on_new_owner","ok":true},{"detail":{},"id":"area_removal_cleans_protection_references","ok":true},{"detail":{"code":"socket_invalid","diagnostics":[{"code":"socket_invalid","entity_id":"entry","field":"terrain","message":"O ponto marcado não tem suporte ou tipo válido.","severity":"error","suggestion":"Corrija a região indicada e compile novamente."}],"input_hash":"","ok":false,"output_hash":""},"id":"socket_uses_canonical_surface_compiler","ok":true},{"detail":{},"id":"socket_lock_prevents_mutation","ok":true},{"detail":{},"id":"socket_remove_and_undo_restore_marker","ok":true},{"detail":{},"id":"scatter_discard_restores_view_without_source_mutation","ok":true},{"detail":{"apply":"","preview":"","stale":"object_preview_missing"},"id":"scatter_review_hash_apply_undo_and_stale_are_guarded","ok":true},{"detail":{},"id":"store_roundtrip_preserves_real_authoring_source","ok":true}],"count":28,"expected_count":28,"ok":true}

@@ -1,0 +1,29 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+F9_WORKFLOW_UI_CHECK native_shell true
+F9_WORKFLOW_UI_CHECK bar_on_the_terrain_screen true
+F9_WORKFLOW_UI_CHECK next_opens_the_composition true
+F9_WORKFLOW_UI_CHECK map_step_asks_to_compile true
+F9_WORKFLOW_UI_CHECK map_compiled_through_the_bar true
+F9_WORKFLOW_UI_CHECK encounters_open_with_the_map true
+F9_WORKFLOW_UI_CHECK empty_encounters_ask_for_marks true
+F9_WORKFLOW_UI_CHECK encounters_compiled_through_the_bar true
+F9_WORKFLOW_UI_CHECK flow_reaches_the_game_test true
+F9_WORKFLOW_UI_CHECK capture_workflow_patrols_ready true
+F9_WORKFLOW_UI_CHECK changed_piece_marks_the_map_stale true
+F9_WORKFLOW_UI_CHECK carry_runs_in_the_background true
+F9_WORKFLOW_UI_CHECK capture_workflow_review_piece true
+F9_WORKFLOW_UI_CHECK piece_carry_is_reviewed_and_one_undo true
+F9_WORKFLOW_UI_CHECK encounters_become_stale true
+F9_WORKFLOW_UI_CHECK map_carried_into_encounters true
+F9_WORKFLOW_UI_CHECK encounters_carried_into_patrols true
+F9_WORKFLOW_UI_CHECK refused_carry_names_the_marker true
+F9_WORKFLOW_UI_CHECK problem_opens_the_owning_screen true
+F9_WORKFLOW_UI_CHECK capture_workflow_problem_focused true
+F9_WORKFLOW_UI_CHECK ax_reads_the_same_state true
+F9_WORKFLOW_UI_CHECK ax_refuses_other_steps_and_shows true
+F9_WORKFLOW_UI_CHECK bar_stays_visible_in_ux_and_out_of_menus true
+F9_WORKFLOW_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"bar_on_the_terrain_screen","ok":true},{"id":"next_opens_the_composition","ok":true},{"id":"map_step_asks_to_compile","ok":true},{"id":"map_compiled_through_the_bar","ok":true},{"id":"encounters_open_with_the_map","ok":true},{"id":"empty_encounters_ask_for_marks","ok":true},{"id":"encounters_compiled_through_the_bar","ok":true},{"id":"flow_reaches_the_game_test","ok":true},{"id":"capture_workflow_patrols_ready","ok":true},{"id":"changed_piece_marks_the_map_stale","ok":true},{"id":"carry_runs_in_the_background","ok":true},{"id":"capture_workflow_review_piece","ok":true},{"id":"piece_carry_is_reviewed_and_one_undo","ok":true},{"id":"encounters_become_stale","ok":true},{"id":"map_carried_into_encounters","ok":true},{"id":"encounters_carried_into_patrols","ok":true},{"id":"refused_carry_names_the_marker","ok":true},{"id":"problem_opens_the_owning_screen","ok":true},{"id":"capture_workflow_problem_focused","ok":true},{"id":"ax_reads_the_same_state","ok":true},{"id":"ax_refuses_other_steps_and_shows","ok":true},{"id":"bar_stays_visible_in_ux_and_out_of_menus","ok":true}],"count":23,"ok":true}
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)

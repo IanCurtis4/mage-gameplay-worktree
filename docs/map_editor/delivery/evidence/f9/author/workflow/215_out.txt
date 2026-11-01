@@ -1,0 +1,12 @@
+﻿HEAD 36ca0f52
+STASH addons/ragrpg_map_editor/presentation.gd, addons/ragrpg_map_editor/shell.gd, scripts/map_authoring/composition/map_panel.gd, scripts/map_authoring/patrol/patrol_panel.gd, scripts/map_authoring/population/population_panel.gd, tools/map_editor_completion/run.ps1
+DIRTY_AFTER_STASH 0
+BASELINE map_editor_patrol -Native :: exit=1 :: 262s
+   ! M5_UI_CHECK test_uses_separate_real_process false
+   ! M5_UI_CHECK native_preview_suspends_checkpoint false
+   ! M5_UI_CHECK native_preview_resumes_checkpoint false
+BASELINE map_editor_candidate -Stage Native :: exit=1 :: 123s
+   ! M8_UI_CHECK ux_terrain_dropdown false
+RESTORED addons/ragrpg_map_editor/presentation.gd, addons/ragrpg_map_editor/shell.gd, scripts/map_authoring/composition/map_panel.gd, scripts/map_authoring/patrol/patrol_panel.gd, scripts/map_authoring/population/population_panel.gd, tools/map_editor_completion/run.ps1
+STASHES 3
+DONE

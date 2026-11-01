@@ -12,7 +12,11 @@ const MapDocument = preload("res://scripts/map_authoring/composition/map_documen
 const IO = preload("res://scripts/map_authoring/io/source_store.gd")
 const Canvas = preload("res://scripts/map_authoring/population/population_canvas.gd")
 const Operations = preload("res://scripts/map_authoring/population/population_operations.gd")
+const Flow = preload("res://scripts/map_authoring/workflow/authoring_flow.gd")
+const WorkflowBar = preload("res://scripts/map_authoring/workflow/workflow_bar.gd")
 var gameplay_tools: Control
+var flow: RefCounted
+var workflow_bar: VBoxContainer
 var name_edit: LineEdit
 var _proposal_signature := ""
 var _imported_map_package: Dictionary = {}
@@ -57,7 +61,7 @@ func open_patrols() -> void:
 	if patrol_window == null:
 		patrol_window = Window.new(); patrol_window.title = "Patrulhas do encontro"; patrol_window.size = Vector2i(1280,860); patrol_window.min_size = Vector2i(1100,700)
 		patrol_window.close_requested.connect(patrol_window.hide); add_child(patrol_window)
-		var panel := preload("res://scripts/map_authoring/patrol/patrol_panel.gd").new(); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); patrol_window.add_child(panel)
+		var panel := preload("res://scripts/map_authoring/patrol/patrol_panel.gd").new(); panel.flow = flow; panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); patrol_window.add_child(panel)
 		panel.import_population(session.data)
 	patrol_window.popup_centered()
 var exchange_panel: Control
@@ -122,6 +126,10 @@ func _ready() -> void:
 	gameplay_tools = preload("res://scripts/map_authoring/preview/gameplay_tools.gd").mount(self,"population","population",func() -> Dictionary: return session.data,func() -> Dictionary: return result.get("package",{}) if result.get("ok",false) else {},func() -> String: return Document.hash_source(session.data))
 	# Checkpoint44 (F9-05, P3b): regional variation of one instance; its own AX provider.
 	synthesis = RootSynthesisSection.new(); add_child(synthesis); synthesis.setup(self,"population","population"); synthesis.refresh()
+	# Checkpoint49 (F9-06/07, P6a): the guided step bar shared by the screens.
+	var owns_flow: bool = flow == null
+	if owns_flow: flow = Flow.new()
+	flow.attach("population",self); workflow_bar = WorkflowBar.mount(self,flow,"population","population",owns_flow)
 	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"population",func() -> Dictionary: return session.data,canvas)
 var synthesis: VBoxContainer
 func _button(parent: Node, text: String, action: Callable) -> Button:

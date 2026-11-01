@@ -1,0 +1,15 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_WORKFLOW_CHECK fixture_ready true
+F9_WORKFLOW_CHECK up_to_date_and_unrelated_are_reported true
+F9_WORKFLOW_CHECK piece_replaces_its_snapshot true
+F9_WORKFLOW_CHECK anchors_follow_their_instance_and_settle true
+F9_WORKFLOW_CHECK plan_is_recertified_with_the_same_slots true
+F9_WORKFLOW_CHECK carry_is_deterministic true
+F9_WORKFLOW_CHECK waypoints_follow_and_routes_keep_slots true
+F9_WORKFLOW_CHECK removed_instance_names_the_marker true
+F9_WORKFLOW_CHECK lost_layer_names_the_marker true
+F9_WORKFLOW_CHECK missing_slot_names_the_route true
+F9_WORKFLOW_CHECK apply_is_one_undo_on_its_base true
+F9_WORKFLOW_CHECK opened_piece_matches_its_snapshot true
+F9_WORKFLOW_RESULT {"checks":[{"id":"fixture_ready","ok":true},{"id":"up_to_date_and_unrelated_are_reported","ok":true},{"id":"piece_replaces_its_snapshot","ok":true},{"id":"anchors_follow_their_instance_and_settle","ok":true},{"id":"plan_is_recertified_with_the_same_slots","ok":true},{"id":"carry_is_deterministic","ok":true},{"id":"waypoints_follow_and_routes_keep_slots","ok":true},{"id":"removed_instance_names_the_marker","ok":true},{"id":"lost_layer_names_the_marker","ok":true},{"id":"missing_slot_names_the_route","ok":true},{"id":"apply_is_one_undo_on_its_base","ok":true},{"id":"opened_piece_matches_its_snapshot","ok":true}],"count":12,"metrics":{"carry_ms":2108},"ok":true}

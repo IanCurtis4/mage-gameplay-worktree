@@ -16,7 +16,11 @@ const Library = preload("res://scripts/map_authoring/library/library_model.gd")
 const Operations = preload("res://scripts/map_authoring/composition/map_operations.gd")
 var generation_window: Window
 var population_window: Window
+const Flow = preload("res://scripts/map_authoring/workflow/authoring_flow.gd")
+const WorkflowBar = preload("res://scripts/map_authoring/workflow/workflow_bar.gd")
 var gameplay_tools: Control
+var flow: RefCounted
+var workflow_bar: VBoxContainer
 var session := Session.new()
 var canvas: Control
 var job: RefCounted
@@ -120,6 +124,10 @@ func _ready() -> void:
 	gameplay_tools = preload("res://scripts/map_authoring/preview/gameplay_tools.gd").mount(self,"map","map",func() -> Dictionary: return session.data,func() -> Dictionary: return result.get("package",{}) if result.get("ok",false) else {},func() -> String: return Document.hash_source(session.data))
 	# Checkpoint44 (F9-05, P3b): regional variation of one instance; its own AX provider.
 	synthesis = RootSynthesisSection.new(); add_child(synthesis); synthesis.setup(self,"map","map"); synthesis.refresh()
+	# Checkpoint49 (F9-06/07, P6a): the guided step bar shared by the screens.
+	var owns_flow: bool = flow == null
+	if owns_flow: flow = Flow.new()
+	flow.attach("map",self); workflow_bar = WorkflowBar.mount(self,flow,"map","map",owns_flow)
 	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"map",func() -> Dictionary: return session.data,canvas)
 var synthesis: VBoxContainer
 func _button(parent: Node, text: String, action: Callable) -> Button:
@@ -128,7 +136,7 @@ func open_population() -> void:
 	if population_window == null:
 		population_window = Window.new(); population_window.title = "Encontros do mapa"; population_window.size = Vector2i(1280,860); population_window.min_size = Vector2i(1100,650)
 		population_window.close_requested.connect(population_window.hide); add_child(population_window)
-		var panel := Population.new(); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); population_window.add_child(panel)
+		var panel := Population.new(); panel.flow = flow; panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); population_window.add_child(panel)
 		if not session.data.instances.is_empty(): panel.import_map(session.data)
 	population_window.popup_centered()
 func open_generation() -> void:

@@ -1,0 +1,13 @@
+{
+  "Workflow": 12,
+  "WorkflowNative": 23,
+  "stages_job_211_pass": ["Workflow","WorkflowNative","RootSynthesis","RootSynthesisNative","ExchangeMergeNative","RegionalSynthesisNative","GameplayEditorNative","CompositionAX","CompositionAXNative","EncounterAuthoring","EncounterAuthoringNative","Authoring","AuthoringNative","Content","ContentNative","MapBiomeNative","ViewportNative","LibraryNative","ObjectsNative"],
+  "runners_job_211_pass": ["M2 terrain","M3 composition","M4 population","M5 patrol","M6 generation","M6 generation native","M7 exchange","M7 exchange native"],
+  "native_failures_identical_on_base_36ca0f52_jobs_213_215": {
+    "M2 terrain native": "native_textured_meshes (mesh count of the large sample)",
+    "M4 population native": "canonical_discardable_test (retired in-editor technical test)",
+    "M5 patrol native": "test_uses_separate_real_process, native_preview_suspends_checkpoint, native_preview_resumes_checkpoint",
+    "M8 candidate native": "ux_terrain_dropdown (terrain sections gained 'Variação regional' in checkpoint43)"
+  },
+  "note": "the four failing native tests are stale expectations of earlier tooling; migrated in P6d together with M3Native24"
+}

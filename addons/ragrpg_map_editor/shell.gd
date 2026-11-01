@@ -30,7 +30,11 @@ var _dialog: ConfirmationDialog
 var _pending_action: Callable
 var _ax_replace_error := ""
 
+const Flow = preload("res://scripts/map_authoring/workflow/authoring_flow.gd")
+const WorkflowBar = preload("res://scripts/map_authoring/workflow/workflow_bar.gd")
 var exchange_panel: Control
+var flow: RefCounted
+var workflow_bar: VBoxContainer
 func _ready() -> void:
 	exchange_panel = preload("res://scripts/map_authoring/exchange/exchange_panel.gd").mount(self,"piece",func() -> Dictionary: return session.document().to_data().duplicate(true),session.apply)
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -132,6 +136,10 @@ func _ready() -> void:
 	add_child(timer)
 	_new_document()
 	context_panel = preload("res://scripts/map_authoring/context/context_panel.gd").mount(self,session,terrain)
+	# Checkpoint49 (F9-06/07, P6a): the guided step bar shared by the screens.
+	var owns_flow: bool = flow == null
+	if owns_flow: flow = Flow.new()
+	flow.attach("piece",self); workflow_bar = WorkflowBar.mount(self,flow,"piece","piece",owns_flow)
 	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"piece",func() -> Dictionary: return session.document().to_data(),terrain.canvas)
 
 func _button(parent: Node, text: String, action: Callable) -> Button:
@@ -147,7 +155,7 @@ func focus_primary() -> void:
 func open_composition() -> void:
 	if composition_window == null:
 		composition_window = Window.new(); composition_window.title = "RagRPG · Composição de mapas"; composition_window.size = Vector2i(1360,850)
-		var panel := Composition.new(); composition_window.add_child(panel); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		var panel := Composition.new(); panel.flow = flow; composition_window.add_child(panel); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		composition_window.close_requested.connect(func() -> void:
 			panel.preserve_draft(); panel.canvas.stop_test(); composition_window.hide())
 		add_child(composition_window)

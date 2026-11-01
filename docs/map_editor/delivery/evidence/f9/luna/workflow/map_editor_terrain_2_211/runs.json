@@ -1,0 +1,1272 @@
+[
+  {
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "finished_utc": "2026-11-01T18:20:45.8919005Z",
+    "exit_code": 0,
+    "started_utc": "2026-11-01T18:20:33.3400160Z",
+    "name": "import",
+    "output_sha256": "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+    "ok": true,
+    "timed_out": false,
+    "result": null,
+    "timeout_ms": 60000
+  },
+  {
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_terrain_test.gd"
+    ],
+    "finished_utc": "2026-11-01T18:20:56.3516299Z",
+    "exit_code": 0,
+    "started_utc": "2026-11-01T18:20:45.9454444Z",
+    "name": "terrain",
+    "output_sha256": "2D8FCB8570F9842400FE1865BADA73C24769F2F889FA2C890F72A5F48F673E3E",
+    "ok": true,
+    "timed_out": false,
+    "result": {
+      "checks": [
+        {
+          "id": "compile_sample",
+          "ok": true
+        },
+        {
+          "id": "exact_coplanar_compaction_count",
+          "ok": true
+        },
+        {
+          "id": "solid_slab_exact",
+          "ok": true
+        },
+        {
+          "id": "source_not_mutated",
+          "ok": true
+        },
+        {
+          "id": "repeat_identical_package",
+          "ok": true
+        },
+        {
+          "id": "collection_order_independent",
+          "ok": true
+        },
+        {
+          "id": "package_valid",
+          "ok": true
+        },
+        {
+          "id": "tampered_package_rejected",
+          "ok": true
+        },
+        {
+          "id": "same_visual_logic_vertices_0",
+          "ok": true
+        },
+        {
+          "id": "same_visual_logic_vertices_1",
+          "ok": true
+        },
+        {
+          "id": "same_visual_logic_vertices_2",
+          "ok": true
+        },
+        {
+          "id": "same_visual_logic_vertices_3",
+          "ok": true
+        },
+        {
+          "id": "canonical_configure",
+          "ok": true
+        },
+        {
+          "id": "ramp_intermediate_support",
+          "ok": true
+        },
+        {
+          "id": "ramp_rejects_flattening",
+          "ok": true
+        },
+        {
+          "id": "lower_support_under_bridge",
+          "ok": true
+        },
+        {
+          "id": "connected_route_to_bridge",
+          "ok": true
+        },
+        {
+          "id": "canonical_motion_bind",
+          "ok": true
+        },
+        {
+          "id": "canonical_motion_plan",
+          "ok": true
+        },
+        {
+          "id": "continuous_motion_no_teleport",
+          "ok": true
+        },
+        {
+          "id": "underpass_route",
+          "ok": true
+        },
+        {
+          "id": "slab_rejects_tall_body",
+          "ok": true
+        },
+        {
+          "id": "bridge_blocks_attack",
+          "ok": true
+        },
+        {
+          "id": "ray_picks_upper_deck",
+          "ok": true
+        },
+        {
+          "id": "slab_occludes_hidden_lower",
+          "ok": true
+        },
+        {
+          "id": "brush_raise_oracle",
+          "ok": true
+        },
+        {
+          "id": "brush_input_density_independent",
+          "ok": true
+        },
+        {
+          "id": "brush_lower_oracle",
+          "ok": true
+        },
+        {
+          "id": "flatten_oracle",
+          "ok": true
+        },
+        {
+          "id": "ramp_control_oracle",
+          "ok": true
+        },
+        {
+          "id": "ramp_rejects_zero_length",
+          "ok": true
+        },
+        {
+          "id": "smooth_frozen_neighbors_oracle",
+          "ok": true
+        },
+        {
+          "id": "paint_two_materials",
+          "ok": true
+        },
+        {
+          "id": "layer_lock",
+          "ok": true
+        },
+        {
+          "id": "region_protected",
+          "ok": true
+        },
+        {
+          "id": "connector_protected",
+          "ok": true
+        },
+        {
+          "id": "stroke_atomic_apply",
+          "ok": true
+        },
+        {
+          "id": "stroke_atomic_undo",
+          "ok": true
+        },
+        {
+          "id": "stroke_atomic_redo",
+          "ok": true
+        },
+        {
+          "id": "save_source",
+          "ok": true
+        },
+        {
+          "id": "reopen_preserves_compilation",
+          "ok": true
+        },
+        {
+          "id": "nonfinite_rejected",
+          "ok": true
+        },
+        {
+          "id": "overlap_rejected",
+          "ok": true
+        },
+        {
+          "id": "nonplanar_special_rejected",
+          "ok": true
+        },
+        {
+          "id": "concave_special_rejected",
+          "ok": true
+        },
+        {
+          "id": "insufficient_clearance_rejected",
+          "ok": true
+        },
+        {
+          "id": "mixed_relief_retains_mass_and_45_degree_support_limit",
+          "ok": true
+        },
+        {
+          "id": "authored_opening_compiles",
+          "ok": true
+        },
+        {
+          "id": "one_stable_boundary_opening",
+          "ok": true
+        },
+        {
+          "id": "interior_port_rejected",
+          "ok": true
+        },
+        {
+          "id": "port_wider_than_edge_rejected",
+          "ok": true
+        },
+        {
+          "id": "unconnected_ramp_rejected",
+          "ok": true
+        },
+        {
+          "id": "warped_grid_compiles_to_triangles",
+          "ok": true
+        },
+        {
+          "id": "invalid_brush_radius_rejected",
+          "ok": true
+        },
+        {
+          "id": "nonfinite_brush_point_rejected",
+          "ok": true
+        },
+        {
+          "id": "square_stamp_corner_oracle",
+          "ok": true
+        },
+        {
+          "id": "compile_cancelled",
+          "ok": true
+        },
+        {
+          "id": "late_result_rejected",
+          "ok": true
+        },
+        {
+          "id": "thread_cancelled_no_package",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_0",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_1",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_2",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_3",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_4",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_5",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_6",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_7",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_8",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_9",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_0",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_1",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_2",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_3",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_4",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_5",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_6",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_7",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_8",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_9",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_0",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_1",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_2",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_3",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_4",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_5",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_6",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_7",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_8",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_9",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_0",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_1",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_2",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_3",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_4",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_5",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_6",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_7",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_8",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_9",
+          "ok": true
+        },
+        {
+          "id": "flat_grid_above_old_limit_compiles",
+          "ok": true
+        },
+        {
+          "id": "brush_above_old_grid_limit",
+          "ok": true
+        },
+        {
+          "id": "long_stroke_rejected_whole",
+          "ok": true
+        }
+      ],
+      "count": 102,
+      "ok": true,
+      "package_hash": "e33efc30aae734e02dc8e5f6e41bf8fc59e4cdb09f1dbc6f5937e3fae7731d20",
+      "source_path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project/.godot/terrain_source_edec325177d6e8f2.json"
+    },
+    "timeout_ms": 60000
+  },
+  {
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://scripts/map_authoring/compiler/headless.gd",
+      "--",
+      "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project/.godot/terrain_source_edec325177d6e8f2.json"
+    ],
+    "finished_utc": "2026-11-01T18:21:01.5731388Z",
+    "exit_code": 0,
+    "started_utc": "2026-11-01T18:20:56.3670241Z",
+    "name": "cli_a",
+    "output_sha256": "046B57CC539DF1F3FD6E3E8F6C596398FDF28ECB5C2B7609729944D828F8BC4C",
+    "ok": true,
+    "timed_out": false,
+    "result": {
+      "code": "",
+      "connections": 3,
+      "diagnostics": [],
+      "grid_quads": 5,
+      "input_hash": "07a691585bf49339188f013ddf5cb1cc5c7bb71bd5ba2720ca53b6cee8e5e4be",
+      "ok": true,
+      "output_hash": "e33efc30aae734e02dc8e5f6e41bf8fc59e4cdb09f1dbc6f5937e3fae7731d20",
+      "piece_count": 1,
+      "support_count": 4
+    },
+    "timeout_ms": 60000
+  },
+  {
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://scripts/map_authoring/compiler/headless.gd",
+      "--",
+      "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project/.godot/terrain_source_edec325177d6e8f2.json"
+    ],
+    "finished_utc": "2026-11-01T18:21:06.5902595Z",
+    "exit_code": 0,
+    "started_utc": "2026-11-01T18:21:01.5780601Z",
+    "name": "cli_b",
+    "output_sha256": "046B57CC539DF1F3FD6E3E8F6C596398FDF28ECB5C2B7609729944D828F8BC4C",
+    "ok": true,
+    "timed_out": false,
+    "result": {
+      "code": "",
+      "connections": 3,
+      "diagnostics": [],
+      "grid_quads": 5,
+      "input_hash": "07a691585bf49339188f013ddf5cb1cc5c7bb71bd5ba2720ca53b6cee8e5e4be",
+      "ok": true,
+      "output_hash": "e33efc30aae734e02dc8e5f6e41bf8fc59e4cdb09f1dbc6f5937e3fae7731d20",
+      "piece_count": 1,
+      "support_count": 4
+    },
+    "timeout_ms": 60000
+  },
+  {
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_terrain_scale_test.gd"
+    ],
+    "finished_utc": "2026-11-01T18:22:18.6257807Z",
+    "exit_code": 0,
+    "started_utc": "2026-11-01T18:21:06.5962985Z",
+    "name": "terrain_scale",
+    "output_sha256": "32EB44C13ED40363A18D11A5B4BB2A67B1B3B03F0AA0B10369CF45E223D6DF1F",
+    "ok": true,
+    "timed_out": false,
+    "result": {
+      "checks": [
+        {
+          "id": "decimal_tie_rounds_to_even",
+          "ok": true
+        },
+        {
+          "id": "decimal_above_tie_rounds_up",
+          "ok": true
+        },
+        {
+          "id": "decimal_subnormal_retained",
+          "ok": true
+        },
+        {
+          "id": "decimal_underflow_and_overflow",
+          "ok": true
+        },
+        {
+          "id": "fractional_masks_binary_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "large_contiguous_piece_compiles",
+          "ok": true
+        },
+        {
+          "id": "one_piece_is_not_grid_count",
+          "ok": true
+        },
+        {
+          "id": "full_extent_preserved",
+          "ok": true
+        },
+        {
+          "id": "dense_paint_retained",
+          "ok": true
+        },
+        {
+          "id": "dependencies_hashed",
+          "ok": true
+        },
+        {
+          "id": "forged_asset_dependency_rejected",
+          "ok": true
+        },
+        {
+          "id": "visual_source_package_equivalence",
+          "ok": true
+        },
+        {
+          "id": "dense_visual_count",
+          "ok": true
+        },
+        {
+          "id": "world_uv_scale_independent_of_partition",
+          "ok": true
+        },
+        {
+          "id": "continuous_blend_and_normal_range",
+          "ok": true
+        },
+        {
+          "id": "steep_material_receives_real_slope_normal",
+          "ok": true
+        },
+        {
+          "id": "steep_material_preserves_author_paint",
+          "ok": true
+        },
+        {
+          "id": "all4225_source_samples_on_exact_support",
+          "ok": true
+        },
+        {
+          "id": "large_piece_route",
+          "ok": true
+        },
+        {
+          "id": "large_real_continuous_traversal",
+          "ok": true
+        },
+        {
+          "id": "large_local_brush_exact_oracle",
+          "ok": true
+        },
+        {
+          "id": "preview_commit_same_data",
+          "ok": true
+        },
+        {
+          "id": "edited_large_piece_still_compiles",
+          "ok": true
+        },
+        {
+          "id": "source_immutable",
+          "ok": true
+        },
+        {
+          "id": "large_atomic_undo",
+          "ok": true
+        },
+        {
+          "id": "large_atomic_redo",
+          "ok": true
+        },
+        {
+          "id": "large_source_saved",
+          "ok": true
+        },
+        {
+          "id": "large_roundtrip_hash",
+          "ok": true
+        },
+        {
+          "id": "flat129_is_one_generated_support",
+          "ok": true
+        },
+        {
+          "id": "logical_budget_fails_without_partial_package",
+          "ok": true
+        },
+        {
+          "id": "sample_budget_distinct_from_piece_size",
+          "ok": true
+        },
+        {
+          "id": "large_measurement_33_0",
+          "ok": true
+        },
+        {
+          "id": "large_measurement_33_1",
+          "ok": true
+        },
+        {
+          "id": "large_measurement_33_2",
+          "ok": true
+        },
+        {
+          "id": "large_measurement_33_3",
+          "ok": true
+        },
+        {
+          "id": "large_measurement_33_4",
+          "ok": true
+        },
+        {
+          "id": "large_measurement_65_0",
+          "ok": true
+        },
+        {
+          "id": "large_measurement_65_1",
+          "ok": true
+        },
+        {
+          "id": "large_measurement_65_2",
+          "ok": true
+        },
+        {
+          "id": "large_measurement_65_3",
+          "ok": true
+        },
+        {
+          "id": "large_measurement_65_4",
+          "ok": true
+        },
+        {
+          "id": "large_measurement_129_0",
+          "ok": true
+        },
+        {
+          "id": "large_measurement_129_1",
+          "ok": true
+        },
+        {
+          "id": "large_measurement_129_2",
+          "ok": true
+        },
+        {
+          "id": "large_measurement_129_3",
+          "ok": true
+        },
+        {
+          "id": "large_measurement_129_4",
+          "ok": true
+        }
+      ],
+      "count": 46,
+      "first_compile_ms": 1750.001,
+      "ok": true,
+      "package_hash": "7d81b475d68541720ffb0f624485a80807b5b2a13d8a46ca9e662509f5b805b1",
+      "source_path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project/.godot/large_piece_4703b3009d4ce184.json"
+    },
+    "timeout_ms": 180000
+  },
+  {
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://scripts/map_authoring/compiler/headless.gd",
+      "--",
+      "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project/.godot/large_piece_4703b3009d4ce184.json"
+    ],
+    "finished_utc": "2026-11-01T18:22:25.3167223Z",
+    "exit_code": 0,
+    "started_utc": "2026-11-01T18:22:18.6368618Z",
+    "name": "large_cli_a",
+    "output_sha256": "6F49D06B5EC6B4E3245625DE4F82E08994DE97F293727537A35A4DD7FFF4EFB2",
+    "ok": true,
+    "timed_out": false,
+    "result": {
+      "code": "",
+      "connections": 2,
+      "diagnostics": [],
+      "grid_quads": 4096,
+      "input_hash": "1a85f62c74ce64e5b6482ea1204ac5f75ba7f442effb5e1198e551ad22f8b799",
+      "ok": true,
+      "output_hash": "7d81b475d68541720ffb0f624485a80807b5b2a13d8a46ca9e662509f5b805b1",
+      "piece_count": 1,
+      "support_count": 3
+    },
+    "timeout_ms": 60000
+  },
+  {
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://scripts/map_authoring/compiler/headless.gd",
+      "--",
+      "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project/.godot/large_piece_4703b3009d4ce184.json"
+    ],
+    "finished_utc": "2026-11-01T18:22:31.9966603Z",
+    "exit_code": 0,
+    "started_utc": "2026-11-01T18:22:25.3200948Z",
+    "name": "large_cli_b",
+    "output_sha256": "6F49D06B5EC6B4E3245625DE4F82E08994DE97F293727537A35A4DD7FFF4EFB2",
+    "ok": true,
+    "timed_out": false,
+    "result": {
+      "code": "",
+      "connections": 2,
+      "diagnostics": [],
+      "grid_quads": 4096,
+      "input_hash": "1a85f62c74ce64e5b6482ea1204ac5f75ba7f442effb5e1198e551ad22f8b799",
+      "ok": true,
+      "output_hash": "7d81b475d68541720ffb0f624485a80807b5b2a13d8a46ca9e662509f5b805b1",
+      "piece_count": 1,
+      "support_count": 3
+    },
+    "timeout_ms": 60000
+  },
+  {
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_document_test.gd"
+    ],
+    "finished_utc": "2026-11-01T18:22:33.5009721Z",
+    "exit_code": 0,
+    "started_utc": "2026-11-01T18:22:32.0005937Z",
+    "name": "document_regression",
+    "output_sha256": "E3540287126E64252635C94DFA87F20BF22097F03D5BBFCB15BDA94A2B5AC2D7",
+    "ok": true,
+    "timed_out": false,
+    "result": {
+      "checks": [
+        {
+          "id": "full_source_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "copy_boundary",
+          "ok": true
+        },
+        {
+          "id": "set_order_hash",
+          "ok": true
+        },
+        {
+          "id": "sequence_order_hash",
+          "ok": true
+        },
+        {
+          "id": "canonical_numeric_oracle",
+          "ok": true
+        },
+        {
+          "id": "canonical_unicode_oracle",
+          "ok": true
+        },
+        {
+          "id": "sha256_oracle",
+          "ok": true
+        },
+        {
+          "id": "duplicate_key_7",
+          "ok": true
+        },
+        {
+          "id": "duplicate_key_8",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_9",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_10",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_11",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_12",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_13",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_14",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_15",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_16",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_17",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_18",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_19",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_20",
+          "ok": true
+        },
+        {
+          "id": "non_finite",
+          "ok": true
+        },
+        {
+          "id": "bounded_depth",
+          "ok": true
+        },
+        {
+          "id": "bounded_string",
+          "ok": true
+        },
+        {
+          "id": "bounded_bytes",
+          "ok": true
+        },
+        {
+          "id": "utf8_strict_25",
+          "ok": true
+        },
+        {
+          "id": "utf8_strict_26",
+          "ok": true
+        },
+        {
+          "id": "utf8_strict_27",
+          "ok": true
+        },
+        {
+          "id": "utf8_strict_28",
+          "ok": true
+        },
+        {
+          "id": "surrogate_strict_29",
+          "ok": true
+        },
+        {
+          "id": "surrogate_strict_30",
+          "ok": true
+        },
+        {
+          "id": "surrogate_strict_31",
+          "ok": true
+        },
+        {
+          "id": "surrogate_pair",
+          "ok": true
+        },
+        {
+          "id": "token_budget",
+          "ok": true
+        },
+        {
+          "id": "unknown_version",
+          "ok": true
+        },
+        {
+          "id": "unknown_field",
+          "ok": true
+        },
+        {
+          "id": "typed_bool",
+          "ok": true
+        },
+        {
+          "id": "typed_integer",
+          "ok": true
+        },
+        {
+          "id": "invalid_draft_readable",
+          "ok": true
+        },
+        {
+          "id": "duplicate_ids",
+          "ok": true
+        },
+        {
+          "id": "broken_reference",
+          "ok": true
+        },
+        {
+          "id": "dependency_reference",
+          "ok": true
+        },
+        {
+          "id": "entity_limit",
+          "ok": true
+        },
+        {
+          "id": "clean_baseline",
+          "ok": true
+        },
+        {
+          "id": "edit_atomic",
+          "ok": true
+        },
+        {
+          "id": "undo",
+          "ok": true
+        },
+        {
+          "id": "redo",
+          "ok": true
+        },
+        {
+          "id": "reject_without_mutation",
+          "ok": true
+        },
+        {
+          "id": "redo_branch_cleared",
+          "ok": true
+        },
+        {
+          "id": "replace_rejection",
+          "ok": true
+        },
+        {
+          "id": "identity_stable",
+          "ok": true
+        },
+        {
+          "id": "duplicate_layer_graph",
+          "ok": true
+        },
+        {
+          "id": "duplicate_internal_references",
+          "ok": true
+        },
+        {
+          "id": "duplicate_atomic_undo",
+          "ok": true
+        },
+        {
+          "id": "duplicate_missing_rejected",
+          "ok": true
+        },
+        {
+          "id": "save_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "overwrite_requires_hash",
+          "ok": true
+        },
+        {
+          "id": "save_backup",
+          "ok": true
+        },
+        {
+          "id": "autosave",
+          "ok": true
+        },
+        {
+          "id": "external_edit",
+          "ok": true
+        },
+        {
+          "id": "recovery_divergence",
+          "ok": true
+        },
+        {
+          "id": "interruption_original_intact",
+          "ok": true
+        },
+        {
+          "id": "pending_preserved",
+          "ok": true
+        },
+        {
+          "id": "concurrent_writer_rejected",
+          "ok": true
+        },
+        {
+          "id": "truncated_pending_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_directory",
+          "ok": true
+        },
+        {
+          "id": "truncated_file",
+          "ok": true
+        },
+        {
+          "id": "draft_saved",
+          "ok": true
+        },
+        {
+          "id": "recovery_kind_safe",
+          "ok": true
+        },
+        {
+          "id": "io_length_limit",
+          "ok": true
+        }
+      ],
+      "count": 70,
+      "ok": true
+    },
+    "timeout_ms": 60000
+  },
+  {
+    "arguments": [
+      "--editor",
+      "--rendering-method",
+      "gl_compatibility"
+    ],
+    "finished_utc": "2026-11-01T18:23:33.5819866Z",
+    "exit_code": 1,
+    "started_utc": "2026-11-01T18:22:33.5358401Z",
+    "name": "native_ui",
+    "output_sha256": "F201E217F5A8E87BD307FF00617036885F451B4E2EA73D847C2C71E988E2DA39",
+    "ok": false,
+    "timed_out": true,
+    "result": {
+      "checks": [
+        {
+          "id": "native_shell_visible",
+          "ok": true
+        },
+        {
+          "id": "oversized_preview_preflight",
+          "ok": true
+        },
+        {
+          "id": "sample_three_layers",
+          "ok": true
+        },
+        {
+          "id": "sample_bridge",
+          "ok": true
+        },
+        {
+          "id": "native_bake_completed",
+          "ok": true
+        },
+        {
+          "id": "native_headless_equivalent",
+          "ok": true
+        },
+        {
+          "id": "native_compiled_boundaries",
+          "ok": true
+        },
+        {
+          "id": "example_preserves_nonempty_piece",
+          "ok": true
+        },
+        {
+          "id": "isometric_pick_matches_support",
+          "ok": true
+        },
+        {
+          "id": "stroke_preview_without_source_mutation",
+          "ok": true
+        },
+        {
+          "id": "cancel_preserves_source",
+          "ok": true
+        },
+        {
+          "id": "release_applies_one_action",
+          "ok": true
+        },
+        {
+          "id": "one_undo_restores_whole_stroke",
+          "ok": true
+        },
+        {
+          "id": "leave_canvas_discards_stroke",
+          "ok": true
+        },
+        {
+          "id": "locked_layer_rejected_in_ui",
+          "ok": true
+        },
+        {
+          "id": "explicit_layer_selection",
+          "ok": true
+        },
+        {
+          "id": "selection_tree_matches_target",
+          "ok": true
+        },
+        {
+          "id": "hide_layer_explicit",
+          "ok": true
+        },
+        {
+          "id": "connector_add_and_compile",
+          "ok": true
+        },
+        {
+          "id": "connector_update_same_identity",
+          "ok": true
+        },
+        {
+          "id": "connector_update_undo",
+          "ok": true
+        },
+        {
+          "id": "connector_form_reselection",
+          "ok": true
+        },
+        {
+          "id": "locked_connector_update_remove_rejected",
+          "ok": true
+        },
+        {
+          "id": "connector_remove",
+          "ok": true
+        },
+        {
+          "id": "connector_remove_undo",
+          "ok": true
+        },
+        {
+          "id": "native_save",
+          "ok": true
+        },
+        {
+          "id": "native_reopen",
+          "ok": true
+        },
+        {
+          "id": "native_cancel_discarded",
+          "ok": true
+        },
+        {
+          "id": "native_stale_result_discarded",
+          "ok": true
+        },
+        {
+          "id": "native_final_bake",
+          "ok": true
+        },
+        {
+          "id": "native_capture",
+          "ok": true
+        },
+        {
+          "id": "native_large_piece_not_subdivided_into_pieces",
+          "ok": true
+        },
+        {
+          "id": "native_textured_meshes",
+          "ok": false
+        },
+        {
+          "id": "native_mipmaps_for_zoomed_out_terrain",
+          "ok": true
+        },
+        {
+          "id": "native_large_pick_on_plateau",
+          "ok": true
+        },
+        {
+          "id": "native_stroke_overlay_tracks_height",
+          "ok": true
+        },
+        {
+          "id": "native_large_brush",
+          "ok": true
+        },
+        {
+          "id": "native_large_atomic_undo",
+          "ok": true
+        },
+        {
+          "id": "native_large_save_reopen",
+          "ok": true
+        },
+        {
+          "id": "native_large_bake",
+          "ok": true
+        },
+        {
+          "id": "native_large_capture",
+          "ok": true
+        },
+        {
+          "id": "native_terrain_detail_capture",
+          "ok": true
+        },
+        {
+          "id": "native_steep_valid_support",
+          "ok": true
+        },
+        {
+          "id": "native_steep_capture",
+          "ok": true
+        },
+        {
+          "id": "native_unload_frees_shell",
+          "ok": true
+        }
+      ],
+      "count": 45,
+      "ok": false
+    },
+    "timeout_ms": 60000
+  }
+]

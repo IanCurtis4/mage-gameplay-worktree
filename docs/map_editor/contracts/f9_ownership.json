@@ -3485,6 +3485,72 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 file (checkpoint48 release API)",
       "base_sha256": "c814870b22345cd89bb50c76e1c85f17d93e564966f968ca778c24a0380ae6a6"
+    },
+    {
+      "path": "scripts/map_authoring/workflow/carry_forward.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint49 guided flow)",
+      "base_sha256": "b215bb46b5abb181787641babfdcef4c9e3a9560bb66152986f9e501a0452f5a"
+    },
+    {
+      "path": "scripts/map_authoring/workflow/authoring_flow.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint49 guided flow)",
+      "base_sha256": "5a2d85d903bfa8c96667ec4e0fbb86af743c3361650b8296840bd3641977be5f"
+    },
+    {
+      "path": "scripts/map_authoring/workflow/workflow_bar.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint49 guided flow)",
+      "base_sha256": "bed8ff23d78deb7f7e72dfceec2a17573f02cd7735308b8586ccfe38eee25811"
+    },
+    {
+      "path": "scripts/map_authoring/workflow/carry_forward.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint49 guided flow)",
+      "base_sha256": "dda46ab23cd42b28aa712e8708a422e74f67ab68a15f2bc81e0a979d72633f97"
+    },
+    {
+      "path": "scripts/map_authoring/workflow/authoring_flow.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint49 guided flow)",
+      "base_sha256": "c577d2c3078d8e9db090a996fc1e8c4a5527ae95bd5b39b40c0006f5d1a2f20c"
+    },
+    {
+      "path": "scripts/map_authoring/workflow/workflow_bar.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint49 guided flow)",
+      "base_sha256": "899b82abf2f94c6bf86afc738226e608b488858b137d31fee244d6f4f7f487e0"
+    },
+    {
+      "path": "docs/map_editor/contracts/f9_guided_flow.md",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint49 guided flow)",
+      "base_sha256": "5ea6f52442d01341b08e62d8804013e6b97703286741baf9672392c0f5aeaec1"
+    },
+    {
+      "path": "tests/map_editor_workflow_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint49 guided flow)",
+      "base_sha256": "9a3e9fe0e43b1546970d785378314f7f28e6e287173590a10eb4f7b27dc59a55"
+    },
+    {
+      "path": "tests/map_editor_workflow_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint49 guided flow)",
+      "base_sha256": "7fa0367ef58a3ecee4a5c3dc7b262cf4581c972c1a727acebf35e9be4227ebf1"
+    },
+    {
+      "path": "tests/map_editor_workflow_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint49 guided flow)",
+      "base_sha256": "461225115f8c51b67f576b2fc24a2fb54f832ebcd4f105eb93b85b9c70a4b99e"
+    },
+    {
+      "path": "tests/map_editor_workflow_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint49 guided flow)",
+      "base_sha256": "8848301b4df6ff8a0f89e595bdf6fbff24a9dbc465e25ab6718d2aed54781438"
     }
   ],
   "read_only_shared": [
@@ -4957,6 +5023,78 @@
         "BosqueRecompileByteIdentical": true
       },
       "limits": "prepare() certifies on the main thread (~80 s for the Bosque), recorded for F10; republishing after any compiler REVISION or catalog change is manual and checked by ReleaseApi freshness"
+    },
+    "guided_flow_p6a": {
+      "state": "validated_increment_F9_still_open",
+      "base": "36ca0f52",
+      "human_report": "01/11: go to P6; keep .tools/godot.zip; choices: step bar on the screens, publish as a confirmed final step, occlusion fade in the game",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "contract": "docs/map_editor/contracts/f9_guided_flow.md",
+      "files": [
+        "scripts/map_authoring/workflow/carry_forward.gd",
+        "scripts/map_authoring/workflow/authoring_flow.gd",
+        "scripts/map_authoring/workflow/workflow_bar.gd",
+        "scripts/map_authoring/workflow/carry_forward.gd.uid",
+        "scripts/map_authoring/workflow/authoring_flow.gd.uid",
+        "scripts/map_authoring/workflow/workflow_bar.gd.uid",
+        "addons/ragrpg_map_editor/shell.gd",
+        "addons/ragrpg_map_editor/presentation.gd",
+        "scripts/map_authoring/composition/map_panel.gd",
+        "scripts/map_authoring/population/population_panel.gd",
+        "scripts/map_authoring/patrol/patrol_panel.gd",
+        "tools/map_editor_completion/run.ps1",
+        "docs/map_editor/contracts/f9_guided_flow.md"
+      ],
+      "test_files": [
+        "tests/map_editor_workflow_test.gd",
+        "tests/map_editor_workflow_ui_test.gd",
+        "tests/map_editor_workflow_test.gd.uid",
+        "tests/map_editor_workflow_ui_test.gd.uid"
+      ],
+      "scope": "step bar on the terrain, map, encounter and patrol screens (piece, map, encounters, patrols, test) with states and the next step run through each screen producer; background carry forward of a changed piece/map/encounters (snapshots replaced, anchors follow their instance and family and settle, plan re-certified keeping every slot, routes keep their slots) reviewed and applied as one undo on its base; localized refusals that open the owning screen; AX <screen>/workflow/*; the bar is not folded into the screen menus",
+      "validation": {
+        "Workflow": 12,
+        "WorkflowNative": 23,
+        "stages_job_211_pass": [
+          "Workflow",
+          "WorkflowNative",
+          "RootSynthesis",
+          "RootSynthesisNative",
+          "ExchangeMergeNative",
+          "RegionalSynthesisNative",
+          "GameplayEditorNative",
+          "CompositionAX",
+          "CompositionAXNative",
+          "EncounterAuthoring",
+          "EncounterAuthoringNative",
+          "Authoring",
+          "AuthoringNative",
+          "Content",
+          "ContentNative",
+          "MapBiomeNative",
+          "ViewportNative",
+          "LibraryNative",
+          "ObjectsNative"
+        ],
+        "runners_job_211_pass": [
+          "M2 terrain",
+          "M3 composition",
+          "M4 population",
+          "M5 patrol",
+          "M6 generation",
+          "M6 generation native",
+          "M7 exchange",
+          "M7 exchange native"
+        ],
+        "native_failures_identical_on_base_36ca0f52_jobs_213_215": {
+          "M2 terrain native": "native_textured_meshes (mesh count of the large sample)",
+          "M4 population native": "canonical_discardable_test (retired in-editor technical test)",
+          "M5 patrol native": "test_uses_separate_real_process, native_preview_suspends_checkpoint, native_preview_resumes_checkpoint",
+          "M8 candidate native": "ux_terrain_dropdown (terrain sections gained 'Variação regional' in checkpoint43)"
+        },
+        "note": "the four failing native tests are stale expectations of earlier tooling; migrated in P6d together with M3Native24"
+      },
+      "limits": "publishing through the flow is P6b; occlusion in the game is P6c; M3Native24 migration is P6d"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

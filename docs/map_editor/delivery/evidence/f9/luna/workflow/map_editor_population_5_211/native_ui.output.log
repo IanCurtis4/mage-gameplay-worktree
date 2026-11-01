@@ -1,0 +1,28 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+M4_UI_CHECK native_shell_visible true
+M4_UI_CHECK population_window_from_composition true
+M4_UI_CHECK imports_snapshot true
+M4_UI_CHECK catalog_populates_ui true
+M4_UI_CHECK paint_entry true
+M4_UI_CHECK gui_prepares_diff true
+M4_UI_CHECK unapplied_spatial_preview true
+M4_UI_CHECK compare_current_before_apply true
+M4_UI_CHECK diff_confirmation_visible true
+M4_UI_CHECK apply_plan_one_undo_step true
+M4_UI_CHECK undo_whole_plan true
+M4_UI_CHECK redo_whole_plan true
+M4_UI_CHECK native_compile_complete true
+M4_UI_CHECK gui_headless_equal true
+M4_UI_CHECK pin_ui true
+M4_UI_CHECK reroll_diff_preserves_pin true
+M4_UI_CHECK pin_home_preserved true
+M4_UI_CHECK canonical_discardable_test false
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+SCRIPT ERROR: Invalid access to property or key 'stages' on a base object of type 'Nil'.
+   at: _run (res://addons/m4_driver/plugin.gd:52)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://addons/m4_driver/plugin.gd:52)
+       [1] wait_job (res://addons/m4_driver/plugin.gd:16)
