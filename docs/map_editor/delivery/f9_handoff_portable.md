@@ -1,7 +1,34 @@
 # RagRPG — handoff portátil de F9
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint50 — publicar pelo roteiro, oclusão no jogo e nativos antigos (P6b–P6d)
+## Checkpoint51 — área final: auditoria técnica e roteiro de aceite (P7)
+
+1/11/2026. Mesmo checkout/branch/fixture. Base 09cbff50; código e documentação
+em commits próprios. Papéis inalterados. Roteiro: delivery/f9_acceptance_script.md.
+
+- Pedido humano: seguir para o P7.
+- Amostra de aceite conferida no Bosque commitado e no pacote publicado
+  (AreaAcceptance13): clareira com dois materiais e caminho curvo, platôs com
+  rampas, ponte sobre a passagem inferior, bifurcação no bosque oeste e passagem
+  inferior sem saída, santuário com pilares e conclusão, emenda entre as duas
+  peças, arbustos de decoração, rochas que bloqueiam e árvores que ocluem,
+  encontros espalhados, grupo, patrulha com slot fixo, entrada e objetivo
+  existentes. Proposta de skill numa cópia da clareira: revisada, aplicada uma vez
+  e recusada fora do escopo, sem tocar nas fontes.
+- Em cópias da área (AreaVariants6): geração por seed com a passagem fixa, pelo
+  mesmo compilador; pincel com duas espécies 3:1 realizado no Bosque; o sorteio
+  canônico deu 3007/993 em 4000.
+- Cópia de aceite `.tools/f9_aceite` (fora do git) e
+  `.tools/claude_bridge/abrir_editor_aceite.ps1`: copia a fixture sem sessões,
+  probes e drivers de teste, liga o editor de mapas, usa perfil descartável próprio;
+  abre sem erros.
+- Roteiro humano com as 8 tarefas da amostra, o roteiro entre telas, a conferência
+  visual do Bosque e a tabela de registro.
+
+Pendente: aceite humano pelo roteiro (P7); P8 (recibo e limpeza).
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint50 — publicar pelo roteiro, oclusão no jogo e nativos antigos (P6b–P6d)
 
 1/11/2026. Mesmo checkout/branch/fixture. Base 8fcce595; código e documentação
 em commits próprios. Papéis inalterados. Contratos: contracts/f9_guided_flow.md e
@@ -28,8 +55,7 @@ contracts/f9_occlusion.md; consumption.md atualizado.
   nativos (antes 60 s); as travas deixadas pela rodada morta no limite antigo
   foram liberadas, sem apagar sessões.
 
-P6 fechado. Pendente: P7 (área final, roteiro humano e aceite), P8 (entrega).
-<!-- /f9-patrol-gameplay-active -->
+P6 fechado. Próximo: P7, iniciado no checkpoint51.
 
 ## Histórico checkpoint49 — roteiro guiado entre as telas (P6a)
 

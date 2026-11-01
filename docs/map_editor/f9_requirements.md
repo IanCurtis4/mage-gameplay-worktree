@@ -285,3 +285,7 @@ Checkpoint50 (1/11, Sol/Astra Opus): P6b publicar no jogo pelo roteiro depois do
 teste, com revisão e revisão anterior preservada (WorkflowNative28); P6c oclusão
 de câmera no jogo para jogador e inimigos, provada no Bosque (OcclusionNative12);
 P6d M3Native24 e nativos antigos de M2/M4/M5/M8 migrados. P6 fechado.
+
+Checkpoint51 (1/11, Sol/Astra Opus): P7 auditoria técnica da área final
+(AreaAcceptance13, AreaVariants6), cópia de aceite e roteiro humano
+(delivery/f9_acceptance_script.md). Aceite humano pendente.

@@ -92,7 +92,7 @@ pente-fino de F10 revisita. Nenhuma prova, guard, limite ou quota foi reduzido.
 | F9-07 | AX: IDs, ações parametrizadas, estado | comprovado | terreno, objetos, contexto, composição, encontros, patrulha (checkpoints 23–30); variação regional `terrain/synthesis/*` (checkpoint43) e `map`/`population`/`patrol` `/synthesis/*` (checkpoint44); intercâmbio `<tela>/exchange/{export,review,apply}` (checkpoint45); roteiro `<tela>/workflow/*` com o mesmo estado da GUI (checkpoint49) | — |
 | F9-07 | UX coerente e guiada, fluxo humano inteiro | comprovado tecnicamente | barra de etapas em todas as telas, próximo passo pelos produtores, atualização entre etapas revisada e com um desfazer (Workflow12, WorkflowNative23, checkpoint49); teste no jogo e publicação revisada pelo roteiro (WorkflowNative28, checkpoint50) | aceite humano (P7) |
 | F9-07 | histórico, hash, confirmação, modos | comprovado | entregue em F8; M1 PASS depois de corrigir a fixture do runner (job 155) | — |
-| F9-08 | biomas, espécies, chances, pesos, reservas | parcial | Content28/Native30, EncounterAuthoring27/25 | conferir chances nos fluxos integrados (P7) |
+| F9-08 | biomas, espécies, chances, pesos, reservas | comprovado | Content28/Native30, EncounterAuthoring27/25; pincel com duas espécies 3:1 realizado no Bosque e sorteio canônico 3007/993 em 4000 (AreaVariants6, checkpoint51) | — |
 | F9-08 | raro manual, exceção por instância, quest passiva | comprovado | entregue em F8; M4 PASS na regressão de base (job 154) | — |
 | F9-08 | bioma no manifesto final | comprovado | 4e3a3788, MapBiome15/13 | — |
 | F9-08 | stale entre revisões e reconciliação sem perda | comprovado | snapshots separados; a variação regional religa cada marcador pela família da camada e posição e reserva todo slot que fica (checkpoint44); o intercâmbio combina base/atual/proposta sem perder mudanças locais e reconfere o plano (checkpoint45); o roteiro leva peça, mapa e encontros adiante com os marcadores seguindo sua posição e o plano reconferido (checkpoint49) | — |
@@ -108,8 +108,8 @@ pente-fino de F10 revisita. Nenhuma prova, guard, limite ou quota foi reduzido.
 | F9-11 | preview real, apresentação de jogo | comprovado | GameplayNative63, checkpoints 30–40 | — |
 | F9-11 | restart, continuidade, compatibilidade | comprovado | 581dae4, diário J1–J3 | — |
 | F9-11 | export release limpo, dependências, API documentada | comprovado | release M8 (checkpoint41); pacote do Bosque fixado em `release_packages.json`, ponto de consumo `map_release.gd` e consumption.md (ReleaseApi11); release em instalação limpa pela API (release_bosque 8/8, checkpoint48) | — |
-| F9-12 | área temática (Bosque do Santuário) | parcial | 2 peças, trilha, colina, rampas, platôs, ponte e rota inferior, santuário, emenda, 47 props, população, patrulha; jogado pelo humano | conferir cada item da amostra no mapa final; geração com pins e intercâmbio em clone na área (P7) |
-| F9-12 | fluxo humano completo sem código, aceite | **falta** | — | roteiro humano e aceite (P7) |
+| F9-12 | área temática (Bosque do Santuário) | comprovado tecnicamente | 2 peças, trilha, colina, rampas, platôs, ponte e rota inferior, santuário, emenda, 47 props, população, patrulha; jogado pelo humano; cada item da amostra conferido nas fontes e no pacote publicado (AreaAcceptance13); geração com a passagem fixa e pesos de encontro em cópias da área (AreaVariants6); proposta de skill revisada, aplicada e recusada numa cópia (checkpoint51) | aceite visual humano pelo roteiro (P7) |
+| F9-12 | fluxo humano completo sem código, aceite | **falta** | roteiro `delivery/f9_acceptance_script.md` e cópia de aceite separada (checkpoint51) | aceite humano pelo roteiro (P7) |
 | — | teste histórico M3Native24 (preview retirado) | comprovado | migrado para o teste no jogo real pelos comandos da tela (M3 nativo 24/24, checkpoint50); os nativos antigos de M2, M4, M5 e M8, que falhavam igual na base 36ca0f52, migrados junto | — |
 | — | recibo final `delivery/f9.md`, limpeza da fixture | **falta** | — | P8 |
 
@@ -131,6 +131,6 @@ pente-fino de F10 revisita. Nenhuma prova, guard, limite ou quota foi reduzido.
    consumo documentada.
 6. **P6 — UX guiada e oclusão (F9-01/06/07).** (checkpoint49: P6a roteiro guiado e diagnóstico no fluxo; checkpoint50: P6b publicar pelo roteiro, P6c oclusão no jogo, P6d nativos antigos migrados. P6 fechado) Fluxo entre telas, diagnóstico
    localizado no fluxo, prova de oclusão.
-7. **P7 — área final e aceite (F9-12).** Conferir a amostra no Bosque, geração com
+7. **P7 — área final e aceite (F9-12).** (checkpoint51: auditoria técnica da área, cópias com geração e pesos, roteiro humano; aceite pendente) Conferir a amostra no Bosque, geração com
    pins e intercâmbio na área, roteiro humano, aceite.
 8. **P8 — entrega.** Recibo final, matriz comprovada, limpeza.
