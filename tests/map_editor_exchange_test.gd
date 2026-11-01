@@ -57,7 +57,9 @@ func run() -> void:
 	check("redo",session.redo() and session.data.name == "Nome revisado")
 	check("reapply_noop",Exchange.apply_to(request,proposal,session.data,session.apply).already_applied and session._undo.size() == 1)
 	var divergent := source.duplicate(true); divergent.name = "Mudança humana"
-	check("base_diverged",Exchange.prepare(request,proposal,divergent).code == "base_diverged")
+	# Checkpoint45 (P3c): a moved base is merged three ways; the same field changed
+	# on both sides is a conflict that needs an explicit choice, never applied.
+	check("base_diverged",Exchange.prepare(request,proposal,divergent).code == "exchange_conflict")
 	var candidate := source.duplicate(true); candidate.mode = "recipe"
 	check("section_denied",Exchange.propose(request,candidate).code == "exchange_section_denied")
 	var altered := proposal.duplicate(true); altered.ticket.policy.sections.append("mode"); altered = rehash(altered)

@@ -32,6 +32,10 @@ var request_summary: Label
 var section_menu: MenuButton
 const SECTION_LABELS := {"name":"Nome","revision":"Revisão","layers":"Terreno e camadas","special_surfaces":"Pontes e rampas","placements":"Objetos","regions":"Regiões","connectors":"Conectores","sockets":"Marcadores","dependencies":"Dependências","composition":"Composição","mode":"Modo","barrier_profile":"Perfil de barreira","pieces":"Peças","instances":"Posições das peças","links":"Vínculos","map":"Mapa-base","entrance":"Entrada","brushes":"Pincéis de população","exclusions":"Exclusões","interactions":"Interações","slots":"Slots","plan_hash":"Plano realizado","population":"Encontros-base","patrols":"Patrulhas","seed_text":"Seed","domains":"Candidatos","pins":"Pins","selection":"Regiões selecionadas","quotas":"Quotas","min_diversity":"Diversidade mínima","budget":"Orçamento"}
 var confirmation: ConfirmationDialog
+## Checkpoint45 (P3c): conflicts of a three-way review and the explicit choices.
+var resolutions: Dictionary = {}
+var conflicts: Array = []
+var choice: OptionButton
 
 static func mount(parent: Control, source_kind: String, getter: Callable, setter: Callable) -> Control:
 	var window := Window.new(); window.title = "Intercâmbio · Revisar proposta"; window.size = Vector2i(1220,820); window.min_size = Vector2i(1080,740)
@@ -39,6 +43,7 @@ static func mount(parent: Control, source_kind: String, getter: Callable, setter
 	parent.add_child(window)
 	var panel: Control = load("res://scripts/map_authoring/exchange/exchange_panel.gd").new(); panel.kind = source_kind; panel.get_source = getter; panel.commit_source = setter
 	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); window.add_child(panel)
+	var provider: Node = load("res://scripts/map_authoring/exchange/exchange_ax.gd").new(); provider.panel = panel; provider.screen = source_kind; parent.add_child(provider)
 	window.close_requested.connect(func() -> void: panel.cancel(); window.hide())
 	var row := HFlowContainer.new(); parent.add_child(row); parent.move_child(row,1)
 	var button := Button.new(); button.text = "Intercâmbio com skills…"; row.add_child(button); button.pressed.connect(func() -> void: window.popup_centered())
@@ -75,6 +80,12 @@ Revise as diferenças e a prévia antes de confirmar. Aplicar permite desfazer n
 	var left := VBoxContainer.new(); left.custom_minimum_size.x = 360; split.add_child(left)
 	differences = ItemList.new(); differences.size_flags_vertical = SIZE_EXPAND_FILL; left.add_child(differences); differences.item_selected.connect(select_difference)
 	details = TextEdit.new(); details.editable = false; details.custom_minimum_size.y = 180; left.add_child(details)
+	var resolve := HFlowContainer.new(); left.add_child(resolve)
+	var choice_label := Label.new(); choice_label.text = "Conflito selecionado"; resolve.add_child(choice_label)
+	choice = OptionButton.new()
+	for caption: String in ["Escolher…","Manter a versão atual","Usar a proposta"]: choice.add_item(caption)
+	choice.disabled = true; resolve.add_child(choice); choice.item_selected.connect(set_choice)
+	button(resolve,"Revalidar com as escolhas",review)
 	tabs = TabContainer.new(); tabs.size_flags_horizontal = SIZE_EXPAND_FILL; split.add_child(tabs)
 	before_canvas = TerrainCanvas.new() if kind == "piece" else MapCanvas.new(); before_canvas.name = "Antes"; tabs.add_child(before_canvas)
 	after_canvas = TerrainCanvas.new() if kind == "piece" else MapCanvas.new(); after_canvas.name = "Proposta"; tabs.add_child(after_canvas)
@@ -101,9 +112,9 @@ func file_selected(path: String) -> void:
 		var checked := Exchange.validate_bundle(loaded.data)
 		if not checked.ok: show_result(checked); return
 		if checked.ticket.kind != kind or loaded.data.source_hash != checked.ticket.base_hash: show_result(Exchange.fail("exchange_not_request")); return
-		cancel(); request = loaded.data.duplicate(true); proposal = {}; summarize_request(); status.text = "Pedido confiável aberto. Importe a proposta separada."
+		cancel(); request = loaded.data.duplicate(true); proposal = {}; resolutions = {}; summarize_request(); status.text = "Pedido confiável aberto. Importe a proposta separada."
 	elif action == "proposal":
-		cancel(); proposal = loaded.data.duplicate(true) if loaded.data is Dictionary else {}; review()
+		cancel(); proposal = loaded.data.duplicate(true) if loaded.data is Dictionary else {}; resolutions = {}; review()
 func export_current(path: String = "") -> void:
 	cancel(); var source: Dictionary = get_source.call(); var permissions := Exchange.policy(values(sections.text),values(ids.text),values(protected_paths.text),int(budget.value)); var message := brief.text
 	export_path = path; job_kind = "export"; mutex.lock(); cancelled = false; mutex.unlock(); job = Thread.new()
@@ -115,9 +126,9 @@ func review() -> void:
 	var source: Dictionary = get_source.call(); var local := request.duplicate(true); var incoming := proposal.duplicate(true)
 	job_kind = "review"; mutex.lock(); cancelled = false; mutex.unlock(); job = Thread.new()
 	# Checkpoint42 (F9-10): the base preview compiles in the same job, not on the UI.
-	var base_kind := kind
+	var base_kind := kind; var chosen := resolutions.duplicate(true)
 	job.start(func() -> Dictionary:
-		var result := Exchange.prepare(local,incoming,source,is_cancelled)
+		var result := Exchange.prepare(local,incoming,source,is_cancelled,chosen)
 		if result.ok and not is_cancelled(): result["base_package"] = Exchange.build(base_kind,local.ticket.base,is_cancelled).get("package",{})
 		return result)
 	status.text = "Validando a proposta em cópia…"
@@ -125,6 +136,7 @@ func _process(_delta: float) -> void:
 	if job == null or job.is_alive(): return
 	var result: Dictionary = job.wait_to_finish(); job = null
 	if cancelled: show_result(Exchange.fail("cancelled")); return
+	if not result.ok and result.get("code","") == "exchange_conflict" and job_kind == "review": show_review(result); return
 	if not result.ok: show_result(result); return
 	if job_kind == "apply":
 		finish_apply(result); return
@@ -135,12 +147,36 @@ func _process(_delta: float) -> void:
 	else:
 		var current: Dictionary = get_source.call(); var checked := Exchange.read(kind,current)
 		if not checked.ok or checked.output_hash != result.current_hash: show_result(Exchange.fail("stale_source")); return
-		prepared = result; differences.clear()
-		for change: Dictionary in result.diff: differences.add_item({"replace":"Alterar","add":"Adicionar","remove":"Remover"}[change.operation]+" · "+change.path)
-		apply_button.disabled = result.already_applied
+		show_review(result)
+## A review result: the differences, or the conflicts that need a choice.
+func show_review(result: Dictionary) -> void:
+	differences.clear(); details.text = ""; conflicts = []; choice.disabled = true
+	if not result.ok and result.get("code","") == "exchange_conflict":
+		prepared = {}; apply_button.disabled = true; conflicts = result.conflicts.duplicate(true)
+		for conflict: Dictionary in conflicts:
+			var label: String = {"protection":"Proteção atual","value":"Conflito","structure":"Estrutura"}.get(conflict.kind,"Conflito")
+			var chosen: String = {"current":" · manter atual","proposal":" · usar proposta"}.get(resolutions.get(conflict.path,""),"")
+			differences.add_item(label+" · "+conflict.path+chosen)
+		status.text = result.diagnostics[0].message
+		return
+	if not result.ok: show_result(result); return
+	prepared = result
+	for change: Dictionary in result.diff: differences.add_item({"replace":"Alterar","add":"Adicionar","remove":"Remover"}[change.operation]+" · "+change.path)
+	apply_button.disabled = result.already_applied
+	if not result.get("package",{}).is_empty():
 		preview(before_canvas,request.ticket.base,result.get("base_package",{}))
 		preview(after_canvas,result.source,result.package)
-		status.text = "%d diferenças · %s · hash compilado %s"%[result.diff.size(),"já aplicada" if result.already_applied else "pronta para revisão",result.output_hash]
+	var merged := ""
+	if result.has("merge"): merged = " · combinada com a versão atual: %d da proposta, %d iguais, %d mantidas como estão"%[result.merge.applied.size(),result.merge.agreed.size(),result.merge.kept_current.size()]
+	status.text = "%d diferenças · %s · hash compilado %s%s"%[result.diff.size(),"já aplicada" if result.already_applied else "pronta para revisão",result.output_hash,merged]
+func set_choice(index: int) -> void:
+	var selected := differences.get_selected_items()
+	if selected.is_empty() or selected[0] >= conflicts.size(): return
+	var path: String = conflicts[selected[0]].path
+	if index == 0: resolutions.erase(path)
+	else: resolutions[path] = "current" if index == 1 else "proposal"
+	var label: String = {"protection":"Proteção atual","value":"Conflito","structure":"Estrutura"}.get(conflicts[selected[0]].kind,"Conflito")
+	differences.set_item_text(selected[0],label+" · "+path+{"current":" · manter atual","proposal":" · usar proposta"}.get(resolutions.get(path,""),""))
 func summarize_request() -> void:
 	var permission: Dictionary = request.ticket.policy; var labels: Array = []
 	for key: String in permission.sections: labels.append(SECTION_LABELS.get(key,key))
@@ -155,6 +191,13 @@ func preview(canvas: Control, source: Dictionary, package: Dictionary) -> void:
 		if kind == "patrol": package = package.population_package.map_package
 		canvas.set_package(package)
 func select_difference(index: int) -> void:
+	if not conflicts.is_empty() and index >= 0 and index < conflicts.size():
+		var conflict: Dictionary = conflicts[index]
+		details.text = "Base:\n"+JSON.stringify(conflict.base,"\t",true,true)+"\nVersão atual:\n"+JSON.stringify(conflict.current,"\t",true,true)+"\nProposta:\n"+JSON.stringify(conflict.proposal,"\t",true,true)
+		if conflict.kind == "protection": details.text += "\n\nUma proteção da versão atual prevalece: só é possível manter a atual."
+		choice.disabled = false; choice.set_item_disabled(2,conflict.kind == "protection")
+		choice.select({"current":1,"proposal":2}.get(resolutions.get(conflict.path,""),0))
+		return
 	if index < 0 or index >= prepared.get("diff",[]).size(): return
 	var change: Dictionary = prepared.diff[index]; details.text = "Antes:\n"+JSON.stringify(change.before,"\t",true,true)+"\nProposta:\n"+JSON.stringify(change.after,"\t",true,true)
 	if kind != "piece": before_canvas.selected_instance = change.entity_id; after_canvas.selected_instance = change.entity_id; before_canvas.redraw(); after_canvas.redraw()
@@ -163,7 +206,7 @@ func apply_result() -> Dictionary:
 	var current: Dictionary = get_source.call()
 	var checked := Exchange.read(kind,current)
 	if not checked.ok or checked.output_hash != prepared.current_hash: show_result(Exchange.fail("stale_source")); return Exchange.fail("stale_source")
-	var result := Exchange.apply_to(request,proposal,current,commit_source)
+	var result := Exchange.apply_to(request,proposal,current,commit_source,resolutions)
 	show_result(result); apply_button.disabled = true
 	return result
 # Checkpoint42 (F9-10): the confirmation button applies like apply_result (same
@@ -176,10 +219,10 @@ func apply_async() -> void:
 	var current: Dictionary = get_source.call()
 	var checked := Exchange.read(kind,current)
 	if not checked.ok or checked.output_hash != prepared.current_hash: show_result(Exchange.fail("stale_source")); return
-	var local := request.duplicate(true); var incoming := proposal.duplicate(true); var snapshot := current.duplicate(true)
+	var local := request.duplicate(true); var incoming := proposal.duplicate(true); var snapshot := current.duplicate(true); var chosen := resolutions.duplicate(true)
 	apply_button.disabled = true
 	job_kind = "apply"; mutex.lock(); cancelled = false; mutex.unlock(); job = Thread.new()
-	job.start(func() -> Dictionary: return Exchange.prepare(local,incoming,snapshot,is_cancelled))
+	job.start(func() -> Dictionary: return Exchange.prepare(local,incoming,snapshot,is_cancelled,chosen))
 	status.text = "Compilando a proposta para aplicar…"
 func finish_apply(result: Dictionary) -> void:
 	if not result.ok or result.get("already_applied",false): show_result(result); return
@@ -195,10 +238,12 @@ func cancel() -> void:
 	mutex.lock(); cancelled = true; mutex.unlock(); prepared = {}
 	if job != null: job.wait_to_finish(); job = null
 	if apply_button != null: apply_button.disabled = true
+	conflicts = []
 	if differences != null: differences.clear(); details.text = ""
 	if status != null: status.text = "Proposta rejeitada ou cancelada; autoria preservada."
 func show_result(value: Dictionary) -> void:
-	status.text = ("Proposta aplicada; use Desfazer na tela de origem. Hash: "+value.output_hash) if value.ok else "Intercâmbio recusado: "+value.code
+	var reason: String = value.get("diagnostics",[{}])[0].get("message","") if not value.ok and not value.get("diagnostics",[]).is_empty() else ""
+	status.text = ("Proposta aplicada; use Desfazer na tela de origem. Hash: "+value.output_hash) if value.ok else "Intercâmbio recusado: "+value.code+(" · "+reason if not reason.is_empty() and not reason.ends_with(value.code) else "")
 	if not value.ok: prepared = {}; apply_button.disabled = true
 func _exit_tree() -> void:
 	if job != null: job.wait_to_finish(); job = null

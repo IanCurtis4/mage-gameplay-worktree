@@ -1,0 +1,11 @@
+﻿
+F9 ExchangeMerge: False
+SCRIPT ERROR: Parse Error: Cannot infer the type of "at" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/exchange/exchange.gd:392)
+RUNNER map_editor_exchange :: exit=1
+   ! exchange: False
+   ! SCRIPT ERROR: Parse Error: Cannot infer the type of "at" variable because the value doesn't have a set type.
+   !    at: GDScript::reload (res://scripts/map_authoring/exchange/exchange.gd:392)
+DONE
+
+

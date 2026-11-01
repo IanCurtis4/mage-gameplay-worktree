@@ -1,0 +1,15 @@
+﻿HEAD a183b845
+STAGE ExchangeMerge :: F9 ExchangeMerge: True (53s)
+STAGE ExchangeMergeNative :: F9 ExchangeMergeNative: False (60s)
+
+F9_MERGE_UI_CHECK ax_apply_refuses_a_stale_source true
+F9_MERGE_UI_CHECK gui_apply_is_one_undo false
+F9_MERGE_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"ax_exports_a_request","ok":true},{"id":"conflict_i
+s_listed_without_mutation","ok":true},{"id":"conflict_shows_three_values_and_choices","ok":true},{"id":"choice_revalida
+tes_the_merge","ok":true},{"id":"capture_exchange_merge_review","ok":true},{"id":"ax_review_has_the_gui_hash","ok":true
+},{"id":"cli_merge_has_the_gui_hash","ok":true},{"id":"ax_apply_refuses_a_stale_source","ok":true},{"id":"gui_apply_is_
+one_undo","ok":false}],"count":10,"ok":false}
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+DONE
+
+

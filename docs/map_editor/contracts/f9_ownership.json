@@ -3347,6 +3347,42 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 file (checkpoint44 regional synthesis roots)",
       "base_sha256": "a322f75cbd876346ff3ab76f9b878644d938a3880cee132739f4da351851e3bd"
+    },
+    {
+      "path": "scripts/map_authoring/exchange/exchange_ax.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint45 three-way exchange)",
+      "base_sha256": "788ffda974d45b800033078a2612c2fe9058af39afa71b05d8e509f2dd691404"
+    },
+    {
+      "path": "tests/map_editor_exchange_merge_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint45 three-way exchange)",
+      "base_sha256": "883a794bef218888d2952be9436acfe0f7967ec54ac81ff85542857b0256f50d"
+    },
+    {
+      "path": "tests/map_editor_exchange_merge_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint45 three-way exchange)",
+      "base_sha256": "72bad1ba37cc90a2741a8dc3caea2ca09de44eb522cf228990093b69c2e07fcf"
+    },
+    {
+      "path": "scripts/map_authoring/exchange/exchange_ax.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint45 three-way exchange)",
+      "base_sha256": "908a3c707b2544c003ad9c3ad7b7a1f127fe215ae3d610bc00eaaedda2ebeca1"
+    },
+    {
+      "path": "tests/map_editor_exchange_merge_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint45 three-way exchange)",
+      "base_sha256": "22b5c21f5dde9c863256f9fe029ee114623324ec511005d299f2e56757395627"
+    },
+    {
+      "path": "tests/map_editor_exchange_merge_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint45 three-way exchange)",
+      "base_sha256": "ac0ba95283446cf5b6ac1ecea19e76dea2767b503daf7752af27b5750f51c6b5"
     }
   ],
   "read_only_shared": [
@@ -4663,6 +4699,42 @@
         "cache": "off"
       },
       "limits": "patrol routes are preserve only; conservative bodies (slots 48, other anchors 24) leave few free samples in small regions full of encounters; receipts/replay and three-way exchange are P3c-P3d"
+    },
+    "exchange_three_way_p3c": {
+      "state": "validated_increment_F9_still_open",
+      "base": "a183b845",
+      "human_report": "01/11: we can start P3c then",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "contract": "docs/map_editor/contracts/f9_regional_synthesis.md",
+      "files": [
+        "scripts/map_authoring/exchange/exchange.gd",
+        "scripts/map_authoring/exchange/exchange_panel.gd",
+        "scripts/map_authoring/exchange/exchange_ax.gd",
+        "scripts/map_authoring/exchange/headless.gd",
+        "scripts/map_authoring/synthesis/regional_synthesis.gd",
+        "tools/map_editor_completion/run.ps1"
+      ],
+      "test_files": [
+        "tests/map_editor_exchange_merge_test.gd",
+        "tests/map_editor_exchange_merge_ui_test.gd",
+        "tests/map_editor_exchange_test.gd"
+      ],
+      "scope": "three-way exchange: fine diff per identity, field and sample; disjoint changes compose, equal ones agree, overlapping ones are conflicts with explicit current/proposal choices; protections the current source added prevail; merged source validated, population plan re-certified without drawing, whole root compiled; shared mask (protected_samples) replaces whole-layer freezing in Exchange.guards; review window conflict list and choices; AX <screen>/exchange/{export,review,apply}; CLI merge and review with choices",
+      "validation": {
+        "ExchangeMerge": 13,
+        "ExchangeMergeNative": 10,
+        "M7": true,
+        "M7Native": true,
+        "RootSynthesis": 12,
+        "RegionalSynthesis": 12,
+        "RegionalSynthesisNative": 14,
+        "LibraryNative": 53,
+        "AuthoringNative": 15,
+        "CompositionAXNative": 13,
+        "EncounterAuthoringNative": 25
+      },
+      "test_update": "tests/map_editor_exchange_test.gd base_diverged now expects exchange_conflict (same field changed on both sides): still refused, now with an explicit choice",
+      "limits": "conflict choices are per change path; ordered waypoint lists stay whole-list changes; assets in the bundle are P4"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

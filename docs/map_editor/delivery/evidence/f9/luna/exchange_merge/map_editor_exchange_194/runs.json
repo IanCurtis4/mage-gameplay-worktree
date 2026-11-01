@@ -1,0 +1,642 @@
+[
+  {
+    "started_utc": "2026-11-01T10:30:59.2454739Z",
+    "result": null,
+    "timed_out": false,
+    "finished_utc": "2026-11-01T10:31:09.2307285Z",
+    "aborted": false,
+    "exit_code": 0,
+    "ok": true,
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "name": "import",
+    "output_sha256": "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7"
+  },
+  {
+    "started_utc": "2026-11-01T10:31:09.2553200Z",
+    "result": {
+      "checks": [
+        {
+          "id": "piece_export",
+          "ok": true
+        },
+        {
+          "id": "piece_safe_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "piece_propose",
+          "ok": true
+        },
+        {
+          "id": "piece_prepare",
+          "ok": true
+        },
+        {
+          "id": "piece_authority_hash",
+          "ok": true
+        },
+        {
+          "id": "piece_no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "piece_idempotent",
+          "ok": true
+        },
+        {
+          "id": "piece_io_request",
+          "ok": true
+        },
+        {
+          "id": "piece_io_proposal",
+          "ok": true
+        },
+        {
+          "id": "piece_io_source",
+          "ok": true
+        },
+        {
+          "id": "piece_io_candidate",
+          "ok": true
+        },
+        {
+          "id": "piece_disk_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "map_export",
+          "ok": true
+        },
+        {
+          "id": "map_safe_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "map_propose",
+          "ok": true
+        },
+        {
+          "id": "map_prepare",
+          "ok": true
+        },
+        {
+          "id": "map_authority_hash",
+          "ok": true
+        },
+        {
+          "id": "map_no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "map_idempotent",
+          "ok": true
+        },
+        {
+          "id": "map_io_request",
+          "ok": true
+        },
+        {
+          "id": "map_io_proposal",
+          "ok": true
+        },
+        {
+          "id": "map_io_source",
+          "ok": true
+        },
+        {
+          "id": "map_io_candidate",
+          "ok": true
+        },
+        {
+          "id": "map_disk_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "population_export",
+          "ok": true
+        },
+        {
+          "id": "population_safe_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "population_propose",
+          "ok": true
+        },
+        {
+          "id": "population_prepare",
+          "ok": true
+        },
+        {
+          "id": "population_authority_hash",
+          "ok": true
+        },
+        {
+          "id": "population_no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "population_idempotent",
+          "ok": true
+        },
+        {
+          "id": "population_io_request",
+          "ok": true
+        },
+        {
+          "id": "population_io_proposal",
+          "ok": true
+        },
+        {
+          "id": "population_io_source",
+          "ok": true
+        },
+        {
+          "id": "population_io_candidate",
+          "ok": true
+        },
+        {
+          "id": "population_disk_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "patrol_export",
+          "ok": true
+        },
+        {
+          "id": "patrol_safe_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "patrol_propose",
+          "ok": true
+        },
+        {
+          "id": "patrol_prepare",
+          "ok": true
+        },
+        {
+          "id": "patrol_authority_hash",
+          "ok": true
+        },
+        {
+          "id": "patrol_no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "patrol_idempotent",
+          "ok": true
+        },
+        {
+          "id": "patrol_io_request",
+          "ok": true
+        },
+        {
+          "id": "patrol_io_proposal",
+          "ok": true
+        },
+        {
+          "id": "patrol_io_source",
+          "ok": true
+        },
+        {
+          "id": "patrol_io_candidate",
+          "ok": true
+        },
+        {
+          "id": "patrol_disk_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "generation_export",
+          "ok": true
+        },
+        {
+          "id": "generation_safe_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "generation_propose",
+          "ok": true
+        },
+        {
+          "id": "generation_prepare",
+          "ok": true
+        },
+        {
+          "id": "generation_authority_hash",
+          "ok": true
+        },
+        {
+          "id": "generation_no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "generation_idempotent",
+          "ok": true
+        },
+        {
+          "id": "generation_io_request",
+          "ok": true
+        },
+        {
+          "id": "generation_io_proposal",
+          "ok": true
+        },
+        {
+          "id": "generation_io_source",
+          "ok": true
+        },
+        {
+          "id": "generation_io_candidate",
+          "ok": true
+        },
+        {
+          "id": "generation_disk_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "atomic_apply",
+          "ok": true
+        },
+        {
+          "id": "undo_preserves_authorship",
+          "ok": true
+        },
+        {
+          "id": "redo",
+          "ok": true
+        },
+        {
+          "id": "reapply_noop",
+          "ok": true
+        },
+        {
+          "id": "base_diverged",
+          "ok": true
+        },
+        {
+          "id": "section_denied",
+          "ok": true
+        },
+        {
+          "id": "untrusted_permissions",
+          "ok": true
+        },
+        {
+          "id": "base_integrity",
+          "ok": true
+        },
+        {
+          "id": "file_integrity",
+          "ok": true
+        },
+        {
+          "id": "bundle_integrity",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_../source.json",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_C:/source.json",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_/tmp/source.json",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_source.gd",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_scene.tscn",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_assets/evil.svg",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_https://example.com/x",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_a\\b.json",
+          "ok": true
+        },
+        {
+          "id": "duplicate_file",
+          "ok": true
+        },
+        {
+          "id": "compiled_integrity",
+          "ok": true
+        },
+        {
+          "id": "duplicate_identity",
+          "ok": true
+        },
+        {
+          "id": "unknown_version",
+          "ok": true
+        },
+        {
+          "id": "duplicate_json_key",
+          "ok": true
+        },
+        {
+          "id": "truncated_json",
+          "ok": true
+        },
+        {
+          "id": "size_limit",
+          "ok": true
+        },
+        {
+          "id": "depth_limit",
+          "ok": true
+        },
+        {
+          "id": "unknown_source_field",
+          "ok": true
+        },
+        {
+          "id": "io_conflict",
+          "ok": true
+        },
+        {
+          "id": "pending_preserved",
+          "ok": true
+        },
+        {
+          "id": "pending_intact",
+          "ok": true
+        },
+        {
+          "id": "ids_denied",
+          "ok": true
+        },
+        {
+          "id": "semantic_entity_diff",
+          "ok": true
+        },
+        {
+          "id": "change_budget",
+          "ok": true
+        },
+        {
+          "id": "protected_path",
+          "ok": true
+        },
+        {
+          "id": "locked_layer",
+          "ok": true
+        },
+        {
+          "id": "fixed_slot",
+          "ok": true
+        },
+        {
+          "id": "pinned_region",
+          "ok": true
+        },
+        {
+          "id": "missing_asset",
+          "ok": true
+        },
+        {
+          "id": "invalid_apply_no_mutation",
+          "ok": true
+        },
+        {
+          "id": "new_identity_denied",
+          "ok": true
+        },
+        {
+          "id": "policy_invalid",
+          "ok": true
+        },
+        {
+          "id": "not_request",
+          "ok": true
+        },
+        {
+          "id": "material_proposal",
+          "ok": true
+        },
+        {
+          "id": "piece_revision_matches_session",
+          "ok": true
+        },
+        {
+          "id": "piece_package_matches_preview",
+          "ok": true
+        },
+        {
+          "id": "piece_undo",
+          "ok": true
+        },
+        {
+          "id": "route_wait_proposal",
+          "ok": true
+        },
+        {
+          "id": "route_wait_compiled",
+          "ok": true
+        },
+        {
+          "id": "protected_region_exports",
+          "ok": true
+        },
+        {
+          "id": "protected_region_geometry",
+          "ok": true
+        },
+        {
+          "id": "broken_seam_not_importable",
+          "ok": true
+        },
+        {
+          "id": "semantic_diff_stable_ids",
+          "ok": true
+        },
+        {
+          "id": "cancelled_export",
+          "ok": true
+        }
+      ],
+      "count": 113,
+      "ok": true,
+      "package_hash": "4e9ac6bc9a8f9c5d105dbb37cd99ad25c9d12ee3324f42703342edc3416c9863"
+    },
+    "timed_out": false,
+    "finished_utc": "2026-11-01T10:31:34.0032517Z",
+    "aborted": false,
+    "exit_code": 0,
+    "ok": true,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_exchange_test.gd"
+    ],
+    "name": "exchange",
+    "output_sha256": "A998B74C840B1C7E41E6D99306803F1E1AE4B7114C1F75AC96C29F46F752D149"
+  },
+  {
+    "started_utc": "2026-11-01T10:31:34.0194867Z",
+    "result": null,
+    "timed_out": false,
+    "finished_utc": "2026-11-01T10:31:39.9116568Z",
+    "aborted": false,
+    "exit_code": 0,
+    "ok": true,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://scripts/map_authoring/exchange/headless.gd",
+      "--",
+      "review",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_samples\\map.rpx",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_samples\\map_proposal.rpx",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_samples\\map.json"
+    ],
+    "name": "cli_a",
+    "output_sha256": "3E958797DB606E4825189B7DED64E7317C1D0F3C5568D10B51D26B4A53733452"
+  },
+  {
+    "started_utc": "2026-11-01T10:31:39.9218453Z",
+    "result": null,
+    "timed_out": false,
+    "finished_utc": "2026-11-01T10:31:45.4038209Z",
+    "aborted": false,
+    "exit_code": 0,
+    "ok": true,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://scripts/map_authoring/exchange/headless.gd",
+      "--",
+      "review",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_samples\\map.rpx",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_samples\\map_proposal.rpx",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_samples\\map.json"
+    ],
+    "name": "cli_b",
+    "output_sha256": "3E958797DB606E4825189B7DED64E7317C1D0F3C5568D10B51D26B4A53733452"
+  },
+  {
+    "started_utc": "2026-11-01T10:31:45.4249415Z",
+    "result": null,
+    "timed_out": false,
+    "finished_utc": "2026-11-01T10:31:50.8971999Z",
+    "aborted": false,
+    "exit_code": 0,
+    "ok": true,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://scripts/map_authoring/exchange/headless.gd",
+      "--",
+      "export",
+      "map",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_samples\\map.json",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_samples\\permissions.json",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_cli_7fdf6892797445b0856bb30e5a508a92\\request.rpx"
+    ],
+    "name": "cli_export",
+    "output_sha256": "247695CB945CE815609E76E517A4213B44C547E3B930781E43A9F5A544388AB8"
+  },
+  {
+    "started_utc": "2026-11-01T10:31:50.8997854Z",
+    "result": null,
+    "timed_out": false,
+    "finished_utc": "2026-11-01T10:31:56.7482997Z",
+    "aborted": false,
+    "exit_code": 0,
+    "ok": true,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://scripts/map_authoring/exchange/headless.gd",
+      "--",
+      "propose",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_cli_7fdf6892797445b0856bb30e5a508a92\\request.rpx",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_samples\\map_candidate.json",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_cli_7fdf6892797445b0856bb30e5a508a92\\proposal.rpx"
+    ],
+    "name": "cli_propose",
+    "output_sha256": "3667EDB7BADEC43165C677649483916D8D4DA662D59BA6AC494329AD4C2DC522"
+  },
+  {
+    "started_utc": "2026-11-01T10:31:56.7578756Z",
+    "result": null,
+    "timed_out": false,
+    "finished_utc": "2026-11-01T10:32:02.5328889Z",
+    "aborted": false,
+    "exit_code": 1,
+    "ok": true,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://scripts/map_authoring/exchange/headless.gd",
+      "--",
+      "export",
+      "map",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_samples\\invalid.json",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_samples\\permissions.json",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_cli_7fdf6892797445b0856bb30e5a508a92\\export_rejected.rpx"
+    ],
+    "name": "cli_invalid_export",
+    "output_sha256": "01EF864CC9A9A86AE839A07DA8FC5B97D59A52C053215937439BE22F17027675"
+  },
+  {
+    "started_utc": "2026-11-01T10:32:02.5461875Z",
+    "result": null,
+    "timed_out": false,
+    "finished_utc": "2026-11-01T10:32:08.0451455Z",
+    "aborted": false,
+    "exit_code": 1,
+    "ok": true,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://scripts/map_authoring/exchange/headless.gd",
+      "--",
+      "propose",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_cli_7fdf6892797445b0856bb30e5a508a92\\request.rpx",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_samples\\invalid.json",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_cli_7fdf6892797445b0856bb30e5a508a92\\propose_rejected.rpx"
+    ],
+    "name": "cli_invalid_propose",
+    "output_sha256": "01EF864CC9A9A86AE839A07DA8FC5B97D59A52C053215937439BE22F17027675"
+  },
+  {
+    "started_utc": "2026-11-01T10:32:08.0506659Z",
+    "result": null,
+    "timed_out": false,
+    "finished_utc": "2026-11-01T10:32:13.8045370Z",
+    "aborted": false,
+    "exit_code": 1,
+    "ok": true,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://scripts/map_authoring/exchange/headless.gd",
+      "--",
+      "review",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_cli_7fdf6892797445b0856bb30e5a508a92\\request.rpx",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_cli_7fdf6892797445b0856bb30e5a508a92\\proposal.rpx",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\m7_samples\\invalid.json"
+    ],
+    "name": "cli_invalid_review",
+    "output_sha256": "01EF864CC9A9A86AE839A07DA8FC5B97D59A52C053215937439BE22F17027675"
+  }
+]

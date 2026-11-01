@@ -206,6 +206,23 @@ static func mask(data: Dictionary, request: Dictionary, staying: Array = [], seg
 			if ok: count += 1
 	return {"ok":true,"layer":layer,"selection":selection,"protections":protections,"discs":discs,"segments":segments,"free":free,"free_count":count}
 
+## Checkpoint45 (P3c): the one mask authority shared with the exchange. The samples
+## of a layer whose influence square (half side = spacing) touches one of its
+## protected regions: neither a variation nor an imported proposal may change them.
+static func protected_samples(data: Dictionary, layer: Dictionary) -> Array[int]:
+	var result: Array[int] = []
+	var polygons: Array = []
+	for region: Dictionary in data.get("regions",[]):
+		if region.layer_id == layer.layer_id and region.region_id in layer.protected_regions: polygons.append(_polygon(region.polygon_xz))
+	if polygons.is_empty(): return result
+	var spacing := float(layer.sample_spacing)
+	for z: int in int(layer.rows):
+		for x: int in int(layer.columns):
+			var square := _square(Vector2(layer.origin_xz[0],layer.origin_xz[1])+Vector2(x,z)*spacing,spacing)
+			for polygon: PackedVector2Array in polygons:
+				if _touches(square,polygon): result.append(z*int(layer.columns)+x); break
+	return result
+
 # A capsule (segment a-b widened by radius) touches the polygon.
 static func _segment_touches(a: Vector2, b: Vector2, radius: float, polygon: PackedVector2Array) -> bool:
 	if Geometry2D.is_point_in_polygon(a,polygon) or Geometry2D.is_point_in_polygon(b,polygon): return true

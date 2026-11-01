@@ -12,6 +12,29 @@ func _initialize() -> void:
 			if result.ok:
 				var saved := Exchange.save_json(args[4],result.bundle)
 				if not saved.ok: result = saved
+	elif args.size() in [5,6] and args[0] == "merge":
+		# Checkpoint45 (P3c): merge <pedido> <proposta> <atual> <saída.json> [<escolhas.json>]
+		# writes the reviewed (three-way) source to a NEW file; nothing else is written.
+		var request := Exchange.load_json(args[1]); var next := Exchange.load_json(args[2]); var current := Exchange.load_json(args[3])
+		var chosen := Exchange.load_json(args[5]) if args.size() == 6 else {"ok":true,"data":{}}
+		result = Exchange.fail("exchange_invalid_type")
+		for loaded: Dictionary in [request,next,current,chosen]:
+			if not loaded.ok: result = loaded
+		if request.ok and next.ok and current.ok and chosen.ok and request.data is Dictionary and next.data is Dictionary and current.data is Dictionary and chosen.data is Dictionary:
+			result = Exchange.prepare(request.data,next.data,current.data,Callable(),chosen.data)
+			if result.ok:
+				var saved := Exchange.save_json(args[4],result.source)
+				result["written"] = saved.ok
+				if not saved.ok: result = saved
+		result.erase("source")
+	elif args.size() in [4,5] and args[0] == "review":
+		var request := Exchange.load_json(args[1]); var next := Exchange.load_json(args[2]); var current := Exchange.load_json(args[3])
+		var chosen := Exchange.load_json(args[4]) if args.size() == 5 else {"ok":true,"data":{}}
+		result = Exchange.fail("exchange_invalid_type")
+		for loaded: Dictionary in [request,next,current,chosen]:
+			if not loaded.ok: result = loaded
+		if request.ok and next.ok and current.ok and chosen.ok and request.data is Dictionary and next.data is Dictionary and current.data is Dictionary and chosen.data is Dictionary:
+			result = Exchange.prepare(request.data,next.data,current.data,Callable(),chosen.data)
 	elif args.size() == 4 and args[0] in ["propose","review"]:
 		var request := Exchange.load_json(args[1]); var next := Exchange.load_json(args[2])
 		result = request if not request.ok else next
