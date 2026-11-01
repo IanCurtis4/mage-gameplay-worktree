@@ -66,7 +66,7 @@ pente-fino de F10 revisita. Nenhuma prova, guard, limite ou quota foi reduzido.
 
 | ID | Item | Estado | Prova existente | Falta / prova exigida |
 |---|---|---|---|---|
-| F9-01 | catálogo, origem, licença, dependências | parcial | 6 definições, PNGs, hashes; a44cfb1 30/23/53/25; manifesto de assets com origem/licença por arquivo (checkpoint41, AssetManifest7) | transporte dos assets no bundle de intercâmbio (P4) |
+| F9-01 | catálogo, origem, licença, dependências | comprovado | 6 definições, PNGs, hashes; a44cfb1 30/23/53/25; manifesto de assets com origem/licença por arquivo (checkpoint41, AssetManifest7); o bundle de intercâmbio declara cada asset com hash, tipo, direitos e origem (ExchangeAssets12, checkpoint47) | — |
 | F9-01 | colocar, mover, rotacionar, duplicar, remover | comprovado | Content28/Native30, Objects53, cliente AX 12/12 | — |
 | F9-01 | seleção, inspector, grupo, camadas, travas | comprovado | checkpoint de objetos, Objects53 | — |
 | F9-01 | snap, assentamento, inclinação | comprovado | Objects53 (ponte, piso travado) | — |
@@ -77,7 +77,7 @@ pente-fino de F10 revisita. Nenhuma prova, guard, limite ou quota foi reduzido.
 | F9-02 | penhasco, faces não caminháveis | comprovado | Cliff61, Ports92 | — |
 | F9-03 | floresta, deserto, planície, ruína | comprovado | Borders93/Native32, MapBiome15/13 | aceite visual humano (P7) |
 | F9-03 | transições, dono, abertura, frestas | comprovado | d3c0e25 | export final (P5) |
-| F9-03 | ausência de perfil/asset | parcial | Borders93 (diagnóstico) | ambiente limpo (P4/P5) |
+| F9-03 | ausência de perfil/asset | parcial | Borders93 (diagnóstico); no intercâmbio, asset ausente ou diferente é nomeado antes de compilar (checkpoint47) | release em ambiente limpo (P5) |
 | F9-04 | largura útil M3-NAV-01, rampas 400/160 e 400/200 | comprovado | ce7bd59 46 checks | — |
 | F9-04 | abertura larga, suporte contínuo, massa | comprovado | e6fdf43, 270ff3a, Ports92 | — |
 | F9-04 | precisão, escala, corpo, folga | comprovado | 270ff3a/e6fdf43, SurfacePick24 | sem garantia universal de escala (limite declarado) |
@@ -96,10 +96,10 @@ pente-fino de F10 revisita. Nenhuma prova, guard, limite ou quota foi reduzido.
 | F9-08 | raro manual, exceção por instância, quest passiva | comprovado | entregue em F8; M4 PASS na regressão de base (job 154) | — |
 | F9-08 | bioma no manifesto final | comprovado | 4e3a3788, MapBiome15/13 | — |
 | F9-08 | stale entre revisões e reconciliação sem perda | comprovado | snapshots separados; a variação regional religa cada marcador pela família da camada e posição e reserva todo slot que fica (checkpoint44); o intercâmbio combina base/atual/proposta sem perder mudanças locais e reconfere o plano (checkpoint45) | — |
-| F9-09 | GUI/AX/CLI equivalentes | parcial | composição, contexto, encontros, patrulhas, compilação, Store; variação regional na peça (checkpoint43) e na raiz de mapa, encontros e patrulhas (checkpoint44); intercâmbio de três vias com o mesmo hash (checkpoint45) | bundle com assets (P4) |
+| F9-09 | GUI/AX/CLI equivalentes | parcial | composição, contexto, encontros, patrulhas, compilação, Store; variação regional na peça (checkpoint43) e na raiz de mapa, encontros e patrulhas (checkpoint44); intercâmbio de três vias com o mesmo hash (checkpoint45); bundle v2 com assets (checkpoint47) | — |
 | F9-09 | diff, preview, undo, proteção espacial, rebase | comprovado | export/revisão/aplicação com diff; três vias por identidade, campo e amostra com a máscara comum; conflitos com escolha explícita; proteção atual prevalece (ExchangeMerge13, ExchangeMergeNative10, checkpoint45) | — |
-| F9-09 | assets passivos, ambiente limpo, segurança | parcial | manifesto de assets no build: o release valida as dependências dos pacotes sem os PNGs crus (checkpoint41) | assets no bundle de intercâmbio, área controlada, rejeição de adulteração no import (P4) |
-| F9-09 | fontes de skills e guias | **falta** | 5 skills versionadas em `skills/` | atualizar as fontes para o editor F9, sem instalar (P4) |
+| F9-09 | assets passivos, ambiente limpo, segurança | comprovado | manifesto de assets no build (checkpoint41); bundle v2 com manifesto passivo, área controlada, adulteração e ambiente diferente recusados, nenhum arquivo transportado (ExchangeAssets12, checkpoint47) | — |
+| F9-09 | fontes de skills e guias | comprovado | `skills/ragrpg-mapdelivery` com a seção do editor F9; exchange.md e contrato de síntese atualizados (checkpoint47); nenhuma cópia instalada | — |
 | F9-10 | autosave, backup, pending, conflito | comprovado | entregue em F1/F3; M1 PASS (job 155) | — |
 | F9-10 | cancelamento, progresso, stale, atomicidade | parcial | threads em compiladores, população, patrulha, geração; intercâmbio compila a prévia da base e a aplicação fora da interface (checkpoint42) | "Iniciar teste" no quadro principal: movido para F10 por decisão humana (1/11) |
 | F9-10 | cache e invalidação regional | parcial | cache verificável de mapa e encontros por pacote (CompileCache10, checkpoint42) | invalidação dentro de uma peça: movida para F10 por decisão humana (1/11) |
@@ -124,7 +124,7 @@ pente-fino de F10 revisita. Nenhuma prova, guard, limite ou quota foi reduzido.
    contrato já preparado: proposta regional sobre a fonte, máscara comum, uma
    aplicação atômica, undo único, diff de três vias no intercâmbio, reconciliação
    de encontros e patrulhas. É o maior pacote.
-4. **P4 — assets e fontes de skills (F9-01/03/09).** Manifesto de assets no bundle,
+4. **P4 — assets e fontes de skills (F9-01/03/09).** (checkpoint47: bundle v2 com manifesto de assets, revisões reais, fonte da skill de mapas) Manifesto de assets no bundle,
    ambiente limpo, rejeição de adulteração; atualizar `skills/ragrpg-mapdelivery`
    e os guias.
 5. **P5 — export release (F9-11).** Release limpo com os pacotes F9 e API de

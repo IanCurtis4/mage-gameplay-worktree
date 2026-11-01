@@ -265,3 +265,8 @@ explícita, proteção atual prevalecendo e plano de encontros reconferido
 Checkpoint46 (1/11, Sol/Astra Opus): P3d recibos na raiz de cada variação
 (pedido, base, dependências, resultado sem recibos), livro passivo de bases e
 replay determinístico com pacote de transporte; fecha o P3 (SynthesisReceipts11).
+
+Checkpoint47 (1/11, Sol/Astra Opus): P4 bundle de intercâmbio v2 com manifesto
+passivo de assets (hash, tipo, direitos, origem), área controlada, adulteração e
+ambiente diferente recusados com os arquivos nomeados, revisões reais dos
+compiladores e fonte da skill de mapas atualizada (ExchangeAssets12).

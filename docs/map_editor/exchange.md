@@ -1,4 +1,4 @@
-# Intercâmbio com skills — F7 / M7
+# Intercâmbio com skills — F7 / M7, atualizado em F9
 
 Contrato1: [dispatch](contracts/m7_dispatch.md). Fonte executável:
 `scripts/map_authoring/exchange/exchange.gd`; cinco schemas/compiladores dos
@@ -67,10 +67,24 @@ novo; conflito ou `.pending` interrompido é explícito, sem sobrescrever origin
 
 ## Formato e segurança de dados
 
-JSON UTF-8 estrito, exchange_version1/revision map_exchange_v1, ticket completo
-com kind/schema-base/compilador/permissões/brief/corpus/base, ticket_hash,
-source_hash, files e bundle_hash. Exatamente dois nomes virtuais:
-`source.json` e `report.json`, cada um com sha256 e data incorporados. Nenhum nome
+JSON UTF-8 estrito, exchange_version2/revision map_exchange_v2 (checkpoint47; v1 é
+recusado e precisa ser reexportado), ticket completo com kind/schema-base/
+compilador/permissões/brief/corpus/base, ticket_hash, source_hash, files e
+bundle_hash. Exatamente três nomes virtuais: `source.json`, `report.json` e
+`assets.json`, cada um com sha256 e data incorporados. A revisão do compilador no
+ticket é a real (`map_terrain_v5`, `map_composition_v5`, `map_population_v2`,
+`map_patrol_v1`, `map_slot_wfc_v1`).
+
+`assets.json` segue o formato do manifesto de assets do projeto: uma entrada por
+arquivo que o pacote compilado usa (texturas, importações, shaders, catálogos e os
+sprites dos props; encontros e patrulhas declaram os do mapa), com sha256, tipo,
+base de direitos e registro de origem. Só declara: nenhum arquivo é transportado
+nem gravado ao importar. Caminho fora de `res://assets/art/map_authoring/`, dos
+catálogos e shaders do editor, ou de formato diferente de PNG, `.import`, shader e
+JSON é `unsafe_asset`; manifesto que não cobre as dependências do relatório é
+`exchange_assets_incomplete`. Antes de compilar, o projeto que recebe confere cada
+entrada: `exchange_asset_missing` ou `exchange_asset_mismatch` nomeiam os arquivos.
+Asset novo entra pelo fluxo de assets com registro de origem, não pelo pacote. Nenhum nome
 é aberto, extraído ou interpretado como Resource. Só os schemas fechados podem
 ser compilados; scripts/cenas/binários e entradas extras são recusados. Dependências
 materiais e hashes de catálogo/políticas são os resolvidos pelos compiladores locais;

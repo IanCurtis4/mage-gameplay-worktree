@@ -1,7 +1,37 @@
 # RagRPG — handoff portátil de F9
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint46 — recibos e replay das variações (P3d; fecha o P3)
+## Checkpoint47 — assets no intercâmbio, fontes de skills e segunda limpeza (P4)
+
+1/11/2026. Mesmo checkout/branch/fixture. Base 42ca1c38; código e documentação
+em commits próprios. Papéis inalterados. Guia: exchange.md.
+
+- Pedido humano: seguir para o P4 e fazer uma segunda limpeza de itens defasados.
+- Limpeza (~0,7 GB; 8,7 → 9,4 GB livres): fixture gerada do M1 (318 MB), rascunhos
+  grandes do teste de documento e verificações antigas dentro da fixture (177 MB),
+  evidências de rodadas substituídas nunca commitadas, rascunhos de probes na raiz
+  de `.godot`, patches já aplicados, jobs e saídas antigas da ponte, cópia
+  aposentada de probe; objetos soltos do git empacotados (`git gc`, sem expirar
+  reflog). Preservados: `RagRPG/build` (versões do jogo), `.tools/godot.zip`, os
+  `.bak` das fontes do Bosque, sessões de jogo e o livro de revisões.
+- Bundle de intercâmbio v2 (`map_exchange_v2`): `source.json`, `report.json` e
+  `assets.json`, o manifesto passivo de cada asset que o pacote compilado usa
+  (caminho, hash, tipo, base de direitos e registro de origem; sprites e catálogo
+  dos props inclusos; encontros e patrulhas declaram os assets do mapa). Nenhum
+  arquivo viaja. Fora da área de assets do editor ou de formato não permitido é
+  `unsafe_asset`; manifesto que não cobre o relatório é adulteração; antes de
+  compilar, asset ausente ou diferente no projeto que recebe é nomeado. Pacotes v1
+  são recusados (reexportar). Revisões reais dos compiladores (terreno v5,
+  composição v5) no lugar de `map_terrain_v2`/`map_composition_v1`.
+- Fonte da skill `ragrpg-mapdelivery`: seção do editor F9 (bundle v2, assets só
+  declarados, máscara comum, três vias com escolhas, `merge`, variação regional e
+  recibos). Sem instalar cópias.
+- ExchangeAssets12; ExchangeMerge, ExchangeMergeNative e M7 headless/nativo PASS.
+
+Pendente: P5 (release com o Bosque e API de consumo); aceite humano.
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint46 — recibos e replay das variações (P3d; fecha o P3)
 
 1/11/2026. Mesmo checkout/branch/fixture. Base 99dff335; código e documentação
 em commits próprios. Papéis inalterados. Contrato:
@@ -27,8 +57,7 @@ contracts/f9_regional_synthesis.md (seção "Estado").
   AX e CLI reproduzem o mesmo recibo); suítes de documento, terreno, composição,
   encontros, patrulha, geração e intercâmbio PASS.
 
-Pendente: P4 (assets no bundle e fontes de skills); aceite humano.
-<!-- /f9-patrol-gameplay-active -->
+Próximo: P4 (assets no bundle e fontes de skills), feito no checkpoint47.
 
 ## Histórico checkpoint45 — intercâmbio de três vias (P3c)
 
