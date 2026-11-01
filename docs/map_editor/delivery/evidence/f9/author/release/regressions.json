@@ -1,0 +1,9 @@
+{
+  "ReleaseApi": 11,
+  "M8Release": {
+    "release": 6,
+    "release_bosque": 8
+  },
+  "AssetManifest": 7,
+  "BosqueRecompileByteIdentical": true
+}

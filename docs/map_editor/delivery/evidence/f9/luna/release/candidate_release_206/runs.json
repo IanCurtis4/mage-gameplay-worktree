@@ -1,0 +1,141 @@
+[
+  {
+    "started_utc": "2026-11-01T17:27:55.2528774Z",
+    "timed_out": false,
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "ok": true,
+    "output_sha256": "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+    "aborted": false,
+    "exit_code": 0,
+    "name": "import",
+    "finished_utc": "2026-11-01T17:28:04.7933058Z",
+    "result": null
+  },
+  {
+    "started_utc": "2026-11-01T17:28:04.8499000Z",
+    "timed_out": false,
+    "arguments": [
+      "--headless",
+      "--export-release",
+      "Windows Desktop",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\m8_release\\RagRPG-Map-Candidate.exe"
+    ],
+    "ok": true,
+    "output_sha256": "6BCD5CF6B0CBB254DE282E7F5DF7DC24CA9F5AC50587064705E8B9E6919DCD14",
+    "aborted": false,
+    "exit_code": 0,
+    "name": "export_release",
+    "finished_utc": "2026-11-01T17:28:33.8476725Z",
+    "result": null
+  },
+  {
+    "started_utc": "2026-11-01T17:28:33.8615877Z",
+    "timed_out": false,
+    "arguments": [
+      "--",
+      "--m8-probe"
+    ],
+    "ok": true,
+    "output_sha256": "E63578E5B3BB7FFB0FB698F7322EC8F11DB594E5B4595C8B716C71F3EF60A100",
+    "aborted": false,
+    "exit_code": 0,
+    "name": "release",
+    "finished_utc": "2026-11-01T17:28:45.6507317Z",
+    "result": {
+      "checks": [
+        {
+          "id": "new_release_process",
+          "ok": true
+        },
+        {
+          "id": "immutable_package",
+          "ok": true
+        },
+        {
+          "id": "seven_real_actors",
+          "ok": true
+        },
+        {
+          "id": "patrol_bound",
+          "ok": true
+        },
+        {
+          "id": "traverse_0.0",
+          "ok": true
+        },
+        {
+          "id": "traverse_40.0",
+          "ok": true
+        }
+      ],
+      "count": 6,
+      "engine": "4.7.2-stable (official)",
+      "ok": true,
+      "package_hash": "caa109fd3444ba7976aa951c8a6cd1dc9fc7ddda0914540c45de43c306f473c5",
+      "package_id": "",
+      "source_hash": "a208ac25d0ca039b22d1a7c7c4537ee4bf04f66ee0f747bfe07cd82fd9d07870"
+    }
+  },
+  {
+    "started_utc": "2026-11-01T17:28:45.7529045Z",
+    "timed_out": false,
+    "arguments": [
+      "--",
+      "--m8-probe",
+      "--m8-package=sanctuary_woods"
+    ],
+    "ok": true,
+    "output_sha256": "6DAB184EF1E1DB45D3842845BE19235AC27B876CA4FE4DF27903FB8E403B120E",
+    "aborted": false,
+    "exit_code": 0,
+    "name": "release_bosque",
+    "finished_utc": "2026-11-01T17:31:15.5455784Z",
+    "result": {
+      "checks": [
+        {
+          "id": "new_release_process",
+          "ok": true
+        },
+        {
+          "id": "clean_install",
+          "ok": true
+        },
+        {
+          "id": "registered_package",
+          "ok": true
+        },
+        {
+          "id": "immutable_package",
+          "ok": true
+        },
+        {
+          "id": "real_actors",
+          "ok": true
+        },
+        {
+          "id": "patrol_bound",
+          "ok": true
+        },
+        {
+          "id": "gameplay_prepared",
+          "ok": true
+        },
+        {
+          "id": "reach_shrine_completion",
+          "ok": true
+        }
+      ],
+      "count": 8,
+      "engine": "4.7.2-stable (official)",
+      "ok": true,
+      "package_hash": "f3cdb4605ed8c07c9c45561a470db54c1cb06e0e33a99fb30c8d32fd84b93a53",
+      "package_id": "sanctuary_woods",
+      "source_hash": "58df5d6386a6222e838763d92a96072ff71ebf2daed168b475ab003d95e29dc1"
+    }
+  }
+]

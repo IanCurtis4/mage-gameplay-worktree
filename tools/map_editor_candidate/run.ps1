@@ -28,12 +28,14 @@ $m8Profile=Join-Path $m8Fixture '.godot/discardable_profile'
 $m8Head=git -C $m8Root rev-parse HEAD
 if(Test-Path -LiteralPath (Join-Path $m8Fixture 'addons/m8_driver/plugin.gd')){Copy-Item -LiteralPath (Join-Path $m8Root 'tests/map_editor_candidate_ui_test.gd') -Destination (Join-Path $m8Fixture 'addons/m8_driver/plugin.gd') -Force}
 $m8Runs=[Collections.Generic.List[object]]::new()
-function Invoke-M8([string]$Name,[string[]]$Arguments,[string]$Marker='',[int]$ExpectedExit=0,[string]$Executable='',[switch]$Standalone){
+function Invoke-M8([string]$Name,[string[]]$Arguments,[string]$Marker='',[int]$ExpectedExit=0,[string]$Executable='',[switch]$Standalone,[string]$ProfileDirectory=''){
     $m8Info=[Diagnostics.ProcessStartInfo]::new()
     $m8Info.FileName=(Resolve-Path -LiteralPath $(if ($Executable) {$Executable} else {$GodotPath})).Path
+    if($Standalone){$m8Info.WorkingDirectory=Split-Path -Parent $m8Info.FileName}
     $m8Info.UseShellExecute=$false; $m8Info.CreateNoWindow=$true; $m8Info.WindowStyle=[Diagnostics.ProcessWindowStyle]::Hidden
     $m8Info.RedirectStandardOutput=$true; $m8Info.RedirectStandardError=$true
-    $m8Info.Environment['APPDATA']=$m8Profile; $m8Info.Environment['LOCALAPPDATA']=$m8Profile
+    $m8Home=if($ProfileDirectory){$ProfileDirectory}else{$m8Profile}
+    $m8Info.Environment['APPDATA']=$m8Home; $m8Info.Environment['LOCALAPPDATA']=$m8Home
     $m8Info.Environment['M8_EVIDENCE']=$m8Evidence
     $m8Prefix=if($Standalone){@()}else{@('--path',$m8Fixture)}
     foreach($m8Arg in $m8Prefix+@('--log-file',(Join-Path $m8Evidence ($Name+'.engine.log')))+$Arguments){$m8Info.ArgumentList.Add($m8Arg)}
@@ -59,7 +61,7 @@ function Invoke-M8([string]$Name,[string[]]$Arguments,[string]$Marker='',[int]$E
         $m8Match=[regex]::Match($m8Text,'(?m)^'+$Marker+' (.+)$')
         if($m8Match.Success){$m8Payload=ConvertFrom-Json $m8Match.Groups[1].Value}
         $m8Pass=$m8Pass -and $null -ne $m8Payload -and $m8Payload.ok -and $m8Payload.count -gt 0 -and @($m8Payload.checks|Where-Object {-not $_.ok}).Count -eq 0
-        $m8Expected=@{candidate=53;document=70;terrain=102;composition=63;population=91;patrol=58;generation=89;exchange=113;native_ui=49;release=6}
+        $m8Expected=@{candidate=53;document=70;terrain=102;composition=63;population=91;patrol=58;generation=89;exchange=113;native_ui=49;release=6;release_bosque=8}
         if($m8Expected.ContainsKey($Name)){$m8Pass=$m8Pass -and $m8Payload.count -eq $m8Expected[$Name] -and @($m8Payload.checks).Count -eq $m8Expected[$Name]}
     }
     $m8Runs.Add(@{name=$Name;ok=$m8Pass;arguments=$Arguments;started_utc=$m8Start;finished_utc=[DateTime]::UtcNow.ToString('o');exit_code=$m8Process.ExitCode;timed_out=$m8Timeout;aborted=$m8Aborted;output_sha256=(Get-FileHash -LiteralPath $m8Log).Hash;result=$m8Payload})
@@ -94,7 +96,17 @@ if($Stage -in @('Release','All')) {
     [IO.File]::WriteAllText((Join-Path $m8Fixture 'project.godot'),$m8ReleaseProject)
     Invoke-M8 'export_release' @('--headless','--export-release','Windows Desktop',$m8Exe)
     Invoke-M8 'release' @('--','--m8-probe') 'M8_RELEASE_RESULT' 0 $m8Exe -Standalone
-    @{template=$m8Template;template_sha256=(Get-FileHash -LiteralPath $m8Template).Hash;exe_sha256=(Get-FileHash -LiteralPath $m8Exe).Hash;pck_sha256=(Get-FileHash -LiteralPath ([IO.Path]::ChangeExtension($m8Exe,'.pck'))).Hash;project_sha256=(Get-FileHash -LiteralPath (Join-Path $m8Fixture 'project.godot')).Hash;preset_sha256=(Get-FileHash -LiteralPath (Join-Path $m8Fixture 'export_presets.cfg')).Hash}|ConvertTo-Json|Set-Content -LiteralPath (Join-Path $m8Evidence 'release_manifest.json') -Encoding utf8
+    # Checkpoint48 (F9-11, P5): the Bosque release in a clean install, outside the
+    # project: only the executable and its pack in a fresh folder, a fresh profile,
+    # the working directory in that folder; the folder is removed afterwards.
+    $m8Clean=Join-Path ([IO.Path]::GetTempPath()) ('ragrpg_release_'+[guid]::NewGuid().ToString('N'))
+    $m8CleanApp=Join-Path $m8Clean 'app'; $m8CleanProfile=Join-Path $m8Clean 'profile'
+    [void](New-Item -ItemType Directory -Path $m8CleanApp); [void](New-Item -ItemType Directory -Path $m8CleanProfile)
+    Copy-Item -LiteralPath $m8Exe -Destination $m8CleanApp; Copy-Item -LiteralPath ([IO.Path]::ChangeExtension($m8Exe,'.pck')) -Destination $m8CleanApp
+    $m8CleanFiles=@()
+    try{Invoke-M8 'release_bosque' @('--','--m8-probe','--m8-package=sanctuary_woods') 'M8_RELEASE_RESULT' 0 (Join-Path $m8CleanApp (Split-Path -Leaf $m8Exe)) -Standalone -ProfileDirectory $m8CleanProfile}
+    finally{$m8CleanFiles=@(Get-ChildItem -LiteralPath $m8Clean -Recurse -File|ForEach-Object {[IO.Path]::GetRelativePath($m8Clean,$_.FullName).Replace('\','/')}); Remove-Item -LiteralPath $m8Clean -Recurse -Force}
+    @{template=$m8Template;template_sha256=(Get-FileHash -LiteralPath $m8Template).Hash;exe_sha256=(Get-FileHash -LiteralPath $m8Exe).Hash;pck_sha256=(Get-FileHash -LiteralPath ([IO.Path]::ChangeExtension($m8Exe,'.pck'))).Hash;project_sha256=(Get-FileHash -LiteralPath (Join-Path $m8Fixture 'project.godot')).Hash;bosque_package_sha256=(Get-FileHash -LiteralPath (Join-Path $m8Root 'data/map_authoring/sanctuary_woods.rpp')).Hash;registry_sha256=(Get-FileHash -LiteralPath (Join-Path $m8Root 'data/map_authoring/release_packages.json')).Hash;clean_install_files_after_run=$m8CleanFiles;preset_sha256=(Get-FileHash -LiteralPath (Join-Path $m8Fixture 'export_presets.cfg')).Hash}|ConvertTo-Json|Set-Content -LiteralPath (Join-Path $m8Evidence 'release_manifest.json') -Encoding utf8
 }
 $m8Inputs=@()
 foreach($m8Dir in @('scripts','scenes','resources','content','data','assets','addons/ragrpg_map_editor','tests','tools')) {

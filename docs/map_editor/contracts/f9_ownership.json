@@ -3443,6 +3443,48 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 file (checkpoint47 exchange assets)",
       "base_sha256": "55828df50a57b6768e71ead2c4d017e1673b80cd07262987b9d4dfa3bfc0e26b"
+    },
+    {
+      "path": "scripts/map_authoring/release/map_release.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint48 release API)",
+      "base_sha256": "473884c0857231d4c940b6d9e7e514cd33872358592d3f3038eeb3e8ede572c3"
+    },
+    {
+      "path": "scripts/map_authoring/release/map_release.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint48 release API)",
+      "base_sha256": "1fb3fe1ca9285d59684289dedc65f96f48855af0c13ddcbe94bafc12a8122193"
+    },
+    {
+      "path": "data/map_authoring/release_packages.json",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint48 release API)",
+      "base_sha256": "e2948691937be757613c56c16cc787356db7c910637dd77512c424cd37c71ac6"
+    },
+    {
+      "path": "data/map_authoring/sanctuary_woods.rpp",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint48 release API)",
+      "base_sha256": "e695a49ecbff21c29e48f598f8ac7cb18ab1f126ff44cab3145cdde638dfb619"
+    },
+    {
+      "path": "docs/map_editor/consumption.md",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint48 release API)",
+      "base_sha256": "14c5628eac85755778d13f14052aa9c24b3c933273f8813a1179b92cdda836eb"
+    },
+    {
+      "path": "tests/map_editor_release_api_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint48 release API)",
+      "base_sha256": "8a0a7bc4089ecdab8ef650ece04f52720f6c2dc2e178661547ff2337c3c7bbef"
+    },
+    {
+      "path": "tests/map_editor_release_api_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint48 release API)",
+      "base_sha256": "c814870b22345cd89bb50c76e1c85f17d93e564966f968ca778c24a0380ae6a6"
     }
   ],
   "read_only_shared": [
@@ -4881,6 +4923,40 @@
       },
       "cleanup": "about 0.7 GB: generated M1 fixture, document-test large drafts and old verification inside the fixture, untracked evidence of superseded runs, scratch probes at the worktree .godot root, applied bridge patches, old bridge jobs/outputs, retired probe copy, loose git objects packed (git gc, no reflog expiry). Kept: RagRPG/build, .tools/godot.zip, Bosque .bak backups, play sessions, ledger",
       "limits": "bundles never carry asset bytes: a new asset enters through the asset/art flow with a provenance record; release in a clean environment is P5"
+    },
+    "release_api_p5": {
+      "state": "validated_increment_F9_still_open",
+      "base": "40b50290",
+      "human_report": "01/11: continue to P5",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "contract": "docs/map_editor/consumption.md",
+      "files": [
+        "scripts/map_authoring/release/map_release.gd",
+        "scripts/map_authoring/release/map_release.gd.uid",
+        "data/map_authoring/release_packages.json",
+        "data/map_authoring/sanctuary_woods.rpp",
+        "data/map_authoring/candidate_preview.gd",
+        "tools/map_editor_candidate/run.ps1",
+        "tools/map_editor_completion/run.ps1",
+        "docs/map_editor/consumption.md",
+        "skills/ragrpg-mapdelivery/SKILL.md",
+        ".gitattributes"
+      ],
+      "test_files": [
+        "tests/map_editor_release_api_test.gd",
+        "tests/map_editor_release_api_test.gd.uid"
+      ],
+      "scope": "Bosque patrol package published by the producer CLI and committed (byte-identical recompile); closed registry of released maps pinning package/source hashes and compiler revision; consumption point map_release.gd (packages, entry, load_package, manifest copy, runtime-only prepare through the gameplay authorities, freshness for authoring); candidate Release stage opens the Bosque through the API from a clean install (only exe+pck in a fresh folder outside the project, fresh profile, working directory there); consumption guide; skill source points to it",
+      "validation": {
+        "ReleaseApi": 11,
+        "M8Release": {
+          "release": 6,
+          "release_bosque": 8
+        },
+        "AssetManifest": 7,
+        "BosqueRecompileByteIdentical": true
+      },
+      "limits": "prepare() certifies on the main thread (~80 s for the Bosque), recorded for F10; republishing after any compiler REVISION or catalog change is manual and checked by ReleaseApi freshness"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_ASSET_CHECK committed_manifest_is_valid true
+F9_ASSET_CHECK committed_manifest_matches_checkout true
+F9_ASSET_CHECK every_package_dependency_is_listed true
+F9_ASSET_CHECK source_runs_hash_the_real_bytes true
+F9_ASSET_CHECK exported_lookup_uses_the_manifest true
+F9_ASSET_CHECK tampered_manifest_no_longer_matches_packages true
+F9_ASSET_CHECK representative_release_package_validates true
+F9_ASSET_RESULT {"checks":[{"id":"committed_manifest_is_valid","ok":true},{"id":"committed_manifest_matches_checkout","ok":true},{"id":"every_package_dependency_is_listed","ok":true},{"id":"source_runs_hash_the_real_bytes","ok":true},{"id":"exported_lookup_uses_the_manifest","ok":true},{"id":"tampered_manifest_no_longer_matches_packages","ok":true},{"id":"representative_release_package_validates","ok":true}],"count":7,"ok":true}

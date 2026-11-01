@@ -25,3 +25,6 @@ docs/map_editor/delivery/evidence/f9/terra/area_encounters/** -text
 
 # Checkpoint41: build-time asset manifest (release dependency hashes).
 data/map_authoring/asset_manifest.json text eol=lf
+
+# Published map packages are immutable bytes.
+data/map_authoring/*.rpp binary

@@ -1,0 +1,24 @@
+﻿HEAD 40b50290
+ELAPSED 158s
+
+F9 ReleaseApi: True
+F9_RELEASE_API_CHECK registry_lists_the_bosque true
+F9_RELEASE_API_CHECK registry_refuses_unsafe_entries true
+F9_RELEASE_API_CHECK committed_package_is_current true
+F9_RELEASE_API_CHECK package_loads_with_its_pins true
+F9_RELEASE_API_CHECK manifest_is_the_consumption_contract true
+F9_RELEASE_API_CHECK manifest_is_a_copy true
+F9_RELEASE_API_CHECK unknown_and_mismatched_pins_are_refused true
+F9_RELEASE_API_CHECK tampered_bytes_are_refused true
+F9_RELEASE_API_CHECK publication_is_by_hash_and_immutable true
+F9_RELEASE_API_CHECK release_export_ships_packages_and_registry true
+F9_RELEASE_API_CHECK prepare_uses_the_game_authorities true
+CANDIDATE exit=0 ELAPSED 218s
+import: True
+export_release: True
+release: True
+release_bosque: True
+M8_SELECTED_PASS
+DONE
+
+

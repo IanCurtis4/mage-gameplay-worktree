@@ -126,6 +126,11 @@ regional", AX `<tela>/synthesis/*` ou a CLI
 pedido é fechado (seed, região, receita ou "preservar" por canal) e cada variação
 aplicada deixa um recibo reproduzível (`replay`/`bundle` na mesma CLI).
 
+Mapa para o jogo: o jogo e os próximos épicos usam só mapas publicados (pacote
+`.rpp` imutável fixado em `data/map_authoring/release_packages.json`), pela API de
+`docs/map_editor/consumption.md`. Publicar e atualizar a lista é decisão humana;
+a skill não publica nem edita a lista.
+
 A pessoa importa a proposta no editor, compara Antes/Proposta e confirma uma ação
 desfazível. Não sobrescreva a fonte humana, não publique nem ative o WFC por
 inferência. A mesma autoridade atende GUI/AX/CLI. Esta adaptação da fonte
