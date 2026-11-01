@@ -1,0 +1,14 @@
+﻿HEAD 8fcce595
+RUNNER map_editor_composition -Native :: exit=1 :: 103s
+   ! M3_UI_CHECK discardable_profile_starts false
+   ! M3_UI_CHECK click_plans_real_actor false
+   ! M3_UI_CHECK native_actor_crosses_seam false
+   !    at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+RUNNER map_editor_terrain -Native :: exit=0 :: 178s
+RUNNER map_editor_population -Native :: exit=0 :: 234s
+RUNNER map_editor_patrol -Native :: exit=1 :: 278s
+   ! M5_UI_CHECK test_uses_separate_real_process false
+   ! M5_UI_CHECK native_preview_resumes_checkpoint false
+   !    at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+RUNNER map_editor_candidate -Stage Native :: exit=0 :: 117s
+DONE

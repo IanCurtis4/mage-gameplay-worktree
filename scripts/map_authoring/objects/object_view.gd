@@ -91,10 +91,27 @@ static func pick(records: Array, local: Vector2, project: Callable, scale: float
 	return selected
 
 static func reveal_actor(sprites: Array[Sprite2D], actor_position: Vector3) -> void:
-	var screen := ProjectionView.project(actor_position)+Vector2(0,-20)
+	reveal_actors(sprites,[actor_position])
+
+## Checkpoint49 (F9-01, P6c): one rule for the editor preview and the game view.
+## A prop with camera_occlusion fades while any actor is behind it: its sprite
+## covers the point just above the actor's feet, it stands in front of the actor
+## (x+z not smaller: the camera looks from +X/+Z) and not far above the actor's
+## floor. Props without camera_occlusion never fade. Returns how many faded.
+const OCCLUDED_ALPHA := 0.38
+static func reveal_actors(sprites: Array[Sprite2D], positions: Array) -> int:
+	var faded := 0
 	for sprite: Sprite2D in sprites:
-		if not sprite.get_meta("camera_occlusion",false): continue
-		var rect := sprite.get_rect()
+		if not is_instance_valid(sprite) or not sprite.get_meta("camera_occlusion",false): continue
+		var world: Vector3 = sprite.get_meta("world_position")
 		var parent := sprite.get_parent() as Node2D
-		var obscures := rect.has_point(sprite.to_local(parent.to_global(screen))) and float(sprite.get_meta("world_position").y) <= actor_position.y+32.0
-		sprite.modulate.a = 0.38 if obscures else 1.0
+		var rect := sprite.get_rect()
+		var obscures := false
+		for position: Vector3 in positions:
+			if world.x+world.z < position.x+position.z-1.0 or world.y > position.y+32.0: continue
+			var screen := ProjectionView.project(position)+Vector2(0,-20)
+			if rect.has_point(sprite.to_local(parent.to_global(screen))): obscures = true; break
+		var alpha := OCCLUDED_ALPHA if obscures else 1.0
+		if not is_equal_approx(sprite.modulate.a,alpha): sprite.modulate.a = alpha
+		if obscures: faded += 1
+	return faded

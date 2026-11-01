@@ -4,6 +4,7 @@ const Shell = preload("res://addons/ragrpg_map_editor/shell.gd")
 const Compiler = preload("res://scripts/map_authoring/compiler/terrain_compiler.gd")
 const Document = preload("res://scripts/map_authoring/document/source_document.gd")
 const TerrainPanel = preload("res://scripts/map_authoring/terrain/terrain_panel.gd")
+const Partition = preload("res://scripts/map_authoring/compiler/terrain_partition.gd")
 var checks: Array[Dictionary] = []
 func check(id: String, ok: bool) -> void:
 	checks.append({"id":id,"ok":ok})
@@ -123,7 +124,10 @@ func _run() -> void:
 	for _i: int in 3: await get_tree().process_frame
 	canvas.fit()
 	check("native_large_piece_not_subdivided_into_pieces",shell.session.document().to_data().layers.size() == 1 and shell.session.document().to_data().layers[0].heights.size() == 4225)
-	check("native_textured_meshes",canvas._mesh_root.get_child_count() == 3 and canvas._mesh_root.get_child(0) is MeshInstance2D and canvas._mesh_root.get_child(0).material is ShaderMaterial)
+	# Checkpoint49 (P6d): one textured mesh per partition region plus the exposed side faces (F9-02).
+	var large_layer: Dictionary = shell.session.document().to_data().layers[0]
+	var expected_meshes: int = Partition.build(large_layer).size()+canvas._shape.get("exposed_sides",[]).size()+canvas._shape.get("visuals",[]).filter(func(visual: Dictionary) -> bool: return visual.special).size()
+	check("native_textured_meshes",canvas._mesh_root.get_child_count() == expected_meshes and canvas._mesh_root.get_children().all(func(node: Node) -> bool: return node is MeshInstance2D and node.material is ShaderMaterial))
 	var grass_texture: Texture2D = canvas._mesh_root.get_child(0).material.get_shader_parameter("grass_tile")
 	check("native_mipmaps_for_zoomed_out_terrain",grass_texture.get_image().has_mipmaps())
 	var large_pick: Dictionary = canvas.pick(canvas.screen(Vector3(7000,128,3500)))

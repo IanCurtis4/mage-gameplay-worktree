@@ -1,0 +1,16 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+F9_OCCLUSION_CHECK bosque_release_loads true
+F9_OCCLUSION_CHECK real_actors_are_bound true
+F9_OCCLUSION_CHECK game_skin_draws_the_bosque true
+F9_OCCLUSION_CHECK player_reaches_a_spot_behind_a_tree true
+F9_OCCLUSION_CHECK tree_in_front_of_the_player_fades true
+F9_OCCLUSION_CHECK capture_occlusion_player_behind_tree true
+F9_OCCLUSION_CHECK tree_behind_the_player_stays_opaque true
+F9_OCCLUSION_CHECK tree_returns_when_the_player_leaves true
+F9_OCCLUSION_CHECK enemy_behind_a_tree_fades_it true
+F9_OCCLUSION_CHECK capture_occlusion_enemy_behind_tree true
+F9_OCCLUSION_CHECK non_occluding_prop_never_fades true
+F9_OCCLUSION_CHECK editor_preview_uses_the_same_rule true
+F9_OCCLUSION_RESULT {"checks":[{"id":"bosque_release_loads","ok":true},{"id":"real_actors_are_bound","ok":true},{"id":"game_skin_draws_the_bosque","ok":true},{"id":"player_reaches_a_spot_behind_a_tree","ok":true},{"id":"tree_in_front_of_the_player_fades","ok":true},{"id":"capture_occlusion_player_behind_tree","ok":true},{"id":"tree_behind_the_player_stays_opaque","ok":true},{"id":"tree_returns_when_the_player_leaves","ok":true},{"id":"enemy_behind_a_tree_fades_it","ok":true},{"id":"capture_occlusion_enemy_behind_tree","ok":true},{"id":"non_occluding_prop_never_fades","ok":true},{"id":"editor_preview_uses_the_same_rule","ok":true}],"count":12,"ok":true}

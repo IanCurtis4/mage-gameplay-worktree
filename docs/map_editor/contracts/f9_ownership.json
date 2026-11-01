@@ -3551,6 +3551,24 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 file (checkpoint49 guided flow)",
       "base_sha256": "8848301b4df6ff8a0f89e595bdf6fbff24a9dbc465e25ab6718d2aed54781438"
+    },
+    {
+      "path": "docs/map_editor/contracts/f9_occlusion.md",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint50)",
+      "base_sha256": "67895ed6e1219028bca72b66b3884b409079925c50833dcb8d24bb74ede3660a"
+    },
+    {
+      "path": "tests/map_editor_occlusion_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint50)",
+      "base_sha256": "7e559484836c73bd51c1d4ed99ff1209872373819a1da06802067bdd668deb46"
+    },
+    {
+      "path": "tests/map_editor_occlusion_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint50)",
+      "base_sha256": "d71ce308f1a5e7d0e01a5bb9c996d08c5a42c44663ada6b0fc4ba6e499be37e0"
     }
   ],
   "read_only_shared": [
@@ -5095,6 +5113,61 @@
         "note": "the four failing native tests are stale expectations of earlier tooling; migrated in P6d together with M3Native24"
       },
       "limits": "publishing through the flow is P6b; occlusion in the game is P6c; M3Native24 migration is P6d"
+    },
+    "publish_occlusion_natives_p6bcd": {
+      "state": "validated_increment_F9_still_open",
+      "base": "8fcce595",
+      "human_report": "01/11: go to P6 (choices: publish as a confirmed final step of the flow; occlusion fade in the game)",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "contract": "docs/map_editor/contracts/f9_guided_flow.md; docs/map_editor/contracts/f9_occlusion.md",
+      "files": [
+        "scripts/map_authoring/release/map_release.gd",
+        "scripts/map_authoring/workflow/authoring_flow.gd",
+        "scripts/map_authoring/workflow/workflow_bar.gd",
+        "scripts/map_authoring/objects/object_view.gd",
+        "scripts/world/authored_expedition_view.gd",
+        "tools/map_editor_completion/run.ps1",
+        "tools/map_editor_composition/run.ps1",
+        "docs/map_editor/contracts/f9_guided_flow.md",
+        "docs/map_editor/contracts/f9_occlusion.md",
+        "docs/map_editor/consumption.md"
+      ],
+      "test_files": [
+        "tests/map_editor_workflow_ui_test.gd",
+        "tests/map_editor_occlusion_ui_test.gd",
+        "tests/map_editor_occlusion_ui_test.gd.uid",
+        "tests/map_editor_composition_ui_test.gd",
+        "tests/map_editor_terrain_ui_test.gd",
+        "tests/map_editor_population_ui_test.gd",
+        "tests/map_editor_patrol_ui_test.gd",
+        "tests/map_editor_candidate_ui_test.gd"
+      ],
+      "scope": "test and publish steps in the guided flow (test ready when the real game opens with the package of the revision; publish plan with id/name, new map or new revision, background publish of <id>.<hash12>.rpp, source and registry entry only on the reviewed registry, previous revision kept on disk; AX <screen>/workflow/publish); one camera-occlusion rule for the editor preview and the game view (sprite covers the point above the feet, prop in front of the actor, not far above its floor), applied every frame by AuthoredExpeditionView to the player and enemies; M3Native24 and the stale native tests of M2, M4, M5 and M8 migrated to the current tooling",
+      "validation": {
+        "WorkflowNative": 28,
+        "OcclusionNative": 12,
+        "Workflow": 12,
+        "ReleaseApi": 11,
+        "job_217_pass": [
+          "OcclusionNative",
+          "Workflow",
+          "ReleaseApi",
+          "WorkflowNative",
+          "BiomePropsNative",
+          "ShadowsNative",
+          "CanvasOrder",
+          "GameplayNative"
+        ],
+        "native_runners_after_migration": {
+          "M2 terrain native": "PASS job 218",
+          "M4 population native": "PASS job 218",
+          "M8 candidate native": "PASS job 218",
+          "M5 patrol native": "PASS job 221",
+          "M3 composition native (M3Native24)": "24/24 PASS job 224"
+        },
+        "note": "M3 native_ui timeout raised from 60 s to the 300 s of the other native runners because it now opens the real game process; the leases left by the run killed at the old timeout (job 219) were released before job 224, session data kept"
+      },
+      "limits": "the test step records that the real game opened with the package, not what the person checked; occlusion uses the sprite rectangle and switches alpha at once"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

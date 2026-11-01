@@ -134,12 +134,22 @@ perfil de travessia) trabalha numa cópia e valida pelas autoridades canônicas.
 
 ## Publicar uma nova revisão
 
+Pelo editor (checkpoint50): na tela de patrulhas, depois de validar e testar no
+jogo a revisão atual, "Publicar no jogo…" no roteiro mostra o que muda e, depois da
+confirmação, grava `data/map_authoring/<id>.<hash12>.rpp` (a revisão anterior
+continua em disco), a fonte `<id>.patrol.json` e a entrada da lista
+(`map_release.gd` `plan_publication`/`publish`). Detalhes em
+`contracts/f9_guided_flow.md`.
+
+À mão, o mesmo resultado:
+
 1. Compile e publique pela CLI do produtor (Godot 4.7.2 contratado, use o
    executável de console para esperar o fim):
    `--headless --path <projeto> --script res://scripts/map_authoring/patrol/headless.gd -- <fonte.patrol.json> <pasta>`.
    O resultado `MAP_PATROL_RESULT` traz `input_hash` e `output_hash`.
-2. Copie `<pasta>/<package_hash>.rpp` para `data/map_authoring/<package_id>.rpp`
-   e atualize `source_hash` e `package_hash` na lista.
+2. Copie `<pasta>/<package_hash>.rpp` para `data/map_authoring/` (o editor usa
+   `<package_id>.<hash12>.rpp`; o Bosque de 1/11 ficou em `sanctuary_woods.rpp`) e
+   atualize `path`, `source_hash` e `package_hash` na lista.
 3. Rode `tools/map_editor_completion/run.ps1 -Stage ReleaseApi` (confere lista,
    pinos, frescor da fonte, adulteração e preparação) e
    `tools/map_editor_candidate/run.ps1 -Stage Release` (export e execução limpa).

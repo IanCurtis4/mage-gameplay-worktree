@@ -47,11 +47,12 @@ func _run() -> void:
 	for brush: Dictionary in reroll.brushes: brush.round = 1
 	panel.session.apply(reroll); panel.prepare_plan(); await wait_job(panel); check("reroll_diff_preserves_pin",panel.proposal.ok and panel.proposal.diff.preserved.has(pin.slot_id))
 	panel.request_apply(); panel._confirmation.hide(); panel.confirm_action(); check("pin_home_preserved",panel.session.data.slots.has(pin))
-	panel.bake(); await wait_job(panel); panel.toggle_test(); check("canonical_discardable_test",panel.canvas.testing and panel.canvas.campaign.valid())
+	# Checkpoint49 (P6d): "Testar" opens the real game; the canonical simulation is the canvas technical test.
+	panel.bake(); await wait_job(panel); var simulated: Dictionary = panel.canvas.start_test(); check("canonical_discardable_test",simulated.get("ok",false) and panel.canvas.testing and panel.canvas.campaign.valid())
 	for i: int in panel.session.data.slots.size(): panel.slots.select(i); panel.simulate_death()
 	check("canonical_clear_from_ui",panel.canvas.campaign.stages.map_preview.cleared_once)
 	panel.simulate_wave(); check("canonical_respawn_from_ui",panel.canvas.campaign.slots.values().filter(func(s: Dictionary) -> bool: return s.generation == 1 and s.life_state == "alive").size() == 7)
-	panel.toggle_test(); check("test_preserves_source",not panel.canvas.testing and panel.session.data.slots.has(pin))
+	panel.canvas.stop_test(); check("test_preserves_source",not panel.canvas.testing and panel.session.data.slots.has(pin))
 	panel._action = "save"; var path := ProjectSettings.globalize_path("res://.godot/native_encounters.json"); panel.file_selected(path)
 	check("native_save_roundtrip",Store.load_source(path).ok and Document.hash_source(Store.load_source(path).data) == Document.hash_source(panel.session.data))
 	panel.preserve_draft(); var draft: String = panel._autosave; var draft_hash := Document.hash_source(panel.session.data)

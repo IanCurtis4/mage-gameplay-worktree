@@ -1,0 +1,8 @@
+﻿HEAD 8fcce595
+M3 :: exit=1
+M3_UI_CHECK discardable_profile_starts false
+M3_GAME_STATE {"code":"","opened":{"code":"preview_busy","ok":false},"ready":true,"state":"active","testing":false}
+M3_UI_CHECK click_plans_real_actor false
+M3_UI_CHECK native_actor_crosses_seam false
+M3_UI_CHECK test_preserves_draft false
+DONE

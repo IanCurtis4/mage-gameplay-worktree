@@ -1,15 +1,15 @@
-# F9 — roteiro guiado entre as telas (P6a)
+# F9 — roteiro guiado entre as telas (P6a/P6b)
 
 Checkpoint49. Pedido humano de 1/11: "Barra de etapas" em todas as telas, com o
 estado de cada etapa e um botão "Próximo passo" que leva o documento adiante e abre
-a tela certa. Publicar no jogo entra como etapa final no P6b, com confirmação.
+a tela certa. Publicar no jogo é a etapa final, com confirmação (P6b, checkpoint50).
 
 ## O que a pessoa vê
 
 No topo das telas de terreno (peça), composição (mapa), encontros e patrulhas,
 logo abaixo do modo de trabalho, a faixa **Roteiro do mapa**:
 
-`1 Peça · 2 Mapa · 3 Encontros · 4 Patrulhas · 5 Teste`, cada uma com seu estado,
+`1 Peça · 2 Mapa · 3 Encontros · 4 Patrulhas · 5 Teste · 6 Publicação`, cada uma com seu estado,
 a etapa da tela atual marcada. Clicar numa etapa abre (ou traz à frente) a tela
 dela. Abaixo, **Próximo passo:** com a ação seguinte, **Mostrar o problema**
 quando uma etapa tem problema, **Cancelar atualização** durante uma atualização
@@ -40,7 +40,8 @@ própria tela (os mesmos botões e funções de antes):
 | Mapa | abrir a composição; começar o mapa com a peça aberta (mapa vazio); levar a peça atual ao mapa; compilar o mapa |
 | Encontros | levar o mapa aos encontros; atualizar o mapa nos encontros; marcar a entrada e pintar encontros; preparar e aplicar a prévia do plano; compilar |
 | Patrulhas | levar os encontros às patrulhas; atualizar os encontros nas patrulhas; validar |
-| Teste | testar no jogo (o pacote validado na janela de jogo real, perfil descartável) |
+| Teste | testar no jogo (o pacote validado na janela de jogo real, perfil descartável); fica pronta para essa revisão do pacote |
+| Publicação | publicar no jogo, depois do teste da mesma revisão |
 
 Nada é aplicado sem a pessoa: o plano de encontros usa a confirmação da tela, e
 cada atualização entre etapas abre "Atualizar a etapa" com o resumo e **Aplicar
@@ -70,6 +71,27 @@ marcador sumiu), `flow_slot_missing` (a rota usa um slot que não existe mais),
 além dos diagnósticos dos compiladores. **Mostrar o problema** abre a tela dona e
 seleciona o item na lista de diagnósticos dela, que foca a entidade no viewport.
 
+## Publicar no jogo (P6b)
+
+Depois de um teste de jogo da revisão atual das patrulhas, **Publicar no jogo…**
+abre "Publicar no jogo" na tela de patrulhas com o identificador (minúsculas,
+dígitos, `_` ou `-`) e o nome visível. O identificador sugerido é o do mapa já
+publicado a partir do mesmo arquivo de patrulhas; senão, o `document_id`. O texto
+diz o que muda na lista de mapas do jogo:
+
+- mapa novo: identificador, nome, pacote e a fonte que será gravada;
+- nova revisão: pacote anterior → novo; o arquivo da revisão anterior continua em
+  disco e a lista passa a apontar para o novo;
+- o mesmo pacote já publicado: nada a fazer ("Publicar" desativado).
+
+Ao confirmar, em segundo plano (`map_release.gd` `publish`): o pacote é validado,
+gravado como `data/map_authoring/<id>.<hash12>.rpp` (nunca sobrescrito), a fonte em
+`<id>.patrol.json` (só se mudou) e a entrada na `release_packages.json`, apenas se
+a lista ainda é a revisada (`release_registry_changed` caso contrário). A etapa
+fica pronta quando a lista fixa este pacote. Falhas (`release_entry_invalid`,
+`release_stale_source`, `immutable_conflict`, `release_io`) aparecem na etapa, com
+"Mostrar o problema" na tela de patrulhas.
+
 ## AX
 
 Cada faixa é um provedor de comandos da sua tela (`piece`, `map`, `population`,
@@ -83,16 +105,19 @@ Cada faixa é um provedor de comandos da sua tela (`piece`, `map`, `population`,
 | `<tela>/workflow/discard` | — | descarta a atualização pendente |
 | `<tela>/workflow/show` | `step` | abre a tela dona e foca o problema da etapa |
 | `<tela>/workflow/open` | `step` | abre a tela da etapa |
+| `<tela>/workflow/publish` | `package_id`, `name`, `registry_hash` | publica depois de `next` com a ação `publish` (que devolve o plano) |
 
 ## Provas
 
 - `Workflow` 12/12 (headless): peça no mapa, âncoras que seguem e assentam, plano
   reconferido com os mesmos slots, rotas, determinismo, recusas localizadas, um
   desfazer sobre a base, peça aberta igual ao snapshot do Bosque.
-- `WorkflowNative` 23/23 (editor real): da composição ao teste só com "Próximo
-  passo"; peça alterada levada ao mapa, aos encontros e às patrulhas em segundo
-  plano, cada uma revisada e aplicada; recusa que abre a tela dona com o marcador
-  focado; AX com o mesmo estado; faixa visível e fora dos menus.
+- `WorkflowNative` 28/28 (editor real): da composição ao teste só com "Próximo
+  passo"; teste no jogo real e publicação revisada numa lista de mapas de teste;
+  peça alterada levada ao mapa, aos encontros e às patrulhas em segundo plano, cada
+  uma revisada e aplicada; nova revisão testada e publicada mantendo o pacote
+  anterior; recusa que abre a tela dona com o marcador focado; AX com o mesmo
+  estado; faixa visível e fora dos menus.
 
 ## Limites
 
@@ -103,4 +128,5 @@ Cada faixa é um provedor de comandos da sua tela (`piece`, `map`, `population`,
 - Atualizar uma etapa compila na hora (no Bosque, o mapa leva ~28 s por
   compilação, e a atualização de encontros compila o mapa antigo e o novo); roda
   em segundo plano e pode ser cancelada.
-- Publicar no jogo é o P6b.
+- A etapa de teste conta como feita quando o jogo abre com o pacote da revisão;
+  o editor não sabe o que a pessoa conferiu na janela de jogo.

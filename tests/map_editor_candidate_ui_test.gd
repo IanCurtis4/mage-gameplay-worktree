@@ -35,7 +35,7 @@ func run() -> void:
 	check("ux_default",host.ax_snapshot().mode == "ux" and host.mode_choice.selected == 0)
 	check("ux_menus_grouped",host.menus.Arquivo.visible and host.menus.Criar.visible)
 	check("ux_original_actions_hidden",host.actions["piece/new_piece"].control.visible == false)
-	check("ux_terrain_dropdown",terrain_host.section_choice.visible and terrain_host.section_choice.item_count == 5)
+	check("ux_terrain_dropdown",terrain_host.section_choice.visible and terrain_host.section_choice.item_count == 6 and terrain_host.section_choice.get_item_text(5) == "Variação regional")
 	check("ux_terrain_noise_reduced",not shell.terrain.grid_columns.is_visible_in_tree())
 	var before: Dictionary = shell.session.document().to_data(); var generation: int = shell.session.generation
 	var undo: bool = shell.session.can_undo()

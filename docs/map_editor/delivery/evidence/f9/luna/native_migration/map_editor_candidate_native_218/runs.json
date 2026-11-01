@@ -1,0 +1,236 @@
+[
+  {
+    "aborted": false,
+    "finished_utc": "2026-11-01T19:46:44.4302774Z",
+    "started_utc": "2026-11-01T19:46:34.5401272Z",
+    "timed_out": false,
+    "exit_code": 0,
+    "output_sha256": "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+    "name": "import",
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "result": null,
+    "ok": true
+  },
+  {
+    "aborted": false,
+    "finished_utc": "2026-11-01T19:48:19.8207719Z",
+    "started_utc": "2026-11-01T19:46:44.4672965Z",
+    "timed_out": false,
+    "exit_code": 0,
+    "output_sha256": "98F2CBFBD37112C61B500DC63483CA5C1025C7BA8CBFB6A69145C107FB7B8138",
+    "name": "native_ui",
+    "arguments": [
+      "--editor",
+      "--rendering-method",
+      "gl_compatibility"
+    ],
+    "result": {
+      "checks": [
+        {
+          "id": "real_main_screen_host",
+          "ok": true
+        },
+        {
+          "id": "ux_default",
+          "ok": true
+        },
+        {
+          "id": "ux_menus_grouped",
+          "ok": true
+        },
+        {
+          "id": "ux_original_actions_hidden",
+          "ok": true
+        },
+        {
+          "id": "ux_terrain_dropdown",
+          "ok": true
+        },
+        {
+          "id": "ux_terrain_noise_reduced",
+          "ok": true
+        },
+        {
+          "id": "ax_action_requires_mode",
+          "ok": true
+        },
+        {
+          "id": "ax_flat_actions",
+          "ok": true
+        },
+        {
+          "id": "ax_overlay_on_viewport",
+          "ok": true
+        },
+        {
+          "id": "ax_snapshot_source",
+          "ok": true
+        },
+        {
+          "id": "ax_shared_mode",
+          "ok": true
+        },
+        {
+          "id": "ax_missing_action",
+          "ok": true
+        },
+        {
+          "id": "ax_disabled_action",
+          "ok": true
+        },
+        {
+          "id": "ax_existing_command_dispatch",
+          "ok": true
+        },
+        {
+          "id": "toggle_preserves_document_history",
+          "ok": true
+        },
+        {
+          "id": "toggle_preserves_hash_validation_dirty",
+          "ok": true
+        },
+        {
+          "id": "invalid_mode_rejected",
+          "ok": true
+        },
+        {
+          "id": "capture_piece_ux",
+          "ok": true
+        },
+        {
+          "id": "menu_metadata_stable",
+          "ok": true
+        },
+        {
+          "id": "snapshot_is_copy",
+          "ok": true
+        },
+        {
+          "id": "piece_context_gui_saves_biomes",
+          "ok": true
+        },
+        {
+          "id": "piece_context_gui_saves_area_reservation",
+          "ok": true
+        },
+        {
+          "id": "piece_context_undo",
+          "ok": true
+        },
+        {
+          "id": "real_composition_window",
+          "ok": true
+        },
+        {
+          "id": "native_map_compiles",
+          "ok": true
+        },
+        {
+          "id": "context_action_exposed",
+          "ok": true
+        },
+        {
+          "id": "map_context_gui_exception",
+          "ok": true
+        },
+        {
+          "id": "map_context_gui_warning",
+          "ok": true
+        },
+        {
+          "id": "rejected_recipe_restores_selector",
+          "ok": true
+        },
+        {
+          "id": "capture_map_ux",
+          "ok": true
+        },
+        {
+          "id": "capture_map_ax",
+          "ok": true
+        },
+        {
+          "id": "ux_ax_call_refused",
+          "ok": true
+        },
+        {
+          "id": "ax_test_calls_real_authority",
+          "ok": true
+        },
+        {
+          "id": "ax_test_stops",
+          "ok": true
+        },
+        {
+          "id": "real_window_population",
+          "ok": true
+        },
+        {
+          "id": "native_ax_population",
+          "ok": true
+        },
+        {
+          "id": "native_switch_pure_population",
+          "ok": true
+        },
+        {
+          "id": "exchange_binding_population",
+          "ok": true
+        },
+        {
+          "id": "test_tools_hidden_in_ux",
+          "ok": true
+        },
+        {
+          "id": "native_population_compiles",
+          "ok": true
+        },
+        {
+          "id": "capture_population_ux",
+          "ok": true
+        },
+        {
+          "id": "real_window_patrol",
+          "ok": true
+        },
+        {
+          "id": "native_ax_patrol",
+          "ok": true
+        },
+        {
+          "id": "native_switch_pure_patrol",
+          "ok": true
+        },
+        {
+          "id": "exchange_binding_patrol",
+          "ok": true
+        },
+        {
+          "id": "real_window_generation",
+          "ok": true
+        },
+        {
+          "id": "native_ax_generation",
+          "ok": true
+        },
+        {
+          "id": "native_switch_pure_generation",
+          "ok": true
+        },
+        {
+          "id": "exchange_binding_generation",
+          "ok": true
+        }
+      ],
+      "count": 49,
+      "ok": true
+    },
+    "ok": true
+  }
+]

@@ -9,16 +9,20 @@ extends RefCounted
 ## undoable change), prepare/apply the encounter plan, test. A failure keeps its
 ## diagnostic with the step that owns it; show() opens that screen and focuses the
 ## entity through the screen's own diagnostics list.
+## Checkpoint49 (P6b): after a game test of the current patrol package, "Publicar
+## no jogo…" reviews and writes the release (map_release.gd publish) in the
+## background; the step is ready when the registry pins this package.
 signal changed
 const Carry = preload("res://scripts/map_authoring/workflow/carry_forward.gd")
 const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 const MapDocument = preload("res://scripts/map_authoring/composition/map_document.gd")
 const PopulationDocument = preload("res://scripts/map_authoring/population/population_document.gd")
 const PatrolDocument = preload("res://scripts/map_authoring/patrol/patrol_document.gd")
-const ORDER := ["piece","map","population","patrol","test"]
-const TITLES := {"piece":"Peça","map":"Mapa","population":"Encontros","patrol":"Patrulhas","test":"Teste"}
+const ORDER := ["piece","map","population","patrol","test","publish"]
+const Release = preload("res://scripts/map_authoring/release/map_release.gd")
+const TITLES := {"piece":"Peça","map":"Mapa","population":"Encontros","patrol":"Patrulhas","test":"Teste","publish":"Publicação"}
 const STATES := {"ready":"pronta","todo":"a fazer","stale":"desatualizada","busy":"em andamento","blocked":"com problema","waiting":"aguarda a anterior","absent":"não aberta","optional":"opcional","review":"a revisar"}
-const LABELS := {"compile_piece":"Compilar a peça","open_map":"Abrir a composição do mapa","start_map":"Começar o mapa com a peça aberta","carry_piece":"Levar a peça atual ao mapa","compile_map":"Compilar o mapa","open_population":"Levar o mapa aos encontros","import_map":"Levar o mapa aos encontros","carry_map":"Atualizar o mapa nos encontros","mark_population":"Marcar a entrada e pintar encontros","prepare_plan":"Preparar o plano dos encontros","apply_plan":"Aplicar a prévia do plano…","compile_population":"Compilar os encontros","open_patrols":"Levar os encontros às patrulhas","import_population":"Levar os encontros às patrulhas","carry_population":"Atualizar os encontros nas patrulhas","compile_patrols":"Validar as patrulhas","test":"Testar no jogo","confirm_carry":"Revisar e aplicar a atualização…"}
+const LABELS := {"compile_piece":"Compilar a peça","open_map":"Abrir a composição do mapa","start_map":"Começar o mapa com a peça aberta","carry_piece":"Levar a peça atual ao mapa","compile_map":"Compilar o mapa","open_population":"Levar o mapa aos encontros","import_map":"Levar o mapa aos encontros","carry_map":"Atualizar o mapa nos encontros","mark_population":"Marcar a entrada e pintar encontros","prepare_plan":"Preparar o plano dos encontros","apply_plan":"Aplicar a prévia do plano…","compile_population":"Compilar os encontros","open_patrols":"Levar os encontros às patrulhas","import_population":"Levar os encontros às patrulhas","carry_population":"Atualizar os encontros nas patrulhas","compile_patrols":"Validar as patrulhas","test":"Testar no jogo","confirm_carry":"Revisar e aplicar a atualização…","publish":"Publicar no jogo…"}
 const CARRIES := {"carry_piece":"map","carry_map":"population","carry_population":"patrol"}
 var _panels: Dictionary = {}
 var _hashes: Dictionary = {}
@@ -28,6 +32,9 @@ var _cancel := false
 var pending: Dictionary = {}
 var failure: Dictionary = {}
 var last_action := ""
+var tested_hash := ""
+var release_folder: String = Release.FOLDER
+var published: Dictionary = {}
 
 func attach(kind: String, panel: Control) -> void:
 	_panels[kind] = weakref(panel)
@@ -171,10 +178,71 @@ func steps() -> Array:
 		elif not problem.is_empty(): result.append(_step("patrol","blocked","compile_patrols",problem.get("message",""),problem))
 		elif _compiled("patrol").get("ok",false): result.append(_step("patrol","ready","","%d rota(s) validadas." % patrol.patrols.size())); patrol_ready = true
 		else: result.append(_step("patrol","todo","compile_patrols","Valide corpo, limite de retorno e trechos."))
-	# 5. Test.
+	# 5. Test, once for every validated revision.
+	var package := patrol_package()
+	var tested := patrol_ready and not tested_hash.is_empty() and tested_hash == String(package.get("package_hash",""))
 	if not patrol_ready: result.append(_step("test","waiting","","Primeiro valide as patrulhas."))
+	elif tested: result.append(_step("test","ready","","Teste aberto nesta revisão."))
 	else: result.append(_step("test","todo","test","Abre o jogo real com o pacote validado, perfil descartável."))
+	# 6. Publish in the game.
+	if not tested: result.append(_step("publish","waiting","","Teste esta revisão antes de publicar."))
+	elif job != null and job_action == "publish": result.append(_step("publish","busy","","Publicando no jogo…"))
+	elif failure.get("step","") == "publish": result.append(_step("publish","blocked","publish",_failed("publish").get("message",""),_failed("publish")))
+	else:
+		var pinned := release_entry_for(String(package.get("package_hash","")))
+		if not pinned.is_empty(): result.append(_step("publish","ready","","Publicado como %s (%s)." % [pinned.name,pinned.package_id]))
+		else: result.append(_step("publish","todo","publish","Grava o pacote e a fonte e atualiza a lista de mapas do jogo, depois da sua confirmação."))
 	return result
+
+func patrol_package() -> Dictionary:
+	var compiled := _compiled("patrol")
+	return compiled.get("package",{}) if compiled.get("ok",false) else {}
+
+var _registry_cache: Dictionary = {}
+## The registry, read again only when its file changed.
+func release_registry() -> Dictionary:
+	var path: String = Release.registry_path(release_folder)
+	var stamp := str(release_folder)+"|"+(str(FileAccess.get_modified_time(path))+"|"+FileAccess.get_sha256(path) if FileAccess.file_exists(path) else "absent")
+	if _registry_cache.get("stamp","") != stamp: _registry_cache = {"stamp":stamp,"value":Release._current(release_folder)}
+	return _registry_cache.value
+
+func release_entry_for(package_hash: String) -> Dictionary:
+	if package_hash.is_empty(): return {}
+	var read: Dictionary = release_registry()
+	if not read.get("ok",false): return {}
+	for item: Dictionary in read.registry.packages:
+		if item.package_hash == package_hash: return item
+	return {}
+
+## The registry entry this patrol source already feeds, or a new identifier.
+func default_release() -> Dictionary:
+	var owner := panel("patrol")
+	var source := data("patrol")
+	var read: Dictionary = release_registry()
+	var path: String = String(owner.get("source_path")) if owner != null and owner.get("source_path") != null else ""
+	if read.get("ok",false) and not path.is_empty():
+		for item: Dictionary in read.registry.packages:
+			if ProjectSettings.globalize_path(item.source_path).simplify_path() == ProjectSettings.globalize_path(path).simplify_path(): return {"package_id":item.package_id,"name":item.name}
+	var id := ""
+	for c: String in String(source.get("document_id","mapa")).to_lower():
+		id += c if c in "abcdefghijklmnopqrstuvwxyz0123456789_-" else "_"
+	var map := data("map")
+	return {"package_id":id.left(64) if not id.is_empty() else "mapa","name":String(map.get("name",source.get("name","Mapa"))) if not map.is_empty() else String(source.get("name","Mapa"))}
+
+func plan_publication(package_id: String, name: String) -> Dictionary:
+	var package := patrol_package()
+	if package.is_empty(): return {"ok":false,"code":"compile_required"}
+	return Release.plan_publication(package_id,name,package,release_folder)
+
+## Starts the publication after the person confirmed the plan.
+func publish(package_id: String, name: String, registry_hash: String) -> Dictionary:
+	if job != null: return {"ok":false,"code":"flow_busy"}
+	if next_step().get("action","") != "publish": return {"ok":false,"code":"flow_action_unavailable"}
+	var package := patrol_package().duplicate(true); var source := data("patrol").duplicate(true); var folder := release_folder
+	failure = {}; published = {}; last_action = "publish"; _cancel = false; job_action = "publish"; job = Thread.new()
+	job.start(func() -> Dictionary: return Release.publish(package_id,name,package,source,registry_hash,folder))
+	changed.emit()
+	return {"ok":true,"pending":true,"action":"publish"}
 
 func next_step() -> Dictionary:
 	for step: Dictionary in steps():
@@ -182,7 +250,7 @@ func next_step() -> Dictionary:
 		return step
 	return {}
 
-func screen_of(kind: String) -> String: return "patrol" if kind == "test" else kind
+func screen_of(kind: String) -> String: return "patrol" if kind in ["test","publish"] else kind
 
 ## Opens (or brings forward) the screen of a step.
 func open(kind: String) -> Dictionary:
@@ -234,7 +302,16 @@ func run(action: String) -> Dictionary:
 		"import_population":
 			open("patrol"); result = panel("patrol").import_population(data("population"),panel("patrol").session.data.patrols.is_empty())
 		"compile_patrols": open("patrol"); result = panel("patrol").bake()
-		"test": open("patrol"); result = panel("patrol").gameplay_tools.toggle()
+		"test":
+			open("patrol")
+			var tools: Control = panel("patrol").gameplay_tools
+			result = {"ok":true,"running":true} if tools.launcher.running() else tools.launch()
+			if result.get("ok",false): tested_hash = String(patrol_package().get("package_hash",""))
+		"publish":
+			var defaults := default_release()
+			var plan := plan_publication(defaults.package_id,defaults.name)
+			open("patrol")
+			return {"ok":plan.get("ok",false),"action":action,"confirmation_required":plan.get("ok",false),"kind":"publish","plan":plan,"code":plan.get("code","")}
 		"carry_piece", "carry_map", "carry_population": result = _start_carry(action)
 		_: return {"ok":false,"code":"flow_action_unavailable"}
 	if result is Dictionary and not result.get("ok",true) and result.has("diagnostics"): failure = result.duplicate(true); failure["step"] = step.id
@@ -261,6 +338,12 @@ func cancel() -> void: _cancel = true
 func poll() -> bool:
 	if job == null or job.is_alive(): return false
 	var outcome: Dictionary = job.wait_to_finish(); job = null
+	if job_action == "publish":
+		job_action = ""
+		if outcome.get("ok",false): published = outcome
+		else: failure = outcome.duplicate(true); failure["step"] = "publish"
+		changed.emit()
+		return true
 	var target: String = CARRIES.get(job_action,""); job_action = ""
 	if outcome.get("ok",false) and outcome.base_hash == current_hash(target): pending = outcome
 	elif outcome.get("ok",false): failure = Carry.fail("flow_stale_proposal","",target)

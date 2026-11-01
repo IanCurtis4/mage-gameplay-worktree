@@ -1,0 +1,9 @@
+{
+  "WorkflowNative": 28,
+  "OcclusionNative": 12,
+  "Workflow": 12,
+  "ReleaseApi": 11,
+  "job_217_pass": ["OcclusionNative","Workflow","ReleaseApi","WorkflowNative","BiomePropsNative","ShadowsNative","CanvasOrder","GameplayNative"],
+  "native_runners_after_migration": {"M2 terrain native": "PASS job 218", "M4 population native": "PASS job 218", "M8 candidate native": "PASS job 218", "M5 patrol native": "PASS job 221", "M3 composition native (M3Native24)": "24/24 PASS job 224"},
+  "note": "M3 native_ui timeout raised from 60 s to the 300 s of the other native runners because it now opens the real game process; the leases left by the run killed at the old timeout (job 219) were released before job 224, session data kept"
+}

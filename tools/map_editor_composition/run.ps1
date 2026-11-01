@@ -45,7 +45,9 @@ function Invoke-M3([string]$Name,[string[]]$Arguments,[string]$Marker = '',[int]
     $m3Started = [DateTime]::UtcNow.ToString('o')
     [void]$m3Process.Start()
     $m3Out = $m3Process.StandardOutput.ReadToEndAsync(); $m3Err = $m3Process.StandardError.ReadToEndAsync()
-    $m3TimeoutMs = if ($Name -eq 'terrain_scale') { 180000 } else { 60000 }
+    # Checkpoint49 (P6d): native_ui now opens the real game process (the technical circle
+    # was retired); it gets the 300 s of the other native runners.
+    $m3TimeoutMs = if ($Name -eq 'terrain_scale') { 180000 } elseif ($Name -eq 'native_ui') { 300000 } else { 60000 }
     $m3Timeout = -not $m3Process.WaitForExit($m3TimeoutMs)
     if ($m3Timeout) { $m3Process.Kill($true); $m3Process.WaitForExit() }
     $m3Text=$m3Out.GetAwaiter().GetResult()+$m3Err.GetAwaiter().GetResult()

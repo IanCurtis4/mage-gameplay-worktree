@@ -2,7 +2,10 @@ extends ExpeditionGeometryView
 ## Disposable skin over the canonical gameplay world. Actors keep their owner.
 const PackageView = preload("res://scripts/world/map_package_view.gd")
 const CanvasOrder = preload("res://scripts/world/world_canvas_order.gd")
+const Objects = preload("res://scripts/map_authoring/objects/object_view.gd")
 var skin: PackageView
+## Checkpoint49 (F9-01, P6c): props faded this frame because an actor is behind them.
+var occluded := 0
 var ordering: Dictionary = {}
 var package: Dictionary = {}
 
@@ -59,6 +62,11 @@ func sync() -> void:
 		actor.visible = actor.world_point().surface_id not in _hidden
 		observed.append(actor)
 	_actors = kept
+	# Camera-occluding props fade while the player or an enemy is behind them.
+	var feet: Array = []
+	for actor: CombatActor in observed:
+		if actor.visible: feet.append(actor.world_point().position)
+	occluded = Objects.reveal_actors(skin.object_sprites,feet)
 	# Never call the base height-Z assignment: it invalidates warm topology reuse.
 	field_views.sync(skin,controller,geometry,_hidden)
 	ordering = CanvasOrder.apply(skin,observed)
