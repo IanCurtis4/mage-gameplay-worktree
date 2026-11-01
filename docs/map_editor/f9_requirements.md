@@ -280,3 +280,8 @@ Checkpoint49 (1/11, Sol/Astra Opus): P6a roteiro guiado entre as telas (barra de
 etapas, próximo passo pelos produtores, atualização entre etapas revisada com um
 desfazer, diagnóstico que abre a tela dona) e AX `<tela>/workflow/*`
 (Workflow12, WorkflowNative23).
+
+Checkpoint50 (1/11, Sol/Astra Opus): P6b publicar no jogo pelo roteiro depois do
+teste, com revisão e revisão anterior preservada (WorkflowNative28); P6c oclusão
+de câmera no jogo para jogador e inimigos, provada no Bosque (OcclusionNative12);
+P6d M3Native24 e nativos antigos de M2/M4/M5/M8 migrados. P6 fechado.

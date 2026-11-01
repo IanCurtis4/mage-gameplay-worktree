@@ -1,7 +1,37 @@
 # Retomada F9 —30/10/2026
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint49 — roteiro guiado entre as telas (P6a)
+## Checkpoint50 — publicar pelo roteiro, oclusão no jogo e nativos antigos (P6b–P6d)
+
+1/11/2026. Mesmo checkout/branch/fixture. Base 8fcce595; código e documentação
+em commits próprios. Papéis inalterados. Contratos: contracts/f9_guided_flow.md e
+contracts/f9_occlusion.md; consumption.md atualizado.
+
+- P6b: etapas "Teste" (pronta quando o jogo real abre com o pacote da revisão) e
+  "Publicação". "Publicar no jogo…" pede identificador e nome, diz se é mapa novo
+  ou nova revisão (pacote anterior → novo) e, depois de "Publicar", grava em
+  segundo plano `<id>.<hash12>.rpp` (a revisão anterior fica em disco), a fonte
+  `<id>.patrol.json` e a entrada da lista de mapas, só se a lista ainda é a
+  revisada (`map_release.gd` `plan_publication`/`publish`; AX
+  `<tela>/workflow/publish`).
+- P6c: árvores, rochas e pilares com oclusão de câmera esmaecem no jogo enquanto o
+  jogador ou um inimigo está atrás (mesma regra da prévia do editor, agora com a
+  condição de estar à frente do ator); arbustos de decoração nunca esmaecem.
+  Provado no Bosque publicado.
+- P6d: M3Native24 migrado para o teste no jogo real pelos comandos da tela; os
+  nativos antigos de M2 (malhas do exemplo grande com as faces laterais), M4
+  (simulação canônica pelo teste técnico do canvas), M5 (teste de patrulhas no
+  jogo real, suspenso e retomado) e M8 (seção "Variação regional") atualizados.
+- WorkflowNative28, OcclusionNative12, Workflow12, ReleaseApi11, BiomePropsNative,
+  ShadowsNative, CanvasOrder, GameplayNative e runners nativos M2–M5/M8 PASS. O
+  nativo do M3 abre o jogo real e passou a ter os 300 s dos outros runners
+  nativos (antes 60 s); as travas deixadas pela rodada morta no limite antigo
+  foram liberadas, sem apagar sessões.
+
+P6 fechado. Pendente: P7 (área final, roteiro humano e aceite), P8 (entrega).
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint49 — roteiro guiado entre as telas (P6a)
 
 1/11/2026. Mesmo checkout/branch/fixture. Base 36ca0f52; código e documentação
 em commits próprios. Papéis inalterados. Contrato: contracts/f9_guided_flow.md.
@@ -28,9 +58,7 @@ em commits próprios. Papéis inalterados. Contrato: contracts/f9_guided_flow.md
   headless e M6/M7 nativos PASS. Os nativos antigos de M2, M4, M5 e M8 falham
   igual na base 36ca0f52 (jobs 213/215): expectativas defasadas, migradas no P6d.
 
-Pendente: P6b (publicar no jogo pelo roteiro), P6c (oclusão no jogo e prova no
-Bosque), P6d (migração do M3Native24); aceite humano.
-<!-- /f9-patrol-gameplay-active -->
+Próximo: P6b–P6d, feitos no checkpoint50.
 
 ## Histórico checkpoint48 — release com o Bosque e ponto de consumo (P5)
 
