@@ -1,0 +1,12 @@
+﻿RUN Mesh EXIT 0 SECONDS 21
+  F9_MESH_RESULT {"checks":[{"id":"curved_grid_compiles","ok":true},{"id":"curved_grid_has_eight_exact_triangles","ok":tru
+RUN Relief EXIT 0 SECONDS 19
+  F9_RELIEF_RESULT {"checks":[{"id":"convex_terrain_mass_valid","ok":true},{"id":"concave_cap_rejected","ok":true},{"id":"
+RUN Borders EXIT 0 SECONDS 152
+  F9_BORDER_RESULT {"checks":[{"id":"four_families_and_transition_catalog","ok":true},{"id":"unknown_profile_is_explicit",
+RUN HeightGridNavigation EXIT 0 SECONDS 17
+  F10_GRID_NAV_RESULT {"checks":[{"id":"seams_from_shared_spans","ok":true},{"id":"route_crosses_the_stretches_through_the
+  F10_GRID_NAV_TIMING {"batch_ms":393.2,"cold_ms":490.9,"points":11,"warm_ms":140.5}
+RUN HeightGridWorld EXIT 0 SECONDS 15
+  F10_GRID_WORLD_RESULT {"checks":[{"id":"stretch_is_a_valid_cell","ok":true},{"id":"support_is_the_stretch","ok":true},{"
+DONE

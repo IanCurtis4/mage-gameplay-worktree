@@ -122,6 +122,8 @@ static func _shadow(world: WorldGeometry) -> WorldGeometry:
 	var result := WorldGeometry.new()
 	result._stage = world._stage.duplicate(true); result._temporary = world._temporary.duplicate(true)
 	result._solid_slabs.assign(world._solid_slabs)
+	# F10 H3: the same stage's stretch lattices (signature-checked at publish).
+	result._grid_cache = world._grid_cache; result._grid_mutex = world._grid_mutex
 	for id: String in world._segments: result._segments[id] = world._segments[id].snapshot()
 	result.geometry_revision = world.geometry_revision; result.configuration_revision = world.configuration_revision
 	return result
@@ -319,10 +321,17 @@ static func _search(world: WorldGeometry, graph: Dictionary, incoming: Dictionar
 				# Checkpoint42: same predicates through the owner's shared memo
 				# (_navigation_clear/_fraction wrap exactly these two calls).
 				var memo: Dictionary = ctx.get("memo",{})
-				cached[b] = world._navigation_clear(from.position,to.position,profile,null,from.surface_id,memo) and world._navigation_fraction(world._cell(from.surface_id),from.position,to.position,profile,memo) >= 1.0-WorldGeometry.EPS
+				var straight: bool = world._navigation_clear(from.position,to.position,profile,null,from.surface_id,memo) and world._navigation_fraction(world._cell(from.surface_id),from.position,to.position,profile,memo) >= 1.0-WorldGeometry.EPS
+				cached[b] = {"via":[],"cost":Vector3(from.position).distance_to(to.position)} if straight else {}
+				if not straight and world._is_grid(from.surface_id):
+					# F10 H3: a stretch's local edge may bend around steep ground.
+					if not ctx.has("grid_fields"): ctx["grid_fields"] = {}
+					if not ctx.grid_fields.has(a): ctx.grid_fields[a] = {}
+					var bent := world._navigation_grid_edge(from,to,profile,null,memo,ctx.grid_fields[a])
+					if bent.ok: cached[b] = {"via":bent.via,"cost":bent.cost}
 			else: ctx.metrics["visibility_cache_hits"] = int(ctx.metrics.get("visibility_cache_hits",0))+1
-			if not cached[b]: continue
-			var edge := {"to":b,"via":[],"connection_id":"","cost":Vector3(graph.nodes[a].position).distance_to(graph.nodes[b].position)}
+			if cached[b].is_empty(): continue
+			var edge := {"to":b,"via":cached[b].via,"connection_id":"","cost":cached[b].cost}
 			if not _admit(other,current,edge,visited,previous,queue,missing,ctx): return {"ok":false}
 	return {"ok":true,"visited":visited,"previous":previous}
 

@@ -606,7 +606,9 @@
       "_navigation_queue": "transient background navigation state (checkpoint36); empty after restore, the gameplay host re-enables it",
       "_navigation_task": "transient background navigation state (checkpoint36); empty after restore, the gameplay host re-enables it",
       "_navigation_running": "transient background navigation state (checkpoint36); empty after restore, the gameplay host re-enables it",
-      "_navigation_box": "transient background navigation state (checkpoint36); empty after restore, the gameplay host re-enables it"
+      "_navigation_box": "transient background navigation state (checkpoint36); empty after restore, the gameplay host re-enables it",
+      "_grid_cache": "derived read-only lattices of height-grid stretches per body radius (F10 H3); empty after restore, rebuilt by queries",
+      "_grid_mutex": "guard of the derived height-grid lattice cache (F10 H3); a fresh lock after restore"
     }
   },
   "res://scripts/core/expedition/spatial/world_ground_field.gd": {

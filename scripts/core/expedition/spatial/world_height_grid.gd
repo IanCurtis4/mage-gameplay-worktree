@@ -238,74 +238,151 @@ static func _lattice(prepared: Dictionary) -> Vector2i:
 static func _node_point(prepared: Dictionary, node: Vector2i) -> Vector2:
 	return Vector2(float(prepared.ox)+float(node.x)*float(prepared.s)*0.5,float(prepared.oz)+float(node.y)*float(prepared.s)*0.5)
 
-## Route inside the stretch for a body of `radius`: A* on the half-spacing lattice
-## (every leg checked by the exact capsule), then greedy string pulling. Ties are
-## broken by node index, so the route is deterministic.
+const OPPOSITE: Array[int] = [1,0,3,2,7,6,5,4]
+
+## Route inside the stretch for a body of `radius`: the cached lattice (every
+## link checked by the exact capsule), one Dijkstra from `from`, then greedy
+## string pulling. Ties are broken by node index, so the route is deterministic.
 static func path(prepared: Dictionary, from: Vector2, to: Vector2, radius: float, inside: bool = true) -> Dictionary:
 	if not disk_clear(prepared,from,radius,inside) or not disk_clear(prepared,to,radius,inside): return {"ok":false,"code":"height_grid_endpoint"}
-	if segment_clear(prepared,from,to,radius,inside): return {"ok":true,"points":PackedVector2Array([from,to]),"length":from.distance_to(to)}
-	var size := _lattice(prepared)
-	if size.x*size.y > MAX_LATTICE: return {"ok":false,"code":"height_grid_limit"}
-	var usable := {}
-	var node_ok := func(node: Vector2i) -> bool:
-		var key := node.y*size.x+node.x
-		if not usable.has(key): usable[key] = disk_clear(prepared,_node_point(prepared,node),radius,inside)
-		return usable[key]
-	var start := -1; var goal := -2
-	var g := {start:0.0}; var parent := {}; var closed := {}
-	var heap: Array = [[from.distance_to(to),start]]
-	var at := func(id: int) -> Vector2:
-		if id == start: return from
-		if id == goal: return to
-		return _node_point(prepared,Vector2i(id%size.x,id/size.x))
-	var neighbours := func(id: int) -> Array:
-		var result: Array = []
-		if id < 0:
-			var p: Vector2 = at.call(id)
-			var cx := int(round((p.x-float(prepared.ox))/(float(prepared.s)*0.5))); var cz := int(round((p.y-float(prepared.oz))/(float(prepared.s)*0.5)))
-			for dz: int in range(-1,2):
-				for dx: int in range(-1,2):
-					var n := Vector2i(cx+dx,cz+dz)
-					if n.x < 0 or n.y < 0 or n.x >= size.x or n.y >= size.y or not node_ok.call(n): continue
-					if segment_clear(prepared,p,_node_point(prepared,n),radius,inside): result.append(n.y*size.x+n.x)
-			return result
+	if segment_clear(prepared,from,to,radius,inside): return {"ok":true,"points":PackedVector2Array([from,to]),"length":from.distance_to(to),"expanded":0}
+	var built := lattice(prepared,radius,inside)
+	if built.is_empty(): return {"ok":false,"code":"height_grid_limit"}
+	return route(built,field(built,from),to)
+
+## Lattice of one stretch for one body: usable nodes (the disk is clear) and the
+## 8-neighbour links whose capsule is clear, as bit masks. Read-only once built;
+## WorldGeometry caches it per stretch and radius.
+static func lattice(prepared: Dictionary, radius: float, inside: bool = true) -> Dictionary:
+	var masked := prepared.duplicate()
+	var walk := PackedByteArray(); walk.resize(int(prepared.qx)*int(prepared.qz)*2)
+	for t: int in walk.size(): walk[t] = 1 if _walkable_vertices(triangle_vertices(prepared,t)) else 0
+	masked["walk"] = walk
+	var size := _lattice(masked)
+	if size.x*size.y > MAX_LATTICE: return {}
+	var usable := PackedByteArray(); usable.resize(size.x*size.y)
+	for id: int in usable.size(): usable[id] = 1 if disk_clear(masked,_node_point(masked,Vector2i(id%size.x,id/size.x)),radius,inside) else 0
+	var links := PackedByteArray(); links.resize(size.x*size.y)
+	for id: int in usable.size():
+		if usable[id] == 0: continue
 		var node := Vector2i(id%size.x,id/size.x)
-		for d: Vector2i in DIRECTIONS:
-			var n := node+d
-			if n.x < 0 or n.y < 0 or n.x >= size.x or n.y >= size.y or not node_ok.call(n): continue
-			if segment_clear(prepared,_node_point(prepared,node),_node_point(prepared,n),radius,inside): result.append(n.y*size.x+n.x)
-		var q: Vector2 = _node_point(prepared,node)
-		if q.distance_to(to) <= float(prepared.s)*0.75 and segment_clear(prepared,q,to,radius,inside): result.append(goal)
-		return result
+		for k: int in 8:
+			var n := node+DIRECTIONS[k]
+			if n.x < 0 or n.y < 0 or n.x >= size.x or n.y >= size.y: continue
+			var other := n.y*size.x+n.x
+			if usable[other] == 0: continue
+			if other < id:
+				if links[other] & (1 << OPPOSITE[k]): links[id] |= (1 << k)
+				continue
+			if segment_clear(masked,_node_point(masked,node),_node_point(masked,n),radius,inside): links[id] |= (1 << k)
+	return {"view":masked,"size":size,"usable":usable,"links":links,"radius":radius,"inside":inside}
+
+## Usable lattice nodes around `point` (two rings) that the body reaches in a
+## straight clear capsule, with that distance.
+static func _attach(built: Dictionary, point: Vector2) -> Array:
+	var view: Dictionary = built.view; var size: Vector2i = built.size
+	var half := float(view.s)*0.5
+	var cx := int(round((point.x-float(view.ox))/half)); var cz := int(round((point.y-float(view.oz))/half))
+	var result: Array = []
+	for dz: int in range(-2,3):
+		for dx: int in range(-2,3):
+			var n := Vector2i(cx+dx,cz+dz)
+			if n.x < 0 or n.y < 0 or n.x >= size.x or n.y >= size.y: continue
+			var id := n.y*size.x+n.x
+			if built.usable[id] == 0: continue
+			var q := _node_point(view,n)
+			if segment_clear(view,point,q,float(built.radius),bool(built.inside)): result.append([id,point.distance_to(q)])
+	return result
+
+## Single-source distances over the lattice from `from` (2D, along the links).
+static func field(built: Dictionary, from: Vector2) -> Dictionary:
+	var view: Dictionary = built.view; var size: Vector2i = built.size
+	if not disk_clear(view,from,float(built.radius),bool(built.inside)): return {"ok":false,"code":"height_grid_endpoint"}
+	var count := size.x*size.y
+	var dist := PackedFloat64Array(); dist.resize(count); dist.fill(INF)
+	var parent := PackedInt32Array(); parent.resize(count); parent.fill(-2)
+	var heap: Array = []
+	for item: Array in _attach(built,from):
+		var id: int = item[0]; var d: float = item[1]
+		if d < dist[id]: dist[id] = d; parent[id] = -1; _heap_push(heap,[d,id])
+	var step := float(view.s)*0.5; var diagonal := step*sqrt(2.0)
 	var expanded := 0
 	while not heap.is_empty():
 		var entry: Array = _heap_pop(heap)
 		var id: int = entry[1]
-		if closed.has(id): continue
-		closed[id] = true; expanded += 1
-		if id == goal: break
-		for next: int in neighbours.call(id):
-			if closed.has(next): continue
-			var cost: float = float(g[id])+Vector2(at.call(id)).distance_to(at.call(next))
-			if not g.has(next) or cost < float(g[next])-EPS:
-				g[next] = cost; parent[next] = id
-				_heap_push(heap,[cost+Vector2(at.call(next)).distance_to(to),next])
-	if not closed.has(goal): return {"ok":false,"code":"height_grid_unreachable","expanded":expanded}
-	var raw: Array[Vector2] = []
-	var cursor := goal
-	while true:
-		raw.push_front(at.call(cursor))
-		if cursor == start: break
-		cursor = parent[cursor]
+		if float(entry[0]) != dist[id]: continue
+		expanded += 1
+		var bits: int = built.links[id]
+		if bits == 0: continue
+		var node := Vector2i(id%size.x,id/size.x)
+		for k: int in 8:
+			if bits & (1 << k) == 0: continue
+			var n := node+DIRECTIONS[k]
+			var other := n.y*size.x+n.x
+			var cost := dist[id]+(step if k < 4 else diagonal)
+			if cost < dist[other]:
+				dist[other] = cost; parent[other] = id; _heap_push(heap,[cost,other])
+	return {"ok":true,"dist":dist,"parent":parent,"from":from,"expanded":expanded}
+
+## Route from the field's source to `to`, string-pulled. Deterministic.
+static func route(built: Dictionary, reach: Dictionary, to: Vector2) -> Dictionary:
+	if not reach.get("ok",false): return {"ok":false,"code":reach.get("code","height_grid_endpoint")}
+	var view: Dictionary = built.view; var size: Vector2i = built.size
+	var radius := float(built.radius); var inside := bool(built.inside)
+	var from: Vector2 = reach.from
+	if not disk_clear(view,to,radius,inside): return {"ok":false,"code":"height_grid_endpoint"}
+	if segment_clear(view,from,to,radius,inside): return {"ok":true,"points":PackedVector2Array([from,to]),"length":from.distance_to(to),"expanded":reach.expanded}
+	var best := INF; var best_id := -1
+	for item: Array in _attach(built,to):
+		var id: int = item[0]
+		if reach.dist[id] == INF: continue
+		var total: float = reach.dist[id]+float(item[1])
+		if total < best or (total == best and id < best_id): best = total; best_id = id
+	if best_id < 0: return {"ok":false,"code":"height_grid_unreachable","expanded":reach.expanded}
+	var raw: Array[Vector2] = [to]
+	var cursor := best_id
+	while cursor >= 0:
+		raw.push_front(_node_point(view,Vector2i(cursor%size.x,cursor/size.x)))
+		cursor = reach.parent[cursor]
+	raw.push_front(from)
 	var points := PackedVector2Array([raw[0]])
 	var i := 0
 	while i < raw.size()-1:
 		var j := raw.size()-1
-		while j > i+1 and not segment_clear(prepared,raw[i],raw[j],radius,inside): j -= 1
+		while j > i+1 and not segment_clear(view,raw[i],raw[j],radius,inside): j -= 1
 		points.append(raw[j]); i = j
 	var length := 0.0
 	for k: int in points.size()-1: length += points[k].distance_to(points[k+1])
-	return {"ok":true,"points":points,"length":length,"expanded":expanded}
+	return {"ok":true,"points":points,"length":length,"expanded":reach.expanded}
+
+## Open spans shared by two stretches along a common side (`side` of `a`, the
+## opposite side of `b`): world-space intervals where the inner triangle is
+## walkable on both. Same spacing and aligned samples are required.
+static func shared_spans(a: Dictionary, side: int, b: Dictionary) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	if not is_equal_approx(float(a.s),float(b.s)): return result
+	var opposite := (side+2) % 4
+	var axis_x := side % 2 == 0
+	var origin_a := float(a.ox) if axis_x else float(a.oz); var origin_b := float(b.ox) if axis_x else float(b.oz)
+	for left: Dictionary in edge_spans(a,side):
+		for right: Dictionary in edge_spans(b,opposite):
+			var lo := maxf(origin_a+float(left.from)*float(a.s),origin_b+float(right.from)*float(b.s))
+			var hi := minf(origin_a+float(left.to)*float(a.s),origin_b+float(right.to)*float(b.s))
+			if hi-lo <= EPS: continue
+			var line: Vector3 = left.a
+			var p := Vector3(lo,0,line.z) if axis_x else Vector3(line.x,0,lo)
+			var q := Vector3(hi,0,line.z) if axis_x else Vector3(line.x,0,hi)
+			p.y = support_y_clamped(a,p.x,p.z); q.y = support_y_clamped(a,q.x,q.z)
+			result.append({"a":p,"b":q})
+	return result
+
+## Outward unit normal of a side (0 = z min, 1 = x max, 2 = z max, 3 = x min).
+static func side_outward(side: int) -> Vector3:
+	match side:
+		0: return Vector3(0,0,-1)
+		1: return Vector3(1,0,0)
+		2: return Vector3(0,0,1)
+	return Vector3(-1,0,0)
 
 ## Connected components of the usable lattice for `radius` (8-neighbour legs
 ## checked by the capsule). Returns labels (-1 unusable) and the count.

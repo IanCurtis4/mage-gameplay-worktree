@@ -30,6 +30,11 @@ var _navigation_queue: Array[PathRequest] = []
 var _navigation_task := -1
 var _navigation_running: PathRequest
 var _navigation_box: Dictionary = {}
+## F10 H3: lattices of height-grid stretches per body radius (read-only once
+## built). Replaced, never cleared, on configure; shared with worker views and
+## connectivity shadows of the same stage, so it is guarded by its mutex.
+var _grid_cache: Dictionary = {}
+var _grid_mutex := Mutex.new()
 
 class PathRequest extends RefCounted:
 	var from: ExpeditionWorldPoint
@@ -56,6 +61,7 @@ func configure(manifest: ExpeditionManifest, stage_id: String) -> Dictionary:
 			_stage = stage.duplicate(true)
 			# A background view may still read the previous index: replace, never clear.
 			_support_index = {}
+			_grid_cache = {}
 			_solid_slabs.clear()
 			# Preserve F0's distinction between authored solids and planar blockers.
 			for instance: Dictionary in stage["part_instances"]:
@@ -258,12 +264,56 @@ func _navigation_work(view: WorldGeometry, from: ExpeditionWorldPoint, to: Exped
 
 # Read-only copy for the worker: _stage and _support_index are never mutated in
 # place after configure, the mutable containers are copied. Its memo is private.
+func _is_grid(surface_id: String) -> bool:
+	_ensure_support_index()
+	return _support_index.has("grids") and _support_index.grids.has(surface_id)
+
+func _grid_lattice(surface_id: String, radius: float) -> Dictionary:
+	var key := surface_id+"|"+str(radius)
+	_grid_mutex.lock(); var known: Variant = _grid_cache.get(key); _grid_mutex.unlock()
+	if known != null: return known
+	var built := HeightGrid.lattice(_support_index.grids[surface_id],radius,true)
+	_grid_mutex.lock()
+	if not _grid_cache.has(key): _grid_cache[key] = built
+	var result: Dictionary = _grid_cache[key]
+	_grid_mutex.unlock()
+	return result
+
+## F10 H3: the local edge between two states of one stretch when the straight
+## segment is blocked: a lattice route around steep ground (one field per
+## source, kept in `field`), every leg and corner then checked by the same exact
+## predicates as a straight local edge (props, temporaries and support). Cost is
+## the 3D length of the legs, never below the chord.
+func _navigation_grid_edge(a: Dictionary, b: Dictionary, profile: Dictionary, candidate: WorldSolidSegment, memo: Dictionary, field: Dictionary) -> Dictionary:
+	var surface: String = a.surface_id
+	var cell := _cell(surface)
+	var built := _grid_lattice(surface,float(profile.radius))
+	if built.is_empty(): return {"ok":false}
+	if field.is_empty(): field.merge(HeightGrid.field(built,Vector2(a.position.x,a.position.z)))
+	if not field.get("ok",false): return {"ok":false}
+	var routed := HeightGrid.route(built,field,Vector2(b.position.x,b.position.z))
+	if not routed.ok or routed.points.size() < 3: return {"ok":false}
+	var points: Array[Vector3] = [a.position]
+	for index: int in range(1,routed.points.size()-1):
+		var corner: Vector2 = routed.points[index]
+		points.append(Kernel.support_y(cell,Vector3(corner.x,0,corner.y)))
+	points.append(b.position)
+	var via: Array = []; var cost := 0.0
+	for index: int in range(1,points.size()):
+		if index < points.size()-1:
+			var state := ExpeditionWorldPoint.create(_stage.stage_id,surface,points[index])
+			if not _navigation_point(state,float(profile.radius),float(profile.height),candidate,memo): return {"ok":false}
+			via.append(state.to_data())
+		if not _navigation_clear(points[index-1],points[index],profile,candidate,surface,memo) or _navigation_fraction(cell,points[index-1],points[index],profile,memo) < 1.0-EPS: return {"ok":false}
+		cost += points[index-1].distance_to(points[index])
+	return {"ok":true,"via":via,"cost":cost}
+
 func _navigation_current_view() -> WorldGeometry:
 	var key := [configuration_revision,geometry_revision,_navigation_epoch]
 	if _navigation_view != null and _navigation_view_key == key: return _navigation_view
 	_ensure_support_index()
 	var view := WorldGeometry.new()
-	view._stage = _stage; view._support_index = _support_index
+	view._stage = _stage; view._support_index = _support_index; view._grid_cache = _grid_cache; view._grid_mutex = _grid_mutex
 	view._temporary.assign(_temporary); view._segments.assign(_segments); view._solid_slabs.assign(_solid_slabs)
 	view.geometry_revision = geometry_revision; view.configuration_revision = configuration_revision; view._navigation_epoch = _navigation_epoch
 	_navigation_view = view; _navigation_view_key = key
@@ -344,6 +394,7 @@ func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictio
 		# tie order, directed portals and all geometry checks remain identical.
 		var portal_edge_count: int = edges[current].size()
 		var current_cost: float = float(distances[current])
+		var grid_field: Dictionary = {}
 		for other: String in by_surface[nodes[current]["surface_id"]]:
 			if current == other: continue
 			# Exact cost before any predicate (f9_navigation_relaxation): distances
@@ -365,6 +416,10 @@ func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictio
 				if tracing: trace["support_usec"] = int(trace.get("support_usec",0))+Time.get_ticks_usec()-support_started
 			if clear and supported:
 				edges[current].append({"to":other,"via":[],"connection_id":"","cost":local_cost})
+			elif _is_grid(nodes[current]["surface_id"]):
+				# F10 H3: on a stretch the local edge may bend around steep ground.
+				var bent := _navigation_grid_edge(nodes[current],nodes[other],profile,candidate,memo,grid_field)
+				if bent.ok: edges[current].append({"to":other,"via":bent.via,"connection_id":"","cost":bent.cost})
 		for edge: Dictionary in edges[current]:
 			var route_cost: float = float(distances[current]) + float(edge["cost"])
 			if route_cost + EPS >= float(distances.get(edge["to"], INF)): continue
