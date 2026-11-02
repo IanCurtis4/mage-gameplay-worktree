@@ -1,0 +1,11 @@
+﻿RUN LibraryNative EXIT 0
+RUN GameplayNative EXIT 0
+RUNNER map_editor_terrain native EXIT 0 SECONDS 131
+  document_regression: True
+  native_ui: True
+  M2_ALL_PASS
+RUNNER map_editor_composition native EXIT 0 SECONDS 104
+  document_regression: True
+  native_ui: True
+  M3_ALL_PASS
+DONE

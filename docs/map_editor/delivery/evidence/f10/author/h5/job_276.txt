@@ -1,0 +1,10 @@
+﻿RUN GridViewNative EXIT 0 SECONDS 38
+  F10_GRID_VIEW_RESULT {"checks":[{"id":"map_compiles","ok":true},{"id":"one_mesh_per_stretch","ok":true},{"id":"drawn_ver
+  F10_GRID_VIEW_TIMING {"build_ms":2193.6,"corner":{"average_ms":13.33,"draw_calls":25,"worst_ms":13.45},"whole":{"average_ms":13.33,"draw_calls":210,"worst_ms":13.45}}
+  F10_GRID_VIEW_CANVAS {"redraw_ms":597.3,"sides":384,"stretches":36}
+  F10_GRID_VIEW_CHECK editor_canvas_draws_the_stretches true
+  F10_GRID_VIEW_RESULT {"checks":[{"id":"map_compiles","ok":true},{"id":"one_mesh_per_stretch","ok":true},{"id":"drawn_vertices_are_the_support","ok":true},{"id":"outline_sides_are_drawn","ok":true},{"id":"sprites_are_ordered_by_the_real_support","ok":true},{"id":"half_turn_is_drawn_on_its_support","ok":true},{"id":"frames_stay_interactive","ok":true},{"id":"editor_canvas_draws_the_stretches","ok":true},{"id":"ax_switches_the_surface_mode","ok":true}],"count":9,"ok":true}
+RUN GridCompile EXIT 0 SECONDS 55
+  F10_GRID_COMPILE_RESULT {"checks":[{"id":"schema_accepts_the_mode","ok":true},{"id":"piece_compiles_to_stretches","ok":t
+  F10_GRID_COMPILE_TIMING {"big_code":"","big_piece_ms":1615.6,"big_validate_ms":1376.3,"linked_code":"","map_code":"","map_metrics":{"elapsed_ms":5425.096,"navigation":{"connections":14,"direct_pairs":20,"edge_tests":1064,"elapsed_ms":3809.319,"endpoint_checks":28,"expansions":372,"landmark_checks":1484,"offset_checks":2408,"operations":1,"pair_candidates":1800,"peak_storage_bytes":4392268,"phase_usec":{"construct":241760,"direct":124117,"inward":1565994,"outward":1745701,"prepare":14275,"publish":6396,"witnesses":111069},"portal_checks":106,"portal_pairs":280,"reconstruction_steps":48,"snapshot_storage_units":1180332,"states":199,"storage_bytes":4351804,"terminal_checks":11,"witness_points":
+DONE

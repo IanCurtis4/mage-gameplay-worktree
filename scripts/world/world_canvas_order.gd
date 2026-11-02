@@ -4,6 +4,7 @@ extends RefCounted
 const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
 const ProjectionMath = preload("res://scripts/world/expedition_projection.gd")
 const Canonical = preload("res://scripts/core/expedition/generation/canonical.gd")
+const HeightGrid = preload("res://scripts/core/expedition/spatial/world_height_grid.gd")
 const EPS := Kernel.EPSILON
 const MAX_ITEMS := 8192
 const MAX_PAIRS := 8388608
@@ -21,6 +22,15 @@ static func _screen(vertices: Array) -> Rect2:
 	return result.grow(0.01)
 
 static func _caps_at(mesh: Dictionary, sprite: Dictionary) -> int:
+	# F10 H5: a stretch mesh answers with its exact support, never with corner caps.
+	if mesh.has("cap_grid"):
+		var view := HeightGrid.view(mesh.cap_grid)
+		var anchor: Vector3 = sprite.anchor
+		if HeightGrid.triangle_at(view,anchor.x,anchor.z) < 0: return 0
+		var ground := HeightGrid.support_y(view,anchor.x,anchor.z)
+		if ground <= float(anchor.y)+EPS+HeightGrid._half_ulp(anchor.y)*4.0: return -1
+		var grid_bounds: AABB = sprite.bounds
+		return 1 if grid_bounds.end.y <= ground+EPS else 0
 	for vertices: Array in mesh.get("caps",[]):
 		var cell := {"vertices":vertices,"headroom":1.0}
 		var contact := Kernel.support_y(cell,sprite.anchor)
@@ -212,6 +222,10 @@ static func tag_grid(view: MeshInstance2D, columns: int, rows: int) -> void:
 	var caps: Array = [corners] if Kernel.valid_cell({"vertices":corners,"headroom":1.0}) else [[corners[0],corners[1],corners[2]],[corners[0],corners[2],corners[3]]]
 	view.set_meta("canvas_order_caps",caps)
 
+## F10 H5: a mesh drawn from one height-grid stretch (`grid` in world space).
+static func tag_height_grid(view: MeshInstance2D, grid: Dictionary) -> void:
+	view.set_meta("canvas_order_caps",[]); view.set_meta("canvas_order_cap_grid",grid)
+
 static func tag_box(node: Node2D, box: AABB) -> void:
 	var vertices: Array = []
 	for i: int in 8: vertices.append(box.get_endpoint(i))
@@ -231,6 +245,7 @@ static func _mesh_record(node: MeshInstance2D, id: String) -> Dictionary:
 			if Kernel.valid_cell({"vertices":triangle,"headroom":1.0}): caps.append(triangle)
 	var bounds := _bounds(vertices)
 	var record := {"id":"mesh_"+Canonical.digest([vertices,caps]).substr(0,32),"kind":"mesh","bounds":bounds,"screen":_screen(vertices),"anchor":bounds.get_center(),"caps":caps}
+	if node.has_meta("canvas_order_cap_grid"): record["cap_grid"] = node.get_meta("canvas_order_cap_grid")
 	node.set_meta("canvas_order_record",record); return record
 
 static func apply(root: Node2D, observed: Array = []) -> Dictionary:

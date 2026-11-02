@@ -10,6 +10,7 @@ const GroundShadow = preload("res://scripts/world/ground_shadow.gd")
 const TerrainTopology = preload("res://scripts/map_authoring/compiler/terrain_topology.gd")
 const Objects = preload("res://scripts/map_authoring/objects/object_view.gd")
 const ViewportTools = preload("res://scripts/map_authoring/preview/viewport_tools.gd")
+const Grid = preload("res://scripts/map_authoring/compiler/grid_piece.gd")
 signal stroke_finished(points: Array, options: Dictionary)
 signal cancelled
 signal object_pressed(hit: Dictionary)
@@ -182,19 +183,21 @@ func redraw_terrain() -> void:
 	for layer: Dictionary in data.layers:
 		if layer.layer_id in hidden_layers or layer.heights.is_empty() or int(layer.columns) < 2 or int(layer.rows) < 2 or layer.sample_spacing <= 0 or layer.heights.size() != int(layer.columns)*int(layer.rows): continue
 		_height_bounds[layer.layer_id] = Vector2(layer.heights.min(),layer.heights.max())
-		var regions := Partition.build(layer)
-		if regions.size() > 1024: regions = [{}] # Invalid complex drafts remain visible; bake reports its logical budget.
+		var gridded := Grid.layer_is_grid(layer)
+		var regions := Grid.regions(layer) if gridded else Partition.build(layer)
+		if not gridded and regions.size() > 1024: regions = [{}] # Invalid complex drafts remain visible; bake reports its logical budget.
 		for region: Dictionary in regions:
 			var mesh := MeshInstance2D.new()
 			mesh.mesh = TerrainMaterial.mesh(layer,region)
-			CanvasOrder.tag_grid(mesh,int(region.get("width",int(layer.columns)-1))+1,int(region.get("height",int(layer.rows)-1))+1)
+			if gridded: CanvasOrder.tag_height_grid(mesh,region.grid); mesh.set_meta("grid_stretch",true)
+			else: CanvasOrder.tag_grid(mesh,int(region.get("width",int(layer.columns)-1))+1,int(region.get("height",int(layer.rows)-1))+1)
 			mesh.material = TerrainMaterial.material(true)
 			var x: int = region.get("x",0); var z: int = region.get("z",0)
 			var width: int = region.get("width",int(layer.columns)-1); var height: int = region.get("height",int(layer.rows)-1)
 			mesh.z_index = Objects.depth_order((Partition.point(layer,x,z).y+Partition.point(layer,x+width,z+height).y)*0.5,depth_domain)
 			_mesh_root.add_child(mesh)
 	var shadow_index := {}
-	_shape = Terrain.preview_geometry(data)
+	_shape = _grid_preview(data) if Grid.uses_grid(data) else Terrain.preview_geometry(data)
 	if _shape.ok:
 		var hidden_faces := {}
 		for visual: Dictionary in _shape.visuals:
@@ -218,6 +221,16 @@ func redraw_terrain() -> void:
 	var ordered := CanvasOrder.apply(_mesh_root)
 	if not ordered.ok: status.emit("A prévia precisa de revisão na ordem de desenho: "+str(ordered.code))
 	queue_redraw()
+
+## F10 H5: the preview of a height-grid piece: its outline sides (no planar
+## visuals; the stretches are drawn above). Hidden layers draw nothing.
+func _grid_preview(data: Dictionary) -> Dictionary:
+	var sides: Array = []
+	for layer: Dictionary in data.layers:
+		if not Grid.layer_is_grid(layer) or layer.layer_id in hidden_layers: continue
+		var built := Grid.build(layer)
+		if built.ok: sides.append_array(built.exposed_sides)
+	return {"ok":true,"visuals":[],"exposed_sides":sides}
 
 func _attach_face(vertices: Array, paint: Array, normal: Vector3, domain: Vector2) -> void:
 	var view := MeshInstance2D.new(); view.mesh = TerrainMaterial.from_arrays(TerrainMaterial.face_arrays(vertices,paint,normal)); view.material = TerrainMaterial.material()

@@ -1,0 +1,3326 @@
+[
+    {
+        "run":  "f10_h5_AuthoringNative",
+        "stage":  "AuthoringNative",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:45:06.6361490Z",
+        "finished_utc":  "2026-11-02T18:45:24.0112106Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "two_real_shells_mount_presentations_with_auxiliary_windows_initially_hidden",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "gui_grid_control_has_enabled_native_menu_entry",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "same_test_only_ramp_plateau_and_real_bridge_source_loaded",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "same_authored_ramp_bridge_fixture_compiles_headless_with_matching_package",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "compiler_rejects_disconnected_far_grid_with_route_unreachable",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "gui_and_ax_grid_share_producer_and_explicit_identity",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "piece_context_and_exchange_ax_windows_open_close_without_source_changes",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "identical_gui_ax_grid_inputs_have_identical_headless_compilation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "gui_and_ax_bridge_use_same_semantic_operation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "gui_and_ax_connector_share_full_canonical_parameters",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "shared_authoring_hash_matches_across_complete_gui_and_ax_sources",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "completed_grid_bridge_connector_compiles_identically_in_gui_and_ax",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "composition_ax_action_mounts_map_with_auxiliary_windows_closed_and_preserves_piece_hash",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "map_context_ax_window_closes_with_map_and_preserves_piece_hash",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "native_ax_capture_has_visible_terrain_and_real_window_dimensions",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  15,
+                       "expected_count":  15,
+                       "ok":  true,
+                       "source_hash":  "bc065013267c089ee5fc22b2ef6a42edb4d0d20cfe13f304c746992e52f42c69"
+                   }
+    },
+    {
+        "run":  "f10_h5_BiomePropsNative",
+        "stage":  "BiomePropsNative",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:39:16.6299560Z",
+        "finished_utc":  "2026-11-02T18:39:58.1332653Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "native_shell",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "six_named_palette_entries",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "structure_category_uses_portuguese_search",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "native_place_desert_cactus",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "native_place_broken_pillar",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "native_place_sandstone_boulder",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "three_native_sprite_nodes",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "desert_cactus_sprite_scale_and_mipmaps",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "desert_cactus_alpha_pick_hits_actual_asset",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "desert_cactus_occlusion_fades_sprite",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "broken_pillar_sprite_scale_and_mipmaps",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "broken_pillar_alpha_pick_hits_actual_asset",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "broken_pillar_occlusion_fades_sprite",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sandstone_boulder_sprite_scale_and_mipmaps",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sandstone_boulder_alpha_pick_hits_actual_asset",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sandstone_boulder_occlusion_fades_sprite",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "occlusion_clears_after_actor_leaves",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_biome_props_light",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "dark_ground_uses_shared_source_operation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_biome_props_dark",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "dark_ground_keeps_same_object_definitions",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "undo_restores_exact_light_source",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "native_source_receives_compiled_objects",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  23,
+                       "ok":  true
+                   }
+    },
+    {
+        "run":  "f10_h5_BordersNative",
+        "stage":  "BordersNative",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:40:00.9756218Z",
+        "finished_utc":  "2026-11-02T18:40:50.3917297Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "ruin_rubble_v1_compiles_for_native_view",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ruin_rubble_v1_view_receives_exact_package",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ruin_rubble_v1_uses_shared_world_channels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ruin_rubble_v1_renders_all_derived_props",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ruin_rubble_v1_capture_saved",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ruin_rubble_v1_ground_and_borders_are_visible",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "forest_rootbank_v1_compiles_for_native_view",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "forest_rootbank_v1_view_receives_exact_package",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "forest_rootbank_v1_uses_shared_world_channels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "forest_rootbank_v1_renders_all_derived_props",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "forest_rootbank_v1_capture_saved",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "forest_rootbank_v1_ground_and_borders_are_visible",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "desert_ridge_v1_compiles_for_native_view",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "desert_ridge_v1_view_receives_exact_package",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "desert_ridge_v1_uses_shared_world_channels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "desert_ridge_v1_renders_all_derived_props",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "desert_ridge_v1_capture_saved",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "desert_ridge_v1_ground_and_borders_are_visible",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "meadow_stream_v1_compiles_for_native_view",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "meadow_stream_v1_view_receives_exact_package",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "meadow_stream_v1_uses_shared_world_channels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "meadow_stream_v1_renders_all_derived_props",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "meadow_stream_v1_capture_saved",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "meadow_stream_v1_ground_and_borders_are_visible",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "gui_profile_uses_shared_transaction",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "mode_switch_preserves_source_hash",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ax_parameterized_action_matches_gui",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ax_snapshot_exposes_parameter_schema",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ax_stale_request_has_no_mutation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ax_incomplete_request_has_no_mutation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "cli_command_completes_without_errors",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "cli_source_matches_gui_and_ax",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  32,
+                       "ok":  true
+                   }
+    },
+    {
+        "run":  "f10_h5_CanvasOrder",
+        "stage":  "CanvasOrder",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:35:02.4790269Z",
+        "finished_utc":  "2026-11-02T18:35:17.0220839Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "actor_on_low_ramp_draws_after_own_ground",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ordering_does_not_mutate_geometry",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "wall_behind_sprite_is_not_overlay",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "foreground_wall_stays_in_front",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "projected_bridge_occludes_lower_actor",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "actor_on_bridge_draws_after_its_cap",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "array_order_is_not_presentation_identity",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "cold_order_tracks_all_pairs",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "stationary_order_reuses_verified_records",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "movement_updates_only_affected_pairs",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "incremental_order_matches_cold_rebuild",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "inplace_source_change_cannot_mutate_cache_snapshot",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "malformed_cap_returns_diagnostic",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "duplicate_id_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "nan_anchor_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "cycle_is_explicit_without_partial_cache",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "piercing_prop_gets_no_cap_verdict",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ramp_prop_and_walker_order_without_cycle",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "live_apply_breaks_a_cycle_instead_of_keeping_stale_order",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "item_budget_rejects_whole_operation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "same_geometry_new_nodes_receive_cached_order",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "closed_negative_and_positive_bucket_boundaries",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "large_and_distant_rectangles_use_bounded_overflow",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "seeded_projected_pairs_equal_exhaustive_oracle",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "reordered_input_reuses_spatial_index",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "many_moving_items_equal_exhaustive_oracle",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "touching_rectangles_keep_closed_constraint",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "leaving_neighbor_removes_stale_constraint",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "entering_neighbor_adds_new_constraint",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "removed_and_added_ids_rebuild_spatial_index",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "invalid_update_keeps_all_spatial_cache_atomic",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "8192_separated_items_avoid_exhaustive_pair_budget",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "unchanged_constraints_and_priority_reuse_order",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "priority_crossing_rebuilds_exact_order",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "changed_constraints_same_result_skip_node_reordering",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "many_priority_inversions_equal_exhaustive_oracle",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "external_actor_more_than4096_static_items_resolve",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "external_actor_hierarchy_and_execution_order_preserved",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "external_actor_has_strict_z_between_static_runs",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "static_relative_order_matches_shared_topology",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "duplicate_external_observation_deduplicates_and_reuses_order",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "external_order_preserves_world_point_profile_and_geometry",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "invalid_external_observation_fails_without_reordering",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "benchmark_small_cold_warm_moving_orders_valid",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "benchmark_representative_cold_warm_moving_orders_valid",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "benchmark_stress_cold_warm_moving_orders_valid",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  46,
+                       "ok":  true
+                   }
+    },
+    {
+        "run":  "f10_h5_CliffNative",
+        "stage":  "CliffNative",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:37:31.2747046Z",
+        "finished_utc":  "2026-11-02T18:38:15.4272963Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "native_editor_shell",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "mixed_relief_compiles_for_native_editor",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "draft_preview_keeps_all_faces",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "tops_and_sides_share_material_pipeline",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_mixed_cliff",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "steep_real_face_visible_above_background",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "exposed_mass_side_visible_above_background",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "walking_floor_still_visible",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "render_does_not_rewrite_source",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "mixed_rotated_composition_compiles",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_mixed_rotated_map",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "rotated_cliff_visible_in_composition",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "rotated_view_keeps_every_face",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ground_and_bridge_compile_with_lower_strip",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_bridge_lower_strip",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "bridge_lower_strip_uses_actual_textured_geometry",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "exposed_lower_strip_visible_above_background",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  17,
+                       "ok":  true
+                   }
+    },
+    {
+        "run":  "f10_h5_CompositionAXNative",
+        "stage":  "CompositionAXNative",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:53:56.1604811Z",
+        "finished_utc":  "2026-11-02T18:54:11.6346848Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "real_shell_opens_the_real_composition_window_and_its_own_ax_presentation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "map_context_and_exchange_auxiliary_windows_start_closed",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "map_screen_advertises_the_closed_instance_link_context_and_compile_actions",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "native_map_ax_actions_load_valid_piece_snapshots_add_identities_link_seam_and_expose_map_source",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+                                                         "baseline":  "a5af24add63844a314939978de2a4a084ccb362637122f1d91252f911aa929a6",
+                                                         "gui_changed":  "9a4884e99191d8cbb4814a5d1a8d661e652b227039283ad37db318e1285efb04",
+                                                         "position":  [
+                                                                          100.0,
+                                                                          0,
+                                                                          0.0
+                                                                      ],
+                                                         "restore_ok":  true,
+                                                         "restored":  "a5af24add63844a314939978de2a4a084ccb362637122f1d91252f911aa929a6"
+                                                     },
+                                          "id":  "visible_gui_placement_control_and_ax_transform_share_map_session",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "native_ax_rejects_out_of_range_transform_without_source_or_history_mutation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "map_context_opens_and_closes_as_a_real_auxiliary_window_without_source_mutation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "native_context_form_and_parameterized_ax_share_policy_producer",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "native_map_context_exception_produces_warning_and_can_be_cleared",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "native_composition_screen_waits_for_successful_current_compiler_result",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "compiled_native_package_contains_both_real_pieces_and_render_meshes",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "native_capture_shows_the_actual_compiled_map_and_meets_viewport_dimensions",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "final_native_snapshot_still_matches_visible_map_and_semantic_source",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  13,
+                       "evidence_dir":  "C:\\Users\\JoÃ£o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\f9_evidence\\f10_h5_CompositionAXNative",
+                       "expected_count":  13,
+                       "ok":  true,
+                       "source_hash":  "9db739d0a84e82a0eb09214f34541bab02c40dc8c97e2e32f6d5235f44055b5d"
+                   }
+    },
+    {
+        "run":  "f10_h5_ContentNative",
+        "stage":  "ContentNative",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:52:57.6278384Z",
+        "finished_utc":  "2026-11-02T18:53:53.4213031Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "detail":  {
+                                                         "code":  "ax_mode_required",
+                                                         "ok":  false
+                                                     },
+                                          "id":  "ux_mode_refuses_agent_mutation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "real_objects_window_and_semantic_commands",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "catalog_and_selection_are_editor_state",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+                                                         "ax":  "",
+                                                         "gui":  ""
+                                                     },
+                                          "id":  "gui_ax_place_same_identity_and_source",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+                                                         "ax":  ""
+                                                     },
+                                          "id":  "move_settles_on_explicit_upper_surface",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+                                                         "rotate":  "",
+                                                         "translate":  ""
+                                                     },
+                                          "id":  "translate_rotate_share_gui_producer",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  [
+
+                                                     ],
+                                          "id":  "duplicate_rejects_outside_support_and_returns_new_identity",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "group_lock_and_hide_apply_to_members",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "explicit_group_unlock_and_ungroup",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "individual_lock_rejects_without_partial_history",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  [
+
+                                                     ],
+                                          "id":  "hidden_editor_object_remains_in_publication",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "no_op_and_remove_undo_redo_are_atomic",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "unknown_fields_duplicate_ids_and_selection_are_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "source_layer_lock_blocks_transfer_from_special_surface",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "region_protection_blocks_prop_footprint",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "passive_catalog_options_use_registered_occurrences",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  [
+
+                                                     ],
+                                          "id":  "context_gui_form_and_ax_share_rules_producer",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "area_and_catalog_reservation_match_between_gui_ax",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "context_rejects_region_collision_catalog_and_inverted_rect",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "area_source_layer_lock_prevents_remove_and_transfer",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "area_transfer_preserves_protection_on_new_owner",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "area_removal_cleans_protection_references",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+                                                         "code":  "socket_invalid",
+                                                         "diagnostics":  [
+                                                                             "@{code=socket_invalid; entity_id=entry; field=terrain; message=O ponto marcado nÃ£o tem suporte ou tipo vÃ¡lido.; severity=error; suggestion=Corrija a regiÃ£o indicada e compile novamente.}"
+                                                                         ],
+                                                         "input_hash":  "",
+                                                         "ok":  false,
+                                                         "output_hash":  ""
+                                                     },
+                                          "id":  "socket_uses_canonical_surface_compiler",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "socket_lock_prevents_mutation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "socket_remove_and_undo_restore_marker",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "scatter_discard_restores_view_without_source_mutation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+                                                         "apply":  "",
+                                                         "preview":  "",
+                                                         "stale":  "object_preview_missing"
+                                                     },
+                                          "id":  "scatter_review_hash_apply_undo_and_stale_are_guarded",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "store_roundtrip_preserves_real_authoring_source",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+
+                                                     },
+                                          "id":  "native_place_form_matches_parameterized_ax_identity",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "detail":  {
+                                                         "canvas_size":  "(926.0, 776.0)",
+                                                         "image_size":  "(1440, 1000)",
+                                                         "mesh_count":  6,
+                                                         "visible":  true,
+                                                         "window_size":  "(1440, 1000)",
+                                                         "written":  true
+                                                     },
+                                          "id":  "native_objects_window_renders_real_prop_and_terrain",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  30,
+                       "expected_count":  30,
+                       "ok":  true
+                   }
+    },
+    {
+        "run":  "f10_h5_GameplayEditorNative",
+        "stage":  "GameplayEditorNative",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:51:20.4497907Z",
+        "finished_utc":  "2026-11-02T18:52:54.8324503Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "actual_map_panel_has_gameplay_controls",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "human_two_room_example_compiles_for_test",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "seven_shared_gameplay_commands_are_inspectable",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ax_class_selection_uses_same_visible_selector",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ax_launch_uses_actual_fixed_game_scene",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "launch_preserves_authored_source",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "human_test_does_not_start_technical_circle",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "editor_launch_boots_real_player_process",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ax_move_posts_to_shared_game_authority",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "real_player_crosses_example_door",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ax_stop_uses_stable_window_token",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "editor_stop_suspends_before_closing",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "new_panel_recovers_last_test_reference",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "resume_uses_new_window_over_saved_revision",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "resumed_test_keeps_same_run_identity",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "source_change_requires_recompile",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "game_controls_do_not_hide_source_undo_history",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "population_has_same_gameplay_tools",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "population_has_seven_same_semantic_commands",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "patrol_has_same_gameplay_tools",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "patrol_has_seven_same_semantic_commands",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_real_editor_gameplay_controls",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  22,
+                       "ok":  true
+                   }
+    },
+    {
+        "run":  "f10_h5_GameplayNative",
+        "stage":  "GameplayNative",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:55:38.9939388Z",
+        "finished_utc":  "2026-11-02T18:57:11.6854700Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "authored_patrol_with_real_population_compiles",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "passive_candidate_accepted",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "stale_authorship_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "tampered_payload_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "executable_field_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "canonical_body_and_patrol_validation_succeeds",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "real_player_profile_not_inspection_radius",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "authored_entry_kept_and_candidate_bound",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "preparation_preserves_source_and_published_package",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "map_without_entry_gets_explicit_ephemeral_safe_anchor",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "small_inspection_body_accepts_narrow_door",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "real_player_refuses_narrow_door_without_shrinking",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "isolated_session_created",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "session_resolves_same_immutable_candidate",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "foreign_session_path_refused",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "app_claims_session",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "second_owner_refused",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "real_campaign_enters_transactionally",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "active_preview_refuses_duplicate_start",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "active_preview_refuses_replacement_without_losing_world",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "refused_request_keeps_live_session_status",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "actual_player_enemy_and_hud_installed",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "authored_skin_replaces_technical_decks",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "profile_and_controls_use_session_paths",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "actor_owner_and_world_binding_preserved",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "existing_patrol_and_threat_are_real",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "shared_ordering_runs_over_foreign_actors",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_gameplay_start",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "canonical_pointer_starts_real_movement",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "player_advances_world_point_without_editor_circle",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "canonical_suspend_returns_to_preview_controls",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "suspension_contains_restorable_real_graph",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "resume_installs_same_candidate",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "resume_changes_only_expected_lifecycle",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "resume_preserves_exact_gameplay_cut",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "restored_controls_are_reassigned_by_preview_owner",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "completion_hint_names_living_blockers",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "pointer_selects_actual_enemy_for_combat",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "real_attack_changes_enemy_health",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "real_combat_resolves_population_slot",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "completion_hint_points_to_marker_after_clear",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "death_commits_as_one_journal_entry",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "journal_keeps_live_host_and_skin",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "journal_commit_frame_stays_short",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "deaths_are_written_in_the_background",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "journal_survives_the_profile_json_round_trip",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "base_plus_journal_restores_live_campaign_state",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "drops_and_xp_are_collected_automatically",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "base_plus_journal_restores_delivered_rewards",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "themed_parallax_backdrop_follows_stage_biome",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_gameplay_combat",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "restart_creates_fresh_disposable_session",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "restart_preserves_old_profile_and_resets_encounter",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "personal_controls_remain_untouched",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "close_releases_only_owned_session_lease",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "real_bridge_map_compiles",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "bridge_supports_real_body_and_lower_passage",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "bridge_uses_actual_player_campaign",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "gameplay_pointer_keeps_upper_floor_occlusion",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "bridge_click_plans_canonical_ramp_route",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "real_player_walks_ramp_and_reaches_bridge",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "bridge_keeps_body_dimensions_and_actor_owner",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_gameplay_bridge",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  63,
+                       "ok":  true
+                   }
+    },
+    {
+        "run":  "f10_h5_GridCompile",
+        "stage":  "GridCompile",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:33:47.5967803Z",
+        "finished_utc":  "2026-11-02T18:34:39.0448624Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "schema_accepts_the_mode",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "piece_compiles_to_stretches",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "receiver_rebuilds_the_package",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "tampered_stretch_is_refused",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "mixed_piece_is_refused",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "field_scale_piece_compiles",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "map_certifies_the_field",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "half_turn_compiles_quarter_turn_is_refused",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "wall_without_gap_fails_certification",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "linked_pieces_route_across_the_seam",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  10,
+                       "ok":  true
+                   }
+    },
+    {
+        "run":  "f10_h5_GridViewNative",
+        "stage":  "GridViewNative",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:33:09.6010636Z",
+        "finished_utc":  "2026-11-02T18:33:43.9189139Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "map_compiles",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "one_mesh_per_stretch",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "drawn_vertices_are_the_support",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "outline_sides_are_drawn",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sprites_are_ordered_by_the_real_support",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "half_turn_is_drawn_on_its_support",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "frames_stay_interactive",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "editor_canvas_draws_the_stretches",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ax_switches_the_surface_mode",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  9,
+                       "ok":  true
+                   }
+    },
+    {
+        "run":  "f10_h5_Library",
+        "stage":  "Library",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:36:09.3550347Z",
+        "finished_utc":  "2026-11-02T18:36:20.3807018Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "empty_preferences_valid",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "boolean_version_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "unknown_fields_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "favorite_added_without_mutating_input",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "favorite_is_idempotent",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "favorite_removed",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "duplicate_favorite_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "favorite_unknown_parameter_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "builtin_presets_use_existing_brush_options",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "builtin_preset_returns_immutable_copy",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "custom_preset_roundtrip",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "custom_preset_copies_input",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "preset_update_preserves_identity",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "preset_removed",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "builtin_preset_cannot_be_removed",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "unsupported_brush_mode_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "nonfinite_preset_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "negative_radius_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "preference_hash_ignores_list_order",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "headless_preferences_roundtrip",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "stale_preferences_refuse_write",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "preferences_do_not_change_source_hash",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "catalog_has_six_props_four_materials_five_borders",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "portuguese_search_folds_accents",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "category_filter_uses_catalog_category",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "favorite_filter_uses_exact_ids",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "search_combines_all_tokens",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "piece_registration_is_passive_and_hashed",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "source_registered_without_mutating_file",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "map_kind_detected_by_its_producer",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "wrong_kind_and_executable_extension_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "piece_copy_has_new_identity_and_revision",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "copy_cannot_reuse_original_identity",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "forget_source_preserves_original_file",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "forged_registry_identity_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "map_loader_hashes_the_exact_bytes_read",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "map_external_change_after_read_refuses_overwrite",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "empty_map_draft_can_be_preserved",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "thumbnail_key_binds_source_and_environment",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "thumbnail_paths_reject_nonhash_keys",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "path_separator_alias_has_same_canonical_source_identity",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "register_reconciles_legacy_path_and_preserves_favorite",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "recovery_preview_preserves_invalid_preferences",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "recovery_rejects_stale_confirmation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "recovery_keeps_invalid_backup_and_last_valid_state",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "derived_thumbnail_roundtrip_and_bounded_dimensions",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "changed_environment_cannot_reuse_thumbnail",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "modified_png_is_rejected_before_loading",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "unknown_thumbnail_stamp_fields_are_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "thumbnail_cache_does_not_change_registered_source",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  50,
+                       "ok":  true
+                   }
+    },
+    {
+        "run":  "f10_h5_LibraryNative",
+        "stage":  "LibraryNative",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:54:49.9672560Z",
+        "finished_utc":  "2026-11-02T18:55:36.2685610Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "native_shell",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "native_project_metadata_storage_bound",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "editor_settings_use_discardable_profile",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "six_catalog_thumbnails",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "favorite_button_writes_project_metadata",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "favorite_filter_matches_current_palette",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "gui_and_ax_share_favorite_query",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "object_library_commands_bound_to_ax_presentation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "library_controls_leave_source_and_history",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_library_favorite_palette",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "portuguese_accent_search_in_native_palette",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "category_control_filters_structure",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "parameterized_selection_uses_existing_tool",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "malformed_library_arguments_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "favorite_toggle_returns_to_previous_state",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "preset_control_applies_exact_brush_options",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "preset_control_preserves_source_and_history",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "native_named_preset_saved",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "semantic_ax_commands_are_inspectable",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ax_apply_matches_gui_preset",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ax_bad_preset_preserves_preferences",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ax_arguments_are_closed",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ax_fractional_preset_saved",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "fractional_preset_applies_without_quantization",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "fractional_strength_is_visible_in_field",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_library_brush_presets",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "mode_switch_preserves_source_and_history",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "remove_custom_keeps_current_brush",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "browser_sources_registered_passively",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "native_library_window_and_categories",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "browser_commands_bound_to_ax_presentation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "favorite_update_reaches_existing_objects_window",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "shared_presets_refresh_without_applying_or_restarting_preview",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "background_thumbnails_complete",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "piece_and_map_have_validated_thumbnail_stamps",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "thumbnail_dimensions_are_bounded",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "thumbnail_jobs_preserve_editor_source",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "library_ax_query_matches_source_registry",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "selected_source_gets_real_preview",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_library_browser",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "preview_job_started_before_external_change",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "obsolete_source_result_is_discarded",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "cancel_drains_worker_without_partial_preferences",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "copy_uses_existing_dirty_document_confirmation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "copy_preserves_previous_unsaved_document",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "copy_is_detached_with_new_identity",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "copy_does_not_overwrite_library_source",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "saved_map_opens_in_its_existing_producer",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "failed_draft_preservation_refuses_replacement",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "invalid_project_metadata_is_preserved_until_recovery",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "recovery_dialog_reviews_last_valid_counts_without_writing",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "native_recovery_restores_valid_preferences_and_preserves_bad_copy",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "project_metadata_restored",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  53,
+                       "ok":  true
+                   }
+    },
+    {
+        "run":  "f10_h5_Materials",
+        "stage":  "Materials",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:35:38.0322978Z",
+        "finished_utc":  "2026-11-02T18:35:50.0825174Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "four_named_materials",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "four_tiles_and_imports_are_hashed",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "renderer_dependency_has_new_revision",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "four_mask_source_compiles",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "four_masks_survive_compilation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "package_dependencies_revalidate",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "compilation_preserves_source",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_paint_independent_weights",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "paint_keeps_heights",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "paint_outside_stamp_unchanged",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "stone_half_strength_oracle",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "every_painted_weight_vector_is_normalized",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "four_material_stroke_is_pointer_density_independent",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "preview_and_commit_use_same_paint",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "locked_layer_rejects_paint",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "protected_region_keeps_all_masks",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "connector_exclusion_keeps_all_masks",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "implicit_grass_can_be_painted_sand",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "implicit_unpainted_region_stays_grass",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "unknown_brush_material_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "unknown_compiler_material_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "four_material_edit_undo",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "four_material_edit_redo",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "paint_roundtrip_is_exact",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "legacy_two_mask_ratio_is_preserved",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "all_four_weights_reach_mesh",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "custom_world_channels_cover_every_vertex",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "world_xyz_is_not_projected_uv",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "world_data_transforms_once",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "material_normal_rotates_with_geometry",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "world_uv_tracks_transformed_position",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "mesh_declares_custom_float_formats",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "source_survives_paint_and_render",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "negative_display_depth_stays_above_background",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "display_depth_preserves_order_and_object_offset",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  35,
+                       "ok":  true
+                   }
+    },
+    {
+        "run":  "f10_h5_MaterialsNative",
+        "stage":  "MaterialsNative",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:36:37.6648921Z",
+        "finished_utc":  "2026-11-02T18:37:28.3941513Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "native_editor_shell",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "four_material_choices_in_controls",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_control_uses_shared_brush",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "stone_control_uses_shared_brush",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "editor_applies_four_material_paint",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "editor_undo_restores_source",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "editor_redo_restores_paint",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "restore_base_for_visual_oracle",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "all_four_tiles_have_mipmaps",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "native_canvas_uses_world_custom_channels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_materials_palette",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "grass_weight_with_zero_alpha_is_visible",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "four_rendered_materials_are_distinct",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "slope_keeps_real_walkable_geometry",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_materials_slope",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "slope_visibly_blends_stone",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "slope_shading_does_not_repaint_source",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "compiled_map_uses_same_material_dependencies",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "composition_keeps_custom_world_attributes",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_materials_rotated_map",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  20,
+                       "ok":  true
+                   }
+    },
+    {
+        "run":  "f10_h5_ObjectsNative",
+        "stage":  "ObjectsNative",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:40:53.1513836Z",
+        "finished_utc":  "2026-11-02T18:41:37.6338989Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "native_shell",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "stable_open_action",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "native_objects_window",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "catalog_thumbnails",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "mipmaps_imported",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "place_tree_from_controls",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "place_rock_from_controls",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "place_shrub_from_controls",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "same_source_shared_with_main_screen",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "actual_sprites_rendered",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "undo_native",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "redo_native",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "alpha_selection_picks_tree",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "lock_from_native_panel",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "locked_native_move_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "unlock_from_native_panel",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "scatter_preview",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "native_confirmation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "scatter_confirmed_once",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_objects",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "native_headless_package",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "composition_with_occupied_center",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "composition_sprites_preserved",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "free_spawn_around_center_object",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_objects_map",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  25,
+                       "ok":  true
+                   }
+    },
+    {
+        "run":  "f10_h5_OcclusionNative",
+        "stage":  "OcclusionNative",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:45:26.8140238Z",
+        "finished_utc":  "2026-11-02T18:46:51.2332541Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "bosque_release_loads",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "real_actors_are_bound",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "game_skin_draws_the_bosque",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "player_reaches_a_spot_behind_a_tree",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "tree_in_front_of_the_player_fades",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_occlusion_player_behind_tree",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "tree_behind_the_player_stays_opaque",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "tree_returns_when_the_player_leaves",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "enemy_behind_a_tree_fades_it",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_occlusion_enemy_behind_tree",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "non_occluding_prop_never_fades",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "editor_preview_uses_the_same_rule",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  12,
+                       "ok":  true
+                   }
+    },
+    {
+        "run":  "f10_h5_RuntimeView",
+        "stage":  "RuntimeView",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:35:20.1017165Z",
+        "finished_utc":  "2026-11-02T18:35:35.1177962Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "actual_map_package_compiles",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "shared_renderer_constructs_world_and_drawables",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "renderer_does_not_mutate_passive_package",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "real_actor_binds_original_world",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "renderer_accepts_existing_world_with_matching_geometry",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "renderer_keeps_actor_hierarchy_point_and_health",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "renderer_stays_out_of_simulated_snapshot_graph",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "mismatched_world_rejected_without_losing_previous_view",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "malformed_package_rejected_without_partial_view",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "temporary_world_state_does_not_rewrite_base_skin",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "shared_view_creates_no_authoring_controls",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "clear_releases_only_presentation",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  12,
+                       "ok":  true
+                   }
+    },
+    {
+        "run":  "f10_h5_Shadows",
+        "stage":  "Shadows",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:35:52.8981102Z",
+        "finished_utc":  "2026-11-02T18:36:06.6006352Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "connected_receiver_mesh_builds",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "seam_uses_both_actual_receivers",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "seam_projected_footprint_area1600",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "world_projection_applied_once",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "radial_texture_uvs_bounded",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "source_and_index_not_mutated",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "edge_shadow_clips_to_real_ground",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "edge_shadow_area960",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ramp_receiver_preserves_real_height",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ramp_does_not_shadow_lower_floor",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "explicit_wrong_surface_does_not_fall_to_lower_floor",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "automatic_receiver_uses_contact_height",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "bridge_shadow_stays_at160",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "real_gap_and_unlinked_neighbor_remain_unshadowed",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "missing_receiver_is_explicit",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "negative_radius_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "nan_anchor_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "missing_projection_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "false_support_height_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "unbounded_radius_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "shadow_stays_positive_at_lowest_sprite_depth",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "shadow_snapshot_bound_to_real_ramp",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "snapshot_cache_contains_real_mesh",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "snapshot_with_visual_cache_captures",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "snapshot_binary_roundtrip_valid",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "visual_toggles_do_not_change_snapshot",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "snapshot_restores_gameplay_and_default_presentation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "restored_shadow_rebuilds_from_preserved_support",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  28,
+                       "ok":  true
+                   }
+    },
+    {
+        "run":  "f10_h5_ShadowsNative",
+        "stage":  "ShadowsNative",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:38:18.4365197Z",
+        "finished_utc":  "2026-11-02T18:39:13.0663462Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "sand_flat_source_authored",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_flat_compiled_real_package",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_flat_actual_world_order_resolves",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_flat_real_animated_actor_bound",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_sand_flat_before",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_sand_flat_after",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_flat_land/oak_tree_shadow_changes_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_flat_land/desert_cactus_shadow_changes_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_flat_land/sandstone_boulder_shadow_changes_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_flat_land/broken_pillar_shadow_changes_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_flat_props_have_grounded_contact_shadows",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_flat_full_prop_silhouettes_fit_view",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_flat_presentation_does_not_mutate_physics_or_source",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_flat_contact_shadows_visibly_darken_ground",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_flat_actor_uses_receiver_mesh_cache",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_flat_actor_shadow_changes_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_flat_stationary_actor_reuses_mesh",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_flat_movement_updates_mesh_and_anchor",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_flat_world_epoch_refreshes_shadow_mesh",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "earth_flat_source_authored",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "earth_flat_compiled_real_package",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "earth_flat_actual_world_order_resolves",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "earth_flat_real_animated_actor_bound",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_earth_flat_before",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_earth_flat_after",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "earth_flat_land/oak_tree_shadow_changes_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "earth_flat_land/desert_cactus_shadow_changes_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "earth_flat_land/sandstone_boulder_shadow_changes_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "earth_flat_land/broken_pillar_shadow_changes_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "earth_flat_props_have_grounded_contact_shadows",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "earth_flat_full_prop_silhouettes_fit_view",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "earth_flat_presentation_does_not_mutate_physics_or_source",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "earth_flat_contact_shadows_visibly_darken_ground",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "earth_flat_actor_uses_receiver_mesh_cache",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "earth_flat_actor_shadow_changes_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "earth_flat_stationary_actor_reuses_mesh",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "earth_flat_movement_updates_mesh_and_anchor",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "earth_flat_world_epoch_refreshes_shadow_mesh",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_ramp_source_authored",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_ramp_compiled_real_package",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_ramp_actual_world_order_resolves",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_ramp_real_animated_actor_bound",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_sand_ramp_before",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_sand_ramp_after",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_ramp_land/oak_tree_shadow_changes_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_ramp_land/desert_cactus_shadow_changes_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_ramp_land/sandstone_boulder_shadow_changes_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_ramp_land/broken_pillar_shadow_changes_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_ramp_props_have_grounded_contact_shadows",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_ramp_full_prop_silhouettes_fit_view",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_ramp_presentation_does_not_mutate_physics_or_source",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_ramp_contact_shadows_visibly_darken_ground",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_ramp_actor_uses_receiver_mesh_cache",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_ramp_actor_shadow_changes_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_ramp_stationary_actor_reuses_mesh",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_ramp_movement_updates_mesh_and_anchor",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_ramp_world_epoch_refreshes_shadow_mesh",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_rotated_source_authored",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_rotated_compiled_real_package",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_rotated_actual_world_order_resolves",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_rotated_real_animated_actor_bound",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_sand_rotated_before",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_sand_rotated_after",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_rotated_land/sandstone_boulder_shadow_changes_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_rotated_land/broken_pillar_shadow_changes_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_rotated_land/oak_tree_shadow_changes_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_rotated_land/desert_cactus_shadow_changes_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_rotated_props_have_grounded_contact_shadows",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_rotated_full_prop_silhouettes_fit_view",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_rotated_presentation_does_not_mutate_physics_or_source",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_rotated_contact_shadows_visibly_darken_ground",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_rotated_actor_uses_receiver_mesh_cache",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_rotated_actor_shadow_changes_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_rotated_stationary_actor_reuses_mesh",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_rotated_movement_updates_mesh_and_anchor",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "sand_rotated_world_epoch_refreshes_shadow_mesh",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "bridge_sample_compiles",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "bridge_view_receives_real_package",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "bridge_actor_binds_to_upper_support",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "bridge_world_order_resolves",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_bridge_before",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_bridge_after",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "bridge_shadow_uses_upper_receiver",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "bridge_shadow_changes_upper_ground_pixels",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "bridge_shadow_does_not_paint_lower_floor",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "bridge_shadow_preserves_physics_and_package",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "external_actor_canvas_order_resolves",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "external_actor_keeps_gameplay_hierarchy_and_world_point",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_bridge_external",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "external_actor_render_matches_direct_root_baseline",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  90,
+                       "ok":  true
+                   }
+    },
+    {
+        "run":  "f10_h5_Viewport",
+        "stage":  "Viewport",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:36:23.3781186Z",
+        "finished_utc":  "2026-11-02T18:36:34.4009567Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "real_ramp_bridge_and_port_compile",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "canonical_world_point_decodes_exactly",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "passive_world_point_decodes_exactly",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "foreign_stage_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "unknown_point_field_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "nonfinite_point_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "boolean_coordinate_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "wrong_vector_length_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "draft_does_not_claim_compiled_body_support",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ramp_model_keeps_vertex_heights",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "compiled_model_includes_actual_supports",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "upper_and_lower_remain_distinct",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "hidden_lower_layer_removed_from_visual_targets",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "hiding_owner_layer_hides_its_bridge",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "hidden_bridge_retains_physical_underside",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "full_width_port_not_replaced_by_center_dot",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "port_direction_and_headroom_preserved",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "layer_focus_includes_attached_bridge",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "source_unchanged_by_all_view_models",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "geometry_unchanged_by_all_view_models",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  20,
+                       "ok":  true
+                   }
+    },
+    {
+        "run":  "f10_h5_ViewportNative",
+        "stage":  "ViewportNative",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:41:40.3879840Z",
+        "finished_utc":  "2026-11-02T18:42:34.1348804Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "real_bridge_map_compiles",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "native_tools_and_minimap_visible",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "map_model_is_compiled_geometry",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "two_levels_preserved_in_model",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "focus_centers_actual_upper_support",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "focus_preserves_actor_source_and_physics",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "camera_footprint_matches_projection_at_named_height",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "minimap_click_moves_camera_to_xz_at_focus_height",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "minimap_never_teleports_actor",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "zoom_preserves_point_under_cursor",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "middle_button_pans_exactly",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "fit_shortcut_ignores_text_focus",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "fit_shortcut_runs_only_on_canvas",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ax_requires_authoring_mode",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "eight_viewport_commands_in_presentation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ax_and_gui_focus_share_camera_authority",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "invalid_ax_arguments_do_not_move_camera",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "projection_overflow_is_rejected_without_camera_change",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "gui_overlay_and_ax_snapshot_agree",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "missing_focus_target_is_explicit",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "exact_probe_dimensions_and_visible_decimals",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "lower_body_fits_below_bridge",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "large_body_fails_real_bridge_headroom",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "false_support_height_rejected",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "occupancy_is_reported_without_calling_it_free",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "real_los_clear_without_obstacle",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "real_los_hits_named_volume_at_exact_entry",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "overlay_cache_tracks_world_revision_and_actual_blocker",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "removing_obstacle_restores_los",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ordinary_click_preserves_real_occlusion",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "gui_inspection_uses_canonical_query_without_moving_actor",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "explicit_support_keeps_real_bridge_collision",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "camera_only_changes_reuse_static_model",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_viewport_map",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "terrain_has_shared_native_navigation",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "draft_refuses_physics_inspection",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "terrain_pick_uses_real_upper_support",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "hidden_bridge_unpickable_but_still_blocks_large_body",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "terrain_overlays_reflect_same_flags",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "inspection_click_never_starts_brush_transaction",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "terrain_zoom_is_camera_only",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "source_edit_invalidates_compiled_inspection",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_viewport_terrain",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "real_patrol_package_compiles",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "minimap_uses_real_slots_and_waypoints",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "route_focus_uses_authored_bounds",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "overlay_toggle_controls_existing_population_and_route_renderer",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "focus_and_visibility_preserve_encounter_authorship",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_viewport_patrol",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "objects_prepare_inspection_uses_shared_compiler",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "objects_shared_inspection_preserves_source_history_and_real_bridge",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_viewport_objects",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  52,
+                       "ok":  true
+                   }
+    },
+    {
+        "run":  "f10_h5_WorkflowNative",
+        "stage":  "WorkflowNative",
+        "ok":  true,
+        "exit_code":  0,
+        "started_utc":  "2026-11-02T18:46:54.3362552Z",
+        "finished_utc":  "2026-11-02T18:51:17.1227318Z",
+        "head":  "eea94766f019bc3ff573590645ef98beea4f2761",
+        "result":  {
+                       "checks":  [
+                                      {
+                                          "id":  "native_shell",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "bar_on_the_terrain_screen",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "next_opens_the_composition",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "map_step_asks_to_compile",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "map_compiled_through_the_bar",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "encounters_open_with_the_map",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "empty_encounters_ask_for_marks",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "encounters_compiled_through_the_bar",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "flow_reaches_the_game_test",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_workflow_patrols_ready",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "publish_waits_for_a_test",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "real_game_test_marks_the_revision",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "publication_is_reviewed_and_pinned",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "changed_piece_marks_the_map_stale",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "carry_runs_in_the_background",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_workflow_review_piece",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "piece_carry_is_reviewed_and_one_undo",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "encounters_become_stale",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "map_carried_into_encounters",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "encounters_carried_into_patrols",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "new_revision_keeps_the_previous_package",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_workflow_published",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "refused_carry_names_the_marker",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "problem_opens_the_owning_screen",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "capture_workflow_problem_focused",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ax_reads_the_same_state",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "ax_refuses_other_steps_and_shows",
+                                          "ok":  true
+                                      },
+                                      {
+                                          "id":  "bar_stays_visible_in_ux_and_out_of_menus",
+                                          "ok":  true
+                                      }
+                                  ],
+                       "count":  28,
+                       "ok":  true
+                   }
+    }
+]

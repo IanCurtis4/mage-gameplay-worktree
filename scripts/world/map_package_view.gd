@@ -10,6 +10,7 @@ const CanvasOrder = preload("res://scripts/world/world_canvas_order.gd")
 const GroundShadow = preload("res://scripts/world/ground_shadow.gd")
 const TerrainTopology = preload("res://scripts/map_authoring/compiler/terrain_topology.gd")
 const BorderCatalog = preload("res://scripts/map_authoring/composition/border_profile_catalog.gd")
+const Grid = preload("res://scripts/map_authoring/compiler/grid_piece.gd")
 var package: Dictionary = {}
 var geometry: WorldGeometry
 var object_sprites: Array[Sprite2D] = []
@@ -51,10 +52,14 @@ func _configure_approved(value: Dictionary, world: WorldGeometry) -> Dictionary:
 	var depth_domain := Objects.depth_domain(heights)
 	for instance: Dictionary in package.render_instances:
 		for layer: Dictionary in instance.layers:
-			for region: Dictionary in Partition.build(layer):
+			# F10 H5: a height-grid layer is drawn per stretch, exactly its support;
+			# the canvas renderer culls stretches outside the camera.
+			var gridded: bool = instance.get("surface_mode","") == Grid.MODE
+			for region: Dictionary in (Grid.regions(layer) if gridded else Partition.build(layer)):
 				var arrays := Materials.arrays(layer,region,instance.rotation_quarters,instance.translation)
 				var view := MeshInstance2D.new(); view.mesh = Materials.from_arrays(arrays); view.material = Materials.material()
-				CanvasOrder.tag_grid(view,int(region.width)+1,int(region.height)+1)
+				if gridded: CanvasOrder.tag_height_grid(view,Grid.transformed(region.grid,int(instance.rotation_quarters),instance.translation)); view.set_meta("grid_stretch",true)
+				else: CanvasOrder.tag_grid(view,int(region.width)+1,int(region.height)+1)
 				self.add_child(view)
 		for visual: Dictionary in instance.visuals:
 			if not visual.special: continue

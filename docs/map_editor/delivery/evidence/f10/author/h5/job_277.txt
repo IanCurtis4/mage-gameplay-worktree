@@ -1,0 +1,44 @@
+﻿RUN CanvasOrder EXIT 0 SECONDS 17
+  F9_ORDER_RESULT {"checks":[{"id":"actor_on_low_ramp_draws_after_own_ground","ok":true},{"id":"ordering_does_not_mutate_g
+RUN RuntimeView EXIT 0 SECONDS 18
+  F9_RUNTIME_VIEW_RESULT {"checks":[{"id":"actual_map_package_compiles","ok":true},{"id":"shared_renderer_constructs_world
+RUN Materials EXIT 0 SECONDS 15
+  F9_MATERIAL_RESULT {"checks":[{"id":"four_named_materials","ok":true},{"id":"four_tiles_and_imports_are_hashed","ok":tru
+RUN Shadows EXIT 0 SECONDS 17
+  F9_SHADOW_RESULT {"checks":[{"id":"connected_receiver_mesh_builds","ok":true},{"id":"seam_uses_both_actual_receivers","o
+RUN Library EXIT 0 SECONDS 14
+  F9_LIBRARY_RESULT {"checks":[{"id":"empty_preferences_valid","ok":true},{"id":"boolean_version_rejected","ok":true},{"id
+RUN Viewport EXIT 0 SECONDS 14
+  F9_VIEWPORT_RESULT {"checks":[{"id":"real_ramp_bridge_and_port_compile","ok":true},{"id":"canonical_world_point_decodes_
+RUN MaterialsNative EXIT 0 SECONDS 54
+  F9_MATERIAL_UI_RESULT {"checks":[{"id":"native_editor_shell","ok":true},{"id":"four_material_choices_in_controls","ok":t
+RUN CliffNative EXIT 0 SECONDS 47
+  F9_CLIFF_UI_RESULT {"checks":[{"id":"native_editor_shell","ok":true},{"id":"mixed_relief_compiles_for_native_editor","ok
+RUN ShadowsNative EXIT 0 SECONDS 58
+  F9_SHADOW_UI_RESULT {"checks":[{"id":"sand_flat_source_authored","ok":true},{"id":"sand_flat_compiled_real_package","ok"
+RUN BiomePropsNative EXIT 0 SECONDS 45
+  F9_BIOME_PROPS_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"six_named_palette_entries","ok":true},{"id":"
+RUN BordersNative EXIT 0 SECONDS 52
+  F9_BORDER_UI_RESULT {"checks":[{"id":"ruin_rubble_v1_compiles_for_native_view","ok":true},{"id":"ruin_rubble_v1_view_rec
+RUN ObjectsNative EXIT 0 SECONDS 47
+  F9_OBJECTS_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"stable_open_action","ok":true},{"id":"native_obje
+RUN ViewportNative EXIT 0 SECONDS 57
+  F9_VIEWPORT_UI_RESULT {"checks":[{"id":"real_bridge_map_compiles","ok":true},{"id":"native_tools_and_minimap_visible","o
+RUN LibraryNative EXIT 1 SECONDS 52
+  F9_LIBRARY_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"native_project_metadata_storage_bound","ok":true}
+  FAIL F9_LIBRARY_UI_CHECK semantic_ax_commands_are_inspectable false
+RUN GameplayNative EXIT 1 SECONDS 97
+  F9_GAMEPLAY_RESULT {"checks":[{"id":"authored_patrol_with_real_population_compiles","ok":true},{"id":"passive_candidate_
+RUN AuthoringNative EXIT 0 SECONDS 20
+  F9_AX_AUTHORING_UI_RESULT {"checks":[{"id":"two_real_shells_mount_presentations_with_auxiliary_windows_initially_hidden"
+RUN OcclusionNative EXIT 0 SECONDS 87
+  F9_OCCLUSION_RESULT {"checks":[{"id":"bosque_release_loads","ok":true},{"id":"real_actors_are_bound","ok":true},{"id":"g
+RUN WorkflowNative EXIT 0 SECONDS 266
+  F9_WORKFLOW_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"bar_on_the_terrain_screen","ok":true},{"id":"nex
+RUN GameplayEditorNative EXIT 0 SECONDS 98
+  F9_GAMEPLAY_EDITOR_RESULT {"checks":[{"id":"actual_map_panel_has_gameplay_controls","ok":true},{"id":"human_two_room_exa
+RUN ContentNative EXIT 0 SECONDS 59
+  F9_AX_CONTENT_UI_RESULT {"checks":[{"detail":{"code":"ax_mode_required","ok":false},"id":"ux_mode_refuses_agent_mutation
+RUN CompositionAXNative EXIT 0 SECONDS 18
+  F9_AX_COMPOSITION_UI_RESULT {"checks":[{"detail":{},"id":"real_shell_opens_the_real_composition_window_and_its_own_ax_pr
+DONE

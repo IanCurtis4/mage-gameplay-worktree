@@ -62,7 +62,7 @@ trechos tocados.
 | H5 | Desenho no jogo e no editor por trecho, com recorte pela câmera | nativos e medida de quadro |
 | H6 | Campo sintético de ~10.000 u de ponta a ponta: compilar, certificar, navegar, desenhar, diário | orçamento medido |
 
-Estado: H1–H4 entregues (checkpoints 1–4, [registro](../delivery/f10.md)).
+Estado: H1–H5 entregues (checkpoints 1–5, [registro](../delivery/f10.md)).
 
 Nenhum guard, teto ou quota é reduzido. Os tetos que contam superfícies passam a
 contar superfícies reais (um trecho conta como uma), com o custo medido.

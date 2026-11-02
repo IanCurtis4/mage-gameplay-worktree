@@ -252,7 +252,8 @@ func remove_preset() -> void:
 
 func authoring_commands() -> Array:
 	return [{"id":"terrain/example/organic","parameters":{}},{"id":"terrain/brush/stroke","parameters":{"points":"number[2][]","options":"brush_options"}},{"id":"terrain/presets/list","parameters":{}},{"id":"terrain/presets/apply","parameters":{"preset_id":"string"}},{"id":"terrain/presets/save","parameters":{"name":"string","options":"brush_options"}},
-		{"id":"terrain/grid/create","parameters":{"layer_id":"id","name":"string","origin_xz":"number[2]","columns":"integer 2..257","rows":"integer 2..257","sample_spacing":"number 4..256","height":"number -512..512"}},
+		{"id":"terrain/grid/create","parameters":{"layer_id":"id","name":"string","origin_xz":"number[2]","columns":"integer 2..257","rows":"integer 2..257","sample_spacing":"number 4..256","height":"number -512..512","surface_mode":"optional: exact_planes | height_grid"}},
+		{"id":"terrain/layer/surface_mode","parameters":{"layer_id":"id","surface_mode":"exact_planes | height_grid"}},
 		{"id":"terrain/layer/select","parameters":{"layer_id":"id"}},
 		{"id":"terrain/layer/lock","parameters":{"layer_id":"id","locked":"boolean"}},
 		{"id":"terrain/layer/protection","parameters":{"layer_id":"id","region_ids":"existing region IDs[]"}},
@@ -266,7 +267,7 @@ func ax_command(id: String, parameters: Dictionary) -> Dictionary:
 		if Operations._layer(session.document().to_data(),parameters.layer_id).is_empty(): return {"ok":false,"code":"source_reference_missing"}
 		select_layer(parameters.layer_id)
 		return {"ok":true,"entity_id":selected_layer,"output_hash":session.document().semantic_hash()}
-	if id.trim_prefix("terrain/") in ["grid/create","bridge/create","connector/upsert","connector/remove","layer/lock","layer/protection"]:
+	if id.trim_prefix("terrain/") in ["grid/create","bridge/create","connector/upsert","connector/remove","layer/lock","layer/protection","layer/surface_mode"]:
 		return apply_operation(id.trim_prefix("terrain/"),parameters)
 	if id == "terrain/example/organic":
 		if not parameters.is_empty(): return {"ok":false,"code":"arguments_invalid"}

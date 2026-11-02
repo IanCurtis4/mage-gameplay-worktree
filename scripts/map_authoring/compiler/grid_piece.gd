@@ -129,3 +129,14 @@ static func transformed(grid: Dictionary, quarter: int, offset: Vector3) -> Dict
 	else:
 		for value: Variant in grid.heights: heights.append(float(value)+offset.y)
 	return {"origin_xz":origin,"sample_spacing":s,"columns":columns,"rows":rows,"heights":heights}
+
+## F10 H5: the render regions of a height-grid layer, one per stretch and in the
+## same order as stretches(): the drawn triangles are the support triangles.
+static func regions(layer: Dictionary) -> Array:
+	var result: Array = []
+	for part: Dictionary in stretches(layer):
+		result.append({"x":part.cx,"z":part.cz,"width":int(part.grid.columns)-1,"height":int(part.grid.rows)-1,"triangles":true,"grid":part.grid})
+	return result
+
+static func layer_is_grid(layer: Dictionary) -> bool:
+	return layer.get("surface_mode","exact_planes") == MODE

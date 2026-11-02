@@ -10,10 +10,14 @@ static func propose(source: Dictionary, operation: String, parameters: Dictionar
 		"connector/upsert":Schema.FIELDS.connectors,
 		"connector/remove":{"connector_id":"id"},
 		"layer/lock":{"layer_id":"id","locked":"bool"},
-		"layer/protection":{"layer_id":"id","region_ids":"strings"}}
+		"layer/protection":{"layer_id":"id","region_ids":"strings"},
+		"layer/surface_mode":{"layer_id":"id","surface_mode":"id"}}
 	if not fields.has(operation): return Schema.result(false,"action_missing")
 	var errors: Array = []
-	Schema._shape(parameters,fields[operation],"parameters",errors)
+	# F10 H5: grid/create may declare the layer's surface mode.
+	var shape: Dictionary = fields[operation]
+	if operation == "grid/create" and parameters.has("surface_mode"): shape = shape.duplicate(); shape["surface_mode"] = "id"
+	Schema._shape(parameters,shape,"parameters",errors)
 	if not errors.is_empty(): return Schema.result(false,"arguments_invalid",errors)
 	var read := Schema.read(JSON.stringify(source,"",true,true).to_utf8_buffer())
 	if not read.ok or not read.valid: return Schema.result(false,"source_invalid")
@@ -25,6 +29,7 @@ static func propose(source: Dictionary, operation: String, parameters: Dictionar
 			if not _origin(parameters.origin_xz) or not _range(parameters.columns,2,257) or not _range(parameters.rows,2,257) or not _range(parameters.sample_spacing,4,256) or not _range(parameters.height,-512,512): return Schema.result(false,"arguments_invalid")
 			var heights: Array = []; heights.resize(int(parameters.columns)*int(parameters.rows)); heights.fill(parameters.height)
 			data.layers.append({"layer_id":parameters.layer_id,"name":parameters.name,"origin_xz":parameters.origin_xz.duplicate(),"columns":int(parameters.columns),"rows":int(parameters.rows),"sample_spacing":parameters.sample_spacing,"heights":heights,"material_masks":{},"locked":false,"protected_regions":[]})
+			if parameters.has("surface_mode") and parameters.surface_mode != "exact_planes": data.layers[-1]["surface_mode"] = parameters.surface_mode
 		"bridge/create":
 			id = parameters.surface_id
 			if _surface_exists(data,id): return Schema.result(false,"source_duplicate_id")
@@ -65,6 +70,13 @@ static func propose(source: Dictionary, operation: String, parameters: Dictionar
 				if surface_locked(data,data.connectors[index].surface_id): return Schema.result(false,"layer_locked")
 				data.connectors.remove_at(index); found = true; break
 			if not found: return Schema.result(false,"source_reference_missing")
+		"layer/surface_mode":
+			var target := _layer(data,id)
+			if target.is_empty(): return Schema.result(false,"source_reference_missing")
+			if target.locked: return Schema.result(false,"layer_locked")
+			# Exact planes is the default: it is stored as the absence of the field.
+			if parameters.surface_mode == "exact_planes": target.erase("surface_mode")
+			else: target["surface_mode"] = parameters.surface_mode
 		"layer/lock", "layer/protection":
 			var layer := _layer(data,id)
 			if layer.is_empty(): return Schema.result(false,"source_reference_missing")
