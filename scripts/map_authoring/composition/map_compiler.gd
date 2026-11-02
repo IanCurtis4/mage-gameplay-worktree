@@ -388,7 +388,48 @@ static func _normalize_walls(raw: Array) -> Array:
 		for i: int in range(1,cuts.size()): _add_wall(output,keys,cuts[i-1].point,cuts[i].point,wall.owner)
 	return output
 
+## F10 H6: packages this process already validated, by the SHA-256 of their
+## exact bytes, with the asset dependencies they were checked against. A hit
+## still recomputes those dependencies (assets may change); only the rebuild of
+## identical bytes is skipped. Bounded.
+static var _validated: Dictionary = {}
+static var _validated_mutex: Mutex = Mutex.new()
+
 static func validate_package(package: Dictionary) -> bool:
+	var context := HashingContext.new(); context.start(HashingContext.HASH_SHA256); context.update(var_to_bytes(package))
+	var digest := context.finish().hex_encode()
+	_validated_mutex.lock(); var known: Variant = _validated.get(digest); _validated_mutex.unlock()
+	if known != null:
+		var now: Variant = _expected_dependencies(package)
+		if now != null and now == known: return true
+	var expected: Variant = _validate_package_full(package)
+	if expected == null: return false
+	_validated_mutex.lock()
+	if _validated.size() >= 8: _validated.clear()
+	_validated[digest] = expected
+	_validated_mutex.unlock()
+	return true
+
+## The material and border-profile dependencies a package must declare; null
+## when a border profile does not resolve.
+static func _expected_dependencies(package: Dictionary) -> Variant:
+	var expected := preload("res://scripts/map_authoring/terrain/terrain_material.gd").dependencies()
+	for span: Dictionary in package.border_spans:
+		if span.profile_id == BorderOperations.LEGACY: continue
+		var resolved := BorderCatalog.resolve(span.profile_id)
+		if not resolved.ok: return null
+		var dependencies := BorderCatalog.dependencies(resolved.definition)
+		if not dependencies.ok: return null
+		for dependency: Dictionary in dependencies.dependencies:
+			if dependency not in expected: expected.append(dependency)
+	return expected
+
+## The full validation; the expected dependencies on success, null otherwise.
+static func _validate_package_full(package: Dictionary) -> Variant:
+	var found: Variant = _expected_if_valid(package)
+	return found if found is Array else null
+
+static func _expected_if_valid(package: Dictionary) -> Variant:
 	if package.get("format_version") != 5 or package.get("compiler_revision") != REVISION or not package.has("package_hash"): return false
 	if not Canonical.valid(package) or not package.has_all(["source_hash","dependencies","profile","manifest","render_instances","barriers","realized_instances","piece_count","border_selection","border_spans","border_geometry"]): return false
 	if not package.profile is Dictionary or package.profile != Terrain.PROFILE: return false
@@ -405,16 +446,9 @@ static func validate_package(package: Dictionary) -> bool:
 	if not _logical_metadata_valid(package) or not _terrain_metadata_valid(package): return false
 	if not _context_metadata_valid(package): return false
 	var content := package.duplicate(true); content.erase("package_hash")
-	var expected := preload("res://scripts/map_authoring/terrain/terrain_material.gd").dependencies()
-	for span: Dictionary in package.border_spans:
-		if span.profile_id == BorderOperations.LEGACY: continue
-		var resolved := BorderCatalog.resolve(span.profile_id)
-		if not resolved.ok: return false
-		var dependencies := BorderCatalog.dependencies(resolved.definition)
-		if not dependencies.ok: return false
-		for dependency: Dictionary in dependencies.dependencies:
-			if dependency not in expected: expected.append(dependency)
-	return Canonical.digest(content) == package.package_hash and Objects.validate_dependencies(package.get("dependencies",[]),expected)
+	var expected: Variant = _expected_dependencies(package)
+	if expected == null: return null
+	return expected if Canonical.digest(content) == package.package_hash and Objects.validate_dependencies(package.get("dependencies",[]),expected) else null
 
 static func _runtime_biome(context: Dictionary) -> String:
 	return "ruin" if str(context.get("biome_id","")).is_empty() else str(context.biome_id)

@@ -1,0 +1,16 @@
+﻿EXIT 0 SECONDS 118
+F10_POP map_compile_ms=17875.6 ok=true cache=
+F10_POP map_compile_hit_ms=4037.9 cache=
+F10_POP prepare_ms=19559.0 ok=true
+F10_POP pool_sampling_ms=1669.8
+F10_POP pool_batch body=[20.0, 32.0] n=2778 ms=13036.5 {"edge_tests":9996,"elapsed":12914,"ms":{"direct":2,"inward":1713,"outward":1847,"prepare":1288,"publish":84,"witnesses":7977},"states":2779,"targets":2778}
+F10_POP regenerate_ms=24163.6 ok=true slots=55
+F10_POP compile_prepare_ms=7849.8
+F10_POP prime_slots_ms=1065.4 ok=true
+F10_POP validate_slots_ms=36.8
+F10_POP planner_ms=1242.8 ok=true
+F10_POP planner_batch n=55 {"edge_tests":170,"elapsed":752,"ms":{"direct":0,"inward":44,"outward":66,"prepare":444,"publish":97,"witnesses":99},"states":56,"targets":55}
+F10_POP package_ms=707.4 bytes=2971212
+F10_POP compile_ms=13157.2 ok=true
+F10_POP campaign_ms=3967.4 ok=true
+DONE

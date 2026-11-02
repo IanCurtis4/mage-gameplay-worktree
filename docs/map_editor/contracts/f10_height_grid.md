@@ -81,6 +81,9 @@ números e política em [checkpoint6](../delivery/f10.md).
 - **Popular:** 55 monstros com plano em 73 s e compilação em 52 s (pendência:
   reaproveitar o certificado).
 - **Sessão:** instantâneo de 1,05 MB, abaixo do limite de 4 MiB.
+- **População depois do checkpoint7:** os lotes reaproveitam um fechamento de
+  base por geometria, corpo e raiz. O mesmo campo popula em 47 s (plano 37 s,
+  compilação 10 s) e a campanha começa em 2,4 s.
 
 Política de certificação em campo, só para estágios com trechos:
 

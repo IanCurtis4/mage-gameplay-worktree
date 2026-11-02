@@ -15,7 +15,7 @@ const PopulationDocument = preload("res://scripts/map_authoring/population/popul
 const Catalog = preload("res://scripts/map_authoring/population/population_catalog.gd")
 ## Measured budget (Windows, the delivery machine), with headroom; a step over
 ## its budget fails the stage.
-const BUDGET_MS := {"piece":10000.0,"map":60000.0,"route_cold":10000.0,"view":15000.0,"population":180000.0,"snapshot":10000.0}
+const BUDGET_MS := {"piece":10000.0,"map":60000.0,"route_cold":10000.0,"view":15000.0,"population":90000.0,"campaign":15000.0,"snapshot":10000.0}
 var checks: Array[Dictionary] = []
 var timing: Dictionary = {}
 func _initialize() -> void: run.call_deferred()
@@ -219,8 +219,12 @@ func populate(map: Dictionary, stage: Dictionary, world: WorldGeometry, profile:
 	timing["population_slots"] = slots.size()
 	if not built.ok: print("F10_GRID_FIELD_POPULATION "+JSON.stringify(built).left(800)); return {"ok":false}
 	timing["population_bytes"] = var_to_bytes(built.package).size()
+	# The play session starts from the package (the editor's "Jogar").
+	started = Time.get_ticks_usec()
+	var campaign := Population.make_campaign(built.package)
+	timing["campaign_ms"] = elapsed(started)
 	var count: int = built.package.manifest.population.slots.size()
-	var ok: bool = count >= 40 and count <= 70 and count == slots.size() and float(timing.population_plan_ms)+float(timing.population_compile_ms) < BUDGET_MS.population
+	var ok: bool = count >= 40 and count <= 70 and count == slots.size() and float(timing.population_plan_ms)+float(timing.population_compile_ms) < BUDGET_MS.population and campaign.get("ok",false) and float(timing.campaign_ms) < BUDGET_MS.campaign
 	return {"ok":ok}
 ## Average and worst frame over 20 frames at one camera placement.
 func measure(camera: Camera2D, at: Vector2, zoom: float) -> Dictionary:

@@ -1,0 +1,32 @@
+﻿RUN CompileCache EXIT 0 SECONDS 28
+  F9_CACHE_RESULT {"checks":[{"id":"cache_is_opt_in","ok":true},{"id":"miss_compiles_and_stores","ok":true},{"id":"hit_ret
+RUN GridField EXIT 0 SECONDS 121
+  F10_GRID_FIELD_RESULT {"checks":[{"id":"field_piece_compiles_in_budget","ok":true},{"id":"field_map_certifies_in_budget"
+  F10_GRID_FIELD_TIMING {"campaign_ms":2383.4,"certification":{"closure":"built","connections":214,"edge_tests":8414,"elapsed_ms":11864.878,"endpoint_checks":428,"expansions":11106,"grid_bent_tests":5560,"grid_bent_usec":1874591,"landmark_checks":42872,"offset_checks":1688,"operations":1,"peak_storage_bytes":55727724,"phase_usec":{"construct":4614077,"direct":86,"inward":2854168,"outward":2555572,"prepare":703887,"publish":85712,"witnesses":1051365},"portal_checks":1544,"reconstruction_steps":842,"snapshot_storage_units":14104056,"states":2909,"storage_bytes":55727724,"straight_usec":3116810,"terminal_checks":111,"witness_points":2271,"witness_segments":1428},"frames_corner":{"average_ms":13.34,"draw_calls":5,"worst_ms":13.48},"frames_whole":{"average_ms":13.33,"draw_calls":860,"worst_ms":14.11},"map_bytes":2028656,"map_ms":21445.3,"map_validate_ms":1794.5,"piece_bytes":1552788,"piece_ms":3047.0,"piece_validate_ms":1889.6,"population_bytes":2971724,"population_compile_ms":9944.4,"population_plan_ms":37191.8,"population_slots":55,"route_background_ms":4789.9,"route_background_worst_pump_ms":0.05,"route_cold_ms":4601.3,"route_points":40,"route_warm_ms":1217.5,"snapshot_bytes":1051324,"snapshot_capture_ms":1612.4,"snapshot_restore_ms":3486.4,"view_ms":2158.2}
+RUN GridCompile EXIT 0 SECONDS 39
+  F10_GRID_COMPILE_RESULT {"checks":[{"id":"schema_accepts_the_mode","ok":true},{"id":"piece_compiles_to_stretches","ok":t
+  F10_GRID_COMPILE_TIMING {"big_code":"","big_piece_ms":2127.9,"big_validate_ms":2110.8,"linked_code":"","map_code":"","map_metrics":{"elapsed_ms":1583.657,"navigation":{"closure":"built","connections":14,"edge_tests":674,"elapsed_ms":824.18,"endpoint_checks":28,"expansions":694,"grid_bent_tests":474,"grid_bent_usec":174906,"landmark_checks":1000,"offset_checks":116,"operations":1,"peak_storage_bytes":4249068,"phase_usec":{"construct":233409,"direct":23,"inward":273692,"outward":169914,"prepare":46212,"publish":7590,"witnesses":93331},"portal_checks":106,"reconstruction_steps":78,"snapshot_storage_units":1180332,"states":199,"storage_bytes":4249068,"straight_usec":234695,"terminal_checks":11,"witness_points":207,"witness_segments":128}},"map_ms":1605.2,"piece_ms":346.2}
+RUN Borders EXIT 0 SECONDS 137
+  F9_BORDER_RESULT {"checks":[{"id":"four_families_and_transition_catalog","ok":true},{"id":"unknown_profile_is_explicit",
+RUN PopulationPlanner EXIT 0 SECONDS 18
+  F9_POPULATION_PLANNER_RESULT {"checks":[{"detail":null,"id":"existing_f5_fixture_generates_manifest","ok":true},{"detail
+RUN PopulationReachability EXIT 0 SECONDS 19
+  F9_POPULATION_REACHABILITY_RESULT {"checks":[{"detail":null,"id":"small_two_room_fixture","ok":true},{"detail":null,"id"
+RUN RuntimeView EXIT 0 SECONDS 16
+  F9_RUNTIME_VIEW_RESULT {"checks":[{"id":"actual_map_package_compiles","ok":true},{"id":"shared_renderer_constructs_world
+RUN ReleaseApi EXIT 0 SECONDS 146
+  F9_RELEASE_API_RESULT {"checks":[{"id":"registry_lists_the_bosque","ok":true},{"id":"registry_refuses_unsafe_entries","o
+RUN AreaAcceptance EXIT 0 SECONDS 39
+  F9_AREA_RESULT {"checks":[{"id":"sources_open_and_release_is_current","ok":true},{"id":"clearing_with_two_materials_and_
+RUN GameplayNative EXIT 0 SECONDS 93
+  F9_GAMEPLAY_RESULT {"checks":[{"id":"authored_patrol_with_real_population_compiles","ok":true},{"id":"passive_candidate_
+RUNNER map_editor_composition EXIT 0 SECONDS 42
+  document_regression: True
+  M3_ALL_PASS
+RUNNER map_editor_population EXIT 0 SECONDS 82
+  document_regression: True
+  M4_ALL_PASS
+RUNNER map_editor_candidate EXIT 0 SECONDS 218
+  exchange: True
+  M8_SELECTED_PASS
+DONE
