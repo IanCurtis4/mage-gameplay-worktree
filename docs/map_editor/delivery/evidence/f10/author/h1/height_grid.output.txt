@@ -1,0 +1,16 @@
+﻿F10_HEIGHT_GRID_CHECK invalid_grids_refused true
+F10_HEIGHT_GRID_CHECK flat_support_and_bounds true
+F10_HEIGHT_GRID_CHECK support_matches_the_planar_kernel true
+F10_HEIGHT_GRID_CHECK support_is_continuous_across_the_diagonal true
+F10_HEIGHT_GRID_CHECK steep_triangles_are_holes true
+F10_HEIGHT_GRID_CHECK disk_keeps_its_radius_from_steep_ground true
+F10_HEIGHT_GRID_CHECK capsule_along_and_across_the_wall true
+F10_HEIGHT_GRID_CHECK zero_radius_edges true
+F10_HEIGHT_GRID_CHECK route_goes_through_the_gap true
+F10_HEIGHT_GRID_CHECK route_is_deterministic true
+F10_HEIGHT_GRID_CHECK no_route_without_the_gap true
+F10_HEIGHT_GRID_CHECK components_follow_the_wall true
+F10_HEIGHT_GRID_CHECK edge_spans_split_at_steep_ground true
+F10_HEIGHT_GRID_TIMING {"gate_ms":35.8,"rough_expanded":182,"rough_ms":42.7,"rough_ok":true}
+F10_HEIGHT_GRID_CHECK rough_route_detours_the_bumps true
+F10_HEIGHT_GRID_RESULT {"checks":[{"id":"invalid_grids_refused","ok":true},{"id":"flat_support_and_bounds","ok":true},{"id":"support_matches_the_planar_kernel","ok":true},{"id":"support_is_continuous_across_the_diagonal","ok":true},{"id":"steep_triangles_are_holes","ok":true},{"id":"disk_keeps_its_radius_from_steep_ground","ok":true},{"id":"capsule_along_and_across_the_wall","ok":true},{"id":"zero_radius_edges","ok":true},{"id":"route_goes_through_the_gap","ok":true},{"id":"route_is_deterministic","ok":true},{"id":"no_route_without_the_gap","ok":true},{"id":"components_follow_the_wall","ok":true},{"id":"edge_spans_split_at_steep_ground","ok":true},{"id":"rough_route_detours_the_bumps","ok":true}],"count":14,"ok":true}
