@@ -1,0 +1,102 @@
+﻿HEAD 5baf6293 START 2026-11-02T00:19:50.3949280-03:00
+STAGE Geometry :: F9 Geometry: True (97s)
+STAGE Objects :: F9 Objects: True (31s)
+STAGE ObjectsNative :: F9 ObjectsNative: True (59s)
+STAGE Mesh :: F9 Mesh: True (17s)
+STAGE Relief :: F9 Relief: True (16s)
+STAGE Ports :: F9 Ports: True (188s)
+STAGE Batch :: F9 Batch: True (14s)
+STAGE Materials :: F9 Materials: True (12s)
+STAGE MaterialsNative :: F9 MaterialsNative: True (38s)
+STAGE Scale :: F9 Scale: True (71s)
+STAGE Cliff :: F9 Cliff: True (16s)
+STAGE CliffNative :: F9 CliffNative: True (35s)
+STAGE BiomeProps :: F9 BiomeProps: True (15s)
+STAGE BiomePropsNative :: F9 BiomePropsNative: True (41s)
+STAGE Borders :: F9 Borders: True (119s)
+STAGE BordersNative :: F9 BordersNative: True (54s)
+STAGE Shadows :: F9 Shadows: True (16s)
+STAGE ShadowsNative :: F9 ShadowsNative: True (58s)
+STAGE CanvasOrder :: F9 CanvasOrder: True (17s)
+STAGE Library :: F9 Library: True (14s)
+STAGE LibraryNative :: F9 LibraryNative: True (50s)
+STAGE Viewport :: F9 Viewport: True (14s)
+STAGE ViewportNative :: F9 ViewportNative: True (59s)
+STAGE RuntimeView :: F9 RuntimeView: True (16s)
+STAGE GameplayNative :: F9 GameplayNative: True (99s)
+STAGE GameplayWindow :: F9 GameplayWindow: True (67s)
+STAGE GameplayControls :: F9 GameplayControls: True (72s)
+STAGE GameplayEditorNative :: F9 GameplayEditorNative: True (89s)
+STAGE GameplayCli :: F9 GameplayCli: True (125s)
+STAGE FieldsNative :: F9 FieldsNative: True (38s)
+STAGE Organic :: F9 Organic: True (277s)
+STAGE NavigationLazy :: F9 NavigationLazy: True (17s)
+STAGE NavigationDense :: F9 NavigationDense: True (62s)
+STAGE NavigationContext :: F9 NavigationContext: True (21s)
+STAGE Rounded :: F9 Rounded: True (13s)
+STAGE RoundedNative :: F9 RoundedNative: True (193s)
+STAGE SnapshotDensity :: F9 SnapshotDensity: True (28s)
+STAGE SurfacePick :: F9 SurfacePick: True (13s)
+STAGE Authoring :: F9 Authoring: True (22s)
+STAGE AuthoringNative :: F9 AuthoringNative: True (19s)
+STAGE Content :: F9 Content: True (56s)
+STAGE ContentNative :: F9 ContentNative: True (59s)
+STAGE CompositionAX :: F9 CompositionAX: True (18s)
+STAGE CompositionAXNative :: F9 CompositionAXNative: True (18s)
+STAGE MapBiome :: F9 MapBiome: True (28s)
+STAGE MapBiomeNative :: F9 MapBiomeNative: True (23s)
+STAGE EncounterAuthoring :: F9 EncounterAuthoring: True (19s)
+STAGE EncounterAuthoringNative :: F9 EncounterAuthoringNative: True (31s)
+STAGE PopulationReachability :: F9 PopulationReachability: True (18s)
+STAGE PopulationPlanner :: F9 PopulationPlanner: True (15s)
+STAGE CandidateBatch :: F9 CandidateBatch: True (14s)
+STAGE GameplayGate :: F9 GameplayGate: True (66s)
+STAGE WorldTargeting :: F9 WorldTargeting: True (27s)
+STAGE WorldRewardPoll :: F9 WorldRewardPoll: True (27s)
+STAGE NavigationAstar :: F9 NavigationAstar: True (35s)
+STAGE NavigationAsync :: F9 NavigationAsync: True (19s)
+STAGE CampaignJournal :: F9 CampaignJournal: True (13s)
+STAGE AssetManifest :: F9 AssetManifest: True (15s)
+STAGE CompileCache :: F9 CompileCache: True (20s)
+STAGE RegionalSynthesis :: F9 RegionalSynthesis: True (31s)
+STAGE RegionalSynthesisNative :: F9 RegionalSynthesisNative: True (99s)
+STAGE RootSynthesis :: F9 RootSynthesis: True (110s)
+STAGE RootSynthesisNative :: F9 RootSynthesisNative: True (117s)
+STAGE ExchangeMerge :: F9 ExchangeMerge: True (31s)
+STAGE ExchangeMergeNative :: F9 ExchangeMergeNative: True (44s)
+STAGE SynthesisReceipts :: F9 SynthesisReceipts: True (54s)
+STAGE ExchangeAssets :: F9 ExchangeAssets: True (18s)
+STAGE ReleaseApi :: F9 ReleaseApi: True (148s)
+STAGE Workflow :: F9 Workflow: True (22s)
+STAGE WorkflowNative :: F9 WorkflowNative: True (232s)
+STAGE OcclusionNative :: F9 OcclusionNative: True (85s)
+STAGE AreaAcceptance :: F9 AreaAcceptance: True (37s)
+STAGE AreaVariants :: F9 AreaVariants: True (169s)
+STAGES pass=73 fail=0
+RUNNER map_editor_document  :: exit=0 :: 81s
+RUNNER map_editor_terrain -ReuseFixture :: exit=0 :: 110s
+RUNNER map_editor_terrain -ReuseFixture -Native :: exit=0 :: 165s
+RUNNER map_editor_composition -ReuseFixture :: exit=0 :: 41s
+RUNNER map_editor_composition -ReuseFixture -Native :: exit=1 :: 250s
+   ! native_ui: False
+   ! M3_UI_CHECK discardable_profile_starts false
+   ! M3_UI_CHECK click_plans_real_actor false
+   ! M3_UI_CHECK native_actor_crosses_seam false
+   ! M3_UI_CHECK test_preserves_draft false
+   ! [31;1m[0m[36;1m[36;1m  68 | [0m …  (-not $m3Pass) { Write-Output $m3Text; [36;1mthrow ('M3 failed: '+$Name)[0m }[0m
+RUNNER map_editor_population -ReuseFixture :: exit=0 :: 96s
+RUNNER map_editor_population -ReuseFixture -Native :: exit=1 :: 251s
+   ! native_ui: False
+   ! M4_UI_CHECK new_preserves_prior_draft false
+   ! [31;1m[0m[36;1m[36;1m  77 | [0m …  (-not $m4Pass) { Write-Output $m4Text; [36;1mthrow ('M4 failed: '+$Name)[0m }[0m
+   ! [31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m     | [31;1mM4 failed: native_ui[0m
+RUNNER map_editor_patrol -ReuseFixture :: exit=0 :: 224s
+RUNNER map_editor_patrol -ReuseFixture -Native :: exit=0 :: 337s
+RUNNER map_editor_generation -ReuseFixture :: exit=0 :: 64s
+RUNNER map_editor_generation -ReuseFixture -Native :: exit=0 :: 85s
+RUNNER map_editor_exchange -ReuseFixture :: exit=0 :: 87s
+RUNNER map_editor_exchange -ReuseFixture -Native :: exit=0 :: 167s
+RUNNER map_editor_candidate -ReuseFixture -Stage Core :: exit=0 :: 236s
+RUNNER map_editor_candidate -ReuseFixture -Stage Native :: exit=0 :: 111s
+RUNNER map_editor_candidate -ReuseFixture -Stage Release :: exit=0 :: 198s
+DONE 2026-11-02T02:07:09.0126356-03:00

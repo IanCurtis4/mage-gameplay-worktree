@@ -1,0 +1,72 @@
+﻿[
+    {
+        "name":  "import",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:45:52.0923110Z",
+        "finished_utc":  "2026-11-02T04:46:03.2652915Z",
+        "output_sha256":  "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+        "count":  0
+    },
+    {
+        "name":  "patrol",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:46:03.2981638Z",
+        "finished_utc":  "2026-11-02T04:46:51.1359742Z",
+        "output_sha256":  "468A988DB59387B89157C703D02231D5120C99AE8A440E447B56534776F9D191",
+        "count":  58
+    },
+    {
+        "name":  "restart_prepare",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:46:51.1418522Z",
+        "finished_utc":  "2026-11-02T04:48:15.1491674Z",
+        "output_sha256":  "2E5F1803F25BC8856F1F7DE0CD72A0B4BFEE1F161F316CA44D11A8DD4572E631",
+        "count":  33
+    },
+    {
+        "name":  "restart_resume",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:48:15.1547392Z",
+        "finished_utc":  "2026-11-02T04:49:02.9536857Z",
+        "output_sha256":  "072A69FCBD7DB37841B14C787A4051256B3A3AAA495DA4A035F6AC59552FF871",
+        "count":  21
+    },
+    {
+        "name":  "cli_a",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:49:02.9569856Z",
+        "finished_utc":  "2026-11-02T04:49:09.2522860Z",
+        "output_sha256":  "405EFD9FBE8BF0307105E1E8E91F1BC10F925D79F3F218AF446329D09B0A840E",
+        "count":  0
+    },
+    {
+        "name":  "cli_b",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:49:09.2550298Z",
+        "finished_utc":  "2026-11-02T04:49:15.4557643Z",
+        "output_sha256":  "405EFD9FBE8BF0307105E1E8E91F1BC10F925D79F3F218AF446329D09B0A840E",
+        "count":  0
+    },
+    {
+        "name":  "native_ui",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:49:15.5311619Z",
+        "finished_utc":  "2026-11-02T04:51:15.8104118Z",
+        "output_sha256":  "E7923C791ACF682C360D3120C462DCD36C6F65FB915A4EC619239EFB18F3FBB6",
+        "count":  19
+    }
+]

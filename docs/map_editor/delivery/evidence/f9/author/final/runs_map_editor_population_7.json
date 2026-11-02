@@ -1,0 +1,62 @@
+﻿[
+    {
+        "name":  "import",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:37:52.8185605Z",
+        "finished_utc":  "2026-11-02T04:38:07.9687883Z",
+        "output_sha256":  "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+        "count":  0
+    },
+    {
+        "name":  "population",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:38:08.0579745Z",
+        "finished_utc":  "2026-11-02T04:39:15.3336172Z",
+        "output_sha256":  "407EA188A9AB76CFD78A2BC438E40045E0E3E1EC0B45EA8210168CF5CFCFB799",
+        "count":  91
+    },
+    {
+        "name":  "cli_a",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:39:15.3469654Z",
+        "finished_utc":  "2026-11-02T04:39:23.6171078Z",
+        "output_sha256":  "472153D58913096B035A19C0F6A378B56020B3D1A44CAB6668043B61388B17CB",
+        "count":  null
+    },
+    {
+        "name":  "cli_b",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:39:23.6204811Z",
+        "finished_utc":  "2026-11-02T04:39:31.9698320Z",
+        "output_sha256":  "472153D58913096B035A19C0F6A378B56020B3D1A44CAB6668043B61388B17CB",
+        "count":  null
+    },
+    {
+        "name":  "document_regression",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:39:31.9752254Z",
+        "finished_utc":  "2026-11-02T04:39:33.6673749Z",
+        "output_sha256":  "E3540287126E64252635C94DFA87F20BF22097F03D5BBFCB15BDA94A2B5AC2D7",
+        "count":  70
+    },
+    {
+        "name":  "native_ui",
+        "ok":  false,
+        "exit_code":  1,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:39:33.6935565Z",
+        "finished_utc":  "2026-11-02T04:42:01.3863947Z",
+        "output_sha256":  "6AEC1477F3DBCA95958571244405795356D6A88B85445FD64A9740ED70486719",
+        "count":  29
+    }
+]

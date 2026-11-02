@@ -1,7 +1,25 @@
 # Retomada F9 —30/10/2026
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint51 — área final: auditoria técnica e roteiro de aceite (P7)
+## Checkpoint52 — aceite humano parcial e entrega (P7/P8)
+
+2/11/2026. Mesmo checkout/branch/fixture. Base 5baf6293; documentação e limpeza.
+Recibo: topo de delivery/f9.md.
+
+- Aceite humano (2/11): tarefa 1 aceita; 2 aceita com ressalvas (pincéis lentos,
+  o traço inteiro num quadro); 3 não aceita ("O ponto marcado não tem suporte ou
+  tipo válido." ao mover uma rocha: `socket_invalid` do marcador de entrada, muito
+  provavelmente depois de esculpir o chão sob ele); 4–9 e conferência visual não
+  executadas. Registrado em delivery/f9_acceptance_script.md.
+- Direção humana: autoria manual em segundo plano; prioridade para a autoria
+  agêntica fluida e sem lag. Pendências manuais movidas para F10.
+- Regressão final (job 232): ver o recibo. Limpeza de rascunhos da ponte e de
+  probes da fixture criados nesta sessão.
+
+F9 entregue tecnicamente. Merge em master depende de decisão humana explícita.
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint51 — área final: auditoria técnica e roteiro de aceite (P7)
 
 1/11/2026. Mesmo checkout/branch/fixture. Base 09cbff50; código e documentação
 em commits próprios. Papéis inalterados. Roteiro: delivery/f9_acceptance_script.md.
@@ -25,8 +43,7 @@ em commits próprios. Papéis inalterados. Roteiro: delivery/f9_acceptance_scrip
 - Roteiro humano com as 8 tarefas da amostra, o roteiro entre telas, a conferência
   visual do Bosque e a tabela de registro.
 
-Pendente: aceite humano pelo roteiro (P7); P8 (recibo e limpeza).
-<!-- /f9-patrol-gameplay-active -->
+Próximo: aceite humano e P8, feitos no checkpoint52.
 
 ## Histórico checkpoint50 — publicar pelo roteiro, oclusão no jogo e nativos antigos (P6b–P6d)
 

@@ -99,6 +99,13 @@ peça; compactação do diário perto de 256 entradas; custo de coletar vários 
 num quadro; `RoundedResume` encadeado ao `RoundedNative`. Registrar aqui não
 ativa F10: a reserva acima continua valendo.
 
+Do aceite humano parcial de 2/11 ([resultado](../delivery/f9_acceptance_script.md)):
+pincéis de terreno aplicados por tick sob o ponteiro em vez de um traço inteiro
+num quadro; o marcador de entrada que não acompanha o relevo esculpido (ou um
+diagnóstico `socket_invalid` que nomeie e foque o marcador); as tarefas 4–9 e a
+conferência visual do roteiro. Direção humana do mesmo dia: a autoria manual fica
+em segundo plano; a autoria agêntica fluida e sem lag é a prioridade.
+
 ## Evidência e conclusão
 
 Registrar revisão, achados/reprodução, correções/transferências, matriz de

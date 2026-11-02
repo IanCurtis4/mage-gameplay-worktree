@@ -1,0 +1,42 @@
+﻿[
+    {
+        "name":  "import",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T05:03:57.9733991Z",
+        "finished_utc":  "2026-11-02T05:04:07.9387224Z",
+        "output_sha256":  "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+        "count":  0
+    },
+    {
+        "name":  "export_release",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T05:04:08.0038216Z",
+        "finished_utc":  "2026-11-02T05:04:44.5085971Z",
+        "output_sha256":  "818DEEBFDC75537201A3C0F0DD0513E07762B9C8562CCC2ECD3B47DB6F8B99AD",
+        "count":  0
+    },
+    {
+        "name":  "release",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T05:04:44.5321112Z",
+        "finished_utc":  "2026-11-02T05:04:54.9000607Z",
+        "output_sha256":  "E63578E5B3BB7FFB0FB698F7322EC8F11DB594E5B4595C8B716C71F3EF60A100",
+        "count":  6
+    },
+    {
+        "name":  "release_bosque",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T05:04:54.9934987Z",
+        "finished_utc":  "2026-11-02T05:07:02.9431285Z",
+        "output_sha256":  "6DAB184EF1E1DB45D3842845BE19235AC27B876CA4FE4DF27903FB8E403B120E",
+        "count":  8
+    }
+]

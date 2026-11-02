@@ -1,0 +1,22 @@
+﻿[
+    {
+        "name":  "import",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T05:02:06.7047509Z",
+        "finished_utc":  "2026-11-02T05:02:16.7815327Z",
+        "output_sha256":  "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+        "count":  0
+    },
+    {
+        "name":  "native_ui",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T05:02:16.8273795Z",
+        "finished_utc":  "2026-11-02T05:03:46.0991339Z",
+        "output_sha256":  "98F2CBFBD37112C61B500DC63483CA5C1025C7BA8CBFB6A69145C107FB7B8138",
+        "count":  49
+    }
+]

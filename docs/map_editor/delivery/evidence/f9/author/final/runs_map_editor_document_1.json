@@ -1,0 +1,92 @@
+﻿[
+    {
+        "name":  "import",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:25:35.2182652Z",
+        "finished_utc":  "2026-11-02T04:26:02.2780343Z",
+        "output_sha256":  "BBD5E0C71B47FA3767E57792B7CE16723BB12C5CD583F3A72B736683C8054C54",
+        "count":  0
+    },
+    {
+        "name":  "document",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:26:02.3504000Z",
+        "finished_utc":  "2026-11-02T04:26:04.4836897Z",
+        "output_sha256":  "E3540287126E64252635C94DFA87F20BF22097F03D5BBFCB15BDA94A2B5AC2D7",
+        "count":  70
+    },
+    {
+        "name":  "cli_create",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:26:04.4957933Z",
+        "finished_utc":  "2026-11-02T04:26:05.0188459Z",
+        "output_sha256":  "CFBF5FA524724C3707CDA2ED161D588DA0EED8848E0FDCC00FE809AB37093DEC",
+        "count":  null
+    },
+    {
+        "name":  "cli_validate",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:26:05.0308072Z",
+        "finished_utc":  "2026-11-02T04:26:05.4340165Z",
+        "output_sha256":  "9D428709D2E92211DCE194EA91EF1622AC442D0689DEE162FD582BEF943834AB",
+        "count":  null
+    },
+    {
+        "name":  "cli_copy",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:26:05.4437192Z",
+        "finished_utc":  "2026-11-02T04:26:05.8485929Z",
+        "output_sha256":  "CFBF5FA524724C3707CDA2ED161D588DA0EED8848E0FDCC00FE809AB37093DEC",
+        "count":  null
+    },
+    {
+        "name":  "interruption",
+        "ok":  true,
+        "exit_code":  -1,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:26:05.8580566Z",
+        "finished_utc":  "2026-11-02T04:26:06.3126484Z",
+        "output_sha256":  "F7209365324E35083B190A4AAA366ECC93BB5851D0FC6B1428FDD5AD08C52C5F",
+        "count":  null
+    },
+    {
+        "name":  "restart_recover",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:26:06.3228520Z",
+        "finished_utc":  "2026-11-02T04:26:06.7276615Z",
+        "output_sha256":  "C4F340B9CC524A587506AE3A88E601E61E48FD860096D970B8A4F3501A74F4E5",
+        "count":  null
+    },
+    {
+        "name":  "restart_pending",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:26:06.7366625Z",
+        "finished_utc":  "2026-11-02T04:26:07.1880535Z",
+        "output_sha256":  "C4F340B9CC524A587506AE3A88E601E61E48FD860096D970B8A4F3501A74F4E5",
+        "count":  null
+    },
+    {
+        "name":  "headless_ui",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:26:07.2054940Z",
+        "finished_utc":  "2026-11-02T04:26:48.8359477Z",
+        "output_sha256":  "5BFFA95A5AE95202E69A88D73D202BEE10F777B2EE7A9A116E7AA4A226784735",
+        "count":  40
+    }
+]

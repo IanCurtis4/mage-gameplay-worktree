@@ -1,0 +1,62 @@
+﻿[
+    {
+        "name":  "import",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:32:06.8118246Z",
+        "finished_utc":  "2026-11-02T04:32:18.7051805Z",
+        "output_sha256":  "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+        "count":  0
+    },
+    {
+        "name":  "composition",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:32:18.7996884Z",
+        "finished_utc":  "2026-11-02T04:32:31.4070952Z",
+        "output_sha256":  "08BD4B41A1EE7F9D9ACD3B0BC048970174DB26A908D6698184722533ABA98190",
+        "count":  63
+    },
+    {
+        "name":  "cli_a",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:32:31.4526253Z",
+        "finished_utc":  "2026-11-02T04:32:36.3594235Z",
+        "output_sha256":  "6690463C2F474BBE2B6FE55FF3EBF39907F39E441084F14351A44A632344EE62",
+        "count":  null
+    },
+    {
+        "name":  "cli_b",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:32:36.3689032Z",
+        "finished_utc":  "2026-11-02T04:32:41.4988355Z",
+        "output_sha256":  "F6F3E5BBC906975EFDB63B15E93E0E9106D834F5D6C8761344B513D2C4E0C383",
+        "count":  null
+    },
+    {
+        "name":  "document_regression",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:32:41.5080786Z",
+        "finished_utc":  "2026-11-02T04:32:42.9916016Z",
+        "output_sha256":  "E3540287126E64252635C94DFA87F20BF22097F03D5BBFCB15BDA94A2B5AC2D7",
+        "count":  70
+    },
+    {
+        "name":  "native_ui",
+        "ok":  false,
+        "exit_code":  1,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:32:43.0157786Z",
+        "finished_utc":  "2026-11-02T04:36:14.7448988Z",
+        "output_sha256":  "83B18481F68C848F9F3E30EB0B6AAA7CA61FFD4EDA0A213FEB07A14CFDE38701",
+        "count":  24
+    }
+]

@@ -1,0 +1,92 @@
+﻿[
+    {
+        "name":  "import",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:53:57.0566342Z",
+        "finished_utc":  "2026-11-02T04:54:08.3609943Z",
+        "output_sha256":  "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+        "count":  0
+    },
+    {
+        "name":  "exchange",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:54:08.3859779Z",
+        "finished_utc":  "2026-11-02T04:54:32.7512959Z",
+        "output_sha256":  "A998B74C840B1C7E41E6D99306803F1E1AE4B7114C1F75AC96C29F46F752D149",
+        "count":  113
+    },
+    {
+        "name":  "cli_a",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:54:32.7648298Z",
+        "finished_utc":  "2026-11-02T04:54:38.9947164Z",
+        "output_sha256":  "3E958797DB606E4825189B7DED64E7317C1D0F3C5568D10B51D26B4A53733452",
+        "count":  0
+    },
+    {
+        "name":  "cli_b",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:54:39.0120432Z",
+        "finished_utc":  "2026-11-02T04:54:44.6153025Z",
+        "output_sha256":  "3E958797DB606E4825189B7DED64E7317C1D0F3C5568D10B51D26B4A53733452",
+        "count":  0
+    },
+    {
+        "name":  "cli_export",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:54:44.6335021Z",
+        "finished_utc":  "2026-11-02T04:54:50.2786906Z",
+        "output_sha256":  "247695CB945CE815609E76E517A4213B44C547E3B930781E43A9F5A544388AB8",
+        "count":  0
+    },
+    {
+        "name":  "cli_propose",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:54:50.2859069Z",
+        "finished_utc":  "2026-11-02T04:54:55.7696994Z",
+        "output_sha256":  "3667EDB7BADEC43165C677649483916D8D4DA662D59BA6AC494329AD4C2DC522",
+        "count":  0
+    },
+    {
+        "name":  "cli_invalid_export",
+        "ok":  true,
+        "exit_code":  1,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:54:55.7828681Z",
+        "finished_utc":  "2026-11-02T04:55:01.1586859Z",
+        "output_sha256":  "01EF864CC9A9A86AE839A07DA8FC5B97D59A52C053215937439BE22F17027675",
+        "count":  0
+    },
+    {
+        "name":  "cli_invalid_propose",
+        "ok":  true,
+        "exit_code":  1,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:55:01.1719135Z",
+        "finished_utc":  "2026-11-02T04:55:06.8613422Z",
+        "output_sha256":  "01EF864CC9A9A86AE839A07DA8FC5B97D59A52C053215937439BE22F17027675",
+        "count":  0
+    },
+    {
+        "name":  "cli_invalid_review",
+        "ok":  true,
+        "exit_code":  1,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:55:06.8655252Z",
+        "finished_utc":  "2026-11-02T04:55:12.2366490Z",
+        "output_sha256":  "01EF864CC9A9A86AE839A07DA8FC5B97D59A52C053215937439BE22F17027675",
+        "count":  0
+    }
+]

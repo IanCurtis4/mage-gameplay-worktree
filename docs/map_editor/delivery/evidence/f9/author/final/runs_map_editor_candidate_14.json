@@ -1,0 +1,92 @@
+﻿[
+    {
+        "name":  "import",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:58:11.0004253Z",
+        "finished_utc":  "2026-11-02T04:58:21.7132146Z",
+        "output_sha256":  "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+        "count":  0
+    },
+    {
+        "name":  "candidate",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:58:21.7445329Z",
+        "finished_utc":  "2026-11-02T04:58:58.2375120Z",
+        "output_sha256":  "F2989A4A0F2AD73BFE42C380C60B27E2F315615C873D3E20E6C6BECF3326C79F",
+        "count":  53
+    },
+    {
+        "name":  "document",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:58:58.2511762Z",
+        "finished_utc":  "2026-11-02T04:58:59.7345719Z",
+        "output_sha256":  "E3540287126E64252635C94DFA87F20BF22097F03D5BBFCB15BDA94A2B5AC2D7",
+        "count":  70
+    },
+    {
+        "name":  "terrain",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:58:59.7387282Z",
+        "finished_utc":  "2026-11-02T04:59:09.1850932Z",
+        "output_sha256":  "7CE2DDC9F12AD3D1951D0622241CB24D252330F4A9C9C358F5DF3C2D831A35DC",
+        "count":  102
+    },
+    {
+        "name":  "composition",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:59:09.1941445Z",
+        "finished_utc":  "2026-11-02T04:59:21.6005968Z",
+        "output_sha256":  "07427E87EDDE2DA1990082DA02123F1CDB27CF893D1E9C67C9B4D8E55967BBED",
+        "count":  63
+    },
+    {
+        "name":  "population",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:59:21.6113256Z",
+        "finished_utc":  "2026-11-02T05:00:17.2104705Z",
+        "output_sha256":  "ACDAFEFE42A60FF200D60A5651A4A2E16015CD0A9CC783DAA117B4BDE905F7C1",
+        "count":  91
+    },
+    {
+        "name":  "patrol",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T05:00:17.2200273Z",
+        "finished_utc":  "2026-11-02T05:01:03.2950509Z",
+        "output_sha256":  "468A988DB59387B89157C703D02231D5120C99AE8A440E447B56534776F9D191",
+        "count":  58
+    },
+    {
+        "name":  "generation",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T05:01:03.2988814Z",
+        "finished_utc":  "2026-11-02T05:01:32.0816621Z",
+        "output_sha256":  "5683E98544532A10735DF958F3976719F8D5437591B6B225E2ED41CEEDA28E95",
+        "count":  89
+    },
+    {
+        "name":  "exchange",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T05:01:32.0862203Z",
+        "finished_utc":  "2026-11-02T05:01:56.1440381Z",
+        "output_sha256":  "A998B74C840B1C7E41E6D99306803F1E1AE4B7114C1F75AC96C29F46F752D149",
+        "count":  113
+    }
+]

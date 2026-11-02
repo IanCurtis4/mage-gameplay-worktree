@@ -1,0 +1,12 @@
+﻿[
+    {
+        "name":  null,
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:01:07.5015320Z",
+        "finished_utc":  "2026-11-02T04:01:22.7602488Z",
+        "output_sha256":  null,
+        "count":  27
+    }
+]

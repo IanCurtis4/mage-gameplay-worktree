@@ -3599,6 +3599,12 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 file (checkpoint51 final area)",
       "base_sha256": "d6dc30fd9c1efb0313b2408e36747ed17e39fbee2e857ff25643a7455adc36dd"
+    },
+    {
+      "path": "docs/map_editor/contracts/f10_final_review.md",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer for checkpoint52 (delivery); base is HEAD blob",
+      "base_sha256": "159018ba9a051f68c57f49dd4e57b6557a137648f90bfd113ed72835ab889fb8"
     }
   ],
   "read_only_shared": [
@@ -5230,6 +5236,26 @@
         "acceptance_copy": "abrir_editor_aceite.ps1 -SoPreparar: 605 MB copy in 15 s; headless editor open with the map editor plugin: exit 0, no errors (job 230)"
       },
       "limits": "visual and usability acceptance is human and still pending; the species draw check covers the canonical hash draw, the Bosque plan shows both species realized"
+    },
+    "delivery_p8": {
+      "state": "delivered_technically_human_acceptance_partial",
+      "base": "5baf6293",
+      "human_report": "02/11: acceptance tasks 1 accepted, 2 accepted with reservations (slow brushes applying the whole stroke in one frame), 3 not accepted (socket_invalid when moving a rock); 4-9 not run; manual authoring is secondary for now, agentic authoring fluid and without lag is the priority; continue the list",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "contract": "docs/map_editor/delivery/f9.md (delivery receipt)",
+      "files": [
+        "docs/map_editor/delivery/f9.md",
+        "docs/map_editor/delivery/f9_acceptance_script.md",
+        "docs/map_editor/contracts/f10_final_review.md"
+      ],
+      "test_files": [
+        "tests/map_editor_population_ui_test.gd"
+      ],
+      "scope": "human acceptance recorded; manual-authoring findings moved to F10; final regression (73/73 F9 stages, M1-M8 runners); delivery receipt; cleanup of this session scratch",
+      "validation": {
+        "final_regression_job_232": "73/73 F9 stages PASS; M1, M2(+native), M3, M4, M5(+native), M6(+native), M7(+native), M8 Core/Native/Release PASS; M3 native failed once under load and passed isolated twice (job 234); M4 native draft test fixed and PASS (job 236)"
+      },
+      "limits": "merge to master needs explicit human decision; F10 items listed in the closure matrix"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

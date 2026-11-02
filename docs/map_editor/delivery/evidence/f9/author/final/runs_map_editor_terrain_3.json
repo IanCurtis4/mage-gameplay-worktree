@@ -1,0 +1,92 @@
+﻿[
+    {
+        "name":  "import",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:28:41.8170969Z",
+        "finished_utc":  "2026-11-02T04:28:52.9283251Z",
+        "output_sha256":  "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+        "count":  0
+    },
+    {
+        "name":  "terrain",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:28:52.9983861Z",
+        "finished_utc":  "2026-11-02T04:29:03.2369691Z",
+        "output_sha256":  "BF3B3CB24A45413BD5F9961434A1D3DF956C3D0FC2BBF541583100426AC57024",
+        "count":  102
+    },
+    {
+        "name":  "cli_a",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:29:03.2496794Z",
+        "finished_utc":  "2026-11-02T04:29:07.9765090Z",
+        "output_sha256":  "046B57CC539DF1F3FD6E3E8F6C596398FDF28ECB5C2B7609729944D828F8BC4C",
+        "count":  null
+    },
+    {
+        "name":  "cli_b",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:29:07.9809721Z",
+        "finished_utc":  "2026-11-02T04:29:12.8225861Z",
+        "output_sha256":  "046B57CC539DF1F3FD6E3E8F6C596398FDF28ECB5C2B7609729944D828F8BC4C",
+        "count":  null
+    },
+    {
+        "name":  "terrain_scale",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:29:12.8276858Z",
+        "finished_utc":  "2026-11-02T04:30:17.7398899Z",
+        "output_sha256":  "A997E0FDAE472795D47AF10C24FF8E13FDEEBD8E53A372F589493DF482ABCECA",
+        "count":  46
+    },
+    {
+        "name":  "large_cli_a",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:30:17.7547869Z",
+        "finished_utc":  "2026-11-02T04:30:24.2016813Z",
+        "output_sha256":  "6F49D06B5EC6B4E3245625DE4F82E08994DE97F293727537A35A4DD7FFF4EFB2",
+        "count":  null
+    },
+    {
+        "name":  "large_cli_b",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:30:24.2049714Z",
+        "finished_utc":  "2026-11-02T04:30:30.6006749Z",
+        "output_sha256":  "6F49D06B5EC6B4E3245625DE4F82E08994DE97F293727537A35A4DD7FFF4EFB2",
+        "count":  null
+    },
+    {
+        "name":  "document_regression",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:30:30.6039456Z",
+        "finished_utc":  "2026-11-02T04:30:32.0202465Z",
+        "output_sha256":  "E3540287126E64252635C94DFA87F20BF22097F03D5BBFCB15BDA94A2B5AC2D7",
+        "count":  70
+    },
+    {
+        "name":  "native_ui",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:30:32.0386858Z",
+        "finished_utc":  "2026-11-02T04:31:22.5990375Z",
+        "output_sha256":  "1647BDC2CC57BB12FFD57A67F12CA2AFDC4BC0F33356E8D0FCEDEC7CED0516B6",
+        "count":  45
+    }
+]

@@ -289,3 +289,7 @@ P6d M3Native24 e nativos antigos de M2/M4/M5/M8 migrados. P6 fechado.
 Checkpoint51 (1/11, Sol/Astra Opus): P7 auditoria técnica da área final
 (AreaAcceptance13, AreaVariants6), cópia de aceite e roteiro humano
 (delivery/f9_acceptance_script.md). Aceite humano pendente.
+
+Checkpoint52 (2/11, Sol/Astra Opus): aceite humano parcial (1 aceita, 2 com
+ressalvas, 3 não aceita, 4–9 não executadas); autoria manual em segundo plano por
+decisão humana, pendências em F10; recibo de entrega, regressão final e limpeza.

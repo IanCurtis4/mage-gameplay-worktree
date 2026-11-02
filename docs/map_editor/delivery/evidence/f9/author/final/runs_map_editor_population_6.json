@@ -1,0 +1,52 @@
+﻿[
+    {
+        "name":  "import",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:36:17.2797969Z",
+        "finished_utc":  "2026-11-02T04:36:29.1786741Z",
+        "output_sha256":  "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+        "count":  0
+    },
+    {
+        "name":  "population",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:36:29.2660074Z",
+        "finished_utc":  "2026-11-02T04:37:27.8538391Z",
+        "output_sha256":  "F281F20ACB107F4FE6935BEC46A4885887211D15F6EEFF0373D50EE5D4C6B8CD",
+        "count":  91
+    },
+    {
+        "name":  "cli_a",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:37:27.8722668Z",
+        "finished_utc":  "2026-11-02T04:37:35.9486195Z",
+        "output_sha256":  "472153D58913096B035A19C0F6A378B56020B3D1A44CAB6668043B61388B17CB",
+        "count":  null
+    },
+    {
+        "name":  "cli_b",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:37:35.9592526Z",
+        "finished_utc":  "2026-11-02T04:37:43.7559406Z",
+        "output_sha256":  "472153D58913096B035A19C0F6A378B56020B3D1A44CAB6668043B61388B17CB",
+        "count":  null
+    },
+    {
+        "name":  "document_regression",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:37:43.7634154Z",
+        "finished_utc":  "2026-11-02T04:37:45.2719188Z",
+        "output_sha256":  "E3540287126E64252635C94DFA87F20BF22097F03D5BBFCB15BDA94A2B5AC2D7",
+        "count":  70
+    }
+]

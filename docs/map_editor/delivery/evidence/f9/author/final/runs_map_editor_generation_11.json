@@ -1,0 +1,52 @@
+﻿[
+    {
+        "name":  "import",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:52:31.7240666Z",
+        "finished_utc":  "2026-11-02T04:52:42.1879159Z",
+        "output_sha256":  "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+        "count":  0
+    },
+    {
+        "name":  "generation",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:52:42.2343579Z",
+        "finished_utc":  "2026-11-02T04:53:11.8616334Z",
+        "output_sha256":  "5683E98544532A10735DF958F3976719F8D5437591B6B225E2ED41CEEDA28E95",
+        "count":  89
+    },
+    {
+        "name":  "cli_a",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:53:11.8665134Z",
+        "finished_utc":  "2026-11-02T04:53:17.2354183Z",
+        "output_sha256":  "A9234AAB4EA6793E368BBBA74957E3D72AFFC1CA9DAAD54469F1E98EC9E02A1D",
+        "count":  0
+    },
+    {
+        "name":  "cli_b",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:53:17.2398201Z",
+        "finished_utc":  "2026-11-02T04:53:22.6121471Z",
+        "output_sha256":  "A9234AAB4EA6793E368BBBA74957E3D72AFFC1CA9DAAD54469F1E98EC9E02A1D",
+        "count":  0
+    },
+    {
+        "name":  "native_ui",
+        "ok":  true,
+        "exit_code":  0,
+        "timed_out":  false,
+        "started_utc":  "2026-11-02T04:53:22.6375304Z",
+        "finished_utc":  "2026-11-02T04:53:45.2538781Z",
+        "output_sha256":  "E8EA329DCD127D9172ACEBB31C7267329DF617DCCBF7511D83B2D35284C0AC1D",
+        "count":  28
+    }
+]
