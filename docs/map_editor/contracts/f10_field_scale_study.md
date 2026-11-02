@@ -84,7 +84,8 @@ Todos os oito têm 400×400 células.
    Entradas de dungeon e NPCs ficam em marcos (a aldeia orc de `gef_fild10`; a
    mina, a Kafra e a villa de `mjolnir_02`).
 8. **População com uma espécie dominante.** De 150 a 320 monstros por mapa: uma
-   espécie fica com 60% a 80% do total, há de 2 a 4 secundárias e de 1 a 3
+   espécie fica com 64% a 73% do total (o prado de `prt_fild08` é a exceção,
+   repartido entre Poring, Lunatic e Fabre), há de 2 a 4 secundárias e de 1 a 3
    chefes ou variantes raras ("Elusive", "Ringleader", MVP). A densidade é de
    cerca de 1 monstro a cada 300–600 células andáveis.
 9. **Altura como borda e como rota.** Terraços e paredões separam regiões. As
@@ -111,7 +112,7 @@ em pixels²" dos campos do RO, ou seja, a mesma área em telas.
   42 s a 220 u/s são ~9.300 unidades.
 - A faixa de **9.000 a 11.000 unidades de lado** (de 40 a 50 s em linha reta,
   de 50 a 65 s pela rota) atende às duas leituras. É de 7 a 8,6 vezes o lado da
-  peça atual, de 50 a 75 vezes a área, e de 37 a 47 vezes a área do Bosque
+  peça atual, de 50 a 75 vezes a área, e de 25 a 37 vezes a área do Bosque
   inteiro.
 
 **O formato já comporta isso numa peça só.**
@@ -123,9 +124,9 @@ em pixels²" dos campos do RO, ou seja, a mesma área em telas.
 
 **O que falta medir** (orçamento de F10):
 
-- No Bosque, a compilação do mapa leva ~28 s e o `prepare()` da certificação
-  leva ~80 s, com 800 quads de terreno.
-- Num campo com 30–40 vezes essa área, a compilação, a certificação, a
+- No Bosque (duas peças de 1280), a compilação do mapa leva ~28 s e o
+  `prepare()` da certificação leva ~80 s.
+- Num campo com 25 a 37 vezes essa área, a compilação, a certificação, a
   navegação, o desenho no jogo e o diário precisam ser por região, incrementais
   e em segundo plano. Sem isso, a autoria agêntica não fica fluida.
 - Os tetos atuais vão restringir o conteúdo:
