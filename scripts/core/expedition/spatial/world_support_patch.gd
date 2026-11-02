@@ -1,12 +1,17 @@
 extends RefCounted
 ## Exact local support union. Triangle seams are openings, not clearance walls.
 const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
+const HeightGrid = preload("res://scripts/core/expedition/spatial/world_height_grid.gd")
 const EPS := 0.00001
 
 static func index(stage: Dictionary) -> Dictionary:
 	var cells: Dictionary = {}; var ports: Dictionary = {}; var by_surface: Dictionary = {}; var links: Dictionary = {}; var transitions: Dictionary = {}
+	# F10 H2: stretch cells keep a grid view; their steep triangles are closed
+	# boundaries inside the outline (see _closed).
+	var grids: Dictionary = {}
 	for cell: Dictionary in stage.get("surfaces",[]):
 		cells[cell.surface_id] = cell; by_surface[cell.surface_id] = []
+		if cell.has("height_grid"): grids[cell.surface_id] = HeightGrid.view(cell.height_grid)
 	for port: Dictionary in stage.get("connectors",[]):
 		ports[port.connector_id] = port
 		if by_surface.has(port.surface_id): by_surface[port.surface_id].append(port)
@@ -47,7 +52,7 @@ static func index(stage: Dictionary) -> Dictionary:
 			edges.append({"a":a,"b":b,"ax":ax,"az":az,"length":length,"openings":openings})
 		outlines[id] = edges
 		orientations[id] = -signf(Kernel._plane(cell.vertices)[1])
-	return {"cells":cells,"ports":by_surface,"endpoints":ports,"transitions":transitions,"outlines":outlines,"orientations":orientations}
+	return {"cells":cells,"ports":by_surface,"endpoints":ports,"transitions":transitions,"outlines":outlines,"orientations":orientations,"grids":grids}
 
 static func on_opening(surface_id: String, connector_id: String, point: Vector3, data: Dictionary) -> bool:
 	for edge: Dictionary in data.outlines.get(surface_id,[]):
@@ -89,9 +94,10 @@ static func _disk_within(id: String, point: Vector2, radius: float, data: Dictio
 static func members(id: String, from: Vector2, to: Vector2, radius: float, height: float, data: Dictionary) -> Dictionary:
 	return _patch(id,from,to,radius,height,data)
 
-static func _closed(patch: Dictionary, height: float, data: Dictionary) -> Array:
+static func _closed(patch: Dictionary, height: float, data: Dictionary, low: Vector2 = Vector2(-INF,-INF), high: Vector2 = Vector2(INF,INF)) -> Array:
 	var result: Array = []
 	for id: String in patch:
+		if data.has("grids") and data.grids.has(id): result.append_array(HeightGrid.steep_edges_in(data.grids[id],low,high))
 		for edge: Dictionary in data.outlines[id]:
 			var at := 0.0
 			for opening: Dictionary in edge.openings:
@@ -107,7 +113,7 @@ static func contains(cell: Dictionary, position: Vector3, radius: float, height:
 	var point := Vector2(position.x,position.z)
 	var patch := _patch(cell.surface_id,point,point,radius,height,data)
 	var clearance := maxf(0,radius-EPS)
-	for edge: Array in _closed(patch,height,data):
+	for edge: Array in _closed(patch,height,data,point-Vector2(radius,radius),point+Vector2(radius,radius)):
 		if point_distance_squared(point,edge[0],edge[1]) < clearance*clearance: return false
 	return true
 
@@ -121,10 +127,12 @@ static func _fraction_prepared(cell: Dictionary, from: Vector3, to: Vector3, pro
 	var a := Vector2(from.x,from.z); var b := Vector2(to.x,to.z)
 	var radius := float(profile.radius); var height := float(profile.height)
 	if float(cell.headroom)+EPS < height: return 0.0
-	if _disk_within(cell.surface_id,a,radius,data) and _disk_within(cell.surface_id,b,radius,data): return 1.0
+	var gridded: bool = data.has("grids") and data.grids.has(cell.surface_id)
+	if _disk_within(cell.surface_id,a,radius,data) and _disk_within(cell.surface_id,b,radius,data) and (not gridded or HeightGrid.segment_clear(data.grids[cell.surface_id],a,b,radius,true)): return 1.0
 	var patch := members if not members.is_empty() else _patch(cell.surface_id,a,b,radius,height,data)
 	var clearance := maxf(0,radius-EPS); var first := 1.0
-	for edge: Array in _closed(patch,height,data):
+	var reach := Vector2(radius,radius)
+	for edge: Array in _closed(patch,height,data,Vector2(minf(a.x,b.x),minf(a.y,b.y))-reach,Vector2(maxf(a.x,b.x),maxf(a.y,b.y))+reach):
 		if segment_distance_squared(a,b,edge[0],edge[1]) >= clearance*clearance: continue
 		first = minf(first,_capsule_fraction(a,b,edge[0],edge[1],clearance))
 	return first

@@ -17,9 +17,32 @@ static func prepare(world: WorldGeometry, anchor: ExpeditionWorldPoint, polygon:
 	if not valid["ok"]: return valid
 	var patches: Array[Dictionary] = []
 	var covered := 0.0
+	var pieces: Array = []
 	for cell: Dictionary in surfaces:
-		var outline := PackedVector2Array()
-		for vertex: Vector3 in cell["vertices"]: outline.append(Vector2(vertex.x,vertex.z))
+		if not cell.has("height_grid"):
+			var outline := PackedVector2Array()
+			for vertex: Vector3 in cell["vertices"]: outline.append(Vector2(vertex.x,vertex.z))
+			pieces.append([cell,outline,cell["vertices"]])
+			continue
+		# F10 H2: a stretch contributes its walkable triangles under the footprint;
+		# steep ones are left uncovered, so the region is refused as unsupported.
+		var view := WorldGeometry.HeightGrid.view(cell.height_grid)
+		var low := Vector2(INF,INF); var high := Vector2(-INF,-INF)
+		for point: Vector2 in polygon: low = Vector2(minf(low.x,point.x),minf(low.y,point.y)); high = Vector2(maxf(high.x,point.x),maxf(high.y,point.y))
+		var box := WorldGeometry.HeightGrid.bounds(view)
+		if high.x < box.position.x or high.y < box.position.y or low.x > box.end.x or low.y > box.end.y: continue
+		var s := float(view.s)
+		var i0 := clampi(int(floor((low.x-float(view.ox))/s)),0,int(view.qx)-1); var i1 := clampi(int(floor((high.x-float(view.ox))/s)),0,int(view.qx)-1)
+		var j0 := clampi(int(floor((low.y-float(view.oz))/s)),0,int(view.qz)-1); var j1 := clampi(int(floor((high.y-float(view.oz))/s)),0,int(view.qz)-1)
+		for j: int in range(j0,j1+1):
+			for i: int in range(i0,i1+1):
+				for k: int in 2:
+					var t := (j*int(view.qx)+i)*2+k
+					if not WorldGeometry.HeightGrid.triangle_walkable(view,t): continue
+					var triangle := WorldGeometry.HeightGrid.triangle_vertices(view,t)
+					pieces.append([cell,PackedVector2Array([Vector2(triangle[0].x,triangle[0].z),Vector2(triangle[1].x,triangle[1].z),Vector2(triangle[2].x,triangle[2].z)]),triangle])
+	for piece: Array in pieces:
+		var cell: Dictionary = piece[0]; var outline: PackedVector2Array = piece[1]; var plane: Array = piece[2]
 		for intersection: PackedVector2Array in Geometry2D.intersect_polygons(polygon,outline):
 			var size := area(intersection)
 			if size <= EPS: continue
@@ -34,8 +57,8 @@ static func prepare(world: WorldGeometry, anchor: ExpeditionWorldPoint, polygon:
 					var reached := world.ground_line_point_at(anchor,point,profile,revision)
 					var expected := WorldGeometry.Kernel.support_y(cell,Vector3(point.x,0,point.y))
 					if not reached["ok"] or Vector3(reached["data"]["point"]["position"]).distance_to(expected) > WorldGeometry.point_tolerance(anchor.position,expected): return WorldSkillCast.failure(&"unsupported_region")
-			var origin: Vector3 = cell["vertices"][0]
-			var normal := WorldGeometry.Kernel.plane_normal(cell["vertices"])
+			var origin: Vector3 = plane[0]
+			var normal := WorldGeometry.Kernel.plane_normal(plane)
 			var patch := {"surface_id":cell["surface_id"],"polygon":intersection,"origin":origin,"normal":normal}
 			for volume: AABB in volumes:
 				var rectangle := PackedVector2Array([Vector2(volume.position.x,volume.position.z),Vector2(volume.end.x,volume.position.z),Vector2(volume.end.x,volume.end.z),Vector2(volume.position.x,volume.end.z)])

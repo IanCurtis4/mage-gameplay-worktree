@@ -5,7 +5,6 @@ extends RefCounted
 ## navigation state. The triangulation is the renderer's and the compiler's: each
 ## quad (a,b,c,d) = (x,z),(x+1,z),(x+1,z+1),(x,z+1) is split into (a,b,c) and
 ## (a,c,d). Steep triangles are holes of the surface, never ground.
-const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
 const EPS := 0.00001
 const WALK_NORMAL_Y := 0.7071067811865476
 const MAX_SAMPLES := 257
@@ -37,7 +36,7 @@ static func prepare(grid: Dictionary) -> Dictionary:
 	var walk := PackedByteArray(); walk.resize((columns-1)*(rows-1)*2)
 	var count := 0
 	for t: int in walk.size():
-		var flag := 1 if absf(Kernel.plane_normal(triangle_vertices(prepared,t)).y) >= WALK_NORMAL_Y-EPS else 0
+		var flag := 1 if _walkable_vertices(triangle_vertices(prepared,t)) else 0
 		walk[t] = flag; count += flag
 	prepared["walk"] = walk; prepared["walkable_count"] = count
 	return prepared
@@ -54,7 +53,42 @@ static func triangle_vertices(prepared: Dictionary, t: int) -> Array:
 	return [point(prepared,x,z),point(prepared,x+1,z+1),point(prepared,x,z+1)]
 
 static func triangle_walkable(prepared: Dictionary, t: int) -> bool:
-	return t >= 0 and t < prepared.walk.size() and prepared.walk[t] == 1
+	if t < 0 or t >= int(prepared.qx)*int(prepared.qz)*2: return false
+	if prepared.has("walk"): return prepared.walk[t] == 1
+	return _walkable_vertices(triangle_vertices(prepared,t))
+
+## The planar kernel's normal rule (Vector3 arithmetic, like
+## ExpeditionFixtureGeometry.plane_normal and the compiler's topology).
+static func _walkable_vertices(vertices: Array) -> bool:
+	var normal := (Vector3(vertices[1])-Vector3(vertices[0])).cross(Vector3(vertices[2])-Vector3(vertices[0])).normalized()
+	return absf(normal.y) >= WALK_NORMAL_Y-EPS
+
+## O(1) view over a grid that was already validated (a stage surface): no copy
+## and no mask; walkability is evaluated per triangle on demand.
+static func view(grid: Dictionary) -> Dictionary:
+	var columns := int(grid.columns); var rows := int(grid.rows)
+	return {"ox":float(grid.origin_xz[0]),"oz":float(grid.origin_xz[1]),"s":float(grid.sample_spacing),"columns":columns,"rows":rows,"qx":columns-1,"qz":rows-1,"h":grid.heights}
+
+static func walkable_count(prepared: Dictionary) -> int:
+	var count := 0
+	for t: int in int(prepared.qx)*int(prepared.qz)*2:
+		if triangle_walkable(prepared,t): count += 1
+	return count
+
+## Outline of the stretch in the kernel's vertex order, at the exact corner heights.
+static func corners(prepared: Dictionary) -> Array:
+	return [point(prepared,0,0),point(prepared,int(prepared.qx),0),point(prepared,int(prepared.qx),int(prepared.qz)),point(prepared,0,int(prepared.qz))]
+
+static func height_range(prepared: Dictionary) -> Vector2:
+	var low := INF; var high := -INF
+	for value: Variant in prepared.h: low = minf(low,float(value)); high = maxf(high,float(value))
+	return Vector2(low,high)
+
+## Upward unit normal of one triangle.
+static func triangle_normal(prepared: Dictionary, t: int) -> Vector3:
+	var vertices := triangle_vertices(prepared,t)
+	var normal := (Vector3(vertices[1])-Vector3(vertices[0])).cross(Vector3(vertices[2])-Vector3(vertices[0])).normalized()
+	return normal if normal.y >= 0.0 else -normal
 
 ## Triangle under (x, z), or -1 outside the stretch. Points on a shared edge
 ## belong to the lower quad index and to (a,b,c) on the diagonal; both agree on y.
@@ -69,6 +103,18 @@ static func triangle_at(prepared: Dictionary, x: float, z: float) -> int:
 static func support_y(prepared: Dictionary, x: float, z: float) -> float:
 	var t := triangle_at(prepared,x,z)
 	if t < 0: return NAN
+	return support_on(prepared,t,x,z)
+
+## The stretch's support extended past its outline by clamping to the nearest
+## point inside, as a planar cell extends its plane (seams query just outside).
+static func support_y_clamped(prepared: Dictionary, x: float, z: float) -> float:
+	var box := bounds(prepared)
+	var cx := clampf(x,box.position.x,box.end.x); var cz := clampf(z,box.position.y,box.end.y)
+	var t := triangle_at(prepared,cx,cz)
+	return support_on(prepared,t,x,z)
+
+## The plane of triangle `t` evaluated at (x, z), in f64 from its f32 vertices.
+static func support_on(prepared: Dictionary, t: int, x: float, z: float) -> float:
 	var vertices := triangle_vertices(prepared,t)
 	var a: Vector3 = vertices[0]; var b: Vector3 = vertices[1]; var c: Vector3 = vertices[2]
 	var ux := float(b.x)-float(a.x); var uy := float(b.y)-float(a.y); var uz := float(b.z)-float(a.z)
@@ -117,7 +163,7 @@ static func _steep_in(prepared: Dictionary, low: Vector2, high: Vector2) -> Arra
 		for i: int in range(i0,i1+1):
 			for k: int in 2:
 				var t := (j*int(prepared.qx)+i)*2+k
-				if prepared.walk[t] == 0: result.append(t)
+				if not triangle_walkable(prepared,t): result.append(t)
 	return result
 
 ## The body's disk at `center` lies on walkable triangles. With `inside`, the
@@ -318,3 +364,102 @@ static func _side_point(prepared: Dictionary, side: int, k: int) -> Vector3:
 		1: return point(prepared,int(prepared.qx),k)
 		2: return point(prepared,k,int(prepared.qz))
 	return point(prepared,0,k)
+
+static func _half_ulp(value: float) -> float:
+	return pow(2.0,-150.0) if absf(value) < pow(2.0,-126.0) else pow(2.0,floor(log(absf(value))/log(2.0))-24.0)
+
+## Kernel contract for a stretch cell: the point lies on the support (the same
+## perpendicular tolerance and f32 roundoff budget as a planar cell) and the
+## body's disk stays inside the stretch, on walkable triangles.
+static func contains(prepared: Dictionary, position: Vector3, radius: float = 0.0) -> bool:
+	if not position.is_finite() or not is_finite(radius) or radius < 0.0: return false
+	var t := triangle_at(prepared,position.x,position.z)
+	if t < 0: return false
+	var y := support_on(prepared,t,position.x,position.z)
+	var normal := triangle_normal(prepared,t)
+	if normal.y <= 0.0: return false
+	var distance := absf(float(position.y)-y)*float(normal.y)
+	var roundoff := absf(normal.x)*_half_ulp(position.x)+absf(normal.y)*_half_ulp(position.y)+absf(normal.z)*_half_ulp(position.z)
+	if distance > EPS+roundoff: return false
+	return disk_clear(prepared,Vector2(position.x,position.z),radius,true)
+
+## Steep-triangle edges whose quads meet [low, high]: the closed boundaries a
+## body's clearance must respect inside the stretch.
+static func steep_edges_in(prepared: Dictionary, low: Vector2, high: Vector2) -> Array:
+	var edges: Array = []
+	for t: int in _steep_in(prepared,low,high):
+		var tri := _triangle_2d(prepared,t)
+		for k: int in 3: edges.append([tri[k],tri[(k+1)%3]])
+	return edges
+
+## Sorted parameters in [0, 1] where the horizontal projection of a->b enters,
+## leaves or crosses a quad edge or diagonal of the stretch. Between two
+## consecutive values the support is one plane. Empty when it misses the stretch.
+static func crossings(prepared: Dictionary, a: Vector2, b: Vector2) -> PackedFloat64Array:
+	var box := bounds(prepared)
+	var t0 := 0.0; var t1 := 1.0
+	var d := b-a
+	for axis: int in 2:
+		var low := box.position[axis]; var high := box.end[axis]
+		var start := a[axis]; var delta := d[axis]
+		if absf(delta) < 1e-12:
+			if start < low-EPS or start > high+EPS: return PackedFloat64Array()
+			continue
+		var ta := (low-start)/delta; var tb := (high-start)/delta
+		t0 = maxf(t0,minf(ta,tb)); t1 = minf(t1,maxf(ta,tb))
+	if t0 > t1: return PackedFloat64Array()
+	var s := float(prepared.s)
+	var ua := (a.x-float(prepared.ox))/s; var va := (a.y-float(prepared.oz))/s
+	var du := d.x/s; var dv := d.y/s
+	var values: Array[float] = [t0,t1]
+	for line: Array in [[ua,du],[va,dv],[ua-va,du-dv]]:
+		var start: float = line[0]; var delta: float = line[1]
+		if absf(delta) < 1e-12: continue
+		var from := start+delta*t0; var to := start+delta*t1
+		for k: int in range(int(ceil(minf(from,to))),int(floor(maxf(from,to)))+1):
+			var t := (float(k)-start)/delta
+			if t > t0 and t < t1: values.append(t)
+	values.sort()
+	var result := PackedFloat64Array()
+	for value: float in values:
+		if result.is_empty() or value-result[result.size()-1] > 1e-12: result.append(value)
+	return result
+
+## First parameter in [0, 1] where the 3D segment goes below the stretch's
+## ground (its solid mass) by more than `tolerance`; -1 when it never does. The
+## stretch is solid below its support, steep triangles included.
+static func ground_fraction(prepared: Dictionary, from: Vector3, to: Vector3, tolerance: float = EPS) -> float:
+	var a := Vector2(from.x,from.z); var b := Vector2(to.x,to.z)
+	if a.distance_to(b) < 1e-9:
+		var y := support_y(prepared,a.x,a.y)
+		if is_nan(y): return -1.0
+		if float(from.y) < y-tolerance: return 0.0
+		if float(to.y) < y-tolerance: return clampf((float(from.y)-(y-tolerance))/(float(from.y)-float(to.y)),0.0,1.0)
+		return -1.0
+	var cuts := crossings(prepared,a,b)
+	for k: int in cuts.size()-1:
+		var ta := cuts[k]; var tb := cuts[k+1]
+		var middle := a.lerp(b,(ta+tb)*0.5)
+		var t := triangle_at(prepared,middle.x,middle.y)
+		if t < 0: continue
+		var pa := a.lerp(b,ta); var pb := a.lerp(b,tb)
+		var fa := (float(from.y)+(float(to.y)-float(from.y))*ta)-support_on(prepared,t,pa.x,pa.y)
+		var fb := (float(from.y)+(float(to.y)-float(from.y))*tb)-support_on(prepared,t,pb.x,pb.y)
+		if fa < -tolerance: return ta
+		if fb < -tolerance: return ta+(tb-ta)*(fa+tolerance)/(fa-fb)
+	return -1.0
+
+## First hit of a ray on the stretch from above. Returns {} on a miss.
+static func ray_hit(prepared: Dictionary, origin: Vector3, direction: Vector3) -> Dictionary:
+	if not origin.is_finite() or not direction.is_finite() or direction.is_zero_approx(): return {}
+	var span := height_range(prepared)
+	var box := bounds(prepared)
+	var reach := origin.distance_to(Vector3(box.get_center().x,span.x,box.get_center().y))+box.size.length()+absf(span.y-span.x)+1.0
+	var end := origin+direction.normalized()*reach*2.0
+	var fraction := ground_fraction(prepared,origin,end,0.0)
+	if fraction < 0.0: return {}
+	var hit := origin.lerp(end,fraction)
+	var t := triangle_at(prepared,hit.x,hit.z)
+	if t < 0: return {}
+	hit.y = support_on(prepared,t,hit.x,hit.z)
+	return {"position":hit,"triangle":t,"walkable":triangle_walkable(prepared,t),"normal":triangle_normal(prepared,t),"distance":origin.distance_to(hit)}

@@ -4,6 +4,7 @@ extends RefCounted
 const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
 const SolidPrism = preload("res://scripts/core/expedition/spatial/world_solid_prism.gd")
 const SupportPatch = preload("res://scripts/core/expedition/spatial/world_support_patch.gd")
+const HeightGrid = preload("res://scripts/core/expedition/spatial/world_height_grid.gd")
 const EPS := 0.00001
 const NAVIGATION_MEMO_LIMIT := 32768
 ## Cross-query memo of exact pair predicates (checkpoint35). Same keys and values
@@ -97,6 +98,7 @@ static func _stage_prisms_valid(stage: Dictionary) -> bool:
 func _supports_solid_floor(volume: AABB) -> bool:
 	var rectangle := PackedVector2Array([Vector2(volume.position.x,volume.position.z),Vector2(volume.end.x,volume.position.z),Vector2(volume.end.x,volume.end.z),Vector2(volume.position.x,volume.end.z)])
 	for cell: Dictionary in _stage["surfaces"]:
+		if cell.has("height_grid"): continue
 		var polygon := PackedVector2Array()
 		var horizontal := true
 		for vertex: Vector3 in cell["vertices"]:
@@ -121,6 +123,13 @@ func _ensure_support_index() -> void:
 		masses.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.volume_id < b.volume_id)
 		for prism: Dictionary in masses: _support_index.solid_prisms.append(SolidPrism.prepare(prism))
 		_support_index["mass_broadphase"] = SolidPrism.spatial_index(_support_index.solid_prisms)
+		# F10 H2: a stretch is solid below its support; boxes are its broadphase.
+		var grid_boxes: Dictionary = {}
+		for id: String in _support_index.grids:
+			var view: Dictionary = _support_index.grids[id]
+			var outline := HeightGrid.bounds(view); var span := HeightGrid.height_range(view)
+			grid_boxes[id] = AABB(Vector3(outline.position.x,span.x-4.0,outline.position.y),Vector3(outline.size.x,span.y-span.x+4.0,outline.size.y))
+		_support_index["grid_boxes"] = grid_boxes
 
 func _cell(id: String) -> Dictionary:
 	_ensure_support_index()
@@ -848,6 +857,19 @@ func _sweep(from: Vector3, to: Vector3, collider: Dictionary, revision: int, mas
 		var hit := SolidPrism.sweep(from,to,prism,float(collider["radius"]),float(collider["height"]))
 		if hit.is_empty() or float(hit["fraction"]) > fraction: continue
 		fraction = hit["fraction"]; normal = hit["normal"]; hit_id = "terrain/"+str(prism.volume_id)
+	# F10 H2: stretch ground. The collider's centre line meets the support; the
+	# body's radius on a stretch is enforced by its support, not by the mass.
+	var grid_boxes: Dictionary = _support_index.grid_boxes if _support_index.has("grid_boxes") else {}
+	for id: String in grid_boxes:
+		if excluded_supports.has(id): continue
+		if Kernel.sweep_box(from,to,grid_boxes[id],0.0,0.0,false).is_empty(): continue
+		var view: Dictionary = _support_index.grids[id]
+		var at := HeightGrid.ground_fraction(view,from,to,EPS)
+		if at < 0.0 or at > fraction: continue
+		fraction = at; hit_id = "terrain/grid/"+id
+		var touched := from.lerp(to,at)
+		var triangle := HeightGrid.triangle_at(view,touched.x,touched.z)
+		normal = HeightGrid.triangle_normal(view,triangle) if triangle >= 0 else Vector3.UP
 	if mask == &"all":
 		var segment_ids: Array = _segments.keys(); segment_ids.sort()
 		for id: String in segment_ids:
@@ -900,6 +922,9 @@ func query_attack(shape: Dictionary, source: ExpeditionWorldPoint, target: Exped
 		var excluded: Dictionary = {}
 		for prism: Dictionary in _support_index.get("solid_prisms",[]):
 			if local.has(prism.support_surface_id) and SolidPrism.above_cap(prism,source.position,target.position): excluded[prism.support_surface_id] = true
+		if _support_index.has("grids"):
+			for id: String in local:
+				if _support_index.grids.has(id): excluded[id] = true
 		var check := _sweep(source.position,target.position,body,revision,&"supporting_slabs",excluded)
 		los_ok = not check["data"]["hit"]
 	else:
@@ -1002,6 +1027,35 @@ func ground_line_point_at(source: ExpeditionWorldPoint, horizontal: Vector2, pro
 	if sampled["data"]["points"].is_empty(): return _failure(&"unsupported_contact")
 	return _success({"point":sampled["data"]["points"][0]})
 
+## F10 H2: on a stretch the support bends at every quad edge and diagonal, so
+## travel is measured along those pieces; a planar cell keeps its single chord.
+func _ground_line_pieces(cell: Dictionary, point: Vector3, exit: Vector3, horizontal_metric: bool) -> Dictionary:
+	if not cell.has("height_grid"): return {"length":Vector2(exit.x-point.x,exit.z-point.z).length() if horizontal_metric else point.distance_to(exit),"points":[],"lengths":[]}
+	var view := HeightGrid.view(cell.height_grid)
+	var a := Vector2(point.x,point.z); var b := Vector2(exit.x,exit.z)
+	var cuts := HeightGrid.crossings(view,a,b)
+	var points: Array[Vector3] = [point]
+	for t: float in cuts:
+		if t <= EPS or t >= 1.0-EPS: continue
+		points.append(Kernel.support_y(cell,point.lerp(exit,t)))
+	points.append(exit)
+	var lengths: Array[float] = []; var total := 0.0
+	for index: int in range(1,points.size()):
+		var step := Vector2(points[index].x-points[index-1].x,points[index].z-points[index-1].z).length() if horizontal_metric else points[index-1].distance_to(points[index])
+		lengths.append(step); total += step
+	return {"length":total,"points":points,"lengths":lengths}
+
+func _ground_line_point(cell: Dictionary, point: Vector3, exit: Vector3, pieces: Dictionary, along: float) -> Vector3:
+	if pieces.points.is_empty(): return Kernel.support_y(cell,point.lerp(exit,clampf(along/float(pieces.length),0.0,1.0)))
+	var remaining := along
+	for index: int in pieces.lengths.size():
+		var step: float = pieces.lengths[index]
+		if remaining <= step or index == pieces.lengths.size()-1:
+			var from: Vector3 = pieces.points[index]; var to: Vector3 = pieces.points[index+1]
+			return Kernel.support_y(cell,from.lerp(to,clampf(remaining/step,0.0,1.0) if step > 0.0 else 1.0))
+		remaining -= step
+	return exit
+
 func ground_line_samples(source: ExpeditionWorldPoint, heading: Vector3, spacing: float, count: int, profile: Dictionary, revision: int) -> Dictionary:
 	return _ground_line_samples(source,heading,spacing,count,profile,revision,false)
 
@@ -1051,10 +1105,11 @@ func _ground_line_samples(source: ExpeditionWorldPoint, heading: Vector3, spacin
 			route.append(ExpeditionWorldPoint.create(source.stage_id,immediate["surface_id"],point).to_data())
 			cell = immediate
 			continue
-		var length := Vector2(exit.x-point.x,exit.z-point.z).length() if horizontal_metric else point.distance_to(exit)
+		var pieces := _ground_line_pieces(cell,point,exit,horizontal_metric)
+		var length: float = pieces.length
 		while points.size() < count and spacing*float(points.size()+1) <= distance+length+EPS:
 			# Re-evaluate this selected support plane after f32 interpolation; never choose another floor.
-			var sample := Kernel.support_y(cell,point.lerp(exit,clampf((spacing*float(points.size()+1)-distance)/length,0.0,1.0)))
+			var sample := _ground_line_point(cell,point,exit,pieces,spacing*float(points.size()+1)-distance)
 			var supported := ExpeditionWorldPoint.create(source.stage_id,cell["surface_id"],sample)
 			var contact := ground_sweep(cell["surface_id"],point,sample,profile,revision)
 			if _support_segment_fraction(cell,point,sample,profile) < 1.0-EPS or not _point_valid(supported,profile["radius"],profile["height"]) or not contact["ok"] or contact["data"]["hit"]:
@@ -1206,6 +1261,15 @@ func resolve_surface(origin: Vector3, direction: Vector3, visible_surfaces: Arra
 	var hits: Array[Dictionary] = []
 	for cell: Dictionary in _stage["surfaces"]:
 		if not visible.has(cell["surface_id"]): continue
+		if cell.has("height_grid"):
+			# F10 H2: the first hit on the stretch from above; steep ground is no pick.
+			var grid_hit := HeightGrid.ray_hit(HeightGrid.view(cell.height_grid),origin,direction)
+			if grid_hit.is_empty() or not grid_hit.walkable: continue
+			var grid_t: float = float(grid_hit.distance)/direction.length()
+			var grid_tolerance := point_tolerance(origin,grid_hit.position)
+			hits.append({"surface_id":cell.surface_id,"position":grid_hit.position,"normal":grid_hit.normal,"t":grid_t,"tolerance":grid_tolerance/direction.length(),"precision":grid_tolerance})
+			nearest = minf(nearest,grid_t)
+			continue
 		var normal := Kernel.plane_normal(cell["vertices"])
 		var denominator := normal.dot(direction)
 		if absf(denominator) < EPS: continue

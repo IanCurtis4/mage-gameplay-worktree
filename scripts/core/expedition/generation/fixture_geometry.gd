@@ -1,7 +1,11 @@
 class_name ExpeditionFixtureGeometry
 extends RefCounted
 ## Pure conservative geometry kernel for convex planar cells. Not F1's actor/attack WorldGeometry.
+## F10 H2: a cell with `height_grid` is one stretch of a terrain grid (contracts/
+## f10_height_grid.md); valid_cell, contains, support_y and cells_overlap
+## dispatch to it. Its `vertices` are the stretch's outline at the corner heights.
 const EPSILON := 0.00001
+const HeightGrid = preload("res://scripts/core/expedition/spatial/world_height_grid.gd")
 
 static func rotate(point: Vector3, quarter: int) -> Vector3:
 	match posmod(quarter, 4):
@@ -47,6 +51,7 @@ static func _support_roundoff(vertices: Array, point: Vector3) -> float:
 	return (absf(normal[0])*_half_ulp(point.x)+absf(normal[1])*_half_ulp(point.y)+absf(normal[2])*_half_ulp(point.z))/length
 
 static func valid_cell(cell: Dictionary) -> bool:
+	if cell.has("height_grid"): return _valid_grid_cell(cell)
 	var vertices: Array = cell["vertices"]
 	if vertices.size() < 3 or cell["headroom"] <= 0.0: return false
 	var normal := plane_normal(vertices)
@@ -68,6 +73,7 @@ static func valid_cell(cell: Dictionary) -> bool:
 
 static func contains(cell: Dictionary, point: Vector3, radius: float = 0.0) -> bool:
 	if not point.is_finite() or not is_finite(radius) or radius < 0: return false
+	if cell.has("height_grid"): return HeightGrid.contains(HeightGrid.view(cell.height_grid),point,radius)
 	var vertices: Array = cell["vertices"]
 	var normal := _plane(vertices); var origin: Vector3 = vertices[0]
 	var normal_length := sqrt(normal[0]*normal[0]+normal[1]*normal[1]+normal[2]*normal[2])
@@ -92,6 +98,9 @@ static func contains(cell: Dictionary, point: Vector3, radius: float = 0.0) -> b
 	return true
 
 static func support_y(cell: Dictionary, point: Vector3) -> Vector3:
+	if cell.has("height_grid"):
+		point.y = HeightGrid.support_y_clamped(HeightGrid.view(cell.height_grid),point.x,point.z)
+		return point
 	var vertices: Array = cell["vertices"]
 	var normal := _plane(vertices)
 	point.y = float(Vector3(vertices[0]).y) - (normal[0]*(float(point.x)-float(Vector3(vertices[0]).x)) + normal[2]*(float(point.z)-float(Vector3(vertices[0]).z)))/normal[1]
@@ -129,11 +138,26 @@ static func cells_overlap(a: Dictionary, b: Dictionary) -> bool:
 				var projection := axis.dot(Vector2(point.x,point.z))
 				bmin=minf(bmin,projection); bmax=maxf(bmax,projection)
 			if amax <= bmin+EPSILON or bmax <= amin+EPSILON: return false
-	var ay: Array[float] = []
-	var by: Array[float] = []
-	for point: Vector3 in av: ay.append(point.y)
-	for point: Vector3 in bv: by.append(point.y)
-	return ay.min() <= by.max()+EPSILON and by.min() <= ay.max()+EPSILON
+	var ar := _y_range(a); var br := _y_range(b)
+	return ar.x <= br.y+EPSILON and br.x <= ar.y+EPSILON
+
+static func _y_range(cell: Dictionary) -> Vector2:
+	if cell.has("height_grid"): return HeightGrid.height_range(HeightGrid.view(cell.height_grid))
+	var low := INF; var high := -INF
+	for point: Vector3 in cell["vertices"]: low = minf(low,point.y); high = maxf(high,point.y)
+	return Vector2(low,high)
+
+## A stretch cell: a valid grid, positive headroom and the exact outline.
+static func _valid_grid_cell(cell: Dictionary) -> bool:
+	if not HeightGrid.valid(cell.height_grid): return false
+	var headroom: Variant = cell.get("headroom")
+	if not (headroom is int or headroom is float) or not is_finite(float(headroom)) or float(headroom) <= 0.0: return false
+	var vertices: Variant = cell.get("vertices")
+	if not vertices is Array or vertices.size() != 4: return false
+	var expected := HeightGrid.corners(HeightGrid.view(cell.height_grid))
+	for index: int in 4:
+		if not vertices[index] is Vector3 or Vector3(vertices[index]) != Vector3(expected[index]): return false
+	return true
 
 static func clear_segment(a: Vector3, b: Vector3, volumes: Array, radius: float, height: float) -> bool:
 	for volume: AABB in volumes:
