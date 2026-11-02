@@ -40,6 +40,9 @@ anteriores permitido).
   exigida.
 - O registro "primeira jogada concluída" é **do personagem**, como todo
   desbloqueio.
+- **Refinamento de 2/11:** nas jogadas seguintes vale **só o objetivo**; quando o
+  objetivo tem chefe ou guardião, é preciso derrotá-lo antes. Ver
+  [inserções de 2/11](f10_insertions.md).
 
 ## Término antecipado
 
@@ -76,6 +79,7 @@ dungeon depende do catálogo de dungeons de F10.
   células, mas a conversão para a área visível em pixels nunca foi aprovada. Também precisa
   medir o custo de navegação, população e snapshot nessa escala (o grafo, as
   rotas em segundo plano e o diário de F9 são a base).
+- Estudo de 2/11 com a conversão proposta: [escala dos campos](f10_field_scale_study.md).
 
 ## Pendências para o contrato de F10
 

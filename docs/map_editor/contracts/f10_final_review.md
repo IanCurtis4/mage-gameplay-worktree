@@ -106,6 +106,14 @@ diagnóstico `socket_invalid` que nomeie e foque o marcador); as tarefas 4–9 e
 conferência visual do roteiro. Direção humana do mesmo dia: a autoria manual fica
 em segundo plano; a autoria agêntica fluida e sem lag é a prioridade.
 
+## Inserções humanas de 2/11/2026
+
+Junto com a integração de F9 em master, a pessoa acrescentou a F10 a primeira
+fase completa em campos maiores e problemas do documento de jogabilidade que
+não dependem do tester: [inserções](f10_insertions.md), [estudo de
+escala](f10_field_scale_study.md). A reserva acima continua valendo até a
+ativação.
+
 ## Evidência e conclusão
 
 Registrar revisão, achados/reprodução, correções/transferências, matriz de
