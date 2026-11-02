@@ -102,7 +102,7 @@ Todos os oito têm 400×400 células.
 | Uma tela | cerca de 29×29 células (área de visão de 14 células do servidor, aproximada) | 1280×720 com a projeção (0,85; 0,425): cerca de 1500 unidades em x−z e 1700 em x+z; uma peça ocupa cerca de 1,3 tela |
 | Campo em telas | cerca de 14×14 telas | uma peça ocupa cerca de 1×1 tela |
 
-**Conversão proposta para aprovação.** A meta humana é "pelo menos metade da área
+**Conversão (aprovada pela pessoa em 2/11).** A meta humana é "pelo menos metade da área
 em pixels²" dos campos do RO, ou seja, a mesma área em telas.
 
 - Metade de 400×400 dá cerca de 283×283 células, ou 9,8 telas de lado.

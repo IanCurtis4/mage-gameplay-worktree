@@ -8,14 +8,14 @@ documento de jogabilidade que meu amigo ajudou a fazer. Em específico, alguns
 problemas que já existem ali e que não precisam do feedback dele agora."
 
 As inserções ampliam a [reserva F10](f10_final_review.md): o pente-fino continua,
-e F10 também entrega a primeira fase completa e os problemas abaixo. Registrar
-não ativa a execução; a ativação é a próxima decisão humana.
+e F10 também entrega a primeira fase completa e os problemas abaixo. F10 foi
+ativada pela pessoa em 2/11 (decisões no fim).
 
 ## 1. Escala dos campos
 
 [Estudo de escala](f10_field_scale_study.md) com oito campos do Ragnarok Online.
 
-- **Conversão proposta, a aprovar:** a metade da área em telas de um campo do
+- **Conversão aprovada em 2/11:** a metade da área em telas de um campo do
   RO dá um mapa de campo de 9.000 a 11.000 unidades de lado (de 40 a 50 s em
   linha reta). A peça atual tem 1280.
 - O formato já comporta isso numa peça só (até 257×257 amostras e 65.536 quads
@@ -60,13 +60,14 @@ manual em segundo plano.
 | Q5 | **Pente-fino** da reserva F10 (itens 1–11) sobre o editor e a fase, com a autoria manual (tarefas 4–9 do aceite F9) em segundo plano |
 | Q6 | **Entrega.** Candidato, roteiro humano curto, preparação do playtest; master só com aceite |
 
-## Decisões ainda abertas
+## Decisões de 2/11 (segunda rodada)
 
-Perguntadas à pessoa em 2/11:
-
-1. A conversão de escala (9.000 a 11.000 u de lado) e a densidade (40 a 70
-   monstros por mapa).
-2. O inimigo que volta ao posto: se fica imune ou volta a lutar quando atingido.
-3. Jogadas seguintes sem guardião: o portal já começa aberto ou abre ao chegar ao
-   objetivo.
-4. Ativação de F10.
+1. **Escala aprovada:** mapa de campo de 9.000 a 11.000 unidades de lado, com
+   40 a 70 monstros (espécie dominante, 2–3 secundárias e guardião). Os números
+   finais são medidos contra a duração da run.
+2. **Retorno ao posto:** o inimigo fica **imune até chegar** e, ao chegar, cura
+   tudo.
+3. **Jogadas seguintes sem guardião:** o portal abre **ao chegar ao objetivo** do
+   estágio (santuário, switch).
+4. **F10 ativada**, começando pelo Q1 (escala e fluidez agêntica), na ordem dos
+   pacotes acima.

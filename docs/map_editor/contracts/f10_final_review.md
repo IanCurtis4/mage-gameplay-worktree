@@ -1,6 +1,7 @@
 # Editor F10 — pente-fino e fechamento integrado
 
-25/10/2026. **RESERVADO — aguarda F9 consolidado e aval humano próprio.**
+25/10/2026. **ATIVADA em 2/11/2026** (F9 integrada em master em `3c35f7f2`;
+branch `codex/map-editor-f10`). Antes: reservada até F9 consolidado e aval humano.
 Chat local criado: `01a1741f-cf1e-7543-a5c6-2dab4e834aa4`.
 Pedido humano: segundo chat para pente-fino de todo o editor, retomando o papel
 de integração/revisão originalmente previsto para F8, antes dos Ex seguintes.
@@ -111,8 +112,8 @@ em segundo plano; a autoria agêntica fluida e sem lag é a prioridade.
 Junto com a integração de F9 em master, a pessoa acrescentou a F10 a primeira
 fase completa em campos maiores e problemas do documento de jogabilidade que
 não dependem do tester: [inserções](f10_insertions.md), [estudo de
-escala](f10_field_scale_study.md). A reserva acima continua valendo até a
-ativação.
+escala](f10_field_scale_study.md). **F10 ativada pela pessoa em 2/11**, começando
+pelo Q1 (escala e fluidez agêntica).
 
 ## Evidência e conclusão
 
