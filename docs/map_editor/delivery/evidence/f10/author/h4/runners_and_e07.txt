@@ -1,0 +1,55 @@
+﻿RUNNER map_editor_terrain EXIT 0 SECONDS 78
+  large_cli_b: True
+  document_regression: True
+  M2_ALL_PASS
+RUNNER map_editor_composition EXIT 0 SECONDS 42
+  cli_b: True
+  document_regression: True
+  M3_ALL_PASS
+RUNNER map_editor_population EXIT 0 SECONDS 95
+  cli_b: True
+  document_regression: True
+  M4_ALL_PASS
+RUNNER map_editor_patrol EXIT 0 SECONDS 261
+  cli_a: True
+  cli_b: True
+  M5_ALL_PASS
+RUNNER map_editor_generation EXIT 0 SECONDS 80
+  cli_a: True
+  cli_b: True
+  M6_ALL_PASS
+RUNNER map_editor_exchange EXIT 0 SECONDS 110
+  cli_invalid_propose: True
+  cli_invalid_review: True
+  M7_ALL_PASS
+RUNNER map_editor_candidate EXIT 0 SECONDS 294
+  generation: True
+  exchange: True
+  M8_SELECTED_PASS
+TEST e07_f1_actor_integration_test EXIT 0 | E07 F1 actor integration: 193 checks, 0 failures
+TEST e07_f1_adversarial_test EXIT 0 | E07 F1 adversarial/flat: 29 checks, 0 failures
+TEST e07_f1_area_cast_test EXIT 0 | E07 F1 area casts: 59 checks, 0 failures
+TEST e07_f1_birth_collect_test EXIT 0 | E07 F1 birth and collection: 210 checks, 0 failures
+TEST e07_f1_cast_test EXIT 0 | E07 F1 casts: 113 checks, 0 failures
+TEST e07_f1_chain_test EXIT 0 | E07 F1 chains: 121 checks, 0 failures
+TEST e07_f1_channels_test EXIT 0 | E07 F1 channels: 32 checks, 0 failures
+TEST e07_f1_composition_test EXIT 0 | E07 F1 compositions: 299 checks, 0 failures; recipes=27
+TEST e07_f1_consumer_test EXIT 0 | E07 F1 consumers: 133 checks, 0 failures
+TEST e07_f1_echo_test EXIT 0 | E07 F1 echoes: 271 checks, 0 failures
+TEST e07_f1_ember_test EXIT 0 | E07 F1 ember: 102 checks, 0 failures
+TEST e07_f1_fields_test EXIT 0 | E07 F1 ground fields: 499 checks, 0 failures
+TEST e07_f1_geometer_full_test EXIT 0 | E07 F1 Geometer full: 1160 checks, 0 failures
+TEST e07_f1_geometer_trace_test EXIT 0 | E07 F1 Geometer trace: 400 checks, 0 failures
+TEST e07_f1_geometry_test EXIT 0 | E07 F1 geometry: 33 checks, 0 failures; seed=711 manifest=2e6232a2f5c2bbe6add8aa0a2645201ad14271b89d
+TEST e07_f1_guard_travel_test EXIT 0 | E07 F1 guard and travel: 293 checks, 0 failures
+TEST e07_f1_hunter_cover_test EXIT 0 | E07 F1 Hunter cover: 235 checks, 0 failures
+TEST e07_f1_hunter_traps_test EXIT 0 | E07 F1 Hunter traps: 631 checks, 0 failures
+TEST e07_f1_ice_test EXIT 0 | E07 F1 Ice Wall: 262 checks, 0 failures
+TEST e07_f1_pilot_scene_test EXIT 0 | E07 F1 native pilot scene: 102 checks, 0 failures; identities=10; presentation=logical_assembly_only
+TEST e07_f1_presentation_test EXIT 1 | E07 F1 presentation: 37 checks, 1 failures; native scene, projection, click, preview, marker, occlus
+TEST e07_f1_sentinel_area_test EXIT 0 | E07 F1 Sentinel areas: 433 checks, 0 failures
+TEST e07_f1_sentinel_direct_test EXIT 0 | E07 F1 Sentinel direct: 364 checks, 0 failures
+TEST e07_f3_continuation_test EXIT 0 | E07 F3 continuation: 2743 checks, 0 failures; scenarios=30
+TEST e07_f5_death_kits_test EXIT 0 | E07 F5 death kits: 191 checks, 0 failures
+TEST e07_f6_runtime_test EXIT 0 | E07 F5 e07_f6_runtime_test.gd: 33 checks, 0 failures
+DONE

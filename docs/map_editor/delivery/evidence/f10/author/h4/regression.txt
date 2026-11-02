@@ -1,0 +1,84 @@
+﻿RUN GridCompile EXIT 0 SECONDS 53
+  F10_GRID_COMPILE_RESULT {"checks":[{"id":"schema_accepts_the_mode","ok":true},{"id":"piece_compiles_to_stretches","ok":t
+  F10_GRID_COMPILE_TIMING {"big_code":"","big_piece_ms":1532.8,"big_validate_ms":1433.7,"linked_code":"","map_code":"","map_metrics":{"elapsed_ms":5621.59,"navigation":{"connections":14,"direct_pairs":20,"edge_tests":1064,"elapsed_ms":4091.51,"endpoint_checks":28,"expansions":372,"landmark_checks":1484,"offset_checks":2408,"operations":1,"pair_candidates":1800,"peak_storage_bytes":4392268,"phase_usec":{"construct":262618,"direct":136052,"inward":1786028,"outward":1741847,"prepare":20008,"publish":6137,"witnesses":138813},"portal_checks":106,"portal_pairs":280,"reconstruction_steps":48,"snapshot_storage_units":1180332,"states":199,"storage_bytes":4351804,"terminal_checks":11,"witness_points":172,"witness_segments":150}},"map_ms":5646.5,"piece_ms":220.7}
+RUN HeightGrid EXIT 0 SECONDS 9
+  F10_HEIGHT_GRID_RESULT {"checks":[{"id":"invalid_grids_refused","ok":true},{"id":"flat_support_and_bounds","ok":true},{"
+  F10_HEIGHT_GRID_TIMING {"gate_ms":108.1,"rough_expanded":657,"rough_ms":132.3,"rough_ok":true}
+RUN HeightGridWorld EXIT 0 SECONDS 14
+  F10_GRID_WORLD_RESULT {"checks":[{"id":"stretch_is_a_valid_cell","ok":true},{"id":"support_is_the_stretch","ok":true},{"
+RUN HeightGridNavigation EXIT 0 SECONDS 16
+  F10_GRID_NAV_RESULT {"checks":[{"id":"seams_from_shared_spans","ok":true},{"id":"route_crosses_the_stretches_through_the
+  F10_GRID_NAV_TIMING {"batch_ms":408.3,"cold_ms":220.5,"points":11,"warm_ms":72.9}
+RUN Geometry EXIT 0 SECONDS 19
+  F9_GEOMETRY_RESULT {"checks":[{"detail":"","id":"wide_opening_compiles","ok":true},{"detail":{"connection_ids":["door"],
+RUN Objects EXIT 0 SECONDS 29
+  F9_OBJECTS_RESULT {"checks":[{"id":"catalog_loads","ok":true},{"id":"catalog_origin_and_rights","ok":true},{"id":"catalo
+RUN Mesh EXIT 0 SECONDS 19
+  F9_MESH_RESULT {"checks":[{"id":"curved_grid_compiles","ok":true},{"id":"curved_grid_has_eight_exact_triangles","ok":tru
+RUN Relief EXIT 0 SECONDS 18
+  F9_RELIEF_RESULT {"checks":[{"id":"convex_terrain_mass_valid","ok":true},{"id":"concave_cap_rejected","ok":true},{"id":"
+RUN Ports EXIT 0 SECONDS 218
+  F9_PORT_RESULT {"checks":[{"id":"refined_group_valid","ok":true},{"id":"single_group_valid","ok":true},{"id":"logical_op
+RUN Batch EXIT 0 SECONDS 16
+  F9_BATCH_RESULT {"checks":[{"id":"direct_batch_complete","ok":true},{"id":"duplicate_inputs_keep_result_indices","ok":tr
+RUN Scale EXIT 0 SECONDS 37
+  M2_SCALE_RESULT {"checks":[{"id":"decimal_tie_rounds_to_even","ok":true},{"id":"decimal_above_tie_rounds_up","ok":true},
+RUN Cliff EXIT 0 SECONDS 19
+  F9_CLIFF_RESULT {"checks":[{"id":"flat_pair_valid","ok":true},{"id":"flat_pair_has_one_join","ok":true},{"id":"equal_bas
+RUN Borders EXIT 0 SECONDS 137
+  F9_BORDER_RESULT {"checks":[{"id":"four_families_and_transition_catalog","ok":true},{"id":"unknown_profile_is_explicit",
+RUN Organic EXIT 0 SECONDS 271
+  F9_ORGANIC_RESULT {"checks":[{"id":"same_gauss17_source_keeps_exact_shape","ok":true},{"id":"rounded_geometry_keeps_512_
+RUN NavigationLazy EXIT 0 SECONDS 18
+  F9_LAZY_RESULT {"checks":[{"id":"radius_0.25_forward_same_points_connections_cost_or_error","ok":true},{"id":"radius_0.2
+RUN NavigationDense EXIT 0 SECONDS 70
+  F9_DENSE_RESULT {"checks":[{"id":"historic_dense_source_publishes_without_bypass","ok":true},{"id":"historic_target_4.0_
+RUN NavigationContext EXIT 0 SECONDS 25
+  F9_CONTEXT_RESULT {"checks":[{"id":"real_curved_terrain_publishes_with_masses","ok":true},{"id":"authored_volume_subset_
+RUN Rounded EXIT 0 SECONDS 16
+  F9_ROUNDED_RESULT {"checks":[{"id":"organic_example_created_without_mutating_empty_source","ok":true},{"id":"organic_exa
+RUN SnapshotDensity EXIT 0 SECONDS 31
+  F9_SNAPSHOT_DENSITY_RESULT {"checks":[{"id":"real_player_actor_run_state_acquires_cut","ok":true},{"id":"one_thousand_ce
+RUN SurfacePick EXIT 0 SECONDS 14
+  F9_PICK_RESULT {"checks":[{"detail":"","id":"canonical_f1_fixture_assembles","ok":true},{"detail":"","id":"planar_connec
+RUN PopulationReachability EXIT 0 SECONDS 18
+  F9_POPULATION_REACHABILITY_RESULT {"checks":[{"detail":null,"id":"small_two_room_fixture","ok":true},{"detail":null,"id"
+RUN PopulationPlanner EXIT 0 SECONDS 17
+  F9_POPULATION_PLANNER_RESULT {"checks":[{"detail":null,"id":"existing_f5_fixture_generates_manifest","ok":true},{"detail
+RUN CandidateBatch EXIT 0 SECONDS 18
+  F9_CANDIDATE_BATCH_RESULT {"checks":[{"detail":null,"id":"existing_f5_fixture_generates_manifest","ok":true},{"detail":n
+RUN GameplayGate EXIT 0 SECONDS 68
+  F9_GATE_RESULT {"checks":[{"detail":null,"id":"protocol_accepts_closed_begin","ok":true},{"detail":null,"id":"protocol_r
+  F9_GATE_CHECK timings_file_has_phases true
+  F9_GATE_RESULT {"checks":[{"detail":null,"id":"protocol_accepts_closed_begin","ok":true},{"detail":null,"id":"protocol_rejects_begin_with_payload","ok":true},{"detail":null,"id":"fixture_candidate_session_and_window","ok":true},{"detail":null,"id":"async_open_claims_window_and_run","ok":true},{"detail":null,"id":"async_open_records_prepare_time","ok":true},{"detail":null,"id":"async_open_releases_busy","ok":true},{"detail":null,"id":"gate_start_boots_campaign","ok":true},{"detail":null,"id":"gate_holds_status_and_pauses_tree","ok":true},{"detail":null,"id":"gate_shows_start_button","ok":true},{"detail":null,"id":"window_status_reports_held","ok":true},{"detail":null,"id":"timings_file_has_phases","ok":true},{"detail":null,"id":"held_world_does_not_advance_actors","ok":true},{"detail":null,"id":"metrics_lines_are_written_while_held","ok":true},{"detail":null,"id":"begin_unpauses_active_campaign","ok":true},{"detail":null,"id":"second_begin_is_refused","ok":true},{"detail":null,"id":"begin_records_time","ok":true},{"detail":null,"id":"restart_is_async_and_holds_again","ok":true},{"detail":null,"id":"suspend_from_held_gate_completes","ok":true},{"detail":null,"id":"held_suspend_returns_to_lobby","ok":true},{"detail":null,"id":"default_app_does_not_hold","ok":true},{"detail":null,"id":"launcher_passes_hold_to_separate_process","ok":true},{"detail":{"ok":true,"state":{"busy":false,"candidate_hash":"527b21f97476cfec37cbc04b87f064e60afbf70d5556efef95b79219afc4b482","command_error":"","current_session_path":"C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project/.godot/map_authoring/play/sessions/7957f5647e57585bebead5d1/session.bin","error":"","gameplay":{"enemies":[],"geometry_revision":1.0,"interactions":[],"lifecycle":"active","player":{"active_cast":"","cast_remaining":0.0,"hp":180.0,"max_hp":180.0,"max_sp":50.0,"point":{"position_xyz":[200.0,0.0,200.0],"stage_id":"map_preview","surface_id":"left/c_a3e1f4935b0919b3_0_0_1_1"},"sp":50.0},"ready":true,"reward_ticket_id":"","run_id":"9cd7718d-ef36-48df-a8cf-7c014cc003f8_1","session_id":"7957f5647e57585bebead5d1","skills":[]},"state":"held","window_id":"b630376d22a8e72b6e5a7d2a"}},"id":"separate_process_reaches_held","ok":true},{"detail":null,"id":"held_separate_process_closes_on_stop","ok":true},{"detail":null,"id":"separate_process_log_clean","ok":true}],"count":24,"expected_count":24,"ok":true}
+RUN WorldTargeting EXIT 0 SECONDS 26
+  F9_TARGET_RESULT {"checks":[{"detail":null,"id":"fixture_campaign_held","ok":true},{"detail":null,"id":"live_enemy_avail
+RUN WorldRewardPoll EXIT 0 SECONDS 25
+  F9_REWARD_POLL_RESULT {"checks":[{"detail":null,"id":"fixture_campaign_held","ok":true},{"detail":null,"id":"enemy_avail
+RUN NavigationAstar EXIT 0 SECONDS 33
+  F9_ASTAR_RESULT {"checks":[{"id":"organic_terrain_publishes","ok":true},{"id":"astar_keeps_dijkstra_outcome_and_error","
+RUN NavigationAsync EXIT 0 SECONDS 18
+  F9_ASYNC_RESULT {"checks":[{"id":"sync_default_answers_immediately_with_path","ok":true},{"id":"detour_is_searched_in_ba
+RUN CampaignJournal EXIT 0 SECONDS 12
+  F9_JOURNAL_RESULT {"checks":[{"id":"three_entries_chain_from_the_base_checkpoint","ok":true},{"id":"payloads_decode_with
+RUN CompileCache EXIT 0 SECONDS 19
+  F9_CACHE_RESULT {"checks":[{"id":"cache_is_opt_in","ok":true},{"id":"miss_compiles_and_stores","ok":true},{"id":"hit_ret
+RUN AssetManifest EXIT 0 SECONDS 15
+  F9_ASSET_RESULT {"checks":[{"id":"committed_manifest_is_valid","ok":true},{"id":"committed_manifest_matches_checkout","o
+RUN RegionalSynthesis EXIT 0 SECONDS 28
+  F9_SYNTH_RESULT {"checks":[{"id":"fixture_has_objects_inside_the_selection","ok":true},{"id":"every_channel_must_be_expl
+RUN RootSynthesis EXIT 0 SECONDS 108
+  F9_ROOT_SYNTH_RESULT {"checks":[{"id":"fixture_plans_and_compiles","ok":true},{"id":"requests_are_closed_per_root","ok":
+RUN ExchangeMerge EXIT 0 SECONDS 33
+  F9_MERGE_RESULT {"checks":[{"id":"fixture_exports","ok":true},{"id":"disjoint_samples_compose","ok":true},{"id":"equal_c
+RUN SynthesisReceipts EXIT 0 SECONDS 47
+  F9_RECEIPT_RESULT {"checks":[{"id":"old_sources_keep_their_hash","ok":true},{"id":"proposal_carries_one_receipt_without_
+RUN ExchangeAssets EXIT 0 SECONDS 18
+  F9_ASSETS_RESULT {"checks":[{"id":"revisions_are_the_real_compilers","ok":true},{"id":"piece_exports_v2","ok":true},{"id
+RUN ReleaseApi EXIT 0 SECONDS 138
+  F9_RELEASE_API_RESULT {"checks":[{"id":"registry_lists_the_bosque","ok":true},{"id":"registry_refuses_unsafe_entries","o
+RUN Workflow EXIT 0 SECONDS 23
+  F9_WORKFLOW_RESULT {"checks":[{"id":"fixture_ready","ok":true},{"id":"up_to_date_and_unrelated_are_reported","ok":true},
+RUN AreaAcceptance EXIT 0 SECONDS 35
+  F9_AREA_RESULT {"checks":[{"id":"sources_open_and_release_is_current","ok":true},{"id":"clearing_with_two_materials_and_
+DONE

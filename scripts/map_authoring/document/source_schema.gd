@@ -41,7 +41,11 @@ static func read(bytes: PackedByteArray) -> Dictionary:
 			if data[collection].size() > 4096:
 				_issue(errors, "source_limit_exceeded", collection)
 				break
-			for entry: Variant in data[collection]: _shape(entry, FIELDS[collection], collection, errors)
+			for entry: Variant in data[collection]:
+				# F10 H4: a layer may declare its surface mode (absent = exact planes).
+				var fields: Dictionary = FIELDS[collection]
+				if collection == "layers" and entry is Dictionary and entry.has("surface_mode"): fields = fields.duplicate(); fields["surface_mode"] = "id"
+				_shape(entry, fields, collection, errors)
 	if not errors.is_empty():
 		output.code = errors[0].code
 		output.diagnostics = errors
@@ -126,6 +130,7 @@ static func validate(data: Dictionary) -> Array:
 			ids[collection][id] = entry
 	for layer: Dictionary in data.layers:
 		var count: int = int(layer.columns) * int(layer.rows)
+		if layer.get("surface_mode", "exact_planes") not in ["exact_planes", "height_grid"]: _issue(errors, "source_surface_mode_invalid", "surface_mode", layer.layer_id)
 		if layer.columns < 2 or layer.rows < 2 or layer.columns > 257 or layer.rows > 257 or layer.sample_spacing <= 0: _issue(errors, "source_grid_invalid", "dimensions", layer.layer_id)
 		if layer.heights.size() != count: _issue(errors, "source_sample_count", "heights", layer.layer_id)
 		for material: String in layer.material_masks:

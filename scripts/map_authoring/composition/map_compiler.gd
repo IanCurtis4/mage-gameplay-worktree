@@ -16,6 +16,11 @@ const BorderOperations = preload("res://scripts/map_authoring/composition/border
 const BorderSpans = preload("res://scripts/map_authoring/composition/border_spans.gd")
 const BorderGeometry = preload("res://scripts/map_authoring/composition/border_geometry.gd")
 const Cache = preload("res://scripts/map_authoring/compiler/compile_cache.gd")
+const Grid = preload("res://scripts/map_authoring/compiler/grid_piece.gd")
+const HeightGrid = preload("res://scripts/core/expedition/spatial/world_height_grid.gd")
+## F10 H4: a stretch is certified per walkable lattice component of at least
+## this many nodes (smaller pockets cannot hold a moving body in practice).
+const MIN_POCKET_NODES := 9
 const REVISION := "map_composition_v5"
 const EPS := 0.0001
 var _thread: Thread
@@ -134,8 +139,13 @@ static func _compile_uncached(source: Dictionary, cancellation: Callable = Calla
 		stage.part_instances.append({"instance_id":instance.instance_id,"part_id":part.part_id,"rotation_quarters":q,"translation":offset})
 		for cell: Dictionary in part.surfaces:
 			var copy := cell.duplicate(true); copy.surface_id = prefix+cell.surface_id
+			if copy.has("height_grid"):
+				# F10 H4: a quarter turn would flip the stretch's diagonal.
+				if posmod(q,2) == 1: return fail("height_grid_rotation_unsupported",instance.instance_id)
+				copy.height_grid = Grid.transformed(cell.height_grid,q,offset)
+				copy.vertices = HeightGrid.corners(HeightGrid.view(copy.height_grid))
 			for i: int in copy.vertices.size():
-				copy.vertices[i] = Kernel.rotate(copy.vertices[i],q)+offset
+				if not copy.has("height_grid"): copy.vertices[i] = Kernel.rotate(copy.vertices[i],q)+offset
 				if Vector3(copy.vertices[i]).length() > 32768: return fail("map_limit",instance.instance_id)
 			for other: Dictionary in stage.surfaces:
 				if provenance[other.surface_id] != instance.instance_id and Kernel.cells_overlap(copy,other): return fail("geometry_overlap",instance.instance_id,_center(copy))
@@ -168,6 +178,8 @@ static func _compile_uncached(source: Dictionary, cancellation: Callable = Calla
 			for i: int in copy.openings.size(): copy.openings[i] = prefix+copy.openings[i]
 			boundaries.append(copy)
 		var presentation := {"instance_id":instance.instance_id,"rotation_quarters":q,"translation":offset,"layers":package.render_layers.duplicate(true),"visuals":package.visuals.duplicate(true),"exposed_sides":package.exposed_sides.duplicate(true),"boundaries":package.boundaries.duplicate(true),"adjacency":package.adjacency.duplicate(true),"authored_ports":package.authored_ports.duplicate(true)}
+		if package.get("surface_mode") == Grid.MODE:
+			presentation["surface_mode"] = Grid.MODE; presentation["grid_revision"] = package.grid_revision; presentation["grid_quads"] = package.grid_quads
 		if package.has("objects"):
 			presentation["objects"] = []
 			for object: Dictionary in package.objects:
@@ -213,11 +225,19 @@ static func _compile_uncached(source: Dictionary, cancellation: Callable = Calla
 	var manifest := Manifest.new(); manifest._data = {"manifest_revision":1,"geometry_revision":1,"input":{"parts":definitions},"stages":[stage],"traversal":Terrain.PROFILE.duplicate(true),"population":{"slots":[]},"objectives":[],"portals":[],"witnesses":{}}
 	var world := World.new(); var configured := world.configure(manifest,"map_preview")
 	if not configured.ok: return fail("geometry_invalid")
-	var root := _walkable_point(world,stage.surfaces[0],Terrain.PROFILE)
+	var root: ExpeditionWorldPoint = null
+	for cell: Dictionary in stage.surfaces:
+		if cell.has("height_grid"):
+			var starts := _grid_targets(world,cell,Terrain.PROFILE)
+			if not starts.is_empty(): root = starts[0]; break
+		else:
+			root = _walkable_point(world,cell,Terrain.PROFILE); break
 	if root == null: return fail("route_unreachable",stage.surfaces[0].surface_id)
 	var destinations: Array[ExpeditionWorldPoint] = []
 	for cell: Dictionary in stage.surfaces:
 		if cancellation.is_valid() and cancellation.call(0.9): return fail("cancelled")
+		if cell.has("height_grid"):
+			destinations.append_array(_grid_targets(world,cell,Terrain.PROFILE)); continue
 		var destination := _walkable_point(world,cell,Terrain.PROFILE)
 		if destination == null: return fail("route_unreachable",cell.surface_id,_center(cell))
 		destinations.append(destination)
@@ -429,7 +449,8 @@ static func _terrain_metadata_valid(package: Dictionary) -> bool:
 		var instance: Dictionary = instances[render.instance_id]
 		if render.get("rotation_quarters") != instance.rotation_quarters or render.get("translation") != instance.translation: return false
 		var local: Dictionary = render.duplicate(true); local["part"] = definitions[instance.part_id]; local["render_layers"] = render.get("layers")
-		if not Terrain._geometry_metadata_valid(local) or not Terrain._ports_metadata_valid(local): return false
+		var terrain_valid: bool = Terrain._grid_metadata_valid(local) if local.get("surface_mode") == Grid.MODE else Terrain._geometry_metadata_valid(local)
+		if not terrain_valid or not Terrain._ports_metadata_valid(local): return false
 		var prefix: String = render.instance_id+"/"
 		for mass: Dictionary in local.part.solid_prisms: masses.append(SolidPrism.transformed(mass,instance.rotation_quarters,instance.translation,prefix,prefix))
 		for volume: AABB in local.part.solid_volumes: volumes.append(Kernel.transform_volume(volume,instance.rotation_quarters,instance.translation))
@@ -478,7 +499,11 @@ static func _logical_metadata_valid(package: Dictionary) -> bool:
 		var physical := {"surfaces":[],"connectors":[],"connector_groups":[]}
 		for cell: Dictionary in part.surfaces:
 			var copy := cell.duplicate(true); copy.surface_id = prefix+cell.surface_id
-			for k: int in copy.vertices.size(): copy.vertices[k] = Kernel.rotate(copy.vertices[k],q)+offset
+			if copy.has("height_grid"):
+				if posmod(q,2) == 1: return false
+				copy.height_grid = Grid.transformed(cell.height_grid,q,offset); copy.vertices = HeightGrid.corners(HeightGrid.view(copy.height_grid))
+			else:
+				for k: int in copy.vertices.size(): copy.vertices[k] = Kernel.rotate(copy.vertices[k],q)+offset
 			physical.surfaces.append(copy)
 		for endpoint: Dictionary in part.connectors:
 			var copy := endpoint.duplicate(true); copy.connector_id = prefix+endpoint.connector_id; copy.surface_id = prefix+endpoint.surface_id; copy.position = Kernel.rotate(endpoint.position,q)+offset; copy.outward = Kernel.rotate(endpoint.outward,q)
@@ -538,6 +563,22 @@ static func _logical_metadata_valid(package: Dictionary) -> bool:
 	for id: String in expected_links:
 		if not actual_links.has(id): return false
 	return referenced.size() == actual_ports.size()
+
+## F10 H4: one supported point per walkable lattice component of a stretch
+## (components below MIN_POCKET_NODES are ignored), in node order.
+static func _grid_targets(world: WorldGeometry, cell: Dictionary, profile: Dictionary, stage_id: String = "map_preview") -> Array[ExpeditionWorldPoint]:
+	var result: Array[ExpeditionWorldPoint] = []
+	var built := HeightGrid.lattice(HeightGrid.view(cell.height_grid),float(profile.radius),true)
+	if built.is_empty(): return result
+	var parts := HeightGrid.lattice_components(built)
+	for label: int in parts.sizes.size():
+		if int(parts.sizes[label]) < MIN_POCKET_NODES: continue
+		for id: int in range(int(parts.firsts[label]),parts.labels.size()):
+			if parts.labels[id] != label: continue
+			var at := HeightGrid.node_point(built,id)
+			var point := Point.create(stage_id,cell.surface_id,Kernel.support_y(cell,Vector3(at.x,0,at.y)))
+			if world.position_query(point,profile,world.geometry_revision).ok: result.append(point); break
+	return result
 
 static func _walkable_point(world: WorldGeometry, cell: Dictionary, profile: Dictionary, stage_id: String = "map_preview") -> ExpeditionWorldPoint:
 	var center := Kernel.support_y(cell,_center(cell))

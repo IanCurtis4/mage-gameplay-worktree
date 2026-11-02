@@ -17,15 +17,19 @@ static func encode(value: Variant) -> String:
 		TYPE_VECTOR3: return "v" + encode([value.x, value.y, value.z])
 		TYPE_AABB: return "a" + encode([value.position, value.size])
 		TYPE_ARRAY:
-			var result := "["
-			for item: Variant in value: result += encode(item)
-			return result + "]"
+			# F10 H4: join once; repeated += copied the whole prefix per item, which
+			# made a 26 000-sample height list take ~15 s. Same bytes as before.
+			var parts := PackedStringArray(["["])
+			for item: Variant in value: parts.append(encode(item))
+			parts.append("]")
+			return "".join(parts)
 		TYPE_DICTIONARY:
 			var keys: Array = value.keys()
 			keys.sort()
-			var result := "{"
-			for key: Variant in keys: result += encode(key) + encode(value[key])
-			return result + "}"
+			var parts := PackedStringArray(["{"])
+			for key: Variant in keys: parts.append(encode(key)); parts.append(encode(value[key]))
+			parts.append("}")
+			return "".join(parts)
 	return "unsupported"
 
 static func valid(value: Variant, depth: int = 0) -> bool:

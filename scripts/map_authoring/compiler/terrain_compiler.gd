@@ -10,6 +10,8 @@ const SolidPrism = preload("res://scripts/core/expedition/spatial/world_solid_pr
 const Objects = preload("res://scripts/map_authoring/objects/object_compiler.gd")
 const Ports = preload("res://scripts/core/expedition/generation/connector_partition.gd")
 const Topology = preload("res://scripts/map_authoring/compiler/terrain_topology.gd")
+const Grid = preload("res://scripts/map_authoring/compiler/grid_piece.gd")
+const HeightGrid = preload("res://scripts/core/expedition/spatial/world_height_grid.gd")
 const REVISION := "map_terrain_v5"
 const MAX_SUPPORTS := 1024
 const MAX_GRID_QUADS := 65536
@@ -85,6 +87,7 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 	if not read.ok: return read
 	if not read.valid: return failure("source_invalid")
 	if source.composition != null: return failure("capability_unsupported", "composition")
+	if Grid.uses_grid(source): return _compile_grid(source,read,cancellation)
 	var generated := _collect_geometry(source,cancellation)
 	if not generated.ok: return generated
 	var candidates: Array = generated.candidates; var visuals: Array = generated.visuals; var slabs: Array = generated.slabs; var cells: Array = []
@@ -426,7 +429,8 @@ static func validate_package(package: Dictionary) -> bool:
 	if not _valid_authoring_value(package) or (package.has("objects") and not Objects.validate_records(package.objects)): return false
 	if not package.get("profile") is Dictionary or package.profile != PROFILE or not package.get("part") is Dictionary or not Ports.validate_groups(package.part).ok: return false
 	if not WorldGeometry._stage_prisms_valid({"surfaces":package.part.surfaces,"solid_prisms":package.part.get("solid_prisms",[])}): return false
-	if not _geometry_metadata_valid(package) or not _ports_metadata_valid(package): return false
+	var terrain_valid: bool = _grid_metadata_valid(package) if package.get("surface_mode") == Grid.MODE else _geometry_metadata_valid(package)
+	if not terrain_valid or not _ports_metadata_valid(package): return false
 	var content := package.duplicate(true); content.erase("package_hash")
 	return Canonical.digest(content) == package.package_hash and Objects.validate_dependencies(package.get("dependencies",[]),Materials.dependencies())
 
@@ -485,3 +489,91 @@ static func preview_manifest(package: Dictionary) -> Manifest:
 	var manifest := Manifest.new()
 	manifest._data = {"manifest_revision":1,"geometry_revision":1,"input":{"parts":[part.duplicate(true)]},"stages":[stage],"traversal":package.profile.duplicate(true),"population":{"slots":[]},"objectives":[],"portals":[],"witnesses":{}}
 	return manifest
+
+## F10 H4: a piece whose only ground layer is a height grid. Stretches replace
+## the exact-plane partition and its topology; ports, sockets and objects follow
+## the same rules as an exact-plane piece. The terrain mass is the stretch
+## itself (no prisms). Reachability inside the piece is certified by the map
+## compiler per walkable component, not here.
+static func _compile_grid(source: Dictionary, read: Dictionary, cancellation: Callable) -> Dictionary:
+	if source.layers.size() != 1 or not source.special_surfaces.is_empty(): return failure("height_grid_piece_mixed")
+	var layer: Dictionary = source.layers[0]
+	if layer.get("surface_mode","exact_planes") != Grid.MODE: return failure("height_grid_piece_mixed",layer.layer_id)
+	var grid_quads := (int(layer.rows)-1)*(int(layer.columns)-1)
+	if grid_quads > MAX_GRID_QUADS: return failure("terrain_sample_limit")
+	for material: String in layer.material_masks:
+		if material not in Materials.IDS: return failure("material_unsupported",layer.layer_id)
+	var material_dependencies := Materials.dependencies()
+	if material_dependencies.is_empty(): return failure("material_missing")
+	var built := Grid.build(layer,func() -> bool: return cancellation.is_valid() and cancellation.call(0.3))
+	if not built.ok: return failure(built.code,layer.layer_id)
+	var cells: Array = built.cells
+	for cell: Dictionary in cells:
+		for vertex: Vector3 in cell.vertices:
+			if maxf(absf(vertex.x),maxf(absf(vertex.y),absf(vertex.z))) > 8192: return failure("geometry_precision_limit",cell.surface_id)
+	var connectors: Array = built.connectors; var boundaries: Array = built.boundaries
+	var authored_ports: Array = []; var connector_groups: Array = []
+	var authored_connectors: Array = source.connectors.duplicate(true)
+	authored_connectors.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.connector_id < b.connector_id)
+	for authored: Dictionary in authored_connectors:
+		var built_port := _compile_authored_port(authored,boundaries,cells)
+		if not built_port.ok: return built_port
+		for fragment: Dictionary in built_port.authored_port.fragments:
+			for boundary: Dictionary in boundaries:
+				if boundary.span_id != fragment.span_id: continue
+				boundary.openings.append(fragment.connector_id); boundary.kind = "opening"
+		connectors.append_array(built_port.endpoints); authored_ports.append(built_port.authored_port); connector_groups.append(built_port.group)
+	var sockets: Array = []
+	for authored: Dictionary in source.sockets:
+		if authored.kind not in ["entrance","exit","objective","thematic_encounter","population","portal"]: return failure("socket_invalid",authored.socket_id)
+		var position := Vector3(authored.position_xyz[0],authored.position_xyz[1],authored.position_xyz[2])
+		var matches: Array = []
+		for cell: Dictionary in cells:
+			if authored.surface_id == layer.layer_id and Kernel.contains(cell,position): matches.append(cell)
+		if matches.is_empty(): return failure("socket_invalid",authored.socket_id)
+		sockets.append({"socket_id":"socket_"+authored.socket_id.sha256_text().substr(0,20),"surface_id":matches[0].surface_id,"position":position,"kind":authored.kind,"tags":[]})
+	if cancellation.is_valid() and cancellation.call(1.0): return failure("cancelled")
+	var part := {"part_id":"piece_"+source.document_id.sha256_text().substr(0,20),"revision":int(source.revision),"biome_tags":["authored"],"allowed_rotations":[0],"surfaces":cells,"connectors":connectors,"sockets":sockets,"solid_volumes":[],"solid_prisms":[],"blockers":[]}
+	if not connector_groups.is_empty(): part["connector_groups"] = connector_groups
+	var render_layers: Array = [{"layer_id":layer.layer_id,"origin_xz":layer.origin_xz.duplicate(),"sample_spacing":float(layer.sample_spacing),"columns":int(layer.columns),"rows":int(layer.rows),"heights":layer.heights.duplicate(),"material_masks":layer.material_masks.duplicate(true)}]
+	var package := {"format_version":5,"compiler_revision":REVISION,"surface_mode":Grid.MODE,"grid_revision":Grid.REVISION,"source_hash":read.output_hash,"dependencies":material_dependencies,"part":part,"authored_ports":authored_ports,"adjacency":built.adjacency,"boundaries":boundaries,"visuals":built.visuals,"exposed_sides":built.exposed_sides,"render_layers":render_layers,"profile":PROFILE.duplicate(true),"grid_quads":grid_quads,"piece_count":1}
+	package.package_hash = Canonical.digest(package)
+	if not source.placements.is_empty() or not source.dependencies.is_empty():
+		var compiled_objects := Objects.compile(source,package,preview_manifest(package))
+		if not compiled_objects.ok: return compiled_objects
+		package.erase("package_hash")
+		package["objects"] = compiled_objects.objects
+		package.part.solid_volumes.append_array(compiled_objects.volumes)
+		package.dependencies.append_array(compiled_objects.dependencies)
+		package.package_hash = Canonical.digest(package)
+	if var_to_bytes(package).size() > 4*1024*1024: return failure("terrain_limit_exceeded")
+	var result := Schema.result(true)
+	result.input_hash = read.output_hash; result.output_hash = package.package_hash; result.package = package
+	return result
+
+## F10 H4: the receiver of a height-grid package rebuilds the stretches, seams,
+## boundaries and sides from its render layer and compares them exactly.
+static func _grid_metadata_valid(package: Dictionary) -> bool:
+	if package.get("grid_revision") != Grid.REVISION or not package.get("render_layers") is Array or package.render_layers.size() != 1: return false
+	if not package.get("visuals") is Array or not package.get("exposed_sides") is Array or not package.get("boundaries") is Array or not package.get("adjacency") is Array: return false
+	if not package.part.get("surfaces") is Array or not package.part.get("solid_prisms") is Array or not package.part.solid_prisms.is_empty(): return false
+	var layer: Variant = package.render_layers[0]
+	var fields := Schema.FIELDS.layers.duplicate(); fields.erase("name"); fields.erase("locked"); fields.erase("protected_regions")
+	var errors: Array = []; Schema._shape(layer,fields,"render_layer",errors)
+	if not errors.is_empty() or not HeightGrid.valid(layer) or package.get("grid_quads") != (int(layer.rows)-1)*(int(layer.columns)-1): return false
+	for material: String in layer.material_masks:
+		if material not in Materials.IDS or layer.material_masks[material].size() != layer.heights.size(): return false
+	var rebuilt := Grid.build(layer)
+	if not rebuilt.ok: return false
+	if Canonical.encode(rebuilt.cells) != Canonical.encode(package.part.surfaces) or Canonical.encode(rebuilt.visuals) != Canonical.encode(package.visuals): return false
+	if Canonical.encode(rebuilt.exposed_sides) != Canonical.encode(package.exposed_sides) or Canonical.encode(rebuilt.adjacency) != Canonical.encode(package.adjacency): return false
+	var endpoints := {}
+	for endpoint: Dictionary in package.part.connectors: endpoints[endpoint.connector_id] = endpoint
+	for endpoint: Dictionary in rebuilt.connectors:
+		if not endpoints.has(endpoint.connector_id) or Canonical.encode(endpoints[endpoint.connector_id]) != Canonical.encode(endpoint): return false
+	var closed: Array = package.boundaries.duplicate(true)
+	for boundary: Variant in closed:
+		if not boundary is Dictionary or not boundary.get("openings") is Array: return false
+		boundary.openings = []
+		boundary.kind = "support_edge" if boundary.get("closure") == "profile" else "cliff_edge"
+	return Canonical.encode(rebuilt.boundaries) == Canonical.encode(closed)

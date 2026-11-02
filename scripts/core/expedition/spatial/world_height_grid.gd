@@ -540,3 +540,29 @@ static func ray_hit(prepared: Dictionary, origin: Vector3, direction: Vector3) -
 	if t < 0: return {}
 	hit.y = support_on(prepared,t,hit.x,hit.z)
 	return {"position":hit,"triangle":t,"walkable":triangle_walkable(prepared,t),"normal":triangle_normal(prepared,t),"distance":origin.distance_to(hit)}
+
+## Connected components of a built lattice over its links (node index order).
+static func lattice_components(built: Dictionary) -> Dictionary:
+	var size: Vector2i = built.size
+	var labels := PackedInt32Array(); labels.resize(size.x*size.y); labels.fill(-1)
+	var sizes: Array[int] = []; var firsts: Array[int] = []
+	for id: int in labels.size():
+		if built.usable[id] == 0 or labels[id] >= 0: continue
+		var label := sizes.size(); var count := 0
+		labels[id] = label
+		var stack: Array[int] = [id]
+		while not stack.is_empty():
+			var current: int = stack.pop_back(); count += 1
+			var bits: int = built.links[current]
+			var node := Vector2i(current%size.x,current/size.x)
+			for k: int in 8:
+				if bits & (1 << k) == 0: continue
+				var n := node+DIRECTIONS[k]
+				var other := n.y*size.x+n.x
+				if labels[other] < 0: labels[other] = label; stack.append(other)
+		sizes.append(count); firsts.append(id)
+	return {"labels":labels,"sizes":sizes,"firsts":firsts}
+
+static func node_point(built: Dictionary, id: int) -> Vector2:
+	var size: Vector2i = built.size
+	return _node_point(built.view,Vector2i(id%size.x,id/size.x))

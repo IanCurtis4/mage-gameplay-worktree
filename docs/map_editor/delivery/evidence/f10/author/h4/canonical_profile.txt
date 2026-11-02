@@ -1,0 +1,18 @@
+﻿EXIT 0
+F10_PROFILE bosque_encode_new 283.829
+F10_PROFILE bosque_encode_old 394.721
+F10_PROFILE identical true 1515859
+F10_PROFILE grid_build 119.613
+F10_PROFILE encode_cells 51.489
+F10_PROFILE encode_visuals 54.017
+F10_PROFILE encode_layer 80.146
+F10_PROFILE layer_identical true
+F10_PROFILE digest_all 193.045
+F10_PROFILE schema_read 610.817
+F10_PROFILE valid_value 71.64
+F10_PROFILE compile_total 1179.653
+F10_PROFILE validate_total 1389.945
+F10_PROFILE grid_metadata 569.902
+F10_PROFILE ports_metadata 198.346
+F10_PROFILE sizes 535142 550482 881555 ok true true
+DONE
