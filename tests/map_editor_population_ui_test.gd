@@ -55,6 +55,9 @@ func _run() -> void:
 	panel.canvas.stop_test(); check("test_preserves_source",not panel.canvas.testing and panel.session.data.slots.has(pin))
 	panel._action = "save"; var path := ProjectSettings.globalize_path("res://.godot/native_encounters.json"); panel.file_selected(path)
 	check("native_save_roundtrip",Store.load_source(path).ok and Document.hash_source(Store.load_source(path).data) == Document.hash_source(panel.session.data))
+	# Checkpoint52: a saved document is clean and has no draft to keep; edit it first so the
+	# draft exists whether or not the 10 s autosave timer already ran.
+	var unsaved: Dictionary = panel.session.data.duplicate(true); unsaved.name = "Encontros antes do novo"; panel.session.apply(unsaved)
 	panel.preserve_draft(); var draft: String = panel._autosave; var draft_hash := Document.hash_source(panel.session.data)
 	panel.new_document(); panel.preserve_draft(); check("new_preserves_prior_draft",panel._autosave != draft and Document.hash_source(Store.load_source(draft).data) == draft_hash)
 	panel._action = "open"; panel.file_selected(path); panel.bake(); await wait_job(panel)
