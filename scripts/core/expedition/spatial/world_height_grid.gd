@@ -153,18 +153,83 @@ static func _segment_triangle_distance(a: Vector2, b: Vector2, tri: PackedVector
 		best = minf(best,minf(_point_segment_distance(a,tri[k],tri[(k+1)%3]),_point_segment_distance(b,tri[k],tri[(k+1)%3])))
 	return best
 
+## F10 H6: the walkable mask plus, per quad row, a prefix count of the quads
+## that hold a steep triangle, so box and capsule queries skip steep-free rows
+## and quads (same triangles, same answers). Adds the keys to `prepared` in
+## place and returns it; callers index a view they own, before sharing it.
+static func index(prepared: Dictionary) -> Dictionary:
+	if prepared.has("steep_rows"): return prepared
+	var qx := int(prepared.qx); var qz := int(prepared.qz)
+	if not prepared.has("walk"):
+		var mask := PackedByteArray(); mask.resize(qx*qz*2)
+		for t: int in mask.size(): mask[t] = 1 if _walkable_vertices(triangle_vertices(prepared,t)) else 0
+		prepared["walk"] = mask
+	var walk: PackedByteArray = prepared.walk
+	var rows := PackedInt32Array(); rows.resize(qz*(qx+1))
+	for j: int in qz:
+		var base := j*(qx+1); var count := 0
+		for i: int in qx:
+			var q := (j*qx+i)*2
+			if walk[q] == 0 or walk[q+1] == 0: count += 1
+			rows[base+i+1] = count
+	prepared["steep_rows"] = rows
+	return prepared
+
 ## Steep triangles whose quads meet the box [low, high] (clamped to the stretch).
 static func _steep_in(prepared: Dictionary, low: Vector2, high: Vector2) -> Array[int]:
 	var result: Array[int] = []
-	var s := float(prepared.s)
-	var i0 := clampi(int(floor((low.x-float(prepared.ox))/s)),0,int(prepared.qx)-1); var i1 := clampi(int(floor((high.x-float(prepared.ox))/s)),0,int(prepared.qx)-1)
+	var s := float(prepared.s); var qx := int(prepared.qx)
+	var i0 := clampi(int(floor((low.x-float(prepared.ox))/s)),0,qx-1); var i1 := clampi(int(floor((high.x-float(prepared.ox))/s)),0,qx-1)
 	var j0 := clampi(int(floor((low.y-float(prepared.oz))/s)),0,int(prepared.qz)-1); var j1 := clampi(int(floor((high.y-float(prepared.oz))/s)),0,int(prepared.qz)-1)
+	var rows: PackedInt32Array = prepared.get("steep_rows",PackedInt32Array())
 	for j: int in range(j0,j1+1):
+		if not rows.is_empty() and rows[j*(qx+1)+i1+1] == rows[j*(qx+1)+i0]: continue
 		for i: int in range(i0,i1+1):
 			for k: int in 2:
-				var t := (j*int(prepared.qx)+i)*2+k
+				var t := (j*qx+i)*2+k
 				if not triangle_walkable(prepared,t): result.append(t)
 	return result
+
+## F10 H6: steep triangles of the quads a capsule of `reach` around [a, b] can
+## meet. Per row, the segment is clipped to the row's band grown by the reach
+## and only the quads within the reach of that piece are listed: every steep
+## triangle closer than the reach is included (a margin covers rounding).
+static func _steep_near(prepared: Dictionary, a: Vector2, b: Vector2, reach: float) -> Array[int]:
+	var result: Array[int] = []
+	var s := float(prepared.s); var ox := float(prepared.ox); var oz := float(prepared.oz)
+	var qx := int(prepared.qx); var qz := int(prepared.qz)
+	var grow := reach+0.001
+	var rows: PackedInt32Array = prepared.get("steep_rows",PackedInt32Array())
+	var j0 := clampi(int(floor((minf(a.y,b.y)-grow-oz)/s)),0,qz-1); var j1 := clampi(int(floor((maxf(a.y,b.y)+grow-oz)/s)),0,qz-1)
+	var dz := b.y-a.y
+	for j: int in range(j0,j1+1):
+		var low_z := oz+float(j)*s-grow; var high_z := oz+float(j+1)*s+grow
+		var t0 := 0.0; var t1 := 1.0
+		if absf(dz) <= EPS:
+			if maxf(a.y,b.y) < low_z or minf(a.y,b.y) > high_z: continue
+		else:
+			var u := (low_z-a.y)/dz; var v := (high_z-a.y)/dz
+			t0 = maxf(0.0,minf(u,v)); t1 = minf(1.0,maxf(u,v))
+			if t0 > t1: continue
+		var xa := a.x+(b.x-a.x)*t0; var xb := a.x+(b.x-a.x)*t1
+		var i0 := clampi(int(floor((minf(xa,xb)-grow-ox)/s)),0,qx-1); var i1 := clampi(int(floor((maxf(xa,xb)+grow-ox)/s)),0,qx-1)
+		if not rows.is_empty() and rows[j*(qx+1)+i1+1] == rows[j*(qx+1)+i0]: continue
+		for i: int in range(i0,i1+1):
+			for k: int in 2:
+				var t := (j*qx+i)*2+k
+				if not triangle_walkable(prepared,t): result.append(t)
+	return result
+
+## F10 H6: whether any quad meeting the box holds a steep triangle.
+static func _box_has_steep(prepared: Dictionary, low: Vector2, high: Vector2) -> bool:
+	var rows: PackedInt32Array = prepared.get("steep_rows",PackedInt32Array())
+	if rows.is_empty(): return not _steep_in(prepared,low,high).is_empty()
+	var s := float(prepared.s); var qx := int(prepared.qx)
+	var i0 := clampi(int(floor((low.x-float(prepared.ox))/s)),0,qx-1); var i1 := clampi(int(floor((high.x-float(prepared.ox))/s)),0,qx-1)
+	var j0 := clampi(int(floor((low.y-float(prepared.oz))/s)),0,int(prepared.qz)-1); var j1 := clampi(int(floor((high.y-float(prepared.oz))/s)),0,int(prepared.qz)-1)
+	for j: int in range(j0,j1+1):
+		if rows[j*(qx+1)+i1+1] != rows[j*(qx+1)+i0]: return true
+	return false
 
 ## The body's disk at `center` lies on walkable triangles. With `inside`, the
 ## disk must also stay within the stretch; otherwise the part outside is left to
@@ -188,8 +253,7 @@ static func disk_clear(prepared: Dictionary, center: Vector2, radius: float, ins
 static func segment_clear(prepared: Dictionary, a: Vector2, b: Vector2, radius: float, inside: bool = true) -> bool:
 	if not disk_clear(prepared,a,radius,inside) or not disk_clear(prepared,b,radius,inside): return false
 	var reach := maxf(radius,EPS)
-	var low := Vector2(minf(a.x,b.x),minf(a.y,b.y))-Vector2(reach,reach); var high := Vector2(maxf(a.x,b.x),maxf(a.y,b.y))+Vector2(reach,reach)
-	for t: int in _steep_in(prepared,low,high):
+	for t: int in _steep_near(prepared,a,b,reach):
 		var tri := _triangle_2d(prepared,t)
 		if radius > 0.0:
 			if _segment_triangle_distance(a,b,tri) < radius-EPS: return false
@@ -254,11 +318,9 @@ static func path(prepared: Dictionary, from: Vector2, to: Vector2, radius: float
 ## 8-neighbour links whose capsule is clear, as bit masks. Read-only once built;
 ## WorldGeometry caches it per stretch and radius.
 static func lattice(prepared: Dictionary, radius: float, inside: bool = true) -> Dictionary:
-	var masked := prepared.duplicate()
-	var walk := PackedByteArray(); walk.resize(int(prepared.qx)*int(prepared.qz)*2)
-	for t: int in walk.size(): walk[t] = 1 if _walkable_vertices(triangle_vertices(prepared,t)) else 0
-	masked["walk"] = walk
+	var masked := index(prepared.duplicate())
 	var size := _lattice(masked)
+	var reach := maxf(radius,EPS)
 	if size.x*size.y > MAX_LATTICE: return {}
 	var usable := PackedByteArray(); usable.resize(size.x*size.y)
 	for id: int in usable.size(): usable[id] = 1 if disk_clear(masked,_node_point(masked,Vector2i(id%size.x,id/size.x)),radius,inside) else 0
@@ -274,7 +336,10 @@ static func lattice(prepared: Dictionary, radius: float, inside: bool = true) ->
 			if other < id:
 				if links[other] & (1 << OPPOSITE[k]): links[id] |= (1 << k)
 				continue
-			if segment_clear(masked,_node_point(masked,node),_node_point(masked,n),radius,inside): links[id] |= (1 << k)
+			# Both ends are usable (their disks are clear): with no steep quad in
+			# the leg's box the capsule is clear, as segment_clear would find.
+			var p := _node_point(masked,node); var q := _node_point(masked,n)
+			if not _box_has_steep(masked,Vector2(minf(p.x,q.x),minf(p.y,q.y))-Vector2(reach,reach),Vector2(maxf(p.x,q.x),maxf(p.y,q.y))+Vector2(reach,reach)) or segment_clear(masked,p,q,radius,inside): links[id] |= (1 << k)
 	return {"view":masked,"size":size,"usable":usable,"links":links,"radius":radius,"inside":inside}
 
 ## Usable lattice nodes around `point` (two rings) that the body reaches in a
@@ -469,6 +534,15 @@ static func steep_edges_in(prepared: Dictionary, low: Vector2, high: Vector2) ->
 		for k: int in 3: edges.append([tri[k],tri[(k+1)%3]])
 	return edges
 
+## F10 H6: the steep-triangle edges a capsule of `reach` around [a, b] can
+## meet (see _steep_near); the others are farther than the reach.
+static func steep_edges_near(prepared: Dictionary, a: Vector2, b: Vector2, reach: float) -> Array:
+	var edges: Array = []
+	for t: int in _steep_near(prepared,a,b,reach):
+		var tri := _triangle_2d(prepared,t)
+		for k: int in 3: edges.append([tri[k],tri[(k+1)%3]])
+	return edges
+
 ## Sorted parameters in [0, 1] where the horizontal projection of a->b enters,
 ## leaves or crosses a quad edge or diagonal of the stretch. Between two
 ## consecutive values the support is one plane. Empty when it misses the stretch.
@@ -562,6 +636,13 @@ static func lattice_components(built: Dictionary) -> Dictionary:
 				if labels[other] < 0: labels[other] = label; stack.append(other)
 		sizes.append(count); firsts.append(id)
 	return {"labels":labels,"sizes":sizes,"firsts":firsts}
+
+## F10 H6: labels of the lattice components that `point` attaches to (the
+## nodes a route from or to it may use, see _attach).
+static func attached_labels(built: Dictionary, parts: Dictionary, point: Vector2) -> Dictionary:
+	var labels := {}
+	for item: Array in _attach(built,point): labels[int(parts.labels[int(item[0])])] = true
+	return labels
 
 static func node_point(built: Dictionary, id: int) -> Vector2:
 	var size: Vector2i = built.size

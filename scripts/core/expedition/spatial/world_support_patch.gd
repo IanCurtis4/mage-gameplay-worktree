@@ -11,7 +11,7 @@ static func index(stage: Dictionary) -> Dictionary:
 	var grids: Dictionary = {}
 	for cell: Dictionary in stage.get("surfaces",[]):
 		cells[cell.surface_id] = cell; by_surface[cell.surface_id] = []
-		if cell.has("height_grid"): grids[cell.surface_id] = HeightGrid.view(cell.height_grid)
+		if cell.has("height_grid"): grids[cell.surface_id] = HeightGrid.index(HeightGrid.view(cell.height_grid))
 	for port: Dictionary in stage.get("connectors",[]):
 		ports[port.connector_id] = port
 		if by_surface.has(port.surface_id): by_surface[port.surface_id].append(port)
@@ -94,10 +94,11 @@ static func _disk_within(id: String, point: Vector2, radius: float, data: Dictio
 static func members(id: String, from: Vector2, to: Vector2, radius: float, height: float, data: Dictionary) -> Dictionary:
 	return _patch(id,from,to,radius,height,data)
 
-static func _closed(patch: Dictionary, height: float, data: Dictionary, low: Vector2 = Vector2(-INF,-INF), high: Vector2 = Vector2(INF,INF)) -> Array:
+static func _closed(patch: Dictionary, height: float, data: Dictionary, low: Vector2 = Vector2(-INF,-INF), high: Vector2 = Vector2(INF,INF), near: Array = []) -> Array:
 	var result: Array = []
 	for id: String in patch:
-		if data.has("grids") and data.grids.has(id): result.append_array(HeightGrid.steep_edges_in(data.grids[id],low,high))
+		# F10 H6: for a capsule, only the steep edges within its reach.
+		if data.has("grids") and data.grids.has(id): result.append_array(HeightGrid.steep_edges_in(data.grids[id],low,high) if near.is_empty() else HeightGrid.steep_edges_near(data.grids[id],near[0],near[1],near[2]))
 		for edge: Dictionary in data.outlines[id]:
 			var at := 0.0
 			for opening: Dictionary in edge.openings:
@@ -132,7 +133,7 @@ static func _fraction_prepared(cell: Dictionary, from: Vector3, to: Vector3, pro
 	var patch := members if not members.is_empty() else _patch(cell.surface_id,a,b,radius,height,data)
 	var clearance := maxf(0,radius-EPS); var first := 1.0
 	var reach := Vector2(radius,radius)
-	for edge: Array in _closed(patch,height,data,Vector2(minf(a.x,b.x),minf(a.y,b.y))-reach,Vector2(maxf(a.x,b.x),maxf(a.y,b.y))+reach):
+	for edge: Array in _closed(patch,height,data,Vector2(minf(a.x,b.x),minf(a.y,b.y))-reach,Vector2(maxf(a.x,b.x),maxf(a.y,b.y))+reach,[a,b,radius]):
 		if segment_distance_squared(a,b,edge[0],edge[1]) >= clearance*clearance: continue
 		first = minf(first,_capsule_fraction(a,b,edge[0],edge[1],clearance))
 	return first

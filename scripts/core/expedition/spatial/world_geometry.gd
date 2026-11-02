@@ -7,6 +7,10 @@ const SupportPatch = preload("res://scripts/core/expedition/spatial/world_suppor
 const HeightGrid = preload("res://scripts/core/expedition/spatial/world_height_grid.gd")
 const EPS := 0.00001
 const NAVIGATION_MEMO_LIMIT := 32768
+## F10 H6: regular offsets along a seam between two stretches in a batch, and
+## the bucket size of the stretch boxes' broadphase.
+const GRID_SEAM_STEP := 256.0
+const GRID_BUCKET := 1024.0
 ## Cross-query memo of exact pair predicates (checkpoint35). Same keys and values
 ## as the per-query memo; valid only for one effective geometry and full profile.
 const NAVIGATION_SHARED_MEMO_LIMIT := 262144
@@ -136,6 +140,17 @@ func _ensure_support_index() -> void:
 			var outline := HeightGrid.bounds(view); var span := HeightGrid.height_range(view)
 			grid_boxes[id] = AABB(Vector3(outline.position.x,span.x-4.0,outline.position.y),Vector3(outline.size.x,span.y-span.x+4.0,outline.size.y))
 		_support_index["grid_boxes"] = grid_boxes
+		# F10 H6: buckets over the boxes' xz rectangles; candidates keep the
+		# boxes' order, so the sweep's tie order does not change.
+		var box_ids: Array = grid_boxes.keys(); var buckets: Dictionary = {}
+		for index: int in box_ids.size():
+			var box: AABB = grid_boxes[box_ids[index]]
+			for bx: int in range(int(floor(box.position.x/GRID_BUCKET)),int(floor(box.end.x/GRID_BUCKET))+1):
+				for bz: int in range(int(floor(box.position.z/GRID_BUCKET)),int(floor(box.end.z/GRID_BUCKET))+1):
+					var key := Vector2i(bx,bz)
+					if not buckets.has(key): buckets[key] = PackedInt32Array()
+					buckets[key].append(index)
+		_support_index["grid_box_ids"] = box_ids; _support_index["grid_buckets"] = buckets
 
 func _cell(id: String) -> Dictionary:
 	_ensure_support_index()
@@ -279,6 +294,19 @@ func _grid_lattice(surface_id: String, radius: float) -> Dictionary:
 	_grid_mutex.unlock()
 	return result
 
+## F10 H6: lattice components of a stretch, cached with its lattice.
+func _grid_parts(surface_id: String, radius: float) -> Dictionary:
+	var key := surface_id+"|"+str(radius)+"|parts"
+	_grid_mutex.lock(); var known: Variant = _grid_cache.get(key); _grid_mutex.unlock()
+	if known != null: return known
+	var built := _grid_lattice(surface_id,radius)
+	var parts: Dictionary = {} if built.is_empty() else HeightGrid.lattice_components(built)
+	_grid_mutex.lock()
+	if not _grid_cache.has(key): _grid_cache[key] = parts
+	var result: Dictionary = _grid_cache[key]
+	_grid_mutex.unlock()
+	return result
+
 ## F10 H3: the local edge between two states of one stretch when the straight
 ## segment is blocked: a lattice route around steep ground (one field per
 ## source, kept in `field`), every leg and corner then checked by the same exact
@@ -289,7 +317,15 @@ func _navigation_grid_edge(a: Dictionary, b: Dictionary, profile: Dictionary, ca
 	var cell := _cell(surface)
 	var built := _grid_lattice(surface,float(profile.radius))
 	if built.is_empty(): return {"ok":false}
-	if field.is_empty(): field.merge(HeightGrid.field(built,Vector2(a.position.x,a.position.z)))
+	# F10 H6: endpoints attached to no common lattice component have no lattice
+	# route (the field would not reach `b`); skip the field. Same answer.
+	var parts := _grid_parts(surface,float(profile.radius))
+	if not field.has("labels"): field["labels"] = _grid_labels(surface,float(profile.radius),built,parts,Vector2(a.position.x,a.position.z))
+	var shared := false
+	for label: int in _grid_labels(surface,float(profile.radius),built,parts,Vector2(b.position.x,b.position.z)):
+		if field.labels.has(label): shared = true; break
+	if not shared: return {"ok":false}
+	if not field.has("ok"): field.merge(HeightGrid.field(built,Vector2(a.position.x,a.position.z)))
 	if not field.get("ok",false): return {"ok":false}
 	var routed := HeightGrid.route(built,field,Vector2(b.position.x,b.position.z))
 	if not routed.ok or routed.points.size() < 3: return {"ok":false}
@@ -609,11 +645,16 @@ func _navigation_graph(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, pro
 			if not WorldConnectivityBatch.reserve(control,[aid,bid,ad,bd,edges[aid],edges[bid]]): return {"ok":false}
 		WorldConnectivityBatch.release_scratch(control,scratch_mark)
 	# Visibility graph corners give detours around AABBs within convex supports.
+	_ensure_support_index()
 	for cell: Dictionary in generation.get("surfaces",_stage["surfaces"]):
+		# F10 H6: a stretch only holds corners inside its outline (a point
+		# outside it is never a valid state there); skip the others early.
+		var outline := HeightGrid.bounds(_support_index.grids[cell.surface_id]).grow(1.0) if _is_grid(cell.surface_id) else Rect2()
 		for volume_index: int in range(_volumes().size()):
 			var box: AABB = _volumes()[volume_index]
 			for x: float in [box.position.x - radius - EPS * 4.0, box.end.x + radius + EPS * 4.0]:
 				for z: float in [box.position.z - radius - EPS * 4.0, box.end.z + radius + EPS * 4.0]:
+					if outline.has_area() and not outline.has_point(Vector2(x,z)): continue
 					if not WorldConnectivityBatch.tick(control,"landmark_checks"): return {"ok":false}
 					var position := Kernel.support_y(cell, Vector3(x, 0, z))
 					var point := ExpeditionWorldPoint.create(from.stage_id, cell["surface_id"], position)
@@ -733,6 +774,8 @@ func _navigation_seams(a: Dictionary, b: Dictionary, source: Vector3, target: Ve
 	if pairs.is_empty(): return {"ok":true,"points":_portal_candidates(a,b,source,target,radius,candidate,height)}
 	var common := _portal_common_offsets(a,b,radius,candidate,height,control); var cache: Dictionary = {}; var unique: Dictionary = {}
 	if not control.is_empty() and not control.error_code.is_empty(): return {"ok":false}
+	_ensure_support_index()
+	if _is_grid(a.surface_id) and _is_grid(b.surface_id): return _grid_seam_points(a,b,common,control)
 	for pair: Dictionary in pairs:
 		if not WorldConnectivityBatch.tick(control,"portal_pairs"): return {"ok":false}
 		var points := _portal_pair_candidates(a,b,pair.from.position,pair.to.position,common,cache,control)
@@ -744,6 +787,51 @@ func _navigation_seams(a: Dictionary, b: Dictionary, source: Vector3, target: Ve
 	var ordered: Array = unique.keys()
 	ordered.sort_custom(func(x: Vector3,y: Vector3) -> bool: return ExpeditionCanonical.encode(x) < ExpeditionCanonical.encode(y))
 	return {"ok":true,"points":ordered}
+
+## F10 H6: a batch's seam between two stretches keeps the opening's own
+## offsets (ends, insets, centre and landmarks) plus one every GRID_SEAM_STEP,
+## instead of every pair's projections (the same opening, far fewer states;
+## certificates prove existence, never shortest cost).
+func _grid_seam_points(a: Dictionary, b: Dictionary, common: Array[float], control: Dictionary) -> Dictionary:
+	var center: Vector3 = a.position; var normal: Vector3 = a.outward; var tangent := Vector3(-normal.z,0,normal.x)
+	var half_width := minf(float(a.width),float(b.width))*0.5
+	var offsets: Array[float] = common.duplicate()
+	for k: int in range(1,int(floor(2.0*half_width/GRID_SEAM_STEP))+1):
+		var offset := -half_width+float(k)*GRID_SEAM_STEP
+		if offset < half_width: offsets.append(offset)
+	offsets.sort()
+	var unique: Dictionary = {}; var previous: Variant = null
+	for offset: float in offsets:
+		if not WorldConnectivityBatch.tick(control,"offset_checks"): return {"ok":false}
+		var point := Kernel.support_y(_cell(a.surface_id),center+tangent*offset)
+		if previous != null and Vector3(previous).distance_to(point) <= EPS: continue
+		previous = point
+		if not unique.has(point) and not WorldConnectivityBatch.scratch(control,[point,true],2): return {"ok":false}
+		unique[point] = true
+	var ordered: Array = unique.keys()
+	ordered.sort_custom(func(x: Vector3,y: Vector3) -> bool: return ExpeditionCanonical.encode(x) < ExpeditionCanonical.encode(y))
+	return {"ok":true,"points":ordered}
+
+## F10 H6: a straight local edge between two states whose bodies lie inside one
+## stretch is blocked when the stretch's capsule test fails (a steep triangle
+## within the body's reach): the exact predicates are then skipped.
+func _grid_straight_blocked(surface_id: String, a: Vector3, b: Vector3, profile: Dictionary) -> bool:
+	if not _is_grid(surface_id): return false
+	var view: Dictionary = _support_index.grids[surface_id]; var radius := float(profile.radius)
+	var p := Vector2(a.x,a.z); var q := Vector2(b.x,b.z)
+	return HeightGrid.disk_clear(view,p,radius,true) and HeightGrid.disk_clear(view,q,radius,true) and not HeightGrid.segment_clear(view,p,q,radius,true)
+
+## F10 H6: labels of the lattice components a point attaches to, cached.
+func _grid_labels(surface_id: String, radius: float, built: Dictionary, parts: Dictionary, point: Vector2) -> Dictionary:
+	var key := surface_id+"|"+str(radius)+"|labels"
+	_grid_mutex.lock()
+	if not _grid_cache.has(key): _grid_cache[key] = {}
+	var known: Variant = _grid_cache[key].get(point)
+	_grid_mutex.unlock()
+	if known != null: return known
+	var labels := HeightGrid.attached_labels(built,parts,point)
+	_grid_mutex.lock(); _grid_cache[key][point] = labels; _grid_mutex.unlock()
+	return labels
 
 func connectivity_batch(root: ExpeditionWorldPoint, targets: Array[ExpeditionWorldPoint], profile: Dictionary, revision: int, cancellation: Callable = Callable(), budget: Dictionary = {}) -> Dictionary:
 	return WorldConnectivityBatch.execute(self,root,targets,profile,revision,cancellation,budget)
@@ -915,7 +1003,7 @@ func _sweep(from: Vector3, to: Vector3, collider: Dictionary, revision: int, mas
 	# F10 H2: stretch ground. The collider's centre line meets the support; the
 	# body's radius on a stretch is enforced by its support, not by the mass.
 	var grid_boxes: Dictionary = _support_index.grid_boxes if _support_index.has("grid_boxes") else {}
-	for id: String in grid_boxes:
+	for id: String in _grid_box_candidates(from,to):
 		if excluded_supports.has(id): continue
 		if Kernel.sweep_box(from,to,grid_boxes[id],0.0,0.0,false).is_empty(): continue
 		var view: Dictionary = _support_index.grids[id]
@@ -932,6 +1020,26 @@ func _sweep(from: Vector3, to: Vector3, collider: Dictionary, revision: int, mas
 			if hit.is_empty() or float(hit["fraction"]) > fraction: continue
 			fraction = hit["fraction"]; normal = hit["normal"]; hit_id = "temporary/"+id
 	return _success({"hit": not hit_id.is_empty(), "fraction": fraction, "position": from.lerp(to, fraction), "normal": normal, "volume_id": hit_id})
+
+## F10 H6: stretch boxes whose xz rectangle may meet the segment, in the
+## boxes' order (conservative: a 1 u margin around the segment's rectangle).
+func _grid_box_candidates(from: Vector3, to: Vector3) -> Array:
+	if not _support_index.has("grid_box_ids"): return []
+	var ids: Array = _support_index.grid_box_ids
+	if ids.size() <= 8: return ids
+	var x0 := int(floor((minf(from.x,to.x)-1.0)/GRID_BUCKET)); var x1 := int(floor((maxf(from.x,to.x)+1.0)/GRID_BUCKET))
+	var z0 := int(floor((minf(from.z,to.z)-1.0)/GRID_BUCKET)); var z1 := int(floor((maxf(from.z,to.z)+1.0)/GRID_BUCKET))
+	if not is_finite(from.x+from.z+to.x+to.z) or (x1-x0+1)*(z1-z0+1) > 64: return ids
+	var buckets: Dictionary = _support_index.grid_buckets; var picked: Dictionary = {}
+	for bx: int in range(x0,x1+1):
+		for bz: int in range(z0,z1+1):
+			var bucket: Variant = buckets.get(Vector2i(bx,bz))
+			if bucket == null: continue
+			for index: int in bucket: picked[index] = true
+	var order: Array = picked.keys(); order.sort()
+	var result: Array = []
+	for index: int in order: result.append(ids[index])
+	return result
 
 static func _segment_box(from: Vector3, to: Vector3, box: AABB) -> Dictionary:
 	# Existing consumers supply their own expanded/local box; preserve this API.

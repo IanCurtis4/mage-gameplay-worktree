@@ -2,6 +2,10 @@ class_name WorldConnectivityBatch
 extends RefCounted
 ## Internal WorldGeometry consumer. Certificates prove existence, never shortest cost.
 const REVISION := "canonical_connectivity_batch_v2"
+## F10 H6: above this many targets on a stage with height-grid stretches, the
+## direct pairs are tried only for the targets the graph search left unreached
+## (a direct edge to an already reached target adds no reachability).
+const LAZY_DIRECT_TARGETS := 64
 const LIMITS := {"max_targets":4096,"max_states":131072,"max_pair_candidates":8000000,"max_edge_tests":4000000,"max_expansions":262144,"max_storage_bytes":268435456,"max_usec":240000000}
 
 ## Conservative allocation-accounting units, not an OS heap/RSS measurement.
@@ -190,6 +194,7 @@ static func execute(world: WorldGeometry, root: ExpeditionWorldPoint, targets: A
 	for id: String in sorted: ordered_nodes[id] = nodes[id]
 	nodes = ordered_nodes
 	var pairs: Array = []; var direct_edges: Dictionary = {}; var trusted_direct: Dictionary = {}; var all_direct := true
+	var lazy: bool = ids.size() > LAZY_DIRECT_TARGETS and not shadow._support_index.get("grids",{}).is_empty()
 	_enter(ctx,"direct")
 	for id: String in sorted:
 		if id == "@root": continue
@@ -198,6 +203,7 @@ static func execute(world: WorldGeometry, root: ExpeditionWorldPoint, targets: A
 			var a: String = "@root" if outward else id; var b: String = id if outward else "@root"
 			pairs.append({"from":points[a],"to":points[b],"from_id":a,"to_id":b})
 			if not reserve(ctx,[a,b],4): return failed(world,ctx)
+			if lazy: all_direct = false; continue
 			var direct := shadow._navigation_direct(points[a],points[b],traversal,revision,null)
 			if not direct.ok: all_direct = false; continue
 			var scratch_mark := int(ctx.get("scratch_live",0))
@@ -239,6 +245,33 @@ static func execute(world: WorldGeometry, root: ExpeditionWorldPoint, targets: A
 	_enter(ctx,"inward")
 	var inward := _search(shadow,graph,incoming,ids,traversal,ctx,true,all_direct)
 	if not inward.ok: return failed(world,ctx)
+	if lazy:
+		# F10 H6: direct pairs only for what is still unreached, then search again.
+		_enter(ctx,"direct")
+		var added := false
+		for id: String in sorted:
+			if id == "@root": continue
+			for direction: bool in [true,false]:
+				if (outward if direction else inward).visited.has(id): continue
+				var a: String = "@root" if direction else id; var b: String = id if direction else "@root"
+				if not tick(ctx,"lazy_direct_pairs",1,true): return failed(world,ctx)
+				var direct := shadow._navigation_direct(points[a],points[b],traversal,revision,null)
+				if not direct.ok: continue
+				var scratch_mark := int(ctx.get("scratch_live",0))
+				if not scratch(ctx,direct): return failed(world,ctx)
+				var kept := _direct_edge(ctx,direct,nodes[a],nodes[b],b)
+				direct.clear(); release_scratch(ctx,scratch_mark)
+				if not kept.ok: return failed(world,ctx,ctx.error_code if not ctx.error_code.is_empty() else &"invalid_support")
+				graph.edges[a].append(kept.edge)
+				if not tick(ctx,"storage_bytes",512): return failed(world,ctx)
+				incoming[b].append({"source":a,"edge":kept.edge}); added = true
+		if added:
+			_enter(ctx,"outward")
+			outward = _search(shadow,graph,incoming,ids,traversal,ctx,false,false)
+			if not outward.ok: return failed(world,ctx)
+			_enter(ctx,"inward")
+			inward = _search(shadow,graph,incoming,ids,traversal,ctx,true,false)
+			if not inward.ok: return failed(world,ctx)
 	var results: Array = []; var all_reachable := true
 	_enter(ctx,"witnesses")
 	for index: int in ids.size():
@@ -321,14 +354,19 @@ static func _search(world: WorldGeometry, graph: Dictionary, incoming: Dictionar
 				# Checkpoint42: same predicates through the owner's shared memo
 				# (_navigation_clear/_fraction wrap exactly these two calls).
 				var memo: Dictionary = ctx.get("memo",{})
-				var straight: bool = world._navigation_clear(from.position,to.position,profile,null,from.surface_id,memo) and world._navigation_fraction(world._cell(from.surface_id),from.position,to.position,profile,memo) >= 1.0-WorldGeometry.EPS
+				var tested := Time.get_ticks_usec()
+				var straight: bool = not world._grid_straight_blocked(from.surface_id,from.position,to.position,profile) and world._navigation_clear(from.position,to.position,profile,null,from.surface_id,memo) and world._navigation_fraction(world._cell(from.surface_id),from.position,to.position,profile,memo) >= 1.0-WorldGeometry.EPS
+				ctx.metrics["straight_usec"] = int(ctx.metrics.get("straight_usec",0))+Time.get_ticks_usec()-tested
 				cached[b] = {"via":[],"cost":Vector3(from.position).distance_to(to.position)} if straight else {}
 				if not straight and world._is_grid(from.surface_id):
 					# F10 H3: a stretch's local edge may bend around steep ground.
+					tested = Time.get_ticks_usec()
 					if not ctx.has("grid_fields"): ctx["grid_fields"] = {}
 					if not ctx.grid_fields.has(a): ctx.grid_fields[a] = {}
 					var bent := world._navigation_grid_edge(from,to,profile,null,memo,ctx.grid_fields[a])
 					if bent.ok: cached[b] = {"via":bent.via,"cost":bent.cost}
+					ctx.metrics["grid_bent_tests"] = int(ctx.metrics.get("grid_bent_tests",0))+1
+					ctx.metrics["grid_bent_usec"] = int(ctx.metrics.get("grid_bent_usec",0))+Time.get_ticks_usec()-tested
 			else: ctx.metrics["visibility_cache_hits"] = int(ctx.metrics.get("visibility_cache_hits",0))+1
 			if cached[b].is_empty(): continue
 			var edge := {"to":b,"via":cached[b].via,"connection_id":"","cost":cached[b].cost}
@@ -401,7 +439,9 @@ static func route_valid(world: WorldGeometry, points: Array, profile: Dictionary
 	for index: int in range(1,points.size()):
 		if not tick(ctx,"witness_segments"): return false
 		var a: Dictionary = points[index-1]; var b: Dictionary = points[index]
-		var key := ExpeditionCanonical.digest([a,b])
+		# F10 H6: the proof depends only on these fields; an exact key without a
+		# digest per segment (equal keys are compared by value).
+		var key := [a.stage_id,a.surface_id,a.position,b.stage_id,b.surface_id,b.position]
 		if not ctx.segment_proofs.has(key):
 			if not reserve(ctx,[key,false],2): return false
 			if a.surface_id == b.surface_id:

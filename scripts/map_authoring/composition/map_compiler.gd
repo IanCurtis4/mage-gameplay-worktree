@@ -568,9 +568,12 @@ static func _logical_metadata_valid(package: Dictionary) -> bool:
 ## (components below MIN_POCKET_NODES are ignored), in node order.
 static func _grid_targets(world: WorldGeometry, cell: Dictionary, profile: Dictionary, stage_id: String = "map_preview") -> Array[ExpeditionWorldPoint]:
 	var result: Array[ExpeditionWorldPoint] = []
-	var built := HeightGrid.lattice(HeightGrid.view(cell.height_grid),float(profile.radius),true)
+	# F10 H6: the world's cached lattice, the one certification routes over.
+	world._ensure_support_index()
+	if not world._is_grid(cell.surface_id): return result
+	var built := world._grid_lattice(cell.surface_id,float(profile.radius))
 	if built.is_empty(): return result
-	var parts := HeightGrid.lattice_components(built)
+	var parts := world._grid_parts(cell.surface_id,float(profile.radius))
 	for label: int in parts.sizes.size():
 		if int(parts.sizes[label]) < MIN_POCKET_NODES: continue
 		for id: int in range(int(parts.firsts[label]),parts.labels.size()):

@@ -1,0 +1,6 @@
+﻿EXIT 0 SECONDS 28
+F10_PROFILE piece ok=true code= ms=1973.6 bytes=1552788
+F10_PROFILE map ok=true code= ms=20329.3
+F10_PROFILE nav {"connections":214,"direct_pairs":220,"edge_tests":10440,"elapsed_ms":13419.742,"endpoint_checks":428,"expansions":5794,"grid_bent_tests":6598,"grid_bent_usec":1941925,"landmark_checks":58800,"offset_checks":1688,"operations":1,"peak_storage_bytes":59068028,"phase_usec":{"construct":3869691,"direct":1821224,"inward":3252946,"outward":2573280,"prepare":365303,"publish":71409,"witnesses":1465880},"portal_checks":1544,"reconstruction_steps":1008,"snapshot_storage_units":14104056,"states":2909,"storage_bytes":58842904,"straight_usec":3516447,"terminal_checks":111,"witness_points":5630,"witness_segments":5408}
+F10_PROFILE map_bytes 2028656
+DONE

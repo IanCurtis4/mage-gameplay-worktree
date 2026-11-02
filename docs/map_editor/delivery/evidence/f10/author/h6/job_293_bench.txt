@@ -1,0 +1,13 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+F10_GRID_FIELD_CHECK field_piece_compiles_in_budget true
+F10_GRID_FIELD_CHECK field_map_certifies_in_budget true
+F10_GRID_FIELD_CHECK field_spots_are_supported true
+F10_GRID_FIELD_CHECK routes_cross_the_field true
+F10_GRID_FIELD_CHECK background_route_keeps_frames true
+F10_GRID_FIELD_CHECK field_is_drawn_per_stretch true
+F10_GRID_FIELD_CHECK field_population_compiles_in_budget true
+F10_GRID_FIELD_CHECK session_snapshot_fits_and_resumes true
+F10_GRID_FIELD_TIMING {"certification":{"connections":214,"direct_pairs":220,"edge_tests":8822,"elapsed_ms":13231.293,"endpoint_checks":428,"expansions":5790,"grid_bent_tests":5958,"grid_bent_usec":2253159,"landmark_checks":42872,"offset_checks":1688,"operations":1,"peak_storage_bytes":58611220,"phase_usec":{"construct":4426585,"direct":2966,"inward":3805068,"outward":3010445,"prepare":514920,"publish":90808,"witnesses":1380492},"portal_checks":1544,"reconstruction_steps":4264,"snapshot_storage_units":14104056,"states":2909,"storage_bytes":58134920,"straight_usec":4126281,"terminal_checks":111,"witness_points":8784,"witness_segments":8562},"frames_corner":{"average_ms":13.34,"draw_calls":5,"worst_ms":13.56},"frames_whole":{"average_ms":13.33,"draw_calls":860,"worst_ms":13.46},"map_bytes":2028656,"map_ms":21946.9,"map_validate_ms":2199.0,"piece_bytes":1552788,"piece_ms":2252.6,"piece_validate_ms":1791.0,"population_bytes":2971724,"population_compile_ms":51713.5,"population_plan_ms":73153.7,"population_slots":55,"route_background_ms":5542.3,"route_background_worst_pump_ms":0.06,"route_cold_ms":5280.8,"route_points":40,"route_warm_ms":1472.2,"snapshot_bytes":1051324,"snapshot_capture_ms":1704.8,"snapshot_restore_ms":3687.2,"view_ms":6587.7}
+F10_GRID_FIELD_RESULT {"checks":[{"id":"field_piece_compiles_in_budget","ok":true},{"id":"field_map_certifies_in_budget","ok":true},{"id":"field_spots_are_supported","ok":true},{"id":"routes_cross_the_field","ok":true},{"id":"background_route_keeps_frames","ok":true},{"id":"field_is_drawn_per_stretch","ok":true},{"id":"field_population_compiles_in_budget","ok":true},{"id":"session_snapshot_fits_and_resumes","ok":true}],"count":8,"ok":true}

@@ -1,0 +1,16 @@
+﻿RUN MaterialsNative EXIT 0 SECONDS 51
+  F9_MATERIAL_UI_RESULT {"checks":[{"id":"native_editor_shell","ok":true},{"id":"four_material_choices_in_controls","ok":t
+RUN LibraryNative EXIT 0 SECONDS 62
+  F9_LIBRARY_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"native_project_metadata_storage_bound","ok":true}
+RUN RootSynthesisNative EXIT 0 SECONDS 127
+  F9_ROOT_SYNTH_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"map_screen_offers_the_tool","ok":true},{"id":"
+RUN ExchangeMergeNative EXIT 0 SECONDS 50
+  F9_MERGE_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"ax_exports_a_request","ok":true},{"id":"conflict_is
+RUN WorkflowNative EXIT 0 SECONDS 233
+  F9_WORKFLOW_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"bar_on_the_terrain_screen","ok":true},{"id":"nex
+RUNNER map_editor_candidate EXIT 0
+  patrol: True
+  generation: True
+  exchange: True
+  M8_SELECTED_PASS
+DONE

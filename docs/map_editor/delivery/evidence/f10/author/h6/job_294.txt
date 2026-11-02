@@ -1,0 +1,90 @@
+﻿RUN HeightGrid EXIT 0 SECONDS 16
+  F10_HEIGHT_GRID_RESULT {"checks":[{"id":"invalid_grids_refused","ok":true},{"id":"flat_support_and_bounds","ok":true},{"
+  F10_HEIGHT_GRID_TIMING {"gate_ms":88.6,"rough_expanded":657,"rough_ms":148.9,"rough_ok":true}
+RUN GridField EXIT 0 SECONDS 156
+  F10_GRID_FIELD_RESULT {"checks":[{"id":"field_piece_compiles_in_budget","ok":true},{"id":"field_map_certifies_in_budget"
+  F10_GRID_FIELD_TIMING {"certification":{"connections":214,"direct_pairs":220,"edge_tests":8822,"elapsed_ms":13479.145,"endpoint_checks":428,"expansions":5790,"grid_bent_tests":5958,"grid_bent_usec":2256495,"landmark_checks":42872,"offset_checks":1688,"operations":1,"peak_storage_bytes":58611220,"phase_usec":{"construct":4534852,"direct":4600,"inward":3861026,"outward":2987982,"prepare":542291,"publish":102862,"witnesses":1445524},"portal_checks":1544,"reconstruction_steps":4264,"snapshot_storage_units":14104056,"states":2909,"storage_bytes":58134920,"straight_usec":4158461,"terminal_checks":111,"witness_points":8784,"witness_segments":8562},"frames_corner":{"average_ms":13.33,"draw_calls":5,"worst_ms":13.47},"frames_whole":{"average_ms":13.78,"draw_calls":860,"worst_ms":26.47},"map_bytes":2028656,"map_ms":22383.7,"map_validate_ms":2091.5,"piece_bytes":1552788,"piece_ms":2664.2,"piece_validate_ms":2052.2,"population_bytes":2971724,"population_compile_ms":5989.3,"population_plan_ms":62321.4,"population_slots":55,"route_background_ms":5101.8,"route_background_worst_pump_ms":0.24,"route_cold_ms":5455.8,"route_points":40,"route_warm_ms":1430.2,"snapshot_bytes":1051324,"snapshot_capture_ms":1885.2,"snapshot_restore_ms":4824.8,"view_ms":6424.9}
+RUN GridViewNative EXIT 0 SECONDS 33
+  F10_GRID_VIEW_RESULT {"checks":[{"id":"map_compiles","ok":true},{"id":"one_mesh_per_stretch","ok":true},{"id":"drawn_ver
+  F10_GRID_VIEW_TIMING {"build_ms":2739.9,"corner":{"average_ms":13.33,"draw_calls":25,"worst_ms":13.47},"whole":{"average_ms":13.34,"draw_calls":210,"worst_ms":13.5}}
+RUN GridCompile EXIT 0 SECONDS 34
+  F10_GRID_COMPILE_RESULT {"checks":[{"id":"schema_accepts_the_mode","ok":true},{"id":"piece_compiles_to_stretches","ok":t
+  F10_GRID_COMPILE_TIMING {"big_code":"","big_piece_ms":1888.0,"big_validate_ms":1572.3,"linked_code":"","map_code":"","map_metrics":{"elapsed_ms":1900.856,"navigation":{"connections":14,"direct_pairs":20,"edge_tests":1036,"elapsed_ms":1031.87,"endpoint_checks":28,"expansions":368,"grid_bent_tests":754,"grid_bent_usec":155000,"landmark_checks":1000,"offset_checks":116,"operations":1,"peak_storage_bytes":4570972,"phase_usec":{"construct":253551,"direct":104709,"inward":291342,"outward":236468,"prepare":59234,"publish":6241,"witnesses":80319},"portal_checks":106,"reconstruction_steps":48,"snapshot_storage_units":1180332,"states":199,"storage_bytes":4537640,"straight_usec":335084,"terminal_checks":11,"witness_points":172,"witness_segments":150}},"map_ms":1922.8,"piece_ms":311.5}
+RUN HeightGridNavigation EXIT 0 SECONDS 17
+  F10_GRID_NAV_RESULT {"checks":[{"id":"seams_from_shared_spans","ok":true},{"id":"route_crosses_the_stretches_through_the
+  F10_GRID_NAV_TIMING {"batch_ms":184.6,"cold_ms":145.1,"points":11,"warm_ms":45.4}
+RUN HeightGridWorld EXIT 0 SECONDS 16
+  F10_GRID_WORLD_RESULT {"checks":[{"id":"stretch_is_a_valid_cell","ok":true},{"id":"support_is_the_stretch","ok":true},{"
+RUN Geometry EXIT 0 SECONDS 25
+  F9_GEOMETRY_RESULT {"checks":[{"detail":"","id":"wide_opening_compiles","ok":true},{"detail":{"connection_ids":["door"],
+RUN Objects EXIT 0 SECONDS 36
+  F9_OBJECTS_RESULT {"checks":[{"id":"catalog_loads","ok":true},{"id":"catalog_origin_and_rights","ok":true},{"id":"catalo
+RUN ObjectsNative EXIT 0 SECONDS 62
+  F9_OBJECTS_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"stable_open_action","ok":true},{"id":"native_obje
+RUN Mesh EXIT 0 SECONDS 22
+  F9_MESH_RESULT {"checks":[{"id":"curved_grid_compiles","ok":true},{"id":"curved_grid_has_eight_exact_triangles","ok":tru
+RUN Relief EXIT 0 SECONDS 21
+  F9_RELIEF_RESULT {"checks":[{"id":"convex_terrain_mass_valid","ok":true},{"id":"concave_cap_rejected","ok":true},{"id":"
+RUN Ports EXIT 0 SECONDS 290
+  F9_PORT_RESULT {"checks":[{"id":"refined_group_valid","ok":true},{"id":"single_group_valid","ok":true},{"id":"logical_op
+RUN Batch EXIT 0 SECONDS 21
+  F9_BATCH_RESULT {"checks":[{"id":"direct_batch_complete","ok":true},{"id":"duplicate_inputs_keep_result_indices","ok":tr
+RUN Materials EXIT 0 SECONDS 17
+  F9_MATERIAL_RESULT {"checks":[{"id":"four_named_materials","ok":true},{"id":"four_tiles_and_imports_are_hashed","ok":tru
+RUN MaterialsNative EXIT 1 SECONDS 63
+  F9_MATERIAL_UI_RESULT {"checks":[{"id":"native_editor_shell","ok":false},{"id":"four_material_choices_in_controls","ok":
+  FAIL F9_MATERIAL_UI_CHECK native_editor_shell false
+  FAIL F9_MATERIAL_UI_CHECK grass_weight_with_zero_alpha_is_visible false
+  FAIL F9_MATERIAL_UI_CHECK four_rendered_materials_are_distinct false
+  FAIL F9_MATERIAL_UI_CHECK slope_visibly_blends_stone false
+RUN Scale EXIT 0 SECONDS 64
+  M2_SCALE_RESULT {"checks":[{"id":"decimal_tie_rounds_to_even","ok":true},{"id":"decimal_above_tie_rounds_up","ok":true},
+RUN Cliff EXIT 0 SECONDS 23
+  F9_CLIFF_RESULT {"checks":[{"id":"flat_pair_valid","ok":true},{"id":"flat_pair_has_one_join","ok":true},{"id":"equal_bas
+RUN CliffNative EXIT 0 SECONDS 54
+  F9_CLIFF_UI_RESULT {"checks":[{"id":"native_editor_shell","ok":true},{"id":"mixed_relief_compiles_for_native_editor","ok
+RUN BiomeProps EXIT 0 SECONDS 22
+  F9_BIOME_PROPS_RESULT {"checks":[{"id":"six_catalog_definitions","ok":true},{"id":"existing_definitions_immutable","ok":
+RUN BiomePropsNative EXIT 0 SECONDS 59
+  F9_BIOME_PROPS_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"six_named_palette_entries","ok":true},{"id":"
+RUN Borders EXIT 0 SECONDS 172
+  F9_BORDER_RESULT {"checks":[{"id":"four_families_and_transition_catalog","ok":true},{"id":"unknown_profile_is_explicit",
+RUN BordersNative EXIT 0 SECONDS 70
+  F9_BORDER_UI_RESULT {"checks":[{"id":"ruin_rubble_v1_compiles_for_native_view","ok":true},{"id":"ruin_rubble_v1_view_rec
+RUN Shadows EXIT 0 SECONDS 22
+  F9_SHADOW_RESULT {"checks":[{"id":"connected_receiver_mesh_builds","ok":true},{"id":"seam_uses_both_actual_receivers","o
+RUN ShadowsNative EXIT 0 SECONDS 75
+  F9_SHADOW_UI_RESULT {"checks":[{"id":"sand_flat_source_authored","ok":true},{"id":"sand_flat_compiled_real_package","ok"
+RUN CanvasOrder EXIT 0 SECONDS 22
+  F9_ORDER_RESULT {"checks":[{"id":"actor_on_low_ramp_draws_after_own_ground","ok":true},{"id":"ordering_does_not_mutate_g
+RUN Library EXIT 0 SECONDS 18
+  F9_LIBRARY_RESULT {"checks":[{"id":"empty_preferences_valid","ok":true},{"id":"boolean_version_rejected","ok":true},{"id
+RUN LibraryNative EXIT 1 SECONDS 68
+  F9_LIBRARY_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"native_project_metadata_storage_bound","ok":true}
+RUN Viewport EXIT 0 SECONDS 19
+  F9_VIEWPORT_RESULT {"checks":[{"id":"real_ramp_bridge_and_port_compile","ok":true},{"id":"canonical_world_point_decodes_
+RUN ViewportNative EXIT 0 SECONDS 70
+  F9_VIEWPORT_UI_RESULT {"checks":[{"id":"real_bridge_map_compiles","ok":true},{"id":"native_tools_and_minimap_visible","o
+RUN RuntimeView EXIT 0 SECONDS 20
+  F9_RUNTIME_VIEW_RESULT {"checks":[{"id":"actual_map_package_compiles","ok":true},{"id":"shared_renderer_constructs_world
+RUN GameplayNative EXIT 0 SECONDS 115
+  F9_GAMEPLAY_RESULT {"checks":[{"id":"authored_patrol_with_real_population_compiles","ok":true},{"id":"passive_candidate_
+RUN GameplayWindow EXIT 0 SECONDS 71
+  F9_WINDOW_RESULT {"checks":[{"id":"actual_wide_map_compiles","ok":true},{"id":"run_session_created","ok":true},{"id":"wi
+RUN GameplayControls EXIT 0 SECONDS 77
+  F9_CONTROLS_RESULT {"checks":[{"id":"authored_interactions_compile_without_synthetic_enemies","ok":true},{"id":"disposab
+RUN GameplayEditorNative EXIT 0 SECONDS 99
+  F9_GAMEPLAY_EDITOR_RESULT {"checks":[{"id":"actual_map_panel_has_gameplay_controls","ok":true},{"id":"human_two_room_exa
+RUN GameplayCli EXIT 0 SECONDS 138
+  F9_GAMEPLAY_CLI_RESULT {"checks":[{"id":"same_canonical_sample_source_and_package","ok":true},{"id":"published_package_i
+RUN FieldsNative EXIT 0 SECONDS 46
+  F9_FIELDS_UI_RESULT {"checks":[{"id":"authored_ramp_and_bridge_keep_height_and_real_scale","ok":true},{"id":"fire_wall_u
+RUN Organic EXIT 0 SECONDS 276
+  F9_ORGANIC_RESULT {"checks":[{"id":"same_gauss17_source_keeps_exact_shape","ok":true},{"id":"rounded_geometry_keeps_512_
+RUN NavigationLazy EXIT 0 SECONDS 20
+  F9_LAZY_RESULT {"checks":[{"id":"radius_0.25_forward_same_points_connections_cost_or_error","ok":true},{"id":"radius_0.2
+RUN NavigationDense EXIT 0 SECONDS 71
+  F9_DENSE_RESULT {"checks":[{"id":"historic_dense_source_publishes_without_bypass","ok":true},{"id":"historic_target_4.0_
+RUN NavigationContext EXIT 0 SECONDS 21
+  F9_CONTEXT_RESULT {"checks":[{"id":"real_curved_terrain_publishes_with_masses","ok":true},{"id":"authored_volume_subset_
+DONE

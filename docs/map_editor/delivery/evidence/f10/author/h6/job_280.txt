@@ -1,0 +1,16 @@
+﻿EXIT 0 SECONDS 32
+F10_PROFILE map_49 ok=true code= ms=4558.7
+F10_PROFILE nav_49 {"connections":14,"direct_pairs":20,"edge_tests":1064,"elapsed_ms":3315.288,"endpoint_checks":28,"expansions":372,"landmark_checks":1484,"offset_checks":2408,"operations":1,"pair_candidates":1800,"peak_storage_bytes":4392268,"phase_usec":{"construct":201849,"direct":130561,"inward":1398001,"outward":1466675,"prepare":15193,"publish":7129,"witnesses":95871},"portal_checks":106,"portal_pairs":280,"reconstruction_steps":48,"snapshot_storage_units":1180332,"states":199,"storage_bytes":4351804,"terminal_checks":11,"witness_points":172,"witness_segments":150}
+F10_PROFILE parts_49 stretches=9 lattice_ms=802.6 components_ms=12.9 field_ms=84.9 (totals)
+F10_PROFILE clear_ms_each 0.193
+F10_PROFILE fraction_ms_each 2.014
+F10_PROFILE segclear_ms_each 2.242
+F10_PROFILE states_by_surface 9
+F10_PROFILE map_81 ok=true code= ms=16455.6
+F10_PROFILE nav_81 {"connections":44,"direct_pairs":56,"edge_tests":4230,"elapsed_ms":13247.976,"endpoint_checks":88,"expansions":1436,"landmark_checks":7040,"offset_checks":20656,"operations":1,"pair_candidates":14660,"peak_storage_bytes":14207252,"phase_usec":{"construct":885630,"direct":481881,"inward":5497637,"outward":5918516,"prepare":38732,"publish":16794,"witnesses":408778},"portal_checks":375,"portal_pairs":2464,"reconstruction_steps":208,"snapshot_storage_units":3339060,"states":731,"storage_bytes":14116684,"terminal_checks":29,"witness_points":790,"witness_segments":732}
+F10_PROFILE parts_81 stretches=25 lattice_ms=2773.9 components_ms=43.9 field_ms=292.8 (totals)
+F10_PROFILE clear_ms_each 0.182
+F10_PROFILE fraction_ms_each 1.823
+F10_PROFILE segclear_ms_each 1.945
+F10_PROFILE states_by_surface 25
+DONE

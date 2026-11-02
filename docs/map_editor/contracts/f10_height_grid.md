@@ -62,7 +62,32 @@ trechos tocados.
 | H5 | Desenho no jogo e no editor por trecho, com recorte pela câmera | nativos e medida de quadro |
 | H6 | Campo sintético de ~10.000 u de ponta a ponta: compilar, certificar, navegar, desenhar, diário | orçamento medido |
 
-Estado: H1–H5 entregues (checkpoints 1–5, [registro](../delivery/f10.md)).
+Estado: H1–H6 entregues (checkpoints 1–6, [registro](../delivery/f10.md)).
 
 Nenhum guard, teto ou quota é reduzido. Os tetos que contam superfícies passam a
 contar superfícies reais (um trecho conta como uma), com o custo medido.
+
+## H6 — orçamento medido
+
+Campo sintético de 10.240 u (161×161 amostras, 100 trechos), etapa `GridField`;
+números e política em [checkpoint6](../delivery/f10.md).
+
+- **Compilar e certificar:** peça em 2,3 s; mapa em 21,9 s, com 13,2 s de
+  navegação. Antes das otimizações, 65 s.
+- **Navegar:** rota que cruza a crista e sobe a rampa em 5,3 s fria e 1,5 s
+  quente. Em segundo plano, o quadro não espera (pump de 0,06 ms).
+- **Desenhar:** quadro no vsync, com 860 chamadas de desenho para o campo
+  inteiro.
+- **Popular:** 55 monstros com plano em 73 s e compilação em 52 s (pendência:
+  reaproveitar o certificado).
+- **Sessão:** instantâneo de 1,05 MB, abaixo do limite de 4 MiB.
+
+Política de certificação em campo, só para estágios com trechos:
+
+- costuras entre trechos usam os deslocamentos da abertura mais um a cada 256 u;
+- com mais de 64 alvos, os pares diretos só são tentados para quem ficou sem
+  alcance;
+- aresta reta bloqueada por íngreme dentro do trecho é recusada sem os
+  predicados exatos.
+
+Nenhum guard, teto ou quota foi reduzido.

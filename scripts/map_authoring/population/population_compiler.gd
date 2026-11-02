@@ -10,6 +10,7 @@ const Point = preload("res://scripts/core/expedition/model/world_point.gd")
 const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
 const Worker = preload("res://scripts/map_authoring/population/population_worker.gd")
 const Context = preload("res://scripts/map_authoring/context/population_context.gd")
+const HeightGrid = preload("res://scripts/core/expedition/spatial/world_height_grid.gd")
 const REVISION := "map_population_v2"
 const PROFILE := {"profile_id":"ruins_player","revision":1,"radius":20.0,"height":32.0,"connector_kinds":["walk"]}
 const STEP := 16.0
@@ -163,6 +164,11 @@ static func placement_code(source: Dictionary, context: Dictionary, point: Exped
 	if cancel.is_valid() and cancel.call(): return "cancelled"
 	var local := _placement_local_code(source,context,point,profile,site)
 	if local != "": return local
+	# F10 H6: a verdict already proved by a batch over this context (see
+	# _prime_reachability) for the same point and body.
+	var known: Dictionary = context.get("reachable",{})
+	var key := [point.surface_id,point.position,float(profile.radius),float(profile.height)]
+	if known.has(key): return "" if known[key] else "population_unreachable"
 	var targets: Array[ExpeditionWorldPoint] = [point]
 	var accessible := reachability(context.world,context.entry,targets,profile,cancel)
 	if not accessible.ok: return accessible.code
@@ -185,7 +191,7 @@ static func _separated(point: ExpeditionWorldPoint, radius: float, spacing: floa
 		if point.position.y+PROFILE.height <= other.point.position.y or other.point.position.y+PROFILE.height <= point.position.y: continue
 		if Vector2(point.position.x,point.position.z).distance_to(Vector2(other.point.position.x,other.point.position.z)) < radius+other.radius+maxf(spacing,other.spacing): return false
 	return true
-static func pool(source: Dictionary, context: Dictionary, brush: Dictionary, cancel: Callable = Callable()) -> Dictionary:
+static func pool(source: Dictionary, context: Dictionary, brush: Dictionary, cancel: Callable = Callable(), gather: Dictionary = {}) -> Dictionary:
 	if cancel.is_valid() and cancel.call(): return fail("cancelled")
 	var profile := PROFILE.duplicate(true)
 	for spec: Dictionary in brush.species:
@@ -199,13 +205,18 @@ static func pool(source: Dictionary, context: Dictionary, brush: Dictionary, can
 	var candidates: Array = []; var pending: Array = []; var terminals: Array[ExpeditionWorldPoint] = []; var count := 0; var rejected := {"population_excluded":0,"population_unreachable":0,"outside_support":0}
 	var first_x := int(floor((center.x-brush.radius)/STEP)); var last_x := int(ceil((center.x+brush.radius)/STEP))
 	var first_z := int(floor((center.z-brush.radius)/STEP)); var last_z := int(ceil((center.z+brush.radius)/STEP))
+	# F10 H6: a stretch contains no sample outside its outline; skip it early.
+	var outlines: Array[Rect2] = []
+	for cell: Dictionary in cells: outlines.append(HeightGrid.bounds(HeightGrid.view(cell.height_grid)).grow(1.0) if cell.has("height_grid") else Rect2())
 	for iz: int in range(first_z,last_z):
 		for ix: int in range(first_x,last_x):
 			if cancel.is_valid() and cancel.call(): return fail("cancelled")
 			var x := (ix+0.5)*STEP; var z := (iz+0.5)*STEP
 			if Vector2(x-center.x,z-center.z).length() > brush.radius: continue
 			var contained := false
-			for cell: Dictionary in cells:
+			for cell_index: int in cells.size():
+				var cell: Dictionary = cells[cell_index]
+				if outlines[cell_index].has_area() and not outlines[cell_index].has_point(Vector2(x,z)): continue
 				var normal := Kernel.plane_normal(cell.vertices)
 				if absf(normal.y) < 0.001: continue
 				var position := Kernel.support_y(cell,Vector3(x,0,z))
@@ -217,8 +228,12 @@ static func pool(source: Dictionary, context: Dictionary, brush: Dictionary, can
 				pending.append({"point":point,"sample":Vector2i(ix,iz)})
 				terminals.append(point)
 			if not contained: rejected.outside_support += 1
+	# F10 H6: _prime_pools collects the terminals of every brush first.
+	if gather.has("collect"):
+		gather.collect.append({"profile":profile,"terminals":terminals}); return {"ok":true}
 	if not terminals.is_empty():
-		var accessible := reachability(context.world,context.entry,terminals,profile,cancel)
+		var accessible := _known(context,terminals,profile)
+		if accessible.is_empty(): accessible = reachability(context.world,context.entry,terminals,profile,cancel)
 		if not accessible.ok: return accessible
 		var accepted: Dictionary = {}
 		for index: int in pending.size():
@@ -281,6 +296,7 @@ static func regenerate(source: Dictionary, cancel: Callable = Callable(), scope:
 		var valid := validate_slot(source,context,slot,occupied,cancel)
 		if not valid.ok: return valid
 		realized.append(slot.duplicate(true)); occupied.append(valid.reservation)
+	_prime_pools(source,context,cancel)
 	for brush: Dictionary in _sorted(source.brushes,"brush_id"):
 		var sampled := pool(source,context,brush,cancel)
 		if not sampled.ok: return sampled
@@ -385,6 +401,8 @@ static func _compile_uncached(source: Dictionary, cancel: Callable = Callable())
 	if not required.ok: return required
 	var occupied: Array = []; var rules: Dictionary = {}; var counts: Dictionary = {}
 	var manifest: ExpeditionManifest = context.manifest
+	var primed := _prime_reachability(source,context,cancel)
+	if not primed.ok: return primed
 	for slot: Dictionary in _sorted(source.slots,"slot_id"):
 		if cancel.is_valid() and cancel.call(): return fail("cancelled")
 		var checked := validate_slot(source,context,slot,occupied,cancel)
@@ -395,7 +413,7 @@ static func _compile_uncached(source: Dictionary, cancel: Callable = Callable())
 		manifest._data.population.slots.append({"slot_id":slot.slot_id,"stage_id":"map_preview","species_id":slot.species_id,"occurrence_category":slot.category,"origin_id":slot.origin_id,"instance_id":point.surface_id.get_slice("/",0),"socket_id":socket_id,"required_tags":[],"respawn_policy_id":"ruins_respawn","reward_policy_id":"ruins_rewards","blocks_clear":true,"home":point.to_data()})
 		manifest._data.witnesses["population/"+slot.slot_id] = {"point":point.to_data()}; rules[slot.slot_id] = checked.rule
 	for brush: Dictionary in _sorted(source.brushes,"brush_id"):
-		var sampled := pool(source,context,brush,cancel)
+		var sampled := _quota(source,context,brush,cancel)
 		if not sampled.ok: return sampled
 		if counts.get(brush.brush_id,0) != sampled.quota: return fail("population_deficit",brush.brush_id,{"requested":sampled.quota,"realized":counts.get(brush.brush_id,0)})
 	var planned := ExpeditionPopulationPlanner.build(manifest,context.catalog,rules,cancel)
@@ -407,6 +425,79 @@ static func _compile_uncached(source: Dictionary, cancel: Callable = Callable())
 	package["package_hash"] = Canonical.digest(package)
 	if var_to_bytes(package).size() > 4*1024*1024: return fail("population_limit")
 	return {"ok":true,"code":"","diagnostics":[],"input_hash":package.source_hash,"output_hash":package.package_hash,"package":package}
+## F10 H6: one connectivity batch per body profile for every slot of the plan,
+## instead of one batch per slot. A larger batch holds more states and pairs, so
+## it proves at least what each single batch proved (existence proofs only);
+## placement_code then reads the verdict.
+static func _prime_reachability(source: Dictionary, context: Dictionary, cancel: Callable = Callable()) -> Dictionary:
+	var groups: Dictionary = {}
+	for slot: Dictionary in _sorted(source.slots,"slot_id"):
+		var spec := _spec(slot,context.catalog)
+		if not spec.ok: continue
+		var point := anchor(slot)
+		if _placement_local_code(source,context,point,spec.profile,slot.site_id) != "": continue
+		var body := [float(spec.profile.radius),float(spec.profile.height)]
+		if not groups.has(body): groups[body] = {"profile":spec.profile,"points":[]}
+		groups[body].points.append(point)
+	var known: Dictionary = {}
+	for body: Array in groups:
+		if cancel.is_valid() and cancel.call(): return fail("cancelled")
+		var targets: Array[ExpeditionWorldPoint] = []; targets.assign(groups[body].points)
+		var accessible := reachability(context.world,context.entry,targets,groups[body].profile,cancel)
+		if not accessible.ok: return accessible
+		for index: int in targets.size(): known[[targets[index].surface_id,targets[index].position,body[0],body[1]]] = accessible.reachable[index]
+	context["reachable"] = known
+	return {"ok":true}
+
+## F10 H6: verdicts for every terminal when a batch over this context already
+## proved them for this body; {} otherwise.
+static func _known(context: Dictionary, terminals: Array[ExpeditionWorldPoint], profile: Dictionary) -> Dictionary:
+	var known: Dictionary = context.get("reachable",{})
+	if known.is_empty(): return {}
+	var reachable: Array[bool] = []
+	for point: ExpeditionWorldPoint in terminals:
+		var key := [point.surface_id,point.position,float(profile.radius),float(profile.height)]
+		if not known.has(key): return {}
+		reachable.append(known[key])
+	return {"ok":true,"reachable":reachable}
+
+## F10 H6: one connectivity batch per body for the candidates of every brush,
+## instead of one batch per brush (a larger batch proves at least as much).
+## Any failure leaves the context unprimed: pool() then reports it in order.
+static func _prime_pools(source: Dictionary, context: Dictionary, cancel: Callable = Callable()) -> void:
+	var gather := {"collect":[]}
+	for brush: Dictionary in _sorted(source.brushes,"brush_id"):
+		if not pool(source,context,brush,cancel,gather).ok: return
+	var groups: Dictionary = {}
+	for item: Dictionary in gather.collect:
+		var body := [float(item.profile.radius),float(item.profile.height)]
+		if not groups.has(body): groups[body] = {"profile":item.profile,"terminals":[],"seen":{}}
+		for point: ExpeditionWorldPoint in item.terminals:
+			var key := [point.surface_id,point.position]
+			if groups[body].seen.has(key): continue
+			groups[body].seen[key] = true; groups[body].terminals.append(point)
+	var known: Dictionary = context.get("reachable",{}).duplicate()
+	for body: Array in groups:
+		var targets: Array[ExpeditionWorldPoint] = []; targets.assign(groups[body].terminals)
+		if targets.is_empty(): continue
+		var accessible := reachability(context.world,context.entry,targets,groups[body].profile,cancel)
+		if not accessible.ok: return
+		for index: int in targets.size(): known[[targets[index].surface_id,targets[index].position,body[0],body[1]]] = accessible.reachable[index]
+	context["reachable"] = known
+
+## F10 H6: a brush's quota for compilation. A count quota is its quantity (the
+## sampling only counts area for a density quota), with the same species, layer
+## and limit checks as pool(); a density quota still samples.
+static func _quota(source: Dictionary, context: Dictionary, brush: Dictionary, cancel: Callable = Callable()) -> Dictionary:
+	if brush.quota_mode != "count": return pool(source,context,brush,cancel)
+	if cancel.is_valid() and cancel.call(): return fail("cancelled")
+	for spec: Dictionary in brush.species:
+		var checked := _spec(spec,context.catalog)
+		if not checked.ok: return checked
+	if context.family_cells.get(context.families.get(brush.surface_id,brush.surface_id),[]).is_empty(): return fail("population_unreachable",brush.brush_id)
+	if int(brush.quantity) > 128: return fail("population_limit",brush.brush_id)
+	return {"ok":true,"quota":int(brush.quantity)}
+
 static func validate_package(package: Dictionary) -> bool:
 	if not package.has_all(["format_version","compiler_revision","source_hash","catalog_hash","policy_hash","map_package","manifest","rules","profile","package_hash"]) or not Canonical.valid(package): return false
 	if not package.map_package is Dictionary or not package.manifest is Dictionary or not package.rules is Dictionary or not package.profile is Dictionary: return false
