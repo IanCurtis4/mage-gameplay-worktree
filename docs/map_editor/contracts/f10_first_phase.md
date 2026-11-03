@@ -30,8 +30,7 @@ Terra no modo AX, com 40 a 70 monstros por mapa de campo (uma espécie dominante
    (`data/expedition/phases/<fase>.json`, JSON estrito) lista, em ordem, os
    `package_id` publicados e as ligações: uma saída (`early_exit` ou portal) do
    mapa A leva à entrada do mapa B. O último mapa tem a `phase_completion`. A saída indicada pode ser uma `early_exit` ou a conclusão do próprio mapa, que nos mapas do meio vira o portal para o próximo.
-2. **Compositor de fase** (`scripts/core/expedition/phase/phase_composer.gd`,
-   puro): de cada pacote de patrulha validado tira o manifesto de um estágio,
+2. **Compositor de fase** (`scripts/map_authoring/release/phase_release.gd`; a composição é pura): de cada pacote de patrulha validado tira o manifesto de um estágio,
    renomeia o estágio (`<fase>_<n>`) e prefixa superfícies, sockets, slots,
    objetivos, testemunhas e regras. Junta tudo num `ExpeditionManifest` de
    vários estágios e transforma cada ligação num portal `travel` (ida e volta),
