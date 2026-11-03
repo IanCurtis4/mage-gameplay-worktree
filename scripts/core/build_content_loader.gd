@@ -28,6 +28,8 @@ static func definitions(origin: StringName, include_progression: bool = false) -
 	if include_progression and origin in [&"equipment", &"mob"]:
 		var extra := "res://resources/loot_progression/equipment" if origin == &"equipment" else "res://resources/playtest_gameplay/mob"
 		result.append_array(_definitions_in(extra))
+		# F10 Q4: species of the first authored phase (forest).
+		if origin == &"mob": result.append_array(_definitions_in("res://resources/forest_phase/mob"))
 	if include_progression and origin in [&"equipment",&"set"]:
 		var content_dir := "res://resources/e06_inventory_content/%s" % origin
 		result.append_array(_definitions_in(content_dir))

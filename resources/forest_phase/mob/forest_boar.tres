@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="MobDefinition" format=3]
+[ext_resource type="Script" path="res://scripts/data/mob_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = &"forest_boar"
+display_name = "Javali da Encosta"
+flavor_text = "Recua, baixa a cabeça e investe quando o alvo se afasta."
+description = "Espécie da Floresta do Santuário. Nível pela origem do mapa."
+base_category = &"normal"
+allowed_occurrence_categories = Array[StringName]([&"normal", &"rare", &"elite"])
+fixed_level = 2
+origin_levels = {&"trial_stage_1": 2, &"trial_stage_2": 4, &"trial_stage_3": 6, &"trial_stage_4": 9}
+primary_attributes = {&"str": 2, &"agi": 2, &"vit": 2, &"int": 2, &"dex": 2, &"luk": 2}
+modifier_sources = Array[Dictionary]([{"source_id": &"forest_species_tuning", "flat": {&"move_speed": -70.0, &"max_hp": 20.0}}])
+archetype = &"charger"
+animation_kind = &"animal_companion"
+tint = Color(0.4196, 0.2902, 0.1804, 1)
+collision_radius = 20.0
+encounter_tiers = true
+aggro_radius = 420.0
+leash_radius = 850.0
+sight_timeout = 4.0
+visual_kind = &"humanoid"
+summons_companion = false

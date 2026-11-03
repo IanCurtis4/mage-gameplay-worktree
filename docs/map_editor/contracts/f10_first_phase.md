@@ -70,3 +70,14 @@ sem mudar a fonte.
 - Compositor entregue: `PhaseRelease` 11/11 (Bosque → Bosque). Preparar um mapa
   publicado leva ~112 s no quadro principal, então uma fase de três mapas paga
   isso três vezes ao entrar (limite do Q1, `start()` fora do quadro).
+
+- Espécies entregues (`resources/forest_phase/mob`, carregadas com o catálogo de
+  jogo): Lobo da Mata (`chaser`, dominante), Javali da Encosta (`charger`),
+  Espreitador da Mata (`flanker`), Arqueiro da Copa (`archer`) e o chefe
+  Guardião Ancestral (`charger`, só `boss`, convoca a fera). Elas usam as origens
+  já publicadas `trial_stage_1` a `3` (níveis 2, 4 e 6) e as recompensas dessas
+  origens; nenhuma política nova foi aberta. `ForestSpecies` 7/7, e os 9 passos
+  do `verify.ps1` que leem o catálogo de jogo passam.
+- **Pendente por consequência:** o Bosque publicado é recusado (`ReleaseApi`
+  falha em `package_loads_with_its_pins`) até ser recompilado e republicado pelo
+  fluxo do editor.

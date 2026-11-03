@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="MobDefinition" format=3]
+[ext_resource type="Script" path="res://scripts/data/mob_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = &"forest_stalker"
+display_name = "Espreitador da Mata"
+flavor_text = "Contorna o alvo pela lateral antes de atacar."
+description = "Espécie da Floresta do Santuário. Nível pela origem do mapa."
+base_category = &"normal"
+allowed_occurrence_categories = Array[StringName]([&"normal", &"rare", &"elite"])
+fixed_level = 2
+origin_levels = {&"trial_stage_1": 2, &"trial_stage_2": 4, &"trial_stage_3": 6, &"trial_stage_4": 9}
+primary_attributes = {&"str": 2, &"agi": 2, &"vit": 2, &"int": 2, &"dex": 2, &"luk": 2}
+modifier_sources = Array[Dictionary]([{"source_id": &"forest_species_tuning", "flat": {&"move_speed": -55.0, &"max_hp": 0.0}}])
+archetype = &"flanker"
+animation_kind = &"warrior"
+tint = Color(0.2471, 0.4196, 0.2275, 1)
+collision_radius = 19.0
+encounter_tiers = true
+aggro_radius = 420.0
+leash_radius = 850.0
+sight_timeout = 4.0
+visual_kind = &"humanoid"
+summons_companion = false
