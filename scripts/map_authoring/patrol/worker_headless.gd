@@ -6,7 +6,7 @@ func _run() -> void:
 	if args.size() != 2: quit(1); return
 	var result: Dictionary = Compiler.fail("worker_invalid_request")
 	var raw := FileAccess.get_file_as_bytes(args[0])
-	if raw.size() <= 8*1024*1024:
+	if raw.size() <= Compiler.MAX_REQUEST_BYTES:
 		var payload: Variant = bytes_to_var(raw)
 		if payload is Dictionary:
 			if payload.get("source") is Dictionary: result = Compiler.compile(payload.source)

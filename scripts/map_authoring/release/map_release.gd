@@ -172,7 +172,7 @@ static func publish(package_id: String, name: String, package: Dictionary, sourc
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(folder))
 	var payload := var_to_bytes(package)
 	var bytes := ("RPP1"+Schema.bytes_hash(payload)).to_utf8_buffer()+payload
-	if bytes.size() > 4*1024*1024: return fail("release_package_invalid",package_id)
+	if bytes.size() > Compiler.MAX_PACKAGE_BYTES: return fail("release_package_invalid",package_id)
 	if FileAccess.file_exists(plan.path):
 		if FileAccess.get_file_as_bytes(plan.path) != bytes: return fail("immutable_conflict",package_id)
 	elif not _write(plan.path,bytes): return fail("release_io",package_id)

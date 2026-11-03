@@ -1,6 +1,13 @@
 class_name PhaseSelectionPanel
 extends PanelContainer
 const Phase = preload("res://data/expedition/phases/ruined_crossing.gd")
+## F10 Q4: authored phases (published maps) beside the generated Travessia.
+const PhaseRelease = preload("res://scripts/map_authoring/release/phase_release.gd")
+var phase_choice: OptionButton
+var phase_description: Label
+var travessia_description: Label
+var _phases: Array = []
+var _rules: Dictionary = {}
 var facade: ProfileFacade
 var menu: CharacterMenu
 var character_id := ""
@@ -28,16 +35,27 @@ func configure(owner_menu: CharacterMenu, id: String) -> void:
 	var column := VBoxContainer.new()
 	add_child(column)
 	var title := Label.new()
-	title.text = "Expedições · " + Phase.TITLE
+	title.text = "Expedições"
 	title.add_theme_font_size_override("font_size", 24)
 	column.add_child(title)
 	message = Label.new()
 	message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	column.add_child(message)
+	phase_choice = OptionButton.new()
+	phase_choice.name = "PhaseChoice"
+	phase_choice.add_item(Phase.TITLE)
+	_phases = PhaseRelease.phases()
+	for item: Dictionary in _phases: phase_choice.add_item(item.title)
+	phase_choice.item_selected.connect(func(_index: int) -> void: _describe())
+	column.add_child(phase_choice)
+	phase_description = Label.new()
+	phase_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	column.add_child(phase_description)
 	var description := Label.new()
 	description.text = "Quatro estágios, ramo lateral com retorno, rampa e ponte sobre uma passagem.\nNível mínimo 1 · sem chave ou custo. Conclusão: 100 gold, 300 EXP Base e 200 EXP Job; sem equipamento garantido.\nSair suspende a mesma expedição. Seu personagem fica reservado até concluí-la."
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	column.add_child(description)
+	travessia_description = description
 	seed_input = LineEdit.new()
 	seed_input.text = str(Time.get_ticks_usec())
 	seed_input.placeholder_text = "Seed decimal da montagem"
@@ -58,7 +76,9 @@ func configure(owner_menu: CharacterMenu, id: String) -> void:
 	var character := profile.character_by_id(id) if profile != null else null
 	var lock := profile.expedition_for_character(id) if profile != null else null
 	message.text = "Personagem: %s" % character.display_name if character != null else "Selecione um personagem válido."
-	start_button.text = "Retomar expedição deste personagem" if lock != null else "Iniciar Travessia das Ruínas"
+	start_button.text = "Retomar expedição deste personagem" if lock != null else "Iniciar a fase escolhida"
+	phase_choice.disabled = lock != null
+	_describe()
 	start_button.disabled = character == null
 	seed_input.editable = lock == null
 	seed_input.visible = lock == null
@@ -76,9 +96,22 @@ func start() -> Dictionary:
 		service_pending = true
 		var resumed := service.resume(lock.expedition_id, character_id, request, profile.revision)
 		return _finish(resumed)
-	var generated := ExpeditionAssembler.build(Phase.input(seed_input.text.strip_edges()))
-	if not generated["ok"]: return _finish(generated)
-	manifest = generated["data"]["manifest"]
+	if phase_choice.selected > 0:
+		# Published maps: prepared like the game test, off the main frame.
+		var phase_id: String = _phases[phase_choice.selected-1].phase_id
+		var worker := Thread.new()
+		var started_at := Time.get_ticks_msec()
+		if worker.start(PhaseRelease.prepare.bind(phase_id)) != OK: return _finish({"ok":false,"error_code":&"phase_unavailable"})
+		while worker.is_alive():
+			message.text = "Preparando os mapas da fase… %ds" % int((Time.get_ticks_msec()-started_at)/1000.0)
+			await get_tree().process_frame
+		var prepared: Dictionary = worker.wait_to_finish()
+		if not prepared.get("ok", false): return _finish({"ok":false,"error_code":StringName(prepared.get("code","phase_unavailable"))})
+		manifest = prepared.manifest; _rules = prepared.rules
+	else:
+		var generated := ExpeditionAssembler.build(Phase.input(seed_input.text.strip_edges()))
+		if not generated["ok"]: return _finish(generated)
+		manifest = generated["data"]["manifest"]; _rules = Phase.rules(manifest)
 	if profile.selected_character_id != character_id:
 		var selected := facade.select_character("select_" + request, profile.revision, character_id)
 		if not selected["ok"]: return _finish(selected)
@@ -102,7 +135,18 @@ func start() -> Dictionary:
 	await get_tree().process_frame
 	if not captured["ok"]: return _finish(captured)
 	service_pending = true
-	return _finish(service.enter(host, host._memory_snapshot_barrier, "exp_" + host.run_state.run_id.md5_text(), manifest, Phase.rules(manifest), request, facade.current_profile().revision))
+	return _finish(service.enter(host, host._memory_snapshot_barrier, "exp_" + host.run_state.run_id.md5_text(), manifest, _rules, request, facade.current_profile().revision))
+
+func _describe() -> void:
+	if phase_description == null: return
+	if phase_choice.selected <= 0:
+		phase_description.text = "Fase gerada por seed."
+		if travessia_description != null: travessia_description.visible = true
+		seed_input.visible = seed_input.editable
+	else:
+		phase_description.text = "Fase de mapas publicados. A primeira jogada do personagem exige limpar cada mapa; as seguintes pedem os guardiões e o objetivo."
+		seed_input.visible = false
+		if travessia_description != null: travessia_description.visible = false
 
 func _finish(result: Dictionary) -> Dictionary:
 	busy = false
@@ -127,5 +171,5 @@ func retry() -> Dictionary:
 	if busy: return BuildEffectCatalog.failure(&"save_in_progress")
 	if uncertain: return _finish(service.reconcile(request))
 	if is_instance_valid(host) and host._memory_snapshot_barrier != null:
-		return _finish(service.enter(host, host._memory_snapshot_barrier, "exp_" + host.run_state.run_id.md5_text(), manifest, Phase.rules(manifest), request, facade.current_profile().revision))
+		return _finish(service.enter(host, host._memory_snapshot_barrier, "exp_" + host.run_state.run_id.md5_text(), manifest, _rules, request, facade.current_profile().revision))
 	return await start()

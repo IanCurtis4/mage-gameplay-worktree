@@ -1,5 +1,10 @@
 @tool
 extends RefCounted
+## F10 Q4: a patrol package embeds its encounter package (itself up to 4 MiB);
+## a field-scale map exceeds 4 MiB here, so the patrol and release ceiling is twice
+## the encounter ceiling and the worker request twice that.
+const MAX_PACKAGE_BYTES := 8*1024*1024
+const MAX_REQUEST_BYTES := 16*1024*1024
 const Document = preload("res://scripts/map_authoring/patrol/patrol_document.gd")
 const Population = preload("res://scripts/map_authoring/population/population_compiler.gd")
 const Catalog = preload("res://scripts/map_authoring/population/population_catalog.gd")
@@ -48,11 +53,11 @@ static func compile(source: Dictionary, cancel: Callable = Callable()) -> Dictio
 				slot["patrol"] = def.duplicate(true)
 	var package := {"format_version":1,"compiler_revision":REVISION,"source_hash":Document.hash_source(source),"population_package":built.package,"manifest":manifest.to_data()}
 	package["package_hash"] = ExpeditionCanonical.digest(package)
-	if var_to_bytes(package).size() > 4*1024*1024: return fail("patrol_limit")
+	if var_to_bytes(package).size() > MAX_PACKAGE_BYTES: return fail("patrol_limit")
 	return {"ok":true,"code":"","input_hash":package.source_hash,"output_hash":package.package_hash,"diagnostics":[],"package":package}
 static func validate_package(package: Dictionary) -> bool:
 	if package.size() != 6 or not package.has_all(["format_version","compiler_revision","source_hash","population_package","manifest","package_hash"]) or not ExpeditionCanonical.valid(package): return false
-	if var_to_bytes(package).size() > 4*1024*1024: return false
+	if var_to_bytes(package).size() > MAX_PACKAGE_BYTES: return false
 	if package.format_version != 1 or package.compiler_revision != REVISION or not Schema._type(package.source_hash,"hash") or not Schema._type(package.package_hash,"hash") or not package.population_package is Dictionary or not package.manifest is Dictionary: return false
 	var copy := package.duplicate(true); copy.erase("package_hash")
 	if ExpeditionCanonical.digest(copy) != package.package_hash: return false
@@ -104,6 +109,6 @@ static func request(payload: Dictionary, cancel: Callable = Callable()) -> Dicti
 	if "SCRIPT ERROR:" in log_text or "ERROR:" in log_text or not FileAccess.file_exists(output): return fail("worker_incomplete")
 	var bytes := FileAccess.get_file_as_bytes(output)
 	Worker.discard(root)
-	if bytes.size() > 8*1024*1024: return fail("patrol_limit")
+	if bytes.size() > MAX_REQUEST_BYTES: return fail("patrol_limit")
 	var result: Variant = bytes_to_var(bytes)
 	return result if result is Dictionary and result.get("ok") is bool else fail("worker_incomplete")

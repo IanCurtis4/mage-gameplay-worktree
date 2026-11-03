@@ -5,6 +5,8 @@ extends SceneTree
 ## a new immutable package file, the source unchanged, the registry re-pinned.
 ## Usage: --headless --path <project> --script res://tools/map_editor_release/republish.gd -- <package_id>
 ## or, for a reference package outside the registry: -- --file <source.json> <package.rpp>
+## or, to publish a new map from res://data/map_authoring/<id>.patrol.json: -- --new <id> <name>
+## or, to publish a changed source over an existing entry: -- --update <id>
 const MapRelease = preload("res://scripts/map_authoring/release/map_release.gd")
 const Patrol = preload("res://scripts/map_authoring/patrol/patrol_compiler.gd")
 const Store = preload("res://scripts/map_authoring/patrol/patrol_store.gd")
@@ -12,6 +14,11 @@ func _initialize() -> void: _run.call_deferred()
 func _run() -> void:
 	var args := OS.get_cmdline_user_args()
 	if args.size() == 3 and args[0] == "--file": _file(args[1],args[2]); return
+	if args.size() == 3 and args[0] == "--new": _new(args[1],args[2]); return
+	if args.size() == 2 and args[0] == "--update":
+		var current_entry := MapRelease.entry(args[1])
+		if not current_entry.ok: _done(current_entry); return
+		_new(args[1],current_entry.entry.name,true); return
 	if args.size() != 1: _done({"ok":false,"code":"arguments_invalid"}); return
 	var read := MapRelease.entry(args[0])
 	if not read.ok: _done(read); return
@@ -45,6 +52,21 @@ func _file(source_path: String, package_path: String) -> void:
 	if file == null: _done({"ok":false,"code":"release_io"}); return
 	file.store_buffer(bytes); file.close()
 	_done({"ok":Store.load_package(package_path).ok,"package_hash":compiled.package.package_hash,"source_hash":compiled.package.source_hash,"path":package_path})
+
+func _new(package_id: String, name: String, update: bool = false) -> void:
+	if MapRelease.entry(package_id).ok != update: _done({"ok":false,"code":"release_entry_exists" if not update else "release_unknown","package_id":package_id}); return
+	var source_read: Dictionary = Store.load_source(MapRelease.FOLDER.path_join(MapRelease.source_file(package_id)))
+	if not source_read.ok: _done(source_read); return
+	OS.set_environment("RAGRPG_COMPILE_CACHE","0")
+	var started := Time.get_ticks_usec()
+	var compiled := Patrol.compile(source_read.data)
+	if not compiled.ok: _done(compiled); return
+	var current := MapRelease._current(MapRelease.FOLDER)
+	if not current.ok: _done(current); return
+	var published := MapRelease.publish(package_id,name,compiled.package,source_read.data,current.registry_hash)
+	published["compile_ms"] = (Time.get_ticks_usec()-started)/1000.0
+	published["package_bytes"] = var_to_bytes(compiled.package).size()
+	_done(published)
 
 func _done(result: Dictionary) -> void:
 	print("F10_REPUBLISH_RESULT "+JSON.stringify(result))

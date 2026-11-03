@@ -461,7 +461,9 @@ func authoring_commands() -> Array:
 func ax_command(id: String, parameters: Dictionary) -> Dictionary:
 	var fields := _ax_fields()
 	if not fields.has(id): return Operations.fail("action_missing")
-	var errors: Array = []; Operations.Schema._shape(parameters,fields[id],"parameters",errors)
+	# F10 Q2: a brush may carry the optional guardian flag.
+	var shape: Dictionary = Document._fields("brushes",fields[id],parameters) if id == "population/brush/upsert" else fields[id]
+	var errors: Array = []; Operations.Schema._shape(parameters,shape,"parameters",errors)
 	if not errors.is_empty(): return Operations.fail("arguments_invalid")
 	var applied: Dictionary
 	match id:

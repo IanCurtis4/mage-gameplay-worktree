@@ -35,7 +35,7 @@ static func publish(root: String, package: Dictionary, current_hash: String) -> 
 	if package.source_hash != current_hash: return Compiler.fail("stale_source")
 	var payload := var_to_bytes(package)
 	var bytes := ("RPP1"+Schema.bytes_hash(payload)).to_utf8_buffer()+payload
-	if bytes.size() > 4*1024*1024: return Compiler.fail("patrol_limit")
+	if bytes.size() > Compiler.MAX_PACKAGE_BYTES: return Compiler.fail("patrol_limit")
 	DirAccess.make_dir_recursive_absolute(root)
 	var path := root.path_join(package.package_hash+".rpp")
 	var lock := path+".writer_lock"
@@ -56,7 +56,7 @@ static func _publish_locked(path: String, package: Dictionary, bytes: PackedByte
 static func load_package(path: String) -> Dictionary:
 	var raw := IO._bytes(path)
 	if not raw.ok: return raw
-	if raw.bytes.size() > 4*1024*1024: return Schema.result(false,"patrol_limit")
+	if raw.bytes.size() > Compiler.MAX_PACKAGE_BYTES: return Schema.result(false,"patrol_limit")
 	# bytes_to_var (without _with_objects) never instantiates executable objects.
 	if raw.bytes.size() < 72 or raw.bytes.slice(0,4).get_string_from_utf8() != "RPP1": return Schema.result(false,"package_invalid")
 	var payload: PackedByteArray = raw.bytes.slice(68)

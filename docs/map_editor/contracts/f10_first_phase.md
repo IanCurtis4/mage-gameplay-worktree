@@ -87,3 +87,38 @@ sem mudar a fonte.
   `CandidateBatch`, `GameplayGate` e `PopulationReachability`. O arquivo antigo
   `sanctuary_woods.rpp` fica sem referência no registro, para a limpeza do Q5. O
   release exportado (M8 `release_bosque`) não foi rodado de novo.
+
+- **Mapas autorados pelo AX** (`tools/map_editor_phase/forest_phase.py`, receitas
+  executadas pelo `ax_session.gd`; nenhum JSON de mapa escrito à mão):
+  - Prado dos Terraços: 10.240 u, três terraços com quatro rampas, borda
+    íngreme, córrego raso, 12 aglomerados de cones rochosos, 196 objetos;
+    62 monstros (lobo 65%), guardião Javali elite, santuário e saída norte.
+  - Vales da Mata: 10.240 u, tronco, quatro ramos e galhos entre maciços de
+    cristas íngremes alinhadas à grade, 12 clareiras, 102 objetos; 59 monstros
+    (lobo 68%), guardião Espreitador elite, santuário e saída norte.
+  - Covil do Guardião: 3.072 u, anel de cones com dois portões, Guardião
+    Ancestral (`boss`) e quatro lobos, conclusão ao norte.
+- **Publicados** (`republish.gd --new/--update`): `forest_terraces` 4,39 MB,
+  `forest_valleys`, `forest_lair`; registro da fase
+  `data/expedition/phases/forest_sanctuary.json`.
+- **`ForestPhase` 9/9:** a fase prepara (190 s: 141, 41 e 8 s) e compõe 3
+  estágios, 4 portais, 2 santuários e 1 conclusão; a campanha aceita; a primeira
+  jogada abre pela limpeza e a repetição pelo guardião e depois pelo santuário.
+  O manifesto da fase tem 1,53 MB.
+- **O que a autoria revelou** (regras do jogo que a receita passou a seguir):
+  todo chão andável relevante precisa ser alcançável (platôs, topos de mesa, fundo
+  de rio estreito e prateleiras de clareira suave foram recusados), e todo trecho
+  de 1024 u precisa de chão alcançável pelo corpo real do jogador. Um rio de
+  margens íngremes amostrado em diagonal sempre deixa uma faixa plana isolada; o
+  rio ficou raso e andável.
+- **Limites de autoria agêntica medidos:** um traço de pincel num campo de
+  161×161 custa 2–5 s; cada `objects/place` custava ~14 s (trocado por
+  `objects/scatter`, ~70 s por sessão de prévia+aplicação); a prévia de população
+  do campo 1 levou ~400 s (a espera do cliente AX subiu de 300 s para 30 min); a
+  compilação de patrulha do campo 1 levou 282 s.
+- **Teto do pacote de patrulha e de publicação:** 4 → 8 MiB
+  (`patrol_compiler.MAX_PACKAGE_BYTES`), porque a patrulha embute o pacote de
+  encontros (até 4 MiB) e um campo dessa escala passa de 4 MiB. Os tetos de
+  terreno, mapa e encontros não mudaram.
+- **Correção do Q2 achada aqui:** o comando AX `population/brush/upsert`
+  recusava o campo `guardian` (o painel conferia o formato antigo).

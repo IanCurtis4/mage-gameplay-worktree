@@ -12,6 +12,9 @@ var _capture_screen := "terrain"
 var _request_path := ""
 var _result_path := ""
 var _capture_path := ""
+## F10 Q4: how long the client waits for a panel job (a field-scale encounter
+## plan exceeded the earlier 300 s). A wait, not a content guard.
+const AX_JOB_WAIT_MSEC := 1800000
 
 func _initialize() -> void:
 	_run.call_deferred()
@@ -81,7 +84,7 @@ func _run() -> void:
 			# The GUI action starts its normal worker. Keep this client alive until
 			# the panel publishes that worker's canonical, revision-checked result.
 			var started := Time.get_ticks_msec()
-			while compile_owner.job != null and Time.get_ticks_msec()-started < 300000:
+			while compile_owner.job != null and Time.get_ticks_msec()-started < AX_JOB_WAIT_MSEC:
 				await process_frame
 			if compile_owner.job != null:
 				if action.screen == "patrol": compile_owner.cancel()

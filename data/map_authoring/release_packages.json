@@ -10,6 +10,36 @@
 			"compiler_revision": "map_patrol_v1",
 			"source_hash": "58df5d6386a6222e838763d92a96072ff71ebf2daed168b475ab003d95e29dc1",
 			"package_hash": "41a8e11a6c70fdc9c87cec67a2c9f8fc8fb7af5ecfdc1690ba532472c0e52587"
+		},
+		{
+			"package_id": "forest_terraces",
+			"name": "Prado dos Terraços",
+			"kind": "patrol",
+			"path": "res://data/map_authoring/forest_terraces.d9d52701a7a4.rpp",
+			"source_path": "res://data/map_authoring/forest_terraces.patrol.json",
+			"compiler_revision": "map_patrol_v1",
+			"source_hash": "832634d0abe73cc2b4ffdbc89d2f943c375fd8d853cf37f90beb90e6cf209df5",
+			"package_hash": "d9d52701a7a40124969d94f1770ef9f3cc3d0f609691afc02ebae48ccdf665ce"
+		},
+		{
+			"package_id": "forest_valleys",
+			"name": "Vales da Mata",
+			"kind": "patrol",
+			"path": "res://data/map_authoring/forest_valleys.2faa15085074.rpp",
+			"source_path": "res://data/map_authoring/forest_valleys.patrol.json",
+			"compiler_revision": "map_patrol_v1",
+			"source_hash": "cff1191858bf2e6e86128ebfd0ba86e97aa6297b76347008a605619c30708e54",
+			"package_hash": "2faa15085074a74ddec8ba0fa48bc27213e18076a0f37ea7706dc64f30db3dbb"
+		},
+		{
+			"package_id": "forest_lair",
+			"name": "Covil do Guardião",
+			"kind": "patrol",
+			"path": "res://data/map_authoring/forest_lair.c19cad53def8.rpp",
+			"source_path": "res://data/map_authoring/forest_lair.patrol.json",
+			"compiler_revision": "map_patrol_v1",
+			"source_hash": "b484d5e4122df46a0f7ed52393f2a613f43118f8a45c82d5db29c078c34c19c8",
+			"package_hash": "c19cad53def80a9191ad8782a0d7d7ce2b80d531a6fba4a34c44f169ca28d39b"
 		}
 	]
 }

@@ -1,0 +1,10 @@
+{
+	"registry_version": 1,
+	"phase_id": "forest_sanctuary",
+	"title": "Floresta do Santuário",
+	"maps": [
+		{"package_id": "forest_terraces", "exit": "trail_north"},
+		{"package_id": "forest_valleys", "exit": "trail_north"},
+		{"package_id": "forest_lair"}
+	]
+}
