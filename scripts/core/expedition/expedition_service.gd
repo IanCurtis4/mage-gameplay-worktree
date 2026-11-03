@@ -325,7 +325,19 @@ func _discard_staged(context: Dictionary) -> void:
 # replacement or portal flag is published before the canonical writer commits.
 func enter(controller: RunController, barrier: SnapshotTickBarrier, expedition_id: String, manifest: ExpeditionManifest, rules: Dictionary, request_id: String, expected_revision: int) -> Dictionary:
 	if manifest == null: return _fail(&"invalid_manifest")
-	return campaign_command(controller, barrier, {"kind": "enter", "expedition_id": expedition_id, "manifest": manifest.to_data(), "rules": rules.duplicate(true)}, request_id, expected_revision)
+	var data := manifest.to_data()
+	var command := {"kind": "enter", "expedition_id": expedition_id, "manifest": data, "rules": rules.duplicate(true)}
+	var profile := facade.current_profile()
+	if profile != null and controller != null and controller.run_state != null and data.get("input", {}).get("phase_id") is String:
+		command["replay"] = phase_completed(profile, controller.run_state.character_id, StringName(data["input"]["phase_id"]))
+	return campaign_command(controller, barrier, command, request_id, expected_revision)
+
+## F10 Q2: the first play of a phase belongs to the character. It is the history
+## itself: a completed expedition of that character and phase, never erased.
+static func phase_completed(profile: ProfileState, character_id: String, phase_id: StringName) -> bool:
+	for slot: ExpeditionAssetLock in profile.expeditions.values():
+		if slot.character_id == character_id and slot.phase_id == phase_id and slot.lifecycle == &"completed": return true
+	return false
 
 func travel(controller: RunController, barrier: SnapshotTickBarrier, portal_id: String, stage_id: String, request_id: String, expected_revision: int) -> Dictionary:
 	return campaign_command(controller, barrier, {"kind": "travel", "portal_id": portal_id, "stage_id": stage_id}, request_id, expected_revision)
@@ -418,11 +430,12 @@ func _valid_campaign_command(command: Dictionary) -> bool:
 	if not command.get("kind") is String: return false
 	match command["kind"]:
 		"enter":
-			if command.size() != 4 or not command.get("expedition_id") is String or not command.get("manifest") is Dictionary or not command.get("rules") is Dictionary: return false
+			if command.size() != (5 if command.has("replay") else 4) or (command.has("replay") and not command["replay"] is bool) or not command.get("expedition_id") is String or not command.get("manifest") is Dictionary or not command.get("rules") is Dictionary: return false
 			var manifest: Dictionary = command["manifest"]
 			if not manifest.has_all(["input", "stages", "population", "witnesses", "portals", "objectives"]) or not manifest["input"] is Dictionary or not manifest["stages"] is Array or manifest["stages"].is_empty() or not manifest["population"] is Dictionary or not manifest["population"].get("slots") is Array or not manifest["witnesses"] is Dictionary or not manifest["portals"] is Array or not manifest["objectives"] is Array: return false
 			return manifest["input"].get("phase_id") is String and manifest["input"].get("entry_stage_id") is String and manifest["input"].get("traversal") is Dictionary
 		"travel": return command.size() == 3 and command.get("portal_id") is String and command.get("stage_id") is String
+		"unlock": return command.size() == 2 and command.get("source") is String and not command["source"].is_empty()
 		"revive": return command.size() == 2 and command.get("event_id") is String and not command["event_id"].is_empty()
 		"finish": return command.size() == 3 and command.get("outcome") in ["completed", "quest"] and command.get("source") is String
 		"events":
@@ -447,7 +460,7 @@ func _apply_campaign(host: RunController, command: Dictionary) -> Dictionary:
 		manifest._data = command["manifest"].duplicate(true)
 		host.campaign_runtime = ExpeditionCampaignRuntime.new()
 		host.combat_participation = CombatParticipation.new()
-		return host.campaign_runtime.configure(host, command["expedition_id"], manifest, command["rules"])
+		return host.campaign_runtime.configure(host, command["expedition_id"], manifest, command["rules"], command.get("replay", false))
 	var runtime := host.campaign_runtime
 	var state := runtime.state
 	if kind in ["travel", "finish", "revive"] and runtime.pending_events.any(func(event: Dictionary) -> bool: return event["kind"] == "mob_death"):
@@ -495,6 +508,16 @@ func _apply_campaign(host: RunController, command: Dictionary) -> Dictionary:
 		if not returned["ok"]: return returned
 		ExpeditionDeathRecovery.revive(host.player, state.policy)
 		return runtime.admit_pending(host)
+	if kind == "unlock":
+		# F10 Q2: reaching a stage objective (sanctuary, switch) after its guardians.
+		if state.lifecycle != "active" or not host.player.is_alive(): return _fail(&"completion_unmet")
+		var target := {}
+		for objective: Dictionary in state.manifest_data["objectives"]:
+			if objective["objective_id"] == command.get("source"): target = objective; break
+		if target.is_empty() or target["outcome"] != "stage_unlock" or target["stage_id"] != state.current_stage_id or not _at_point(host, target["point"]): return _fail(&"completion_unmet")
+		if not state.guardians_resolved(state.current_stage_id): return _fail(&"guardian_pending")
+		state.objectives[target["objective_id"]] = true
+		return {"ok": true}
 	if kind == "finish":
 		if state.lifecycle != "active" or not host.player.is_alive(): return _fail(&"completion_unmet")
 		var source := {}
@@ -506,7 +529,9 @@ func _apply_campaign(host: RunController, command: Dictionary) -> Dictionary:
 			state.objectives[source["objective_id"]] = true
 			state.lifecycle = "suspended"
 			return {"ok": true}
-		if command.get("outcome") != "completed" or source["outcome"] != "phase_completion" or not state.stages[state.current_stage_id]["cleared_once"]: return _fail(&"completion_unmet")
+		# F10 Q2: a replay finishes on its objective once the guardians are down.
+		var ready: bool = state.guardians_resolved(state.current_stage_id) if state.replay else state.stages[state.current_stage_id]["cleared_once"]
+		if command.get("outcome") != "completed" or source["outcome"] != "phase_completion" or not ready: return _fail(&"completion_unmet")
 		if host.reward_service.has_uncollected(): return _fail(&"rewards_pending")
 		for objective: Dictionary in state.manifest_data["objectives"]:
 			if objective["required"] and objective["objective_id"] != source["objective_id"] and not state.objectives.has(objective["objective_id"]): return _fail(&"completion_unmet")

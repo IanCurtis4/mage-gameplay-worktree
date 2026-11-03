@@ -171,6 +171,15 @@ func _hunter_and_taunt() -> void:
 	_damage(enemy, target.get_instance_id(), 10.0)
 	enemy._try_attack(false)
 	_check(enemy.engagement_mode == &"returning" and f["attacks"][0] == 0, "damage beyond leash cannot reopen pursuit")
+	var returning_hp := enemy.health.current_hp
+	_damage(enemy, target.get_instance_id(), 25.0)
+	_check(enemy.returning_immune() and enemy.health.current_hp == returning_hp, "returning mob takes no damage (F10 Q2)")
+	enemy.global_position = enemy.spawn_home + Vector2(200, 0)
+	enemy.health._hp_deficit = 30.0
+	_advance(enemy, 0.2)
+	_check(enemy.engagement_mode == &"returning" and enemy.health.hp_deficit() == 30.0, "return does not heal before arriving (F10 Q2)")
+	_advance(enemy, 6.0)
+	_check(enemy.engagement_mode == &"idle" and enemy.health.hp_deficit() == 0.0, "arrival at the post heals everything (F10 Q2)")
 	(f["owner"] as Node).free()
 	f = _fixture()
 	enemy = f["enemy"]

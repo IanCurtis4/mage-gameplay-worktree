@@ -117,7 +117,7 @@ func _patrol_return_planned(planned: Dictionary) -> void:
 func _world_walk(delta: float) -> void:
 	if is_rooted() or is_stunned() or not world_motion.has_route(): return
 	var before := world_point()
-	var movement := world_motion.advance(stat_breakdown.value(&"move_speed")*movement_speed_multiplier()*delta)
+	var movement := world_motion.advance(stat_breakdown.value(&"move_speed")*movement_speed_multiplier()*_charge_factor()*delta)
 	if not movement["ok"]: world_motion.cancel(); _repath_time = 0.0; return
 	var after := world_point()
 	if before.position != after.position:
@@ -152,7 +152,7 @@ func _advance_world_ai(delta: float) -> void:
 			_world_plan(_world_home)
 			_world_walk(delta)
 			if world_point().position.distance_to(_world_home.position) <= WorldGeometry.EPS and world_point().surface_id == _world_home.surface_id:
-				engagement_mode = &"idle"
+				_arrive_home()
 				_world_last_seen = null
 				_sight_lost_time = 0.0
 				world_motion.cancel()
@@ -177,10 +177,46 @@ func _advance_world_ai(delta: float) -> void:
 	if archetype == &"archer" and taunt_remaining <= 0.0:
 		var standoff := minf(280.0,attack_range*0.75) if _mob_definition != null and not _mob_definition.skill_ids.is_empty() else 280.0
 		_world_plan(_world_standoff_goal(standoff))
+	elif archetype == &"flanker" and taunt_remaining <= 0.0 and distance > FLANK_CLOSE:
+		var flank := _world_flank_goal()
+		_world_plan(flank if flank != null else player.world_point())
 	else:
+		if archetype == &"charger": _try_charge(distance)
 		_world_plan(player.world_point())
 	_world_walk(delta)
 	if _uses_engagement() and engagement_mode == &"engaged" and not _inside_leash(): _begin_return()
+
+## F10 Q2 (contracts/f10_phase_rules.md): against kiting. A charger closes the
+## distance with a short burst of speed; a flanker comes in from one side of the
+## target (a stable side per occurrence) and only then goes straight at it.
+const CHARGE_MIN := 160.0
+const CHARGE_MAX := 480.0
+const CHARGE_SECONDS := 0.6
+const CHARGE_COOLDOWN := 4.0
+const CHARGE_SPEED := 2.6
+const FLANK_DISTANCE := 120.0
+const FLANK_CLOSE := 150.0
+var _charge_remaining := 0.0
+var _charge_cooldown := 0.0
+
+func _try_charge(distance: float) -> void:
+	if _charge_remaining > 0.0 or _charge_cooldown > 0.0 or distance < CHARGE_MIN or distance > CHARGE_MAX or is_rooted() or is_stunned(): return
+	_charge_remaining = CHARGE_SECONDS; _charge_cooldown = CHARGE_COOLDOWN
+
+func _charge_factor() -> float:
+	return CHARGE_SPEED if _charge_remaining > 0.0 else 1.0
+
+func _world_flank_goal() -> ExpeditionWorldPoint:
+	var target_point := player.world_point()
+	var offset := world_point().position-target_point.position
+	var toward := -Vector2(offset.x,offset.z).normalized()
+	if toward.is_zero_approx(): return null
+	var side := 1.0 if String(threat.enemy_id).hash() % 2 == 0 else -1.0
+	var horizontal := Vector2(target_point.position.x,target_point.position.z)+toward.orthogonal()*side*FLANK_DISTANCE
+	var support := world_motion.geometry.support_at(target_point.surface_id,horizontal,world_motion.geometry.geometry_revision)
+	if not support["ok"]: return null
+	var data: Dictionary = support["data"]["point"]
+	return ExpeditionWorldPoint.create(data["stage_id"],data["surface_id"],data["position"])
 
 func _world_standoff_goal(distance: float) -> ExpeditionWorldPoint:
 	var target_point := player.world_point()
@@ -304,6 +340,7 @@ func _process(delta: float) -> void:
 		_path_index = 0
 		_repath_time = 0.0
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
+	_charge_remaining = maxf(0.0, _charge_remaining - delta); _charge_cooldown = maxf(0.0, _charge_cooldown - delta)
 	for skill: StringName in _mob_cooldowns:
 		_mob_cooldowns[skill] = maxf(0.0, float(_mob_cooldowns[skill]) - delta)
 	if taunt_remaining > 0.0: queue_redraw()
@@ -664,13 +701,29 @@ func _refresh_world_engagement(delta: float) -> bool:
 		if _sight_lost_time >= _mob_definition.sight_timeout: _begin_return()
 	return player_target_acquired
 
-## Checkpoint38: a mob returning from its leash (aggro already ignored on the
-## way) or standing idle while hurt recovers to full HP over this many seconds.
+## Checkpoint38: a mob standing idle while hurt recovers to full HP over this
+## many seconds; F10 Q2: a returning one is immune and heals on arrival.
 ## Chip damage from beyond the leash therefore cannot accumulate.
 const LEASH_RECOVERY_SECONDS := 4.0
 func _recover_out_of_combat(delta: float) -> void:
-	if not _uses_engagement() or not is_alive() or engagement_mode == &"engaged" or health.hp_deficit() <= 0.0 or not is_finite(delta) or delta <= 0.0: return
+	if not _uses_engagement() or not is_alive() or engagement_mode != &"idle" or health.hp_deficit() <= 0.0 or not is_finite(delta) or delta <= 0.0: return
 	health.heal(health.max_hp * delta / LEASH_RECOVERY_SECONDS)
+
+## F10 Q2 (decisão humana de 2/11): a mob returning to its post takes no damage
+## and recovers all of its HP on arrival. A return that has no route is not
+## immune, so a stuck mob can still be defeated.
+func returning_immune() -> bool:
+	return _uses_engagement() and is_alive() and engagement_mode == &"returning" and (world_motion == null or world_ai_failure == &"")
+
+func apply_damage(request: DamageRequest, rng: RandomNumberGenerator) -> Dictionary:
+	if request != null and returning_immune():
+		var ignored := request.copy(); ignored.damage_dealt_multiplier = 0.0
+		return super.apply_damage(ignored,rng)
+	return super.apply_damage(request,rng)
+
+func _arrive_home() -> void:
+	engagement_mode = &"idle"
+	if is_alive() and health.hp_deficit() > 0.0: health.heal(health.max_hp)
 
 func _begin_return() -> void:
 	if engagement_mode == &"returning": return
@@ -691,7 +744,7 @@ func _process_return(delta: float) -> void:
 	_update_path(spawn_home)
 	_move_along_path(delta)
 	if global_position.distance_to(spawn_home) <= MOVEMENT_EPSILON:
-		engagement_mode = &"idle"
+		_arrive_home()
 		_last_seen_position = Vector2.INF
 		hunter_last_seen_position = Vector2.INF
 		_sight_lost_time = 0.0

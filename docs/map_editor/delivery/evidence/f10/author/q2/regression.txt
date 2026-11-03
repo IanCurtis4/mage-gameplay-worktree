@@ -1,0 +1,231 @@
+RUN SocketFollow EXIT 0 SECONDS 34
+  F10_SOCKET_FOLLOW_RESULT {"checks":[{"id":"ground_uses_the_drawn_diagonal","ok":true},{"id":"exact_planes_marker_follows
+RUN PhaseRules EXIT 0 SECONDS 14
+  F10_PHASE_RULES_RESULT {"checks":[{"id":"completion_is_per_character_and_phase","ok":true},{"id":"first_play_waits_for_t
+RUN GridRegional EXIT 0 SECONDS 40
+  F10_GRID_REGIONAL_RESULT {"checks":[{"id":"cold_compile_builds_every_stretch","ok":true},{"id":"unchanged_field_rebuilds
+  F10_GRID_REGIONAL_TIMING {"lattices_rebuilt":1,"map_cold_ms":8907.0,"map_cold_twin_ms":4526.0,"map_stroke_ms":7819.0,"piece_cold_ms":630.0,"piece_cold_twin_ms":701.0,"piece_same_ms":606.0,"piece_stroke_ms":611.0,"stretches_rebuilt":1}
+RUN RoundedResume EXIT 0 SECONDS 223
+  F9_ROUNDED_RESUME_RESULT {"checks":[{"id":"persisted_resume_session_path_is_provided","ok":true},{"id":"existing_candida
+  F9_ROUNDED_TIMING {"app_open_ms":28577.676,"app_start_ms":19445.931,"compile_prepare_ms":2176.131,"in_game_frame_sample":{"count":96,"max_ms":80.521,"p50_ms":32.105,"p95_ms":36.225},"in_game_movement_ms":3018.52,"map_publish_ms":23218.273,"movement_request_ms":21.391,"scope":"one published piece, one real App route; frame durations sampled during gameplay; no general FPS claim"}
+  F9_ROUNDED_UI_RESULT {"checks":[{"id":"native_empty_session_replaced","ok":true},{"id":"real_terrain_panel_and_gui_action_present","ok":true},{"id":"panel_toolbar_fits_without_horizontal_overflow","ok":true},{"id":"gui_example_is_one_atomic_session_apply","ok":true},{"id":"gui_apply_undo_redo_restores_exact_source","ok":true},{"id":"ax_example_uses_same_real_command_provider","ok":true},{"id":"ax_and_gui_publish_identical_piece_and_curve","ok":true},{"id":"same_gui_authored_piece_compiles_and_is_published_to_canvas","ok":true},{"id":"native_curve_and_path_capture_written","ok":true},{"id":"same_gui_ax_authored_piece_compiles_as_map","ok":true},{"id":"compiled_gui_piece_becomes_candidate","ok":true},{"id":"candidate_is_published_to_disposable_session","ok":true},{"id":"real_preview_app_opens_published_candidate","ok":true},{"id":"real_preview_app_starts_without_duplicate_prepare","ok":true},{"id":"real_gameplay_has_raised_target_and_prescribed_body","ok":true},{"id":"real_game_view_picks_raised_piece_support","ok":true},{"id":"real_game_pointer_starts_canonical_walk","ok":true},{"id":"real_player_walks_from_safe_start_to_raised_target","ok":true},{"id":"real_player_keeps_20_by_32_body_and_actor_ownership","ok":true},{"id":"real_app_gameplay_capture_written","ok":true}],"count":20,"ok":true,"timings":{"app_open_ms":28577.676,"app_start_ms":19445.931,"compile_prepare_ms":2176.131,"in_game_frame_sample":{"count":96,"max_ms":80.521,"p50_ms":32.105,"p95_ms":36.225},"in_game_movement_ms":3018.52,"map_publish_ms":23218.273,"movement_request_ms":21.391,"scope":"one published piece, one real App route; frame durations sampled during gameplay; no general FPS claim"}}
+  F9_ROUNDED_RESUME_TIMING {"app_open_ms":33800.686,"in_game_frame_sample":{"count":2,"max_ms":38.841,"p50_ms":32.175,"p95_ms":32.175},"movement_request_ms":7.071,"resume_start_ms":20964.384,"resuspend_checkpoint_bytes":3592896,"scope":"fresh-process persisted resume, one saved rounded-hill session, one nearby walk; no general FPS claim","short_hill_walk_ms":78.223}
+  F9_ROUNDED_RESUME_RESULT {"checks":[{"id":"persisted_resume_session_path_is_provided","ok":true},{"id":"existing_candidate_session_opens_in_fresh_app","ok":true},{"id":"existing_suspended_run_resumes_in_new_process","ok":true},{"id":"same_candidate_and_dense_geometry_are_restored","ok":true},{"id":"player_resumes_on_saved_raised_hill_position","ok":true},{"id":"restored_player_keeps_original_20_by_32_body","ok":true},{"id":"resumed_game_has_nearby_raised_support","ok":true},{"id":"resumed_authored_view_picks_raised_support","ok":true},{"id":"resumed_player_accepts_canonical_short_walk","ok":true},{"id":"resumed_player_walks_across_raised_hill","ok":true},{"id":"resumed_player_remains_inside_original_body_clearance","ok":true},{"id":"fresh_process_gameplay_capture_written","ok":true},{"id":"resuspend_saves_format_two_checkpoint_under_original_four_mib","ok":true}],"count":13,"ok":true,"timings":{"app_open_ms":33800.686,"in_game_frame_sample":{"count":2,"max_ms":38.841,"p50_ms":32.175,"p95_ms":32.175},"movement_request_ms":7.071,"resume_start_ms":20964.384,"resuspend_checkpoint_bytes":3592896,"scope":"fresh-process persisted resume, one saved rounded-hill session, one nearby walk; no general FPS claim","short_hill_walk_ms":78.223}}
+RUN HeightGrid EXIT 0 SECONDS 8
+  F10_HEIGHT_GRID_RESULT {"checks":[{"id":"invalid_grids_refused","ok":true},{"id":"flat_support_and_bounds","ok":true},{"
+  F10_HEIGHT_GRID_TIMING {"gate_ms":26.7,"rough_expanded":657,"rough_ms":45.6,"rough_ok":true}
+RUN GridField EXIT 0 SECONDS 97
+  F10_GRID_FIELD_RESULT {"checks":[{"id":"field_piece_compiles_in_budget","ok":true},{"id":"field_map_certifies_in_budget"
+  F10_GRID_FIELD_TIMING {"campaign_ms":2135.2,"certification":{"closure":"built","connections":214,"edge_tests":8414,"elapsed_ms":9601.41,"endpoint_checks":428,"expansions":11106,"grid_bent_tests":5560,"grid_bent_usec":1681726,"landmark_checks":42872,"offset_checks":1688,"operations":1,"peak_storage_bytes":55727724,"phase_usec":{"construct":3208254,"direct":94,"inward":2659484,"outward":2224946,"prepare":445796,"publish":71794,"witnesses":991032},"portal_checks":1544,"reconstruction_steps":842,"snapshot_storage_units":14104056,"states":2909,"storage_bytes":55727724,"straight_usec":2816535,"terminal_checks":111,"witness_points":2271,"witness_segments":1428},"frames_corner":{"average_ms":13.34,"draw_calls":5,"worst_ms":13.41},"frames_whole":{"average_ms":13.33,"draw_calls":860,"worst_ms":13.48},"map_bytes":2028656,"map_ms":16664.1,"map_validate_ms":1737.7,"piece_bytes":1552788,"piece_ms":1764.4,"piece_validate_ms":1300.8,"population_bytes":2971724,"population_compile_ms":9147.1,"population_plan_ms":30519.6,"population_slots":55,"route_background_ms":3448.2,"route_background_worst_pump_ms":0.04,"route_cold_ms":3485.5,"route_points":40,"route_warm_ms":997.4,"snapshot_bytes":1051324,"snapshot_capture_ms":1410.2,"snapshot_restore_ms":3364.8,"view_ms":1527.5}
+RUN GridViewNative EXIT 0 SECONDS 25
+  F10_GRID_VIEW_RESULT {"checks":[{"id":"map_compiles","ok":true},{"id":"one_mesh_per_stretch","ok":true},{"id":"drawn_ver
+  F10_GRID_VIEW_TIMING {"build_ms":1438.6,"corner":{"average_ms":13.33,"draw_calls":25,"worst_ms":14.21},"whole":{"average_ms":13.18,"draw_calls":210,"worst_ms":26.6}}
+RUN GridCompile EXIT 0 SECONDS 24
+  F10_GRID_COMPILE_RESULT {"checks":[{"id":"schema_accepts_the_mode","ok":true},{"id":"piece_compiles_to_stretches","ok":t
+  F10_GRID_COMPILE_TIMING {"big_code":"","big_piece_ms":1344.8,"big_validate_ms":1052.4,"linked_code":"","map_code":"","map_metrics":{"elapsed_ms":1162.157,"navigation":{"closure":"built","connections":14,"edge_tests":674,"elapsed_ms":637.139,"endpoint_checks":28,"expansions":694,"grid_bent_tests":474,"grid_bent_usec":139379,"landmark_checks":1000,"offset_checks":116,"operations":1,"peak_storage_bytes":4249068,"phase_usec":{"construct":191888,"direct":19,"inward":208726,"outward":130706,"prepare":37620,"publish":5700,"witnesses":62474},"portal_checks":106,"reconstruction_steps":78,"snapshot_storage_units":1180332,"states":199,"storage_bytes":4249068,"straight_usec":174593,"terminal_checks":11,"witness_points":207,"witness_segments":128}},"map_ms":1178.0,"piece_ms":193.7}
+RUN HeightGridNavigation EXIT 0 SECONDS 13
+  F10_GRID_NAV_RESULT {"checks":[{"id":"seams_from_shared_spans","ok":true},{"id":"route_crosses_the_stretches_through_the
+  F10_GRID_NAV_TIMING {"batch_ms":205.2,"cold_ms":142.8,"points":11,"warm_ms":43.2}
+RUN HeightGridWorld EXIT 0 SECONDS 12
+  F10_GRID_WORLD_RESULT {"checks":[{"id":"stretch_is_a_valid_cell","ok":true},{"id":"support_is_the_stretch","ok":true},{"
+RUN Geometry EXIT 0 SECONDS 17
+  F9_GEOMETRY_RESULT {"checks":[{"detail":"","id":"wide_opening_compiles","ok":true},{"detail":{"connection_ids":["door"],
+RUN Objects EXIT 0 SECONDS 25
+  F9_OBJECTS_RESULT {"checks":[{"id":"catalog_loads","ok":true},{"id":"catalog_origin_and_rights","ok":true},{"id":"catalo
+RUN ObjectsNative EXIT 0 SECONDS 47
+  F9_OBJECTS_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"stable_open_action","ok":true},{"id":"native_obje
+RUN Mesh EXIT 0 SECONDS 16
+  F9_MESH_RESULT {"checks":[{"id":"curved_grid_compiles","ok":true},{"id":"curved_grid_has_eight_exact_triangles","ok":tru
+RUN Relief EXIT 0 SECONDS 15
+  F9_RELIEF_RESULT {"checks":[{"id":"convex_terrain_mass_valid","ok":true},{"id":"concave_cap_rejected","ok":true},{"id":"
+RUN Ports EXIT 0 SECONDS 178
+  F9_PORT_RESULT {"checks":[{"id":"refined_group_valid","ok":true},{"id":"single_group_valid","ok":true},{"id":"logical_op
+RUN Batch EXIT 0 SECONDS 14
+  F9_BATCH_RESULT {"checks":[{"id":"direct_batch_complete","ok":true},{"id":"duplicate_inputs_keep_result_indices","ok":tr
+RUN Materials EXIT 0 SECONDS 12
+  F9_MATERIAL_RESULT {"checks":[{"id":"four_named_materials","ok":true},{"id":"four_tiles_and_imports_are_hashed","ok":tru
+RUN MaterialsNative EXIT 0 SECONDS 39
+  F9_MATERIAL_UI_RESULT {"checks":[{"id":"native_editor_shell","ok":true},{"id":"four_material_choices_in_controls","ok":t
+RUN Scale EXIT 0 SECONDS 32
+  M2_SCALE_RESULT {"checks":[{"id":"decimal_tie_rounds_to_even","ok":true},{"id":"decimal_above_tie_rounds_up","ok":true},
+RUN Cliff EXIT 0 SECONDS 16
+  F9_CLIFF_RESULT {"checks":[{"id":"flat_pair_valid","ok":true},{"id":"flat_pair_has_one_join","ok":true},{"id":"equal_bas
+RUN CliffNative EXIT 0 SECONDS 36
+  F9_CLIFF_UI_RESULT {"checks":[{"id":"native_editor_shell","ok":true},{"id":"mixed_relief_compiles_for_native_editor","ok
+RUN BiomeProps EXIT 0 SECONDS 16
+  F9_BIOME_PROPS_RESULT {"checks":[{"id":"six_catalog_definitions","ok":true},{"id":"existing_definitions_immutable","ok":
+RUN BiomePropsNative EXIT 0 SECONDS 41
+  F9_BIOME_PROPS_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"six_named_palette_entries","ok":true},{"id":"
+RUN Borders EXIT 0 SECONDS 112
+  F9_BORDER_RESULT {"checks":[{"id":"four_families_and_transition_catalog","ok":true},{"id":"unknown_profile_is_explicit",
+RUN BordersNative EXIT 0 SECONDS 48
+  F9_BORDER_UI_RESULT {"checks":[{"id":"ruin_rubble_v1_compiles_for_native_view","ok":true},{"id":"ruin_rubble_v1_view_rec
+RUN Shadows EXIT 0 SECONDS 15
+  F9_SHADOW_RESULT {"checks":[{"id":"connected_receiver_mesh_builds","ok":true},{"id":"seam_uses_both_actual_receivers","o
+RUN ShadowsNative EXIT 0 SECONDS 50
+  F9_SHADOW_UI_RESULT {"checks":[{"id":"sand_flat_source_authored","ok":true},{"id":"sand_flat_compiled_real_package","ok"
+RUN CanvasOrder EXIT 0 SECONDS 15
+  F9_ORDER_RESULT {"checks":[{"id":"actor_on_low_ramp_draws_after_own_ground","ok":true},{"id":"ordering_does_not_mutate_g
+RUN Library EXIT 0 SECONDS 15
+  F9_LIBRARY_RESULT {"checks":[{"id":"empty_preferences_valid","ok":true},{"id":"boolean_version_rejected","ok":true},{"id
+RUN LibraryNative EXIT 0 SECONDS 50
+  F9_LIBRARY_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"native_project_metadata_storage_bound","ok":true}
+RUN Viewport EXIT 0 SECONDS 14
+  F9_VIEWPORT_RESULT {"checks":[{"id":"real_ramp_bridge_and_port_compile","ok":true},{"id":"canonical_world_point_decodes_
+RUN ViewportNative EXIT 0 SECONDS 61
+  F9_VIEWPORT_UI_RESULT {"checks":[{"id":"real_bridge_map_compiles","ok":true},{"id":"native_tools_and_minimap_visible","o
+RUN RuntimeView EXIT 0 SECONDS 16
+  F9_RUNTIME_VIEW_RESULT {"checks":[{"id":"actual_map_package_compiles","ok":true},{"id":"shared_renderer_constructs_world
+RUN GameplayNative EXIT 0 SECONDS 88
+  F9_GAMEPLAY_RESULT {"checks":[{"id":"authored_patrol_with_real_population_compiles","ok":true},{"id":"passive_candidate_
+RUN GameplayWindow EXIT 0 SECONDS 61
+  F9_WINDOW_RESULT {"checks":[{"id":"actual_wide_map_compiles","ok":true},{"id":"run_session_created","ok":true},{"id":"wi
+RUN GameplayControls EXIT 0 SECONDS 62
+  F9_CONTROLS_RESULT {"checks":[{"id":"authored_interactions_compile_without_synthetic_enemies","ok":true},{"id":"disposab
+RUN GameplayEditorNative EXIT 0 SECONDS 87
+  F9_GAMEPLAY_EDITOR_RESULT {"checks":[{"id":"actual_map_panel_has_gameplay_controls","ok":true},{"id":"human_two_room_exa
+RUN GameplayCli EXIT 0 SECONDS 130
+  F9_GAMEPLAY_CLI_RESULT {"checks":[{"id":"same_canonical_sample_source_and_package","ok":true},{"id":"published_package_i
+RUN FieldsNative EXIT 0 SECONDS 34
+  F9_FIELDS_UI_RESULT {"checks":[{"id":"authored_ramp_and_bridge_keep_height_and_real_scale","ok":true},{"id":"fire_wall_u
+RUN Organic EXIT 0 SECONDS 261
+  F9_ORGANIC_RESULT {"checks":[{"id":"same_gauss17_source_keeps_exact_shape","ok":true},{"id":"rounded_geometry_keeps_512_
+RUN NavigationLazy EXIT 0 SECONDS 17
+  F9_LAZY_RESULT {"checks":[{"id":"radius_0.25_forward_same_points_connections_cost_or_error","ok":true},{"id":"radius_0.2
+RUN NavigationDense EXIT 0 SECONDS 65
+  F9_DENSE_RESULT {"checks":[{"id":"historic_dense_source_publishes_without_bypass","ok":true},{"id":"historic_target_4.0_
+RUN NavigationContext EXIT 0 SECONDS 22
+  F9_CONTEXT_RESULT {"checks":[{"id":"real_curved_terrain_publishes_with_masses","ok":true},{"id":"authored_volume_subset_
+RUN Rounded EXIT 0 SECONDS 14
+  F9_ROUNDED_RESULT {"checks":[{"id":"organic_example_created_without_mutating_empty_source","ok":true},{"id":"organic_exa
+RUN RoundedNative EXIT 0 SECONDS 154
+  F9_ROUNDED_UI_RESULT {"checks":[{"id":"native_empty_session_replaced","ok":true},{"id":"real_terrain_panel_and_gui_actio
+  F9_ROUNDED_TIMING {"app_open_ms":32853.336,"app_start_ms":21810.094,"compile_prepare_ms":3048.528,"in_game_frame_sample":{"count":105,"max_ms":85.577,"p50_ms":28.196,"p95_ms":37.422},"in_game_movement_ms":3010.955,"map_publish_ms":29337.642,"movement_request_ms":32.454,"scope":"one published piece, one real App route; frame durations sampled during gameplay; no general FPS claim"}
+  F9_ROUNDED_UI_RESULT {"checks":[{"id":"native_empty_session_replaced","ok":true},{"id":"real_terrain_panel_and_gui_action_present","ok":true},{"id":"panel_toolbar_fits_without_horizontal_overflow","ok":true},{"id":"gui_example_is_one_atomic_session_apply","ok":true},{"id":"gui_apply_undo_redo_restores_exact_source","ok":true},{"id":"ax_example_uses_same_real_command_provider","ok":true},{"id":"ax_and_gui_publish_identical_piece_and_curve","ok":true},{"id":"same_gui_authored_piece_compiles_and_is_published_to_canvas","ok":true},{"id":"native_curve_and_path_capture_written","ok":true},{"id":"same_gui_ax_authored_piece_compiles_as_map","ok":true},{"id":"compiled_gui_piece_becomes_candidate","ok":true},{"id":"candidate_is_published_to_disposable_session","ok":true},{"id":"real_preview_app_opens_published_candidate","ok":true},{"id":"real_preview_app_starts_without_duplicate_prepare","ok":true},{"id":"real_gameplay_has_raised_target_and_prescribed_body","ok":true},{"id":"real_game_view_picks_raised_piece_support","ok":true},{"id":"real_game_pointer_starts_canonical_walk","ok":true},{"id":"real_player_walks_from_safe_start_to_raised_target","ok":true},{"id":"real_player_keeps_20_by_32_body_and_actor_ownership","ok":true},{"id":"real_app_gameplay_capture_written","ok":true}],"count":20,"ok":true,"timings":{"app_open_ms":32853.336,"app_start_ms":21810.094,"compile_prepare_ms":3048.528,"in_game_frame_sample":{"count":105,"max_ms":85.577,"p50_ms":28.196,"p95_ms":37.422},"in_game_movement_ms":3010.955,"map_publish_ms":29337.642,"movement_request_ms":32.454,"scope":"one published piece, one real App route; frame durations sampled during gameplay; no general FPS claim"}}
+RUN SnapshotDensity EXIT 0 SECONDS 27
+  F9_SNAPSHOT_DENSITY_RESULT {"checks":[{"id":"real_player_actor_run_state_acquires_cut","ok":true},{"id":"one_thousand_ce
+RUN SurfacePick EXIT 0 SECONDS 14
+  F9_PICK_RESULT {"checks":[{"detail":"","id":"canonical_f1_fixture_assembles","ok":true},{"detail":"","id":"planar_connec
+RUN Authoring EXIT 0 SECONDS 23
+  F9_AX_AUTHORING_RESULT {"bridge_source_hash":"2f8cc257ea6340a1ada841960fa5af9af7dfd118944351ffa3c921dc8e4d7359","checks"
+RUN AuthoringNative EXIT 0 SECONDS 20
+  F9_AX_AUTHORING_UI_RESULT {"checks":[{"id":"two_real_shells_mount_presentations_with_auxiliary_windows_initially_hidden"
+RUN Content EXIT 0 SECONDS 57
+  F9_AX_CONTENT_RESULT {"checks":[{"detail":{"code":"ax_mode_required","ok":false},"id":"ux_mode_refuses_agent_mutation","
+RUN ContentNative EXIT 0 SECONDS 63
+  F9_AX_CONTENT_UI_RESULT {"checks":[{"detail":{"code":"ax_mode_required","ok":false},"id":"ux_mode_refuses_agent_mutation
+RUN CompositionAX EXIT 0 SECONDS 23
+  F9_AX_COMPOSITION_RESULT {"checks":[{"detail":{},"id":"real_shell_action_opens_real_map_panel_and_map_specific_presentat
+RUN CompositionAXNative EXIT 0 SECONDS 19
+  F9_AX_COMPOSITION_UI_RESULT {"checks":[{"detail":{},"id":"real_shell_opens_the_real_composition_window_and_its_own_ax_pr
+RUN MapBiome EXIT 0 SECONDS 29
+  F9_MAP_BIOME_RESULT {"checks":[{"detail":{},"id":"legacy_missing_and_empty_context_use_ruin_without_mutating_source","ok
+RUN MapBiomeNative EXIT 0 SECONDS 25
+  F9_MAP_BIOME_UI_RESULT {"checks":[{"detail":{},"id":"two_real_shells_open_independent_composition_sessions_and_screen_sp
+RUN EncounterAuthoring EXIT 0 SECONDS 20
+  F9_ENCOUNTER_RESULT {"checks":[{"id":"real_population_and_patrol_fixtures_validate","ok":true},{"id":"catalog_options_ar
+RUN EncounterAuthoringNative EXIT 0 SECONDS 31
+  F9_ENCOUNTER_UI_RESULT {"checks":[{"detail":{},"id":"two_shells_open_real_population_windows_and_sessions","ok":true},{"
+RUN PopulationReachability EXIT 0 SECONDS 19
+  F9_POPULATION_REACHABILITY_RESULT {"checks":[{"detail":null,"id":"small_two_room_fixture","ok":true},{"detail":null,"id"
+RUN PopulationPlanner EXIT 0 SECONDS 15
+  F9_POPULATION_PLANNER_RESULT {"checks":[{"detail":null,"id":"existing_f5_fixture_generates_manifest","ok":true},{"detail
+RUN CandidateBatch EXIT 0 SECONDS 15
+  F9_CANDIDATE_BATCH_RESULT {"checks":[{"detail":null,"id":"existing_f5_fixture_generates_manifest","ok":true},{"detail":n
+RUN GameplayGate EXIT 0 SECONDS 60
+  F9_GATE_RESULT {"checks":[{"detail":null,"id":"protocol_accepts_closed_begin","ok":true},{"detail":null,"id":"protocol_r
+  F9_GATE_CHECK timings_file_has_phases true
+  F9_GATE_RESULT {"checks":[{"detail":null,"id":"protocol_accepts_closed_begin","ok":true},{"detail":null,"id":"protocol_rejects_begin_with_payload","ok":true},{"detail":null,"id":"fixture_candidate_session_and_window","ok":true},{"detail":null,"id":"async_open_claims_window_and_run","ok":true},{"detail":null,"id":"async_open_records_prepare_time","ok":true},{"detail":null,"id":"async_open_releases_busy","ok":true},{"detail":null,"id":"gate_start_boots_campaign","ok":true},{"detail":null,"id":"gate_holds_status_and_pauses_tree","ok":true},{"detail":null,"id":"gate_shows_start_button","ok":true},{"detail":null,"id":"window_status_reports_held","ok":true},{"detail":null,"id":"timings_file_has_phases","ok":true},{"detail":null,"id":"held_world_does_not_advance_actors","ok":true},{"detail":null,"id":"metrics_lines_are_written_while_held","ok":true},{"detail":null,"id":"begin_unpauses_active_campaign","ok":true},{"detail":null,"id":"second_begin_is_refused","ok":true},{"detail":null,"id":"begin_records_time","ok":true},{"detail":null,"id":"restart_is_async_and_holds_again","ok":true},{"detail":null,"id":"suspend_from_held_gate_completes","ok":true},{"detail":null,"id":"held_suspend_returns_to_lobby","ok":true},{"detail":null,"id":"default_app_does_not_hold","ok":true},{"detail":null,"id":"launcher_passes_hold_to_separate_process","ok":true},{"detail":{"ok":true,"state":{"busy":false,"candidate_hash":"527b21f97476cfec37cbc04b87f064e60afbf70d5556efef95b79219afc4b482","command_error":"","current_session_path":"C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project/.godot/map_authoring/play/sessions/594e42d19e405cd6ab5bc735/session.bin","error":"","gameplay":{"enemies":[],"geometry_revision":1.0,"interactions":[],"lifecycle":"active","player":{"active_cast":"","cast_remaining":0.0,"hp":180.0,"max_hp":180.0,"max_sp":50.0,"point":{"position_xyz":[200.0,0.0,200.0],"stage_id":"map_preview","surface_id":"left/c_a3e1f4935b0919b3_0_0_1_1"},"sp":50.0},"ready":true,"reward_ticket_id":"","run_id":"7411f9b8-e448-41a0-a3ed-50a0bb28b1f2_1","session_id":"594e42d19e405cd6ab5bc735","skills":[]},"state":"held","window_id":"6ca1e20c167565f43dd98f01"}},"id":"separate_process_reaches_held","ok":true},{"detail":null,"id":"held_separate_process_closes_on_stop","ok":true},{"detail":null,"id":"separate_process_log_clean","ok":true}],"count":24,"expected_count":24,"ok":true}
+RUN WorldTargeting EXIT 0 SECONDS 25
+  F9_TARGET_RESULT {"checks":[{"detail":null,"id":"fixture_campaign_held","ok":true},{"detail":null,"id":"live_enemy_avail
+RUN WorldRewardPoll EXIT 0 SECONDS 33
+  F9_REWARD_POLL_RESULT {"checks":[{"detail":null,"id":"fixture_campaign_held","ok":true},{"detail":null,"id":"enemy_avail
+RUN NavigationAstar EXIT 0 SECONDS 38
+  F9_ASTAR_RESULT {"checks":[{"id":"organic_terrain_publishes","ok":true},{"id":"astar_keeps_dijkstra_outcome_and_error","
+RUN NavigationAsync EXIT 0 SECONDS 21
+  F9_ASYNC_RESULT {"checks":[{"id":"sync_default_answers_immediately_with_path","ok":true},{"id":"detour_is_searched_in_ba
+RUN CampaignJournal EXIT 0 SECONDS 14
+  F9_JOURNAL_RESULT {"checks":[{"id":"three_entries_chain_from_the_base_checkpoint","ok":true},{"id":"payloads_decode_with
+RUN AssetManifest EXIT 0 SECONDS 16
+  F9_ASSET_RESULT {"checks":[{"id":"committed_manifest_is_valid","ok":true},{"id":"committed_manifest_matches_checkout","o
+RUN CompileCache EXIT 0 SECONDS 18
+  F9_CACHE_RESULT {"checks":[{"id":"cache_is_opt_in","ok":true},{"id":"miss_compiles_and_stores","ok":true},{"id":"hit_ret
+RUN RegionalSynthesis EXIT 0 SECONDS 31
+  F9_SYNTH_RESULT {"checks":[{"id":"fixture_has_objects_inside_the_selection","ok":true},{"id":"every_channel_must_be_expl
+RUN RegionalSynthesisNative EXIT 0 SECONDS 98
+  F9_SYNTH_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"section_is_a_terrain_tool","ok":true},{"id":"region
+RUN RootSynthesis EXIT 0 SECONDS 97
+  F9_ROOT_SYNTH_RESULT {"checks":[{"id":"fixture_plans_and_compiles","ok":true},{"id":"requests_are_closed_per_root","ok":
+RUN RootSynthesisNative EXIT 0 SECONDS 125
+  F9_ROOT_SYNTH_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"map_screen_offers_the_tool","ok":true},{"id":"
+RUN ExchangeMerge EXIT 0 SECONDS 30
+  F9_MERGE_RESULT {"checks":[{"id":"fixture_exports","ok":true},{"id":"disjoint_samples_compose","ok":true},{"id":"equal_c
+RUN ExchangeMergeNative EXIT 0 SECONDS 48
+  F9_MERGE_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"ax_exports_a_request","ok":true},{"id":"conflict_is
+RUN SynthesisReceipts EXIT 0 SECONDS 45
+  F9_RECEIPT_RESULT {"checks":[{"id":"old_sources_keep_their_hash","ok":true},{"id":"proposal_carries_one_receipt_without_
+RUN ExchangeAssets EXIT 0 SECONDS 17
+  F9_ASSETS_RESULT {"checks":[{"id":"revisions_are_the_real_compilers","ok":true},{"id":"piece_exports_v2","ok":true},{"id
+RUN ReleaseApi EXIT 0 SECONDS 139
+  F9_RELEASE_API_RESULT {"checks":[{"id":"registry_lists_the_bosque","ok":true},{"id":"registry_refuses_unsafe_entries","o
+RUN Workflow EXIT 0 SECONDS 20
+  F9_WORKFLOW_RESULT {"checks":[{"id":"fixture_ready","ok":true},{"id":"up_to_date_and_unrelated_are_reported","ok":true},
+RUN WorkflowNative EXIT 0 SECONDS 212
+  F9_WORKFLOW_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"bar_on_the_terrain_screen","ok":true},{"id":"nex
+RUN OcclusionNative EXIT 0 SECONDS 86
+  F9_OCCLUSION_RESULT {"checks":[{"id":"bosque_release_loads","ok":true},{"id":"real_actors_are_bound","ok":true},{"id":"g
+RUN AreaAcceptance EXIT 0 SECONDS 35
+  F9_AREA_RESULT {"checks":[{"id":"sources_open_and_release_is_current","ok":true},{"id":"clearing_with_two_materials_and_
+RUN AreaVariants EXIT 0 SECONDS 197
+  F9_AREA_VARIANT_RESULT {"checks":[{"id":"area_sources_open","ok":true},{"id":"generation_keeps_the_pinned_passage","ok":
+RUNNER map_editor_terrain EXIT 0 SECONDS 72
+  document_regression: True
+  M2_ALL_PASS
+RUNNER map_editor_composition EXIT 0 SECONDS 39
+  document_regression: True
+  M3_ALL_PASS
+RUNNER map_editor_population EXIT 0 SECONDS 75
+  document_regression: True
+  M4_ALL_PASS
+RUNNER map_editor_patrol EXIT 0 SECONDS 183
+  cli_b: True
+  M5_ALL_PASS
+RUNNER map_editor_generation EXIT 0 SECONDS 59
+  cli_b: True
+  M6_ALL_PASS
+RUNNER map_editor_exchange EXIT 0 SECONDS 76
+  cli_invalid_review: True
+  M7_ALL_PASS
+RUNNER map_editor_candidate EXIT 0 SECONDS 199
+  exchange: True
+  M8_SELECTED_PASS
+TEST e06_gameplay_ai_test EXIT 0 | E06 gameplay AI: 76 checks, 0 failures
+TEST e07_f3_snapshot_test EXIT 0 | E07 F3 snapshot: 50 checks, 0 failures
+TEST e07_f4_compatibility_test EXIT 0 | E07 F4 e07_f4_compatibility_test.gd: 16 checks, 0 failures
+TEST e07_f1_actor_integration_test EXIT 0 | E07 F1 actor integration: 193 checks, 0 failures
+TEST e07_f1_adversarial_test EXIT 0 | E07 F1 adversarial/flat: 29 checks, 0 failures
+TEST e07_f1_area_cast_test EXIT 0 | E07 F1 area casts: 59 checks, 0 failures
+TEST e07_f1_birth_collect_test EXIT 0 | E07 F1 birth and collection: 210 checks, 0 failures
+TEST e07_f1_cast_test EXIT 0 | E07 F1 casts: 113 checks, 0 failures
+TEST e07_f1_chain_test EXIT 0 | E07 F1 chains: 121 checks, 0 failures
+TEST e07_f1_channels_test EXIT 0 | E07 F1 channels: 32 checks, 0 failures
+TEST e07_f1_composition_test EXIT 0 | E07 F1 compositions: 299 checks, 0 failures; recipes=27
+TEST e07_f1_consumer_test EXIT 0 | E07 F1 consumers: 133 checks, 0 failures
+TEST e07_f1_echo_test EXIT 0 | E07 F1 echoes: 271 checks, 0 failures
+TEST e07_f1_ember_test EXIT 0 | E07 F1 ember: 102 checks, 0 failures
+TEST e07_f1_fields_test EXIT 0 | E07 F1 ground fields: 499 checks, 0 failures
+TEST e07_f1_geometer_full_test EXIT 0 | E07 F1 Geometer full: 1160 checks, 0 failures
+TEST e07_f1_geometer_trace_test EXIT 0 | E07 F1 Geometer trace: 400 checks, 0 failures
+TEST e07_f1_geometry_test EXIT 0 | E07 F1 geometry: 33 checks, 0 failures; seed=711 manifest=2e6232a2f5c2bbe6add8aa0a2645201ad14271b89d
+TEST e07_f1_guard_travel_test EXIT 0 | E07 F1 guard and travel: 293 checks, 0 failures
+TEST e07_f1_hunter_cover_test EXIT 0 | E07 F1 Hunter cover: 235 checks, 0 failures
+TEST e07_f1_hunter_traps_test EXIT 0 | E07 F1 Hunter traps: 631 checks, 0 failures
+TEST e07_f1_ice_test EXIT 0 | E07 F1 Ice Wall: 262 checks, 0 failures
+TEST e07_f1_pilot_scene_test EXIT 0 | E07 F1 native pilot scene: 102 checks, 0 failures; identities=10; presentation=logical_assembly_only
+TEST e07_f1_presentation_test EXIT 1 | E07 F1 presentation: 37 checks, 1 failures; native scene, projection, click, preview, marker, occlus
+TEST e07_f1_sentinel_area_test EXIT 0 | E07 F1 Sentinel areas: 433 checks, 0 failures
+TEST e07_f1_sentinel_direct_test EXIT 0 | E07 F1 Sentinel direct: 364 checks, 0 failures
+TEST e07_f3_continuation_test EXIT 0 | E07 F3 continuation: 2743 checks, 0 failures; scenarios=30
+TEST e07_f5_death_kits_test EXIT 0 | E07 F5 death kits: 191 checks, 0 failures
+TEST e07_f6_runtime_test EXIT 0 | E07 F5 e07_f6_runtime_test.gd: 33 checks, 0 failures
+DONE

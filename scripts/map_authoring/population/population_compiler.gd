@@ -411,6 +411,9 @@ static func _compile_uncached(source: Dictionary, cancel: Callable = Callable())
 		var point := anchor(slot); var socket_id: String = "population_"+slot.slot_id
 		manifest._data.stages[0].sockets.append({"socket_id":socket_id,"surface_id":point.surface_id,"position":point.position,"kind":"population","tags":[]})
 		manifest._data.population.slots.append({"slot_id":slot.slot_id,"stage_id":"map_preview","species_id":slot.species_id,"occurrence_category":slot.category,"origin_id":slot.origin_id,"instance_id":point.surface_id.get_slice("/",0),"socket_id":socket_id,"required_tags":[],"respawn_policy_id":"ruins_respawn","reward_policy_id":"ruins_rewards","blocks_clear":true,"home":point.to_data()})
+		# F10 Q2: guardians are marked by their brush; absent means not a guardian.
+		for brush: Dictionary in source.brushes:
+			if brush.brush_id == slot.brush_id and brush.get("guardian",false): manifest._data.population.slots[-1]["guardian"] = true
 		manifest._data.witnesses["population/"+slot.slot_id] = {"point":point.to_data()}; rules[slot.slot_id] = checked.rule
 	for brush: Dictionary in _sorted(source.brushes,"brush_id"):
 		var sampled := _quota(source,context,brush,cancel)

@@ -77,7 +77,7 @@ func present_campaign(host: RunController) -> void:
 			caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			caption.add_theme_color_override("font_color", Color("ffe49d"))
 			_effects.add_child(caption)
-		caption.text = "◆ SAÍDA FINAL" if objective["outcome"] == "phase_completion" else "◆ REFÚGIO — SUSPENDER"
+		caption.text = "◆ SAÍDA FINAL" if objective["outcome"] == "phase_completion" else ("◆ OBJETIVO DO ESTÁGIO" if objective["outcome"] == "stage_unlock" else "◆ REFÚGIO — SUSPENDER")
 		caption.position = project(objective["point"]["position"]) + Vector2(-80,-36)
 func visible_surfaces() -> Array[String]:
 	var result: Array[String] = []

@@ -75,7 +75,7 @@
     }
   },
   "res://scripts/actors/enemy_actor.gd": {
-    "revision": 2,
+    "revision": 3,
     "fields": [
       "effect_ledger",
       "is_summoned",
@@ -109,7 +109,9 @@
       "world_ai_failure",
       "threat",
       "threat_actors",
-      "threat_taunt_sequence"
+      "threat_taunt_sequence",
+      "_charge_remaining",
+      "_charge_cooldown"
     ],
     "omitted": {
       "taunt_remaining": "computed projection of threat.forced_remaining"
@@ -1971,7 +1973,7 @@
   },
   "res://scripts/core/expedition/campaign/expedition_campaign_state.gd": {
     "omitted": {},
-    "revision": 1,
+    "revision": 2,
     "fields": [
       "expedition_id",
       "character_id",
@@ -1989,7 +1991,8 @@
       "objectives",
       "traversed_edges",
       "completed",
-      "population_rules"
+      "population_rules",
+      "replay"
     ]
   },
   "res://scripts/world/expedition_portal.gd": {

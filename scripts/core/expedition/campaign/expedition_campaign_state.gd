@@ -18,8 +18,10 @@ var current_death_id := ""
 var objectives: Dictionary = {}
 var traversed_edges: Dictionary = {}
 var completed := false
+## F10 Q2: true when this character already completed this phase. Fixed at entry.
+var replay := false
 
-static func create(id: String, character: String, manifest: ExpeditionManifest, catalog: MobCatalog, rules: Dictionary) -> Dictionary:
+static func create(id: String, character: String, manifest: ExpeditionManifest, catalog: MobCatalog, rules: Dictionary, is_replay: bool = false) -> Dictionary:
 	if not IdentityIds.is_technical_id(id) or character.is_empty(): return BuildEffectCatalog.failure(&"invalid_identity")
 	var planned := ExpeditionPopulationPlanner.build(manifest, catalog, rules)
 	if not planned["ok"]: return planned
@@ -32,6 +34,7 @@ static func create(id: String, character: String, manifest: ExpeditionManifest, 
 	result.policy = parsed
 	result.slots = planned["slots"]
 	result.population_rules = rules.duplicate(true)
+	result.replay = is_replay
 	result.clock.interval = result.policy["interval_seconds"]
 	for stage: Dictionary in result.manifest_data["stages"]:
 		result.stages[stage["stage_id"]] = {"visited": false, "cleared_once": false}
@@ -137,9 +140,28 @@ func portal_view(portal_id: String) -> Dictionary:
 		if portal["portal_id"] != portal_id: continue
 		var copy := portal.duplicate(true)
 		var returning := traversed_edges.has(ExpeditionCanonical.digest([portal["to_stage"], portal["from_stage"]]))
-		copy["open"] = portal["kind"] == "local" or returning or stages[portal["from_stage"]]["cleared_once"]
+		copy["open"] = portal["kind"] == "local" or returning or stage_ready(portal["from_stage"])
 		return copy
 	return {}
+
+## F10 Q2 (contracts/f10_phase_rules.md): the first play of a phase by a
+## character opens portals by clearing the stage; a replay by its objective. The
+## stage's guardians come first; a stage_unlock objective, when the stage has one,
+## must then be reached.
+func stage_ready(stage_id: String) -> bool:
+	if not replay: return stages[stage_id]["cleared_once"]
+	if not guardians_resolved(stage_id): return false
+	var unlocks := 0
+	for objective: Dictionary in manifest_data["objectives"]:
+		if objective["stage_id"] != stage_id or objective["outcome"] != "stage_unlock": continue
+		unlocks += 1
+		if objectives.has(objective["objective_id"]): return true
+	return unlocks == 0
+
+func guardians_resolved(stage_id: String) -> bool:
+	for slot: Dictionary in slots.values():
+		if slot["stage_id"] == stage_id and slot.get("guardian", false) and not slot["initial_resolved"]: return false
+	return true
 
 func view() -> Dictionary:
 	return {"expedition_id": expedition_id, "stage_id": current_stage_id, "lifecycle": lifecycle, "stages": stages.duplicate(true), "slots": slots.duplicate(true), "remaining": clock.remaining, "wave_index": clock.wave_index, "anchor": anchor.duplicate(true)}
@@ -149,7 +171,9 @@ func valid() -> bool:
 	if policy != JSON.parse_string(FileAccess.get_file_as_string("res://data/expedition/policies/e07_initial.json")) or clock.interval != policy["interval_seconds"]: return false
 	if not manifest_data.has_all(["input", "stages", "population", "portals", "objectives", "witnesses"]) or not stages.has(current_stage_id) or slots.size() != population_rules.size(): return false
 	if anchor.is_empty() or not stages.has(anchor.get("stage_id")) or not anchor.get("position") is Vector3 or not anchor["position"].is_finite(): return false
-	if completed != (lifecycle == "completed"): return false
+	if completed != (lifecycle == "completed") or not replay is bool: return false
+	for id: Variant in objectives:
+		if not id is String or objectives[id] != true: return false
 	if stages.size() != manifest_data["stages"].size() or slots.size() != manifest_data["population"]["slots"].size(): return false
 	var any_cleared := false
 	var expected_claims := {}

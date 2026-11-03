@@ -14,8 +14,8 @@ var death_serial := 0
 # waits (respawn_pending), so a capture taken meanwhile stays consistent.
 var birth_queue: Array[Dictionary] = []
 
-func configure(host: RunController, id: String, manifest: ExpeditionManifest, rules: Dictionary) -> Dictionary:
-	var created := ExpeditionCampaignState.create(id, host.run_state.character_id, manifest, host.run_state.effect_catalog().mob_catalog(), rules)
+func configure(host: RunController, id: String, manifest: ExpeditionManifest, rules: Dictionary, is_replay: bool = false) -> Dictionary:
+	var created := ExpeditionCampaignState.create(id, host.run_state.character_id, manifest, host.run_state.effect_catalog().mob_catalog(), rules, is_replay)
 	if not created["ok"]: return created
 	state = created["state"]
 	worlds = created["worlds"]

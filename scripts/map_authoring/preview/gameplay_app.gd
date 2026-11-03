@@ -556,6 +556,7 @@ func command(action: Dictionary) -> Dictionary:
 			return await panel.run_action({"kind":"travel","portal_id":portal.portal_id,"stage_id":state.current_stage_id})
 	for objective: Dictionary in state.manifest_data.objectives:
 		if objective.objective_id == value.interaction_id and objective.stage_id == state.current_stage_id:
+			if objective.outcome == "stage_unlock": return await panel.run_action({"kind":"unlock","source":objective.objective_id})
 			return await panel.run_action({"kind":"finish","outcome":"completed" if objective.outcome == "phase_completion" else "quest","source":objective.objective_id})
 	return {"ok":false,"code":"interaction_missing"}
 

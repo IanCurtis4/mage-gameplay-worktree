@@ -54,7 +54,7 @@ func _draw_world() -> void:
 	for brush: Dictionary in source.get("brushes",[]): _ring(Population.vector(brush.center_xyz),brush.radius,Color("92bde8"))
 	for entry: Dictionary in source.get("entrance",[]): _label(Population.vector(entry.position_xyz),"Entrada",Color("9ae2ba"))
 	for interaction: Dictionary in source.get("interactions",[]):
-		_label(Population.vector(interaction.position_xyz),{"portal":"Portal","phase_completion":"Conclusão","early_exit":"Saída","thematic_encounter":"Palco"}[interaction.kind],Color("e7c77a"))
+		_label(Population.vector(interaction.position_xyz),{"portal":"Portal","phase_completion":"Conclusão","early_exit":"Saída","stage_unlock":"Objetivo do estágio","thematic_encounter":"Palco"}[interaction.kind],Color("e7c77a"))
 	for slot: Dictionary in source.get("slots",[]):
 		var at := screen(Population.vector(slot.position_xyz)); var alive: bool = campaign == null or campaign.slots[slot.slot_id].life_state == "alive"
 		var color := Color("f2b875") if slot.fixed else Color("ed859a")

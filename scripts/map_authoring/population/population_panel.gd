@@ -42,6 +42,7 @@ var target: OptionButton
 var radius: SpinBox
 var spacing: SpinBox
 var quantity: SpinBox
+var guardian: CheckBox
 var density: SpinBox
 var group_radius: SpinBox
 var weight: SpinBox
@@ -83,7 +84,7 @@ func _ready() -> void:
 	var inspector := VBoxContainer.new(); inspector.size_flags_horizontal = Control.SIZE_EXPAND_FILL; scroll.add_child(inspector)
 	_label(inspector,"Clique no mapa para a ação escolhida")
 	paint = OptionButton.new()
-	for text: String in ["Selecionar slot","Marcar entrada","Pintar pincel","Excluir região","Colocar slot fixo","Palco memorável","Portal local","Saída de conclusão","Saída antecipada","Mover slot selecionado"]: paint.add_item(text)
+	for text: String in ["Selecionar slot","Marcar entrada","Pintar pincel","Excluir região","Colocar slot fixo","Palco memorável","Portal local","Saída de conclusão","Saída antecipada","Mover slot selecionado","Objetivo do estágio"]: paint.add_item(text)
 	inspector.add_child(paint); paint.item_selected.connect(func(index: int) -> void: canvas.paint_enabled = index > 0)
 	surface = OptionButton.new(); surface.add_item("Todas as superfícies visíveis"); inspector.add_child(surface); surface.item_selected.connect(func(index: int) -> void: canvas.selected_surface = "" if index == 0 else surface.get_item_text(index))
 	_label(inspector,"Catálogo · espécie, categoria e origem")
@@ -97,6 +98,7 @@ func _ready() -> void:
 	radius = _number(inspector,"Raio do pincel",1,512,80); group_radius = _number(inspector,"Raio do grupo",1,512,60)
 	quantity = _number(inspector,"Quantidade (inclui fixos)",0,128,3); density = _number(inspector,"Densidade",0,100,1,0.1)
 	spacing = _number(inspector,"Espaço além dos corpos",0,1024,8)
+	guardian = CheckBox.new(); guardian.text = "Guardião do estágio (repetições exigem derrotá-lo)"; inspector.add_child(guardian)
 	_label(inspector,"Semente numérica (inteiro de 64 bits)")
 	seed_edit = LineEdit.new(); seed_edit.text = "0"; inspector.add_child(seed_edit)
 	round_number = _number(inspector,"Rodada (novo sorteio explícito)",0,2147483647,0)
@@ -265,11 +267,15 @@ func select_brush(index: int) -> void:
 	var brush: Dictionary = session.data.brushes[index]
 	mode.select(0 if brush.mode == "dispersed" else 1); quota.select(0 if brush.quota_mode == "count" else 1)
 	radius.value = brush.radius; group_radius.value = brush.group_radius; quantity.value = brush.quantity; density.value = brush.density; spacing.value = brush.spacing; seed_edit.text = brush.seed; round_number.value = brush.round
+	guardian.button_pressed = brush.get("guardian",false)
 	choices.clear()
 	for spec: Dictionary in brush.species: choices.add_item("%s · %s · peso %d"%[spec.species_id,spec.category,spec.weight])
 func _parameters(brush: Dictionary) -> Dictionary:
 	var copy := brush.duplicate(true); copy.mode = "dispersed" if mode.selected == 0 else "concentrated"; copy.quota_mode = "count" if quota.selected == 0 else "density"
-	copy.radius = radius.value; copy.group_radius = group_radius.value; copy.quantity = quantity.value; copy.density = density.value; copy.spacing = spacing.value; copy.seed = seed_edit.text; copy.round = int(round_number.value); return copy
+	copy.radius = radius.value; copy.group_radius = group_radius.value; copy.quantity = quantity.value; copy.density = density.value; copy.spacing = spacing.value; copy.seed = seed_edit.text; copy.round = int(round_number.value)
+	if guardian.button_pressed: copy["guardian"] = true
+	else: copy.erase("guardian")
+	return copy
 func apply_brush() -> void:
 	var selected := brushes.get_selected_items()
 	if selected.is_empty(): return
@@ -303,6 +309,8 @@ func paint_at(point: Dictionary) -> void:
 			apply_operation("slot/upsert",{"slot_id":"fixed_"+suffix,"brush_id":brush.brush_id,"surface_id":point.surface_id,"position_xyz":point.position_xyz,"species_id":spec.species_id,"category":spec.category,"origin_id":spec.origin_id,"fixed":true,"site_id":site})
 		5,6,7,8:
 			apply_operation("interaction/upsert",{"interaction_id":"marker_"+suffix,"kind":{5:"thematic_encounter",6:"portal",7:"phase_completion",8:"early_exit"}[paint.selected],"surface_id":point.surface_id,"position_xyz":point.position_xyz,"target_id":""})
+		10:
+			apply_operation("interaction/upsert",{"interaction_id":"marker_"+suffix,"kind":"stage_unlock","surface_id":point.surface_id,"position_xyz":point.position_xyz,"target_id":""})
 		9:
 			var selected := slots.get_selected_items()
 			if selected.is_empty(): status.text = "Selecione um slot para mover."; return

@@ -78,6 +78,11 @@ func refresh() -> void:
 		button.disabled = not view["open"]
 	for objective: Dictionary in state.manifest_data["objectives"]:
 		if objective["stage_id"] == state.current_stage_id:
+			if objective["outcome"] == "stage_unlock":
+				var unlock := _button("Ativar o objetivo do estágio", run_action.bind({"kind": "unlock", "source": objective["objective_id"]}))
+				unlock.disabled = state.objectives.has(objective["objective_id"]) or not state.guardians_resolved(state.current_stage_id)
+				unlock.tooltip_text = "Derrote o guardião deste estágio antes." if not state.guardians_resolved(state.current_stage_id) else "Aproxime-se do objetivo marcado no mapa."
+				continue
 			_button("Concluir na saída final" if objective["outcome"] == "phase_completion" else "Suspender no refúgio lateral", run_action.bind({"kind": "finish", "outcome": "completed" if objective["outcome"] == "phase_completion" else "quest", "source": objective["objective_id"]}))
 	_button("Suspender e voltar ao lobby", run_action.bind({"kind": "suspend"}))
 

@@ -24,7 +24,7 @@ static func fail(code: String, entity: String = "") -> Dictionary:
 static func propose(source: Dictionary, operation: String, parameters: Dictionary) -> Dictionary:
 	if not FIELDS.has(operation): return fail("action_missing")
 	var errors: Array = []
-	Schema._shape(parameters,FIELDS[operation],"parameters",errors)
+	Schema._shape(parameters,Document._fields("brushes",FIELDS[operation],parameters) if operation == "brush/upsert" else FIELDS[operation],"parameters",errors)
 	if not errors.is_empty(): return fail("arguments_invalid")
 	var checked := Document.validate(source)
 	if not checked.ok: return checked

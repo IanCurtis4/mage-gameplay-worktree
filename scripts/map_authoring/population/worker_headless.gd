@@ -29,7 +29,7 @@ func _run() -> void:
 						var made := Compiler.make_campaign(candidate)
 						if made.ok:
 							var data: Dictionary = {}
-							for field: String in ["expedition_id","character_id","manifest_data","policy","current_stage_id","lifecycle","stages","slots","population_rules","anchor","entry_claims","death_events","current_death_id","objectives","traversed_edges","completed"]: data[field] = made.state.get(field)
+							for field: String in ["expedition_id","character_id","manifest_data","policy","current_stage_id","lifecycle","stages","slots","population_rules","anchor","entry_claims","death_events","current_death_id","objectives","traversed_edges","completed","replay"]: data[field] = made.state.get(field)
 							result = {"ok":true,"state_data":data,"clock_interval":made.state.clock.interval}
 	var file := FileAccess.open(args[1],FileAccess.WRITE)
 	if file == null: quit(1); return
