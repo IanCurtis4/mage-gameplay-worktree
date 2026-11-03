@@ -78,6 +78,12 @@ sem mudar a fonte.
   já publicadas `trial_stage_1` a `3` (níveis 2, 4 e 6) e as recompensas dessas
   origens; nenhuma política nova foi aberta. `ForestSpecies` 7/7, e os 9 passos
   do `verify.ps1` que leem o catálogo de jogo passam.
-- **Pendente por consequência:** o Bosque publicado é recusado (`ReleaseApi`
-  falha em `package_loads_with_its_pins`) até ser recompilado e republicado pelo
-  fluxo do editor.
+- **Bosque republicado** (`tools/map_editor_release/republish.gd`: o produtor de
+  patrulha sobre a fonte commitada, sem cache, 75 s, e depois
+  `MapRelease.publish`). A fonte é a mesma (`58df5d63…`); o pacote novo é
+  `sanctuary_woods.41a8e11a6c70.rpp` (`41a8e11a…`). O `representative.rpp` de
+  referência foi recompilado da mesma forma (`b6ffc4b6…`). Passam `ReleaseApi`,
+  `AreaAcceptance`, `PhaseRelease`, `Workflow`, `ExchangeAssets`,
+  `CandidateBatch`, `GameplayGate` e `PopulationReachability`. O arquivo antigo
+  `sanctuary_woods.rpp` fica sem referência no registro, para a limpeza do Q5. O
+  release exportado (M8 `release_bosque`) não foi rodado de novo.
