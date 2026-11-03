@@ -4,6 +4,9 @@ extends RefCounted
 var cast_mode: int = CastIntent.Mode.CONFIRM
 var smart_lock := true
 var path := "user://controls.cfg"
+## F10 Q3: interface scale and an optional cursor confined to the game window.
+var ui_scale := GuiMetrics.SCALE
+var confine_cursor := false
 const SLOT_COUNT := 24
 const DEFAULT_KEYS := [KEY_1, KEY_2, KEY_3, KEY_4, KEY_R, KEY_F, KEY_Q, KEY_E, KEY_APOSTROPHE, KEY_V, KEY_5, KEY_T]
 const RESERVED_KEYS := [KEY_ESCAPE, KEY_TAB, KEY_F1, KEY_F2, KEY_F3, KEY_F6, KEY_F8, KEY_F9]
@@ -16,6 +19,8 @@ func _init() -> void:
 func load_settings() -> void:
 	cast_mode = CastIntent.Mode.CONFIRM
 	smart_lock = true
+	ui_scale = GuiMetrics.SCALE
+	confine_cursor = false
 	restore_bindings()
 	var config := ConfigFile.new()
 	if config.load(path) != OK:
@@ -26,6 +31,12 @@ func load_settings() -> void:
 	var stored_lock: Variant = config.get_value("battle", "smart_lock", true)
 	if stored_lock is bool:
 		smart_lock = stored_lock
+	var stored_scale: Variant = config.get_value("interface", "ui_scale", GuiMetrics.SCALE)
+	if (stored_scale is float or stored_scale is int) and is_finite(float(stored_scale)):
+		ui_scale = clampf(float(stored_scale), GuiMetrics.MIN_SCALE, GuiMetrics.MAX_SCALE)
+	var stored_confine: Variant = config.get_value("interface", "confine_cursor", false)
+	if stored_confine is bool:
+		confine_cursor = stored_confine
 	var stored: Variant = config.get_value("battle", "action_bindings") if config.has_section_key("battle", "action_bindings") else null
 	if stored is Array and stored.size() == SLOT_COUNT:
 		# A stored invalid/conflicting slot stays empty, never silently fires twice.
@@ -40,6 +51,8 @@ func save_settings() -> Error:
 	config.set_value("battle", "cast_mode", cast_mode)
 	config.set_value("battle", "smart_lock", smart_lock)
 	config.set_value("battle", "action_bindings", bindings)
+	config.set_value("interface", "ui_scale", ui_scale)
+	config.set_value("interface", "confine_cursor", confine_cursor)
 	return config.save(path)
 
 func restore_bindings() -> void:

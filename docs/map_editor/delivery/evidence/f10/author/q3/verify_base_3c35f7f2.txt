@@ -1,0 +1,13 @@
+PLAN 299 steps; from 1
+  51 e05_hunter_catalog_test                              exit=1 17s | E05 Caçadora catalog: 619 checks, 1 failures || ERROR: current catalog preserves Hunter metadata and save schema ||   85 |          throw "Godot verification failed (exit $checkExitCode)."
+  89 e04_swordsman_integrated_closure_test                exit=1 61s | ERROR: Falha SWI: dois presets manuais persistem || ERROR: Falha SWI: reload preserva arrays legados ativos distintos || ERROR: Falha SWI: reload preserva arrays legados passivos distintos
+ 135 e05_sentinel_builds_test                             exit=1 26s | E05 Sentinel S6 builds/progression: FAIL (313 checks) || ERROR: older catalog Archer save migrates through real facade/store ||   85 |          throw "Godot verification failed (exit $checkExitCode)."
+ 204 e06_publication_test                                 exit=1 9s | E06 publication: 1123 checks, 36 failures || ERROR: native active resource matches publication augment/battle_rhythm || ERROR: native active resource matches publication augment/extra_fire_spear
+ 206 e06_ui_menu_test                                     exit=1 8s | E06 UI menu: 105 checks, 3 failures || ERROR: all seventy-three added pieces coexist with historical collection || ERROR: isolated published collection persisted
+ 213 e06_permanent_cards_test                             exit=1 10s | E06 permanent cards: 42 checks, 7 failures || ERROR: schema4 migration does not invent old discarded cards || ERROR: alt observes same collection
+ 223 reward_feedback_test                                 exit=0 10s | E06 reward feedback: 55 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 226 e06_skill_downrank_test                              exit=1 7s | E06 downranking: FAIL (112 checks) || ERROR: schema5 explicit migration succeeds ||   85 |          throw "Godot verification failed (exit $checkExitCode)."
+ 227 e06_swordsman_cluster_test                           exit=1 7s | E06 swordsman clusters: FAIL (186 checks) || ERROR: historical durable fixture decodes || ERROR: historical durable fixture decodes
+ 235 e07_f0_generation_test                               exit=1 2s | SCRIPT ERROR: Parse Error: Preload file "res://scripts/core/expedition/spatial/world_solid_prism.gd" does not exist. || SCRIPT ERROR: Compile Error: Failed to compile depended scripts. || SCRIPT ERROR: Compile Error: Fai
+ 299 e07_f8_candidate_resume                              exit=1 7s | E07 F8 CANDIDATE resume: FAIL checks=8 failures=1 release=false || ERROR: F8: new process finds suspended expedition ||   85 |          throw "Godot verification failed (exit $checkExitCode)."
+DONE 165s

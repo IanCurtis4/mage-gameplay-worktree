@@ -55,7 +55,7 @@ manual em segundo plano.
 | Q0 | Branch `codex/map-editor-f10` a partir de master (`3c35f7f2`); base e manifesto nominal |
 | Q1 | **Escala e fluidez agêntica.** Mapa sintético de campo (~10.000 u) como banco de medida; compilação e certificação por região com cache (pendência F9); `prepare()`/`start()` do teste em segundo plano (pendência F9); navegação, desenho no jogo e diário nessa escala (compactação perto de 256 entradas, coleta de vários drops); orçamento medido de quadro, compilação e memória; pincéis por tick; marcador de entrada que acompanha o relevo e `socket_invalid` que o nomeia |
 | Q2 | **Regras da fase** (entregue no checkpoint9).  Primeira jogada concluída por personagem; portais por limpeza na primeira jogada e por objetivo (guardião antes) nas seguintes; leash com cura total; população contra o kiting (quem fecha distância, quem atira, quem cerca) |
-| Q3 | **Interface do jogo.** Os sete itens da tabela acima, cada um reproduzido antes; reavaliar a Geômetra depois |
+| Q3 | **Interface do jogo** (entregue no checkpoint10, Geômetra pendente). Os sete itens da tabela acima, cada um reproduzido antes; reavaliar a Geômetra depois |
 | Q4 | **Primeira fase completa.** Terra no modo AX: pelo menos dois mapas de campo na nova escala, com arquétipos de forma distintos (regras do estudo), e um mapa de boss; população de 40 a 70 por mapa a medir; publicação e jogo real |
 | Q5 | **Pente-fino** da reserva F10 (itens 1–11) sobre o editor e a fase, com a autoria manual (tarefas 4–9 do aceite F9) em segundo plano |
 | Q6 | **Entrega.** Candidato, roteiro humano curto, preparação do playtest; master só com aceite |

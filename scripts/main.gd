@@ -1027,6 +1027,9 @@ func _notification(what: int) -> void:
 	if snapshot_passive or _memory_snapshot_pending: return
 	if what == NOTIFICATION_WM_WINDOW_FOCUS_OUT:
 		_cancel_casting(false)
+		_apply_cursor_mode(false)
+	elif what == NOTIFICATION_WM_WINDOW_FOCUS_IN:
+		_apply_cursor_mode(true)
 
 func _toggle_settings(open: bool) -> void:
 	if open and (get_tree().paused or run_finished):
@@ -1038,6 +1041,22 @@ func _toggle_settings(open: bool) -> void:
 	if not open:
 		battle_controls.cancel_binding_capture()
 	get_tree().paused = open
+
+## F10 Q3: scale and cursor capture are applied live and kept in controls.cfg.
+func change_interface_preferences(ui_scale: float, confine_cursor: bool) -> void:
+	control_preferences.ui_scale = clampf(ui_scale, GuiMetrics.MIN_SCALE, GuiMetrics.MAX_SCALE)
+	control_preferences.confine_cursor = confine_cursor
+	_apply_interface_preferences()
+	if control_preferences.save_settings() != OK:
+		status_label.text = "Interface aplicada; não foi possível salvar a preferência."
+
+func _apply_interface_preferences() -> void:
+	if ui_root != null: GuiMetrics.set_scale(control_preferences.ui_scale, ui_root)
+	_apply_cursor_mode(true)
+
+func _apply_cursor_mode(focused: bool) -> void:
+	if DisplayServer.get_name() == "headless": return
+	Input.mouse_mode = Input.MOUSE_MODE_CONFINED if control_preferences.confine_cursor and focused else Input.MOUSE_MODE_VISIBLE
 
 func _change_control_preferences(mode: int, smart_lock: bool) -> void:
 	_cancel_casting(false)
@@ -3735,6 +3754,9 @@ func _build_ui() -> void:
 	battle_controls = BattleControls.new()
 	ui_root.add_child(battle_controls)
 	battle_controls.set_options(control_preferences.cast_mode, control_preferences.smart_lock)
+	battle_controls.set_interface_options(control_preferences.ui_scale, control_preferences.confine_cursor)
+	battle_controls.interface_changed.connect(change_interface_preferences)
+	_apply_interface_preferences()
 	battle_controls.skill_selected.connect(_select_skill_from_bar)
 	battle_controls.settings_requested.connect(_toggle_settings)
 	battle_controls.preferences_changed.connect(_change_control_preferences)
@@ -3890,6 +3912,10 @@ func _open_inventory() -> void:
 	if encounter_active or run_finished or not player.is_alive() or get_tree().paused or inventory_frozen: return
 	_cancel_casting(false)
 	_clear_hover()
+	# F10 Q3: the windows stay above the action bar and its shortcuts.
+	if is_instance_valid(bottom_controls) and ui_root != null and ui_root.scale.y > 0.0:
+		var bar_top := bottom_controls.get_global_transform_with_canvas().origin.y
+		inventory_panel.bottom_reserved = maxf(0.0, get_viewport().get_visible_rect().size.y - bar_top) / ui_root.scale.y
 	inventory_panel.configure(self)
 	get_tree().paused = true
 func _close_inventory() -> void:

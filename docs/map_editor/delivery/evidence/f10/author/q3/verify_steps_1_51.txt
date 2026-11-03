@@ -1,0 +1,52 @@
+E06 inventory resources: 24 checks, 0 failures
+E06 inventory: 68 checks, 0 failures
+E06 rewards: 51 checks, 0 failures
+E06 migration: 143 checks, 0 failures
+E06 effects composition: 70 checks, 0 failures
+E06 proc ledger: 29 checks, 0 failures
+E06 effects runtime: 53 checks, 0 failures
+Foundation: PASS (20 checks)
+Animações: PASS (39 checks)
+Marco 1: PASS (64 checks)
+Perseguição e inércia: PASS (41 checks)
+UI de batalha: PASS (47 checks)
+Fluxo da arena: PASS (33 checks)
+Layout da UI: PASS (30 checks)
+Gameplay do Mago: PASS (52 checks)
+Estado persistente E01.1: PASS (33 checks)
+Persistência E01.2: PASS (94 checks)
+Fachada de perfil E01.3-A: PASS (52 checks)
+Sessão e recompensas E01.3-B: PASS (54 checks)
+Diagnóstico E01.3-C: PASS (7 checks)
+Menu E02.1: PASS (26 checks)
+Verification profile isolation: 5 checks, 0 failures
+Menu tabs: PASS (40 checks)
+Integração E02 menu/run: PASS (9 checks)
+E03 StatCalculator: PASS (39 checks)
+Stat threshold rules: PASS (28090 checks, 0 failures)
+Stat threshold migration: PASS (522 checks, 0 failures)
+Stat threshold preview integration: PASS (26 checks, 0 failures)
+E03 Stat matrix: PASS (296 checks)
+E03 progressão/transações: PASS (47 checks)
+E03 painel de progressão: PASS (5 checks)
+E03 consumidores: PASS (28 checks)
+E03 fluxo integrado: PASS (17 checks)
+E04 skill ranks: PASS (16 checks)
+E04 Corte por rank: PASS (27 checks)
+E04 Investida por rank: PASS (28 checks)
+E04 Resistência por rank: PASS (24 checks)
+E04 Bola de Fogo por rank: PASS (35 checks)
+E04 Parede de Fogo por rank: PASS (36 checks)
+E04 Lança de Fogo por rank: PASS (39 checks)
+E04 Lança de Gelo por rank: PASS (39 checks)
+E04 Teleporte por rank: PASS (29 checks)
+E04 Regeneração de SP por rank: PASS (27 checks)
+E04 Arqueiro projétil de precisão: PASS (17 checks)
+E04 Disparo Duplo por rank: PASS (37 checks)
+E04 Flecha Perfurante por rank: PASS (44 checks)
+E04 Chuva de Flechas por rank: PASS (48 checks)
+E04 Mira Estendida por rank: PASS (49 checks)
+E04 runtime de armadilhas: PASS (40 checks)
+E05 Caçadora catalog: 619 checks, 1 failures
+ERROR: current catalog preserves Hunter metadata and save schema
+Exception: C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.tools\map-editor-m5\tools\verify.ps1:85

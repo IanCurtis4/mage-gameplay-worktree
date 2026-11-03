@@ -1933,7 +1933,9 @@
       "bindings"
     ],
     "omitted": {
-      "path": "external settings write destination; host default, never selected by snapshot"
+      "path": "external settings write destination; host default, never selected by snapshot",
+      "ui_scale": "interface preference of this machine, reread from the settings file",
+      "confine_cursor": "interface preference of this machine, reread from the settings file"
     }
   },
   "res://scripts/core/expedition/campaign/expedition_campaign_runtime.gd": {

@@ -434,9 +434,9 @@ func _make_entry(option: Dictionary, point: Vector2) -> void:
 	button.size = Vector2(92, 78) if _tree else Vector2(420, 50)
 	button.tooltip_text = SkillPresentation.describe(option, draft.preview.get("summary", {}))
 	if button.drag_allowed: button.tooltip_text += "\n[b]Versão para arrastar: %s[/b]" % ("maior rank disponível" if button.cast_rank == 0 else "R%d" % button.cast_rank)
-	button.pressed.connect(_select.bind(id))
+	button.pressed.connect(pin_skill.bind(id))
 	button.focus_entered.connect(_select.bind(id))
-	button.mouse_entered.connect(_select.bind(id))
+	button.mouse_entered.connect(hover_skill.bind(id))
 	button.gui_input.connect(_navigation_key)
 	card.add_child(button)
 	var icon := TextureRect.new()
@@ -544,6 +544,16 @@ func _navigation_key(event: InputEvent) -> void:
 		if inspection["requirements"].is_empty(): return
 		_follow_requirement("skill:%s" % String(inspection["requirements"][0]["skill_id"]))
 		get_viewport().set_input_as_handled()
+
+## F10 Q3: hovering previews a skill; a click pins its description, so moving
+## the pointer away to read it does not replace it. A second click releases it.
+var pinned_skill: StringName = &""
+func hover_skill(id: StringName) -> void:
+	if pinned_skill.is_empty(): _select(id)
+
+func pin_skill(id: StringName) -> void:
+	pinned_skill = &"" if pinned_skill == id else id
+	_select(id)
 
 func _show_details() -> void:
 	_rank_picker.clear()

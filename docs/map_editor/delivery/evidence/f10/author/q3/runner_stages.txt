@@ -1,0 +1,16 @@
+VERIFY EXIT 1 SECONDS 1
+   458 |  … dotPath)) { throw 'GodotPath is required to execute checks; use -List …
+       | GodotPath is required to execute checks; use -List to inspect the plan.
+  TAIL Exception: C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.tools\map-editor-m5\tools\verify.ps1:458
+  TAIL Line |
+  TAIL  458 |  … dotPath)) { throw 'GodotPath is required to execute checks; use -List …
+  TAIL      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  TAIL      | GodotPath is required to execute checks; use -List to inspect the plan.
+RUN GameInterface EXIT 0 SECONDS 55
+RUN GameplayNative EXIT 0 SECONDS 82
+RUN GameplayControls EXIT 0 SECONDS 57
+RUN PhaseRules EXIT 0 SECONDS 12
+RUN CampaignJournal EXIT 0 SECONDS 12
+RUN WorldRewardPoll EXIT 0 SECONDS 23
+RUN RoundedResume EXIT 0 SECONDS 224
+DONE

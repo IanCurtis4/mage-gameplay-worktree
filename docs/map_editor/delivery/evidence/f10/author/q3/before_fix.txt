@@ -1,0 +1,9 @@
+F10_INTERFACE_CHECK fixture_character_has_a_robe_and_skills true ["", "", ""]
+F10_INTERFACE_CHECK status_panel_click_does_not_move false [(682.5, 415.25), 35.0806007385254]
+F10_INTERFACE_CHECK inventory_clears_the_action_bar false [[P: (158.05, 637.1), S: (613.7, 37.40002)], [P: (130.0, 476.9), S: (1020.0, 122.4)]]
+F10_INTERFACE_CHECK bag_filter_is_explicit false [false, true, -1]
+F10_INTERFACE_CHECK double_click_equips false -1
+F10_INTERFACE_CHECK clicked_skill_description_is_pinned false [&"electric_discharge", &"fire_spear"]
+F10_INTERFACE_CHECK interface_scale_is_offered false
+F10_INTERFACE_CHECK cursor_capture_is_offered false
+F10_INTERFACE_CHECK interface_scale_applies_and_persists false

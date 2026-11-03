@@ -16,7 +16,8 @@ var last_actions := ""
 
 func _ready() -> void:
 	name = "ExpeditionStatus"
-	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# F10 Q3: the panel draws a background; a click on it never reaches the world.
+	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_preset(Control.PRESET_TOP_LEFT)
 	offset_left = 24; offset_right = 414; offset_top = 220
 	var column := VBoxContainer.new()

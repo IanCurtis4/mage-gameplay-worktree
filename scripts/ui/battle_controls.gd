@@ -7,6 +7,7 @@ const ActionEditorScript := preload("res://scripts/ui/action_bar_editor.gd")
 signal skill_selected(skill: StringName, rank: int)
 signal settings_requested(open: bool)
 signal preferences_changed(mode: int, smart_lock: bool)
+signal interface_changed(ui_scale: float, confine_cursor: bool)
 signal layout_changed(slots: Array[Variant])
 signal bindings_changed
 
@@ -14,6 +15,8 @@ var skill_buttons: Dictionary[StringName, Button] = {}
 var settings_overlay: ColorRect
 var settings_panel: PanelContainer
 var mode_option: OptionButton
+var scale_option: HSlider
+var cursor_option: CheckBox
 var lock_option: CheckBox
 var mode_description: Label
 var aim_panel: PanelContainer
@@ -107,6 +110,20 @@ func _build_settings() -> void:
 	lock_option.text = "Smart lock de alvos pelo mouse"
 	lock_option.toggled.connect(func(value: bool) -> void: preferences_changed.emit(mode_option.selected, value))
 	column.add_child(lock_option)
+	# F10 Q3: interface scale and an optional cursor confined to the window.
+	var scale_row := HBoxContainer.new()
+	var scale_label := Label.new(); scale_label.text = "Escala da interface"
+	scale_row.add_child(scale_label)
+	scale_option = HSlider.new()
+	scale_option.min_value = GuiMetrics.MIN_SCALE; scale_option.max_value = GuiMetrics.MAX_SCALE; scale_option.step = 0.05
+	scale_option.value = GuiMetrics.SCALE; scale_option.custom_minimum_size.x = 220
+	scale_option.drag_ended.connect(func(_changed: bool) -> void: interface_changed.emit(scale_option.value, cursor_option.button_pressed))
+	scale_row.add_child(scale_option)
+	column.add_child(scale_row)
+	cursor_option = CheckBox.new()
+	cursor_option.text = "Manter o cursor dentro da janela"
+	cursor_option.toggled.connect(func(value: bool) -> void: interface_changed.emit(scale_option.value, value))
+	column.add_child(cursor_option)
 	action_editor = ActionEditorScript.new()
 	action_editor.managed_externally = true
 	action_editor.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -259,6 +276,10 @@ func set_options(mode: int, smart_lock: bool) -> void:
 	mode_option.select(mode)
 	lock_option.set_pressed_no_signal(smart_lock)
 	_update_description(mode)
+
+func set_interface_options(ui_scale: float, confine_cursor: bool) -> void:
+	scale_option.set_value_no_signal(ui_scale)
+	cursor_option.set_pressed_no_signal(confine_cursor)
 
 func set_skill_ranks(ranks: Dictionary) -> void:
 	available_ranks = ranks.duplicate()

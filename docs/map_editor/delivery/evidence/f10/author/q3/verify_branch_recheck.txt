@@ -1,0 +1,5 @@
+PLAN 299 steps; from 1
+ 206 e06_ui_menu_test                                     exit=1 9s | E06 UI menu: 105 checks, 3 failures || ERROR: all seventy-three added pieces coexist with historical collection || ERROR: isolated published collection persisted
+ 223 reward_feedback_test                                 exit=0 10s | E06 reward feedback: 55 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 299 e07_f8_candidate_resume                              exit=1 7s | E07 F8 CANDIDATE resume: FAIL checks=8 failures=1 release=false || ERROR: F8: new process finds suspended expedition ||   85 |          throw "Godot verification failed (exit $checkExitCode)."
+DONE 26s

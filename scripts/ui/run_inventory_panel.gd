@@ -26,6 +26,9 @@ var _candidate: Dictionary = {}
 var _serial := 0
 var _busy := false
 var _dragging: PanelContainer
+## F10 Q3: height kept free at the bottom for the action bar and its shortcuts.
+var bottom_reserved := 0.0
+var bag_filter: OptionButton
 var _drag_start := Vector2.ZERO
 var _window_start := Vector2.ZERO
 func _ready() -> void:
@@ -51,10 +54,18 @@ func _ready() -> void:
 	legend_label.text = "Peças e cartas permanecem no perfil, inclusive encaixadas."
 	legend_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	column.add_child(legend_label)
+	# F10 Q3: the slots scroll when the space above the action bar is short, so
+	# the confirmation always stays visible.
+	var body_scroll := ScrollContainer.new()
+	body_scroll.name = "EquipmentBody"
+	body_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	body_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	column.add_child(body_scroll)
 	var body := HBoxContainer.new()
 	body.add_theme_constant_override("separation", 8)
+	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	column.add_child(body)
+	body_scroll.add_child(body)
 	var left_slots := VBoxContainer.new()
 	left_slots.custom_minimum_size.x = 134
 	body.add_child(left_slots)
@@ -132,10 +143,22 @@ func _ready() -> void:
 	var equipables := VBoxContainer.new()
 	equipables.name = "Equipáveis"
 	bag_tabs.add_child(equipables)
+	# F10 Q3: the filter is explicit, and a double click equips.
+	bag_filter = OptionButton.new()
+	bag_filter.name = "BagFilter"
+	bag_filter.add_item("Para o espaço selecionado")
+	bag_filter.add_item("Todas as peças")
+	bag_filter.item_selected.connect(func(_index: int) -> void:
+		if _transaction_pending(): return
+		_clear_preview(); refresh_view()
+	)
+	equipables.add_child(bag_filter)
 	equipment_list = ItemList.new()
 	equipment_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	equipment_list.icon_scale = 0.5
 	equipment_list.item_selected.connect(_equipment_selected)
+	equipment_list.item_activated.connect(equip_activated)
+	equipment_list.tooltip_text = "Clique para comparar; duplo clique para equipar."
 	equipables.add_child(equipment_list)
 	_empty_tab("Misc", "Nenhum item diverso disponível.")
 	var pack := VBoxContainer.new()
@@ -223,18 +246,18 @@ func _input(event: InputEvent) -> void:
 		_dragging = null
 func _clamp_window(at: Vector2, extent: Vector2) -> Vector2:
 	var viewport := GuiMetrics.local_extent(self)
-	return Vector2(clampf(at.x, 0.0, maxf(0.0, viewport.x - extent.x)), clampf(at.y, 0.0, maxf(0.0, viewport.y - extent.y)))
+	return Vector2(clampf(at.x, 0.0, maxf(0.0, viewport.x - extent.x)), clampf(at.y, 0.0, maxf(0.0, viewport.y - bottom_reserved - extent.y)))
 func _layout_windows() -> void:
 	if equipment_window == null or bag_window == null: return
 	var viewport := GuiMetrics.local_extent(self)
 	var gap := 12.0
 	var width := minf(742.0, maxf(560.0, viewport.x * 0.62))
 	var bag_width := minf(400.0, maxf(290.0, viewport.x - width - gap - 24.0))
-	var height := minf(568.0, viewport.y - 48.0)
+	var height := minf(568.0, viewport.y - 48.0 - bottom_reserved)
 	equipment_window.size = Vector2(width, height)
 	bag_window.size = Vector2(bag_width, height)
 	var total := width + gap + bag_width
-	equipment_window.position = _clamp_window(Vector2((viewport.x - total) * 0.5, (viewport.y - height) * 0.5), equipment_window.size)
+	equipment_window.position = _clamp_window(Vector2((viewport.x - total) * 0.5, (viewport.y - bottom_reserved - height) * 0.5), equipment_window.size)
 	bag_window.position = _clamp_window(equipment_window.position + Vector2(width + gap, 0), bag_window.size)
 func _select_slot(slot: StringName) -> void:
 	if _transaction_pending(): return
@@ -307,9 +330,12 @@ func refresh_view() -> void:
 		button.button_pressed = slot == _slot() if button.toggle_mode else false
 	equipped_label.text = "Selecionado: %s\n%s" % [EquipmentPresentation.SLOT_LABELS[_slot()], selected_name]
 	character_preview.call("configure", _dto.get("identity_id", &"swordsman"), _dto.get("equipment_visual", {}))
+	var everything := bag_filter != null and bag_filter.selected == 1
+	if bag_filter != null: bag_filter.set_item_text(0, "Para %s" % EquipmentPresentation.SLOT_LABELS[_slot()])
 	for row: Dictionary in _dto["equipment"]:
-		if not EquipmentRules.slot_matches(row["slot"], _slot()): continue
+		if not everything and not EquipmentRules.slot_matches(row["slot"], _slot()): continue
 		var text := "%02d · %s · %s · ilvl %d · %d encaixe(s)" % [equipment_list.item_count + 1, row["name"], EquipmentPresentation.quality_name(row["quality_id"]), row["item_level"], row["socket_capacity"]]
+		if everything: text = "%s · %s" % [EquipmentPresentation.SLOT_LABELS.get(row["slot"], String(row["slot"])), text]
 		equipment_list.add_item(text, row["icon"])
 		var index := equipment_list.item_count - 1
 		equipment_list.set_item_metadata(index, row["id"])
@@ -368,7 +394,27 @@ func _card_selected(_index: int) -> void:
 			break
 func _compare_equipment() -> void:
 	if equipment_list.get_selected_items().is_empty(): return
-	propose({"kind": &"equip", "slot": _slot(), "equipment_instance_id": equipment_list.get_item_metadata(equipment_list.get_selected_items()[0])})
+	var instance: Variant = equipment_list.get_item_metadata(equipment_list.get_selected_items()[0])
+	propose({"kind": &"equip", "slot": _slot_for(instance), "equipment_instance_id": instance})
+
+## The slot an item goes to: the selected one when it fits, else the first that does.
+func _slot_for(instance: Variant) -> StringName:
+	for row: Dictionary in _dto.get("equipment", []):
+		if row["id"] != instance: continue
+		if EquipmentRules.slot_matches(row["slot"], _slot()): return _slot()
+		for slot: StringName in IdentityIds.equipment_slots():
+			if EquipmentRules.slot_matches(row["slot"], slot): return slot
+	return _slot()
+
+## F10 Q3: a double click compares and confirms in one gesture.
+func equip_activated(index: int) -> Dictionary:
+	if _busy or _transaction_pending() or index < 0 or index >= equipment_list.item_count or equipment_list.is_item_disabled(index): return BuildEffectCatalog.failure(&"preview_required")
+	equipment_list.select(index)
+	_clear_preview()
+	_refresh_sockets()
+	_compare_equipment()
+	if _candidate.is_empty(): return BuildEffectCatalog.failure(&"preview_required")
+	return confirm_change()
 func _compare_unsocket() -> void:
 	if socket_selector.selected < 0: return
 	propose({"kind": &"unsocket", "equipment_instance_id": _socket_host(), "socket_index": socket_selector.selected})
