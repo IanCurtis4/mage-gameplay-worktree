@@ -17,7 +17,8 @@ static func production(catalog: BuildEffectCatalog) -> MobLootTable:
 	table.recipe_revision_id = &"catalog_v1"
 	table.power_ruleset_id = &"equipment_growth_v1"
 	table.cardless_base_ids = [&"demo_chaser", &"demo_archer"]
-	for id: StringName in [&"test_gel", &"test_beast_master", &"test_animal_companion"]:
+	# F10 Q4: the forest phase species have no cards yet (future content).
+	for id: StringName in [&"test_gel", &"test_beast_master", &"test_animal_companion", &"forest_wolf", &"forest_boar", &"forest_stalker", &"forest_canopy_archer", &"forest_ancient_warden"]:
 		if catalog.mob_catalog().get_definition(id) != null: table.cardless_base_ids.append(id)
 	for category: StringName in CHANCES:
 		var equipment: Dictionary = {}

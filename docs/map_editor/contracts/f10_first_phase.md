@@ -122,3 +122,22 @@ sem mudar a fonte.
   terreno, mapa e encontros não mudaram.
 - **Correção do Q2 achada aqui:** o comando AX `population/brush/upsert`
   recusava o campo `guardian` (o painel conferia o formato antigo).
+
+## Bloqueio de persistência (3/11)
+
+A etapa nativa `ForestPlay` entra na fase pelo painel "Expedições" (preparo na
+thread do painel) e para no `enter` com `snapshot_too_large`:
+
+| Medida | Valor |
+| --- | --- |
+| Envelope do snapshot | 10,6 MB (teto 4 MiB, `snapshot_graph_encoding.MAX_BYTES`) |
+| Contêineres | 18.854, com 8,8 MB (dicionários 5,5 MB, arrays 2,8 MB) |
+| Registros de objetos | 1.578, com 1,7 MB |
+| Geometria por mundo | 490 KB, 453 KB e 48 KB |
+
+O perfil, onde o checkpoint é gravado, também tem teto de 4 MiB
+(`ProfileCodec.MAX_FILE_BYTES`). Um campo sozinho (`GridField`) dava 1,05 MB.
+
+Antes disso, a entrada pelo lobby mostrou que o loot exige carta para quem não
+está na lista de espécies sem carta; as espécies da floresta entraram nessa
+lista (sem cartas por ora).
