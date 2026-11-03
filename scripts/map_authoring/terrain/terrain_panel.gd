@@ -293,8 +293,12 @@ func ax_command(id: String, parameters: Dictionary) -> Dictionary:
 
 func apply_stroke(points: Array, options: Dictionary) -> Dictionary:
 	var proposal := Brush.stroke(session.document().to_data(),selected_layer,points,options)
+	var followed: Array = proposal.get("followed_sockets",[])
 	if proposal.ok and proposal.changed > 0: proposal = session.apply(proposal.data)
 	if not proposal.ok: status.text = "Destrave a camada para editar." if proposal.code == "layer_locked" else "O traço não pôde ser aplicado. Confira a camada e os parâmetros."
+	elif not followed.is_empty():
+		proposal.followed_sockets = followed
+		status.text = "Marcadores que acompanharam o relevo: "+", ".join(followed)+"."
 	return proposal
 
 func apply_operation(operation: String, parameters: Dictionary) -> Dictionary:
@@ -436,7 +440,12 @@ func _process(_delta: float) -> void:
 	else:
 		var messages := {"cancelled":"Compilação cancelada.","stale_source":"A fonte mudou; compile novamente.","geometry_overlap":"Há pisos sobrepostos na mesma altura.","insufficient_headroom":"A passagem sob a ponte não tem folga.","slope_too_steep":"A inclinação supera 45°; alongue a rampa.","terrain_limit_exceeded":"O relevo excede o orçamento de 1024 suportes gerados. Reduza a densidade de amostras ou simplifique o relevo.","connector_invalid":"Um conector não coincide com uma abertura válida."}
 		status.text = messages.get(completed.code,completed.diagnostics[0].message if not completed.diagnostics.is_empty() else "Não foi possível compilar; confira a fonte.")
-		if not completed.diagnostics.is_empty(): status.text += " Região: " + str(completed.diagnostics[0].entity_id)
+		if not completed.diagnostics.is_empty():
+			var diagnostic: Dictionary = completed.diagnostics[0]
+			if diagnostic.has("position_xyz"):
+				var at: Array = diagnostic.position_xyz
+				if is_instance_valid(canvas._viewport_tools): canvas._viewport_tools.focus_world(Vector3(at[0],at[1],at[2]))
+			else: status.text += " Região: " + str(diagnostic.entity_id)
 	inspection_compiled.emit(completed.duplicate(true))
 
 func _exit_tree() -> void:

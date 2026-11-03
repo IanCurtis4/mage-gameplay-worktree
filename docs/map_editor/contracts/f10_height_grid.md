@@ -85,6 +85,9 @@ números e política em [checkpoint6](../delivery/f10.md).
   base por geometria, corpo e raiz. O mesmo campo popula em 47 s (plano 37 s,
   compilação 10 s) e a campanha começa em 2,4 s.
 
+- **Recompilar depois de um traço (checkpoint8):** peça em 0,63 s e mapa em 8,2 s,
+  reconstruindo só o trecho e o reticulado tocados; a certificação segue global.
+
 Política de certificação em campo, só para estágios com trechos:
 
 - costuras entre trechos usam os deslocamentos da abertura mais um a cada 256 u;

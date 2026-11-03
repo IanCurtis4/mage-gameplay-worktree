@@ -232,15 +232,33 @@ func _shallow_hash(value: Variant) -> int:
 	if typeof(value) in [TYPE_OBJECT,TYPE_CALLABLE,TYPE_SIGNAL,TYPE_RID]: return typeof(value)
 	return hash(value)
 
+## F10 Q1: the code of a process does not change while it runs, and hashing every
+## script took ~0.6 s per capture and per validation. Once per process; each
+## caller gets its own copy, so a tampered snapshot still differs from the truth.
+static var _revisions_cache: Dictionary = {}
+static var _digest_cache: Dictionary = {}
+static var _digest_mutex := Mutex.new()
+
 func _source_revisions() -> Dictionary:
+	_digest_mutex.lock(); var known: Dictionary = _revisions_cache; _digest_mutex.unlock()
+	if not known.is_empty(): return known.duplicate()
 	var paths: Array[String] = [MANIFEST, "res://data/expedition/policies/e07_initial.json"]
 	_collect_sources("res://scripts",paths)
 	paths.sort()
 	var result: Dictionary = {}
 	for path: String in paths: result[path] = _content_digest(path)
-	return result
+	_digest_mutex.lock(); _revisions_cache = result; _digest_mutex.unlock()
+	return result.duplicate()
 
 func _content_digest(logical_path: String) -> String:
+	_digest_mutex.lock(); var known: Variant = _digest_cache.get(logical_path); _digest_mutex.unlock()
+	if known != null: return known
+	var digest := _file_digest(logical_path)
+	if not digest.is_empty():
+		_digest_mutex.lock(); _digest_cache[logical_path] = digest; _digest_mutex.unlock()
+	return digest
+
+func _file_digest(logical_path: String) -> String:
 	# Editor files and exported resources have different physical storage.
 	# Hash the exact bytes actually loaded by this build; never omit a digest
 	# or accept a missing asset. Cross-build checkpoint migration stays unsupported.

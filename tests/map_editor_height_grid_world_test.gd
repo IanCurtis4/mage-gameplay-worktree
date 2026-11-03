@@ -6,6 +6,8 @@ extends SceneTree
 const Grid = preload("res://scripts/core/expedition/spatial/world_height_grid.gd")
 const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
 const PROFILE := {"radius":10.0,"height":40.0,"connector_kinds":["walk"]}
+const GroundShadow = preload("res://scripts/world/ground_shadow.gd")
+const Patch = preload("res://scripts/core/expedition/spatial/world_support_patch.gd")
 var checks: Array[Dictionary] = []
 var world: WorldGeometry
 var view: Dictionary
@@ -92,6 +94,15 @@ func run() -> void:
 	var above := flat_cell(); above.vertices = [Vector3(300,300,100),Vector3(500,300,100),Vector3(500,300,300),Vector3(300,300,300)]
 	var crossing := flat_cell(); crossing.vertices = [Vector3(300,30,100),Vector3(500,30,100),Vector3(500,30,300),Vector3(300,30,300)]
 	check("overlap_uses_the_height_range",Kernel.cells_overlap(cell,crossing) and not Kernel.cells_overlap(cell,above) and not Kernel.cells_overlap(cell,flat_cell()))
+	# 10. A contact shadow on a stretch lies on the support triangles.
+	var shadow_index: Dictionary = Patch.index({"surfaces":[cell],"connectors":[],"connections":[]})
+	var anchor := at(500.0,300.0).position
+	var shadow: Dictionary = GroundShadow.mesh_data(anchor,Vector2(70.0,50.0),shadow_index,"field",func(point: Vector3) -> Vector2: return Vector2(point.x,point.z))
+	var on_ground: bool = shadow.ok and GroundShadow.receiver(anchor,shadow_index,"a_layer") == "field" and shadow.world_vertices.size() > 3
+	if shadow.ok:
+		for vertex: Vector3 in shadow.world_vertices:
+			if absf(vertex.y-Grid.support_y(view,vertex.x,vertex.z)) > 0.01: on_ground = false
+	check("shadow_lies_on_the_support",on_ground)
 	finish()
 func finish() -> void:
 	var ok := not checks.is_empty() and checks.all(func(item: Dictionary) -> bool: return item.ok)

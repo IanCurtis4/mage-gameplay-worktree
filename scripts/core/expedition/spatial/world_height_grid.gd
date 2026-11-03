@@ -10,6 +10,10 @@ const WALK_NORMAL_Y := 0.7071067811865476
 const MAX_SAMPLES := 257
 const MAX_LATTICE := 263169
 const DIRECTIONS: Array[Vector2i] = [Vector2i(1,0),Vector2i(-1,0),Vector2i(0,1),Vector2i(0,-1),Vector2i(1,1),Vector2i(-1,1),Vector2i(1,-1),Vector2i(-1,-1)]
+const MAX_SHARED_LATTICES := 2048
+static var _lattices: Dictionary = {}
+static var _lattices_mutex := Mutex.new()
+static var lattices_built := 0
 
 static func valid(grid: Variant) -> bool:
 	if not grid is Dictionary or not grid.has_all(["origin_xz","sample_spacing","columns","rows","heights"]): return false
@@ -51,6 +55,18 @@ static func triangle_vertices(prepared: Dictionary, t: int) -> Array:
 	var quad := t >> 1; var x := quad % int(prepared.qx); var z := quad / int(prepared.qx)
 	if t & 1 == 0: return [point(prepared,x,z),point(prepared,x+1,z),point(prepared,x+1,z+1)]
 	return [point(prepared,x,z),point(prepared,x+1,z+1),point(prepared,x,z+1)]
+
+## F10 Q1: the walkable triangles of the quads touching a box, as vertex lists.
+static func triangles_in(prepared: Dictionary, low: Vector2, high: Vector2) -> Array:
+	var qx := int(prepared.qx); var s := float(prepared.s)
+	var x0 := clampi(floori((low.x-float(prepared.ox))/s),0,qx-1); var x1 := clampi(floori((high.x-float(prepared.ox))/s),0,qx-1)
+	var z0 := clampi(floori((low.y-float(prepared.oz))/s),0,int(prepared.qz)-1); var z1 := clampi(floori((high.y-float(prepared.oz))/s),0,int(prepared.qz)-1)
+	var result: Array = []
+	for z: int in range(z0,z1+1):
+		for x: int in range(x0,x1+1):
+			for t: int in [(z*qx+x)*2,(z*qx+x)*2+1]:
+				if triangle_walkable(prepared,t): result.append(triangle_vertices(prepared,t))
+	return result
 
 static func triangle_walkable(prepared: Dictionary, t: int) -> bool:
 	if t < 0 or t >= int(prepared.qx)*int(prepared.qz)*2: return false
@@ -317,6 +333,26 @@ static func path(prepared: Dictionary, from: Vector2, to: Vector2, radius: float
 ## Lattice of one stretch for one body: usable nodes (the disk is clear) and the
 ## 8-neighbour links whose capsule is clear, as bit masks. Read-only once built;
 ## WorldGeometry caches it per stretch and radius.
+## F10 Q1: a lattice is a pure function of the stretch and the radius. Maps that
+## share a stretch (the next compile after a stroke) reuse it by content.
+static func lattice_shared(prepared: Dictionary, radius: float) -> Dictionary:
+	var context := HashingContext.new(); context.start(HashingContext.HASH_SHA256)
+	context.update(var_to_bytes([prepared.ox,prepared.oz,prepared.s,prepared.qx,prepared.qz,prepared.h,radius]))
+	var content := context.finish()
+	_lattices_mutex.lock(); var known: Variant = _lattices.get(content); _lattices_mutex.unlock()
+	if known != null: return known
+	var built := lattice(prepared,radius,true)
+	_lattices_mutex.lock()
+	lattices_built += 1
+	if _lattices.size() >= MAX_SHARED_LATTICES: _lattices.clear()
+	if not _lattices.has(content): _lattices[content] = built
+	var result: Dictionary = _lattices[content]
+	_lattices_mutex.unlock()
+	return result
+
+static func clear_shared_lattices() -> void:
+	_lattices_mutex.lock(); _lattices.clear(); _lattices_mutex.unlock()
+
 static func lattice(prepared: Dictionary, radius: float, inside: bool = true) -> Dictionary:
 	var masked := index(prepared.duplicate())
 	var size := _lattice(masked)

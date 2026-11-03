@@ -1,6 +1,9 @@
 class_name ExpeditionService
 extends RefCounted
 ## Transaction coordinator. ProfileStore remains the only durable writer.
+## F10 Q1: drops per journal entry. Collecting 7 at once took 60-75 ms in a frame;
+## the rest of the queue follows when the background save of this entry ends.
+const COLLECT_BATCH := 2
 const Journal = preload("res://scripts/core/expedition/persistence/expedition_journal_codec.gd")
 var facade: ProfileFacade
 var _pending: Dictionary = {}
@@ -685,7 +688,7 @@ func journal_collect(controller: RunController, barrier: SnapshotTickBarrier, re
 	var rewards := controller.reward_service
 	var tickets: Array[String] = []
 	for ticket_id: String in rewards._queue:
-		if not rewards._tickets[ticket_id].get("mob_ticket", false) or rewards._tickets[ticket_id]["delivered"]: break
+		if tickets.size() >= COLLECT_BATCH or not rewards._tickets[ticket_id].get("mob_ticket", false) or rewards._tickets[ticket_id]["delivered"]: break
 		tickets.append(ticket_id)
 	if tickets.is_empty(): return _fail(&"reward_unavailable")
 	var fingerprint := _fingerprint("journal", lock.expedition_id, lock.phase_id, "collect:" + ",".join(tickets))

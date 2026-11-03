@@ -2750,9 +2750,9 @@ func _background_saves() -> bool:
 	if OS.get_environment("RAGRPG_BACKGROUND_SAVE") == "1": return true
 	return DisplayServer.get_name() != "headless" and OS.get_environment("RAGRPG_SYNC_SAVE") != "1"
 
-# Checkpoint38: out of combat, every mob drop and its XP waiting in the queue go
-# to the character in one journal entry, written in the background. The status
-# panel button remains the explicit fallback.
+# Checkpoint38: out of combat, the mob drops and their XP waiting in the queue go
+# to the character in journal entries of ExpeditionService.COLLECT_BATCH, written
+# in the background. The status panel button remains the explicit fallback.
 func _auto_collect() -> void:
 	if campaign_runtime == null or reward_service == null or persistent_facade == null or not reward_service.has_uncollected(): return
 	if snapshot_passive or _expedition_flush_running or expedition_save_busy() or _memory_snapshot_pending or encounter_active or run_finished or inventory_frozen: return

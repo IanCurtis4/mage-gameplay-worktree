@@ -16,6 +16,16 @@ const REVISION := "height_grid_v1"
 const CHUNK := 16
 const HEADROOM := 100.0
 const MAX_STRETCHES := 1024
+const MAX_CACHED := 4096
+## F10 Q1: records of one stretch by content (its grid, the grids it seams with
+## and the mass base). A stroke rebuilds only the stretches it touched; a hit is
+## the same pure output, and receivers still compare the whole package.
+static var _records: Dictionary = {}
+static var _records_mutex := Mutex.new()
+static var rebuilt_stretches := 0
+
+static func clear_cache() -> void:
+	_records_mutex.lock(); _records.clear(); _records_mutex.unlock()
 
 static func uses_grid(source: Dictionary) -> bool:
 	for layer: Variant in source.get("layers",[]):
@@ -54,31 +64,49 @@ static func build(layer: Dictionary, cancellation: Callable = Callable()) -> Dic
 	var qx := int(layer.columns)-1; var qz := int(layer.rows)-1
 	for part: Dictionary in parts:
 		if cancellation.is_valid() and cancellation.call(): return {"ok":false,"code":"cancelled"}
-		var view := HeightGrid.view(part.grid)
-		var corners := HeightGrid.corners(view)
-		cells.append({"surface_id":part.id,"headroom":HEADROOM,"vertices":corners,"height_grid":part.grid})
-		visuals.append({"face_id":part.id,"surface_id":part.id,"source_id":layer.layer_id,"vertices":corners.duplicate(),"earth_weights":[],"material_weights":[],"special":false,"headroom":HEADROOM,"walkable":true,"bottom_y":base})
-		# Seams to the next stretch along x (side 1) and along z (side 2).
-		for side: int in [1,2]:
-			var next := Vector2i(part.cx+CHUNK,part.cz) if side == 1 else Vector2i(part.cx,part.cz+CHUNK)
-			if not by_chunk.has(next): continue
-			var other: Dictionary = by_chunk[next]
-			var spans := HeightGrid.shared_spans(view,side,HeightGrid.view(other.grid))
-			for k: int in spans.size():
-				var a: Vector3 = spans[k].a; var b: Vector3 = spans[k].b
-				var middle := (a+b)*0.5; middle.y = HeightGrid.support_y_clamped(view,middle.x,middle.z)
-				var key := Canonical.digest([part.id,other.id,side,a,b]).substr(0,20)
-				var width := Vector2(b.x-a.x,b.z-a.z).length()
-				var pa := {"connector_id":"j_ga_"+key,"surface_id":part.id,"position":middle,"outward":HeightGrid.side_outward(side),"kind":"walk","tags":["map_editor"],"width":width,"headroom":HEADROOM,"direction":"both"}
-				var pb := {"connector_id":"j_gb_"+key,"surface_id":other.id,"position":middle,"outward":-HeightGrid.side_outward(side),"kind":"walk","tags":["map_editor"],"width":width,"headroom":HEADROOM,"direction":"both"}
-				connectors.append(pa); connectors.append(pb)
-				joins.append({"connection_id":"join_g_"+key,"a_connector":pa.connector_id,"b_connector":pb.connector_id,"forward":true,"backward":true})
-		# Outline of the layer: boundaries in runs of one walkability, sides per segment.
-		for side: int in 4:
-			var on_outline: bool = (side == 0 and part.cz == 0) or (side == 1 and part.cx+CHUNK >= qx) or (side == 2 and part.cz+CHUNK >= qz) or (side == 3 and part.cx == 0)
-			if on_outline: _outline(view,part.id,layer.layer_id,side,base,boundaries,sides)
+		var record := _stretch_record(layer.layer_id,part,by_chunk,base,qx,qz)
+		cells.append(record.cell); visuals.append(record.visual)
+		connectors.append_array(record.connectors); joins.append_array(record.joins)
+		boundaries.append_array(record.boundaries); sides.append_array(record.sides)
 	if sides.size() > Topology.MAX_SIDES: return {"ok":false,"code":"terrain_side_limit"}
 	return {"ok":true,"cells":cells,"visuals":visuals,"connectors":connectors,"adjacency":joins,"boundaries":boundaries,"exposed_sides":sides,"base_y":base}
+
+static func _stretch_record(layer_id: String, part: Dictionary, by_chunk: Dictionary, base: float, qx: int, qz: int) -> Dictionary:
+	var right: Variant = by_chunk.get(Vector2i(part.cx+CHUNK,part.cz))
+	var below: Variant = by_chunk.get(Vector2i(part.cx,part.cz+CHUNK))
+	var context := HashingContext.new(); context.start(HashingContext.HASH_SHA256)
+	context.update(var_to_bytes([layer_id,part.cx,part.cz,part.grid,right.grid if right != null else null,below.grid if below != null else null,base,qx,qz]))
+	var content := context.finish()
+	_records_mutex.lock(); var known: Variant = _records.get(content); _records_mutex.unlock()
+	if known != null: return known.duplicate(true)
+	var view := HeightGrid.view(part.grid)
+	var corners := HeightGrid.corners(view)
+	var connectors: Array = []; var joins: Array = []; var boundaries: Array = []; var sides: Array = []
+	# Seams to the next stretch along x (side 1) and along z (side 2).
+	for side: int in [1,2]:
+		var other: Variant = right if side == 1 else below
+		if other == null: continue
+		var spans := HeightGrid.shared_spans(view,side,HeightGrid.view(other.grid))
+		for k: int in spans.size():
+			var a: Vector3 = spans[k].a; var b: Vector3 = spans[k].b
+			var middle := (a+b)*0.5; middle.y = HeightGrid.support_y_clamped(view,middle.x,middle.z)
+			var key := Canonical.digest([part.id,other.id,side,a,b]).substr(0,20)
+			var width := Vector2(b.x-a.x,b.z-a.z).length()
+			var pa := {"connector_id":"j_ga_"+key,"surface_id":part.id,"position":middle,"outward":HeightGrid.side_outward(side),"kind":"walk","tags":["map_editor"],"width":width,"headroom":HEADROOM,"direction":"both"}
+			var pb := {"connector_id":"j_gb_"+key,"surface_id":other.id,"position":middle,"outward":-HeightGrid.side_outward(side),"kind":"walk","tags":["map_editor"],"width":width,"headroom":HEADROOM,"direction":"both"}
+			connectors.append(pa); connectors.append(pb)
+			joins.append({"connection_id":"join_g_"+key,"a_connector":pa.connector_id,"b_connector":pb.connector_id,"forward":true,"backward":true})
+	# Outline of the layer: boundaries in runs of one walkability, sides per segment.
+	for side: int in 4:
+		var on_outline: bool = (side == 0 and part.cz == 0) or (side == 1 and part.cx+CHUNK >= qx) or (side == 2 and part.cz+CHUNK >= qz) or (side == 3 and part.cx == 0)
+		if on_outline: _outline(view,part.id,layer_id,side,base,boundaries,sides)
+	var record := {"cell":{"surface_id":part.id,"headroom":HEADROOM,"vertices":corners,"height_grid":part.grid},"visual":{"face_id":part.id,"surface_id":part.id,"source_id":layer_id,"vertices":corners.duplicate(),"earth_weights":[],"material_weights":[],"special":false,"headroom":HEADROOM,"walkable":true,"bottom_y":base},"connectors":connectors,"joins":joins,"boundaries":boundaries,"sides":sides}
+	_records_mutex.lock()
+	rebuilt_stretches += 1
+	if _records.size() >= MAX_CACHED: _records.clear()
+	_records[content] = record.duplicate(true)
+	_records_mutex.unlock()
+	return record
 
 ## Sample points along one side in counter-clockwise order (outward on the right).
 static func _side_points(view: Dictionary, side: int) -> Array:

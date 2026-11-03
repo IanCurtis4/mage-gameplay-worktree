@@ -243,6 +243,7 @@ func start() -> Dictionary:
 	previous.control_preferences.path = session.directory.path_join("controls.cfg")
 	previous.expedition_field_height = prepared.manifest._data.input.traversal.height
 	var was_paused := get_tree().paused; get_tree().paused = true
+	var phase_started := Time.get_ticks_usec()
 	add_child(previous)
 	if previous.player == null or previous.reward_service == null:
 		previous.free(); get_tree().paused = was_paused; busy = false
@@ -253,11 +254,14 @@ func start() -> Dictionary:
 	var barrier := SnapshotTickBarrier.new(); var held := barrier.acquire(previous)
 	if not held.ok:
 		previous.free(); get_tree().paused = was_paused; busy = false; return _set_result(held)
+	timings["start_controller_ms"] = (Time.get_ticks_usec()-phase_started)/1000.0; phase_started = Time.get_ticks_usec()
 	var entered := ExpeditionService.new(facade).enter(previous,barrier,"preview_"+session.session.session_id,prepared.manifest,prepared.rules,_request("enter"),facade.current_profile().revision)
 	barrier.release()
 	if not entered.ok:
 		previous.free(); get_tree().paused = was_paused; busy = false; return _set_result(entered)
+	timings["start_enter_ms"] = (Time.get_ticks_usec()-phase_started)/1000.0; phase_started = Time.get_ticks_usec()
 	var installed := ExpeditionSceneFlow.install(entered,previous)
+	timings["start_install_ms"] = (Time.get_ticks_usec()-phase_started)/1000.0
 	busy = false
 	if not installed.ok:
 		if is_instance_valid(entered.root): entered.root.free()

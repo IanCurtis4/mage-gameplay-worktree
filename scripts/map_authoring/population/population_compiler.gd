@@ -90,9 +90,9 @@ static func prepare(source: Dictionary, cancel: Callable = Callable()) -> Dictio
 	manifest._data.input["traversal"] = PROFILE.duplicate(true); manifest._data.traversal = PROFILE.duplicate(true); manifest._data.input["entry_stage_id"] = "map_preview"
 	stage.entrance = "authored_entry"; stage.sockets.append({"socket_id":"authored_entry","kind":"entrance","tags":[],"surface_id":source.entrance[0].surface_id,"position":vector(source.entrance[0].position_xyz)})
 	var world := WorldGeometry.new(); var configured := world.configure(manifest,"map_preview")
-	if not configured.ok: return fail("entrance_invalid")
+	if not configured.ok: return fail("entrance_invalid","authored_entry",{},vector(source.entrance[0].position_xyz))
 	var entry := anchor(source.entrance[0])
-	if not world.position_query(entry,PROFILE,world.geometry_revision).ok: return fail("entrance_invalid")
+	if not world.position_query(entry,PROFILE,world.geometry_revision).ok: return fail("entrance_invalid","authored_entry",{},vector(source.entrance[0].position_xyz))
 	var ids: Dictionary = {}; var completion_count := 0
 	for interaction: Dictionary in source.interactions:
 		ids[interaction.interaction_id] = interaction

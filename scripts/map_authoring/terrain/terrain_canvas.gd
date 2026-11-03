@@ -45,6 +45,11 @@ var _mesh_root: Node2D
 var _overlay: Node2D
 var _height_bounds: Dictionary = {}
 var _shape: Dictionary = {}
+## F10 Q1: pointer events only record points; the preview follows at the pace the
+## machine can draw it, so a slow redraw never holds the pointer back.
+const PREVIEW_MIN_MSEC := 66
+var _preview_pending := false
+var _preview_due_msec := 0
 
 func _ready() -> void:
 	custom_minimum_size = Vector2(480,300)
@@ -198,6 +203,7 @@ func redraw_terrain() -> void:
 			_mesh_root.add_child(mesh)
 	var shadow_index := {}
 	_shape = _grid_preview(data) if Grid.uses_grid(data) else Terrain.preview_geometry(data)
+	if _shape.get("stretches",{}).has("cells") and not _object_records.is_empty(): shadow_index = GroundShadow.index_from_stretches(_shape.stretches)
 	if _shape.ok:
 		var hidden_faces := {}
 		for visual: Dictionary in _shape.visuals:
@@ -225,12 +231,12 @@ func redraw_terrain() -> void:
 ## F10 H5: the preview of a height-grid piece: its outline sides (no planar
 ## visuals; the stretches are drawn above). Hidden layers draw nothing.
 func _grid_preview(data: Dictionary) -> Dictionary:
-	var sides: Array = []
+	var sides: Array = []; var stretches := {}
 	for layer: Dictionary in data.layers:
 		if not Grid.layer_is_grid(layer) or layer.layer_id in hidden_layers: continue
 		var built := Grid.build(layer)
-		if built.ok: sides.append_array(built.exposed_sides)
-	return {"ok":true,"visuals":[],"exposed_sides":sides}
+		if built.ok: sides.append_array(built.exposed_sides); stretches = built
+	return {"ok":true,"visuals":[],"exposed_sides":sides,"stretches":stretches}
 
 func _attach_face(vertices: Array, paint: Array, normal: Vector3, domain: Vector2) -> void:
 	var view := MeshInstance2D.new(); view.mesh = TerrainMaterial.from_arrays(TerrainMaterial.face_arrays(vertices,paint,normal)); view.material = TerrainMaterial.material()
@@ -321,7 +327,7 @@ func _stroke_screen(point: Vector2) -> Vector2:
 func cancel_stroke() -> void:
 	var redraw := not _preview.is_empty()
 	if _dragging: cancelled.emit()
-	_dragging = false; _points.clear(); _preview = {}; queue_redraw()
+	_dragging = false; _points.clear(); _preview = {}; _preview_pending = false; queue_redraw()
 	if redraw and is_instance_valid(_mesh_root): redraw_terrain()
 
 func _gui_input(event: InputEvent) -> void:
@@ -353,7 +359,7 @@ func _gui_input(event: InputEvent) -> void:
 			if not Rect2(Vector2.ZERO,size).has_point(event.position): cancel_stroke(); return
 			var points := _points.duplicate(); var active := _active_options.duplicate(true)
 			if active.get("mode") == "ramp" and points.size() > 1: points = [points[0],points[-1]]
-			_dragging = false; _points.clear(); _preview = {}
+			_dragging = false; _points.clear(); _preview = {}; _preview_pending = false
 			stroke_finished.emit(points,active); queue_redraw()
 		accept_event()
 	if event is InputEventMouseMotion:
@@ -364,7 +370,7 @@ func _gui_input(event: InputEvent) -> void:
 			var hit := pick(event.position)
 			if hit.ok and _points[-1].distance_to(hit.point) > 0.01:
 				if _points.size() >= 4096: cancel_stroke(); return
-				_points.append(hit.point); _update_preview()
+				_points.append(hit.point); _preview_pending = true
 		queue_redraw()
 
 func camera_state() -> Dictionary: return {"scale":_scale,"offset":_origin+_pan,"size":size}
@@ -404,7 +410,18 @@ func inspection_pick(at: Vector2) -> Dictionary:
 	if not inspection_surface.is_empty(): return ViewportTools.pick_support(world,inspection_surface,ray)
 	return world.resolve_surface(ray.origin,ray.direction,ids,world.geometry_revision)
 
+func _process(_delta: float) -> void:
+	if not _preview_pending or Time.get_ticks_msec() < _preview_due_msec: return
+	_preview_pending = false
+	_update_preview()
+
 func _update_preview() -> void:
+	var started := Time.get_ticks_msec()
+	_build_preview()
+	# A preview that takes 300 ms gets the same again of free frames.
+	_preview_due_msec = Time.get_ticks_msec()+maxi(PREVIEW_MIN_MSEC,Time.get_ticks_msec()-started)
+
+func _build_preview() -> void:
 	var points := _points
 	if _active_options.get("mode") == "ramp":
 		if points.size() < 2: return

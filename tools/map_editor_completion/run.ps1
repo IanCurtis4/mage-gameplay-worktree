@@ -3,7 +3,7 @@ param(
     [Parameter(Mandatory)][string]$EvidenceDirectory,
     [switch]$SkipImport,
     [string]$ResumeSession="",
-    [ValidateSet('HeightGrid','GridField','GridViewNative','GridCompile','HeightGridNavigation','HeightGridWorld','Geometry','Objects','ObjectsNative','Mesh','Relief','Ports','Batch','Materials','MaterialsNative','Scale','Cliff','CliffNative','BiomeProps','BiomePropsNative','Borders','BordersNative','Shadows','ShadowsNative','CanvasOrder','Library','LibraryNative','Viewport','ViewportNative','RuntimeView','GameplayNative','GameplayWindow','GameplayControls','GameplayEditorNative','GameplayCli','FieldsNative','Organic','NavigationLazy','NavigationDense','NavigationContext','Rounded','RoundedNative','SnapshotDensity','RoundedResume','SurfacePick','Authoring','AuthoringNative','Content','ContentNative','CompositionAX','CompositionAXNative','MapBiome','MapBiomeNative','EncounterAuthoring','EncounterAuthoringNative','PopulationReachability','PopulationPlanner','CandidateBatch','GameplayGate','WorldTargeting','WorldRewardPoll','NavigationAstar','NavigationAsync','CampaignJournal','AssetManifest','CompileCache','RegionalSynthesis','RegionalSynthesisNative','RootSynthesis','RootSynthesisNative','ExchangeMerge','ExchangeMergeNative','SynthesisReceipts','ExchangeAssets','ReleaseApi','Workflow','WorkflowNative','OcclusionNative','AreaAcceptance','AreaVariants')][string]$Stage='Geometry'
+    [ValidateSet('GridRegional','SocketFollow','HeightGrid','GridField','GridViewNative','GridCompile','HeightGridNavigation','HeightGridWorld','Geometry','Objects','ObjectsNative','Mesh','Relief','Ports','Batch','Materials','MaterialsNative','Scale','Cliff','CliffNative','BiomeProps','BiomePropsNative','Borders','BordersNative','Shadows','ShadowsNative','CanvasOrder','Library','LibraryNative','Viewport','ViewportNative','RuntimeView','GameplayNative','GameplayWindow','GameplayControls','GameplayEditorNative','GameplayCli','FieldsNative','Organic','NavigationLazy','NavigationDense','NavigationContext','Rounded','RoundedNative','SnapshotDensity','RoundedResume','SurfacePick','Authoring','AuthoringNative','Content','ContentNative','CompositionAX','CompositionAXNative','MapBiome','MapBiomeNative','EncounterAuthoring','EncounterAuthoringNative','PopulationReachability','PopulationPlanner','CandidateBatch','GameplayGate','WorldTargeting','WorldRewardPoll','NavigationAstar','NavigationAsync','CampaignJournal','AssetManifest','CompileCache','RegionalSynthesis','RegionalSynthesisNative','RootSynthesis','RootSynthesisNative','ExchangeMerge','ExchangeMergeNative','SynthesisReceipts','ExchangeAssets','ReleaseApi','Workflow','WorkflowNative','OcclusionNative','AreaAcceptance','AreaVariants')][string]$Stage='Geometry'
 )
 $ErrorActionPreference='Stop'
 # Checkpoint42: every test compiles for real; the editor cache is opt-in.
@@ -40,7 +40,16 @@ $f9Info.Environment['LOCALAPPDATA']=$f9Info.Environment['APPDATA']
 $f9Info.Environment['F9_EVIDENCE']=$f9Evidence
 $f9Info.Environment['RAGRPG_COMPILE_CACHE']='0'
 if($Stage -eq 'RoundedResume'){
-    if([string]::IsNullOrEmpty($ResumeSession) -or -not (Test-Path -LiteralPath $ResumeSession -PathType Leaf)){throw 'Provide the existing disposable gameplay session.'}
+    # F10 Q1: without a session the stage records its own through RoundedNative.
+    if([string]::IsNullOrEmpty($ResumeSession)){
+        $f9Since=Get-Date
+        & pwsh -NoProfile -File $PSCommandPath -GodotPath $GodotPath -EvidenceDirectory (Join-Path $f9Evidence 'rounded_native') -SkipImport -Stage RoundedNative
+        if($LASTEXITCODE -ne 0){throw 'RoundedNative did not record a session.'}
+        $f9Recorded=Get-ChildItem -LiteralPath (Join-Path $f9Fixture '.godot/map_authoring/play/sessions') -Recurse -Filter 'session.bin' | Where-Object {$_.LastWriteTime -ge $f9Since} | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+        if($null -eq $f9Recorded){throw 'RoundedNative left no session.'}
+        $ResumeSession=$f9Recorded.FullName
+    }
+    if(-not (Test-Path -LiteralPath $ResumeSession -PathType Leaf)){throw 'Provide the existing disposable gameplay session.'}
     $f9Info.Environment['F9_RESUME_SESSION']=[IO.Path]::GetFullPath($ResumeSession)
 }
 $f9Script=if($Stage -eq 'Geometry'){'res://tests/map_editor_f9_geometry_test.gd'}else{'res://tests/map_editor_objects_test.gd'}
@@ -63,6 +72,8 @@ if($Stage -eq 'AreaAcceptance'){$f9Script='res://tests/map_editor_area_acceptanc
 if($Stage -eq 'HeightGridWorld'){$f9Script='res://tests/map_editor_height_grid_world_test.gd';$f9Marker='F10_GRID_WORLD_RESULT'}
 if($Stage -eq 'HeightGridNavigation'){$f9Script='res://tests/map_editor_height_grid_navigation_test.gd';$f9Marker='F10_GRID_NAV_RESULT'}
 if($Stage -eq 'GridCompile'){$f9Script='res://tests/map_editor_grid_compile_test.gd';$f9Marker='F10_GRID_COMPILE_RESULT'}
+if($Stage -eq 'GridRegional'){$f9Script='res://tests/map_editor_grid_regional_test.gd';$f9Marker='F10_GRID_REGIONAL_RESULT'}
+if($Stage -eq 'SocketFollow'){$f9Script='res://tests/map_editor_socket_follow_test.gd';$f9Marker='F10_SOCKET_FOLLOW_RESULT'}
 if($Stage -eq 'HeightGrid'){$f9Script='res://tests/map_editor_height_grid_test.gd';$f9Marker='F10_HEIGHT_GRID_RESULT'}
 if($Stage -eq 'AreaVariants'){$f9Script='res://tests/map_editor_area_variants_test.gd';$f9Marker='F9_AREA_VARIANT_RESULT'}
 if($Stage -eq 'Workflow'){$f9Script='res://tests/map_editor_workflow_test.gd';$f9Marker='F9_WORKFLOW_RESULT'}
@@ -138,7 +149,7 @@ $f9EngineText=Get-Content -LiteralPath (Join-Path $f9Evidence 'geometry.engine.l
 $f9Match=[regex]::Match($f9Text,'(?m)^'+$f9Marker+' (.+)$')
 $f9Result=if($f9Match.Success){ConvertFrom-Json $f9Match.Groups[1].Value}else{$null}
 $f9Pass=-not $f9Timeout -and -not $f9Aborted -and $f9Process.ExitCode -eq 0 -and $null -ne $f9Result -and $f9Result.ok -and $f9Result.count -gt 0 -and @($f9Result.checks).Count -eq $f9Result.count -and @($f9Result.checks | Where-Object {-not $_.ok}).Count -eq 0 -and $f9Text -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:' -and $f9EngineText -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:'
-$f9Expected=@{HeightGrid=14;GridField=8;GridViewNative=9;GridCompile=10;HeightGridNavigation=8;HeightGridWorld=14;AreaAcceptance=13;AreaVariants=6;OcclusionNative=12;WorkflowNative=28;Workflow=12;ReleaseApi=11;ExchangeAssets=12;SynthesisReceipts=11;ExchangeMergeNative=10;ExchangeMerge=13;RootSynthesisNative=11;RootSynthesis=12;RegionalSynthesisNative=16;RegionalSynthesis=12;CompileCache=10;AssetManifest=7;CampaignJournal=22;NavigationAsync=18;NavigationAstar=18;WorldRewardPoll=10;WorldTargeting=16;GameplayGate=24;CandidateBatch=18;PopulationPlanner=20;PopulationReachability=27;Geometry=46;Objects=53;ObjectsNative=25;Mesh=34;Relief=58;Ports=92;Batch=36;Materials=35;MaterialsNative=20;Scale=46;Cliff=61;CliffNative=17;BiomeProps=30;BiomePropsNative=23;Borders=93;BordersNative=32;Shadows=28;ShadowsNative=90;CanvasOrder=46;Library=50;LibraryNative=53;Viewport=20;ViewportNative=52;RuntimeView=12;GameplayNative=63;GameplayWindow=33;GameplayControls=29;GameplayEditorNative=22;GameplayCli=18;FieldsNative=73;Organic=15;NavigationLazy=24;NavigationDense=5;NavigationContext=11;Rounded=19;RoundedNative=20;SnapshotDensity=33;RoundedResume=13;SurfacePick=24;Authoring=30;AuthoringNative=15;Content=28;ContentNative=30;CompositionAX=31;CompositionAXNative=13;MapBiome=15;MapBiomeNative=13;EncounterAuthoring=27;EncounterAuthoringNative=25}
+$f9Expected=@{GridRegional=10;SocketFollow=10;HeightGrid=14;GridField=8;GridViewNative=9;GridCompile=10;HeightGridNavigation=8;HeightGridWorld=15;AreaAcceptance=13;AreaVariants=6;OcclusionNative=12;WorkflowNative=28;Workflow=12;ReleaseApi=11;ExchangeAssets=12;SynthesisReceipts=11;ExchangeMergeNative=10;ExchangeMerge=13;RootSynthesisNative=11;RootSynthesis=12;RegionalSynthesisNative=16;RegionalSynthesis=12;CompileCache=10;AssetManifest=7;CampaignJournal=22;NavigationAsync=18;NavigationAstar=18;WorldRewardPoll=10;WorldTargeting=16;GameplayGate=24;CandidateBatch=18;PopulationPlanner=20;PopulationReachability=27;Geometry=46;Objects=53;ObjectsNative=25;Mesh=34;Relief=58;Ports=92;Batch=36;Materials=35;MaterialsNative=20;Scale=46;Cliff=61;CliffNative=17;BiomeProps=30;BiomePropsNative=23;Borders=93;BordersNative=32;Shadows=28;ShadowsNative=90;CanvasOrder=46;Library=50;LibraryNative=53;Viewport=20;ViewportNative=52;RuntimeView=12;GameplayNative=63;GameplayWindow=33;GameplayControls=29;GameplayEditorNative=22;GameplayCli=18;FieldsNative=73;Organic=15;NavigationLazy=24;NavigationDense=5;NavigationContext=11;Rounded=19;RoundedNative=20;SnapshotDensity=33;RoundedResume=13;SurfacePick=24;Authoring=30;AuthoringNative=15;Content=28;ContentNative=30;CompositionAX=31;CompositionAXNative=13;MapBiome=15;MapBiomeNative=13;EncounterAuthoring=27;EncounterAuthoringNative=25}
 $f9Pass=$f9Pass -and $f9Result.count -eq $f9Expected[$Stage]
 $f9PreviewExit=$null
 if($Stage -eq 'GameplayCli'){

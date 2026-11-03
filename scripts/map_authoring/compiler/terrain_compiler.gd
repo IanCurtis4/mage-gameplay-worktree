@@ -6,6 +6,7 @@ const Canonical = preload("res://scripts/core/expedition/generation/canonical.gd
 const Manifest = preload("res://scripts/core/expedition/model/manifest.gd")
 const Partition = preload("res://scripts/map_authoring/compiler/terrain_partition.gd")
 const Materials = preload("res://scripts/map_authoring/terrain/terrain_material.gd")
+const Brush = preload("res://scripts/map_authoring/terrain/brush.gd")
 const SolidPrism = preload("res://scripts/core/expedition/spatial/world_solid_prism.gd")
 const Objects = preload("res://scripts/map_authoring/objects/object_compiler.gd")
 const Ports = preload("res://scripts/core/expedition/generation/connector_partition.gd")
@@ -59,6 +60,35 @@ static func failure(code: String, entity: String = "", field: String = "terrain"
 	var messages := {"terrain_empty":"Adicione uma camada de terreno.","material_missing":"Um material de terreno está ausente.","terrain_sample_limit":"A fonte excede o orçamento de 65536 quadrados de grade nesta sessão.","terrain_limit_exceeded":"O relevo excede o orçamento de 1024 suportes gerados. Reduza a densidade ou simplifique o relevo.","source_invalid":"Corrija os diagnósticos da fonte.","source_non_finite":"A fonte contém um número inválido.","capability_unsupported":"Esta peça usa uma capacidade ainda não disponível na compilação de terreno.","material_unsupported":"Use os materiais Grama e Terra nesta entrega.","geometry_invalid":"O piso precisa ser convexo e plano.","geometry_overlap":"Há pisos sobrepostos na mesma altura.","geometry_non_manifold":"Mais de dois pisos disputam a mesma borda.","insufficient_headroom":"Não há folga para o corpo de teste.","slope_too_steep":"A inclinação supera 45°; alongue a rampa.","geometry_precision_limit":"A coordenada excede o domínio técnico de 8192 unidades.","connector_invalid":"O conector não coincide com uma abertura válida.","connector_ambiguous":"O conector coincide com mais de uma borda.","socket_invalid":"O ponto marcado não tem suporte ou tipo válido.","route_unreachable":"Há uma região sem ligação para o corpo de teste.","cancelled":"Compilação cancelada.","stale_source":"A fonte mudou; compile novamente."}
 	messages["material_unsupported"] = "Use os materiais Grama, Terra, Areia ou Pedra."
 	return Schema.result(false, code, [{"code":code,"severity":"error","entity_id":entity,"field":field,"message":messages.get(code,"Não foi possível concluir a compilação."),"suggestion":"Corrija a região indicada e compile novamente."}])
+
+## F10 Q1: names the marker, where it is and where the ground is, so a person
+## or an agent can fix or focus it without searching for it.
+static func socket_failure(source: Dictionary, authored: Dictionary) -> Dictionary:
+	var output := failure("socket_invalid",authored.socket_id,"socket")
+	var at: Array = authored.position_xyz
+	var diagnostic: Dictionary = output.diagnostics[0]
+	diagnostic["surface_id"] = authored.surface_id; diagnostic["position_xyz"] = at.duplicate()
+	if authored.kind not in ["entrance","exit","objective","thematic_encounter","population","portal"]:
+		diagnostic.message = "O marcador \"%s\" tem um tipo desconhecido (%s)."%[authored.socket_id,authored.kind]
+		diagnostic.suggestion = "Escolha um tipo de marcador válido."
+		return output
+	var place := "O marcador \"%s\" (%s) em (%.1f, %.1f, %.1f)"%[authored.socket_id,authored.kind,at[0],at[1],at[2]]
+	diagnostic.message = place+" não está sobre a superfície \"%s\"."%authored.surface_id
+	diagnostic.suggestion = "Mova o marcador para cima do piso escolhido."
+	for layer: Dictionary in source.layers:
+		if layer.layer_id != authored.surface_id: continue
+		var ground := Brush.ground_y(layer,layer.heights,Vector2(at[0],at[2]))
+		if is_nan(ground):
+			diagnostic.message = place+" está fora da camada \"%s\"."%layer.layer_id
+		elif absf(ground-float(at[1])) > Brush.SOCKET_TOLERANCE:
+			diagnostic["ground_y"] = ground
+			diagnostic.message = place+" não acompanha o chão, que ali está na altura %.1f."%ground
+			diagnostic.suggestion = "Coloque o marcador na altura %.1f ou reposicione-o."%ground
+		else:
+			diagnostic["ground_y"] = ground
+			diagnostic.message = place+" está sobre chão íngreme ou estreito demais."
+			diagnostic.suggestion = "Reposicione o marcador num chão andável."
+	return output
 
 static func _valid_authoring_value(value: Variant, depth: int = 0) -> bool:
 	# GDScript dot assignment introduces StringName keys; the source reader
@@ -140,12 +170,12 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 		connectors.append_array(built_port.endpoints); authored_ports.append(built_port.authored_port); connector_groups.append(built_port.group)
 	var sockets: Array = []
 	for authored: Dictionary in source.sockets:
-		if authored.kind not in ["entrance","exit","objective","thematic_encounter","population","portal"]: return failure("socket_invalid",authored.socket_id)
+		if authored.kind not in ["entrance","exit","objective","thematic_encounter","population","portal"]: return socket_failure(source,authored)
 		var position := Vector3(authored.position_xyz[0],authored.position_xyz[1],authored.position_xyz[2])
 		var matches: Array = []
 		for i: int in cells.size():
 			if origins[cells[i].surface_id] == authored.surface_id and Kernel.contains(cells[i],position): matches.append(cells[i])
-		if matches.is_empty(): return failure("socket_invalid",authored.socket_id)
+		if matches.is_empty(): return socket_failure(source,authored)
 		sockets.append({"socket_id":"socket_"+authored.socket_id.sha256_text().substr(0,20),"surface_id":matches[0].surface_id,"position":position,"kind":authored.kind,"tags":[]})
 	# One authored piece must be connected for the declared technical body.
 	var reachable := {cells[0].surface_id:true}
@@ -525,12 +555,12 @@ static func _compile_grid(source: Dictionary, read: Dictionary, cancellation: Ca
 		connectors.append_array(built_port.endpoints); authored_ports.append(built_port.authored_port); connector_groups.append(built_port.group)
 	var sockets: Array = []
 	for authored: Dictionary in source.sockets:
-		if authored.kind not in ["entrance","exit","objective","thematic_encounter","population","portal"]: return failure("socket_invalid",authored.socket_id)
+		if authored.kind not in ["entrance","exit","objective","thematic_encounter","population","portal"]: return socket_failure(source,authored)
 		var position := Vector3(authored.position_xyz[0],authored.position_xyz[1],authored.position_xyz[2])
 		var matches: Array = []
 		for cell: Dictionary in cells:
 			if authored.surface_id == layer.layer_id and Kernel.contains(cell,position): matches.append(cell)
-		if matches.is_empty(): return failure("socket_invalid",authored.socket_id)
+		if matches.is_empty(): return socket_failure(source,authored)
 		sockets.append({"socket_id":"socket_"+authored.socket_id.sha256_text().substr(0,20),"surface_id":matches[0].surface_id,"position":position,"kind":authored.kind,"tags":[]})
 	if cancellation.is_valid() and cancellation.call(1.0): return failure("cancelled")
 	var part := {"part_id":"piece_"+source.document_id.sha256_text().substr(0,20),"revision":int(source.revision),"biome_tags":["authored"],"allowed_rotations":[0],"surfaces":cells,"connectors":connectors,"sockets":sockets,"solid_volumes":[],"solid_prisms":[],"blockers":[]}

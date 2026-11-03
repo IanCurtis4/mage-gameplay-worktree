@@ -287,7 +287,7 @@ func _grid_lattice(surface_id: String, radius: float) -> Dictionary:
 	var key := surface_id+"|"+str(radius)
 	_grid_mutex.lock(); var known: Variant = _grid_cache.get(key); _grid_mutex.unlock()
 	if known != null: return known
-	var built := HeightGrid.lattice(_support_index.grids[surface_id],radius,true)
+	var built := HeightGrid.lattice_shared(_support_index.grids[surface_id],radius)
 	_grid_mutex.lock()
 	if not _grid_cache.has(key): _grid_cache[key] = built
 	var result: Dictionary = _grid_cache[key]

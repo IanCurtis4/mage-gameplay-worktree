@@ -4,6 +4,7 @@ extends RefCounted
 ## patch; clipping and UVs never create gameplay support, mass, or persisted state.
 const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
 const Patch = preload("res://scripts/core/expedition/spatial/world_support_patch.gd")
+const HeightGrid = preload("res://scripts/core/expedition/spatial/world_height_grid.gd")
 const EPS := Kernel.EPSILON
 const MAX_RECEIVERS := 128
 static var _texture: GradientTexture2D
@@ -42,9 +43,14 @@ static func index_from_topology(faces: Array, topology: Dictionary) -> Dictionar
 		if face.walkable: surfaces.append({"surface_id":face.face_id,"vertices":face.vertices.duplicate(),"headroom":face.headroom})
 	return Patch.index({"surfaces":surfaces,"connectors":topology.connectors,"connections":topology.adjacency})
 
+## F10 Q1: a height-grid piece has no planar faces; its stretches are the receivers.
+static func index_from_stretches(built: Dictionary) -> Dictionary:
+	return Patch.index({"surfaces":built.cells,"connectors":built.connectors,"connections":built.adjacency})
+
 static func receiver(anchor: Vector3, index: Dictionary, preferred: String = "") -> String:
 	if not index.get("cells") is Dictionary: return ""
-	var ids: Array = [preferred] if not preferred.is_empty() else index.cells.keys()
+	# An authored object names its layer; a stretch of that layer receives it.
+	var ids: Array = [preferred] if not preferred.is_empty() and (index.cells.has(preferred) or index.get("grids",{}).is_empty()) else index.cells.keys()
 	ids.sort()
 	for id: String in ids:
 		if not index.cells.has(id): continue
@@ -61,20 +67,23 @@ static func mesh_data(anchor: Vector3, radii: Vector2, index: Dictionary, surfac
 	var positions := PackedVector2Array(); var uv := PackedVector2Array(); var indices := PackedInt32Array(); var world: Array = []; var used: Array[String] = []
 	var origin: Vector2 = project.call(anchor); var ids: Array = members.keys(); ids.sort()
 	for id: String in ids:
-		var polygon: Array = index.cells[id].vertices.duplicate()
-		for cut: Array in [[0,float(anchor.x)+radii.x,1.0],[0,float(anchor.x)-radii.x,-1.0],[2,float(anchor.z)+radii.y,1.0],[2,float(anchor.z)-radii.y,-1.0]]:
-			polygon = _clip(polygon,int(cut[0]),float(cut[1]),float(cut[2]))
-			if polygon.size() < 3: break
-		if polygon.size() < 3: continue
-		var first := positions.size(); var area := 0.0
-		for k: int in polygon.size():
-			var a: Vector3 = polygon[k]; var b: Vector3 = polygon[(k+1)%polygon.size()]
-			area += float(a.x)*float(b.z)-float(b.x)*float(a.z)
-		if absf(area) <= EPS: continue
-		used.append(id)
-		for p: Vector3 in polygon:
-			positions.append(Vector2(project.call(p))-origin); uv.append(Vector2((float(p.x)-float(anchor.x))/radii.x*0.5+0.5,(float(p.z)-float(anchor.z))/radii.y*0.5+0.5)); world.append(p)
-		for k: int in range(2,polygon.size()): indices.append_array(PackedInt32Array([first,first+k-1,first+k]))
+		var pieces: Array = [index.cells[id].vertices.duplicate()]
+		if index.get("grids",{}).has(id): pieces = HeightGrid.triangles_in(index.grids[id],center-radii,center+radii)
+		for piece: Array in pieces:
+			var polygon := piece
+			for cut: Array in [[0,float(anchor.x)+radii.x,1.0],[0,float(anchor.x)-radii.x,-1.0],[2,float(anchor.z)+radii.y,1.0],[2,float(anchor.z)-radii.y,-1.0]]:
+				polygon = _clip(polygon,int(cut[0]),float(cut[1]),float(cut[2]))
+				if polygon.size() < 3: break
+			if polygon.size() < 3: continue
+			var first := positions.size(); var area := 0.0
+			for k: int in polygon.size():
+				var a: Vector3 = polygon[k]; var b: Vector3 = polygon[(k+1)%polygon.size()]
+				area += float(a.x)*float(b.z)-float(b.x)*float(a.z)
+			if absf(area) <= EPS: continue
+			if id not in used: used.append(id)
+			for p: Vector3 in polygon:
+				positions.append(Vector2(project.call(p))-origin); uv.append(Vector2((float(p.x)-float(anchor.x))/radii.x*0.5+0.5,(float(p.z)-float(anchor.z))/radii.y*0.5+0.5)); world.append(p)
+			for k: int in range(2,polygon.size()): indices.append_array(PackedInt32Array([first,first+k-1,first+k]))
 	if indices.is_empty(): return {"ok":false,"code":"shadow_receiver_missing"}
 	var arrays: Array = []; arrays.resize(Mesh.ARRAY_MAX); arrays[Mesh.ARRAY_VERTEX] = positions; arrays[Mesh.ARRAY_TEX_UV] = uv; arrays[Mesh.ARRAY_INDEX] = indices
 	return {"ok":true,"arrays":arrays,"world_vertices":world,"receivers":used}

@@ -4,6 +4,7 @@ extends RefCounted
 ## Extra collinear pointer events and repeated events cannot accumulate strength.
 const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 const Materials = preload("res://scripts/map_authoring/terrain/terrain_material.gd")
+const SOCKET_TOLERANCE := 0.5
 
 static func stroke(source: Dictionary, layer_id: String, points: Array, options: Dictionary, preview_only: bool = false) -> Dictionary:
 	if points.size() > 4096: return Schema.result(false, "brush_limit_exceeded")
@@ -95,9 +96,32 @@ static func stroke(source: Dictionary, layer_id: String, points: Array, options:
 			if value != original[index]: changed += 1
 			selected.heights[index] = value
 	var output := Schema.result(true)
+	if not preview_only and mode != "material": output.followed_sockets = _follow_relief(data,selected,original)
 	output.data = data; output.changed = changed; output.input_hash = read.output_hash
 	output.output_hash = "" if preview_only else Schema.semantic_hash(data)
 	return output
+
+## The ground of a layer at a point, by the drawn diagonal; NAN outside the layer.
+static func ground_y(layer: Dictionary, heights: Array, point: Vector2) -> float:
+	var local := (point-Vector2(layer.origin_xz[0],layer.origin_xz[1]))/float(layer.sample_spacing)
+	if local.x < 0.0 or local.y < 0.0 or local.x > int(layer.columns)-1 or local.y > int(layer.rows)-1: return NAN
+	var x := mini(floori(local.x),int(layer.columns)-2); var z := mini(floori(local.y),int(layer.rows)-2)
+	var u := local.x-x; var v := local.y-z; var columns := int(layer.columns)
+	var a: float = heights[z*columns+x]; var b: float = heights[z*columns+x+1]
+	var c: float = heights[(z+1)*columns+x+1]; var d: float = heights[(z+1)*columns+x]
+	return a+(b-a)*u+(c-b)*v if u >= v else a+(c-d)*u+(d-a)*v
+
+## F10 Q1: a marker standing on the layer stays on it when the ground under it
+## changes. A marker that was off the ground is left for the compiler to name.
+static func _follow_relief(data: Dictionary, layer: Dictionary, original: Array) -> Array:
+	var followed: Array = []
+	for socket: Dictionary in data.sockets:
+		if socket.surface_id != layer.layer_id: continue
+		var at := Vector2(socket.position_xyz[0],socket.position_xyz[2])
+		var before := ground_y(layer,original,at); var after := ground_y(layer,layer.heights,at)
+		if is_nan(before) or before == after or absf(float(socket.position_xyz[1])-before) > SOCKET_TOLERANCE: continue
+		socket.position_xyz[1] = after; followed.append(socket.socket_id)
+	return followed
 
 static func _distance(delta: Vector2, shape: String) -> float:
 	return maxf(absf(delta.x), absf(delta.y)) if shape == "square" else delta.length()
