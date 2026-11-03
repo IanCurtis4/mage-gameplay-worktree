@@ -1,0 +1,63 @@
+PLAN 299 steps; from 1
+ 238 e07_f1_native_import                                 exit=1 75s | [  93% ] _update_scan_actions | overpass.png || [  93% ] _update_scan_actions | overpass_retry2.png || [  93% ] _update_scan_actions | overpass_retry.png
+ 239 e07_f1_import_test                                   exit=0 80s | E07 F1 import PASS: 2183 byte-identical files; sole project delta VCS autoload true -> false; source_manifest_sha256=0afaf159ad0e8c3f83c3621ceebea9e69cd95daf6cd5f0abc657a5027d4351b7 || Selected checks passed (1/299 steps
+ 240 e07_f2_ownership_test                                exit=0 10s | E07 F2 e07_f2_ownership_test.gd: 45 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 241 e07_f2_migration_test                                exit=0 8s | E07 F2 e07_f2_migration_test.gd: 35 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 242 e07_f2_store_test                                    exit=0 14s | E07 F2 e07_f2_store_test.gd: 87 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 243 e07_f2_integration_test                              exit=0 8s | E07 F2 e07_f2_integration_test.gd: 18 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 244 e07_f4_alt_isolation_test                            exit=0 14s | E07 F4 e07_f4_alt_isolation_test.gd: 16 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 245 e07_f4_controller_test                               exit=0 10s | E07 F4 e07_f4_controller_test.gd: 11 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 246 e07_f4_restart_test                                  exit=0 40s | E07 F4 restart worker PASS write || E07 F4 restart worker PASS recover || E07 F4 restart worker PASS confirm
+ 247 e07_f4_durable_test                                  exit=0 14s | E07 F4 e07_f4_durable_test.gd: 28 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 248 e07_f4_fault_test                                    exit=0 42s | E07 F4 e07_f4_fault_test.gd: 53 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 249 e07_f4_compatibility_test                            exit=0 10s | E07 F4 e07_f4_compatibility_test.gd: 16 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 250 e07_f6_threat_test                                   exit=0 2s | E07 F6 threat: 43 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 251 e07_f6_runtime_test                                  exit=0 14s | E07 F5 e07_f6_runtime_test.gd: 33 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 252 e07_f6_snapshot_test                                 exit=0 36s | E07 F5 e07_f6_snapshot_test.gd: 40 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 253 e07_f7_presentation_test                             exit=0 21s | E07 F7 presentation: 10 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 254 e07_f7_migration_boundary_test                       exit=0 10s | E07 F7 migration: PASS (16 assertions; opaque modal/original missing-roster boundary resolved) || Selected checks passed (1/299 steps); unselected steps were not run.
+ 255 e07_f7_authoring_test                                exit=0 9s | E07 F7 authoring: 26 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 256 e07_f7_flow_test                                     exit=0 38s | E07 F7 flow: PASS (23 assertions, opaque selection/visible/isometric camera/enter/lobby locks/closed portal/usable uncertain recovery/resume/install/activate) || Selected checks passed (1/299 steps); unselected steps wer
+ 257 e07_f7_actions_test                                  exit=0 52s | E07 F7 actions: 28 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 258 e07_f5_population_test                               exit=0 8s | E07 F5 population: 40 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 259 e07_f5_campaign_test                                 exit=0 57s | E07 F5 e07_f5_campaign_test.gd: 28 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 260 e07_f5_recovery_test                                 exit=0 77s | E07 F5 e07_f5_recovery_test.gd: 33 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 261 e07_f5_fault_test                                    exit=0 40s | E07 F5 e07_f5_fault_test.gd: 20 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 262 e07_f5_completion_test                               exit=0 129s | E07 F5 e07_f5_completion_test.gd: 39 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 263 e07_f5_quest_test                                    exit=0 54s | E07 F5 e07_f5_quest_test.gd: 21 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 264 e07_f5_death_kits_test                               exit=0 30s | E07 F5 death kits: 191 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 265 e07_f5_reward_test                                   exit=0 7s | E07 F5 rewards: 6 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 266 e07_f5_waves_test                                    exit=0 106s | E07 F5 e07_f5_waves_test.gd: 37 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 267 e07_f5_build_test                                    exit=0 49s | E07 F5 e07_f5_build_test.gd: 32 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 268 e07_f3_snapshot_test                                 exit=0 18s | E07 F3 snapshot: 50 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 269 e07_f3_continuation_test                             exit=0 95s | E07 F3 continuation: 2743 checks, 0 failures; scenarios=30 || Selected checks passed (1/299 steps); unselected steps were not run.
+ 270 e07_f3_action_matrix_test                            exit=0 77s | E07 F3 action matrix: 2004 checks, 0 failures; scenarios=21 || Selected checks passed (1/299 steps); unselected steps were not run.
+ 271 e07_f3_lifecycle_test                                exit=0 16s | E07 F3 lifecycle: 90 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 272 e07_f3_mob_state_test                                exit=0 25s | E07 F3 mob state: 372 checks, 0 failures; scenarios=4 || Selected checks passed (1/299 steps); unselected steps were not run.
+ 273 e07_f1_geometry_test                                 exit=0 17s | E07 F1 geometry: 33 checks, 0 failures; seed=711 manifest=2e6232a2f5c2bbe6add8aa0a2645201ad14271b89d39765978b055ecfa2c3eed || Selected checks passed (1/299 steps); unselected steps were not run.
+ 274 e07_f1_actor_integration_test                        exit=0 13s | E07 F1 actor integration: 193 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 275 e07_f1_inventory_test                                exit=0 11s | E07 F1 inventory: 10 identities, 93 skills, 27 non-stat item effects; 371 checks, 0 failures; json_sha256=8fd44f4e3d1b05b0f31f8c6622ce991613371a5828119cd18b834dc2f8863cb2 || Selected checks passed (1/299 steps); unselect
+ 276 e07_f1_adversarial_test                              exit=0 11s | E07 F1 adversarial/flat: 29 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 277 e07_f1_consumer_test                                 exit=0 14s | E07 F1 consumers: 133 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 278 e07_f1_channels_test                                 exit=0 12s | E07 F1 channels: 32 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 279 e07_f1_cast_test                                     exit=0 13s | E07 F1 casts: 113 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 280 e07_f1_area_cast_test                                exit=0 13s | E07 F1 area casts: 59 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 281 e07_f1_echo_test                                     exit=0 13s | E07 F1 echoes: 271 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 282 e07_f1_chain_test                                    exit=0 12s | E07 F1 chains: 121 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 283 e07_f1_ember_test                                    exit=0 13s | E07 F1 ember: 102 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 284 e07_f1_guard_travel_test                             exit=0 14s | E07 F1 guard and travel: 293 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 285 e07_f1_sentinel_direct_test                          exit=0 16s | E07 F1 Sentinel direct: 364 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 286 e07_f1_hunter_traps_test                             exit=0 19s | E07 F1 Hunter traps: 631 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 287 e07_f1_hunter_cover_test                             exit=0 14s | E07 F1 Hunter cover: 235 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 288 e07_f1_sentinel_area_test                            exit=0 16s | E07 F1 Sentinel areas: 433 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 289 e07_f1_birth_collect_test                            exit=0 28s | E07 F1 birth and collection: 210 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 290 e07_f1_fields_test                                   exit=0 33s | E07 F1 ground fields: 499 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 291 e07_f1_ice_test                                      exit=0 31s | E07 F1 Ice Wall: 262 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 292 e07_f1_geometer_trace_test                           exit=0 16s | E07 F1 Geometer trace: 400 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 293 e07_f1_geometer_full_test                            exit=0 41s | E07 F1 Geometer full: 1160 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 294 e07_f1_non_planar_test                               exit=0 24s | E07 F1 non-planar fields: 311 checks, 0 failures || Selected checks passed (1/299 steps); unselected steps were not run.
+ 295 e07_f1_composition_test                              exit=0 22s | E07 F1 compositions: 299 checks, 0 failures; recipes=27 || Selected checks passed (1/299 steps); unselected steps were not run.
+ 296 e07_f1_pilot_scene_test                              exit=0 14s | E07 F1 native pilot scene: 102 checks, 0 failures; identities=10; presentation=logical_assembly_only; D05_visual_separate || Selected checks passed (1/299 steps); unselected steps were not run.
+ 297 e07_f1_presentation_test                             exit=1 12s | E07 F1 presentation: 37 checks, 1 failures; native scene, projection, click, preview, marker, occlusion || ERROR: coincident surface seam is refused rather than choosing floor by order: { "ok": true, "error_code": &"", "
+ 298 e07_f8_candidate_prepare                             exit=1 8s | E07 F8 CANDIDATE prepare: FAIL checks=7 failures=1 release=false || ERROR: F8: prepare requires fresh synthetic profile ||   85 |          throw "Godot verification failed (exit $checkExitCode)."
+DONE 1.750s

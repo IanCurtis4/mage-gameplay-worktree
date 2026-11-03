@@ -1,0 +1,5 @@
+PLAN 299 steps; from 1
+ 238 e07_f1_native_import                                 exit=1 19s | ERROR: Cannot get class 'GitPlugin'. || ERROR: Received a nullptr VCS extension instance during construction. ||   85 |          throw "Godot verification failed (exit $checkExitCode)."
+ 297 e07_f1_presentation_test                             exit=1 11s | ERROR: stale fixture ||   85 |          throw "Godot verification failed (exit $checkExitCode)." ||      | Godot verification failed (exit 1).
+ 298 e07_f8_candidate_prepare                             exit=1 7s | E07 F8 CANDIDATE prepare: FAIL checks=7 failures=1 release=false || ERROR: F8: prepare requires fresh synthetic profile ||   85 |          throw "Godot verification failed (exit $checkExitCode)."
+DONE 37s
