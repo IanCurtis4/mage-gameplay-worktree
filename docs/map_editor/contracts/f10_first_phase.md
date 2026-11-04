@@ -1,5 +1,11 @@
 # F10 — primeira fase completa (Q4)
 
+Atualização de desempenho de 4/11: [contrato](f10_transition_performance.md) e
+[checkpoint14](../delivery/f10.md) registram a redução de entrada/portais e a
+correção do indicador de maior quadro (os valores históricos abaixo omitiam o
+intervalo síncrono final da entrada). O formato de save e a transação canônica
+permanecem os mesmos.
+
 3/11/2026. Contrato de Sol (Claude Opus, papel Astra para a arquitetura). Fontes:
 [inserções de 2/11](f10_insertions.md), [estudo de escala](f10_field_scale_study.md),
 [arquitetura de fase](f10_phase_architecture.md) e [regras da fase](f10_phase_rules.md).

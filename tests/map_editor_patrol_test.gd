@@ -65,12 +65,14 @@ func _run() -> void:
 	if not publication.ok: print(publication); finish(); return
 	check("immutable_repeat",Store.publish(directory,built.package,Document.hash_source(source)).ok)
 	check("package_reload",Store.load_package(publication.path).ok)
+	check("warm_package_proof_accepts_exact_copy",Compiler.validate_package(built.package.duplicate(true)))
 	check("stale_refused",not Store.publish(directory,built.package,"stale").ok)
 	var tampered: Dictionary = built.package.duplicate(true); tampered.manifest.population.slots[0].home.position.x += 10
 	check("hash_integrity",not Compiler.validate_package(tampered))
 	tampered = built.package.duplicate(true); tampered.manifest.population.slots[0].patrol.waypoints[1].point.position = Vector3(2000,0,200)
 	var unsigned := tampered.duplicate(true); unsigned.erase("package_hash"); tampered.package_hash = ExpeditionCanonical.digest(unsigned)
 	check("forged_hash_does_not_bypass_geometry",not Compiler.validate_package(tampered))
+	check("rejected_mutation_does_not_poison_original_proof",Compiler.validate_package(built.package))
 	var made := idle_fixture(built.package); check("real_actors_bind",made.ok)
 	if not made.ok: print(made); finish(); return
 	var player: PlayerActor = made.player; var actor: EnemyActor = made.actors[0]

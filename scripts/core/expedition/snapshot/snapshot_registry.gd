@@ -28,6 +28,9 @@ var _dead_values: Array = []
 var _dead_references: Dictionary = {}
 var _dead_proxies: Dictionary = {}
 var _class_kinds: Dictionary = {}
+## Reflection is invariant within one graph operation, never across captures.
+var _field_cache: Dictionary = {}
+var _base_property_cache: Dictionary = {}
 
 func _init() -> void:
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(MANIFEST))
@@ -49,6 +52,7 @@ func _kind(value: Object) -> String:
 func _fields(value: Object) -> Array:
 	if value is RandomNumberGenerator: return ["seed","state"]
 	var kind := _kind(value)
+	if _field_cache.has(kind): return _field_cache[kind]
 	if not schemas.has(kind):
 		_fail(&"unknown_runtime_kind", kind if not kind.is_empty() else value.get_class())
 		return []
@@ -71,12 +75,15 @@ func _fields(value: Object) -> Array:
 			if field not in fields: fields.append(field)
 		if kind in ["root_budget","wall_reaction_visual"]: break
 		script = script.get_base_script()
+	if _error.is_empty(): _field_cache[kind] = fields
 	return fields
 
 func _base_has_property(script: Script, field: String) -> bool:
-	for property: Dictionary in script.get_script_property_list():
-		if property["name"] == field: return true
-	return false
+	if not _base_property_cache.has(script):
+		var names := {}
+		for property: Dictionary in script.get_script_property_list(): names[property["name"]] = true
+		_base_property_cache[script] = names
+	return _base_property_cache[script].has(field)
 
 func _is_asset(value: Object) -> bool:
 	return value is Resource and not (value as Resource).resource_path.is_empty() and not value is Script
@@ -123,6 +130,7 @@ func _presentation_target(value: Object) -> bool:
 func capture(root: Node, barrier: SnapshotTickBarrier) -> Dictionary:
 	var started := Time.get_ticks_usec()
 	if barrier == null or not barrier.owns(root): return StableEntityRegistry.failure(&"tick_barrier_required")
+	_field_cache.clear(); _base_property_cache.clear()
 	_objects.clear(); _seen.clear(); _records = {}; _error.clear(); _assets = {}
 	_visited_containers.clear(); _container_values.clear(); _visited_buckets.clear(); _value_buckets.clear(); _containers = {}
 	_referenced_tombstones.clear()
@@ -705,6 +713,7 @@ func _factory(kind: String) -> Object:
 
 func restore(snapshot: Dictionary, facade: ProfileFacade = null, validated_encoding: PackedByteArray = PackedByteArray()) -> Dictionary:
 	var started := Time.get_ticks_usec()
+	_field_cache.clear(); _base_property_cache.clear()
 	# Only the encoding returned by capture() for this same envelope skips it.
 	var checked := {"ok":true} if not validated_encoding.is_empty() else validate(snapshot)
 	if not checked["ok"]: return checked
@@ -774,12 +783,16 @@ func restore(snapshot: Dictionary, facade: ProfileFacade = null, validated_encod
 		var value := entities.resolve(id)
 		var record: Dictionary = snapshot["objects"][id]
 		var fields: Dictionary = {}
+		# Query once per object. Typed containers still compare against this
+		# object's initial value, so instance-specific types are not cached.
+		var properties := {}
+		for property: Dictionary in value.get_property_list(): properties[property["name"]] = property
 		for field: String in record["fields"]:
 			var decoded: Variant = _decode(record["fields"][field])
 			if value is RandomNumberGenerator:
 				if not decoded is String or str(int(decoded)) != decoded: return _discard(StableEntityRegistry.failure(&"invalid_rng_state"))
 				decoded = int(decoded)
-			if not _assignable(value,field,decoded): return _discard(StableEntityRegistry.failure(&"invalid_payload",record["kind"]+":"+field))
+			if not _assignable(value,field,decoded,properties): return _discard(StableEntityRegistry.failure(&"invalid_payload",record["kind"]+":"+field))
 			fields[field] = decoded
 		pending_fields[id] = fields
 	if not _error.is_empty(): return _discard(_error)
@@ -890,31 +903,30 @@ func _abort_install(root: Node, reason: Dictionary) -> Dictionary:
 	_freeze_installed(root,StableEntityRegistry.new(),ignored)
 	return reason
 
-func _assignable(owner: Object, field: String, value: Variant) -> bool:
-	for property: Dictionary in owner.get_property_list():
-		if property["name"] != field: continue
-		var expected := int(property["type"])
-		if expected == TYPE_NIL: return true
-		if value == null: return expected == TYPE_OBJECT
-		if typeof(value) != expected and not (expected == TYPE_FLOAT and typeof(value) == TYPE_INT): return false
-		if expected == TYPE_OBJECT:
-			var name: String = property.get("class_name", "")
-			if name.is_empty() or value.is_class(name): return true
-			var script: Script = value.get_script()
-			while script != null:
-				if String(script.get_global_name()) == name: return true
-				script = script.get_base_script()
-			return false
-		if value is Array:
-			var initial: Array = owner.get(field)
-			if not initial.is_typed(): return true
-			return initial.get_typed_builtin() == value.get_typed_builtin() and initial.get_typed_class_name() == value.get_typed_class_name() and initial.get_typed_script() == value.get_typed_script()
-		if value is Dictionary:
-			var initial: Dictionary = owner.get(field)
-			if not initial.is_typed(): return true
-			return initial.get_typed_key_builtin() == value.get_typed_key_builtin() and initial.get_typed_key_class_name() == value.get_typed_key_class_name() and initial.get_typed_key_script() == value.get_typed_key_script() and initial.get_typed_value_builtin() == value.get_typed_value_builtin() and initial.get_typed_value_class_name() == value.get_typed_value_class_name() and initial.get_typed_value_script() == value.get_typed_value_script()
-		return true
-	return false
+func _assignable(owner: Object, field: String, value: Variant, properties: Dictionary) -> bool:
+	if not properties.has(field): return false
+	var property: Dictionary = properties[field]
+	var expected := int(property["type"])
+	if expected == TYPE_NIL: return true
+	if value == null: return expected == TYPE_OBJECT
+	if typeof(value) != expected and not (expected == TYPE_FLOAT and typeof(value) == TYPE_INT): return false
+	if expected == TYPE_OBJECT:
+		var name: String = property.get("class_name", "")
+		if name.is_empty() or value.is_class(name): return true
+		var script: Script = value.get_script()
+		while script != null:
+			if String(script.get_global_name()) == name: return true
+			script = script.get_base_script()
+		return false
+	if value is Array:
+		var initial: Array = owner.get(field)
+		if not initial.is_typed(): return true
+		return initial.get_typed_builtin() == value.get_typed_builtin() and initial.get_typed_class_name() == value.get_typed_class_name() and initial.get_typed_script() == value.get_typed_script()
+	if value is Dictionary:
+		var initial: Dictionary = owner.get(field)
+		if not initial.is_typed(): return true
+		return initial.get_typed_key_builtin() == value.get_typed_key_builtin() and initial.get_typed_key_class_name() == value.get_typed_key_class_name() and initial.get_typed_key_script() == value.get_typed_key_script() and initial.get_typed_value_builtin() == value.get_typed_value_builtin() and initial.get_typed_value_class_name() == value.get_typed_value_class_name() and initial.get_typed_value_script() == value.get_typed_value_script()
+	return true
 
 func _validate_runtime_graph() -> Dictionary:
 	for value: Object in _objects:

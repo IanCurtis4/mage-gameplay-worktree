@@ -1,6 +1,31 @@
 class_name ExpeditionPopulationPlanner
 extends RefCounted
 ## Realized F0 slots are checked against F1 geometry and the canonical mob catalog.
+## Admission is geometric: renaming a stage when composing a published phase
+## cannot change reachability. Retain only successful boolean proofs, not worlds.
+static var _admissions: Dictionary = {}
+static var _admission_mutex := Mutex.new()
+const MAX_ADMISSIONS := 32
+
+static func _admission_key(world: WorldGeometry, group: Dictionary) -> String:
+	if not ExpeditionCanonical.valid([world._stage,world._solid_slabs,group.profile]): return ""
+	var stage: Dictionary = world._stage.duplicate(true)
+	_admission_namespace(stage,String(world._stage.stage_id))
+	var targets: Array = []
+	for target: ExpeditionWorldPoint in group.targets: targets.append([target.surface_id,target.position])
+	var bytes := var_to_bytes([stage,world._solid_slabs,group.profile,[group.entry.surface_id,group.entry.position],targets])
+	var hash_context := HashingContext.new()
+	hash_context.start(HashingContext.HASH_SHA256); hash_context.update(bytes)
+	return hash_context.finish().hex_encode()
+
+static func _admission_namespace(value: Variant, stage_id: String) -> void:
+	if value is Dictionary:
+		for key: Variant in value:
+			if key in ["stage_id","from_stage","to_stage"] and value[key] is String and value[key] == stage_id: value[key] = ""
+			else: _admission_namespace(value[key],stage_id)
+	elif value is Array:
+		for item: Variant in value: _admission_namespace(item,stage_id)
+
 static func build(manifest: ExpeditionManifest, catalog: MobCatalog, rules: Dictionary, cancellation: Callable = Callable()) -> Dictionary:
 	if manifest == null or catalog == null: return BuildEffectCatalog.failure(&"invalid_manifest")
 	if cancellation.is_valid() and cancellation.call(): return BuildEffectCatalog.failure(&"cancelled")
@@ -57,6 +82,14 @@ static func build(manifest: ExpeditionManifest, catalog: MobCatalog, rules: Dict
 		if cancellation.is_valid() and cancellation.call(): return BuildEffectCatalog.failure(&"cancelled")
 		var group: Dictionary = groups[id]
 		var geometry: WorldGeometry = worlds[group.stage_id]
+		# Worlds were freshly configured above; occupancy, temporary blockers and
+		# segments are empty. Every home, occurrence, witness and policy was still
+		# validated above. Callers with cancellation keep the full query lifecycle.
+		var admission_key := "" if cancellation.is_valid() else _admission_key(geometry,group)
+		_admission_mutex.lock(); var known: bool = _admissions.has(admission_key); _admission_mutex.unlock()
+		if known:
+			navigation_metrics.append({"stage_id":group.stage_id,"profile":group.profile.duplicate(true),"targets":group.targets.size(),"metrics":{"admission":"reused"}})
+			continue
 		var certified := geometry.connectivity_batch(group.entry,group.targets,group.profile,geometry.geometry_revision,cancellation)
 		if not certified.ok:
 			var code: StringName = certified.error_code
@@ -66,6 +99,11 @@ static func build(manifest: ExpeditionManifest, catalog: MobCatalog, rules: Dict
 		if not certified.data.complete: return BuildEffectCatalog.failure(&"navigation_budget_exceeded")
 		for target: Dictionary in certified.data.targets:
 			if not target.outward_reachable: return BuildEffectCatalog.failure(&"population_unreachable")
+		if not admission_key.is_empty():
+			_admission_mutex.lock()
+			if _admissions.size() >= MAX_ADMISSIONS: _admissions.clear()
+			_admissions[admission_key] = true
+			_admission_mutex.unlock()
 		navigation_metrics.append({"stage_id":group.stage_id,"profile":group.profile.duplicate(true),"targets":group.targets.size(),"metrics":certified.data.metrics.duplicate(true)})
 	if cancellation.is_valid() and cancellation.call(): return BuildEffectCatalog.failure(&"cancelled")
 	return {"ok": true, "slots": slots, "worlds": worlds, "navigation_metrics":navigation_metrics}

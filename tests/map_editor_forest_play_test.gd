@@ -30,8 +30,11 @@ func run() -> void:
 		var now := Time.get_ticks_usec(); timing.longest = maxf(timing.longest,(now-timing.last)/1000.0); timing.last = now
 	process_frame.connect(tick)
 	var entered: Dictionary = await panel.start()
+	# Include the final synchronous interval: no process_frame is emitted while
+	# enter() blocks, and disconnecting first used to hide that last stall.
+	var terminal_frame_ms: float = (Time.get_ticks_usec()-timing.last)/1000.0
 	process_frame.disconnect(tick)
-	var longest: float = timing.longest; var last := Time.get_ticks_usec()
+	var longest: float = maxf(timing.longest,terminal_frame_ms); var last := Time.get_ticks_usec()
 	var enter_ms := (Time.get_ticks_usec()-started)/1000.0
 	check("phase_enters_through_the_panel",entered.get("ok",false),entered.get("error_code",""))
 	if not entered.get("ok",false):
@@ -91,7 +94,9 @@ func run() -> void:
 	if not suspended.get("ok",false): finish(); return
 	var lobby := current_scene as CharacterMenu
 	var again := PhaseSelectionPanel.new(); lobby.add_child(again); again.configure(lobby,f["a"])
+	var resume_started := Time.get_ticks_usec()
 	var resumed: Dictionary = await again.start()
+	var resume_ms := (Time.get_ticks_usec()-resume_started)/1000.0
 	var resumed_ok: bool = resumed.get("ok",false) and (resumed["root"] as RunController).campaign_runtime.state.current_stage_id == "forest_sanctuary_2"
 	check("resumes_the_phase",resumed_ok,resumed.get("error_code",""))
 	if resumed_ok:
@@ -132,7 +137,7 @@ func run() -> void:
 			status = host.ui_root.get_node("ExpeditionStatus") as ExpeditionStatusPanel
 			var finished: Dictionary = await status.run_action({"kind":"finish","outcome":"completed","source":completion})
 			check("phase_completes",finished.get("ok",false),finished.get("error_code",""))
-	print("F10_FOREST_PLAY_TIMING "+JSON.stringify({"enter_ms":snappedf(enter_ms,1.0),"longest_frame_while_preparing_ms":snappedf(longest,0.1),"walk_frames":count,"walk_mean_ms":snappedf(total/maxf(1,count),0.1),"walk_worst_ms":snappedf(worst,0.1),"checkpoint_bytes":checkpoint_bytes,"snapshot_raw_bytes":int(lock.checkpoint.get("byte_count",0)) if lock != null else -1,"checkpoint_base64_bytes":String(lock.checkpoint.get("snapshot","")).length() if lock != null else -1,"suspend_ms":snappedf(suspend_ms,1.0),"travel_ms":snappedf(report_travel,1.0),"profile_bytes":profile_bytes,"slots_field_1":state.slots.values().filter(func(slot: Dictionary) -> bool: return slot.stage_id == "forest_sanctuary_1").size()}))
+	print("F10_FOREST_PLAY_TIMING "+JSON.stringify({"enter_ms":snappedf(enter_ms,1.0),"entry_terminal_frame_ms":snappedf(terminal_frame_ms,0.1),"resume_ms":snappedf(resume_ms,1.0),"longest_frame_while_preparing_ms":snappedf(longest,0.1),"walk_frames":count,"walk_mean_ms":snappedf(total/maxf(1,count),0.1),"walk_worst_ms":snappedf(worst,0.1),"checkpoint_bytes":checkpoint_bytes,"snapshot_raw_bytes":int(lock.checkpoint.get("byte_count",0)) if lock != null else -1,"checkpoint_base64_bytes":String(lock.checkpoint.get("snapshot","")).length() if lock != null else -1,"suspend_ms":snappedf(suspend_ms,1.0),"travel_ms":snappedf(report_travel,1.0),"profile_bytes":profile_bytes,"slots_field_1":state.slots.values().filter(func(slot: Dictionary) -> bool: return slot.stage_id == "forest_sanctuary_1").size()}))
 	if resumed.get("ok",false) and is_instance_valid(resumed["root"]): (resumed["root"] as Node).queue_free()
 	finish()
 func finish() -> void:

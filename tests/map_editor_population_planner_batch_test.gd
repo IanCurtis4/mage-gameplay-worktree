@@ -7,7 +7,7 @@ const World = preload("res://scripts/core/expedition/spatial/world_geometry.gd")
 const CampaignFixture = preload("res://tests/fixtures/e07/f5/campaign_fixture.gd")
 
 const ARCHER_SLOT := "entry_archer_batch_fixture"
-const EXPECTED_CHECKS := 20
+const EXPECTED_CHECKS := 22
 
 var checks: Array[Dictionary] = []
 var failed: Array[String] = []
@@ -67,6 +67,11 @@ func _run() -> void:
 	check("build_does_not_mutate_manifest_catalog_or_rules",fixture_manifest.canonical_hash() == manifest_hash_before and catalog_signature(catalog) == catalog_before and rules == rules_before)
 	var repeated: Dictionary = Planner.build(fixture_manifest,catalog,rules)
 	check("repeated_build_keeps_realized_slots_and_grouping",repeated.get("ok",false) and repeated.get("slots",{}) == baseline.slots and group_summary(repeated.get("navigation_metrics",[])) == group_summary(metrics))
+	var renamed := copy_manifest(fixture_manifest)
+	rename_stages(renamed._data)
+	var renamed_build := Planner.build(renamed,catalog,rules)
+	check("stage_renaming_reuses_geometric_admission",renamed_build.get("ok",false) and renamed_build.navigation_metrics.all(func(item: Dictionary) -> bool: return item.metrics.get("admission","") == "reused"),renamed_build.get("error_code",""))
+	check("renamed_admission_creates_fresh_worlds_and_slot_bindings",renamed_build.get("ok",false) and renamed_build.worlds.has("renamed_entry") and renamed_build.worlds.renamed_entry != baseline.worlds.entry and renamed_build.worlds.renamed_entry._stage.stage_id == "renamed_entry" and renamed_build.slots.entry_field.home.stage_id == "renamed_entry")
 
 	var one_way: Dictionary = one_way_fixture(fixture_manifest,baseline.slots["entry_field"].traversal)
 	var one_way_build: Dictionary = Planner.build(one_way.manifest,catalog,rules) if one_way.configured else {"ok":false,"error_code":"fixture_invalid"}
@@ -102,6 +107,15 @@ func _run() -> void:
 	var geometry_diagnostic: Dictionary = cancelled_during.get("geometry_diagnostic",{})
 	check("query_cancel_propagates_without_partial_result_or_mutation",not cancelled_during.get("ok",false) and cancelled_during.get("error_code") == &"cancelled" and no_partial_payload(cancelled_during) and geometry_diagnostic.has("phase") and fixture_manifest.canonical_hash() == manifest_hash_before and rules == rules_before and catalog_signature(catalog) == catalog_before)
 	finish()
+
+func rename_stages(value: Variant) -> void:
+	var names := ["entry","left","right","final"]
+	if value is Dictionary:
+		for key: Variant in value:
+			if key in ["stage_id","from_stage","to_stage","entry_stage_id"] and value[key] is String and value[key] in names: value[key] = "renamed_"+value[key]
+			else: rename_stages(value[key])
+	elif value is Array:
+		for item: Variant in value: rename_stages(item)
 
 func with_profile_case(original: ExpeditionManifest) -> ExpeditionManifest:
 	var manifest := copy_manifest(original)

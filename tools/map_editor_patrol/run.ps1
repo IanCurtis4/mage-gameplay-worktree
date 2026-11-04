@@ -58,7 +58,7 @@ function Invoke-M5([string]$Name,[string[]]$Arguments,[string]$Marker=''){
         $m5Match=[regex]::Match($m5Text,'(?m)^'+$Marker+' (.+)$')
         if($m5Match.Success){$m5Payload=ConvertFrom-Json $m5Match.Groups[1].Value}
         $m5Pass=$m5Pass -and $null -ne $m5Payload -and $m5Payload.ok -and $m5Payload.count -gt 0 -and @($m5Payload.checks|Where-Object {-not $_.ok}).Count -eq 0
-        $m5Expected=@{patrol=58;restart_prepare=33;restart_resume=21;native_ui=19}
+        $m5Expected=@{patrol=60;restart_prepare=33;restart_resume=21;native_ui=19}
         if($m5Expected.ContainsKey($Name)){$m5Pass=$m5Pass -and $m5Payload.count -eq $m5Expected[$Name] -and @($m5Payload.checks).Count -eq $m5Expected[$Name]}
     }
     $m5Runs.Add(@{name=$Name;ok=$m5Pass;arguments=$Arguments;started_utc=$m5Start;finished_utc=[DateTime]::UtcNow.ToString('o');exit_code=$m5Process.ExitCode;timed_out=$m5Timeout;aborted=$m5Aborted;output_sha256=(Get-FileHash -LiteralPath $m5Log).Hash;result=$m5Payload})

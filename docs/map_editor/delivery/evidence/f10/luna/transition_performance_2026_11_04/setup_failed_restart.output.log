@@ -1,0 +1,17 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ERROR: Failed to open 'user://logs/godot2026-11-04T13.45.32.log'.
+   at: copy (core/io/dir_access.cpp:429)
+ERROR: Failed to open log file for writing: user://logs/godot.log
+   at: rotate_file (core/io/logger.cpp:169)
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+E07 F4 restart worker PASS write
+
+E07 F4 e07_f4_restart_test.gd: 1 checks, 1 failures
+ERROR: separate native process completed write
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/fixtures/e07/f4/suite.gd:9)
+       [1] _run (res://tests/e07_f4_restart_test.gd:11)
+

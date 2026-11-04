@@ -42,6 +42,12 @@ func _run() -> void:
 	check(captured["ok"],"explicit actor/run graph captures: "+str(captured.get("detail",captured.get("error_code",""))))
 	if not captured["ok"]: barrier.release(); actor.free(); _finish(); return
 	var payload: Dictionary = captured["snapshot"]
+	var actor_kind: String = (actor.get_script() as Script).resource_path
+	var original_schema: Dictionary = registry.schemas[actor_kind].duplicate(true)
+	registry.schemas[actor_kind]["fields"].erase("attack_cooldown")
+	check(registry.capture(actor,barrier).get("error_code") == &"checkpoint_incomplete","warm reflection cannot hide an unlisted field on the next capture")
+	registry.schemas[actor_kind] = original_schema
+	check(registry.capture(actor,barrier).get("ok",false),"reflection is recomputed after restoring the explicit schema")
 	var coverage_file := FileAccess.open("res://.godot/verification/e07_f3_snapshot_coverage.json",FileAccess.WRITE)
 	coverage_file.store_string(JSON.stringify(payload["coverage"],"  ",true)); coverage_file.close()
 	check(payload["tombstones"].size() == 1,"dead causal target has a stable tombstone without a node")

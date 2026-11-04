@@ -13,6 +13,10 @@ const Patrol = preload("res://scripts/core/expedition/patrol/enemy_patrol.gd")
 const Worker = preload("res://scripts/map_authoring/population/population_worker.gd")
 const REVISION := "map_patrol_v1"
 const PREVIEW_PHASE := "editor_patrol_preview"
+## Exact package bytes, after all live dependencies have been checked below.
+## The bounded proof cache contains no actor, graph or mutable run state.
+static var _proofs: Dictionary = {}
+static var _proof_mutex := Mutex.new()
 static func fail(code: String, id: String = "", point: Dictionary = {}) -> Dictionary:
 	var messages := {"patrol_empty":"Importe encontros com slots realizados.","patrol_invalid":"A rota precisa de dois a 32 pontos, modo e slots válidos.","patrol_waypoint_invalid":"Ponto sem suporte, corpo válido ou fora do leash fixo.","patrol_unreachable":"Um trecho da patrulha não é transitável pelo corpo do inimigo.","patrol_leash":"O caminho sai do leash fixo do slot.","patrol_slot_missing":"O slot referenciado não existe neste encontro.","patrol_slot_duplicate":"Um slot não pode ter duas patrulhas.","patrol_unsupported":"Esta espécie não usa o engajamento necessário à patrulha.","patrol_limit":"A patrulha excede o orçamento técnico.","cancelled":"Operação cancelada.","stale_source":"A fonte mudou; compile novamente."}
 	return {"ok":false,"code":code,"diagnostics":[{"code":code,"entity_id":id,"field":"patrol","surface_id":point.get("surface_id",""),"location":Population.vector(point.position_xyz) if point.has("position_xyz") else Vector3.ZERO,"severity":"error","message":messages.get(code,"Revise os dados da patrulha: "+code),"suggestion":"Selecione a rota e ajuste o ponto ou o slot."}]}
@@ -57,7 +61,8 @@ static func compile(source: Dictionary, cancel: Callable = Callable()) -> Dictio
 	return {"ok":true,"code":"","input_hash":package.source_hash,"output_hash":package.package_hash,"diagnostics":[],"package":package}
 static func validate_package(package: Dictionary) -> bool:
 	if package.size() != 6 or not package.has_all(["format_version","compiler_revision","source_hash","population_package","manifest","package_hash"]) or not ExpeditionCanonical.valid(package): return false
-	if var_to_bytes(package).size() > MAX_PACKAGE_BYTES: return false
+	var bytes := var_to_bytes(package)
+	if bytes.size() > MAX_PACKAGE_BYTES: return false
 	if package.format_version != 1 or package.compiler_revision != REVISION or not Schema._type(package.source_hash,"hash") or not Schema._type(package.package_hash,"hash") or not package.population_package is Dictionary or not package.manifest is Dictionary: return false
 	var copy := package.duplicate(true); copy.erase("package_hash")
 	if ExpeditionCanonical.digest(copy) != package.package_hash: return false
@@ -76,6 +81,9 @@ static func validate_package(package: Dictionary) -> bool:
 	if candidate != base: return false
 	var loaded := Catalog.load_current()
 	if not loaded.ok: return false
+	var proof_key: String = Schema.bytes_hash(bytes)+"/"+loaded.hash+"/"+loaded.policy_hash
+	_proof_mutex.lock(); var known: bool = _proofs.has(proof_key); _proof_mutex.unlock()
+	if known: return true
 	var planned := ExpeditionPopulationPlanner.build(manifest(package),loaded.catalog,package.population_package.rules)
 	if not planned.ok: return false
 	for slot: Dictionary in planned.slots.values():
@@ -85,6 +93,10 @@ static func validate_package(package: Dictionary) -> bool:
 			if not planned.slots.has(id) or planned.slots[id].get("patrol",{}) != def: return false
 		var mob: MobDefinition = loaded.catalog.get_definition(StringName(slot.species_id))
 		if mob == null or mob.aggro_radius <= 0 or not Patrol.validate_route(def,planned.worlds[slot.stage_id],ExpeditionPopulationPlanner.point(slot.home),slot.traversal,mob.leash_radius).ok: return false
+	_proof_mutex.lock()
+	if _proofs.size() >= 8: _proofs.clear()
+	_proofs[proof_key] = true
+	_proof_mutex.unlock()
 	return true
 static func manifest(package: Dictionary) -> ExpeditionManifest:
 	var result := ExpeditionManifest.new(); result._data = package.manifest.duplicate(true); return result
