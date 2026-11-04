@@ -1,0 +1,271 @@
+extends "res://tests/fixtures/e07/f5/suite.gd"
+## Q5 review: automatic collection, the journal capacity boundary, and a safe
+## checkpoint that compacts a real service-generated journal payload.
+const Journal = preload("res://scripts/core/expedition/persistence/expedition_journal_codec.gd")
+
+func journal_kill(f: Dictionary, slot_id: String, request_id: String) -> Dictionary:
+	var host: RunController = f["controller"]
+	var actor: EnemyActor = host.campaign_runtime.actors[slot_id]
+	actor.health.current_hp = 0.0
+	actor.health._death_emitted = true
+	host._on_enemy_died(actor)
+	var events: Array = host.campaign_runtime.pending_events.duplicate(true)
+	var result: Dictionary = f["service"].journal_events(host, f["barrier"], events, request_id, f["facade"].current_profile().revision)
+	result["source_events"] = events
+	return result
+
+func current_lock(f: Dictionary) -> ExpeditionAssetLock:
+	var profile: ProfileState = f["facade"].current_profile()
+	return profile.expedition_for_character(f["controller"].run_state.character_id)
+
+func collect_once(f: Dictionary, request_id: String) -> Dictionary:
+	var host: RunController = f["controller"]
+	return f["service"].journal_collect(host, f["barrier"], request_id, f["facade"].current_profile().revision)
+
+func _run() -> void:
+	var f := make("journal_capacity")
+	if not enter(f)["ok"]:
+		dispose(f); finish_test(); return
+
+	var setup_ok := true
+	var routes: Array[Dictionary] = [
+		{"portal": "", "slots": ["entry_field", "entry_boss"]},
+		{"portal": "entry_to_left", "slots": ["left_field", "left_boss"]},
+		{"portal": "left_to_entry", "slots": []},
+		{"portal": "entry_to_right", "slots": ["right_field", "right_boss"]},
+		{"portal": "right_to_final", "slots": ["final_field"]},
+	]
+	for route_index: int in routes.size():
+		var route: Dictionary = routes[route_index]
+		if not String(route["portal"]).is_empty():
+			var travel := travel_to(f, String(route["portal"]), "q5_travel_%d" % route_index)
+			check(travel.get("ok", false), "safe stage route %s" % route["portal"])
+			if not travel.get("ok", false): setup_ok = false; break
+		for slot_id: String in route["slots"]:
+			var killed := journal_kill(f, slot_id, "q5_death_" + slot_id)
+			check(killed.get("ok", false), "real journal death and drop for %s" % slot_id)
+			if not killed.get("ok", false): setup_ok = false; break
+			if slot_id == "final_field":
+				f["last_death_events"] = killed["source_events"]
+				f["last_death_request"] = "q5_death_final_field"
+		if not setup_ok: break
+	if not setup_ok:
+		dispose(f); finish_test(); return
+
+	var host: RunController = f["controller"]
+	var ticket_ids: Array = host.reward_service._queue.duplicate()
+	var unique_ticket_ids: Dictionary = {}
+	for ticket_id: String in ticket_ids: unique_ticket_ids[ticket_id] = true
+	check(ticket_ids.size() == 7 and unique_ticket_ids.size() == 7, "seven distinct mob drops are waiting across the real F5 route")
+	if ticket_ids.size() != 7:
+		dispose(f); finish_test(); return
+	var rng_before_collect: int = host.rng.state
+	var xp_before: Dictionary = host.reward_service._observe_xp(host)
+	var sequence_before: int = int(f["facade"].current_profile().reward_session["last_committed_seq"])
+	var expected_base_xp := 0
+	var expected_job_xp := 0
+	for ticket_id: String in ticket_ids:
+		var ticket: Dictionary = host.reward_service.ticket(ticket_id)
+		expected_base_xp += int(ticket["payload"]["base_xp"])
+		expected_job_xp += int(ticket["payload"]["job_xp"])
+
+	var lock := current_lock(f)
+	var generated: Dictionary = Journal.decode(lock.journal, lock.checkpoint)
+	var seed_payload: Dictionary = generated["payloads"][-1] if generated.get("ok", false) else {}
+	check(generated.get("ok", false) and generated["payloads"].size() == 1 and seed_payload.get("events", []).size() == 1 and seed_payload["tickets"].size() == 1, "capacity seed comes from one real, service-generated death")
+	if seed_payload.is_empty():
+		dispose(f); finish_test(); return
+
+	# Build a large, hash-valid chain from a payload the service already wrote.
+	# Duplicate replay is idempotent: the death and ticket are applied once.
+	var seeded_profile: ProfileState = f["facade"].current_profile()
+	lock = seeded_profile.expedition_for_character(host.run_state.character_id)
+	while lock.journal.size() < Journal.MAX_ENTRIES - 1:
+		var index := lock.journal.size()
+		var made: Dictionary = Journal.make_entry(lock.journal, lock.checkpoint, "q5_capacity_%03d" % index, seed_payload)
+		if not made.get("ok", false):
+			check(false, "valid service payload fills the bounded journal")
+			setup_ok = false
+			break
+		lock.journal.append(made["entry"])
+	seeded_profile.expeditions[lock.expedition_id] = lock
+	var seed_saved: Dictionary = f["store"].commit(seeded_profile)
+	check(setup_ok and seed_saved.get("ok", false), "valid 255-entry fixture is written by ProfileStore")
+	if not seed_saved.get("ok", false):
+		dispose(f); finish_test(); return
+	var seed_reopened: Dictionary = f["facade"].open_profile()
+	check(seed_reopened.get("ok", false), "facade rereads the persisted capacity fixture")
+	if not seed_reopened.get("ok", false):
+		dispose(f); finish_test(); return
+	lock = current_lock(f)
+	var decoded: Dictionary = Journal.decode(lock.journal, lock.checkpoint)
+	check(setup_ok and decoded.get("ok", false) and decoded["payloads"].size() == Journal.MAX_ENTRIES - 1, "255-entry chain validates before the cap")
+	var replay_before: Dictionary = f["service"]._restore(lock)
+	var replay_same := false
+	if replay_before.get("ok", false):
+		var replay_host: RunController = replay_before["root"]
+		replay_same = replay_host.campaign_runtime.state.slots == host.campaign_runtime.state.slots and replay_host.reward_service._tickets == host.reward_service._tickets and replay_host.reward_service._queue == ticket_ids and replay_host.rng.state == host.rng.state
+	check(replay_same, "255 valid entries replay to the same slots, drops, queue, and RNG")
+	if not replay_same:
+		if replay_before.get("ok", false): replay_before["root"].free()
+		dispose(f); finish_test(); return
+	var previous_host: RunController = f["controller"]
+	f["barrier"].release()
+	var replay_registry: SnapshotRegistry = replay_before["registry"]
+	var installed: Dictionary = replay_registry.install(replay_before, root)
+	check(installed.get("ok", false), "replayed F5 host installs into the live SceneTree")
+	if not installed.get("ok", false):
+		replay_before["root"].free(); dispose(f); finish_test(); return
+	var activated: Dictionary = replay_registry.activate(replay_before)
+	check(activated.get("ok", false), "replayed F5 host activates after installation")
+	if not activated.get("ok", false):
+		replay_before["root"].free(); dispose(f); finish_test(); return
+	previous_host.free()
+	f["controller"] = replay_before["root"]
+	host = f["controller"]
+	# The F5 fixture deliberately disabled node callbacks. Enable only the live
+	# controller loop that owns automatic collection; world actors stay frozen.
+	host.process_mode = Node.PROCESS_MODE_PAUSABLE
+	host.set_process(true)
+	f["barrier"] = SnapshotTickBarrier.new()
+	var active_barrier: Dictionary = f["barrier"].acquire(host)
+	check(active_barrier.get("ok", false), "installed replay host accepts the active tick barrier")
+	if not active_barrier.get("ok", false):
+		dispose(f); finish_test(); return
+
+	# Let the installed controller's process loop call _auto_collect. Await any
+	# deferred snapshot and save completion before counting each published batch.
+	f["barrier"].release()
+	f["barrier"] = null
+	host.get_tree().paused = false
+	var batches: Array[int] = []
+	var started_usec := Time.get_ticks_usec()
+	var largest_journal := lock.journal.size()
+	var observed_queue: int = host.reward_service._queue.size()
+	var auto_deadline := Time.get_ticks_msec() + 30000
+	while (host.reward_service.has_uncollected() or host._memory_snapshot_pending or host.expedition_save_busy() or host._expedition_flush_running) and Time.get_ticks_msec() < auto_deadline:
+		await process_frame
+		if not is_instance_valid(host): break
+		var queue_now: int = host.reward_service._queue.size()
+		var delivered_now := observed_queue - queue_now
+		if delivered_now > 0:
+			batches.append(delivered_now)
+			observed_queue = queue_now
+			largest_journal = maxi(largest_journal, current_lock(f).journal.size())
+	var automatic_elapsed_ms := float(Time.get_ticks_usec() - started_usec) / 1000.0
+	var automatic_drained := not host.reward_service.has_uncollected()
+	check(automatic_drained, "automatic collection compacts a full journal and drains all seven drops")
+	var automatic_delivered := 0
+	var automatic_bounded := not batches.is_empty()
+	for count: int in batches:
+		automatic_delivered += count
+		if count > ExpeditionService.COLLECT_BATCH: automatic_bounded = false
+	check(automatic_bounded and automatic_delivered <= 7, "automatic collection respects COLLECT_BATCH=2")
+
+	# A safe checkpoint is the supported compaction boundary. It also gives the
+	# remaining tickets a fresh journal if the pre-fix automatic path stalled.
+	var barrier := SnapshotTickBarrier.new()
+	host.get_tree().paused = true
+	var acquired: Dictionary = barrier.acquire(host)
+	check(acquired.get("ok", false), "fresh safe-point barrier after automatic collection")
+	if not acquired.get("ok", false):
+		dispose(f); finish_test(); return
+	f["barrier"] = barrier
+	lock = current_lock(f)
+	var before_compaction_count: int = host.reward_service._queue.size()
+	var compacted: Dictionary = f["service"].checkpoint(host, barrier, lock.expedition_id, lock.phase_id, "q5_safe_compaction", f["facade"].current_profile().revision)
+	check(compacted.get("ok", false), "safe checkpoint compacts the full journal transactionally")
+	if not compacted.get("ok", false):
+		dispose(f); finish_test(); return
+	lock = current_lock(f)
+	check(lock.journal.is_empty() and not lock.checkpoint.is_empty(), "compaction replaces the chain with a new base")
+
+	var post_compaction_batches: Array[int] = []
+	var collect_index := 0
+	while host.reward_service.has_uncollected() and collect_index < 5:
+		var before_count: int = host.reward_service._queue.size()
+		var collected := collect_once(f, "q5_post_compact_%d" % collect_index)
+		check(collected.get("ok", false) and collected.get("journal_kind") == "collect", "durable collection after compaction %d" % collect_index)
+		if not collected.get("ok", false): break
+		post_compaction_batches.append(before_count - host.reward_service._queue.size())
+		collect_index += 1
+	var all_batches := batches.duplicate()
+	all_batches.append_array(post_compaction_batches)
+	var delivered_count := 7 - host.reward_service._queue.size()
+	check(delivered_count == 7 and not host.reward_service.has_uncollected(), "all seven drops become durable exactly once")
+	check(all_batches == [2, 2, 2, 1], "seven drops are collected in four bounded batches")
+	check(float(Time.get_ticks_usec() - started_usec) / 1000.0 >= automatic_elapsed_ms, "batch timing covers automatic and post-compaction collection")
+
+	var profile: ProfileState = f["facade"].current_profile()
+	var character: CharacterState = profile.character_by_id(host.run_state.character_id)
+	var xp_after: Dictionary = host.reward_service._observe_xp(host)
+	lock = current_lock(f)
+	check(int(xp_after["base_xp"]) == int(xp_before["base_xp"]) + expected_base_xp and int(xp_after["job_xp"]) == int(xp_before["job_xp"]) + expected_job_xp, "owner receives each ticket's base and job XP once")
+	check(lock.effective_owner_digest() == ExpeditionCheckpointCodec.owner_digest(profile, host.run_state.character_id) and character != null and profile.reward_session["last_committed_seq"] == sequence_before + 7, "owner digest and reward sequence match seven grants")
+	check(host.rng.state == rng_before_collect and ticket_ids.all(func(id: String) -> bool: return host.reward_service.ticket(id).get("delivered", false)), "collection preserves RNG and marks every original ticket delivered")
+
+	var revision_before_retry: int = profile.revision
+	var duplicate_death: Dictionary = f["service"].journal_events(host, barrier, f["last_death_events"], f["last_death_request"], revision_before_retry)
+	check(duplicate_death.get("already_applied", false) and f["facade"].current_profile().revision == revision_before_retry and host.reward_service._queue.is_empty(), "retrying the final death cannot mint another ticket")
+	var lock_after_retry := current_lock(f)
+	var decoded_after_retry: Dictionary = Journal.decode(lock_after_retry.journal, lock_after_retry.checkpoint)
+	var post_compaction_ids: Array[String] = []
+	if decoded_after_retry.get("ok", false):
+		for payload: Dictionary in decoded_after_retry["payloads"]:
+			if not Journal.is_collect(payload): continue
+			for item: Dictionary in payload["delivered"]: post_compaction_ids.append(item["ticket_id"])
+	var unique_collected_ids: Dictionary = {}
+	for ticket_id: String in post_compaction_ids: unique_collected_ids[ticket_id] = true
+	var post_compaction_delivered := 0
+	for count: int in post_compaction_batches: post_compaction_delivered += count
+	check(post_compaction_ids.size() == post_compaction_delivered and unique_collected_ids.size() == post_compaction_ids.size(), "post-compaction journal contains unique delivered ticket ids")
+
+	var reopened := ProfileFacade.new(f["store"])
+	var opened: Dictionary = reopened.open_profile()
+	var disk_lock: ExpeditionAssetLock = reopened.current_profile().expedition_for_character(host.run_state.character_id) if opened.get("ok", false) else null
+	var disk_replay: Dictionary = ExpeditionService.new(reopened)._restore(disk_lock) if disk_lock != null else {"ok": false}
+	var disk_matches := false
+	if disk_replay.get("ok", false):
+		var disk_host: RunController = disk_replay["root"]
+		disk_matches = disk_host.campaign_runtime.state.slots == host.campaign_runtime.state.slots and disk_host.reward_service._tickets == host.reward_service._tickets and disk_host.reward_service._queue.is_empty() and disk_host.rng.state == host.rng.state
+		disk_host.free()
+	check(disk_matches, "canonical disk reopen and base-plus-journal replay preserve grants without duplication")
+	await verify_uncertain_compaction(f,seed_payload)
+	print("F10_Q5_JOURNAL_CAPACITY_TIMING " + JSON.stringify({"drops":7,"batch_sizes":all_batches,"automatic_and_recovery_ms":float(Time.get_ticks_usec()-started_usec)/1000.0,"automatic_ms":automatic_elapsed_ms,"journal_capacity":Journal.MAX_ENTRIES,"largest_journal_entries":largest_journal,"queue_before_compaction":before_compaction_count}))
+	print("F10_Q5_JOURNAL_CAPACITY_RESULT " + JSON.stringify({"ok":failures == 0,"count":checks,"failures":failures,"automatic_drained":automatic_drained,"delivered":delivered_count,"batch_sizes":all_batches}))
+	dispose(f)
+	finish_test()
+
+func verify_uncertain_compaction(f: Dictionary, seed_payload: Dictionary) -> void:
+	var host: RunController = f["controller"]
+	var profile: ProfileState = f["facade"].current_profile()
+	var lock := profile.expedition_for_character(host.run_state.character_id)
+	while lock.journal.size() < Journal.MAX_ENTRIES:
+		var made := Journal.make_entry(lock.journal,lock.checkpoint,"q5_recovery_%03d" % lock.journal.size(),seed_payload)
+		if not made.get("ok",false): check(false,"recovery fixture has a valid chain"); return
+		lock.journal.append(made.entry)
+	profile.expeditions[lock.expedition_id] = lock
+	var saved: Dictionary = f["store"].commit(profile)
+	var opened: Dictionary = f["facade"].open_profile() if saved.get("ok",false) else {"ok":false}
+	check(saved.get("ok",false) and opened.get("ok",false),"recovery capacity fixture uses the canonical writer and reader")
+	if not opened.get("ok",false): return
+	var before_xp := host.reward_service._observe_xp(host)
+	var before_rng: int = host.rng.state
+	f["barrier"].release()
+	host.set_process(false)
+	paused = false
+	f["store"].uncertain = true
+	host._compact_reward_journal()
+	var deadline := Time.get_ticks_msec()+15000
+	while not host._expedition_flush_running and Time.get_ticks_msec() < deadline: await process_frame
+	check(host._expedition_flush_running and host._memory_snapshot_pending and paused and f["store"].hide_reads,"uncertain compaction retains its barrier and recovery context")
+	check(host.reward_service._queue.is_empty() and host.reward_service._observe_xp(host) == before_xp and host.rng.state == before_rng,"uncertain compaction grants nothing and preserves RNG")
+	f["store"].hide_reads = false
+	var recovered := host.retry_expedition_events()
+	check(recovered.get("ok",false) and not host._memory_snapshot_pending and not host._expedition_flush_running and not paused,"checkpoint reconciliation releases the same host")
+	lock = current_lock(f)
+	check(lock.journal.is_empty() and host.reward_service._observe_xp(host) == before_xp and host.reward_service._queue.is_empty(),"confirmed compaction replaces the journal without duplicate grants")
+	var revision: int = f["facade"].current_profile().revision
+	var retry := host.retry_expedition_events()
+	check(not retry.get("ok",false) and f["facade"].current_profile().revision == revision,"repeated recovery cannot write or grant again")
+	paused = true

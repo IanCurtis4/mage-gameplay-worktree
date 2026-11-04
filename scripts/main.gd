@@ -2780,6 +2780,9 @@ func _auto_collect() -> void:
 	var profile := persistent_facade.current_profile()
 	var lock := profile.expedition_for_character(run_state.character_id) if profile != null else null
 	if lock == null or lock.checkpoint.is_empty() or lock.lifecycle != &"active": return
+	if lock.journal.size() >= ExpeditionService.Journal.MAX_ENTRIES:
+		_compact_reward_journal()
+		return
 	_memory_snapshot_pending = true
 	_memory_snapshot_previous_pause = get_tree().paused
 	get_tree().paused = true
@@ -2801,6 +2804,29 @@ func _auto_collect() -> void:
 		return
 	release_memory_snapshot()
 	_auto_collect_after_msec = Time.get_ticks_msec() + 5000
+
+## Keep queued drops live across the bounded journal boundary. The same frozen
+## cut and canonical checkpoint writer used by suspension replace the chain;
+## no ticket is granted and no RNG is consumed by compaction itself.
+func _compact_reward_journal() -> void:
+	var queued := request_memory_snapshot()
+	if not queued.get("ok",false): return
+	var captured: Dictionary = await memory_snapshot_ready
+	var profile := persistent_facade.current_profile()
+	var lock := profile.expedition_for_character(run_state.character_id) if profile != null else null
+	if not captured.get("ok",false) or lock == null or lock.lifecycle != &"active" or encounter_active or run_finished or inventory_frozen or not player.is_alive() or run_state.has_open_offer() or not campaign_runtime.pending_events.is_empty():
+		release_memory_snapshot()
+		_auto_collect_after_msec = Time.get_ticks_msec() + 5000
+		return
+	var request := "compact_" + ExpeditionCanonical.digest([lock.expedition_id,lock.revision,lock.checkpoint.get("sha256","")]).substr(0,56)
+	_expedition_transaction_service = ExpeditionService.new(persistent_facade)
+	var result := _expedition_transaction_service.checkpoint(self,_memory_snapshot_barrier,lock.expedition_id,lock.phase_id,request,profile.revision,false,captured)
+	if result.get("read_only",false):
+		_expedition_flush_running = true
+		status_label.text = "A expedição está pausada; confirme a recuperação antes de continuar: %s" % result["error_code"]
+		return
+	release_memory_snapshot()
+	_auto_collect_after_msec = 0 if result.get("ok",false) else Time.get_ticks_msec() + 5000
 
 # Checkpoint39: a death leaves the game paused in recovery, like the installed
 # host of the full transaction; a revive resumes it.
@@ -2900,7 +2926,7 @@ func retry_expedition_events() -> Dictionary:
 func _install_expedition_result(result: Dictionary) -> Dictionary:
 	if not result.has("root"):
 		# A journal entry was applied to this same host: only unfreeze it.
-		if result.has("journal_seq"):
+		if result.has("journal_seq") or (result.get("durable",false) and result.get("lifecycle") == &"active"):
 			release_memory_snapshot(); _expedition_flush_running = false
 			_settle_lifecycle(result.get("journal_kind", "") == "revive")
 		return result

@@ -32,8 +32,20 @@ func configure(value: Dictionary, world: WorldGeometry = null) -> Dictionary:
 		if not configured.ok: return configured
 	var stage: Dictionary = value.manifest.stages[0]
 	for field: String in ["surfaces","volumes","solid_prisms"]:
-		if authority._stage.get(field,[]) != stage.get(field,[]): return {"ok":false,"code":"renderer_world_mismatch"}
+		var expected: Array = stage.get(field,[]).duplicate(true)
+		_bind_stage(expected,String(stage.stage_id),String(authority._stage.stage_id))
+		if authority._stage.get(field,[]) != expected: return {"ok":false,"code":"renderer_world_mismatch"}
 	return _configure_approved(value.duplicate(true),authority)
+
+## Only the namespace changed by PhaseRelease; geometry remains byte-for-byte
+## equal in the comparisons above, and the validated package is never edited.
+static func _bind_stage(value: Variant, from_stage: String, to_stage: String) -> void:
+	if value is Dictionary:
+		for key: Variant in value:
+			if key in ["stage_id","from_stage","to_stage"] and value[key] is String and value[key] == from_stage: value[key] = to_stage
+			else: _bind_stage(value[key],from_stage,to_stage)
+	elif value is Array:
+		for item: Variant in value: _bind_stage(item,from_stage,to_stage)
 
 func _configure_approved(value: Dictionary, world: WorldGeometry) -> Dictionary:
 	# Internal ownership transfer after the producer already validated this package.

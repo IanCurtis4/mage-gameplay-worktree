@@ -44,6 +44,8 @@ func run() -> void:
 	await frames(10)
 	var state := host.campaign_runtime.state
 	check("first_field_is_installed",current_scene == host and state.current_stage_id == "forest_sanctuary_1" and host.expedition_view != null and not state.replay)
+	check("first_field_uses_authored_presentation",rich(host) and host.expedition_view.get("skin").object_sprites.size() >= 196)
+	await capture("forest_first.png")
 	var forward := ""
 	for portal: Dictionary in state.manifest_data.portals:
 		if portal.kind == "travel" and portal.from_stage == "forest_sanctuary_1": forward = portal.portal_id
@@ -85,6 +87,8 @@ func run() -> void:
 	if travelled.get("ok",false) and travelled.has("root"): host = travelled["root"]
 	if current_scene is RunController: host = current_scene
 	check("travels_to_the_second_field",travelled.get("ok",false) and host.campaign_runtime.state.current_stage_id == "forest_sanctuary_2",[placed.get("ok",false),travelled.get("error_code","")])
+	check("travel_keeps_authored_presentation",rich(host))
+	await capture("forest_second.png")
 	report_travel = travel_ms
 	status = host.ui_root.get_node("ExpeditionStatus") as ExpeditionStatusPanel
 	var suspend_started := Time.get_ticks_usec()
@@ -99,6 +103,7 @@ func run() -> void:
 	var resume_ms := (Time.get_ticks_usec()-resume_started)/1000.0
 	var resumed_ok: bool = resumed.get("ok",false) and (resumed["root"] as RunController).campaign_runtime.state.current_stage_id == "forest_sanctuary_2"
 	check("resumes_the_phase",resumed_ok,resumed.get("error_code",""))
+	check("resume_keeps_authored_presentation",resumed_ok and rich(resumed["root"]))
 	if resumed_ok:
 		host = resumed["root"] as RunController
 		state = host.campaign_runtime.state
@@ -118,6 +123,8 @@ func run() -> void:
 		if next_travel.get("ok",false) and next_travel.has("root"): host = next_travel["root"]
 		if current_scene is RunController: host = current_scene
 		check("travels_to_boss_field",next_placed.get("ok",false) and next_travel.get("ok",false) and host.campaign_runtime.state.current_stage_id == "forest_sanctuary_3",next_travel.get("error_code",""))
+		check("boss_keeps_authored_presentation",rich(host))
+		await capture("forest_boss.png")
 		if next_travel.get("ok",false):
 			state = host.campaign_runtime.state
 			for slot_id: String in state.slots:
@@ -140,6 +147,12 @@ func run() -> void:
 	print("F10_FOREST_PLAY_TIMING "+JSON.stringify({"enter_ms":snappedf(enter_ms,1.0),"entry_terminal_frame_ms":snappedf(terminal_frame_ms,0.1),"resume_ms":snappedf(resume_ms,1.0),"longest_frame_while_preparing_ms":snappedf(longest,0.1),"walk_frames":count,"walk_mean_ms":snappedf(total/maxf(1,count),0.1),"walk_worst_ms":snappedf(worst,0.1),"checkpoint_bytes":checkpoint_bytes,"snapshot_raw_bytes":int(lock.checkpoint.get("byte_count",0)) if lock != null else -1,"checkpoint_base64_bytes":String(lock.checkpoint.get("snapshot","")).length() if lock != null else -1,"suspend_ms":snappedf(suspend_ms,1.0),"travel_ms":snappedf(report_travel,1.0),"profile_bytes":profile_bytes,"slots_field_1":state.slots.values().filter(func(slot: Dictionary) -> bool: return slot.stage_id == "forest_sanctuary_1").size()}))
 	if resumed.get("ok",false) and is_instance_valid(resumed["root"]): (resumed["root"] as Node).queue_free()
 	finish()
+func rich(host: RunController) -> bool:
+	return host.expedition_view != null and host.expedition_view.get_script().resource_path == "res://scripts/world/authored_expedition_view.gd" and host.expedition_view.get("skin") != null
+func capture(name: String) -> void:
+	await frames(2)
+	var folder := OS.get_environment("F9_EVIDENCE")
+	if DisplayServer.get_name() != "headless" and not folder.is_empty(): get_root().get_texture().get_image().save_png(folder.path_join(name))
 func finish() -> void:
 	var ok := not checks.is_empty() and checks.all(func(item: Dictionary) -> bool: return item.ok)
 	print("F10_FOREST_PLAY_RESULT "+JSON.stringify({"ok":ok,"count":checks.size(),"checks":checks})); quit(0 if ok else 1)

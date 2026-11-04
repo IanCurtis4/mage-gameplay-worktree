@@ -16,7 +16,7 @@ func run() -> void:
 	OS.set_environment("RAGRPG_COMPILE_CACHE","0")
 	var read := Release.registry()
 	var listing: Dictionary = read.get("registry",{})
-	check("registry_lists_the_bosque",read.ok and Release.packages() == [{"package_id":BOSQUE,"name":"Bosque do Santuário"}])
+	check("registry_lists_the_bosque",read.ok and Release.packages() == [{"package_id":BOSQUE,"name":"Bosque do Santuário"},{"package_id":"forest_terraces","name":"Prado dos Terraços"},{"package_id":"forest_valleys","name":"Vales da Mata"},{"package_id":"forest_lair","name":"Covil do Guardião"}])
 	var pinned: Dictionary = listing.packages[0] if read.ok else {}
 	var bad: Array = []
 	for change: Callable in [

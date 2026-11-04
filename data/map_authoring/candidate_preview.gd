@@ -6,6 +6,7 @@ const Store = preload("res://scripts/map_authoring/patrol/patrol_store.gd")
 const Preview = preload("res://scripts/map_authoring/patrol/patrol_preview.gd")
 const Canvas = preload("res://scripts/map_authoring/patrol/patrol_canvas.gd")
 const Release = preload("res://scripts/map_authoring/release/map_release.gd")
+const PhaseProbe = preload("res://tools/map_editor_release/phase_release_probe.gd")
 var host: PlayerActor
 var actors: Array[EnemyActor] = []
 var canvas: Control
@@ -15,6 +16,9 @@ var package_id := ""
 var release_entry: Dictionary = {}
 var paused := false
 func _ready() -> void:
+	if "--m8-phase" in OS.get_cmdline_user_args():
+		get_tree().root.add_child.call_deferred(PhaseProbe.new())
+		queue_free(); return
 	for argument: String in OS.get_cmdline_user_args():
 		if argument.begins_with("--m8-package="): package_id = argument.trim_prefix("--m8-package=")
 	var loaded := Release.load_package(package_id) if not package_id.is_empty() else Store.load_package("res://data/map_authoring/representative.rpp")

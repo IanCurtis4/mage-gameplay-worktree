@@ -91,7 +91,14 @@ static func entry(package_id: String, listing: Dictionary = {}, folder: String =
 static func load_package(package_id: String, listing: Dictionary = {}, folder: String = FOLDER) -> Dictionary:
 	var found := entry(package_id,listing,folder)
 	if not found.ok: return found
-	var pinned: Dictionary = found.entry
+	return load_reference(found.entry,folder)
+
+## A running phase pins an immutable revision, independently of later registry
+## updates. Source files are never needed to draw or resume that revision.
+static func load_reference(reference: Dictionary, folder: String = FOLDER) -> Dictionary:
+	if not valid_entry(reference,folder): return fail("release_entry_invalid")
+	var pinned: Dictionary = reference.duplicate(true)
+	var package_id: String = pinned.package_id
 	var loaded := Store.load_package(pinned.path)
 	if not loaded.ok: return fail("release_package_invalid",package_id)
 	var package: Dictionary = loaded.package

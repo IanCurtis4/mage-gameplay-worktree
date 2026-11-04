@@ -75,7 +75,7 @@ func _ready() -> void:
 	overlay.toggled.connect(func(enabled: bool) -> void: canvas.wire_overlay = enabled; canvas.queue_redraw())
 	var settings := HFlowContainer.new(); add_child(settings)
 	radius = _number(settings,"Raio",1,512,48)
-	strength = _number(settings,"Força",0,128,8)
+	strength = _number(settings,"Força por segundo (exceto rampa)",0,128,8)
 	hardness = _number(settings,"Dureza",0,1,0.5,0.05)
 	target = _number(settings,"Altura inicial",-512,512,0)
 	end_height = _number(settings,"Final",-512,512,40)
@@ -113,6 +113,7 @@ func _ready() -> void:
 	_button(grid,"Nova grade",add_grid)
 	canvas = Canvas.new(); add_child(canvas)
 	canvas.stroke_finished.connect(apply_stroke)
+	canvas.temporal_finished.connect(_apply_temporal)
 	canvas.status.connect(func(message: String) -> void: status.text = message)
 	var bridge := HFlowContainer.new(); add_child(bridge)
 	bridge_x = _number(bridge,"Ponte X",-8192,8192,0)
@@ -290,6 +291,18 @@ func ax_command(id: String, parameters: Dictionary) -> Dictionary:
 		if not Preferences._keys(parameters,["name","options"]) or not parameters.name is String or not parameters.options is Dictionary: return {"ok":false,"code":"arguments_invalid"}
 		return save_named_preset(parameters.name,parameters.options)
 	return {"ok":false,"code":"action_missing"}
+
+func _apply_temporal(proposal: Dictionary) -> void:
+	if not proposal.ok:
+		status.text = "O traço não pôde ser aplicado. Confira a camada e os parâmetros."
+		return
+	if proposal.changed <= 0: return
+	var followed: Array = proposal.followed_sockets
+	var applied: Dictionary = session.apply(proposal.data)
+	if not applied.ok:
+		status.text = "O traço não pôde ser aplicado. Confira a camada e os parâmetros."
+		canvas.redraw_terrain()
+	elif not followed.is_empty(): status.text = "Marcadores que acompanharam o relevo: "+", ".join(followed)+"."
 
 func apply_stroke(points: Array, options: Dictionary) -> Dictionary:
 	var proposal := Brush.stroke(session.document().to_data(),selected_layer,points,options)

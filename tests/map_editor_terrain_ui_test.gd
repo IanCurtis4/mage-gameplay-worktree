@@ -49,12 +49,18 @@ func _run() -> void:
 	panel.radius.value = 80.0; panel.strength.value = 4.0
 	var press := InputEventMouseButton.new(); press.button_index = MOUSE_BUTTON_LEFT; press.pressed = true; press.position = at
 	canvas._gui_input(press)
+	for _i: int in 120:
+		await get_tree().process_frame
+		if not canvas._preview.is_empty() or not canvas._dragging: break
 	check("stroke_preview_without_source_mutation",canvas._dragging and not canvas._preview.is_empty() and shell.session.document().semantic_hash() == before)
 	canvas.cancel_stroke()
 	check("cancel_preserves_source",shell.session.document().semantic_hash() == before and not canvas._dragging)
 	canvas._gui_input(press)
 	var release := InputEventMouseButton.new(); release.button_index = MOUSE_BUTTON_LEFT; release.position = at
 	canvas._gui_input(release)
+	for _i: int in 120:
+		await get_tree().process_frame
+		if not canvas._dragging: break
 	check("release_applies_one_action",shell.session.document().semantic_hash() != before)
 	shell.session.undo()
 	check("one_undo_restores_whole_stroke",shell.session.document().semantic_hash() == before)
@@ -124,9 +130,9 @@ func _run() -> void:
 	for _i: int in 3: await get_tree().process_frame
 	canvas.fit()
 	check("native_large_piece_not_subdivided_into_pieces",shell.session.document().to_data().layers.size() == 1 and shell.session.document().to_data().layers[0].heights.size() == 4225)
-	# Checkpoint49 (P6d): one textured mesh per partition region plus the exposed side faces (F9-02).
+	# Q5: bounded visual chunks allow local brush redraws, preserving every sample.
 	var large_layer: Dictionary = shell.session.document().to_data().layers[0]
-	var expected_meshes: int = Partition.build(large_layer).size()+canvas._shape.get("exposed_sides",[]).size()+canvas._shape.get("visuals",[]).filter(func(visual: Dictionary) -> bool: return visual.special).size()
+	var expected_meshes: int = ceili(float(large_layer.columns-1)/16.0)*ceili(float(large_layer.rows-1)/16.0)+canvas._shape.get("exposed_sides",[]).size()+canvas._shape.get("visuals",[]).filter(func(visual: Dictionary) -> bool: return visual.special).size()
 	check("native_textured_meshes",canvas._mesh_root.get_child_count() == expected_meshes and canvas._mesh_root.get_children().all(func(node: Node) -> bool: return node is MeshInstance2D and node.material is ShaderMaterial))
 	var grass_texture: Texture2D = canvas._mesh_root.get_child(0).material.get_shader_parameter("grass_tile")
 	check("native_mipmaps_for_zoomed_out_terrain",grass_texture.get_image().has_mipmaps())

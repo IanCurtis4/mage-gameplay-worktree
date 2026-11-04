@@ -42,9 +42,10 @@ function Invoke-M8([string]$Name,[string[]]$Arguments,[string]$Marker='',[int]$E
     $m8Process=[Diagnostics.Process]::new(); $m8Process.StartInfo=$m8Info
     $m8Start=[DateTime]::UtcNow.ToString('o'); [void]$m8Process.Start()
     $m8Out=$m8Process.StandardOutput.ReadToEndAsync(); $m8Err=$m8Process.StandardError.ReadToEndAsync()
-    $m8Watch=[Diagnostics.Stopwatch]::StartNew(); $m8Timeout=$false; $m8Aborted=$false
+    $m8Watch=[Diagnostics.Stopwatch]::StartNew(); $m8Timeout=$false; $m8Aborted=$false; $m8PeakMemory=0L
     while(-not $m8Process.WaitForExit(500)){
-        if($m8Watch.ElapsedMilliseconds -gt 300000){$m8Timeout=$true; break}
+        try{$m8Process.Refresh();$m8PeakMemory=[Math]::Max($m8PeakMemory,$m8Process.PeakWorkingSet64)}catch [InvalidOperationException]{}
+        if($m8Watch.ElapsedMilliseconds -gt $(if($Name -eq 'release_forest'){900000}else{300000})){$m8Timeout=$true; break}
         try{
             $m8Live=Get-Content -LiteralPath (Join-Path $m8Evidence ($Name+'.engine.log')) -Raw -ErrorAction SilentlyContinue
             if($m8Live -match 'SCRIPT ERROR:|Parse Error:|ERROR:'){$m8Aborted=$true; break}
@@ -61,10 +62,10 @@ function Invoke-M8([string]$Name,[string[]]$Arguments,[string]$Marker='',[int]$E
         $m8Match=[regex]::Match($m8Text,'(?m)^'+$Marker+' (.+)$')
         if($m8Match.Success){$m8Payload=ConvertFrom-Json $m8Match.Groups[1].Value}
         $m8Pass=$m8Pass -and $null -ne $m8Payload -and $m8Payload.ok -and $m8Payload.count -gt 0 -and @($m8Payload.checks|Where-Object {-not $_.ok}).Count -eq 0
-        $m8Expected=@{candidate=53;document=70;terrain=102;composition=63;population=91;patrol=58;generation=89;exchange=113;native_ui=49;release=6;release_bosque=8}
+        $m8Expected=@{candidate=53;document=70;terrain=102;composition=63;population=91;patrol=60;generation=89;exchange=113;native_ui=49;release=6;release_bosque=8;release_forest=14}
         if($m8Expected.ContainsKey($Name)){$m8Pass=$m8Pass -and $m8Payload.count -eq $m8Expected[$Name] -and @($m8Payload.checks).Count -eq $m8Expected[$Name]}
     }
-    $m8Runs.Add(@{name=$Name;ok=$m8Pass;arguments=$Arguments;started_utc=$m8Start;finished_utc=[DateTime]::UtcNow.ToString('o');exit_code=$m8Process.ExitCode;timed_out=$m8Timeout;aborted=$m8Aborted;output_sha256=(Get-FileHash -LiteralPath $m8Log).Hash;result=$m8Payload})
+    $m8Runs.Add(@{name=$Name;ok=$m8Pass;arguments=$Arguments;started_utc=$m8Start;finished_utc=[DateTime]::UtcNow.ToString('o');exit_code=$m8Process.ExitCode;timed_out=$m8Timeout;aborted=$m8Aborted;sampled_peak_working_set_bytes=$m8PeakMemory;output_sha256=(Get-FileHash -LiteralPath $m8Log).Hash;result=$m8Payload})
     [IO.File]::WriteAllText((Join-Path $m8Evidence 'runs.json'),(ConvertTo-Json -InputObject @($m8Runs.ToArray()) -Depth 30))
     $m8Process.Dispose(); Write-Output ($Name+': '+$m8Pass)
     if(-not $m8Pass){Write-Output $m8Text; throw ('M8 failed: '+$Name)}
@@ -86,11 +87,12 @@ if($Stage -in @('Native','All')) {
     Invoke-M8 'native_ui' @('--editor','--rendering-method','gl_compatibility') 'M8_UI_RESULT'
 }
 if($Stage -in @('Release','All')) {
+    try{
     $m8ReleaseRoot=Join-Path $m8Root '.godot/m8_release'; [void](New-Item -ItemType Directory -Force -Path $m8ReleaseRoot)
     $m8Exe=Join-Path $m8ReleaseRoot 'RagRPG-Map-Candidate.exe'
     $m8Template='C:/Users/João Pedro/AppData/Roaming/Godot/export_templates/4.7.2.stable/windows_release_x86_64.exe'
     if(-not (Test-Path -LiteralPath $m8Template)){throw 'Windows release template missing.'}
-    $m8Preset=(Get-Content -LiteralPath (Join-Path $m8Root 'export_presets.cfg') -Raw).Replace('custom_template/release=""',('custom_template/release="'+$m8Template+'"')).Replace('exclude_filter=""','exclude_filter="addons/godot-git-plugin/*"').Replace('include_filter=""','include_filter="data/map_authoring/*.json,data/map_authoring/*.rpp,data/expedition/policies/*.json,scripts/core/expedition/snapshot/runtime_manifest.json"')
+    $m8Preset=(Get-Content -LiteralPath (Join-Path $m8Root 'export_presets.cfg') -Raw).Replace('custom_template/release=""',('custom_template/release="'+$m8Template+'"')).Replace('exclude_filter=""','exclude_filter="addons/godot-git-plugin/*"').Replace('include_filter=""','include_filter="data/map_authoring/*.json,data/map_authoring/*.rpp,data/expedition/phases/*.json,data/expedition/policies/*.json,scripts/core/expedition/snapshot/runtime_manifest.json"')
     [IO.File]::WriteAllText((Join-Path $m8Fixture 'export_presets.cfg'),$m8Preset)
     $m8ReleaseProject=$m8Project.Replace('run/main_scene="res://scenes/character_menu.tscn"','run/main_scene="res://data/map_authoring/candidate_preview.tscn"')+"`n[editor_plugins]`nenabled=PackedStringArray(`"res://addons/ragrpg_map_editor/plugin.cfg`")"
     [IO.File]::WriteAllText((Join-Path $m8Fixture 'project.godot'),$m8ReleaseProject)
@@ -104,9 +106,23 @@ if($Stage -in @('Release','All')) {
     [void](New-Item -ItemType Directory -Path $m8CleanApp); [void](New-Item -ItemType Directory -Path $m8CleanProfile)
     Copy-Item -LiteralPath $m8Exe -Destination $m8CleanApp; Copy-Item -LiteralPath ([IO.Path]::ChangeExtension($m8Exe,'.pck')) -Destination $m8CleanApp
     $m8CleanFiles=@()
-    try{Invoke-M8 'release_bosque' @('--','--m8-probe','--m8-package=sanctuary_woods') 'M8_RELEASE_RESULT' 0 (Join-Path $m8CleanApp (Split-Path -Leaf $m8Exe)) -Standalone -ProfileDirectory $m8CleanProfile}
-    finally{$m8CleanFiles=@(Get-ChildItem -LiteralPath $m8Clean -Recurse -File|ForEach-Object {[IO.Path]::GetRelativePath($m8Clean,$_.FullName).Replace('\','/')}); Remove-Item -LiteralPath $m8Clean -Recurse -Force}
-    @{template=$m8Template;template_sha256=(Get-FileHash -LiteralPath $m8Template).Hash;exe_sha256=(Get-FileHash -LiteralPath $m8Exe).Hash;pck_sha256=(Get-FileHash -LiteralPath ([IO.Path]::ChangeExtension($m8Exe,'.pck'))).Hash;project_sha256=(Get-FileHash -LiteralPath (Join-Path $m8Fixture 'project.godot')).Hash;bosque_package_sha256=(Get-FileHash -LiteralPath (Join-Path $m8Root 'data/map_authoring/sanctuary_woods.rpp')).Hash;registry_sha256=(Get-FileHash -LiteralPath (Join-Path $m8Root 'data/map_authoring/release_packages.json')).Hash;clean_install_files_after_run=$m8CleanFiles;preset_sha256=(Get-FileHash -LiteralPath (Join-Path $m8Fixture 'export_presets.cfg')).Hash}|ConvertTo-Json|Set-Content -LiteralPath (Join-Path $m8Evidence 'release_manifest.json') -Encoding utf8
+    try{
+        Invoke-M8 'release_bosque' @('--','--m8-probe','--m8-package=sanctuary_woods') 'M8_RELEASE_RESULT' 0 (Join-Path $m8CleanApp (Split-Path -Leaf $m8Exe)) -Standalone -ProfileDirectory $m8CleanProfile
+        Invoke-M8 'release_forest' @('--','--m8-phase') 'M8_PHASE_RELEASE_RESULT' 0 (Join-Path $m8CleanApp (Split-Path -Leaf $m8Exe)) -Standalone -ProfileDirectory $m8CleanProfile
+    }finally{
+        $m8ResolvedClean=[IO.Path]::GetFullPath((Resolve-Path -LiteralPath $m8Clean).Path)
+        $m8TempRoot=[IO.Path]::GetFullPath([IO.Path]::GetTempPath())
+        if(-not $m8ResolvedClean.StartsWith($m8TempRoot,[StringComparison]::OrdinalIgnoreCase) -or -not (Split-Path -Leaf $m8ResolvedClean).StartsWith('ragrpg_release_')){throw 'Unsafe release cleanup path.'}
+        $m8CleanFiles=@(Get-ChildItem -LiteralPath $m8ResolvedClean -Recurse -File|ForEach-Object {[IO.Path]::GetRelativePath($m8ResolvedClean,$_.FullName).Replace('\','/')})
+        Remove-Item -LiteralPath $m8ResolvedClean -Recurse -Force
+    }
+    $m8Published=Get-Content -LiteralPath (Join-Path $m8Root 'data/map_authoring/release_packages.json') -Raw | ConvertFrom-Json
+    $m8BosqueEntry=$m8Published.packages | Where-Object package_id -eq 'sanctuary_woods'
+    $m8BosquePath=Join-Path $m8Root $m8BosqueEntry.path.Substring(6)
+    @{template=$m8Template;template_sha256=(Get-FileHash -LiteralPath $m8Template).Hash;exe_sha256=(Get-FileHash -LiteralPath $m8Exe).Hash;pck_sha256=(Get-FileHash -LiteralPath ([IO.Path]::ChangeExtension($m8Exe,'.pck'))).Hash;project_sha256=(Get-FileHash -LiteralPath (Join-Path $m8Fixture 'project.godot')).Hash;bosque_package_sha256=(Get-FileHash -LiteralPath $m8BosquePath).Hash;forest_phase_sha256=(Get-FileHash -LiteralPath (Join-Path $m8Root 'data/expedition/phases/forest_sanctuary.json')).Hash;registry_sha256=(Get-FileHash -LiteralPath (Join-Path $m8Root 'data/map_authoring/release_packages.json')).Hash;clean_install_files_after_run=$m8CleanFiles;preset_sha256=(Get-FileHash -LiteralPath (Join-Path $m8Fixture 'export_presets.cfg')).Hash}|ConvertTo-Json|Set-Content -LiteralPath (Join-Path $m8Evidence 'release_manifest.json') -Encoding utf8
+    }finally{
+        [IO.File]::WriteAllText((Join-Path $m8Fixture 'project.godot'),$m8Project)
+    }
 }
 $m8Inputs=@()
 foreach($m8Dir in @('scripts','scenes','resources','content','data','assets','addons/ragrpg_map_editor','tests','tools')) {

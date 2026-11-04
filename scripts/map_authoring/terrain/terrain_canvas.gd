@@ -12,6 +12,7 @@ const Objects = preload("res://scripts/map_authoring/objects/object_view.gd")
 const ViewportTools = preload("res://scripts/map_authoring/preview/viewport_tools.gd")
 const Grid = preload("res://scripts/map_authoring/compiler/grid_piece.gd")
 signal stroke_finished(points: Array, options: Dictionary)
+signal temporal_finished(proposal: Dictionary)
 signal cancelled
 signal object_pressed(hit: Dictionary)
 signal status(message: String)
@@ -36,6 +37,12 @@ var _preview: Dictionary = {}
 var _points: Array = []
 var _active_options: Dictionary = {}
 var _dragging := false
+var _temporal: Dictionary = {}
+var _release_pending := false
+var _intent_position := Vector2.ZERO
+var _start_position := Vector2.ZERO
+var _temporal_accumulator := 0.0
+const BRUSH_TICK := 1.0 / 30.0
 var _scale := 1.0
 var _pan := Vector2.ZERO
 var _origin := Vector2.ZERO
@@ -45,6 +52,10 @@ var _mesh_root: Node2D
 var _overlay: Node2D
 var _height_bounds: Dictionary = {}
 var _shape: Dictionary = {}
+var _terrain_meshes: Array[Dictionary] = []
+var _saved_meshes: Dictionary = {}
+var _dirty_regions: Array[Rect2i] = []
+const PREVIEW_CHUNK := 16
 ## F10 Q1: pointer events only record points; the preview follows at the pace the
 ## machine can draw it, so a slow redraw never holds the pointer back.
 const PREVIEW_MIN_MSEC := 66
@@ -144,7 +155,8 @@ static func preview_supported(data: Dictionary) -> bool:
 func pick(at: Vector2) -> Dictionary:
 	if not preview_supported(source): return {"ok":false}
 	var result := {"ok":false}; var highest := -INF
-	for layer: Dictionary in source.layers:
+	var data := _preview if not _preview.is_empty() else source
+	for layer: Dictionary in data.layers:
 		if layer.layer_id != selected_layer or layer.layer_id in hidden_layers or not _height_bounds.has(layer.layer_id): continue
 		var ray := WorldProjection.ray((at-_origin-_pan)/_scale)
 		var low: Vector3 = ray.origin+ray.direction*((_height_bounds[layer.layer_id].x-ray.origin.y)/ray.direction.y)
@@ -173,6 +185,7 @@ func redraw_terrain() -> void:
 	_navigation_revision += 1
 	if not is_instance_valid(_mesh_root): return
 	for child: Node in _mesh_root.get_children(): child.free()
+	_terrain_meshes.clear(); _saved_meshes.clear(); _dirty_regions.clear()
 	_height_bounds.clear()
 	var data := _preview if not _preview.is_empty() else source
 	if data.is_empty() or not preview_supported(data): queue_redraw(); return
@@ -189,8 +202,7 @@ func redraw_terrain() -> void:
 		if layer.layer_id in hidden_layers or layer.heights.is_empty() or int(layer.columns) < 2 or int(layer.rows) < 2 or layer.sample_spacing <= 0 or layer.heights.size() != int(layer.columns)*int(layer.rows): continue
 		_height_bounds[layer.layer_id] = Vector2(layer.heights.min(),layer.heights.max())
 		var gridded := Grid.layer_is_grid(layer)
-		var regions := Grid.regions(layer) if gridded else Partition.build(layer)
-		if not gridded and regions.size() > 1024: regions = [{}] # Invalid complex drafts remain visible; bake reports its logical budget.
+		var regions := Grid.regions(layer) if gridded else _preview_regions(layer)
 		for region: Dictionary in regions:
 			var mesh := MeshInstance2D.new()
 			mesh.mesh = TerrainMaterial.mesh(layer,region)
@@ -201,6 +213,7 @@ func redraw_terrain() -> void:
 			var width: int = region.get("width",int(layer.columns)-1); var height: int = region.get("height",int(layer.rows)-1)
 			mesh.z_index = Objects.depth_order((Partition.point(layer,x,z).y+Partition.point(layer,x+width,z+height).y)*0.5,depth_domain)
 			_mesh_root.add_child(mesh)
+			_terrain_meshes.append({"layer_id":layer.layer_id,"region":region,"node":mesh,"gridded":gridded})
 	var shadow_index := {}
 	_shape = _grid_preview(data) if Grid.uses_grid(data) else Terrain.preview_geometry(data)
 	if _shape.get("stretches",{}).has("cells") and not _object_records.is_empty(): shadow_index = GroundShadow.index_from_stretches(_shape.stretches)
@@ -227,6 +240,39 @@ func redraw_terrain() -> void:
 	var ordered := CanvasOrder.apply(_mesh_root)
 	if not ordered.ok: status.emit("A prévia precisa de revisão na ordem de desenho: "+str(ordered.code))
 	queue_redraw()
+
+## Stable chunks keep a drag local even for one large exact-plane region.
+func _preview_regions(layer: Dictionary) -> Array:
+	var regions: Array = []
+	for z: int in range(0,int(layer.rows)-1,PREVIEW_CHUNK):
+		for x: int in range(0,int(layer.columns)-1,PREVIEW_CHUNK):
+			regions.append({"x":x,"z":z,"width":mini(PREVIEW_CHUNK,int(layer.columns)-1-x),"height":mini(PREVIEW_CHUNK,int(layer.rows)-1-z),"triangles":true})
+	return regions
+
+func _redraw_dirty() -> void:
+	if _dirty_regions.is_empty() or _temporal.is_empty(): return
+	var layer: Dictionary = _temporal.layer
+	for record: Dictionary in _terrain_meshes:
+		if record.layer_id != selected_layer: continue
+		var region: Dictionary = record.region
+		# One sample halo updates normal vectors on neighbouring meshes too.
+		var area := Rect2i(int(region.x)-1,int(region.z)-1,int(region.width)+3,int(region.height)+3)
+		var intersects := false
+		for dirty: Rect2i in _dirty_regions:
+			if area.intersects(dirty): intersects = true; break
+		if not intersects: continue
+		var node: MeshInstance2D = record.node
+		if not _saved_meshes.has(node): _saved_meshes[node] = node.mesh
+		node.mesh = TerrainMaterial.mesh(layer,region)
+	_dirty_regions.clear()
+
+func _restore_preview_meshes() -> void:
+	for node: Variant in _saved_meshes:
+		if is_instance_valid(node): node.mesh = _saved_meshes[node]
+	_saved_meshes.clear(); _dirty_regions.clear()
+	for layer: Dictionary in source.get("layers",[]):
+		if layer.layer_id == selected_layer and not layer.heights.is_empty():
+			_height_bounds[selected_layer] = Vector2(layer.heights.min(),layer.heights.max())
 
 ## F10 H5: the preview of a height-grid piece: its outline sides (no planar
 ## visuals; the stretches are drawn above). Hidden layers draw nothing.
@@ -327,8 +373,10 @@ func _stroke_screen(point: Vector2) -> Vector2:
 func cancel_stroke() -> void:
 	var redraw := not _preview.is_empty()
 	if _dragging: cancelled.emit()
-	_dragging = false; _points.clear(); _preview = {}; _preview_pending = false; queue_redraw()
-	if redraw and is_instance_valid(_mesh_root): redraw_terrain()
+	_dragging = false; _points.clear(); _preview = {}; _temporal = {}; _release_pending = false; _preview_pending = false; queue_redraw()
+	if redraw and is_instance_valid(_mesh_root):
+		if _active_options.get("mode") == "ramp": redraw_terrain()
+		else: _restore_preview_meshes()
 
 func _gui_input(event: InputEvent) -> void:
 	if navigation_input(event): accept_event(); return
@@ -350,27 +398,18 @@ func _gui_input(event: InputEvent) -> void:
 			accept_event(); return
 		if event.pressed:
 			grab_focus()
-			var hit := pick(event.position)
-			if not hit.ok: return
-			_dragging = true; _points = [hit.point]; _active_options = options.duplicate(true)
-			_update_preview()
+			_dragging = true; _points.clear(); _active_options = options.duplicate(true)
+			_intent_position = event.position; _start_position = event.position; _temporal = {}; _release_pending = false; _temporal_accumulator = BRUSH_TICK
 		else:
 			if not _dragging: return
 			if not Rect2(Vector2.ZERO,size).has_point(event.position): cancel_stroke(); return
-			var points := _points.duplicate(); var active := _active_options.duplicate(true)
-			if active.get("mode") == "ramp" and points.size() > 1: points = [points[0],points[-1]]
-			_dragging = false; _points.clear(); _preview = {}; _preview_pending = false
-			stroke_finished.emit(points,active); queue_redraw()
+			_intent_position = event.position; _release_pending = true
 		accept_event()
 	if event is InputEventMouseMotion:
 		_cursor = event.position
 		if event.button_mask & MOUSE_BUTTON_MASK_MIDDLE:
 			_pan += event.relative; queue_redraw(); accept_event(); return
-		if _dragging:
-			var hit := pick(event.position)
-			if hit.ok and _points[-1].distance_to(hit.point) > 0.01:
-				if _points.size() >= 4096: cancel_stroke(); return
-				_points.append(hit.point); _preview_pending = true
+		if _dragging: _intent_position = event.position
 		queue_redraw()
 
 func camera_state() -> Dictionary: return {"scale":_scale,"offset":_origin+_pan,"size":size}
@@ -410,21 +449,66 @@ func inspection_pick(at: Vector2) -> Dictionary:
 	if not inspection_surface.is_empty(): return ViewportTools.pick_support(world,inspection_surface,ray)
 	return world.resolve_surface(ray.origin,ray.direction,ids,world.geometry_revision)
 
-func _process(_delta: float) -> void:
-	if not _preview_pending or Time.get_ticks_msec() < _preview_due_msec: return
-	_preview_pending = false
-	_update_preview()
+func _process(delta: float) -> void:
+	if not _dragging: return
+	_temporal_accumulator = minf(_temporal_accumulator + delta, BRUSH_TICK * 2.0)
+	if _temporal_accumulator < BRUSH_TICK: return
+	_temporal_accumulator -= BRUSH_TICK
+	var hit := pick(_intent_position)
+	if not hit.ok:
+		if _release_pending: cancel_stroke()
+		return
+	if _active_options.get("mode") == "ramp":
+		if _points.is_empty():
+			var start := pick(_start_position)
+			if not start.ok: cancel_stroke(); return
+			_points = [start.point,hit.point]
+		elif _points.size() == 1: _points.append(hit.point)
+		else: _points[1] = hit.point
+		if _release_pending: _finish_stroke(); return
+		if _points.size() == 2 and _points[0].distance_to(_points[1]) >= 0.00001 and Time.get_ticks_msec() >= _preview_due_msec: _update_preview()
+		return
+	if _temporal.is_empty():
+		_temporal = Brush.temporal_begin(source,selected_layer,_active_options,hit.point)
+		if not _temporal.ok:
+			status.emit("Destrave a camada para editar." if _temporal.code == "layer_locked" else "Não foi possível iniciar o pincel.")
+			cancel_stroke(); return
+	var previous: Vector2 = _temporal.last_point
+	var max_distance := float(_active_options.get("radius",32.0))*2.0
+	var point: Vector2 = previous.move_toward(hit.point,max_distance)
+	var applied := Brush.temporal_sample(_temporal,point,BRUSH_TICK)
+	if not applied.ok: cancel_stroke(); return
+	_preview = _temporal.data
+	if applied.changed > 0:
+		_dirty_regions.append(applied.bounds)
+		# Pick the live surface under the pointer, including relief raised since
+		# press. Expand the ray domain using only the bounded changed samples.
+		var bounds: Rect2i = applied.bounds
+		var domain: Vector2 = _height_bounds[selected_layer]
+		for z: int in range(bounds.position.y,bounds.end.y):
+			for x: int in range(bounds.position.x,bounds.end.x):
+				var height: float = _temporal.layer.heights[z*int(_temporal.layer.columns)+x]
+				domain.x = minf(domain.x,height); domain.y = maxf(domain.y,height)
+		_height_bounds[selected_layer] = domain
+	if _release_pending and point.distance_to(hit.point) <= 0.00001: _finish_stroke(); return
+	if Time.get_ticks_msec() >= _preview_due_msec:
+		var started := Time.get_ticks_msec()
+		_redraw_dirty()
+		_preview_due_msec = Time.get_ticks_msec()+maxi(PREVIEW_MIN_MSEC,Time.get_ticks_msec()-started)
+
+func _finish_stroke() -> void:
+	var points := _points.duplicate(); var active := _active_options.duplicate(true)
+	var finished := Brush.temporal_finish(_temporal) if not _temporal.is_empty() else {}
+	_restore_preview_meshes()
+	_dragging = false; _points.clear(); _preview = {}; _temporal = {}; _release_pending = false
+	if active.get("mode") == "ramp":
+		if points.size() == 2: stroke_finished.emit(points,active)
+	elif not finished.is_empty(): temporal_finished.emit(finished)
+	if is_instance_valid(_mesh_root) and active.get("mode") == "ramp": redraw_terrain()
+	queue_redraw()
 
 func _update_preview() -> void:
 	var started := Time.get_ticks_msec()
-	_build_preview()
-	# A preview that takes 300 ms gets the same again of free frames.
-	_preview_due_msec = Time.get_ticks_msec()+maxi(PREVIEW_MIN_MSEC,Time.get_ticks_msec()-started)
-
-func _build_preview() -> void:
-	var points := _points
-	if _active_options.get("mode") == "ramp":
-		if points.size() < 2: return
-		points = [points[0],points[-1]]
-	var proposal := Brush.stroke(source,selected_layer,points,_active_options,true)
+	var proposal := Brush.stroke(source,selected_layer,_points,_active_options,true)
 	if proposal.ok: _preview = proposal.data; redraw_terrain()
+	_preview_due_msec = Time.get_ticks_msec()+maxi(PREVIEW_MIN_MSEC,Time.get_ticks_msec()-started)

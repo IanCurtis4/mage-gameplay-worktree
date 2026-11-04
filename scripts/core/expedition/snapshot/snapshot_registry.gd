@@ -879,9 +879,24 @@ func install(restored: Dictionary, parent: Node) -> Dictionary:
 		root._create_runtime_camera()
 		root._build_ui()
 		if restored["snapshot"]["world_view"]:
-			var view := ExpeditionGeometryView.new()
+			var view: ExpeditionGeometryView
+			var authored_package := {}
+			if root.campaign_runtime != null:
+				var state: ExpeditionCampaignState = root.campaign_runtime.state
+				var presentations: Variant = state.manifest_data["input"].get("authored_presentations",{})
+				if not presentations is Dictionary: return _abort_install(root,StableEntityRegistry.failure(&"invalid_payload","authored presentations"))
+				if state.manifest_data["input"].has("authored_presentations") and not presentations.has(state.current_stage_id): return _abort_install(root,StableEntityRegistry.failure(&"content_revision_unavailable","missing stage presentation"))
+				if presentations.has(state.current_stage_id):
+					var pin: Variant = presentations[state.current_stage_id]
+					if not pin is Dictionary: return _abort_install(root,StableEntityRegistry.failure(&"invalid_payload","authored presentation"))
+					var release_api: Script = load("res://scripts/map_authoring/release/map_release.gd")
+					var published: Dictionary = release_api.load_reference(pin)
+					if not published.ok: return _abort_install(root,StableEntityRegistry.failure(&"content_revision_unavailable",str(published.get("code",""))))
+					authored_package = published.package.population_package.map_package
+			if authored_package.is_empty(): view = ExpeditionGeometryView.new()
+			else: view = (load("res://scripts/world/authored_expedition_view.gd") as Script).new()
 			root.add_child(view)
-			var configured := view.configure(root.player.world_motion.geometry)
+			var configured: Dictionary = view.configure(root.player.world_motion.geometry) if authored_package.is_empty() else view.call("configure_package",authored_package,root.player.world_motion.geometry)
 			if not configured["ok"]: return _abort_install(root,configured)
 			var attached: Dictionary = root.attach_expedition_view(view,root.expedition_field_height)
 			if not attached["ok"]: return _abort_install(root,attached)

@@ -9,7 +9,7 @@ const MapRelease = preload("res://scripts/map_authoring/release/map_release.gd")
 const StrictJSON = preload("res://scripts/map_authoring/io/strict_json.gd")
 const Canonical = preload("res://scripts/core/expedition/generation/canonical.gd")
 const FOLDER := "res://data/expedition/phases"
-const REVISION := "authored_phase_v1"
+const REVISION := "authored_phase_v2"
 const MAX_MAPS := 8
 const STAGE_KEYS := ["stage_id","from_stage","to_stage"]
 
@@ -118,6 +118,11 @@ static func compose(phase: Dictionary, prepared: Array) -> Dictionary:
 	root.input.erase("preview_candidate_hash")
 	var phase_hash := Canonical.digest([REVISION,phase,hashes])
 	root.input["phase_hash"] = phase_hash
+	var presentations := {}
+	for index: int in maps.size():
+		if not prepared[index].get("release") is Dictionary or not MapRelease.valid_entry(prepared[index].release): return fail("phase_invalid",phase.maps[index].package_id)
+		presentations[maps[index].stage_id] = prepared[index].release.duplicate(true)
+	root.input["authored_presentations"] = presentations
 	var manifest := ExpeditionManifest.new(); manifest._data = root
 	return {"ok":true,"manifest":manifest,"rules":rules,"phase_hash":phase_hash,"entry":maps[0].entry.duplicate(true),"stages":stages.map(func(stage: Dictionary) -> String: return stage.stage_id)}
 

@@ -35,6 +35,58 @@ static func stroke(source: Dictionary, layer_id: String, points: Array, options:
 		if material not in Materials.IDS: return Schema.result(false, "material_unsupported")
 		for id: String in selected.material_masks:
 			if id not in Materials.IDS: return Schema.result(false, "material_unsupported")
+	var applied := _kernel(data, selected, points, options)
+	if not applied.ok: return applied
+	var changed: int = applied.changed
+	var output := Schema.result(true)
+	if not preview_only and mode != "material": output.followed_sockets = _follow_relief(data,selected,original)
+	output.data = data; output.changed = changed; output.input_hash = read.output_hash
+	output.output_hash = "" if preview_only else Schema.semantic_hash(data)
+	return output
+
+## A temporal session owns an isolated copy. Each sample is explicit and bounded;
+## replay the same ordered samples to reproduce the result.
+static func temporal_begin(source: Dictionary, layer_id: String, options: Dictionary, point: Vector2) -> Dictionary:
+	var check_options := options.duplicate(true)
+	var rate: float = options.get("strength",8.0)
+	if not is_finite(rate) or rate < 0.0: return Schema.result(false, "brush_invalid")
+	if check_options.get("mode") == "ramp": return Schema.result(false, "brush_invalid")
+	check_options.strength = 0.0
+	var check := stroke(source, layer_id, [point], check_options, true)
+	if not check.ok: return check
+	var layer: Dictionary = {}
+	for candidate: Dictionary in check.data.layers:
+		if candidate.layer_id == layer_id: layer = candidate
+	return {"ok":true,"data":check.data,"layer":layer,"original":layer.heights.duplicate(),"options":options.duplicate(true),"changed":0,"last_point":point}
+
+static func temporal_sample(session: Dictionary, point: Vector2, seconds: float) -> Dictionary:
+	if not session.get("ok",false) or not point.is_finite() or not is_finite(seconds) or seconds <= 0.0 or seconds > 0.1: return Schema.result(false, "brush_invalid")
+	var previous: Vector2 = session.last_point
+	var max_distance := float(session.options.get("radius",32.0))*2.0
+	if previous.distance_to(point) > max_distance + 0.00001: return Schema.result(false, "brush_limit_exceeded")
+	var options: Dictionary = session.options.duplicate()
+	options.strength = float(options.get("strength",8.0))*seconds
+	var points := [point] if previous == point else [previous,point]
+	var applied := _kernel(session.data,session.layer,points,options)
+	if applied.ok:
+		session.changed += applied.changed
+		session.last_point = point
+	return applied
+
+static func temporal_finish(session: Dictionary) -> Dictionary:
+	if not session.get("ok",false): return Schema.result(false, "brush_invalid")
+	var followed := _follow_relief(session.data,session.layer,session.original) if session.options.get("mode") != "material" else []
+	if not Schema.validate(session.data).is_empty(): return Schema.result(false, "source_invalid")
+	return {"ok":true,"data":session.data,"changed":session.changed,"followed_sockets":followed}
+
+static func _kernel(data: Dictionary, selected: Dictionary, points: Array, options: Dictionary) -> Dictionary:
+	var mode: String = options.get("mode", "raise")
+	var radius: float = options.get("radius", 32.0)
+	var strength: float = options.get("strength", 8.0)
+	var hardness: float = options.get("hardness", 0.5)
+	var target: float = options.get("target", 0.0)
+	var end_height: float = options.get("end_height", target)
+	var material: String = options.get("material", "earth")
 	var changed := 0
 	var bounds := Rect2(points[0],Vector2.ZERO)
 	for point: Vector2 in points: bounds = bounds.expand(point)
@@ -44,6 +96,11 @@ static func stroke(source: Dictionary, layer_id: String, points: Array, options:
 	var max_x := clampi(ceili((bounds.end.x-origin.x)/selected.sample_spacing),0,int(selected.columns)-1)
 	var min_z := clampi(floori((bounds.position.y-origin.y)/selected.sample_spacing),0,int(selected.rows)-1)
 	var max_z := clampi(ceili((bounds.end.y-origin.y)/selected.sample_spacing),0,int(selected.rows)-1)
+	var original := {}
+	for z: int in range(maxi(0,min_z-1),mini(int(selected.rows),max_z+2)):
+		for x: int in range(maxi(0,min_x-1),mini(int(selected.columns),max_x+2)):
+			var index: int = z*int(selected.columns)+x
+			original[index] = selected.heights[index]
 	for z: int in range(min_z,max_z+1):
 		for x: int in range(min_x,max_x+1):
 			var index: int = z * int(selected.columns) + x
@@ -88,18 +145,14 @@ static func stroke(source: Dictionary, layer_id: String, points: Array, options:
 							var id: String = Materials.IDS[k]
 							var implicit := 1.0 if id == "grass" else 0.0
 							if not selected.material_masks.has(id) and next[k] != implicit:
-								var values: Array = []; values.resize(original.size()); values.fill(implicit)
+								var values: Array = []; values.resize(selected.heights.size()); values.fill(implicit)
 								selected.material_masks[id] = values
 							if selected.material_masks.has(id): selected.material_masks[id][index] = next[k]
 						changed += 1
 			if not is_finite(value): return Schema.result(false, "source_non_finite")
 			if value != original[index]: changed += 1
 			selected.heights[index] = value
-	var output := Schema.result(true)
-	if not preview_only and mode != "material": output.followed_sockets = _follow_relief(data,selected,original)
-	output.data = data; output.changed = changed; output.input_hash = read.output_hash
-	output.output_hash = "" if preview_only else Schema.semantic_hash(data)
-	return output
+	return {"ok":true,"changed":changed,"bounds":Rect2i(min_x,min_z,max_x-min_x+1,max_z-min_z+1)}
 
 ## The ground of a layer at a point, by the drawn diagonal; NAN outside the layer.
 static func ground_y(layer: Dictionary, heights: Array, point: Vector2) -> float:
