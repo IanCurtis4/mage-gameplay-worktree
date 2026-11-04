@@ -94,8 +94,46 @@ func run() -> void:
 	var resumed: Dictionary = await again.start()
 	var resumed_ok: bool = resumed.get("ok",false) and (resumed["root"] as RunController).campaign_runtime.state.current_stage_id == "forest_sanctuary_2"
 	check("resumes_the_phase",resumed_ok,resumed.get("error_code",""))
+	if resumed_ok:
+		host = resumed["root"] as RunController
+		state = host.campaign_runtime.state
+		var second_portal := ""
+		for candidate: Dictionary in state.manifest_data.portals:
+			if candidate.kind == "travel" and candidate.from_stage == "forest_sanctuary_2" and candidate.to_stage == "forest_sanctuary_3": second_portal = candidate.portal_id
+		for slot_id: String in state.slots:
+			var slot: Dictionary = state.slots[slot_id]
+			if slot.stage_id == "forest_sanctuary_2" and slot.blocks_clear and not slot.initial_resolved: state.record_death(slot_id,0,"forest_play_second_"+slot_id)
+		check("second_field_clears",not second_portal.is_empty() and state.portal_view(second_portal).open and host.campaign_runtime.valid())
+		var next_anchor := ExpeditionPopulationPlanner.point(state.portal_view(second_portal).from_anchor)
+		var next_geometry: WorldGeometry = host.player.world_motion.geometry
+		var next_placed := host.player.world_motion.teleport(next_anchor,1.0e20,next_geometry.geometry_revision)
+		await frames(2)
+		status = host.ui_root.get_node("ExpeditionStatus") as ExpeditionStatusPanel
+		var next_travel: Dictionary = await status.run_action({"kind":"travel","portal_id":second_portal,"stage_id":"forest_sanctuary_2"})
+		if next_travel.get("ok",false) and next_travel.has("root"): host = next_travel["root"]
+		if current_scene is RunController: host = current_scene
+		check("travels_to_boss_field",next_placed.get("ok",false) and next_travel.get("ok",false) and host.campaign_runtime.state.current_stage_id == "forest_sanctuary_3",next_travel.get("error_code",""))
+		if next_travel.get("ok",false):
+			state = host.campaign_runtime.state
+			for slot_id: String in state.slots:
+				var slot: Dictionary = state.slots[slot_id]
+				if slot.stage_id == "forest_sanctuary_3" and slot.blocks_clear and not slot.initial_resolved: state.record_death(slot_id,0,"forest_play_boss_"+slot_id)
+			var completion := ""
+			var completion_point := {}
+			for objective: Dictionary in state.manifest_data.objectives:
+				if objective.stage_id == "forest_sanctuary_3" and objective.outcome == "phase_completion":
+					completion = objective.objective_id
+					completion_point = objective.point
+			check("boss_field_clears",not completion.is_empty() and state.stages["forest_sanctuary_3"].cleared_once and host.campaign_runtime.valid())
+			var boss_geometry: WorldGeometry = host.player.world_motion.geometry
+			var finish_placed := host.player.world_motion.teleport(ExpeditionPopulationPlanner.point(completion_point),1.0e20,boss_geometry.geometry_revision)
+			await frames(2)
+			check("reaches_final_exit",finish_placed.get("ok",false),finish_placed.get("error_code",""))
+			status = host.ui_root.get_node("ExpeditionStatus") as ExpeditionStatusPanel
+			var finished: Dictionary = await status.run_action({"kind":"finish","outcome":"completed","source":completion})
+			check("phase_completes",finished.get("ok",false),finished.get("error_code",""))
 	print("F10_FOREST_PLAY_TIMING "+JSON.stringify({"enter_ms":snappedf(enter_ms,1.0),"longest_frame_while_preparing_ms":snappedf(longest,0.1),"walk_frames":count,"walk_mean_ms":snappedf(total/maxf(1,count),0.1),"walk_worst_ms":snappedf(worst,0.1),"checkpoint_bytes":checkpoint_bytes,"snapshot_raw_bytes":int(lock.checkpoint.get("byte_count",0)) if lock != null else -1,"checkpoint_base64_bytes":String(lock.checkpoint.get("snapshot","")).length() if lock != null else -1,"suspend_ms":snappedf(suspend_ms,1.0),"travel_ms":snappedf(report_travel,1.0),"profile_bytes":profile_bytes,"slots_field_1":state.slots.values().filter(func(slot: Dictionary) -> bool: return slot.stage_id == "forest_sanctuary_1").size()}))
-	if resumed.get("ok",false): (resumed["root"] as Node).queue_free()
+	if resumed.get("ok",false) and is_instance_valid(resumed["root"]): (resumed["root"] as Node).queue_free()
 	finish()
 func finish() -> void:
 	var ok := not checks.is_empty() and checks.all(func(item: Dictionary) -> bool: return item.ok)
