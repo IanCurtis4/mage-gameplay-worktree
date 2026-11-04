@@ -1,0 +1,11 @@
+{
+  "result": "Skill is valid!",
+  "validator_sha256": "6068513D924ED3559E186DFCDEAD7439129828DCF402167FD925C06DFFBF2806",
+  "exit_code": 0,
+  "skill": "skills/ragrpg-mapdelivery",
+  "validator": "C:/Users/João Pedro/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+  "skill_sha256": "4A405D3B27993145E11AD39C8AA15C9DD321967D0CB62DC13DDF6844D11F4993",
+  "dependency": "PyYAML 6.0.3 in isolated disposable target, removed after validation",
+  "scope": "Portal policy precedence and immutable phase presentation reference; discovery metadata unchanged",
+  "installed_copies_changed": false
+}

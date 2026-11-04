@@ -1,5 +1,14 @@
 # F10 — primeira fase completa (Q4)
 
+**Correção de leitura Q5 (4/11):** o fluxo do lobby testado pelo `ForestPlay`
+instalava a vista técnica, enquanto a prévia e o perfil específico do renderer
+usavam a vista autorada. Os tempos antigos de `ForestPlay` abaixo não certificam
+o custo com arte. Q5 corrige esse caminho por referências imutáveis de revisão
+visual em cada estágio (`authored_phase_v2`), sem alterar a geometria ou o pacote
+publicado. [Contrato](f10_q5_review.md), [consumo](../consumption.md) e
+[checkpoint com as novas medidas](../delivery/f10.md). Os registros de Q4
+abaixo são preservados como evidência daquela implementação.
+
 Atualização de desempenho de 4/11: [contrato](f10_transition_performance.md) e
 [checkpoint14](../delivery/f10.md) registram a redução de entrada/portais e a
 correção do indicador de maior quadro (os valores históricos abaixo omitiam o

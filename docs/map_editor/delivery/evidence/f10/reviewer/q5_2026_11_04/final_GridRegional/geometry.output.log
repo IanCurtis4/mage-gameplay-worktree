@@ -1,0 +1,14 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F10_GRID_REGIONAL_CHECK cold_compile_builds_every_stretch true
+F10_GRID_REGIONAL_CHECK unchanged_field_rebuilds_nothing true
+F10_GRID_REGIONAL_CHECK cold_map_compiles true
+F10_GRID_REGIONAL_CHECK stroke_changes_the_field true
+F10_GRID_REGIONAL_CHECK stroke_rebuilds_the_touched_stretches true
+F10_GRID_REGIONAL_CHECK cached_records_are_not_shared true
+F10_GRID_REGIONAL_CHECK map_rebuilds_only_touched_lattices true
+F10_GRID_REGIONAL_CHECK regional_piece_equals_cold_piece true
+F10_GRID_REGIONAL_CHECK regional_map_equals_cold_map true
+F10_GRID_REGIONAL_CHECK receivers_accept_the_regional_result true
+F10_GRID_REGIONAL_TIMING {"lattices_rebuilt":1,"map_cold_ms":8837.0,"map_cold_twin_ms":4223.0,"map_stroke_ms":7110.0,"piece_cold_ms":631.0,"piece_cold_twin_ms":620.0,"piece_same_ms":547.0,"piece_stroke_ms":554.0,"stretches_rebuilt":1}
+F10_GRID_REGIONAL_RESULT {"checks":[{"id":"cold_compile_builds_every_stretch","ok":true},{"id":"unchanged_field_rebuilds_nothing","ok":true},{"id":"cold_map_compiles","ok":true},{"id":"stroke_changes_the_field","ok":true},{"id":"stroke_rebuilds_the_touched_stretches","ok":true},{"id":"cached_records_are_not_shared","ok":true},{"id":"map_rebuilds_only_touched_lattices","ok":true},{"id":"regional_piece_equals_cold_piece","ok":true},{"id":"regional_map_equals_cold_map","ok":true},{"id":"receivers_accept_the_regional_result","ok":true}],"count":10,"ok":true}

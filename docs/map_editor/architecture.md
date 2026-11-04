@@ -1,5 +1,15 @@
 # Arquitetura proposta do editor
 
+**Leitura vigente (4/11/2026):** o desenho abaixo é a proposta histórica.
+As APIs implementadas estão nos recibos F0–F9, em [consumo](consumption.md) e
+no [checkpoint F10](delivery/f10.md). F10 Q1 contratou o envelope de snapshot
+de até 16 MiB e pacotes de patrulha de até 8 MiB para a fase ampla;
+[contrato](contracts/f10_height_grid.md). Não aplicar o antigo limite universal
+de 4 MiB a esses formatos. Outros limites continuam específicos de cada codec.
+
+Q5 revisa o caminho lobby → fase → apresentação por referência imutável,
+documentado no [contrato de revisão](contracts/f10_q5_review.md).
+
 Estado e decisões: [índice](README.md). Este documento descreve interfaces futuras;
 os nomes propostos não anunciam APIs já disponíveis.
 

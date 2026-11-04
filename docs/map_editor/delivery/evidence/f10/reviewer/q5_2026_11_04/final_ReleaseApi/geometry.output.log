@@ -1,0 +1,14 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_RELEASE_API_CHECK registry_lists_the_bosque true
+F9_RELEASE_API_CHECK registry_refuses_unsafe_entries true
+F9_RELEASE_API_CHECK committed_package_is_current true
+F9_RELEASE_API_CHECK package_loads_with_its_pins true
+F9_RELEASE_API_CHECK manifest_is_the_consumption_contract true
+F9_RELEASE_API_CHECK manifest_is_a_copy true
+F9_RELEASE_API_CHECK unknown_and_mismatched_pins_are_refused true
+F9_RELEASE_API_CHECK tampered_bytes_are_refused true
+F9_RELEASE_API_CHECK publication_is_by_hash_and_immutable true
+F9_RELEASE_API_CHECK release_export_ships_packages_and_registry true
+F9_RELEASE_API_CHECK prepare_uses_the_game_authorities true
+F9_RELEASE_API_RESULT {"checks":[{"id":"registry_lists_the_bosque","ok":true},{"id":"registry_refuses_unsafe_entries","ok":true},{"id":"committed_package_is_current","ok":true},{"id":"package_loads_with_its_pins","ok":true},{"id":"manifest_is_the_consumption_contract","ok":true},{"id":"manifest_is_a_copy","ok":true},{"id":"unknown_and_mismatched_pins_are_refused","ok":true},{"id":"tampered_bytes_are_refused","ok":true},{"id":"publication_is_by_hash_and_immutable","ok":true},{"id":"release_export_ships_packages_and_registry","ok":true},{"id":"prepare_uses_the_game_authorities","ok":true}],"count":11,"ok":true}

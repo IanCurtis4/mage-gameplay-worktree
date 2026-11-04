@@ -1,0 +1,13 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F10_SOCKET_FOLLOW_CHECK ground_uses_the_drawn_diagonal true
+F10_SOCKET_FOLLOW_CHECK exact_planes_marker_follows true
+F10_SOCKET_FOLLOW_CHECK exact_planes_compiles_after_sculpting true
+F10_SOCKET_FOLLOW_CHECK height_grid_marker_follows true
+F10_SOCKET_FOLLOW_CHECK height_grid_compiles_after_sculpting true
+F10_SOCKET_FOLLOW_CHECK material_moves_nothing true
+F10_SOCKET_FOLLOW_CHECK preview_does_not_follow true
+F10_SOCKET_FOLLOW_CHECK floating_marker_is_kept true
+F10_SOCKET_FOLLOW_CHECK diagnostic_names_the_marker true
+F10_SOCKET_FOLLOW_CHECK diagnostic_outside_the_layer true
+F10_SOCKET_FOLLOW_RESULT {"checks":[{"id":"ground_uses_the_drawn_diagonal","ok":true},{"id":"exact_planes_marker_follows","ok":true},{"id":"exact_planes_compiles_after_sculpting","ok":true},{"id":"height_grid_marker_follows","ok":true},{"id":"height_grid_compiles_after_sculpting","ok":true},{"id":"material_moves_nothing","ok":true},{"id":"preview_does_not_follow","ok":true},{"id":"floating_marker_is_kept","ok":true},{"id":"diagnostic_names_the_marker","ok":true},{"id":"diagnostic_outside_the_layer","ok":true}],"count":10,"ok":true}

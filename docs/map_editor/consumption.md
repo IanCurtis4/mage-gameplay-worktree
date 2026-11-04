@@ -13,6 +13,15 @@ abre o Bosque no executável exportado, numa instalação limpa (`release_bosque
 
 ## Uso
 
+F10 compõe a fase em `phase_release.gd` (`authored_phase_v2`). Cada estágio
+guarda em `input.authored_presentations` uma cópia dos oito campos da revisão
+publicada. `MapRelease.load_reference(reference)` valida e resolve essa revisão
+sem consultar a lista atual nem ler fontes de autoria. `SnapshotRegistry.install`
+usa `AuthoredExpeditionView` para esses estágios, na entrada, viagem e retomada.
+Uma referência presente inválida ou incompleta é recusada sem regravar o save.
+Grafos antigos sem esse campo preservam seu caminho original; não há migração
+silenciosa nem promessa de compatibilidade de grafo entre builds.
+
 ```gdscript
 const MapRelease = preload("res://scripts/map_authoring/release/map_release.gd")
 
@@ -37,6 +46,7 @@ var prepared := MapRelease.prepare("sanctuary_woods")
 | `packages(listing = {})` | qualquer | `[{package_id, name}]` na ordem da lista | lê só a lista |
 | `entry(id, listing = {})` | qualquer | `{ok, entry}` com os pinos | lê só a lista |
 | `load_package(id, listing = {})` | qualquer | `{ok, entry, package}` | ~17 s (valida rotas e encontros) |
+| `load_reference(reference)` | qualquer | `{ok, entry, package}` da revisão imutável | mesma validação do pacote |
 | `manifest(id, listing = {})` | qualquer | `{ok, entry, package, manifest}` | ~17 s |
 | `prepare(id, listing = {})` | só jogo | o resultado de `gameplay_candidate.prepare` + `package` e `release` | ~100 s, no quadro principal |
 | `freshness(id, listing = {})` | autoria/testes | `{ok, current, source_hash, pinned_source_hash}` | lê e hasheia a fonte |
@@ -45,12 +55,16 @@ var prepared := MapRelease.prepare("sanctuary_woods")
 para testes. Toda falha devolve `{ok:false, code, diagnostics:[{code, severity,
 entity_id, field:"release", message}]}` com mensagem em português.
 
+Os custos da tabela foram medidos no Bosque F9, antes das otimizações F10;
+não são medidas da floresta ampla atual. O lobby prepara mapas no worker e
+instala o grafo na thread principal. Medidas/limites atuais e a correção da
+apresentação na fase constam no [checkpoint](delivery/f10.md).
+
 `prepare()` certifica, com as autoridades do jogo e o perfil de travessia da fase
 de produção, que a entrada autorada, todas as superfícies, objetivos e portais
 têm ida e volta para o corpo real, que as casas dos encontros são alcançáveis e
-que as patrulhas cabem no leash. Ela roda no quadro principal (~80 s só na
-certificação do Bosque); tirar esse custo do quadro é pendência F10 já
-registrada. Quem precisar só dos dados usa `manifest()`.
+que as patrulhas cabem no leash. É síncrona para seu chamador; o fluxo do lobby
+a executa no worker. Quem precisar só dos dados usa `manifest()`.
 
 ## Lista de mapas publicados
 
@@ -88,7 +102,7 @@ cortado ou alterado é `release_package_invalid`.
 ## Formato do `.rpp`
 
 `"RPP1"` + sha256 hexadecimal (64 caracteres) do payload + `var_to_bytes(pacote)`,
-no máximo 4 MiB. A leitura (`PatrolStore.load_package`) confere o cabeçalho e o
+no máximo 8 MiB (F10 Q1). A leitura (`PatrolStore.load_package`) confere o cabeçalho e o
 hash, decodifica com `bytes_to_var` (nunca instancia objetos ou scripts) e
 revalida o pacote com `PatrolCompiler.validate_package`: forma fechada, hash do
 conteúdo, encontros do pacote de população e cada rota de patrulha contra a

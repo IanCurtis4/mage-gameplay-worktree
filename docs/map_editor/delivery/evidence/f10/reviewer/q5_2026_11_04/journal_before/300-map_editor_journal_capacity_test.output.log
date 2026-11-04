@@ -1,0 +1,16 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F10_Q5_JOURNAL_CAPACITY_TIMING {"automatic_and_recovery_ms":35838.592,"automatic_ms":30002.966,"batch_sizes":[2,2,2,1],"drops":7,"journal_capacity":256,"largest_journal_entries":256,"queue_before_compaction":5}
+F10_Q5_JOURNAL_CAPACITY_RESULT {"automatic_drained":false,"batch_sizes":[2,2,2,1],"count":50,"delivered":7,"failures":2,"ok":false}
+E07 F5 map_editor_journal_capacity_test.gd: 50 checks, 2 failures
+ERROR: automatic collection compacts a full journal and drains all seven drops
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/fixtures/e07/f5/suite.gd:10)
+       [1] _run (res://tests/map_editor_journal_capacity_test.gd:157)
+ERROR: owner digest and reward sequence match seven grants
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/fixtures/e07/f5/suite.gd:10)
+       [1] _run (res://tests/map_editor_journal_capacity_test.gd:203)
+

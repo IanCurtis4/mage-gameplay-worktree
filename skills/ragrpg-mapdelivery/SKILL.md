@@ -51,10 +51,13 @@ Não corrigir desconexão teleportando silenciosamente jogador/inimigos.
 Portais permitem avanço e retorno conforme grafo e preservam estado dos mapas;
 revalidam sessão, estado e pendências. Revisita/retry não repetem loot/XP/augment.
 Limpeza de atores/efeitos mantém progresso permanente e regras de run/augments.
-Decisão humana de 18/10: derrotar todos os inimigos abre portais. Respawn tardio
+Decisões humanas de 31/10 e 2/11 substituem a regra geral de 18/10: a primeira
+jogada de cada fase por personagem exige limpeza; nas repetições vale o objetivo
+do estágio, com o guardião resolvido antes quando existir. Confira
+`docs/map_editor/contracts/f10_phase_rules.md` e o contrato do mapa. Respawn tardio
 em massa só após limpeza, sem fechar portais; timer único da fase, não por estágio.
 Memoráveis contam na limpeza; fechar contabilização de invocações no contrato.
-Não substituir limpeza por objetivo parcial. Fase maculada conserva redução de
+Não trocar essa política por uma condição improvisada. Fase maculada conserva redução de
 rendimento entre tentativas até conclusão; detalhe segue PRODUCT_DIRECTION.
 Portais podem ramificar; quests devem ter objetivo ou rota garantidos conforme
 docs/PRODUCT_DIRECTION.md. Respawn não duplica conclusão ou entrada de estágio.
@@ -130,6 +133,12 @@ Mapa para o jogo: o jogo e os próximos épicos usam só mapas publicados (pacot
 `.rpp` imutável fixado em `data/map_authoring/release_packages.json`), pela API de
 `docs/map_editor/consumption.md`. Publicar e atualizar a lista é decisão humana;
 a skill não publica nem edita a lista.
+
+Na fase composta, a revisão visual é fixada por estágio e resolvida pela API
+`MapRelease.load_reference`, independentemente de uma atualização posterior da
+lista. Não inserir o pacote visual no snapshot nem ler fontes de autoria para
+retomar a run. Confira a apresentação realmente instalada no lobby, portais e
+retomada: métricas de uma vista técnica não certificam o renderer com arte.
 
 A pessoa importa a proposta no editor, compara Antes/Proposta e confirma uma ação
 desfazível. Não sobrescreva a fonte humana, não publique nem ative o WFC por

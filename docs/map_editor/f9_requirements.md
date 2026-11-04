@@ -1,5 +1,12 @@
 # F9 — matriz de completude em execução
 
+**Matriz histórica de descoberta.** O fechamento F9 está em
+[f9_closure_matrix.md](f9_closure_matrix.md) e no [recibo final](delivery/f9.md).
+F10/Q5 confronta essas promessas com os consumidores atuais conforme
+[contrato](contracts/f10_q5_review.md) e [checkpoint](delivery/f10.md).
+“Pendente” nas linhas abaixo registra o estado daquele checkpoint; não revoga
+uma entrega posterior nem demonstra sua reprodução em F10.
+
 Autorização25/10/2026 e base/propriedade no [dispatch](contracts/f9_dispatch.md).
 Piso obrigatório [F9-01–12](contracts/f9_completion.md); confrontar fontes e código.
 Estados iniciais são diagnóstico, não declaração de que a implementação já passou.

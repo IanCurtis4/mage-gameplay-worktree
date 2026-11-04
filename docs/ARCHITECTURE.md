@@ -1,5 +1,20 @@
 # Arquitetura vigente — índice de autoridades e contratos
 
+## Delta do editor F10 — 4/11/2026
+
+F10 está ativo; Q5 em revisão, sem fechamento técnico ou aceite humano final.
+O [contrato de grade Q1](map_editor/contracts/f10_height_grid.md) substituiu o
+limite de 4 MiB apenas nos formatos contratados: envelope de snapshot até 16 MiB,
+checkpoint format 2 comprimido e pacote de patrulha até 8 MiB. Outros codecs
+conservam seus próprios limites. Geometria/corpo/LoS continuam canônicos.
+
+O [consumo](map_editor/consumption.md) compõe fases autoradas e fixa a revisão
+visual por estágio; a instalação reconstrói a vista descartável a partir desse
+pacote, sem pôr o pacote visual no grafo salvo ou ler fontes de autoria.
+Q5 corrige a coleta automática no limite do diário usando a barreira, o
+checkpoint e o writer já existentes. Não há segundo writer nem novo formato de
+diário. Evidências e limites no [checkpoint F10](map_editor/delivery/f10.md).
+
 ## Composição técnica E07 —23/10/2026
 
 [F8](epics/e07/delivery/f8.md) consolida F0–F7 sobre runtime 7775f44: geometria com

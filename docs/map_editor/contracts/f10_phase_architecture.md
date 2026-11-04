@@ -1,5 +1,13 @@
 # F10 — arquitetura de fase (decisões humanas)
 
+Estado de 4/11: a primeira fase foi delimitada e construída conforme o
+[contrato Q4](f10_first_phase.md); a direção de dungeons/atalhos abaixo não
+autoriza consumidores adicionais. Na revisão Q5, a composição v2 passou a
+fixar por estágio a referência passiva da publicação visual, resolvida na
+entrada/viagem/retomada sem ler fontes ou a lista atual. Isso corrige a vista
+técnica no lobby e preserva os mesmos mapas, colisão e regras. Ver
+[contrato Q5](f10_q5_review.md) e [consumo](../consumption.md).
+
 31/10/2026. Registro de Sol/Astra (Claude Opus) das respostas humanas ao estudo
 de fase do checkpoint38 (Torghast/Thanator, Ragnarok Online, Super Mario World e
 Wario Land 3). É direção aprovada para F10, não implementação: nenhum código de

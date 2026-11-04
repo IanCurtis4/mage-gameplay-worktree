@@ -1,0 +1,29 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+F9_ENCOUNTER_UI_CHECK two_shells_open_real_population_windows_and_sessions true
+F9_ENCOUNTER_UI_CHECK map_query_reads_real_compiled_surfaces_and_sockets true
+F9_ENCOUNTER_UI_CHECK map_query_includes_socket_records_and_source_hash_for_real_package true
+F9_ENCOUNTER_UI_CHECK real_catalog_populates_both_authoring_panels true
+F9_ENCOUNTER_UI_CHECK population_command_contract_advertised_by_real_presentations true
+F9_ENCOUNTER_UI_CHECK gui_controls_and_ax_share_population_producer_and_semantic_hash true
+F9_ENCOUNTER_UI_CHECK invalid_nested_ids_and_confirmations_preserve_ax_source_and_history true
+F9_ENCOUNTER_UI_CHECK gui_and_ax_plan_preview_workers_return_proposal_without_applying true
+F9_ENCOUNTER_UI_CHECK proposal_confirmation_signature_and_internal_identity_are_required true
+F9_ENCOUNTER_UI_CHECK proposal_apply_commits_once_and_undo_redo_whole_plan true
+F9_ENCOUNTER_UI_CHECK stale_proposal_base_is_refused_without_mutation true
+F9_ENCOUNTER_UI_CHECK manual_fixed_slot_and_brush_removal_preserve_other_brush_slots true
+F9_ENCOUNTER_UI_CHECK ax_rejects_manual_nonfixed_slot_without_partial_history true
+F9_ENCOUNTER_UI_CHECK patrol_windows_import_realized_guard_and_reuse_population_map_query true
+F9_ENCOUNTER_UI_CHECK patrol_gui_and_ax_route_proposals_have_equal_source true
+F9_ENCOUNTER_UI_CHECK patrol_route_removal_requires_confirmation true
+F9_ENCOUNTER_UI_CHECK real_patrol_controls_mode_wait_move_and_slot_assignment_match_ax true
+F9_ENCOUNTER_UI_CHECK patrol_nested_nan_and_unknown_references_reject_without_history true
+F9_ENCOUNTER_UI_CHECK patrol_route_undo_redo_restore_full_order_and_slot_assignments true
+F9_ENCOUNTER_UI_CHECK patrol_workers_complete_against_canonical_compiler true
+F9_ENCOUNTER_UI_CHECK document_save_dirty_new_confirmation_draft_and_real_open true
+F9_ENCOUNTER_UI_CHECK panel_disk_conflict_preserves_state_then_reopens_external_revision true
+F9_ENCOUNTER_UI_CHECK worker_cancel_refresh_and_compiler_take_stale_preserve_source_semantics true
+F9_ENCOUNTER_UI_CHECK population_compiler_returns_canonical_package_body true
+F9_ENCOUNTER_UI_CHECK separate_native_population_and_patrol_captures_use_visible_real_ancestry_at_1440x1000 true
+F9_ENCOUNTER_UI_RESULT {"checks":[{"detail":{},"id":"two_shells_open_real_population_windows_and_sessions","ok":true},{"detail":{},"id":"map_query_reads_real_compiled_surfaces_and_sockets","ok":true},{"detail":{},"id":"map_query_includes_socket_records_and_source_hash_for_real_package","ok":true},{"detail":{},"id":"real_catalog_populates_both_authoring_panels","ok":true},{"detail":{},"id":"population_command_contract_advertised_by_real_presentations","ok":true},{"detail":{},"id":"gui_controls_and_ax_share_population_producer_and_semantic_hash","ok":true},{"detail":{},"id":"invalid_nested_ids_and_confirmations_preserve_ax_source_and_history","ok":true},{"detail":{},"id":"gui_and_ax_plan_preview_workers_return_proposal_without_applying","ok":true},{"detail":{},"id":"proposal_confirmation_signature_and_internal_identity_are_required","ok":true},{"detail":{},"id":"proposal_apply_commits_once_and_undo_redo_whole_plan","ok":true},{"detail":{},"id":"stale_proposal_base_is_refused_without_mutation","ok":true},{"detail":{},"id":"manual_fixed_slot_and_brush_removal_preserve_other_brush_slots","ok":true},{"detail":{},"id":"ax_rejects_manual_nonfixed_slot_without_partial_history","ok":true},{"detail":{},"id":"patrol_windows_import_realized_guard_and_reuse_population_map_query","ok":true},{"detail":{},"id":"patrol_gui_and_ax_route_proposals_have_equal_source","ok":true},{"detail":{},"id":"patrol_route_removal_requires_confirmation","ok":true},{"detail":{},"id":"real_patrol_controls_mode_wait_move_and_slot_assignment_match_ax","ok":true},{"detail":{},"id":"patrol_nested_nan_and_unknown_references_reject_without_history","ok":true},{"detail":{},"id":"patrol_route_undo_redo_restore_full_order_and_slot_assignments","ok":true},{"detail":{},"id":"patrol_workers_complete_against_canonical_compiler","ok":true},{"detail":{},"id":"document_save_dirty_new_confirmation_draft_and_real_open","ok":true},{"detail":{},"id":"panel_disk_conflict_preserves_state_then_reopens_external_revision","ok":true},{"detail":{},"id":"worker_cancel_refresh_and_compiler_take_stale_preserve_source_semantics","ok":true},{"detail":{},"id":"population_compiler_returns_canonical_package_body","ok":true},{"detail":{"encounter_package_hash":"b1da6933f772de450e33f1b3ffcf697e86740f002ab10d32a3f7c7c920ab54f7","patrol_saved":true,"patrol_size":"(1440, 1000)","patrol_visible":true,"physical_window":"(1440, 1000)","population_saved":true,"population_size":"(1440, 1000)","population_visible":true},"id":"separate_native_population_and_patrol_captures_use_visible_real_ancestry_at_1440x1000","ok":true}],"count":25,"evidence_dir":"C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\q5_validation\\final_EncounterAuthoringNative","expected_count":25,"ok":true}

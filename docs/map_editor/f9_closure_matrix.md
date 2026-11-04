@@ -1,5 +1,11 @@
 # F9 — matriz de fechamento (rastreabilidade)
 
+**Estado vigente:** F9 integrada em 2/11; esta matriz preserva a evolução e a
+prova autoral F9. O resumo de 31/10 e os pacotes propostos abaixo são históricos.
+F10 Q5 está em revisão conforme [contrato](contracts/f10_q5_review.md) e
+[checkpoint](delivery/f10.md). As tarefas humanas não executadas continuam
+pendentes; a integração F9 não as converteu em aceite.
+
 31/10/2026, Sol/Astra (Claude Opus). Pedido humano: "Podemos continuar para a
 matriz do editor. Pelo que eu sei já estava próximo de acabar, mas pode ver você
 mesmo o que falta." Base 0ce15143. Fontes: [F9-01–12](contracts/f9_completion.md),

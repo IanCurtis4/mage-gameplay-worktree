@@ -1,5 +1,15 @@
 # Produto vigente e limites da entrega
 
+## Editor F10 — 4/11/2026
+
+F9 foi integrada em 2/11 com aceite parcial. F10 acrescentou a fase de floresta
+em três mapas amplos; Q5 revisa o editor e o consumo no jogo. Pincéis temporais,
+diário cheio e apresentação da fase passaram nos testes dirigidos, sem aceite
+final ou certificação de fluidez.
+[Checkpoint e limites medidos](map_editor/delivery/f10.md),
+[matriz Q5](map_editor/delivery/f10_q5_matrix.md). Entrada e portais ainda levam
+dezenas de segundos/minutos; não há certificação de fluidez ou abertura de E08+.
+
 ## Candidato técnico E07 —23/10/2026
 
 [F8 validada tecnicamente](epics/e07/delivery/f8.md) compõe F0–F7: geometria com

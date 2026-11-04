@@ -1,0 +1,13 @@
+{
+  "retained_fixture": ".godot/verification/e07_f1/fixture_project",
+  "no_engine_processes": true,
+  "removed_bytes": 229057875.0,
+  "fixture_reason": "Q5 operator GUI review still pending; open_f10_review.ps1 uses this single prepared fixture",
+  "retained_engine": "shared standard engine in principal .tools/godot",
+  "removed": [
+    ".godot/q5_validation (raw receipts copied and verified)",
+    ".godot/m8_release/RagRPG-Map-Candidate.exe",
+    ".godot/m8_release/RagRPG-Map-Candidate.pck"
+  ],
+  "personal_saves_touched": false
+}

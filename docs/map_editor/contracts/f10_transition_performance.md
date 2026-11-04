@@ -1,5 +1,12 @@
 # F10 — redução do custo de entrada e portais
 
+**Ressalva descoberta em Q5 (4/11):** a comparação deste incremento usava a
+vista técnica no lobby. As otimizações e suas invariantes permanecem válidas,
+mas não certificam o custo da apresentação autorada. Q5 acrescentou a vista
+rica ao fluxo completo e repetiu as medidas, registradas no
+[checkpoint](../delivery/f10.md). Não combinar essas amostras como se a
+apresentação tivesse permanecido idêntica.
+
 4/11/2026. Pedido humano: diminuir mais os tempos antes de fechar Q5.
 Base `a8196dc7cd313673e60bb13287f2cc5e50e66b92`, branch
 `codex/map-editor-f10`, checkout único `.tools/map-editor-m5`.

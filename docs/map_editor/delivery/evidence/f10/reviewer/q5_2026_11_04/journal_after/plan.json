@@ -1,0 +1,69 @@
+{
+  "created_utc": "2026-11-04T21:47:27.2508170Z",
+  "f1_native_fixture": true,
+  "source_commit": "34bf16511019e88bf34ddfabfab624e533d7c20d",
+  "working_tree_status": [
+    " M data/map_authoring/candidate_preview.gd",
+    " M docs/map_editor/README.md",
+    " M docs/map_editor/authoring_modes.md",
+    " M docs/map_editor/execution.md",
+    " M docs/map_editor/f9_requirements.md",
+    " M scripts/core/expedition/snapshot/snapshot_registry.gd",
+    " M scripts/main.gd",
+    " M scripts/map_authoring/release/map_release.gd",
+    " M scripts/map_authoring/release/phase_release.gd",
+    " M scripts/map_authoring/terrain/brush.gd",
+    " M scripts/map_authoring/terrain/terrain_canvas.gd",
+    " M scripts/map_authoring/terrain/terrain_panel.gd",
+    " M scripts/world/map_package_view.gd",
+    " M tests/map_editor_forest_play_test.gd",
+    " M tests/map_editor_release_api_test.gd",
+    " M tests/map_editor_terrain_ui_test.gd",
+    " M tools/map_editor_candidate/run.ps1",
+    " M tools/map_editor_completion/run.ps1",
+    " M tools/verify.ps1",
+    "?? data/map_authoring/sanctuary_woods.map.json.bak",
+    "?? data/map_authoring/sanctuary_woods.population.json.bak",
+    "?? data/map_authoring/sanctuary_woods_clearing.source.json.bak",
+    "?? data/map_authoring/sanctuary_woods_overpass.source.json.bak",
+    "?? docs/map_editor/contracts/f10_q5_review.md",
+    "?? tests/map_editor_journal_capacity_test.gd",
+    "?? tests/map_editor_journal_capacity_test.gd.uid",
+    "?? tests/map_editor_manual_brush_native_test.gd",
+    "?? tests/map_editor_manual_brush_native_test.gd.uid",
+    "?? tests/map_editor_manual_brush_test.gd",
+    "?? tests/map_editor_manual_brush_test.gd.uid",
+    "?? tests/map_editor_phase_presentation_test.gd",
+    "?? tests/map_editor_phase_presentation_test.gd.uid",
+    "?? tools/map_editor_release/phase_release_probe.gd",
+    "?? tools/map_editor_release/phase_release_probe.gd.uid"
+  ],
+  "runner_sha256": "2EA3C9E334654C80788872039A1AD82FCA5184EF46F23719A98B10769BFAC297",
+  "engine_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+  "timeout_seconds": 300,
+  "selection": {
+    "test": [
+      "map_editor_journal_capacity_test"
+    ],
+    "test_filter_specified": true,
+    "from_step": 1,
+    "to_step": 300,
+    "skip_editor_import": true
+  },
+  "total_steps": 300,
+  "selected_steps": 1,
+  "checks": [
+    {
+      "index": 300,
+      "name": "map_editor_journal_capacity_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/map_editor_journal_capacity_test.gd"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F10_PHASE_PRESENTATION_RESULT {"checks":[{"id":"published_map_prepares","ok":true},{"id":"phase_composes","ok":true},{"id":"every_stage_pins_original_revision","ok":true},{"id":"pinned_reference_loads_without_registry_lookup","ok":true},{"id":"unsafe_reference_refused","ok":true},{"id":"changed_pin_refused","ok":true},{"id":"renamed_stage_configures","ok":true},{"id":"original_package_binds_to_renamed_geometry","ok":true},{"id":"presentation_does_not_rewrite_package","ok":true},{"id":"changed_geometry_still_refused","ok":true}],"count":10,"ok":true}

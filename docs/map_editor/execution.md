@@ -1,5 +1,12 @@
 # Pacotes e chats preparados
 
+**Retomada vigente de 4/11:** F9 integrada em master, F10 ativa e Q5 autorizado.
+Base, propriedade, resultados e próximos passos no [checkpoint F10](delivery/f10.md)
+e no [contrato Q5](contracts/f10_q5_review.md). Reutilizar o worktree/fixture atuais
+conforme STORAGE. As reservas e branches nas seções seguintes são históricas.
+
+## Histórico dos pacotes preparados
+
 **F9 em execução25/10/2026**, autorização humana neste chat; [dispatch nominal](contracts/f9_dispatch.md)
 e [rastreabilidade](f9_requirements.md). Reserva F9 abaixo substituída somente
 nesse ponto. F10 não foi iniciado.

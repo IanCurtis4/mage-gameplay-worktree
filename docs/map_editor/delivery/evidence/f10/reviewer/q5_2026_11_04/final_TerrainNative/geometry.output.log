@@ -1,0 +1,51 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+M2_UI_CHECK native_shell_visible true
+M2_UI_CHECK oversized_preview_preflight true
+M2_UI_CHECK sample_three_layers true
+M2_UI_CHECK sample_bridge true
+M2_UI_CHECK native_bake_completed true
+M2_UI_CHECK native_headless_equivalent true
+M2_UI_CHECK native_compiled_boundaries true
+M2_UI_CHECK example_preserves_nonempty_piece true
+M2_UI_CHECK isometric_pick_matches_support true
+M2_UI_CHECK stroke_preview_without_source_mutation true
+M2_UI_CHECK cancel_preserves_source true
+M2_UI_CHECK release_applies_one_action true
+M2_UI_CHECK one_undo_restores_whole_stroke true
+M2_UI_CHECK leave_canvas_discards_stroke true
+M2_UI_CHECK locked_layer_rejected_in_ui true
+M2_UI_CHECK explicit_layer_selection true
+M2_UI_CHECK selection_tree_matches_target true
+M2_UI_CHECK hide_layer_explicit true
+M2_UI_CHECK connector_add_and_compile true
+M2_UI_CHECK connector_update_same_identity true
+M2_UI_CHECK connector_update_undo true
+M2_UI_CHECK connector_form_reselection true
+M2_UI_CHECK locked_connector_update_remove_rejected true
+M2_UI_CHECK connector_remove true
+M2_UI_CHECK connector_remove_undo true
+M2_UI_CHECK native_save true
+M2_UI_CHECK native_reopen true
+M2_UI_CHECK native_cancel_discarded true
+M2_UI_CHECK native_stale_result_discarded true
+M2_UI_CHECK native_final_bake true
+M2_UI_CHECK native_capture true
+M2_UI_CHECK native_large_piece_not_subdivided_into_pieces true
+M2_UI_CHECK native_textured_meshes true
+M2_UI_CHECK native_mipmaps_for_zoomed_out_terrain true
+M2_UI_CHECK native_large_pick_on_plateau true
+M2_UI_CHECK native_stroke_overlay_tracks_height true
+M2_UI_CHECK native_large_brush true
+M2_UI_CHECK native_large_atomic_undo true
+M2_UI_CHECK native_large_save_reopen true
+M2_UI_CHECK native_large_bake true
+M2_UI_CHECK native_large_capture true
+M2_UI_CHECK native_terrain_detail_capture true
+M2_UI_CHECK native_steep_valid_support true
+M2_UI_CHECK native_steep_capture true
+M2_UI_CHECK native_unload_frees_shell true
+M2_UI_RESULT {"checks":[{"id":"native_shell_visible","ok":true},{"id":"oversized_preview_preflight","ok":true},{"id":"sample_three_layers","ok":true},{"id":"sample_bridge","ok":true},{"id":"native_bake_completed","ok":true},{"id":"native_headless_equivalent","ok":true},{"id":"native_compiled_boundaries","ok":true},{"id":"example_preserves_nonempty_piece","ok":true},{"id":"isometric_pick_matches_support","ok":true},{"id":"stroke_preview_without_source_mutation","ok":true},{"id":"cancel_preserves_source","ok":true},{"id":"release_applies_one_action","ok":true},{"id":"one_undo_restores_whole_stroke","ok":true},{"id":"leave_canvas_discards_stroke","ok":true},{"id":"locked_layer_rejected_in_ui","ok":true},{"id":"explicit_layer_selection","ok":true},{"id":"selection_tree_matches_target","ok":true},{"id":"hide_layer_explicit","ok":true},{"id":"connector_add_and_compile","ok":true},{"id":"connector_update_same_identity","ok":true},{"id":"connector_update_undo","ok":true},{"id":"connector_form_reselection","ok":true},{"id":"locked_connector_update_remove_rejected","ok":true},{"id":"connector_remove","ok":true},{"id":"connector_remove_undo","ok":true},{"id":"native_save","ok":true},{"id":"native_reopen","ok":true},{"id":"native_cancel_discarded","ok":true},{"id":"native_stale_result_discarded","ok":true},{"id":"native_final_bake","ok":true},{"id":"native_capture","ok":true},{"id":"native_large_piece_not_subdivided_into_pieces","ok":true},{"id":"native_textured_meshes","ok":true},{"id":"native_mipmaps_for_zoomed_out_terrain","ok":true},{"id":"native_large_pick_on_plateau","ok":true},{"id":"native_stroke_overlay_tracks_height","ok":true},{"id":"native_large_brush","ok":true},{"id":"native_large_atomic_undo","ok":true},{"id":"native_large_save_reopen","ok":true},{"id":"native_large_bake","ok":true},{"id":"native_large_capture","ok":true},{"id":"native_terrain_detail_capture","ok":true},{"id":"native_steep_valid_support","ok":true},{"id":"native_steep_capture","ok":true},{"id":"native_unload_frees_shell","ok":true}],"count":45,"ok":true}
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)

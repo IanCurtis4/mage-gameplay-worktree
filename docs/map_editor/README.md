@@ -1,5 +1,15 @@
 # Editor de mapas — proposta de arquitetura e execução
 
+**Estado vigente em 4/11/2026:** F9 foi entregue e integrada em master em
+2/11 (`3c35f7f2`), com aceite humano parcial e pendências manuais transferidas.
+F10 foi ativada em 2/11 e Q5 foi autorizado em 4/11. Execução no único worktree
+`.tools/map-editor-m5`, branch `codex/map-editor-f10`.
+[Checkpoint atual](delivery/f10.md), [contrato Q5](contracts/f10_q5_review.md),
+[matriz final F9](f9_closure_matrix.md). Esses registros substituem os estados
+de reserva e de execução abaixo; aprovação técnica e aceite humano são separados.
+
+## Histórico de autorização e preparação (23–25/10)
+
 **F9 autorizado25/10/2026 e em execução:** “F8 terminou. Podemos começar F9.”
 [Dispatch/base/propriedade](contracts/f9_dispatch.md), [matriz](f9_requirements.md).
 Reutiliza o checkout atual na branch `codex/map-editor-f9`, base completa

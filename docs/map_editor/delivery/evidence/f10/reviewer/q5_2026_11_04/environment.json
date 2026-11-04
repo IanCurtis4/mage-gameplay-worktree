@@ -1,0 +1,38 @@
+{
+  "physical_memory_note": "CIM query denied; no RAM amount inferred",
+  "preserved_backups": [
+    {
+      "path": "data\\map_authoring\\sanctuary_woods.map.json.bak",
+      "sha256": "6B8D52095B0D98BA4A436FD5B192FF732B98A8F5DA02855646E7E21B9792BB4F"
+    },
+    {
+      "path": "data\\map_authoring\\sanctuary_woods.population.json.bak",
+      "sha256": "3DEBC7674A1770702639E8BB33B1E6598C52929E9230395CCFBF505C1ED04889"
+    },
+    {
+      "path": "data\\map_authoring\\sanctuary_woods_clearing.source.json.bak",
+      "sha256": "65A26754C437695D7E7D60E93980C187371FDDEEC4FB71F78323104DBB55CED5"
+    },
+    {
+      "path": "data\\map_authoring\\sanctuary_woods_overpass.source.json.bak",
+      "sha256": "D0071096ADDFEFCEFAD1F1DF849C3977064A741B4ED1446FFAF50A3F25A95D7E"
+    }
+  ],
+  "game_viewport": [
+    1280,
+    720
+  ],
+  "base": "34bf16511019e88bf34ddfabfab624e533d7c20d",
+  "logical_processors": "12",
+  "engine": "Godot 4.7.2 standard",
+  "cpu_identifier": "Intel64 Family 6 Model 158 Stepping 10, GenuineIntel",
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+  "gpu": "NVIDIA GeForce GTX 1080",
+  "samples": "One run per game transition; 10 native brush redraw ticks; no percentile claim",
+  "physical_memory_bytes": null,
+  "renderer": "gl_compatibility",
+  "manual_brush_editor_capture": [
+    1920,
+    1018
+  ]
+}

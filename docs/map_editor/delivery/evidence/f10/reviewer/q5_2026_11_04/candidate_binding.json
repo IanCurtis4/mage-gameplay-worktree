@@ -1,0 +1,11 @@
+{
+  "base": "34bf16511019e88bf34ddfabfab624e533d7c20d",
+  "code_candidate": "8bbfb6c3ab39411fb27942d6d659ac94dc94aa6c",
+  "tested_before_commit_with_frozen_dirty_inputs": true,
+  "checked_inputs": 2214,
+  "source_and_fixture_match_tested_release_inputs": true,
+  "mismatches": [],
+  "four_user_backups_match_record": true,
+  "release_manifest_sha256": "b2748642eb1f794e641941d7edf6a6737322c858d7ec74aa31122aaa38949eb9",
+  "pre_fix_source_recovery": "journal_before/source/*.before.txt are byte-exact matches of hashes in import_typed/manifest.json; content reconstructed only after matching the recorded SHA256."
+}

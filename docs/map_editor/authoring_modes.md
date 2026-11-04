@@ -36,8 +36,10 @@ Receitas e geração por seed recusam exceções manuais; não as herdam em sil�
 
 Contexto é uma extensão opcional, com `version=1`, da fonte1. Fontes antigas não
 ganham campos nem hashes novos só por abrir. Novas fontes carregam o contexto
-nos snapshots, no intercâmbio e no pacote compilado. O limite do pacote continua
-4MiB. Recompilar uma fonte não reescreve expedições pessoais existentes.
+nos snapshots, no intercâmbio e no pacote compilado. Os tetos são específicos
+de cada formato; o pacote de patrulha passou a 8 MiB para os campos F10
+([contrato da fase](contracts/f10_first_phase.md)). Não há escala ilimitada.
+Recompilar uma fonte não reescreve expedições pessoais existentes.
 
 ## Tema dos encontros
 
