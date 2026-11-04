@@ -51,7 +51,10 @@ func run() -> void:
 	# Walk the field for a few seconds and measure the frames.
 	var origin: ExpeditionWorldPoint = host.player.world_point()
 	var geometry: WorldGeometry = host.player.world_motion.geometry
-	var goal := geometry.support_at(origin.surface_id,Vector2(origin.position.x+400.0,origin.position.z-300.0),geometry.geometry_revision)
+	var goal: Dictionary = {"ok":false}
+	for offset: Vector2 in [Vector2(300,-300),Vector2(400,0),Vector2(0,-400),Vector2(-300,-300),Vector2(250,250),Vector2(-400,0)]:
+		var probe := geometry.support_at(origin.surface_id,Vector2(origin.position.x,origin.position.z)+offset,geometry.geometry_revision)
+		if probe.ok: goal = probe; break
 	var moved := false; var worst := 0.0; var count := 0; var total := 0.0
 	if goal.ok:
 		host.spatial_pointer_move(host.get_canvas_transform().affine_inverse()*(host.get_canvas_transform()*ExpeditionGeometryView.project(goal.data.point.position)))
@@ -63,7 +66,9 @@ func run() -> void:
 		moved = host.player.world_point().position.distance_to(origin.position) > 100.0
 	check("player_walks_the_field",moved,[goal.ok,host.player.world_point().position.distance_to(origin.position)])
 	var status := host.ui_root.get_node("ExpeditionStatus") as ExpeditionStatusPanel
+	var suspend_started := Time.get_ticks_usec()
 	var suspended: Dictionary = await status.run_action({"kind":"suspend"})
+	var suspend_ms := (Time.get_ticks_usec()-suspend_started)/1000.0
 	check("suspends_to_the_lobby",suspended.get("ok",false) and current_scene is CharacterMenu,suspended.get("error_code",""))
 	if not suspended.get("ok",false): finish(); return
 	var lobby := current_scene as CharacterMenu
@@ -71,7 +76,7 @@ func run() -> void:
 	var resumed: Dictionary = await again.start()
 	var resumed_ok: bool = resumed.get("ok",false) and (resumed["root"] as RunController).campaign_runtime.state.current_stage_id == "forest_sanctuary_1"
 	check("resumes_the_phase",resumed_ok,resumed.get("error_code",""))
-	print("F10_FOREST_PLAY_TIMING "+JSON.stringify({"enter_ms":snappedf(enter_ms,1.0),"longest_frame_while_preparing_ms":snappedf(longest,0.1),"walk_frames":count,"walk_mean_ms":snappedf(total/maxf(1,count),0.1),"walk_worst_ms":snappedf(worst,0.1),"checkpoint_bytes":checkpoint_bytes,"profile_bytes":profile_bytes,"slots_field_1":state.slots.values().filter(func(slot: Dictionary) -> bool: return slot.stage_id == "forest_sanctuary_1").size()}))
+	print("F10_FOREST_PLAY_TIMING "+JSON.stringify({"enter_ms":snappedf(enter_ms,1.0),"longest_frame_while_preparing_ms":snappedf(longest,0.1),"walk_frames":count,"walk_mean_ms":snappedf(total/maxf(1,count),0.1),"walk_worst_ms":snappedf(worst,0.1),"checkpoint_bytes":checkpoint_bytes,"snapshot_raw_bytes":int(lock.checkpoint.get("byte_count",0)) if lock != null else -1,"checkpoint_base64_bytes":String(lock.checkpoint.get("snapshot","")).length() if lock != null else -1,"suspend_ms":snappedf(suspend_ms,1.0),"profile_bytes":profile_bytes,"slots_field_1":state.slots.values().filter(func(slot: Dictionary) -> bool: return slot.stage_id == "forest_sanctuary_1").size()}))
 	if resumed.get("ok",false): (resumed["root"] as Node).queue_free()
 	finish()
 func finish() -> void:

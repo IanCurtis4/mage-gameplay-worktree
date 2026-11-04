@@ -3,7 +3,9 @@ extends RefCounted
 ## Physical encoding of the existing explicit graph, never a second runtime serializer.
 ## Container IDs remain distinct even when their contents compare equal.
 const VERSION := 2
-const MAX_BYTES := 4 * 1024 * 1024
+## F10 Q4: a phase of three field-scale maps encodes at 4.96 MB (one field alone
+## was 1.05 MB); the ceiling keeps about 3x headroom over that.
+const MAX_BYTES := 16 * 1024 * 1024
 const MAX_DEPTH := 96
 const W_DICTIONARY := 0
 const W_ARRAY := 1

@@ -141,3 +141,39 @@ O perfil, onde o checkpoint é gravado, também tem teto de 4 MiB
 Antes disso, a entrada pelo lobby mostrou que o loot exige carta para quem não
 está na lista de espécies sem carta; as espécies da floresta entraram nessa
 lista (sem cartas por ora).
+
+### Resolução (decisão humana de 3/11: "Aumente o teto, ou se não for possível, quebre o snapshot em partes.")
+
+O teto subiu; não foi preciso dividir o snapshot. Os 10,6 MB eram o envelope
+lógico; a codificação compacta da fase dá **4,96 MB**, logo acima dos 4 MiB.
+
+| Teto | Antes | Agora | Medido |
+| --- | --- | --- | --- |
+| Snapshot codificado (`snapshot_graph_encoding.MAX_BYTES`) | 4 MiB | 16 MiB | 4,96 MB |
+| Base64 do checkpoint (`expedition_checkpoint_codec.MAX_ENCODED`) | 6 MiB | 22 MiB | 567 KB |
+| Arquivo do perfil (`ProfileCodec.MAX_FILE_BYTES`) | 4 MiB | 32 MiB | 574 KB |
+
+O perfil subiu porque toda expedição concluída guarda seu checkpoint (prova do
+mundo que pagou a conclusão): ~567 KB por conclusão da fase, ou seja, 4 MiB
+encheria depois de umas seis. Com 32 MiB cabem ~55; podar checkpoints de
+expedições concluídas é uma decisão de persistência em aberto.
+
+**`ForestPlay` 8/8** (janela real): o painel lista a fase; entra (preparo na
+thread + transação: 345 s no total, maior quadro 1,9 s); instala o primeiro
+campo com 62 encontros; o portal começa fechado; o personagem anda 400 u;
+suspende para o lobby (18,7 s) e retoma.
+
+**Regressão:** passam os 19 passos de persistência do `verify.ps1` (perfil,
+E07 F2, F3 e F4) e as etapas `SnapshotDensity`, `CampaignJournal`, `PhaseRules`
+e `ForestSpecies`. Os passos E07 F8 298–299 contavam 11 espécies de produção (agora
+16, nomeadas) e voltaram às mesmas falhas da base `3c35f7f2`.
+
+**Limites medidos que continuam:**
+
+- **Quadro no campo:** andando com 62 encontros e 196 objetos, o quadro médio foi
+  de **147 ms** (pior 180 ms), cerca de 7 fps. O `GridField` sem atores desenhava
+  no vsync; o custo está nos atores ou nos objetos em escala de campo. Precisa ser
+  investigado antes de chamar a fase de jogável.
+- **Transação completa:** suspender leva 18,7 s, e viajar por portal é a mesma
+  transação, então cada portal congela o jogo por uns 18 s.
+- **Entrada:** 345 s para entrar na fase (190 s de preparo dos três mapas).

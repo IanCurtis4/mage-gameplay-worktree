@@ -4,7 +4,8 @@ extends RefCounted
 const Encoding = preload("res://scripts/core/expedition/snapshot/snapshot_graph_encoding.gd")
 const FORMAT := 2
 const MAX_BYTES := Encoding.MAX_BYTES
-const MAX_ENCODED := 6 * 1024 * 1024
+## Base64 of the compressed snapshot: 4/3 of an incompressible MAX_BYTES, plus slack.
+const MAX_ENCODED := 22 * 1024 * 1024
 
 static func pack(snapshot: Dictionary, owner_digest: String, session: Dictionary) -> Dictionary:
 	var checked := SnapshotRegistry.new().validate(snapshot)

@@ -4,7 +4,10 @@ extends RefCounted
 
 const LEGACY_SCHEMA_VERSION := 7
 const OWNERSHIP_FIELDS := ["profile_unlocks", "expeditions", "asset_receipts", "migration_receipt"]
-const MAX_FILE_BYTES := 4 * 1024 * 1024
+## F10 Q4: the profile keeps the compressed checkpoint of every expedition,
+## completed ones included (~567 KB each for the forest phase); 4 MiB would fill
+## after about six completions.
+const MAX_FILE_BYTES := 32 * 1024 * 1024
 const MAX_EXACT_JSON_INTEGER := 9007199254740991
 const LEGACY_CATALOG_VERSION := 1
 const LEGACY_RULESET_ID := "e00_v1"

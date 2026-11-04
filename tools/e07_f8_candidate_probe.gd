@@ -59,7 +59,8 @@ func _run() -> void:
 	var loaded := BuildContentLoader.load_catalog(true)
 	if not check(loaded.get("ok", false), "production catalog available from source or PCK"): stop(); return
 	var catalog := ProfileCatalog.pilot()
-	if not check(catalog != null and loaded["catalog"].mob_catalog().ids().size() == 11, "eleven production mob definitions"): stop(); return
+	# F10 Q4 adds the five forest phase species to the eleven production definitions.
+	if not check(catalog != null and loaded["catalog"].mob_catalog().ids().size() == 16 and loaded["catalog"].mob_catalog().get_definition(&"forest_ancient_warden") != null, "sixteen production mob definitions (eleven plus five forest)"): stop(); return
 	facade = ProfileFacade.new(ProfileStore.new(output.path_join("profile"), catalog), ProfileRewardResolver.pilot_progression())
 	var opened := facade.open_profile()
 	if not check(opened.get("ok", false), "isolated profile opens: " + str(opened.get("error_code"))): stop(); return
