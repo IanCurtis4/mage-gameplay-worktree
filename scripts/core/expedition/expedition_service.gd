@@ -13,7 +13,7 @@ var _background: Dictionary = {}
 func _init(profile_facade: ProfileFacade) -> void:
 	facade = profile_facade
 
-func checkpoint(controller: RunController, barrier: SnapshotTickBarrier, expedition_id: String, phase_id: StringName, request_id: String, expected_revision: int, suspend: bool = false) -> Dictionary:
+func checkpoint(controller: RunController, barrier: SnapshotTickBarrier, expedition_id: String, phase_id: StringName, request_id: String, expected_revision: int, suspend: bool = false, frozen_cut: Dictionary = {}) -> Dictionary:
 	if not _pending.is_empty(): return _fail(&"recovery_required")
 	if controller == null or controller.persistent_facade != facade or controller.run_state == null: return _fail(&"invalid_session")
 	if barrier == null or not barrier.owns(controller): return _fail(&"tick_barrier_required")
@@ -24,11 +24,12 @@ func checkpoint(controller: RunController, barrier: SnapshotTickBarrier, expedit
 	if lock != null and lock.lifecycle not in [&"active",&"suspended",&"recovering"]: return _fail(&"policy_unresolved")
 	if lock != null and (lock.expedition_id != expedition_id or lock.phase_id != phase_id): return _fail(&"expedition_conflict")
 	if profile.expeditions.has(expedition_id) and profile.expeditions[expedition_id].character_id != controller.run_state.character_id: return _fail(&"expedition_conflict")
-	var captured := SnapshotRegistry.new().capture(controller,barrier)
+	# A cut taken under this same held barrier is identical to a fresh capture.
+	var captured := frozen_cut if _frozen(frozen_cut) else SnapshotRegistry.new().capture(controller,barrier)
 	if not captured["ok"]: return captured
-	return commit_cut(controller,captured["snapshot"],expedition_id,phase_id,request_id,expected_revision,suspend)
+	return commit_cut(controller,captured["snapshot"],expedition_id,phase_id,request_id,expected_revision,suspend,captured.get("encoding",PackedByteArray()))
 
-func commit_cut(controller: RunController, snapshot: Dictionary, expedition_id: String, phase_id: StringName, request_id: String, expected_revision: int, suspend: bool = false) -> Dictionary:
+func commit_cut(controller: RunController, snapshot: Dictionary, expedition_id: String, phase_id: StringName, request_id: String, expected_revision: int, suspend: bool = false, validated_encoding: PackedByteArray = PackedByteArray()) -> Dictionary:
 	if not _pending.is_empty(): return _fail(&"recovery_required")
 	if controller == null or controller.persistent_facade != facade or controller._memory_snapshot_barrier == null and controller.is_inside_tree() and not controller.get_tree().paused: return _fail(&"tick_barrier_required")
 	var profile := facade.current_profile()
@@ -53,7 +54,7 @@ func commit_cut(controller: RunController, snapshot: Dictionary, expedition_id: 
 	slot.phase_id = phase_id
 	slot.lifecycle = &"suspended" if suspend else (&"recovering" if _unrevived_death(controller) else &"active")
 	slot.revision += 1
-	var packed := ExpeditionCheckpointCodec.pack(snapshot,ExpeditionCheckpointCodec.owner_digest(candidate,slot.character_id),profile.reward_session)
+	var packed := ExpeditionCheckpointCodec.pack(snapshot,ExpeditionCheckpointCodec.owner_digest(candidate,slot.character_id),profile.reward_session,validated_encoding)
 	if not packed["ok"]: return packed
 	slot.checkpoint = packed["checkpoint"]
 	slot.journal = []
@@ -89,7 +90,7 @@ func collect(controller: RunController, barrier: SnapshotTickBarrier, ticket_id:
 	var candidate: ProfileState = prepared["candidate"]
 	# Mutate a detached graph only; callbacks and material publication wait for commit.
 	var registry := SnapshotRegistry.new()
-	var restored := registry.restore(captured["snapshot"],facade)
+	var restored := registry.restore(captured["snapshot"],facade,captured["encoding"])
 	if not restored["ok"]: return restored
 	var staged: RunController = restored["root"]
 	staged.reward_service.apply_collected(ticket_id,prepared,candidate)
@@ -104,7 +105,7 @@ func collect(controller: RunController, barrier: SnapshotTickBarrier, ticket_id:
 	staged.free()
 	if not after["ok"]: return after
 	lock.revision += 1
-	var packed := ExpeditionCheckpointCodec.pack(after["snapshot"],ExpeditionCheckpointCodec.owner_digest(candidate,lock.character_id),candidate.reward_session)
+	var packed := ExpeditionCheckpointCodec.pack(after["snapshot"],ExpeditionCheckpointCodec.owner_digest(candidate,lock.character_id),candidate.reward_session,after["encoding"])
 	if not packed["ok"]: return packed
 	lock.checkpoint = packed["checkpoint"]
 	lock.journal = []
@@ -266,7 +267,7 @@ func change_build(controller: RunController, barrier: SnapshotTickBarrier, inten
 	var candidate: ProfileState = material["candidate"]
 	var cut := SnapshotRegistry.new().capture(controller, barrier)
 	if not cut["ok"]: return cut
-	var restored := SnapshotRegistry.new().restore(cut["snapshot"], facade)
+	var restored := SnapshotRegistry.new().restore(cut["snapshot"], facade, cut["encoding"])
 	if not restored["ok"]: return restored
 	var staged: RunController = restored["root"]
 	for id: String in cut["snapshot"]["objects"]:
@@ -285,10 +286,10 @@ func change_build(controller: RunController, barrier: SnapshotTickBarrier, inten
 	staged.free()
 	if not after["ok"]: return after
 	var final_registry := SnapshotRegistry.new()
-	var final_world := final_registry.restore(after["snapshot"], facade)
+	var final_world := final_registry.restore(after["snapshot"], facade, after["encoding"])
 	if not final_world["ok"]: return final_world
 	lock.revision += 1
-	var packed := ExpeditionCheckpointCodec.pack(after["snapshot"], ExpeditionCheckpointCodec.owner_digest(candidate, lock.character_id), candidate.reward_session)
+	var packed := ExpeditionCheckpointCodec.pack(after["snapshot"], ExpeditionCheckpointCodec.owner_digest(candidate, lock.character_id), candidate.reward_session, after["encoding"])
 	if not packed["ok"]: final_world["root"].free(); return packed
 	lock.checkpoint = packed["checkpoint"]
 	lock.journal = []
@@ -307,6 +308,11 @@ func _replay(profile: ProfileState, expedition_id: String, request_id: String, f
 
 func _fingerprint(operation: String, expedition_id: String, phase_id: StringName, payload: String) -> String:
 	return MigrationPlan.canonical([operation,expedition_id,String(phase_id),payload]).sha256_text()
+
+## A frozen cut is the capture() result the caller took under the barrier it
+## still holds; its "encoding" is reused only with that same envelope.
+func _frozen(cut: Dictionary) -> bool:
+	return cut.get("ok", false) and cut.get("snapshot") is Dictionary and cut.get("encoding", PackedByteArray()) is PackedByteArray
 
 func _fail(code: StringName) -> Dictionary:
 	return ExpeditionCheckpointCodec.fail(code)
@@ -378,10 +384,10 @@ func campaign_command(controller: RunController, barrier: SnapshotTickBarrier, c
 	if entering and lock != null: return _fail(&"expedition_conflict")
 	if not entering and (lock == null or lock.expedition_id != id): return _fail(&"invalid_session")
 	# A cut taken under this same held barrier is identical to a fresh capture.
-	var cut := frozen_cut if frozen_cut.get("ok", false) and frozen_cut.get("snapshot") is Dictionary else SnapshotRegistry.new().capture(controller, barrier)
+	var cut := frozen_cut if _frozen(frozen_cut) else SnapshotRegistry.new().capture(controller, barrier)
 	if not cut["ok"]: return cut
 	var registry := SnapshotRegistry.new()
-	var restored := registry.restore(cut["snapshot"], facade)
+	var restored := registry.restore(cut["snapshot"], facade, cut.get("encoding", PackedByteArray()))
 	if not restored["ok"]: return restored
 	var staged: RunController = restored["root"]
 	# Restore captured modes off-tree, without advancing or installing the graph.
@@ -409,7 +415,7 @@ func campaign_command(controller: RunController, barrier: SnapshotTickBarrier, c
 	staged.free()
 	if not after["ok"]: return after
 	var final_registry := SnapshotRegistry.new()
-	var final_world := final_registry.restore(after["snapshot"], facade)
+	var final_world := final_registry.restore(after["snapshot"], facade, after["encoding"])
 	if not final_world["ok"]: return final_world
 	var slot := lock if lock != null else ExpeditionAssetLock.new()
 	slot.expedition_id = id
@@ -417,7 +423,7 @@ func campaign_command(controller: RunController, barrier: SnapshotTickBarrier, c
 	slot.phase_id = phase
 	slot.lifecycle = StringName(state.lifecycle)
 	slot.revision += 1
-	var packed := ExpeditionCheckpointCodec.pack(after["snapshot"], ExpeditionCheckpointCodec.owner_digest(candidate, slot.character_id), profile.reward_session)
+	var packed := ExpeditionCheckpointCodec.pack(after["snapshot"], ExpeditionCheckpointCodec.owner_digest(candidate, slot.character_id), profile.reward_session, after["encoding"])
 	if not packed["ok"]: final_world["root"].free(); return packed
 	slot.checkpoint = packed["checkpoint"]
 	slot.journal = []

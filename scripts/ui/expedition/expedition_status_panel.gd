@@ -12,6 +12,8 @@ var intent: Dictionary = {}
 var request := ""
 var busy := false
 var uncertain := false
+## The capture() result taken under the barrier this panel is still holding.
+var _cut: Dictionary = {}
 var last_actions := ""
 
 func _ready() -> void:
@@ -123,6 +125,9 @@ func run_action(command: Dictionary) -> Dictionary:
 	var captured: Dictionary = await host.memory_snapshot_ready
 	await get_tree().process_frame
 	if not captured["ok"]: return _finish(captured)
+	# The world stays frozen under the held barrier: the service reuses this cut
+	# instead of capturing and validating the same world a second time.
+	_cut = captured
 	return _execute()
 
 func _execute() -> Dictionary:
@@ -130,14 +135,17 @@ func _execute() -> Dictionary:
 	var result: Dictionary
 	if intent["kind"] == "suspend":
 		var state := host.campaign_runtime.state
-		result = service.checkpoint(host, host._memory_snapshot_barrier, state.expedition_id, StringName(state.manifest_data["input"]["phase_id"]), request, revision, true)
+		result = service.checkpoint(host, host._memory_snapshot_barrier, state.expedition_id, StringName(state.manifest_data["input"]["phase_id"]), request, revision, true, _cut)
 	elif intent["kind"] == "collect":
 		result = service.collect(host, host._memory_snapshot_barrier, intent["ticket_id"], request, revision)
-	else: result = service.campaign_command(host, host._memory_snapshot_barrier, intent, request, revision)
+	else: result = service.campaign_command(host, host._memory_snapshot_barrier, intent, request, revision, _cut)
 	return _finish(result)
 
 func _finish(result: Dictionary) -> Dictionary:
 	busy = false
+	# A cut serves one attempt: an uncertain write retries by reconciliation,
+	# and any other retry captures again under its own barrier.
+	_cut = {}
 	if result.get("ok", false):
 		if intent.get("kind") == "suspend" or (intent.get("kind") == "finish" and intent.get("outcome") == "quest"):
 			if result.has("root"): result["root"].free()

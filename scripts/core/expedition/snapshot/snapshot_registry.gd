@@ -185,7 +185,10 @@ func capture(root: Node, barrier: SnapshotTickBarrier) -> Dictionary:
 			checked["snapshot_metrics"] = _size_metrics(envelope,logical_bytes)
 		return checked
 	_objects.clear(); _visited_containers.clear(); _container_values.clear(); _visited_buckets.clear(); _value_buckets.clear()
-	return {"ok":true,"snapshot":envelope,"bytes":checked.byte_count,"logical_bytes":logical_bytes,"capture_usec":Time.get_ticks_usec()-started}
+	# "encoding" is the validated compact form of this envelope. A caller that
+	# restores or packs the same unmodified envelope may pass it instead of
+	# validating again; any other snapshot keeps the full validation.
+	return {"ok":true,"snapshot":envelope,"encoding":checked.encoding,"bytes":checked.byte_count,"logical_bytes":logical_bytes,"capture_usec":Time.get_ticks_usec()-started}
 
 func _size_metrics(envelope: Dictionary, byte_count: int) -> Dictionary:
 	# Diagnostics contain counts only; no profile or source payload is exported.
@@ -700,9 +703,10 @@ func _factory(kind: String) -> Object:
 		"res://scripts/core/expedition/spatial/flat_world_geometry.gd": return FlatWorldGeometry.new(null)
 	return (load(kind) as Script).new()
 
-func restore(snapshot: Dictionary, facade: ProfileFacade = null) -> Dictionary:
+func restore(snapshot: Dictionary, facade: ProfileFacade = null, validated_encoding: PackedByteArray = PackedByteArray()) -> Dictionary:
 	var started := Time.get_ticks_usec()
-	var checked := validate(snapshot)
+	# Only the encoding returned by capture() for this same envelope skips it.
+	var checked := {"ok":true} if not validated_encoding.is_empty() else validate(snapshot)
 	if not checked["ok"]: return checked
 	if not snapshot["authority"].is_empty():
 		if facade == null: return StableEntityRegistry.failure(&"restore_binding_required")

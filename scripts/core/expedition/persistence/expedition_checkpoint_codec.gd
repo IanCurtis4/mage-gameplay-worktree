@@ -7,10 +7,13 @@ const MAX_BYTES := Encoding.MAX_BYTES
 ## Base64 of the compressed snapshot: 4/3 of an incompressible MAX_BYTES, plus slack.
 const MAX_ENCODED := 22 * 1024 * 1024
 
-static func pack(snapshot: Dictionary, owner_digest: String, session: Dictionary) -> Dictionary:
-	var checked := SnapshotRegistry.new().validate(snapshot)
-	if not checked["ok"]: return checked
-	var bytes: PackedByteArray = checked.encoding
+static func pack(snapshot: Dictionary, owner_digest: String, session: Dictionary, validated_encoding: PackedByteArray = PackedByteArray()) -> Dictionary:
+	# validated_encoding: capture()'s encoding of this same unmodified envelope.
+	var bytes := validated_encoding
+	if bytes.is_empty():
+		var checked := SnapshotRegistry.new().validate(snapshot)
+		if not checked["ok"]: return checked
+		bytes = checked.encoding
 	if bytes.size() > MAX_BYTES: return fail(&"snapshot_too_large")
 	var compressed := bytes.compress(FileAccess.COMPRESSION_DEFLATE)
 	return {"ok":true,"checkpoint":{"format":FORMAT,"snapshot":Marshalls.raw_to_base64(compressed),"byte_count":bytes.size(),"sha256":digest_bytes(bytes),"compressed_sha256":digest_bytes(compressed),"owner_digest":owner_digest,"session":session.duplicate(true)}}

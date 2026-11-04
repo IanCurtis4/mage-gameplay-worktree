@@ -205,3 +205,46 @@ rota e mundo E07 F1 (os dois que falham são os da base: import nativo e
 
 **Ainda pendente:** a transação completa de suspender ou viajar por portal
 (~18 s) e a entrada na fase (~337 s).
+
+## Portais e suspensão (3/11)
+
+Pedido humano: "Sim, os portais". O `ForestPlay` passou a viajar de verdade:
+limpa o primeiro campo pelo caminho válido (`record_death` dos encontros que
+bloqueiam), vai à âncora do portal e viaja pelo painel até o segundo campo, de
+onde suspende e retoma (10 checagens). Marcar `cleared_once` direto deixava o
+estado inválido e a captura recusava com `invalid_payload`; é o validador
+fazendo o seu papel, não falha do jogo.
+
+Contadores temporários (removidos) mostraram onde ia o tempo. Cada `validate`
+de um snapshot de 4,96 MB custa 2,4–3 s, e a travessia validava o mesmo mundo
+seis vezes: a captura do painel, outra captura do serviço sobre o mesmo mundo
+congelado, os dois `restore` e o `pack`. Na suspensão eram duas capturas e o
+`pack`.
+
+| Correção | Onde |
+| --- | --- |
+| O painel guarda o corte que capturou sob a barreira e o entrega ao serviço (`checkpoint(..., frozen_cut)`, `campaign_command(..., frozen_cut)`); o corte vale para uma tentativa, e retentar captura de novo | `expedition_status_panel.gd`, `expedition_service.gd` |
+| `capture()` devolve também a codificação compacta que acabou de validar; `restore` e `ExpeditionCheckpointCodec.pack` aceitam essa codificação para o mesmo envelope sem validar de novo | `snapshot_registry.gd`, `expedition_checkpoint_codec.gd` |
+| As cadeias capturar → restaurar → empacotar do serviço (`campaign_command`, `collect`, `change_build`, `checkpoint`) e a suspensão durável do `main.gd` passam a codificação adiante | `expedition_service.gd`, `main.gd` |
+
+Snapshot que não veio de uma captura deste processo (retomada do perfil,
+testes que adulteram o envelope, chamadas sem a codificação) continua com a
+validação completa. O painel é `Control`, fora do grafo capturado, então o
+corte guardado nunca entra no snapshot.
+
+| Medida (`ForestPlay`, janela real) | Antes | Depois |
+| --- | --- | --- |
+| Viajar pelo portal | 46,5 s | 31,5 s |
+| Suspender no segundo campo | 23,7 s | 12,1 s |
+
+**Regressão:** os 19 passos de persistência do `verify.ps1` (perfil, E07 F2,
+F3 e F4, com `continuation` 2743 e `action_matrix` 2004 checagens) e as etapas
+`SnapshotDensity`, `CampaignJournal` e `ForestPlay` 10/10; 298–299 continuam
+nas falhas da base (pedem perfil sintético novo).
+
+**Limite que continua:** a travessia ainda reconstrói o mundo duas vezes por
+desenho da transação: restaura o corte fora da árvore, aplica o comando
+(instala o campo seguinte), captura e restaura de novo, para que o mundo
+instalado seja exatamente o checkpoint gravado (~10 s + ~6 s de captura + ~8 s
+de restauração). Tirar a segunda reconstrução muda essa garantia e é decisão
+de arquitetura de persistência; suspender ainda paga uma captura (~9 s).

@@ -4389,7 +4389,7 @@ func request_durable_suspend(expedition_id: String, phase_id: StringName, reques
 	await get_tree().process_frame
 	if not captured["ok"]: return captured
 	var service := ExpeditionService.new(persistent_facade)
-	var result := service.commit_cut(self,captured["snapshot"],expedition_id,phase_id,request_id,expected_revision,true)
+	var result := service.commit_cut(self,captured["snapshot"],expedition_id,phase_id,request_id,expected_revision,true,captured["encoding"])
 	# Keep reconciliation context reachable while this scene remains frozen.
 	if result.get("read_only",false): result["transaction_service"] = service
 	return result

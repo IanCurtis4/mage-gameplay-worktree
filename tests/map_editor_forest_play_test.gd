@@ -5,6 +5,7 @@ extends SceneTree
 ## suspends to the lobby and resumes. Measures the checkpoint the profile keeps.
 const F = preload("res://tests/fixtures/e07/f2/fixture.gd")
 var checks: Array[Dictionary] = []
+var report_travel := 0.0
 func _initialize() -> void: run.call_deferred()
 func check(id: String, ok: bool, detail: Variant = "") -> void:
 	checks.append({"id":id,"ok":ok,"detail":str(detail)}); print("F10_FOREST_PLAY_CHECK "+id+" "+str(ok)+" "+str(detail))
@@ -66,6 +67,23 @@ func run() -> void:
 		moved = host.player.world_point().position.distance_to(origin.position) > 100.0
 	check("player_walks_the_field",moved,[goal.ok,host.player.world_point().position.distance_to(origin.position)])
 	var status := host.ui_root.get_node("ExpeditionStatus") as ExpeditionStatusPanel
+	# Travel through the first portal (opened as by a clear) from its anchor.
+	for slot_id: String in state.slots:
+		var slot: Dictionary = state.slots[slot_id]
+		if slot.stage_id == "forest_sanctuary_1" and slot.blocks_clear and not slot.initial_resolved: state.record_death(slot_id,0,"forest_play_clear_"+slot_id)
+	check("first_field_clears",state.stages["forest_sanctuary_1"].cleared_once and state.portal_view(forward).open and host.campaign_runtime.valid())
+	var portal := state.portal_view(forward)
+	var anchor := ExpeditionPopulationPlanner.point(portal.from_anchor)
+	var placed := host.player.world_motion.teleport(anchor,1.0e20,geometry.geometry_revision)
+	await frames(2)
+	var travel_started := Time.get_ticks_usec()
+	var travelled: Dictionary = await status.run_action({"kind":"travel","portal_id":forward,"stage_id":"forest_sanctuary_1"})
+	var travel_ms := (Time.get_ticks_usec()-travel_started)/1000.0
+	if travelled.get("ok",false) and travelled.has("root"): host = travelled["root"]
+	if current_scene is RunController: host = current_scene
+	check("travels_to_the_second_field",travelled.get("ok",false) and host.campaign_runtime.state.current_stage_id == "forest_sanctuary_2",[placed.get("ok",false),travelled.get("error_code","")])
+	report_travel = travel_ms
+	status = host.ui_root.get_node("ExpeditionStatus") as ExpeditionStatusPanel
 	var suspend_started := Time.get_ticks_usec()
 	var suspended: Dictionary = await status.run_action({"kind":"suspend"})
 	var suspend_ms := (Time.get_ticks_usec()-suspend_started)/1000.0
@@ -74,9 +92,9 @@ func run() -> void:
 	var lobby := current_scene as CharacterMenu
 	var again := PhaseSelectionPanel.new(); lobby.add_child(again); again.configure(lobby,f["a"])
 	var resumed: Dictionary = await again.start()
-	var resumed_ok: bool = resumed.get("ok",false) and (resumed["root"] as RunController).campaign_runtime.state.current_stage_id == "forest_sanctuary_1"
+	var resumed_ok: bool = resumed.get("ok",false) and (resumed["root"] as RunController).campaign_runtime.state.current_stage_id == "forest_sanctuary_2"
 	check("resumes_the_phase",resumed_ok,resumed.get("error_code",""))
-	print("F10_FOREST_PLAY_TIMING "+JSON.stringify({"enter_ms":snappedf(enter_ms,1.0),"longest_frame_while_preparing_ms":snappedf(longest,0.1),"walk_frames":count,"walk_mean_ms":snappedf(total/maxf(1,count),0.1),"walk_worst_ms":snappedf(worst,0.1),"checkpoint_bytes":checkpoint_bytes,"snapshot_raw_bytes":int(lock.checkpoint.get("byte_count",0)) if lock != null else -1,"checkpoint_base64_bytes":String(lock.checkpoint.get("snapshot","")).length() if lock != null else -1,"suspend_ms":snappedf(suspend_ms,1.0),"profile_bytes":profile_bytes,"slots_field_1":state.slots.values().filter(func(slot: Dictionary) -> bool: return slot.stage_id == "forest_sanctuary_1").size()}))
+	print("F10_FOREST_PLAY_TIMING "+JSON.stringify({"enter_ms":snappedf(enter_ms,1.0),"longest_frame_while_preparing_ms":snappedf(longest,0.1),"walk_frames":count,"walk_mean_ms":snappedf(total/maxf(1,count),0.1),"walk_worst_ms":snappedf(worst,0.1),"checkpoint_bytes":checkpoint_bytes,"snapshot_raw_bytes":int(lock.checkpoint.get("byte_count",0)) if lock != null else -1,"checkpoint_base64_bytes":String(lock.checkpoint.get("snapshot","")).length() if lock != null else -1,"suspend_ms":snappedf(suspend_ms,1.0),"travel_ms":snappedf(report_travel,1.0),"profile_bytes":profile_bytes,"slots_field_1":state.slots.values().filter(func(slot: Dictionary) -> bool: return slot.stage_id == "forest_sanctuary_1").size()}))
 	if resumed.get("ok",false): (resumed["root"] as Node).queue_free()
 	finish()
 func finish() -> void:
