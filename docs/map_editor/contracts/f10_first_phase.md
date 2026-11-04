@@ -177,3 +177,31 @@ e `ForestSpecies`. Os passos E07 F8 298–299 contavam 11 espécies de produçã
 - **Transação completa:** suspender leva 18,7 s, e viajar por portal é a mesma
   transação, então cada portal congela o jogo por uns 18 s.
 - **Entrada:** 345 s para entrar na fase (190 s de preparo dos três mapas).
+
+## Desempenho no campo (3/11)
+
+Pedido humano: "Sim, investigar". A etapa nativa `ForestProfile` abre o Prado
+dos Terraços publicado no app de teste de jogo e mede o quadro em variantes
+(inimigos pausados, mapa escondido, `sync` da vista desligado, interface,
+`_process` do jogo e jogador). Contadores temporários, removidos depois,
+localizaram o custo.
+
+| Causa | Custo por quadro | Correção |
+| --- | --- | --- |
+| Cada inimigo traçava a visibilidade de cada ator da sua tabela de ameaça a cada quadro (`_advance_threat` → `world_can_reach`), mesmo ocioso e a quilômetros | ~139 ms com 62 inimigos | No mundo, a visibilidade só é traçada quando importa: inimigo engajado, provocado ou dentro do raio de aggro. Fora disso o ator conta como não visível, e o engajamento só acontece nesses casos. O ocioso também testa a distância de aggro antes da linha de visão |
+| `CanvasOrder.apply` refazia a ordem de ~980 nós do desenho do campo a cada quadro, mesmo sem mudança, e `reveal_actors` comparava os props com os pés | ~14 + 3 ms | A vista recalcula ordem e oclusão só quando um ator se move ou aparece (ou o desenho muda), no máximo a cada 50 ms no laço do jogo (`sync()` direto sempre aplica); com campo de skill ativo, todo quadro. O solver não revalida o mesmo dicionário já validado, props guardam o registro no nó e o ator usa a maior altura já vista |
+
+| Medida (janela real, 62 inimigos, 196 objetos) | Antes | Depois |
+| --- | --- | --- |
+| Parado, tudo ligado | 155 ms | 19,7 ms |
+| Parado, inimigos pausados | 30 ms | 13,4 ms (vsync) |
+| Andando (`ForestPlay`) | 147 ms | 21,4 ms (pior 38,5 ms) |
+
+**Regressão:** `CanvasOrder`, `OcclusionNative`, `ShadowsNative`,
+`GameplayNative`, `FieldsNative` (que acusou a primeira versão, sem os campos de
+skill), `RuntimeView` e `ForestPlay`; 31 de 33 passos do `verify.ps1` de IA,
+rota e mundo E07 F1 (os dois que falham são os da base: import nativo e
+`presentation` 1/37).
+
+**Ainda pendente:** a transação completa de suspender ou viajar por portal
+(~18 s) e a entrada na fase (~337 s).

@@ -8,6 +8,18 @@ var skin: PackageView
 var occluded := 0
 var ordering: Dictionary = {}
 var package: Dictionary = {}
+## F10 Q4: the canvas order and the occlusion fade are recomputed only when an
+## actor moved or appeared (and at most every ORDER_INTERVAL_MSEC while they keep
+## moving); a field has ~1000 drawn nodes and re-solving an unchanged order took
+## ~14 ms a frame.
+const ORDER_INTERVAL_MSEC := 50
+var _order_signature: Array = []
+var _order_due_msec := 0
+var _frame_paced := false
+
+## The frame loop paces the order; a direct sync() always applies a change.
+func _process(_delta: float) -> void:
+	_frame_paced = true; sync(); _frame_paced = false
 
 func configure_package(value: Dictionary, world: WorldGeometry) -> Dictionary:
 	var proposed := PackageView.new()
@@ -64,10 +76,16 @@ func sync() -> void:
 	_actors = kept
 	# Camera-occluding props fade while the player or an enemy is behind them.
 	var feet: Array = []
+	var signature: Array = [skin.get_child_count()]
 	for actor: CombatActor in observed:
 		if actor.visible: feet.append(actor.world_point().position)
-	occluded = Objects.reveal_actors(skin.object_sprites,feet)
+		signature.append(actor.get_instance_id()); signature.append(actor.visible); signature.append(actor.world_point().position)
 	# Never call the base height-Z assignment: it invalidates warm topology reuse.
 	field_views.sync(skin,controller,geometry,_hidden)
-	ordering = CanvasOrder.apply(skin,observed)
+	# Skill fields change shape every frame: while one exists, order every frame.
+	if not field_views.entries.is_empty(): signature.append(Engine.get_process_frames()); _order_due_msec = 0
+	if signature != _order_signature and (not _frame_paced or Time.get_ticks_msec() >= _order_due_msec):
+		occluded = Objects.reveal_actors(skin.object_sprites,feet)
+		ordering = CanvasOrder.apply(skin,observed)
+		_order_signature = signature; _order_due_msec = Time.get_ticks_msec()+ORDER_INTERVAL_MSEC
 	if _effects != null: _effects.queue_redraw()

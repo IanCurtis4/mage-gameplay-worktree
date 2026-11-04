@@ -684,9 +684,12 @@ func _refresh_world_engagement(delta: float) -> bool:
 		if engagement_mode == &"engaged" or threat.engaged or world_point().position.distance_to(_world_home.position) > _mob_definition.leash_radius: _begin_return()
 		player_target_acquired = false
 		return false
+	# F10 Q4: an idle mob engages only within its aggro radius (or when taunted);
+	# that cheap check comes before the line of sight, which crosses the world.
+	if engagement_mode == &"idle" and taunt_remaining <= 0.0 and world_distance_to(player) > _mob_definition.aggro_radius: player_target_acquired = false; return false
 	var visible := _can_see_player()
 	if engagement_mode == &"idle":
-		if not visible or (taunt_remaining <= 0.0 and world_distance_to(player) > _mob_definition.aggro_radius): player_target_acquired = false; return false
+		if not visible: player_target_acquired = false; return false
 		engagement_mode = &"engaged"
 		world_motion.cancel()
 		_repath_time = 0.0
@@ -838,7 +841,13 @@ func _advance_threat(delta: float) -> void:
 	for id: String in threat_actors.keys():
 		var actor: PlayerActor = threat_actors[id]
 		var alive := is_instance_valid(actor) and actor.is_alive()
-		var visible := _threat_actor_visible(actor, threat.forced_id == id and threat.forced_remaining > 0.0)
+		var forced: bool = threat.forced_id == id and threat.forced_remaining > 0.0
+		# F10 Q4: in the world, sight is traced only when it can matter: engaged,
+		# taunted or within the aggro radius. 62 idle mobs on a 10 km field spent
+		# ~139 ms a frame tracing sight to a player kilometres away.
+		var visible := false
+		if world_motion == null or threat.engaged or forced or _mob_definition == null or _mob_definition.aggro_radius <= 0.0 or world_distance_to(actor) <= _mob_definition.aggro_radius:
+			visible = _threat_actor_visible(actor, forced)
 		threat.eligibility(id, alive, visible)
 		if not is_instance_valid(actor): threat_actors.erase(id)
 	if not is_alive(): threat.disengage()

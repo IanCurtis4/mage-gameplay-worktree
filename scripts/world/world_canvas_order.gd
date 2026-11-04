@@ -141,6 +141,10 @@ static func solve(items: Array, cache: Dictionary = {}, break_cycles: bool = fal
 	var records := {}; var ids: Array[String] = []; var changed := {}
 	var previous: Dictionary = cache.get("records",{}) if cache.get("version") == 2 else {}
 	for item: Variant in items:
+		# F10 Q4: the very dictionary already validated last frame (static meshes and
+		# props) needs no new check; only new or changed records are validated.
+		if item is Dictionary and item.get("id") is String and previous.has(item.id) and is_same(previous[item.id],item) and not records.has(item.id):
+			ids.append(item.id); records[item.id] = item; continue
 		if not item is Dictionary or not item.has_all(["id","kind","bounds","screen","anchor"]) or not item.id is String or item.id.is_empty() or records.has(item.id) or item.kind not in ["mesh","sprite"] or not item.bounds is AABB or not item.screen is Rect2 or not item.anchor is Vector3 or not item.anchor.is_finite() or not item.bounds.position.is_finite() or not item.bounds.size.is_finite(): return {"ok":false,"code":"presentation_invalid"}
 		if not item.screen.position.is_finite() or not item.screen.size.is_finite() or minf(item.screen.size.x,item.screen.size.y) < 0 or minf(item.bounds.size.x,minf(item.bounds.size.y,item.bounds.size.z)) < 0: return {"ok":false,"code":"presentation_invalid"}
 		var identical: bool = previous.has(item.id) and previous[item.id] == item
@@ -267,11 +271,17 @@ static func apply(root: Node2D, observed: Array = []) -> Dictionary:
 			var anchor: Vector3 = node.get_meta("world_position"); var radius := float(node.get_meta("footprint_radius",1.0)); var height := float(node.get_meta("world_height",1.0))
 			var rect := Rect2(node.position+node.get_rect().position*node.scale,node.get_rect().size*node.scale)
 			record = {"id":id,"kind":"sprite","anchor":anchor,"bounds":AABB(anchor-Vector3(radius,0,radius),Vector3(radius*2,height,radius*2)),"screen":rect}
+			# F10 Q4: a prop does not move; its record is kept like a mesh record.
+			node.set_meta("canvas_order_record",record)
 		elif node.has_method("world_point"):
 			id = "actor_"+(str(node.get_path()) if node.get_parent() != root and node.is_inside_tree() else str(node.name))
 			var point: Variant = node.call("world_point")
 			if point == null: continue
-			var radius := float(node.get("collision_radius")); var height := float(node.get("_sprite_visible_height"))*float(node.get("sprite_visual_scale"))
+			# F10 Q4: the tallest height seen so far, not this animation frame's: an
+			# idle animation would mark every actor changed every frame and re-solve
+			# its order against the field meshes (~11 ms a frame with 63 actors).
+			var radius := float(node.get("collision_radius")); var height := maxf(float(node.get_meta("canvas_order_height",0.0)),float(node.get("_sprite_visible_height"))*float(node.get("sprite_visual_scale")))
+			node.set_meta("canvas_order_height",height)
 			var anchor: Vector3 = point.position; var screen := ProjectionMath.project(anchor)
 			record = {"id":id,"kind":"sprite","anchor":anchor,"bounds":AABB(anchor-Vector3(radius,0,radius),Vector3(radius*2,height,radius*2)),"screen":Rect2(screen-Vector2(height*0.65,height),Vector2(height*1.3,height+8))}
 		if record.is_empty(): continue
