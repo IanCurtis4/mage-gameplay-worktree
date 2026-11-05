@@ -167,6 +167,7 @@ var gameplay_extension := false
 var active_bounds := ARENA_BOUNDS
 var _world_obstacle_views: Array[Node2D] = []
 var route_camera: Camera2D
+var stage_minimap: StageMinimap
 var training_boss: EnemyActor = null
 var _training_add_elapsed := 0.0
 var _training_wave_index := 0
@@ -349,8 +350,10 @@ func _ready() -> void:
 		_spawn_encounter(1)
 
 func _create_runtime_camera() -> void:
+	control_preferences.load_camera_zoom()
 	var camera := Camera2D.new()
 	route_camera = camera
+	camera.zoom = Vector2.ONE * control_preferences.camera_zoom
 	camera.position_smoothing_enabled = true
 	camera.position_smoothing_speed = 7.0
 	camera.limit_left = int(active_bounds.position.x - 40.0)
@@ -398,6 +401,7 @@ func _process(_delta: float) -> void:
 	_auto_collect()
 	_advance_runtime(_delta)
 	_update_hud()
+	_update_stage_minimap(_delta)
 	for element: StringName in geometer_element_buttons:
 		var element_button := geometer_element_buttons[element]
 		element_button.disabled = get_tree().paused or run_finished or not player.is_alive()
@@ -467,6 +471,11 @@ func _input(event: InputEvent) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if player != null and player.world_motion != null and expedition_view == null: return # Logical-only consumers have no pointer adapter.
+	if event is InputEventMouseButton and event.pressed and event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN]:
+		if not _camera_zoom_available() or not _world_pointer_available(): return
+		change_camera_zoom(1 if event.button_index == MOUSE_BUTTON_WHEEL_UP else -1)
+		get_viewport().set_input_as_handled()
+		return
 	if event is InputEventKey and event.pressed and not event.echo:
 		if _keyboard_text_focused():
 			return
@@ -1052,7 +1061,88 @@ func change_interface_preferences(ui_scale: float, confine_cursor: bool) -> void
 
 func _apply_interface_preferences() -> void:
 	if ui_root != null: GuiMetrics.set_scale(control_preferences.ui_scale, ui_root)
+	_layout_stage_minimap()
 	_apply_cursor_mode(true)
+
+func _camera_zoom_available() -> bool:
+	return is_inside_tree() and not snapshot_passive and not _memory_snapshot_pending and not inventory_frozen and not get_tree().paused and not run_finished and is_instance_valid(route_camera)
+
+func change_camera_zoom(step: int) -> void:
+	_set_camera_zoom(control_preferences.camera_zoom + float(step) * ControlPreferences.CAMERA_ZOOM_STEP)
+
+func reset_camera_zoom() -> void:
+	_set_camera_zoom(1.0)
+
+func _set_camera_zoom(value: float) -> void:
+	if not _camera_zoom_available() or not is_finite(value): return
+	control_preferences.camera_zoom = snappedf(clampf(value, ControlPreferences.CAMERA_ZOOM_MIN, ControlPreferences.CAMERA_ZOOM_MAX), 0.1)
+	route_camera.zoom = Vector2.ONE * control_preferences.camera_zoom
+	route_camera.force_update_scroll()
+	if is_instance_valid(stage_minimap): stage_minimap.set_camera_zoom(control_preferences.camera_zoom)
+	if control_preferences.save_settings() != OK:
+		status_label.text = "Zoom aplicado; não foi possível salvar a preferência."
+
+func _build_stage_minimap() -> void:
+	stage_minimap = StageMinimap.new()
+	stage_minimap.name = "StageMinimap"
+	ui_root.add_child(stage_minimap)
+	# Keep all modals above the map, including inventory and settings.
+	ui_root.move_child(stage_minimap, hud_panel.get_index())
+	stage_minimap.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	stage_minimap.zoom_requested.connect(change_camera_zoom)
+	stage_minimap.zoom_reset_requested.connect(reset_camera_zoom)
+	stage_minimap.set_camera_zoom(control_preferences.camera_zoom)
+	stage_minimap.minimum_size_changed.connect(_layout_stage_minimap)
+	ui_root.resized.connect(_layout_stage_minimap)
+	bottom_controls.item_rect_changed.connect(_layout_stage_minimap)
+	_configure_stage_minimap()
+	_layout_stage_minimap()
+	_update_stage_minimap(0.1)
+
+func _layout_stage_minimap() -> void:
+	if not is_instance_valid(stage_minimap) or ui_root == null: return
+	var extent := stage_minimap.get_combined_minimum_size()
+	if extent.x <= 0.0 or extent.y <= 0.0: return
+	var bar_top := ui_root.size.y - 286.0
+	if is_instance_valid(bottom_controls) and bottom_controls.size.y > 0.0:
+		bar_top = minf(bar_top, bottom_controls.position.y)
+	var fit := clampf((bar_top - 88.0) / extent.y, 0.55, 1.0)
+	stage_minimap.scale = Vector2.ONE * fit
+	stage_minimap.offset_left = -24.0 - extent.x * fit
+	stage_minimap.offset_right = stage_minimap.offset_left + extent.x
+	stage_minimap.offset_top = 76.0
+	stage_minimap.offset_bottom = 76.0 + extent.y
+	if is_instance_valid(help_panel):
+		help_panel.offset_top = stage_minimap.offset_top + extent.y * fit + 12.0
+		help_panel.offset_bottom = help_panel.offset_top + 146.0
+		help_panel.visible = geometer_casting == null and help_panel.offset_bottom < bar_top - 12.0
+
+func _configure_stage_minimap(force: bool = false) -> void:
+	if not is_instance_valid(stage_minimap) or not is_instance_valid(player): return
+	var world := player.world_motion.geometry if player.world_motion != null else null
+	if world != null:
+		if not force and stage_minimap.has_meta("geometry") and stage_minimap.get_meta("geometry") == world and stage_minimap.get_meta("configuration", -1) == world.configuration_revision: return
+		var snapshot := world.presentation_snapshot(world.geometry_revision)
+		if not snapshot["ok"]: return
+		var data := StageMinimapData.world_map(snapshot["data"])
+		stage_minimap.configure_map(data["bounds"], data["surfaces"], data["obstacles"])
+		stage_minimap.set_meta("geometry", world)
+		stage_minimap.set_meta("configuration", world.configuration_revision)
+	elif is_instance_valid(arena_view):
+		if not force and stage_minimap.has_meta("flat_map"): return
+		var data := StageMinimapData.flat_map(arena_view.bounds, arena_view.obstacles)
+		stage_minimap.configure_map(data["bounds"], data["surfaces"], data["obstacles"])
+		stage_minimap.set_meta("flat_map", true)
+
+func _update_stage_minimap(delta: float) -> void:
+	if not is_instance_valid(stage_minimap) or snapshot_passive: return
+	var elapsed := float(stage_minimap.get_meta("elapsed", 0.0)) + delta
+	if elapsed < 0.1: stage_minimap.set_meta("elapsed", elapsed); return
+	stage_minimap.set_meta("elapsed", 0.0)
+	_configure_stage_minimap()
+	var markers := StageMinimapData.actor_markers(player, enemies)
+	if markers["ok"]: stage_minimap.update_markers(markers["player"], markers["heading"], markers["enemies"])
+	stage_minimap.set_zoom_enabled(_camera_zoom_available())
 
 func _apply_cursor_mode(focused: bool) -> void:
 	if DisplayServer.get_name() == "headless": return
@@ -3869,6 +3959,7 @@ func _build_ui() -> void:
 		var expedition_status := ExpeditionStatusPanel.new()
 		expedition_status.host = self
 		ui_root.add_child(expedition_status)
+	_build_stage_minimap()
 
 
 func _battle_theme() -> Theme:
@@ -3959,6 +4050,7 @@ func _configure_world(stage: int) -> void:
 	if expedition_entry_mode: obstacles.clear()
 	navigation.configure(active_bounds, obstacles, 22.0)
 	arena_view.configure(active_bounds, obstacles)
+	_configure_stage_minimap(true)
 	for view: Node2D in _world_obstacle_views:
 		if is_instance_valid(view): view.free()
 	_world_obstacle_views.clear()
@@ -4295,6 +4387,7 @@ func attach_expedition_view(view: ExpeditionGeometryView, field_height: float) -
 		var bound := geometer_casting.bind_world_construction(field_height)
 		if not bound["ok"]: return bound
 	expedition_view = view; expedition_field_height = field_height; view.controller = self
+	_configure_stage_minimap()
 	# Interactive play searches long routes on a worker thread; headless runs,
 	# tests and RAGRPG_SYNC_NAVIGATION=1 stay synchronous.
 	view.geometry.navigation_async = DisplayServer.get_name() != "headless" and OS.get_environment("RAGRPG_SYNC_NAVIGATION") != "1"

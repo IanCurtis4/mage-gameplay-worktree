@@ -1397,6 +1397,7 @@
       "persistent_facade": "presentation/input settings or externally rebound profile authority",
       "_world_obstacle_views": "presentation/input settings or externally rebound profile authority",
       "route_camera": "presentation/input settings or externally rebound profile authority",
+      "stage_minimap": "disposable presentation; rebuilt after install, never gameplay authority",
       "health_label": "presentation/input settings or externally rebound profile authority",
       "sp_label": "presentation/input settings or externally rebound profile authority",
       "skill_label": "presentation/input settings or externally rebound profile authority",
@@ -1935,6 +1936,7 @@
     "omitted": {
       "path": "external settings write destination; host default, never selected by snapshot",
       "ui_scale": "interface preference of this machine, reread from the settings file",
+      "camera_zoom": "camera preference of this machine; reread on camera creation, never restored from checkpoint",
       "confine_cursor": "interface preference of this machine, reread from the settings file"
     }
   },

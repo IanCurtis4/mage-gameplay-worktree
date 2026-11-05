@@ -358,6 +358,8 @@ Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f6_runtime_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f6_snapshot_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f7_presentation_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/stage_minimap_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/stage_minimap_data_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f7_migration_boundary_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f7_authoring_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f7_flow_test.gd')

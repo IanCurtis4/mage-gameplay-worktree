@@ -7,6 +7,10 @@ var path := "user://controls.cfg"
 ## F10 Q3: interface scale and an optional cursor confined to the game window.
 var ui_scale := GuiMetrics.SCALE
 var confine_cursor := false
+const CAMERA_ZOOM_MIN := 0.5
+const CAMERA_ZOOM_MAX := 1.6
+const CAMERA_ZOOM_STEP := 0.1
+var camera_zoom := 1.0
 const SLOT_COUNT := 24
 const DEFAULT_KEYS := [KEY_1, KEY_2, KEY_3, KEY_4, KEY_R, KEY_F, KEY_Q, KEY_E, KEY_APOSTROPHE, KEY_V, KEY_5, KEY_T]
 const RESERVED_KEYS := [KEY_ESCAPE, KEY_TAB, KEY_F1, KEY_F2, KEY_F3, KEY_F6, KEY_F8, KEY_F9]
@@ -21,10 +25,12 @@ func load_settings() -> void:
 	smart_lock = true
 	ui_scale = GuiMetrics.SCALE
 	confine_cursor = false
+	camera_zoom = 1.0
 	restore_bindings()
 	var config := ConfigFile.new()
 	if config.load(path) != OK:
 		return
+	_read_camera_zoom(config)
 	var stored_mode: Variant = config.get_value("battle", "cast_mode", CastIntent.Mode.CONFIRM)
 	if stored_mode is int and stored_mode >= CastIntent.Mode.CONFIRM and stored_mode <= CastIntent.Mode.INSTANT:
 		cast_mode = stored_mode
@@ -53,7 +59,19 @@ func save_settings() -> Error:
 	config.set_value("battle", "action_bindings", bindings)
 	config.set_value("interface", "ui_scale", ui_scale)
 	config.set_value("interface", "confine_cursor", confine_cursor)
+	config.set_value("interface", "camera_zoom", camera_zoom)
 	return config.save(path)
+
+func load_camera_zoom() -> void:
+	# Snapshots restore battle bindings; this machine's camera setting stays external.
+	camera_zoom = 1.0
+	var config := ConfigFile.new()
+	if config.load(path) == OK: _read_camera_zoom(config)
+
+func _read_camera_zoom(config: ConfigFile) -> void:
+	var value: Variant = config.get_value("interface", "camera_zoom", 1.0)
+	if (value is float or value is int) and is_finite(float(value)):
+		camera_zoom = clampf(float(value), CAMERA_ZOOM_MIN, CAMERA_ZOOM_MAX)
 
 func restore_bindings() -> void:
 	bindings.clear()
