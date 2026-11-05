@@ -1,0 +1,14 @@
+{
+  "engine_owner": "root",
+  "script_sha256": "9872CDC9E751800E1BE2C0F8E365999472C7D0A82EF3F8E29B2B41EEA195BB70",
+  "personal_profile_used": false,
+  "date": "2026-11-05",
+  "writes": [
+    ".godot/loading_study_2026_11_05",
+    "fixture/.godot/loading_study_2026_11_05"
+  ],
+  "future_integration_authorized": false,
+  "agents": "read-only analysis only",
+  "scope": "read-only architecture experiment, one published map; no runtime or gameplay authority change",
+  "base": "8c38ea8fd5a15189aece64a9e814d176a3848d58"
+}

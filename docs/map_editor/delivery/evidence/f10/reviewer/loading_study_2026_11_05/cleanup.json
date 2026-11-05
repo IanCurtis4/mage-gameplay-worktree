@@ -1,0 +1,10 @@
+{
+  "removed_bytes": 379584,
+  "no_engine_processes": true,
+  "removed": [
+    ".godot/loading_study_2026_11_05",
+    ".godot/verification/e07_f1/fixture_project/.godot/loading_study_2026_11_05",
+    ".godot/verification/e07_f1/fixture_project/.godot/loading_study_profile"
+  ],
+  "fixture_preserved": true
+}

@@ -1,0 +1,155 @@
+extends SceneTree
+## Read-only architecture experiment. Never a gameplay loader or admission API.
+const Release = preload("res://scripts/map_authoring/release/map_release.gd")
+const PatrolCompiler = preload("res://scripts/map_authoring/patrol/patrol_compiler.gd")
+const Population = preload("res://scripts/map_authoring/population/population_compiler.gd")
+const Catalog = preload("res://scripts/map_authoring/population/population_catalog.gd")
+const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
+const Batch = preload("res://scripts/core/expedition/spatial/world_connectivity_batch.gd")
+const Grid = preload("res://scripts/core/expedition/spatial/world_height_grid.gd")
+var output := ""
+var checks: Array[Dictionary] = []
+var expected_root: Dictionary = {}
+var expected_targets: Array = []
+var expected_profile: Dictionary = {}
+func _initialize() -> void: run.call_deferred()
+func check(id: String, passed: bool) -> bool:
+	checks.append({"id":id,"ok":passed})
+	if not passed: finish({"failed":id})
+	return passed
+func run() -> void:
+	var args := OS.get_cmdline_user_args()
+	if args.size() != 2: quit(2); return
+	output = args[1]
+	if args[0] == "collect": collect()
+	elif args[0] == "verify": verify()
+	else: quit(2)
+func retain(data: Dictionary, targets: Array, outward: bool, nodes: Dictionary) -> Dictionary:
+	var selected := {}; var all: Dictionary = data.outward_previous if outward else data.inward_previous
+	for target: Dictionary in targets:
+		var cursor: String = target.node_id
+		var seen := {}
+		while cursor != "@root" and not selected.has(cursor):
+			if seen.has(cursor) or not all.has(cursor): return {"ok":false}
+			seen[cursor] = true
+			var record: Dictionary = all[cursor]
+			nodes[cursor] = data.states[cursor].duplicate(true)
+			nodes[record.from] = data.states[record.from].duplicate(true)
+			selected[cursor] = record.duplicate(true)
+			cursor = record.from
+	return {"ok":true,"previous":selected}
+func collect() -> void:
+	var started := Time.get_ticks_usec()
+	var loaded := Release.load_package("forest_terraces")
+	var load_ms := (Time.get_ticks_usec()-started)/1000.0
+	if not check("normal_public_loader",loaded.ok): return
+	var manifest := PatrolCompiler.manifest(loaded.package)
+	var catalog := Catalog.load_current()
+	if not check("catalog",catalog.ok): return
+	var planned := ExpeditionPopulationPlanner.build(manifest,catalog.catalog,loaded.package.population_package.rules)
+	if not check("fresh_planner_world",planned.ok): return
+	var world: WorldGeometry = planned.worlds.map_preview
+	var targets: Array[ExpeditionWorldPoint] = []
+	var profile: Dictionary = {}
+	for slot: Dictionary in planned.slots.values():
+		if profile.is_empty(): profile = slot.traversal.duplicate(true)
+		if not check("single_profile_"+String(slot.slot_id),profile == slot.traversal): return
+		targets.append(ExpeditionPopulationPlanner.point(slot.home))
+	var root_point: ExpeditionWorldPoint
+	for socket: Dictionary in world._stage.sockets:
+		if socket.socket_id == world._stage.entrance: root_point = ExpeditionWorldPoint.create("map_preview",socket.surface_id,socket.position)
+	if not check("entry",root_point != null): return
+	started = Time.get_ticks_usec()
+	var certificate := world.connectivity_batch(root_point,targets,profile,world.geometry_revision)
+	var certificate_ms := (Time.get_ticks_usec()-started)/1000.0
+	if not check("normal_certificate",certificate.ok and certificate.data.complete and certificate.data.all_reachable): return
+	var nodes := {"@root":certificate.data.states["@root"].duplicate(true)}
+	var out := retain(certificate.data,certificate.data.targets,true,nodes)
+	var back := retain(certificate.data,certificate.data.targets,false,nodes)
+	if not check("retained_paths",out.ok and back.ok): return
+	var proof := {"format":1,"package_hash":loaded.package.package_hash,"rpp_sha256":FileAccess.get_sha256(loaded.entry.path),"rpp_path":loaded.entry.path,"graph_revision":Batch.REVISION,"profile":profile,"root":root_point.to_data(),"targets":certificate.data.targets.duplicate(true),"nodes":nodes,"outward":out.previous,"inward":back.previous}
+	var bytes := var_to_bytes(proof)
+	var file := FileAccess.open(output.path_join("proof.bin"),FileAccess.WRITE)
+	if not check("proof_output",file != null): return
+	file.store_buffer(bytes); file.close()
+	finish({"normal_load_ms":load_ms,"certificate_after_warm_load_ms":certificate_ms,"full_certificate_bytes":var_to_bytes(certificate).size(),"compact_proof_bytes":bytes.size(),"zstd_proof_bytes":bytes.compress(FileAccess.COMPRESSION_ZSTD).size(),"rpp_bytes":FileAccess.get_file_as_bytes(loaded.entry.path).size(),"targets":targets.size(),"retained_nodes":nodes.size(),"outward_edges":out.previous.size(),"inward_edges":back.previous.size(),"certificate_metrics":certificate.data.metrics,"rpp_sha256":proof.rpp_sha256})
+func context(world: WorldGeometry) -> Dictionary:
+	return {"owner":world,"revision":world.geometry_revision,"configuration":world.configuration_revision,"cancellation":Callable(),"limits":Batch.LIMITS,"started":Time.get_ticks_usec(),"operations":0,"last_poll":0,"error_code":&"","phase":"offline_proof_study","metrics":{},"point_proofs":{},"segment_proofs":{}}
+func verify_tree(world: WorldGeometry, proof: Dictionary) -> Dictionary:
+	var ctx := context(world)
+	if not Batch.reserve(ctx,proof,2): return {"ok":false,"metrics":ctx.metrics}
+	if proof.graph_revision != Batch.REVISION or proof.nodes.get("@root") != proof.root or proof.root != expected_root or proof.profile != expected_profile or proof.targets.size() != expected_targets.size(): return {"ok":false,"metrics":ctx.metrics}
+	if not Batch.route_valid(world,[proof.root],proof.profile,ctx): return {"ok":false,"metrics":ctx.metrics}
+	var out_done := {"@root":true}; var back_done := {"@root":true}
+	for index: int in proof.targets.size():
+		var target: Dictionary = proof.targets[index]
+		if target.get("input_index") != index or target.get("point") != expected_targets[index] or target.get("point") != proof.nodes.get(target.node_id): return {"ok":false,"metrics":ctx.metrics}
+		if not Batch._tree_valid(world,proof.nodes,proof.outward,target.node_id,true,out_done,proof.profile,ctx) or not Batch._tree_valid(world,proof.nodes,proof.inward,target.node_id,false,back_done,proof.profile,ctx): return {"ok":false,"metrics":ctx.metrics}
+	if not Batch.tick(ctx,"operations",1,true): return {"ok":false,"metrics":ctx.metrics}
+	return {"ok":true,"metrics":ctx.metrics,"elapsed_ms":(Time.get_ticks_usec()-int(ctx.started))/1000.0}
+func verify() -> void:
+	var started := Time.get_ticks_usec()
+	var proof_bytes := FileAccess.get_file_as_bytes(output.path_join("proof.bin"))
+	var decoded: Variant = bytes_to_var(proof_bytes)
+	if not check("passive_proof",decoded is Dictionary): return
+	var proof: Dictionary = decoded
+	# For this experiment only: identity is pinned to the normal validated load
+	# performed by the collector. This is not complete patrol package validation.
+	if not check("same_validated_package_bytes",FileAccess.get_sha256(proof.rpp_path) == proof.rpp_sha256): return
+	var bytes := FileAccess.get_file_as_bytes(proof.rpp_path)
+	if not check("rpp_frame",bytes.size() >= 72 and bytes.slice(0,4).get_string_from_utf8() == "RPP1" and Schema.bytes_hash(bytes.slice(68)) == bytes.slice(4,68).get_string_from_utf8()): return
+	var package: Dictionary = bytes_to_var(bytes.slice(68))
+	if not check("package_binding",package.package_hash == proof.package_hash): return
+	var frame_ms := (Time.get_ticks_usec()-started)/1000.0
+	started = Time.get_ticks_usec()
+	if not check("canonical_population_package_structure",Population.validate_package(package.population_package)): return
+	var structure_ms := (Time.get_ticks_usec()-started)/1000.0
+	var manifest := PatrolCompiler.manifest(package)
+	var world := WorldGeometry.new()
+	started = Time.get_ticks_usec()
+	if not check("fresh_world",world.configure(manifest,"map_preview").ok): return
+	var world_ms := (Time.get_ticks_usec()-started)/1000.0
+	for socket: Dictionary in world._stage.sockets:
+		if socket.socket_id == world._stage.entrance: expected_root = ExpeditionWorldPoint.create("map_preview",socket.surface_id,socket.position).to_data()
+	var catalog := Catalog.load_current()
+	if not check("current_catalog",catalog.ok): return
+	for slot: Dictionary in manifest.population_plan().slots():
+		var definition: MobDefinition = catalog.catalog.get_definition(StringName(slot.species_id))
+		if not check("current_species_"+String(slot.slot_id),definition != null): return
+		var profile: Dictionary = manifest._data.input.traversal.duplicate(true)
+		profile.radius = maxf(float(profile.radius),definition.collision_radius)
+		if expected_profile.is_empty(): expected_profile = profile
+		if not check("same_current_profile_"+String(slot.slot_id),expected_profile == profile): return
+		expected_targets.append(ExpeditionPopulationPlanner.point(slot.home).to_data())
+	var before := {"lattices_built":Grid.lattices_built,"world_grid_cache":world._grid_cache.size(),"world_shared_memo":world._navigation_shared.size()}
+	var verified := verify_tree(world,proof)
+	if not check("cold_canonical_geometry_witnesses",verified.ok): return
+	var broken := proof.duplicate(true)
+	broken.outward.erase(broken.targets[0].node_id)
+	if not check("missing_edge_rejected",not verify_tree(world,broken).ok): return
+	broken = proof.duplicate(true)
+	var target_nodes := {}
+	for target: Dictionary in proof.targets: target_nodes[target.node_id] = true
+	var altered := false
+	for id: String in broken.nodes:
+		if id != "@root" and not target_nodes.has(id):
+			broken.nodes[id].position.y += 1000.0
+			altered = true
+			break
+	if not check("has_intermediate_control",altered): return
+	if not check("altered_route_rejected",not verify_tree(world,broken).ok): return
+	var closed := PatrolCompiler.manifest(package)
+	for stage: Dictionary in closed._data.stages:
+		for link: Dictionary in stage.connections: link.forward = false; link.backward = false
+	var closed_world := WorldGeometry.new()
+	if not check("closed_world",closed_world.configure(closed,"map_preview").ok): return
+	if not check("blocked_openings_rejected",not verify_tree(closed_world,proof).ok): return
+	finish({"frame_and_proof_read_ms":frame_ms,"population_structure_ms":structure_ms,"world_configure_ms":world_ms,"cold_witness_verify_ms":verified.elapsed_ms,"cold_witness_metrics":verified.metrics,"cold_state_before_verify":before,"lattices_after_verify":Grid.lattices_built,"compact_proof_bytes":proof_bytes.size(),"rpp_sha256":proof.rpp_sha256,"scope":"geometry witness study; excludes full patrol validation, phase preparation, snapshot, view and profile installation"})
+func finish(metrics: Dictionary) -> void:
+	var result := {"ok":not checks.is_empty() and checks.all(func(item: Dictionary) -> bool: return item.ok),"checks":checks,"metrics":metrics,"engine":Engine.get_version_info().string}
+	print("LOAD_PROOF_STUDY "+JSON.stringify(result))
+	var args := OS.get_cmdline_user_args()
+	if not output.is_empty():
+		var file := FileAccess.open(output.path_join(args[0]+".json"),FileAccess.WRITE)
+		if file != null: file.store_string(JSON.stringify(result,"\t")); file.close()
+	quit(0 if result.ok else 1)

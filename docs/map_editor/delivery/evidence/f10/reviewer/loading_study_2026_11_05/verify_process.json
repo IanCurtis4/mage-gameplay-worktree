@@ -1,0 +1,10 @@
+{
+  "sampled_peak_working_set_bytes": 370470912,
+  "head_after": "8c38ea8fd5a15189aece64a9e814d176a3848d58",
+  "probe_scope": "fresh-process canonical witness geometry only, not a production loader",
+  "exit_code": 0,
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+  "timed_out": false,
+  "script_sha256": "9872CDC9E751800E1BE2C0F8E365999472C7D0A82EF3F8E29B2B41EEA195BB70",
+  "elapsed_ms": 11487.4024
+}

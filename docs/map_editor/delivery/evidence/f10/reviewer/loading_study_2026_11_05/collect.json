@@ -1,0 +1,321 @@
+{
+	"checks": [
+		{
+			"id": "normal_public_loader",
+			"ok": true
+		},
+		{
+			"id": "catalog",
+			"ok": true
+		},
+		{
+			"id": "fresh_planner_world",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_02fb475a5c0360b1dd9679d5a9e78a6e38e623c4",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_05444c6249b034bd51ac73fd1c64b1c182d78b81",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_13dab02576944426e04f9ac2c36b5994adb6cc52",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_1408b4d35fdb7e79bdab522fc3af674ed735c5c2",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_15c88f3d7f4e0e293ad593dad6685ff92e86896d",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_19639e71d2c0eaebfb529532ead23cb2a9204651",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_1baa98b135d92650704aeeabbe300c0b50b0574d",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_214bd030a6235d00ccb11fe969239df5f76f84c6",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_2187a4ea68f3be8715e9a1f75055c1ea9e0000ed",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_225469529c941f6b4e4b088a176aae28502372cf",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_27029ed677f1e899fcdbb7188e77b6a17d0d55f7",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_2b49628ee0434ab664d04bab99fe68e21e6b1cd2",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_2de7c4d98f2d715f87a28b0f86ae310e9dc5eb02",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_2ef7290820c2cb3856a0eb7e4e307b35e44497aa",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_34128004ffdae70660afd55b8c84150e1fe9c368",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_3727e78586e56e69f6fcb91e463d763311754e4e",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_3badd64ce6c56686b7ce0009c876b7eef6335bbd",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_3f37d2544181b3f6833faf8d94b59e9ad4e67862",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_425e80d92cee0238c8b61aea887748a112ed18eb",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_47fc2967faf696c1c815cd0ec8f155450b88cd5d",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_4a16307bcbcda94bc56218468f33eeecea036ade",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_507a02444b8d6a8e9df9b6e757ab64a2026ab864",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_525462851c938e57a35be86717925122e2f68012",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_57bab820acf72a5a9bed14abdd23bc5821563e4f",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_59a93b4dc323d33b89f2c12cda0c0ae4d3bf1b09",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_5c0f5bb1fd4ddaa02980a533b567c63cb88ba05c",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_5c3dc4f5dc442a5d502557fac73f2a5f71656937",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_6065f40837fb6534dea3e9f8d01feca65ca17fc0",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_63e008f323e11367b492ac6448d44ebf88e1e01f",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_658412717726b349539d72f56fab33e26c01d6d8",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_659ae5fd117df4148c227ac698365c0c6760b8ad",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_7d12d55e3303c8d82425cc31bebd507e38583bce",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_7e5064749b544a1e80dea72a704965d4c88020fc",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_817b1984c738e1f3c9b614e3dbf81831d800a626",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_8594471bf984e501cad8722b4f0862a2c3a2ff2c",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_8615e382ca93daabfd163904c8db71412da25c99",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_9274c2ae21d25b5f6404afde2de214cc277f7ca3",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_9a7883de3e86abd3260c097f0c3183f64384be96",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_9bd78441c03c47ae10b32ab86547e2ef38374d6f",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_a08efa033403119dc36c2f73871477bfcb624f9d",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_a405d1d1857f18fdba3cf224d4bcbe5f190308c7",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_a52a16e20a2041b96637a8f95bbdbb3fa038b97b",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_a9e0203bb436338895ecc9f254ca18f586b45d6d",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_abbcb9bff9ae81651d3a7f91f66077d6e0fc6954",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_ac7875a610de9a849e8a1c066b79ed0df268caf3",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_ad2bab68940e36d1a98eb7a83988a1289ced5d09",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_adeae817e1b227e03ea48a471890727b6c105b4d",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_b06e8941adf4f69669778241c572927ef387091c",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_b0e128134544f20c5e5b4fc26f2948224f5263a1",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_c101d6bbb283e80d145132dbb0862e8aad345355",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_c48f78e7afcd10eb404609d918cef3067b1b9ad0",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_c5700aad915e7a8015d1ab8a4d4b87b3169f7228",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_d00b44743a8d30f824944f479fd1d49e9078ff17",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_d18b62cfca7f6e38820a3ef13b9e11fd6c45908c",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_d525cce14a5a2d5c5573196dc2a7cf54cca9431e",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_d9c76bb6d8d65349fe0044e55ddcf5b62c1a729b",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_dc5aa995a69f2c1bbc5315c10436611f35951b3c",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_ef03e664505a512f5318bdd0e1cf22bb25e659ef",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_f7d9874cff19b25213401d2e6a952101815618a3",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_f9124d2927c34cac485b185a9f73789367839091",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_fa9e9eaa60375c0bdc687662fdbc44a2d2bd6ffc",
+			"ok": true
+		},
+		{
+			"id": "single_profile_slot_ff2d83fd625c44314546a992a69f27c7e3622abc",
+			"ok": true
+		},
+		{
+			"id": "entry",
+			"ok": true
+		},
+		{
+			"id": "normal_certificate",
+			"ok": true
+		},
+		{
+			"id": "retained_paths",
+			"ok": true
+		},
+		{
+			"id": "proof_output",
+			"ok": true
+		}
+	],
+	"engine": "4.7.2-stable (official)",
+	"metrics": {
+		"certificate_after_warm_load_ms": 1750.08,
+		"certificate_metrics": {
+			"closure": "reused",
+			"edge_tests": 420,
+			"elapsed_ms": 1616.478,
+			"expansions": 8704,
+			"grid_bent_tests": 298,
+			"grid_bent_usec": 390677,
+			"operations": 1,
+			"peak_storage_bytes": 184580620,
+			"phase_usec": {
+				"direct": 68,
+				"inward": 454568,
+				"outward": 610169,
+				"prepare": 466285,
+				"publish": 72809,
+				"witnesses": 12571
+			},
+			"reconstruction_steps": 428,
+			"snapshot_storage_units": 14291088,
+			"states": 63,
+			"storage_bytes": 184580620,
+			"straight_usec": 115980,
+			"terminal_checks": 62,
+			"witness_points": 1148,
+			"witness_segments": 719
+		},
+		"compact_proof_bytes": 308100,
+		"full_certificate_bytes": 20157888,
+		"inward_edges": 213,
+		"normal_load_ms": 121057.19,
+		"outward_edges": 215,
+		"retained_nodes": 220,
+		"rpp_bytes": 4385144,
+		"rpp_sha256": "7e689497e5dd26d108e4da6292001c2e1437aff3a0e406b3fbf9d43abf1b16d7",
+		"targets": 62,
+		"zstd_proof_bytes": 20633
+	},
+	"ok": true
+}
