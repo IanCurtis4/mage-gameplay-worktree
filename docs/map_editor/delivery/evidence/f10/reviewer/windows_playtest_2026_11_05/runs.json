@@ -1,0 +1,77 @@
+[
+  {
+    "exit_code": 0,
+    "finished_utc": "2026-11-05T15:02:10.8035531Z",
+    "started_utc": "2026-11-05T15:01:39.0795646Z",
+    "name": "export",
+    "arguments": [
+      "--headless",
+      "--path",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+      "--export-release",
+      "Windows Desktop",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\7ac05ff2\\RagRPG-F10-Q5.exe"
+    ],
+    "ok": true,
+    "timed_out": false
+  },
+  {
+    "exit_code": -1,
+    "finished_utc": "2026-11-05T15:04:33.9116347Z",
+    "started_utc": "2026-11-05T15:02:10.8331785Z",
+    "name": "inspect_pack",
+    "arguments": [
+      "--headless",
+      "--script",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\7ac05ff2\\validation\\inspect_pack.gd"
+    ],
+    "ok": false,
+    "timed_out": false
+  },
+  {
+    "ok": true,
+    "name": "inspect_pack_editor",
+    "arguments": [
+      "--headless",
+      "--main-pack",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\7ac05ff2\\RagRPG-F10-Q5.pck",
+      "--script",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\7ac05ff2\\validation\\inspect_pack.gd"
+    ],
+    "finished_utc": "2026-11-05T15:05:06.2268327Z",
+    "started_utc": "2026-11-05T15:05:05.612764Z",
+    "timed_out": false,
+    "exit_code": 0
+  },
+  {
+    "ok": true,
+    "name": "normal_boot",
+    "arguments": [
+      "--rendering-method",
+      "gl_compatibility",
+      "--quit-after",
+      "120",
+      "--verbose"
+    ],
+    "finished_utc": "2026-11-05T15:05:13.0104641Z",
+    "started_utc": "2026-11-05T15:05:06.2472355Z",
+    "timed_out": false,
+    "exit_code": 0
+  },
+  {
+    "name": "normal_menu_pack",
+    "started_utc": "2026-11-05T15:06:44.3906922Z",
+    "exit_code": 0,
+    "finished_utc": "2026-11-05T15:06:51.2496313Z",
+    "ok": true,
+    "timed_out": false,
+    "arguments": [
+      "--main-pack",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\7ac05ff2\\RagRPG-F10-Q5.pck",
+      "--rendering-method",
+      "gl_compatibility",
+      "--script",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\7ac05ff2\\validation\\normal_menu_probe.gd"
+    ]
+  }
+]

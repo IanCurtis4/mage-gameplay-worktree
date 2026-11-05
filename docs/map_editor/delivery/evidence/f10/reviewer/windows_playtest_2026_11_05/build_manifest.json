@@ -1,0 +1,115 @@
+{
+  "test_save_directory": "C:\\Users\\João Pedro\\AppData\\Roaming\\Godot\\app_userdata\\RagRPG F10 Q5",
+  "source_inputs_checked": 2233,
+  "runtime_commit": "dc563d2e1c59e949591e1d25a4f5e21f274d3fe4",
+  "fixture": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+  "packaging_deltas": [
+    "VCS autoload disabled",
+    "Map editor export plugin enabled to preserve original dependency bytes",
+    "Release template absolute path",
+    "Git plugin excluded",
+    "Console wrapper disabled",
+    "Application name isolates saves"
+  ],
+  "generated_utc": "2026-11-05T15:06:54.5407432Z",
+  "artifacts": [
+    {
+      "bytes": 109127680,
+      "sha256": "4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668",
+      "file": "RagRPG-F10-Q5.exe"
+    },
+    {
+      "bytes": 94861816,
+      "sha256": "09a10b111b37ea3f9cd0a759ac189a15b3e69ee221820f917def99990facad41",
+      "file": "RagRPG-F10-Q5.pck"
+    }
+  ],
+  "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "runs": [
+    {
+      "exit_code": 0,
+      "finished_utc": "2026-11-05T15:02:10.8035531Z",
+      "started_utc": "2026-11-05T15:01:39.0795646Z",
+      "name": "export",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--export-release",
+        "Windows Desktop",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\7ac05ff2\\RagRPG-F10-Q5.exe"
+      ],
+      "ok": true,
+      "timed_out": false
+    },
+    {
+      "exit_code": -1,
+      "finished_utc": "2026-11-05T15:04:33.9116347Z",
+      "started_utc": "2026-11-05T15:02:10.8331785Z",
+      "name": "inspect_pack",
+      "arguments": [
+        "--headless",
+        "--script",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\7ac05ff2\\validation\\inspect_pack.gd"
+      ],
+      "ok": false,
+      "timed_out": false
+    },
+    {
+      "ok": true,
+      "name": "inspect_pack_editor",
+      "arguments": [
+        "--headless",
+        "--main-pack",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\7ac05ff2\\RagRPG-F10-Q5.pck",
+        "--script",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\7ac05ff2\\validation\\inspect_pack.gd"
+      ],
+      "finished_utc": "2026-11-05T15:05:06.2268327Z",
+      "started_utc": "2026-11-05T15:05:05.612764Z",
+      "timed_out": false,
+      "exit_code": 0
+    },
+    {
+      "ok": true,
+      "name": "normal_boot",
+      "arguments": [
+        "--rendering-method",
+        "gl_compatibility",
+        "--quit-after",
+        "120",
+        "--verbose"
+      ],
+      "finished_utc": "2026-11-05T15:05:13.0104641Z",
+      "started_utc": "2026-11-05T15:05:06.2472355Z",
+      "timed_out": false,
+      "exit_code": 0
+    },
+    {
+      "name": "normal_menu_pack",
+      "started_utc": "2026-11-05T15:06:44.3906922Z",
+      "exit_code": 0,
+      "finished_utc": "2026-11-05T15:06:51.2496313Z",
+      "ok": true,
+      "timed_out": false,
+      "arguments": [
+        "--main-pack",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\7ac05ff2\\RagRPG-F10-Q5.pck",
+        "--rendering-method",
+        "gl_compatibility",
+        "--script",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\7ac05ff2\\validation\\normal_menu_probe.gd"
+      ]
+    }
+  ],
+  "main_scene": "res://scenes/character_menu.tscn",
+  "fixture_preset_restored": true,
+  "normal_profile_file": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\7ac05ff2\\validation\\normal_menu_pack_profile\\Godot\\app_userdata\\RagRPG F10 Q5\\profile.json",
+  "application_name": "RagRPG F10 Q5",
+  "template_sha256": "d34d36f3be1a6c49c56525ae86469b92e4f417ddf0b43cf00dd80c385c4b0562",
+  "candidate_commit": "7ac05ff2088e31e2164150c6531fe56d55ab671e",
+  "engine": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+  "fixture_project_restored": true,
+  "template": "C:/Users/João Pedro/AppData/Roaming/Godot/export_templates/4.7.2.stable/windows_release_x86_64.exe",
+  "source": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5"
+}

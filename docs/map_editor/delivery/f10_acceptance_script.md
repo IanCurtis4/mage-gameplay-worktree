@@ -49,8 +49,12 @@ preservada e a gravação deve exigir a revisão do plano.
 
 ## Jogo
 
-No mesmo editor descartável, abra o jogo e crie um personagem de teste. No
-lobby, escolha **Floresta do Santuário**. Percorra Prado dos Terraços, Vales da
+Para testar sem abrir o editor, há um [executável Windows com perfil próprio](f10_windows_playtest.md).
+Ele abre no menu normal e permite criar personagens, entrar na floresta,
+suspender e retomar. O executável não substitui as tarefas de autoria acima.
+
+Se optar pelo editor descartável, abra o jogo e crie um personagem de teste.
+Em qualquer opção, no lobby, escolha **Floresta do Santuário**. Percorra Prado dos Terraços, Vales da
 Mata e Covil do Guardião; confira arte e props, terreno/altura, navegação,
 combate/retorno, objetivo do estágio, portais, suspensão e retomada. O teste
 automático simula mortes e não substitui este combate. Confira também o Bosque
