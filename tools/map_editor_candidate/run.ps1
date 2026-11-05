@@ -92,7 +92,7 @@ if($Stage -in @('Release','All')) {
     $m8Exe=Join-Path $m8ReleaseRoot 'RagRPG-Map-Candidate.exe'
     $m8Template='C:/Users/João Pedro/AppData/Roaming/Godot/export_templates/4.7.2.stable/windows_release_x86_64.exe'
     if(-not (Test-Path -LiteralPath $m8Template)){throw 'Windows release template missing.'}
-    $m8Preset=(Get-Content -LiteralPath (Join-Path $m8Root 'export_presets.cfg') -Raw).Replace('custom_template/release=""',('custom_template/release="'+$m8Template+'"')).Replace('exclude_filter=""','exclude_filter="addons/godot-git-plugin/*"').Replace('include_filter=""','include_filter="data/map_authoring/*.json,data/map_authoring/*.rpp,data/expedition/phases/*.json,data/expedition/policies/*.json,scripts/core/expedition/snapshot/runtime_manifest.json"')
+    $m8Preset=(Get-Content -LiteralPath (Join-Path $m8Root 'export_presets.cfg') -Raw).Replace('custom_template/release=""',('custom_template/release="'+$m8Template+'"')).Replace('exclude_filter=""','exclude_filter="addons/godot-git-plugin/*"').Replace('include_filter=""','include_filter="data/map_authoring/*.json,data/map_authoring/*.rpp,data/map_authoring/*.navproof,data/expedition/phases/*.json,data/expedition/policies/*.json,scripts/core/expedition/snapshot/runtime_manifest.json"')
     [IO.File]::WriteAllText((Join-Path $m8Fixture 'export_presets.cfg'),$m8Preset)
     $m8ReleaseProject=$m8Project.Replace('run/main_scene="res://scenes/character_menu.tscn"','run/main_scene="res://data/map_authoring/candidate_preview.tscn"')+"`n[editor_plugins]`nenabled=PackedStringArray(`"res://addons/ragrpg_map_editor/plugin.cfg`")"
     [IO.File]::WriteAllText((Join-Path $m8Fixture 'project.godot'),$m8ReleaseProject)

@@ -15,6 +15,12 @@ Q5 corrige a coleta automática no limite do diário usando a barreira, o
 checkpoint e o writer já existentes. Não há segundo writer nem novo formato de
 diário. Evidências e limites no [checkpoint F10](map_editor/delivery/f10.md).
 
+Q5 pode consumir árvores positivas de preparação em `.navproof`, vinculadas à
+revisão RPP e verificadas geometricamente em mundos novos. A autoridade
+`PreparationProofCache` não carrega estado de run nem vereditos persistidos;
+pedidos sem cobertura usam a busca anterior. Contrato e limites:
+[provas completas](map_editor/contracts/f10_preparation_proofs.md).
+
 ## Composição técnica E07 —23/10/2026
 
 [F8](epics/e07/delivery/f8.md) consolida F0–F7 sobre runtime 7775f44: geometria com

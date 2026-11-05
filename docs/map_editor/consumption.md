@@ -13,6 +13,18 @@ abre o Bosque no executável exportado, numa instalação limpa (`release_bosque
 
 ## Uso
 
+Q5 acrescenta provas auxiliares opcionais `.navproof`, ao lado da revisão RPP.
+`MapRelease.bake_preparation(package_id)` executa a preparação integral e grava
+as árvores positivas compactas; `tools/map_editor_completion/bake_preparation.gd`
+reproduz o bake dos três mapas da floresta. O export inclui esses arquivos.
+O RPP e seus hashes não mudam. Carga consulta a prova limitada a 16 MiB, com
+frame/digest, pacote fixado, estrutura/ciclos e verificação geométrica atual.
+Cada consulta exige raiz/corpo/destinos e geometria exatos; só namespace muda.
+Uma prova não cobre pedidos novos por aproximação. Falha de cobertura ou arquivo
+inválido mantém a busca normal. Consultas canceláveis/orçamento customizado
+preservam seu caminho integral. Não há mundo/ator/RNG/save carregado do cache.
+Contrato: [provas de preparação](contracts/f10_preparation_proofs.md).
+
 F10 compõe a fase em `phase_release.gd` (`authored_phase_v2`). Cada estágio
 guarda em `input.authored_presentations` uma cópia dos oito campos da revisão
 publicada. `MapRelease.load_reference(reference)` valida e resolve essa revisão

@@ -6,6 +6,8 @@ const REVISION := "canonical_connectivity_batch_v2"
 ## direct pairs are tried only for the targets the graph search left unreached
 ## (a direct edge to an already reached target adds no reachability).
 const LAZY_DIRECT_TARGETS := 64
+static var preparation_proof_hits := 0
+static var preparation_searches := 0
 const LIMITS := {"max_targets":4096,"max_states":131072,"max_pair_candidates":8000000,"max_edge_tests":4000000,"max_expansions":262144,"max_storage_bytes":268435456,"max_usec":240000000}
 
 ## Conservative allocation-accounting units, not an OS heap/RSS measurement.
@@ -193,6 +195,13 @@ static func execute(world: WorldGeometry, root: ExpeditionWorldPoint, targets: A
 	var ordered_nodes: Dictionary = {}
 	for id: String in sorted: ordered_nodes[id] = nodes[id]
 	nodes = ordered_nodes
+	if not cancellation.is_valid() and budget.is_empty():
+		var proved := PreparationProofCache.try_certificate(world,start,captured,traversal,revision,ctx)
+		if not proved.is_empty():
+			preparation_proof_hits += 1
+			PreparationProofCache.record(world,start,captured,traversal,proved)
+			return proved
+	preparation_searches += 1
 	if _reusable(shadow): return _execute_reused(world,shadow,start,captured,nodes,ids,points,sorted,traversal,revision,ctx)
 	var pairs: Array = []; var direct_edges: Dictionary = {}; var trusted_direct: Dictionary = {}; var all_direct := true
 	var lazy: bool = ids.size() > LAZY_DIRECT_TARGETS and not shadow._support_index.get("grids",{}).is_empty()
@@ -301,7 +310,9 @@ static func execute(world: WorldGeometry, root: ExpeditionWorldPoint, targets: A
 	_enter(ctx,"done")
 	ctx.metrics["elapsed_ms"] = (Time.get_ticks_usec()-int(ctx.started))/1000.0
 	var data := {"complete":true,"all_reachable":all_reachable,"configuration_revision":ctx.configuration,"profile_hash":ctx.profile_hash,"profile":traversal,"graph_revision":REVISION,"snapshot_hash":ctx.snapshot_hash,"targets":results,"states":graph.nodes,"outward_previous":outward.previous,"inward_previous":inward.previous,"metrics":ctx.metrics}
-	return world._success(data)
+	var result := world._success(data)
+	PreparationProofCache.record(world,ExpeditionPopulationPlanner.point(data.states["@root"]),captured,traversal,result)
+	return result
 
 static func _direct_edge(ctx: Dictionary, direct: Dictionary, source: Dictionary, target: Dictionary, target_id: String) -> Dictionary:
 	if not direct.get("data") is Dictionary or not direct.data.get("points") is Array: return {"ok":false}
@@ -551,7 +562,9 @@ static func _execute_reused(world: WorldGeometry, shadow: WorldGeometry, start: 
 	_enter(ctx,"done")
 	ctx.metrics["elapsed_ms"] = (Time.get_ticks_usec()-int(ctx.started))/1000.0
 	var data := {"complete":true,"all_reachable":all_reachable,"configuration_revision":ctx.configuration,"profile_hash":ctx.profile_hash,"profile":traversal,"graph_revision":REVISION,"snapshot_hash":ctx.snapshot_hash,"targets":results,"states":graph.nodes,"outward_previous":outward.previous,"inward_previous":inward.previous,"metrics":ctx.metrics}
-	return world._success(data)
+	var result := world._success(data)
+	PreparationProofCache.record(world,ExpeditionPopulationPlanner.point(data.states["@root"]),captured,traversal,result)
+	return result
 
 static func _admit(next: String, current: String, edge: Dictionary, visited: Dictionary, previous: Dictionary, queue: Array[String], missing: Dictionary, ctx: Dictionary) -> bool:
 	if visited.has(next): return true

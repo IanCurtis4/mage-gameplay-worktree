@@ -57,6 +57,19 @@ func run() -> void:
 	# Walk the field for a few seconds and measure the frames.
 	var origin: ExpeditionWorldPoint = host.player.world_point()
 	var geometry: WorldGeometry = host.player.world_motion.geometry
+	var cold_goal: ExpeditionWorldPoint
+	var cold_distance := -1.0
+	for slot: Dictionary in state.slots.values():
+		if slot.stage_id != state.current_stage_id: continue
+		var point := ExpeditionPopulationPlanner.point(slot.home)
+		if point.position.distance_to(origin.position) > cold_distance:
+			cold_distance = point.position.distance_to(origin.position); cold_goal = point
+	var cold_lattices := WorldGeometry.HeightGrid.lattices_built
+	var cold_started := Time.get_ticks_usec()
+	var cold_route := geometry.path(origin,cold_goal,host.player.world_motion._profile,geometry.geometry_revision)
+	var cold_path_ms := (Time.get_ticks_usec()-cold_started)/1000.0
+	check("first_far_route_crosses_supports",cold_route.ok and cold_route.data.points.any(func(point: Dictionary) -> bool: return point.surface_id != origin.surface_id))
+	print("F10_FOREST_COLD_ROUTE "+JSON.stringify({"ok":cold_route.ok,"elapsed_ms":cold_path_ms,"lattices_before":cold_lattices,"lattices_after":WorldGeometry.HeightGrid.lattices_built,"distance":cold_distance,"proof_hits":WorldConnectivityBatch.preparation_proof_hits,"searches":WorldConnectivityBatch.preparation_searches}))
 	var goal: Dictionary = {"ok":false}
 	for offset: Vector2 in [Vector2(300,-300),Vector2(400,0),Vector2(0,-400),Vector2(-300,-300),Vector2(250,250),Vector2(-400,0)]:
 		var probe := geometry.support_at(origin.surface_id,Vector2(origin.position.x,origin.position.z)+offset,geometry.geometry_revision)

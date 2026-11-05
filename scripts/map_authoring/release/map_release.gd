@@ -99,6 +99,7 @@ static func load_reference(reference: Dictionary, folder: String = FOLDER) -> Di
 	if not valid_entry(reference,folder): return fail("release_entry_invalid")
 	var pinned: Dictionary = reference.duplicate(true)
 	var package_id: String = pinned.package_id
+	if not Engine.is_editor_hint(): PreparationProofCache.load(proof_path(pinned),pinned.package_hash)
 	var loaded := Store.load_package(pinned.path)
 	if not loaded.ok: return fail("release_package_invalid",package_id)
 	var package: Dictionary = loaded.package
@@ -144,6 +145,19 @@ static func freshness(package_id: String, listing: Dictionary = {}) -> Dictionar
 	return {"ok":true,"code":"","current":current == found.entry.source_hash,"source_hash":current,"pinned_source_hash":found.entry.source_hash}
 
 static func package_file(package_id: String, package_hash: String) -> String: return package_id+"."+package_hash.substr(0,12)+".rpp"
+static func proof_path(reference: Dictionary) -> String: return String(reference.path).trim_suffix(".rpp")+".navproof"
+
+## Explicit publication/export bake; source and immutable RPP remain untouched.
+static func bake_preparation(package_id: String) -> Dictionary:
+	var found := entry(package_id)
+	if not found.ok: return found
+	PreparationProofCache.begin_recording()
+	var prepared := prepare(package_id)
+	var bundle := PreparationProofCache.end_recording()
+	if not prepared.ok: return prepared
+	var path := proof_path(found.entry)
+	if not PreparationProofCache.save(path,found.entry.package_hash,bundle): return fail("release_io",package_id)
+	return {"ok":true,"path":path,"bytes":FileAccess.get_file_as_bytes(path).size(),"manifest_hash":ExpeditionCanonical.digest(prepared.manifest.to_data()),"bundle":bundle}
 static func source_file(package_id: String) -> String: return package_id+".patrol.json"
 
 ## The registry as it is now (an absent registry in a scratch folder is empty).

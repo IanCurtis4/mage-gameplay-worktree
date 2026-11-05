@@ -49,7 +49,7 @@ func run() -> void:
 	for objective: Dictionary in unlocks:
 		if objective.stage_id == "forest_sanctuary_1": again.objectives[objective.objective_id] = true
 	check("replay_opens_by_guardian_then_shrine",before_guardian and before_shrine and again.portal_view(forward).open and not again.stages["forest_sanctuary_1"].cleared_once)
-	print("F10_FOREST_PHASE_TIMING "+JSON.stringify({"prepare_ms":snappedf(prepare_ms,1.0),"maps":prepared.metrics,"manifest_bytes":var_to_bytes(data).size(),"manifest_hash":ExpeditionCanonical.digest(data)}))
+	print("F10_FOREST_PHASE_TIMING "+JSON.stringify({"proof_hits":WorldConnectivityBatch.preparation_proof_hits,"searches":WorldConnectivityBatch.preparation_searches,"prepare_ms":snappedf(prepare_ms,1.0),"maps":prepared.metrics,"manifest_bytes":var_to_bytes(data).size(),"manifest_hash":ExpeditionCanonical.digest(data)}))
 	finish()
 func finish() -> void:
 	var ok := not checks.is_empty() and checks.all(func(item: Dictionary) -> bool: return item.ok)
