@@ -1,0 +1,18 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+M8_PHASE_RELEASE_CHECK release_process true
+M8_PHASE_RELEASE_CHECK clean_install true
+M8_PHASE_RELEASE_CHECK packaged_phase_definition true
+M8_PHASE_RELEASE_CHECK synthetic_character true
+M8_PHASE_RELEASE_CHECK phase_listed_in_lobby true
+M8_PHASE_RELEASE_CHECK enters_from_lobby true
+M8_PHASE_RELEASE_CHECK three_stages_and_population true
+M8_PHASE_RELEASE_CHECK authored_game_presentation true
+M8_PHASE_RELEASE_CHECK authored_props_present true
+M8_PHASE_RELEASE_CHECK player_walks true
+M8_PHASE_RELEASE_CHECK native_game_draws true
+M8_PHASE_RELEASE_CHECK suspends true
+M8_PHASE_RELEASE_CHECK resume_keeps_authored_presentation true
+M8_PHASE_RELEASE_CHECK no_source_checkout_in_install true
+M8_PHASE_RELEASE_RESULT {"checks":[{"detail":"","id":"release_process","ok":true},{"detail":"","id":"clean_install","ok":true},{"detail":"","id":"packaged_phase_definition","ok":true},{"detail":"","id":"synthetic_character","ok":true},{"detail":"","id":"phase_listed_in_lobby","ok":true},{"detail":"","id":"enters_from_lobby","ok":true},{"detail":"","id":"three_stages_and_population","ok":true},{"detail":"","id":"authored_game_presentation","ok":true},{"detail":"238","id":"authored_props_present","ok":true},{"detail":"","id":"player_walks","ok":true},{"detail":"","id":"native_game_draws","ok":true},{"detail":"","id":"suspends","ok":true},{"detail":"","id":"resume_keeps_authored_presentation","ok":true},{"detail":"","id":"no_source_checkout_in_install","ok":true}],"count":14,"engine":"4.7.2-stable (official)","ok":true,"timings":{"entry_ms":63799.485,"resume_ms":26260.661,"suspend_ms":7745.575}}

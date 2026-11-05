@@ -45,7 +45,7 @@ estão no checkpoint e nos recibos do lote.
 | 7 · dados adversos/recuperação/conflito | documento 70, intercâmbio 113, journal_capacity 53, F5 fault/recovery 20/33, F7 flow 23 | sem falha técnica identificada nesses cenários; percurso manual completo permanece pendente |
 | 8 · população/patrulha/combate/continuidade | patrulha 60, 16 IDs oficiais F3/F4/F5, ForestPlay 19 com arte até conclusão, diário sem duplicação | combate/legibilidade humanos; ForestPlay simula mortes e não prova diversão ou combate real |
 | 9 · GUI/AX/headless/skills/release limpo | provas compatíveis do checkpoint15; release atualizado 6/6, Bosque 8/8, floresta 14/14, nomes conferidos na captura; fonte da skill validada | percurso manual por operador ainda indisponível; instrução longa de limpeza segue truncada no botão |
-| 10 · tempos/memória/limites | medidas do checkpoint15 e decomposição fria: admissão do primeiro campo 114 s/173.648 arestas; duas tentativas sem ganho descartadas, núcleo restaurado | pausas longas persistem; nenhuma redução nova de latência ou certificação universal de fluidez/escala |
+| 10 · tempos/memória/limites | checkpoint17: provas completas, preparação 178,986→43,774 s com 14 hits/zero buscas, entrada release 171,07→63,799 s; manifesto igual; tentativas antigas sem ganho continuam descartadas | resíduo síncrono/portais/retomada e rota extrema ainda lentos; sem certificação universal de fluidez/escala |
 | 11 · guias/recibos/roteiro/limpeza | cabeçalhos históricos, consumo/arquitetura/skill corrigidos; roteiro e abertura isolada preparados | recibo/hashes/limpeza concluídos; uma fixture retida temporariamente para o roteiro humano |
 
 ## Limites de reprodução e retomada

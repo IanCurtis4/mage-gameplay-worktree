@@ -1,0 +1,18 @@
+{
+  "generated_files_archived": 68,
+  "private_probe_archived": true,
+  "builds": [
+    {
+      "path": ".godot/m8_release/RagRPG-Map-Candidate.exe",
+      "sha256": "4A9EADED8955EF789AB02651ED9D2DDE80328FBB342BD2A6DB4DB33E86305668"
+    },
+    {
+      "path": ".godot/m8_release/RagRPG-Map-Candidate.pck",
+      "sha256": "37AE01F4607AB7B564DFD340C127BDB0D29084C0238C0BA34B69FB5B4882D1D1"
+    }
+  ],
+  "no_engine_processes": true,
+  "user_backups_preserved": 4,
+  "removed_bytes": 214664176,
+  "fixture_preserved": true
+}

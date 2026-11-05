@@ -1,0 +1,4 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+M8_RELEASE_RESULT {"checks":[{"id":"new_release_process","ok":true},{"id":"clean_install","ok":true},{"id":"registered_package","ok":true},{"id":"immutable_package","ok":true},{"id":"real_actors","ok":true},{"id":"patrol_bound","ok":true},{"id":"gameplay_prepared","ok":true},{"id":"reach_shrine_completion","ok":true}],"count":8,"engine":"4.7.2-stable (official)","ok":true,"package_hash":"41a8e11a6c70fdc9c87cec67a2c9f8fc8fb7af5ecfdc1690ba532472c0e52587","package_id":"sanctuary_woods","source_hash":"58df5d6386a6222e838763d92a96072ff71ebf2daed168b475ab003d95e29dc1"}

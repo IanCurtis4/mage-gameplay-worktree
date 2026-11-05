@@ -1,0 +1,46 @@
+{
+  "base": "11c8c14e293081d9014adea22b8e4da8eeafdcc0",
+  "derived_files": [
+    {
+      "bytes": 66708,
+      "sha256": "e12b70bc533bd2126954c16aa125635cff5fb9e752e9c0009d6a01eb604e0b0a",
+      "path": "data/map_authoring/forest_lair.c19cad53def8.navproof"
+    },
+    {
+      "bytes": 976772,
+      "sha256": "28624d7d0eea93d7e23a811c65080048ac92b53759b30cad889ab7fcf4e70159",
+      "path": "data/map_authoring/forest_terraces.d9d52701a7a4.navproof"
+    },
+    {
+      "bytes": 849200,
+      "sha256": "17acaeb78b3cd8523f8b6f1b95eb8f8916a946a86f50899020e61dab25522e0f",
+      "path": "data/map_authoring/forest_valleys.2faa15085074.navproof"
+    }
+  ],
+  "release_inputs": 2227,
+  "native_inputs": 2233,
+  "manifest_hash_unchanged": "12271a4e44f456e7e2993bcd4d81a405717ab2463be0697a969964bac5916707",
+  "supervision_sha256": "92e1b4f346215de6bab094d70c498c1eeab748a74d8cea84f105e71a10f8d506",
+  "backups_preserved": [
+    {
+      "sha256": "65a26754c437695d7e7d60e93980c187371fddeec4fb71f78323104dbb55ced5",
+      "path": "data/map_authoring/sanctuary_woods_clearing.source.json.bak"
+    },
+    {
+      "sha256": "d0071096addfefcefad1f1df849c3977064a741b4ed1446ffaf50a3f25a95d7e",
+      "path": "data/map_authoring/sanctuary_woods_overpass.source.json.bak"
+    },
+    {
+      "sha256": "6b8d52095b0d98ba4a436fd5b192ff732b98a8f5da02855646e7e21b9792bb4f",
+      "path": "data/map_authoring/sanctuary_woods.map.json.bak"
+    },
+    {
+      "sha256": "3debc7674a1770702639e8bb33b1e6598c52929e9230395ccfbf505c1ed04889",
+      "path": "data/map_authoring/sanctuary_woods.population.json.bak"
+    }
+  ],
+  "code_candidate": "06abdd917f59c7238252dba03a3219cf2d95d056",
+  "all_source_fixture_inputs_match": true,
+  "supervision": "docs/map_editor/delivery/evidence/f10/luna/preparation_proofs_2026_11_05/supervision.md",
+  "tested_before_commit_with_frozen_inputs": true
+}

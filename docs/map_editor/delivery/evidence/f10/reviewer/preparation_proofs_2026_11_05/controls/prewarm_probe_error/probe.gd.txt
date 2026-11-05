@@ -1,0 +1,58 @@
+extends SceneTree
+const Cache = preload("res://scripts/core/expedition/spatial/preparation_proof_cache.gd")
+const Fixture = preload("res://tests/map_editor_height_grid_navigation_test.gd")
+const Release = preload("res://scripts/map_authoring/release/map_release.gd")
+const Compiler = preload("res://scripts/map_authoring/patrol/patrol_compiler.gd")
+func _initialize() -> void: run.call_deferred()
+func run() -> void:
+	var args := OS.get_cmdline_user_args()
+	var result: Dictionary = limits(args[1]) if args[0] == "limits" else warm()
+	print("PREPARATION_CONTROL "+JSON.stringify(result))
+	var file := FileAccess.open(args[1].path_join(args[0]+".json"),FileAccess.WRITE)
+	file.store_string(JSON.stringify(result,"\t")); file.close()
+	quit(0 if result.ok else 1)
+func limits(folder: String) -> Dictionary:
+	var helper := Fixture.new()
+	var built: Dictionary = helper.build(true,true)
+	var world: WorldGeometry = built.world
+	var root_point: ExpeditionWorldPoint = helper.at(built,"A",200.0,150.0)
+	var targets: Array[ExpeditionWorldPoint] = [helper.at(built,"C",2900.0,150.0)]
+	Cache.begin_recording()
+	var certified := world.connectivity_batch(root_point,targets,Fixture.PROFILE,world.geometry_revision)
+	var bundle := Cache.end_recording()
+	var cyclic := bundle.duplicate(true)
+	var proof: Dictionary = cyclic.proofs[0]
+	var id: String = proof.outward.keys()[0]
+	proof.outward[id].from = id
+	var rejected := not Cache.save(folder.path_join("cycle.navproof"),"a".repeat(64),cyclic)
+	var oversized := FileAccess.open(folder.path_join("oversized.navproof"),FileAccess.WRITE)
+	var bytes := PackedByteArray(); bytes.resize(Cache.MAX_FILE_BYTES+1)
+	oversized.store_buffer(bytes); oversized.close()
+	var too_big := not Cache.load(folder.path_join("oversized.navproof"),"a".repeat(64))
+	DirAccess.remove_absolute(folder.path_join("oversized.navproof"))
+	helper.free()
+	return {"ok":certified.ok and rejected and too_big,"cycle_rejected":rejected,"oversized_rejected":too_big}
+func warm() -> Dictionary:
+	var loaded := Release.load_package("forest_terraces")
+	if not loaded.ok: return {"ok":false,"load":loaded}
+	var manifest := Compiler.manifest(loaded.package)
+	var world := WorldGeometry.new(); world.configure(manifest,"map_preview")
+	var profile: Dictionary = manifest._data.input.traversal.duplicate(true)
+	var origin: ExpeditionWorldPoint
+	for socket: Dictionary in world._stage.sockets:
+		if socket.socket_id == world._stage.entrance: origin = ExpeditionWorldPoint.create("map_preview",socket.surface_id,socket.position)
+	var goal: ExpeditionWorldPoint; var distance := -1.0
+	for slot: Dictionary in manifest.population_plan().slots():
+		var point := ExpeditionPopulationPlanner.point(slot.home)
+		if point.position.distance_to(origin.position) > distance:
+			distance = point.position.distance_to(origin.position); goal = point
+	var before := WorldGeometry.HeightGrid.lattices_built
+	var started := Time.get_ticks_usec(); var grids := 0
+	for cell: Dictionary in world._stage.surfaces:
+		if cell.has("height_grid"):
+			world._grid_lattice(cell.surface_id,float(profile.radius)); grids += 1
+	var prewarm_ms := (Time.get_ticks_usec()-started)/1000.0
+	var after := WorldGeometry.HeightGrid.lattices_built
+	started = Time.get_ticks_usec()
+	var route := world.path(origin,goal,profile,world.geometry_revision)
+	return {"ok":route.ok,"prewarm_ms":prewarm_ms,"route_ms":(Time.get_ticks_usec()-started)/1000.0,"lattices_before":before,"lattices_after_prewarm":after,"grids":grids,"distance":distance,"profile":profile,"origin":origin.to_data(),"goal":goal.to_data(),"proof_hits":WorldConnectivityBatch.preparation_proof_hits,"searches":WorldConnectivityBatch.preparation_searches}

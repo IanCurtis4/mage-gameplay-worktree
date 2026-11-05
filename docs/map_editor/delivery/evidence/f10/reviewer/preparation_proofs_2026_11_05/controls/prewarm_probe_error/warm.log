@@ -1,0 +1,603 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PREPARATION_CONTROL {"distance":10620.966796875,"goal":{"position":"(3368.0, 240.0, -3448.0)","stage_id":"map_preview","surface_id":"field/g_dbb3b50e59c7326b_128_16"},"grids":100,"lattices_after_prewarm":0,"lattices_before":0,"ok":true,"origin":{"position":"(-4200.0, 0.0, 4000.0)","stage_id":"map_preview","surface_id":"field/g_dbb3b50e59c7326b_0_128"},"prewarm_ms":22.79,"profile":{"connector_kinds":["walk"],"height":32.0,"profile_id":"ruins_player","radius":20.0,"revision":1},"proof_hits":1,"route_ms":113203.277,"searches":0}
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'grids' on a base object of type 'Dictionary'.
+   at: WorldGeometry._grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+   GDScript backtrace (most recent call first):
+       [0] _grid_lattice (res://scripts/core/expedition/spatial/world_geometry.gd:290)
+       [1] warm (res://.godot/preparation_controls/probe.gd:53)
+       [2] run (res://.godot/preparation_controls/probe.gd:9)

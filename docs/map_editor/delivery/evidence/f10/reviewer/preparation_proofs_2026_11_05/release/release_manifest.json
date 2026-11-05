@@ -1,0 +1,24 @@
+{
+  "registry_sha256": "6DFE523965DF579C04994C4EE96D00BED456EF20E8ACA15C8EC64E7F6B6D9CD8",
+  "pck_sha256": "37AE01F4607AB7B564DFD340C127BDB0D29084C0238C0BA34B69FB5B4882D1D1",
+  "project_sha256": "0A90A7D060B43322035E741538DC181107D717BE09FC3194ADCDBCA0465400D9",
+  "forest_phase_sha256": "CE1FF61ADFDEE394758BEC8258CD0B4EF1175AE22DBD537F64C1875F611D43D5",
+  "preset_sha256": "46ABC20F7D814EFC412C9ED4C6F9AA9BA55D31B4C4A254C14C36262A49751037",
+  "exe_sha256": "4A9EADED8955EF789AB02651ED9D2DDE80328FBB342BD2A6DB4DB33E86305668",
+  "template": "C:/Users/João Pedro/AppData/Roaming/Godot/export_templates/4.7.2.stable/windows_release_x86_64.exe",
+  "template_sha256": "D34D36F3BE1A6C49C56525AE86469B92E4F417DDF0B43CF00DD80C385C4B0562",
+  "clean_install_files_after_run": [
+    "app/RagRPG-Map-Candidate.exe",
+    "app/RagRPG-Map-Candidate.pck",
+    "profile/forest_profile/profile.backup.json",
+    "profile/forest_profile/profile.json",
+    "profile/Godot/app_userdata/RagRPG/shader_cache/CanvasShaderGLES3/4b21f9059454d39659ceb15c1dcc5415f5af1b9f967129090f7224e294a76f43/0c987d3855a14368b03807cea19e4f3e4c1995ba.cache",
+    "profile/Godot/app_userdata/RagRPG/shader_cache/CanvasShaderGLES3/4b21f9059454d39659ceb15c1dcc5415f5af1b9f967129090f7224e294a76f43/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+    "profile/Godot/app_userdata/RagRPG/shader_cache/CanvasShaderGLES3/4b21f9059454d39659ceb15c1dcc5415f5af1b9f967129090f7224e294a76f43/a8dc60f273ad599d7ff0a579490c7936d1767f84.cache",
+    "profile/Godot/app_userdata/RagRPG/shader_cache/CopyShaderGLES3/01e731892a306b1dcbf8dff6319fc31eaf0a63a96a2125280956f61a566a7ff8/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+    "profile/Godot/app_userdata/RagRPG/shader_cache/FeedShaderGLES3/36e566cf2e94d1251172682052fed8f0c5d0e2ccfbb63f42501f4decffe37a13/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+    "profile/Godot/app_userdata/RagRPG/shader_cache/PostShaderGLES3/912c3ddd699cf65161e57e6f8633bd7e67be3e0236c084bc93c702e260715db9/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+    "profile/Godot/app_userdata/RagRPG/shader_cache/SceneShaderGLES3/98cacf09a74d815867c211597b078f6a2e0efd43b48403f40e1bce109c4241aa/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache"
+  ],
+  "bosque_package_sha256": "ACDD3E1264CECA22B5D15D16F83397BEEC37B76C3DA167B1FE893AB7B229EEC0"
+}

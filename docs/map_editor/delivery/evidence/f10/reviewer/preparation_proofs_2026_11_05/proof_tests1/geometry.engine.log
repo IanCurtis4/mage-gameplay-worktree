@@ -1,0 +1,31 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PREPARATION_PROOFS_CHECK fixture_has_real_round_trip_certificate true
+PREPARATION_PROOFS_CHECK passive_bundle_saves true
+PREPARATION_PROOFS_CHECK exact_package_pin_loads true
+PREPARATION_PROOFS_CHECK subset_duplicates_reordering_and_root_have_valid_witnesses true
+PREPARATION_PROOFS_CHECK certificate_uses_fresh_world_revisions true
+PREPARATION_PROOFS_CHECK proof_verification_obeys_storage_budget true
+PREPARATION_PROOFS_CHECK proof_verification_obeys_cancellation true
+PREPARATION_PROOFS_CHECK record_and_verify_leave_stage_and_occupancy_unchanged true
+PREPARATION_PROOFS_CHECK stage_namespace_only_can_change true
+PREPARATION_PROOFS_CHECK different_body_is_not_a_proof_hit true
+PREPARATION_PROOFS_CHECK different_root_is_not_a_proof_hit true
+PREPARATION_PROOFS_CHECK unrecorded_destination_is_not_a_proof_hit true
+PREPARATION_PROOFS_CHECK unrecorded_destination_keeps_normal_fallback true
+PREPARATION_PROOFS_CHECK changed_geometry_is_not_a_proof_hit true
+PREPARATION_PROOFS_CHECK blocked_geometry_keeps_complete_normal_negative true
+PREPARATION_PROOFS_CHECK different_package_pin_refused true
+ERROR: Condition "len < 4" is true. Returning: ERR_INVALID_DATA
+   at: decode_variant (core/io/marshalls.cpp:211)
+   GDScript backtrace (most recent call first):
+       [0] load (res://scripts/core/expedition/spatial/preparation_proof_cache.gd:194)
+       [1] run (res://tests/map_editor_preparation_proofs_test.gd:106)
+PREPARATION_PROOFS_CHECK corrupt_file_refused true
+PREPARATION_PROOFS_CHECK hostile_control_changes_a_real_route true
+PREPARATION_PROOFS_CHECK forged_route_never_admits_geometry true
+PREPARATION_PROOFS_CHECK clear_removes_loaded_proofs true
+PREPARATION_PROOFS_CHECK one_way_control_has_only_outward_access true
+PREPARATION_PROOFS_CHECK outward_only_result_never_becomes_round_trip_hit true
+PREPARATION_PROOFS_CHECK final_stage_and_occupancy_remain_unchanged true
+PREPARATION_PROOFS_RESULT {"checks":[{"id":"fixture_has_real_round_trip_certificate","ok":true},{"id":"passive_bundle_saves","ok":true},{"id":"exact_package_pin_loads","ok":true},{"id":"subset_duplicates_reordering_and_root_have_valid_witnesses","ok":true},{"id":"certificate_uses_fresh_world_revisions","ok":true},{"id":"proof_verification_obeys_storage_budget","ok":true},{"id":"proof_verification_obeys_cancellation","ok":true},{"id":"record_and_verify_leave_stage_and_occupancy_unchanged","ok":true},{"id":"stage_namespace_only_can_change","ok":true},{"id":"different_body_is_not_a_proof_hit","ok":true},{"id":"different_root_is_not_a_proof_hit","ok":true},{"id":"unrecorded_destination_is_not_a_proof_hit","ok":true},{"id":"unrecorded_destination_keeps_normal_fallback","ok":true},{"id":"changed_geometry_is_not_a_proof_hit","ok":true},{"id":"blocked_geometry_keeps_complete_normal_negative","ok":true},{"id":"different_package_pin_refused","ok":true},{"id":"corrupt_file_refused","ok":true},{"id":"hostile_control_changes_a_real_route","ok":true},{"id":"forged_route_never_admits_geometry","ok":true},{"id":"clear_removes_loaded_proofs","ok":true},{"id":"one_way_control_has_only_outward_access","ok":true},{"id":"outward_only_result_never_becomes_round_trip_hit","ok":true},{"id":"final_stage_and_occupancy_remain_unchanged","ok":true}],"count":23,"ok":true}

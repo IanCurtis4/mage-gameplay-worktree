@@ -1,0 +1,4 @@
+{
+  "accepted": false,
+  "reason": "Private prewarm probe omitted _ensure_support_index; script errors invalidate its nominal JSON success; corrected control is ../warm.json"
+}

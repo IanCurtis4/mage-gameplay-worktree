@@ -1,0 +1,3 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PREPARATION_BAKE_RESULT {"ok":true,"records":[{"bytes":976772,"elapsed_ms":133289.952,"id":"forest_terraces","manifest_hash":"deb529451acddc19fe2e614d99468a3661f5240dee1b8735949d6f2c2484dfb7","path":"res://data/map_authoring/forest_terraces.d9d52701a7a4.navproof"},{"bytes":849200,"elapsed_ms":39506.995,"id":"forest_valleys","manifest_hash":"4e34c193ec80e5b7c688ac4c750b8cae12b1c6cedde9ab0c49e56f27153c4ea7","path":"res://data/map_authoring/forest_valleys.2faa15085074.navproof"},{"bytes":66708,"elapsed_ms":8509.004,"id":"forest_lair","manifest_hash":"b9e67687cd30073c7f7edbc2a8522643bf2403852d7ffb1956af79c7a5a54779","path":"res://data/map_authoring/forest_lair.c19cad53def8.navproof"}]}
