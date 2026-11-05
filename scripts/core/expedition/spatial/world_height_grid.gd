@@ -268,6 +268,11 @@ static func disk_clear(prepared: Dictionary, center: Vector2, radius: float, ins
 ## The body's capsule from `a` to `b` lies on walkable triangles.
 static func segment_clear(prepared: Dictionary, a: Vector2, b: Vector2, radius: float, inside: bool = true) -> bool:
 	if not disk_clear(prepared,a,radius,inside) or not disk_clear(prepared,b,radius,inside): return false
+	return _segment_clear_between_disks(prepared,a,b,radius)
+
+## Private capsule interior: both endpoint disks were proved against this same
+## immutable view, radius and inside policy. Public callers use segment_clear.
+static func _segment_clear_between_disks(prepared: Dictionary, a: Vector2, b: Vector2, radius: float) -> bool:
 	var reach := maxf(radius,EPS)
 	for t: int in _steep_near(prepared,a,b,reach):
 		var tri := _triangle_2d(prepared,t)
@@ -382,6 +387,8 @@ static func lattice(prepared: Dictionary, radius: float, inside: bool = true) ->
 ## straight clear capsule, with that distance.
 static func _attach(built: Dictionary, point: Vector2) -> Array:
 	var view: Dictionary = built.view; var size: Vector2i = built.size
+	var radius := float(built.radius)
+	if not disk_clear(view,point,radius,bool(built.inside)): return []
 	var half := float(view.s)*0.5
 	var cx := int(round((point.x-float(view.ox))/half)); var cz := int(round((point.y-float(view.oz))/half))
 	var result: Array = []
@@ -392,7 +399,9 @@ static func _attach(built: Dictionary, point: Vector2) -> Array:
 			var id := n.y*size.x+n.x
 			if built.usable[id] == 0: continue
 			var q := _node_point(view,n)
-			if segment_clear(view,point,q,float(built.radius),bool(built.inside)): result.append([id,point.distance_to(q)])
+			# usable proved q's disk in this same lattice; point's disk was proved
+			# once above. Keep the ordered steep test and distance unchanged.
+			if _segment_clear_between_disks(view,point,q,radius): result.append([id,point.distance_to(q)])
 	return result
 
 ## Single-source distances over the lattice from `from` (2D, along the links).

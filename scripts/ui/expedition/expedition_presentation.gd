@@ -22,7 +22,12 @@ static func stage_name(id: String, manifest: Dictionary = {}) -> String:
 
 static func portal_text(view: Dictionary, manifest: Dictionary = {}) -> String:
 	if view.is_empty(): return "Portal indisponível"
-	return "%s · %s" % [stage_name(view["to_stage"], manifest), "Aberto" if view["open"] else "Fechado — conclua a limpeza"]
+	return "%s\n%s" % [stage_name(view["to_stage"], manifest), "Portal aberto" if view["open"] else "Portal fechado"]
+
+static func portal_tooltip(view: Dictionary) -> String:
+	if view.is_empty(): return "Portal indisponível."
+	if view["open"]: return "Aproxime-se do portal indicado no mapa antes de viajar."
+	return "Cumpra os requisitos deste estágio para abrir o portal."
 
 static func campaign_text(view: Dictionary, manifest: Dictionary = {}) -> String:
 	var lifecycle: String = view["lifecycle"]
@@ -47,7 +52,7 @@ static func error_text(code: StringName) -> String:
 		&"recovery_required": return "Há uma gravação pendente que precisa de recuperação. Os dados foram preservados."
 		&"content_revision_unavailable", &"checkpoint_version_unavailable": return "Esta expedição precisa de uma versão de conteúdo indisponível. O checkpoint foi preservado."
 		&"locked_by_expedition": return "Este personagem tem uma expedição pendente. Retome-a antes de alterar a preparação."
-		&"portal_closed": return "Derrote todos os inimigos obrigatórios para abrir este portal."
+		&"portal_closed": return "Este portal ainda está fechado. Cumpra os requisitos do estágio."
 		&"destination_unsafe": return "A chegada está ocupada. Aguarde e tente novamente."
 		&"out_of_range": return "Aproxime-se do portal ou objetivo marcado no mapa."
 		&"rewards_pending": return "Colete as recompensas pendentes antes de concluir a fase."

@@ -14,6 +14,8 @@ const GRID_BUCKET := 1024.0
 ## Cross-query memo of exact pair predicates (checkpoint35). Same keys and values
 ## as the per-query memo; valid only for one effective geometry and full profile.
 const NAVIGATION_SHARED_MEMO_LIMIT := 262144
+## Endpoint membership has its own small budget so pair saturation cannot evict it.
+const NAVIGATION_CONTAINS_MEMO_LIMIT := 32768
 var _navigation_epoch := 0
 var _navigation_shared: Dictionary = {}
 var geometry_revision := 0
@@ -317,6 +319,14 @@ func _navigation_grid_edge(a: Dictionary, b: Dictionary, profile: Dictionary, ca
 	var cell := _cell(surface)
 	var built := _grid_lattice(surface,float(profile.radius))
 	if built.is_empty(): return {"ok":false}
+	# Q5: route() returns a two-point terrain chord before consulting its field.
+	# This producer rejects that answer: its failed straight edge was blocked by
+	# a mass, temporary or candidate, and a terrain chord cannot detour around it.
+	# Test the identical capsule first, before building an otherwise unused field.
+	# Keep the ordered 3D body/mass predicates below for every actual bent route.
+	if HeightGrid.segment_clear(built.view,Vector2(a.position.x,a.position.z),Vector2(b.position.x,b.position.z),float(built.radius),bool(built.inside)):
+		field["straight_rejections"] = int(field.get("straight_rejections",0))+1
+		return {"ok":false}
 	# F10 H6: endpoints attached to no common lattice component have no lattice
 	# route (the field would not reach `b`); skip the field. Same answer.
 	var parts := _grid_parts(surface,float(profile.radius))
@@ -385,6 +395,7 @@ func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictio
 	var query_started := Time.get_ticks_usec() if tracing else 0
 	if tracing:
 		trace["build_usec"] = 0; trace["surfaces"] = 0; trace["expansions"] = 0; trace["edge_tests"] = 0
+		trace["grid_fields"] = 0; trace["grid_straight_rejections"] = 0
 	var direct := _navigation_direct(from,to,profile,revision,candidate)
 	if tracing: trace["direct_usec"] = Time.get_ticks_usec()-query_started
 	if direct.ok:
@@ -456,6 +467,9 @@ func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictio
 				# F10 H3: on a stretch the local edge may bend around steep ground.
 				var bent := _navigation_grid_edge(nodes[current],nodes[other],profile,candidate,memo,grid_field)
 				if bent.ok: edges[current].append({"to":other,"via":bent.via,"connection_id":"","cost":bent.cost})
+		if tracing:
+			trace["grid_fields"] = int(trace.get("grid_fields",0))+(1 if grid_field.has("ok") else 0)
+			trace["grid_straight_rejections"] = int(trace.get("grid_straight_rejections",0))+int(grid_field.get("straight_rejections",0))
 		for edge: Dictionary in edges[current]:
 			var route_cost: float = float(distances[current]) + float(edge["cost"])
 			if route_cost + EPS >= float(distances.get(edge["to"], INF)): continue
@@ -475,6 +489,7 @@ func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictio
 		trace["total_usec"] = Time.get_ticks_usec()-query_started; trace["states"] = nodes.size()
 		trace["memo_entries"] = memo.get("entries",0); trace["memo_hits"] = memo.get("hits",0); trace["memo_misses"] = memo.get("misses",0)
 		trace["memo_peak"] = memo.get("peak",0); trace["memo_stored"] = memo.get("stored",0); trace["memo_released"] = memo.get("released",0)
+		trace["contains_evaluations"] = memo.get("contains_evaluations",0); trace["contains_hits"] = memo.get("contains_hits",0); trace["contains_entries"] = memo.get("contains_entries",0)
 	if not visited.has("@to"): return _failure(&"unreachable")
 	var steps: Array[Dictionary] = []
 	var cursor := "@to"
@@ -746,6 +761,39 @@ static func _navigation_memo_release(memo: Dictionary, surface: String) -> void:
 		for ends: Dictionary in surfaces.get(surface,{}).values(): removed += ends.size()
 		surfaces.erase(surface)
 	memo.entries -= removed; memo.released += removed
+	if memo.has("contains"):
+		memo.contains_entries -= memo.contains.get(surface,{}).size()
+		memo.contains.erase(surface)
+
+## Exact radius-zero membership, isolated by the memo's effective world/profile.
+## Values are booleans only; saturation computes normally without retaining more.
+func _navigation_contains(surface: String, point: Vector3, memo: Dictionary) -> bool:
+	if not memo.is_empty() and memo.get("contains",{}).get(surface,{}).has(point):
+		memo["contains_hits"] = int(memo.get("contains_hits",0))+1
+		return bool(memo.contains[surface][point])
+	var cell := _cell(surface)
+	var accepted := not cell.is_empty() and Kernel.contains(cell,point)
+	if not memo.is_empty():
+		memo["contains_evaluations"] = int(memo.get("contains_evaluations",0))+1
+		if int(memo.get("contains_entries",0)) < NAVIGATION_CONTAINS_MEMO_LIMIT:
+			if not memo.has("contains"): memo["contains"] = {}
+			if not memo.contains.has(surface): memo.contains[surface] = {}
+			memo.contains[surface][point] = accepted
+			memo["contains_entries"] = int(memo.get("contains_entries",0))+1
+	return accepted
+
+## A live private receipt cannot arrive through a data-only witness/certificate.
+## Check owner, configuration/revision, support and both ordered endpoints.
+func _navigation_support_known(context: Variant, surface: String, a: Vector3, b: Vector3) -> bool:
+	if not context is Dictionary: return false
+	var proof: Variant = context.get("endpoint_support")
+	return proof is Array and proof.size() == 7 and proof[0] == self and proof[1] == configuration_revision and proof[2] == geometry_revision and proof[3] == surface and proof[4] == a and proof[5] == b and proof[6] == true
+
+func _navigation_prepare_support(context: Dictionary, surface: String, a: Vector3, b: Vector3, memo: Dictionary) -> bool:
+	if _navigation_support_known(context,surface,a,b): return true
+	if not _navigation_contains(surface,a,memo) or not _navigation_contains(surface,b,memo): return false
+	context["endpoint_support"] = [self,configuration_revision,geometry_revision,surface,a,b,true]
+	return true
 
 func _navigation_point(point: ExpeditionWorldPoint, radius: float, height: float, candidate: WorldSolidSegment, memo: Dictionary) -> bool:
 	if point.stage_id != _stage.stage_id: return false
@@ -758,7 +806,8 @@ func _navigation_point(point: ExpeditionWorldPoint, radius: float, height: float
 func _navigation_clear(a: Vector3, b: Vector3, profile: Dictionary, candidate: WorldSolidSegment, surface: String, memo: Dictionary, mass_context: Dictionary = {}, segment_context: Variant = null) -> bool:
 	var value: Variant = _navigation_memo_get(memo,"clear",surface,a,b)
 	if value != null: return bool(value)
-	var accepted := _clear_path_segment(a,b,profile,candidate,surface,mass_context,segment_context)
+	var prepared: Dictionary = segment_context if segment_context is Dictionary else {}
+	var accepted := (surface.is_empty() or _navigation_prepare_support(prepared,surface,a,b,memo)) and _clear_path_segment(a,b,profile,candidate,surface,mass_context,prepared)
 	_navigation_memo_put(memo,"clear",surface,a,b,accepted)
 	return accepted
 
@@ -766,7 +815,10 @@ func _navigation_fraction(cell: Dictionary, a: Vector3, b: Vector3, profile: Dic
 	var value: Variant = _navigation_memo_get(memo,"fraction",cell.surface_id,a,b)
 	if value != null: return float(value)
 	_ensure_support_index()
-	var fraction: float = SupportPatch._fraction_prepared(cell,a,b,profile,_support_index,segment_context.get("members",{}))
+	if not _navigation_prepare_support(segment_context,cell.surface_id,a,b,memo):
+		_navigation_memo_put(memo,"fraction",cell.surface_id,a,b,0.0)
+		return 0.0
+	var fraction: float = SupportPatch._fraction_prepared(cell,a,b,profile,_support_index,segment_context.get("members",{}),true)
 	_navigation_memo_put(memo,"fraction",cell.surface_id,a,b,fraction)
 	return fraction
 
@@ -953,7 +1005,8 @@ func _ground_sweep(surface_id: String, from: Vector3, to: Vector3, collider: Dic
 	if not _current(revision): return _failure(&"stale_geometry")
 	if not collider.has_all(["radius","height"]) or not _finite_number(collider["radius"]) or not _finite_number(collider["height"]) or float(collider["radius"]) < 0 or float(collider["height"]) < 0: return _failure(&"invalid_collider")
 	var cell := _cell(surface_id)
-	if cell.is_empty() or not from.is_finite() or not to.is_finite() or not Kernel.contains(cell,from) or not Kernel.contains(cell,to): return _failure(&"invalid_support")
+	if cell.is_empty() or not from.is_finite() or not to.is_finite(): return _failure(&"invalid_support")
+	if not _navigation_support_known(segment_context,surface_id,from,to) and (not Kernel.contains(cell,from) or not Kernel.contains(cell,to)): return _failure(&"invalid_support")
 	var trace: Dictionary = mass_context.get("trace",{})
 	var tracing: bool = trace.get("enabled",false) == true
 	var members_started := Time.get_ticks_usec() if tracing else 0

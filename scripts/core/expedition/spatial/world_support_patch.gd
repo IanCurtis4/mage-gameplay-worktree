@@ -123,8 +123,10 @@ static func fraction(cell: Dictionary, from: Vector3, to: Vector3, profile: Dict
 
 # One ordered segment can reuse the exact members already computed by its sweep.
 # This private preparation is never accepted from a public witness/certificate.
-static func _fraction_prepared(cell: Dictionary, from: Vector3, to: Vector3, profile: Dictionary, data: Dictionary, members: Dictionary) -> float:
-	if not Kernel.contains(cell,from) or not Kernel.contains(cell,to): return 0.0
+# endpoints_contained comes only from WorldGeometry's live segment preparation;
+# the public fraction() entry point always keeps its own canonical checks.
+static func _fraction_prepared(cell: Dictionary, from: Vector3, to: Vector3, profile: Dictionary, data: Dictionary, members: Dictionary, endpoints_contained: bool = false) -> float:
+	if not endpoints_contained and (not Kernel.contains(cell,from) or not Kernel.contains(cell,to)): return 0.0
 	var a := Vector2(from.x,from.z); var b := Vector2(to.x,to.z)
 	var radius := float(profile.radius); var height := float(profile.height)
 	if float(cell.headroom)+EPS < height: return 0.0

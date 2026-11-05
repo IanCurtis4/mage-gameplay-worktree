@@ -38,7 +38,7 @@ func _run() -> void:
 	var barrier := SnapshotTickBarrier.new()
 	check("real_player_actor_run_state_acquires_cut",barrier.acquire(actor).get("ok",false))
 	var registry := SnapshotRegistry.new()
-	var captured: Dictionary = registry.capture(actor,barrier)
+	var captured: Dictionary = registry.capture(actor,barrier,true)
 	check("one_thousand_cell_metadata_graph_captures_under_four_mib",captured.get("ok",false) and captured.get("bytes",SnapshotRegistry.MAX_BYTES+1) <= SnapshotRegistry.MAX_BYTES)
 	if not captured.get("ok",false):
 		print("F9_SNAPSHOT_DENSITY_CAPTURE "+JSON.stringify({"error_code":captured.get("error_code",""),"detail":captured.get("detail",""),"snapshot_metrics":captured.get("snapshot_metrics",{})}))
@@ -91,6 +91,7 @@ func _run() -> void:
 	var legacy_barrier := SnapshotTickBarrier.new()
 	var legacy_acquired: Dictionary = legacy_barrier.acquire(legacy_actor)
 	var legacy_capture: Dictionary = SnapshotRegistry.new().capture(legacy_actor,legacy_barrier) if legacy_acquired.get("ok",false) else {"ok":false}
+	check("logical_expansion_is_opt_in_without_skipping_compact_encoding",legacy_capture.get("ok",false) and legacy_capture.get("logical_bytes",0) == -1 and legacy_capture.get("encoding",PackedByteArray()).size() == legacy_capture.get("bytes",-1))
 	var legacy_payload: Dictionary = legacy_capture.get("snapshot",{})
 	var legacy_bytes: PackedByteArray = var_to_bytes(legacy_payload)
 	var compressed_legacy: PackedByteArray = legacy_bytes.compress(FileAccess.COMPRESSION_DEFLATE)

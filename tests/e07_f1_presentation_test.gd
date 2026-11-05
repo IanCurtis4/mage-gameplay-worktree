@@ -52,7 +52,19 @@ func _run() -> void:
 	check(not world.query_attack({"geometry_rule_id":&"direct_volume","range":1000},under,bridge,world.geometry_revision)["data"]["hit"],"cutaway never disables collision")
 	view.hide_surfaces([])
 	var seam := view.pick(view.project(Vector3(300,0,150)),world.geometry_revision)
-	check(not seam["ok"] and seam["error_code"] == &"ambiguous_surface","coincident surface seam is refused rather than choosing floor by order: "+str(seam))
+	# F9 surface picking supersedes F1's blanket tie refusal: a local active
+	# bidirectional opening has the lexicographically smallest support as owner.
+	check(seam["ok"] and seam["data"]["point"]["surface_id"] == Fixture.point("root",Vector3.ZERO).surface_id and Vector3(seam["data"]["point"]["position"]).distance_to(Vector3(300,0,150)) < 0.02,"continuous native ramp seam resolves to its deterministic owner: "+str(seam))
+	var disconnected_manifest := ExpeditionManifest.new()
+	var disconnected_stage: Dictionary = world._stage.duplicate(true)
+	for link: Dictionary in disconnected_stage.connections:
+		link.forward = false; link.backward = false
+	disconnected_manifest._data = {"input":{"parts":[]},"stages":[disconnected_stage]}
+	var disconnected_world := WorldGeometry.new()
+	check(disconnected_world.configure(disconnected_manifest,"sample")["ok"],"same native surfaces configure with their openings disabled")
+	var seam_ray := ExpeditionGeometryView.ray(view.project(Vector3(300,0,150)))
+	var disconnected_hit := disconnected_world.resolve_surface(seam_ray.origin,seam_ray.direction,view.visible_surfaces(),disconnected_world.geometry_revision)
+	check(not disconnected_hit["ok"] and disconnected_hit["error_code"] == &"ambiguous_surface","same native ray stays ambiguous without the active local opening")
 	check(not view.pick(Vector2.ZERO,epoch-1)["ok"],"stale pick does not produce a fresh marker")
 	# Public convex-region input must reject concavity and a forged cross-stage point.
 	var polygon := PackedVector2Array([Vector2(50,100),Vector2(100,100),Vector2(70,120),Vector2(100,150),Vector2(50,150)])

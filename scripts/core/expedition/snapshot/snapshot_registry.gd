@@ -127,7 +127,7 @@ func _visit(value: Variant, depth: int = 0) -> void:
 func _presentation_target(value: Object) -> bool:
 	return value is Control or value is CanvasLayer or value is Camera2D or value is Window or value is ArenaView or value is ActorDeathVisual or value is ExpeditionGeometryView or value is EquipmentHeadVisual or value is EquipmentAttachmentVisual
 
-func capture(root: Node, barrier: SnapshotTickBarrier) -> Dictionary:
+func capture(root: Node, barrier: SnapshotTickBarrier, measure_logical_bytes: bool = false) -> Dictionary:
 	var started := Time.get_ticks_usec()
 	if barrier == null or not barrier.owns(root): return StableEntityRegistry.failure(&"tick_barrier_required")
 	_field_cache.clear(); _base_property_cache.clear()
@@ -186,10 +186,12 @@ func capture(root: Node, barrier: SnapshotTickBarrier) -> Dictionary:
 	for id: String in _referenced_tombstones: generations[id] = entities.generation_for(id)
 	var has_world_view: bool = root is RunController and (root.expedition_view != null or (root.campaign_runtime != null and root.player.world_motion != null))
 	var envelope := {"format":FORMAT,"engine":Engine.get_version_info()["string"],"sources":_source_revisions(),"root":entities.stable_for(root.get_instance_id()),"objects":_records,"containers":_containers,"dead_references":_dead_references,"tombstones":_referenced_tombstones.keys(),"identity_generations":generations,"next_entity_serial":entities.next_serial(),"assets":_assets,"coverage":_coverage(),"authority":authority.duplicate(true),"world_view":has_world_view}
-	var logical_bytes := var_to_bytes(envelope).size()
+	# Raw graph expansion is diagnostic only; compact encoding is always checked.
+	var logical_bytes := var_to_bytes(envelope).size() if measure_logical_bytes else -1
 	var checked := validate(envelope)
 	if not checked["ok"]:
 		if checked.get("error_code") == &"snapshot_too_large":
+			if logical_bytes < 0: logical_bytes = var_to_bytes(envelope).size()
 			checked["snapshot_metrics"] = _size_metrics(envelope,logical_bytes)
 		return checked
 	_objects.clear(); _visited_containers.clear(); _container_values.clear(); _visited_buckets.clear(); _value_buckets.clear()

@@ -76,8 +76,7 @@ func refresh() -> void:
 	if not next_ticket.is_empty():
 		_button("Coletar próxima recompensa", run_action.bind({"kind": "collect", "ticket_id": next_ticket["ticket_id"]}))
 	for view: Dictionary in views:
-		var button := _button(ExpeditionPresentation.portal_text(view, state.manifest_data), run_action.bind({"kind": "travel", "portal_id": view["portal_id"], "stage_id": state.current_stage_id}))
-		button.tooltip_text = "Aproxime-se do portal indicado no mapa antes de viajar."
+		var button := _portal_button(view, state.manifest_data, run_action.bind({"kind": "travel", "portal_id": view["portal_id"], "stage_id": state.current_stage_id}))
 		button.disabled = not view["open"]
 	for objective: Dictionary in state.manifest_data["objectives"]:
 		if objective["stage_id"] == state.current_stage_id:
@@ -99,6 +98,35 @@ func _button(text: String, callback: Callable) -> Button:
 	button.pressed.connect(callback)
 	actions.add_child(button)
 	return button
+
+func _portal_button(view: Dictionary, manifest: Dictionary, callback: Callable) -> Button:
+	var text := ExpeditionPresentation.portal_text(view, manifest)
+	var button := _button("", callback)
+	button.tooltip_text = text + "\n" + ExpeditionPresentation.portal_tooltip(view)
+	button.accessibility_name = text
+	button.accessibility_description = ExpeditionPresentation.portal_tooltip(view)
+	var label := Label.new()
+	label.name = "PortalText"
+	label.text = text
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(label)
+	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	label.offset_left = 8; label.offset_right = -8
+	# Recompute after container layout and whenever the actual width changes.
+	label.resized.connect(_fit_portal_height.bind(button, label))
+	_fit_portal_height(button, label)
+	return button
+
+func _fit_portal_height(button: Button, label: Label) -> void:
+	var width := label.size.x if label.size.x > 16.0 else 334.0
+	var font := label.get_theme_font("font")
+	var font_size := label.get_theme_font_size("font_size")
+	var breaks := TextServer.BREAK_MANDATORY | TextServer.BREAK_WORD_BOUND | TextServer.BREAK_ADAPTIVE
+	var height := font.get_multiline_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, width, font_size, -1, breaks).y
+	if label.size.x > 16.0: height = maxf(height, label.get_minimum_size().y)
+	button.custom_minimum_size.y = maxf(36.0, height + 12.0)
 
 func run_action(command: Dictionary) -> Dictionary:
 	if busy or host._memory_snapshot_pending: return BuildEffectCatalog.failure(&"save_in_progress")

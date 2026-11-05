@@ -135,7 +135,6 @@ func resume(expedition_id: String, character_id: String, request_id: String, exp
 	var restored := _restore(lock)
 	if not restored["ok"]: return restored
 	var recovering := _unrevived_death(restored["root"])
-	restored["root"].free()
 	var candidate := profile.copy_state()
 	candidate.selected_character_id = character_id
 	candidate.reward_session = lock.effective_session().duplicate(true)
@@ -143,7 +142,9 @@ func resume(expedition_id: String, character_id: String, request_id: String, exp
 	lock.revision += 1
 	lock.receipts[request_id] = {"fingerprint":fingerprint,"operation":"resume","revision":lock.revision}
 	candidate.expeditions[expedition_id] = lock
-	var committed := _commit(candidate,request_id,expected_revision,{"expedition_id":expedition_id,"resume":true})
+	# Keep the fully validated graph inert until the canonical writer confirms.
+	# Definitive failure frees it; an uncertain write retains it for reconcile.
+	var committed := _commit(candidate,request_id,expected_revision,{"expedition_id":expedition_id,"resume":true,"staged":restored})
 	return committed
 
 func reconcile(request_id: String) -> Dictionary:
@@ -223,10 +224,11 @@ func _publish(result: Dictionary, context: Dictionary) -> Dictionary:
 		var suspended_host := context["source"].get_ref() as RunController
 		if suspended_host != null: suspended_host.snapshot_passive = true
 	if context.get("resume",false):
-		var restored := _restore(lock)
-		if not restored["ok"]:
-			restored["durable"] = true
-			return restored
+		var restored: Dictionary = context["staged"]
+		# The commit changes only external authority and lifecycle, not the cut.
+		restored["snapshot"]["authority"] = {"profile_id":profile.profile_id,"revision":profile.revision,"reward_session":profile.reward_session}
+		var host: RunController = restored["root"]
+		if host.campaign_runtime != null: host.campaign_runtime.state.lifecycle = String(lock.lifecycle)
 		result.merge(restored,true)
 	if context.has("ticket_id"):
 		var controller := context["source"].get_ref() as RunController

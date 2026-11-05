@@ -20,7 +20,7 @@ func configure(view: Dictionary, manifest: Dictionary = {}) -> void:
 		caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		caption.add_theme_font_size_override("font_size", 15)
 		add_child(caption)
-	caption.text = "%s\n%s" % [ExpeditionPresentation.stage_name(view["to_stage"], manifest), "Portal aberto" if open else "Aguardando limpeza"]
+	caption.text = ExpeditionPresentation.portal_text(view,manifest)
 	caption.modulate = Color("6ddac2") if open else Color("c4bdd7")
 	queue_redraw()
 
