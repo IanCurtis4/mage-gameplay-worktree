@@ -1,5 +1,10 @@
 # Roadmap vigente — 17/10/2026
 
+Atualização de estado em5/11: [aceite E07/F10 com ressalvas](epics/e07/e07_closure_2026_11_05.md)
+e [abertura documental E08](epics/e08_opening_2026_11_05.md). Integração Git
+continua separada; E09+ não foram liberados. As reservas antigas não revogam
+essa decisão nem autorizam consumidores de E08 sem seu contrato.
+
 Este mapa substitui a lista antiga de reservas como orientação atual.
 [Histórico](LONG_TERM_EPICS.history_2026_10_17.md) conserva aceites e planejamento
 anteriores. Normas: [WORKFLOW](WORKFLOW.md); direção: [PRODUCT_DIRECTION](PRODUCT_DIRECTION.md).
@@ -10,8 +15,8 @@ anteriores. Normas: [WORKFLOW](WORKFLOW.md); direção: [PRODUCT_DIRECTION](PROD
 | E04 | Três bases disponíveis, com extensões posteriores documentadas em E06 |
 | E05 | Seis evoluções puras + Geômetra disponíveis; cinco híbridas originais ainda bloqueadas. Não declarar épico inteiro encerrado |
 | E06 | Implementado e [aceito em gameplay18/10](epics/e06/e06_gameplay_acceptance_2026_10_18.md); merge/publicação não executados |
-| E07 | [Abertura documental autorizada](epics/e07_launch_queue.md) após revogação da espera por orçamento; contratos antes de implementação |
-| E08 | Reservado. Arte/feedback futuros acompanham os contratos reais; arte entregue dentro de E04–E06 não inicia todo E08 |
+| E07 | Fundação funcional aceita com ressalvas em5/11, ampliada pelo editor/F10; integração operacional separada. [Recibo](epics/e07/e07_closure_2026_11_05.md) |
+| E08 | [Arquitetura/inventário autorizados](epics/e08_opening_2026_11_05.md); atualizar o plano a partir da arte existente antes dos consumidores |
 | E09 | Reservado. Integração/demo e validação operacional Luna/Sol, com aceite humano; não é auditoria Astra automática |
 | E10/E11 | Reservados. Bases restantes e híbridas futuras mantêm autorização por família/par; não produzir kits por efeito de roadmap |
 | Economia/consumíveis/misc | Direção atualizada em18/10; alocação a épico/pacotes ainda a definir, sem execução automática |

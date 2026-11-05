@@ -1,5 +1,13 @@
 # Chats e retomada — conferido em 17/10/2026
 
+## Transição vigente — 5/11/2026
+
+[E07/F10 aceitos em produto com ressalvas](epics/e07/e07_closure_2026_11_05.md).
+O [brief de arquitetura E08](epics/e08_opening_2026_11_05.md) está preparado;
+novo Astra permanente ainda não criado. Não inventar ID nem retomar reserva
+histórica automaticamente. Nenhum chat foi criado/arquivado ou recebeu mensagem
+por esta consolidação; integração operacional permanece separada.
+
 ## Situação atual22/10 — integração e consumidor F7
 
 F1–F6 foram integradas; evidência, base efetiva e arquivamento estão no

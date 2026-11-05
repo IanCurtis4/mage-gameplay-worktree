@@ -1,5 +1,15 @@
 # Desenvolvimento, revisão e playtest
 
+## Atualização humana de 5/11/2026 — transição E07/F10 para E08
+
+A pessoa pediu encerrar o estágio e avançar. [Aceite de produto com ressalvas](epics/e07/e07_closure_2026_11_05.md)
+fixa o candidato E07/F10 e conserva limitações medidas e tarefas humanas não
+reproduzidas, sem marcá-las PASS. Integração Git/playtest/arquivamento continuam
+operações separadas. [E08](epics/e08_opening_2026_11_05.md) abre inventário e
+arquitetura sobre o pipeline existente; nenhum consumidor/asset novo é iniciado
+sem contrato delimitado. O Astra permanente de arquitetura é o próximo destino
+do brief; nenhum chat foi criado nesta rodada. E09+ continuam reservados.
+
 ## Atualização humana de30/10/2026 — papéis em modelos Claude
 
 Para concluir o escopo F9 desta rodada (patrulha e mapa jogável para checagem

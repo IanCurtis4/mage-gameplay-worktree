@@ -1,5 +1,11 @@
 # Editor de mapas — proposta de arquitetura e execução
 
+**Decisão vigente de 5/11/2026:** F10 aceita para encerramento de produto com
+ressalvas. [Recibo E07/F10 e limites](../epics/e07/e07_closure_2026_11_05.md),
+[checkpoint22](delivery/f10.md). Tarefas manuais não reproduzidas e desempenho
+remanescente não viraram PASS; integração Git continua separada. E08 abre
+inventário/arquitetura, sem novo runtime ou assets. O estado abaixo é histórico.
+
 **Estado vigente em 5/11/2026:** F9 foi entregue e integrada em master em
 2/11 (`3c35f7f2`), com aceite humano parcial e pendências manuais transferidas.
 F10 foi ativada em 2/11 e Q5 foi autorizado em 4/11. Execução no único worktree

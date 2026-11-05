@@ -1,5 +1,10 @@
 # Editor F10 — pente-fino e fechamento integrado
 
+**Encerramento de produto com ressalvas em 5/11/2026:**
+[recibo E07/F10](../../epics/e07/e07_closure_2026_11_05.md). O contrato e seus
+critérios abaixo permanecem como referência; a decisão humana não declara
+reproduzidos os itens manuais pendentes nem conclui a integração operacional.
+
 25/10/2026. **ATIVADA em 2/11/2026** (F9 integrada em master em `3c35f7f2`;
 branch `codex/map-editor-f10`). Antes: reservada até F9 consolidado e aval humano.
 Chat local criado: `01a1741f-cf1e-7543-a5c6-2dab4e834aa4`.

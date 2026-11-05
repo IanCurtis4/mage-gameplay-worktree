@@ -14,8 +14,10 @@
 > Preserva a regra de 26/09: nenhum gate Astra por microtarefa.
 > E06 iniciado por autorização humana; contrato e retomada:
 > [docs/epics/e06.md](docs/epics/e06.md). Gameplay E06 aceito em18/10.
-> E07: [abertura autorizada](docs/epics/e07_launch_queue.md) em18/10 após novo
-> sinal humano. Arquitetura/contratos antes dos consumidores. E08+ não liberados.
+> E07/F10: [aceite de produto com ressalvas](docs/epics/e07/e07_closure_2026_11_05.md)
+> em5/11; integração operacional separada. E08 abriu
+> [preparação de arquitetura/inventário](docs/epics/e08_opening_2026_11_05.md).
+> Contratos antes dos consumidores; E09+ permanecem reservados.
 
 - Leia `docs/MVP.md`, `docs/ARCHITECTURE.md` e o contrato/checkpoint correspondente
   antes de editar. E00 e decisões posteriores explícitas prevalecem sobre o piloto.

@@ -1,5 +1,11 @@
 # F10 Q5 — rastreabilidade e revisão integrada
 
+**Encerramento de produto em 5/11:** [decisão e ressalvas](../../epics/e07/e07_closure_2026_11_05.md).
+A matriz abaixo conserva a situação técnica de suas verificações; o aceite
+humano de encerrar o estágio não preenche as tarefas ainda não reproduzidas.
+Pendências descritas como impeditivas eram os gates de revisão anteriores
+à decisão humana; seguem identificadas, sem falsa certificação de execução.
+
 5/11/2026. Base `954341d5721ea6959fb89b1458ce17242e3ce6f6`, contratos
 [Q5](../contracts/f10_q5_review.md) e [pendências](../contracts/f10_q5_remaining.md). Candidato deste incremento fixado no
 [checkpoint18](f10.md)

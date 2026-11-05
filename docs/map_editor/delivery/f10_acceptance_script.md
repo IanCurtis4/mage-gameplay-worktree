@@ -1,5 +1,9 @@
 # F10 — roteiro de revisão Q5
 
+Atualização em5/11: [encerramento de produto com ressalvas](../../epics/e07/e07_closure_2026_11_05.md).
+Este roteiro permanece para as tarefas não reproduzidas; sua existência não
+declara que todas foram executadas, e o texto de revisão abaixo é histórico.
+
 4/11/2026. O candidato e as evidências ficam no [checkpoint](f10.md). Este
 roteiro não registra aceite por execução de teste automático. Q5 permanece
 aberto até as obrigações técnicas e a avaliação humana serem concluídas.

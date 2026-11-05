@@ -1,5 +1,15 @@
 # Produto vigente e limites da entrega
 
+## Aceite e transição — 5/11/2026
+
+E07 e o estágio posterior F10/editor receberam aceite de produto com ressalvas:
+[recibo e candidato](epics/e07/e07_closure_2026_11_05.md). Permanecem picos,
+latências e tarefas humanas não reproduzidas, sem falsa certificação de fluidez.
+Integração operacional continua separada. [E08](epics/e08_opening_2026_11_05.md)
+inicia arquitetura/inventário de arte, animações e feedback, com contratos antes
+de produção. Os estados de aceite pendente abaixo descrevem as entregas antes
+dessa decisão; E09+ continuam reservados.
+
 ## Editor F10 — 5/11/2026
 
 F9 foi integrada em 2/11 com aceite parcial. F10 acrescentou a fase de floresta
@@ -9,7 +19,8 @@ final ou certificação de fluidez. A continuação reduziu trabalho de retomada
 navegação e corrigiu leitura dos portais, incluindo títulos sem espaços.
 [Checkpoint e limites medidos](map_editor/delivery/f10.md),
 [matriz Q5](map_editor/delivery/f10_q5_matrix.md). Entrada e portais ainda levam
-dezenas de segundos/minutos; não há certificação de fluidez ou abertura de E08+.
+dezenas de segundos/minutos; não há certificação de fluidez. A abertura E08
+acima é documental, sem consumidores novos.
 
 O [teste Windows atualizado](map_editor/delivery/f10_terrain_performance.md) inclui
 minimapa quadrado do mapa atual inteiro, inimigos vermelhos, seta dourada com

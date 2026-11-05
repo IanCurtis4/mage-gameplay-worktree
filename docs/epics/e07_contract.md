@@ -1,5 +1,10 @@
 # E07 — contrato de arquitetura v1
 
+Estado posterior em5/11/2026: [fundação funcional aceita com ressalvas](e07/e07_closure_2026_11_05.md),
+com abertura documental E08 e integração operacional separada. O contrato técnico
+continua válido nos pontos não substituídos pelas decisões posteriores; estados
+de autorização/aceite datados abaixo conservam seu caráter histórico.
+
 ## Atualização operacional —22/10/2026
 
 F1–F6 integradas conforme [recibo](e07/f1_f6_integration.md). Aprovações humanas

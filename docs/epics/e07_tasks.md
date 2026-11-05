@@ -1,5 +1,9 @@
 # E07 — pacotes substanciais e fronteiras de execução
 
+Estado posterior em5/11: [fundação E07 aceita com ressalvas e encerramento F10](e07/e07_closure_2026_11_05.md),
+com abertura documental E08. A tabela operacional de23/10 abaixo é histórica;
+o aceite não declara tarefas manuais executadas nem merge/arquivamento concluídos.
+
 ## Estado operacional consolidado —23/10/2026
 
 Esta seção prevalece sobre estados históricos da arquitetura e da execução abaixo.

@@ -1,5 +1,9 @@
 # F10 — terreno no minimapa e desempenho
 
+Decisão humana posterior nesta data: [encerramento de produto E07/F10 com ressalvas](../../epics/e07/e07_closure_2026_11_05.md).
+O recibo abaixo conserva a validação/medidas anteriores ao aceite; flags de
+aceite pendente nos artefatos imutáveis não foram reescritas retroativamente.
+
 5/11/2026. Pedido humano após o teste do minimapa: representar o relevo e os
 locais onde não se pode andar, reduzir o lag com muitos inimigos e experimentar
 outra tática para preparar/executar o jogo. [Contrato](../contracts/f10_terrain_performance.md).

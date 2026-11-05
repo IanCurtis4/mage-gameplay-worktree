@@ -2,7 +2,10 @@
 
 ## Delta do editor F10 — 5/11/2026
 
-F10 está ativo; Q5 em revisão, sem fechamento técnico ou aceite humano final.
+F10 recebeu aceite de produto com ressalvas em5/11; [encerramento E07/F10](epics/e07/e07_closure_2026_11_05.md).
+Limitações e tarefas não reproduzidas seguem registradas; integração operacional
+separada. [E08](epics/e08_opening_2026_11_05.md) abre inventário/arquitetura,
+sem alterar estas autoridades nem iniciar produção de assets/runtime.
 O [contrato de grade Q1](map_editor/contracts/f10_height_grid.md) substituiu o
 limite de 4 MiB apenas nos formatos contratados: envelope de snapshot até 16 MiB,
 checkpoint format 2 comprimido e pacote de patrulha até 8 MiB. Outros codecs
