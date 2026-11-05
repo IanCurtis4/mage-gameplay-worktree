@@ -19,6 +19,11 @@ sincronizar a fixture. Não edite as fontes pessoais ou os quatro backups.
 
 ## Editor, sem editar código
 
+**Mostrar dados da peça** abre nome, caminho e recuperação. **Mostrar roteiro
+do mapa** abre a lista de etapas; o próximo passo continua visível quando essa
+lista está recolhida. Os controles abaixo da prévia continuam acessíveis pela
+rolagem, nos modos UX e AX.
+
 Siga as [nove tarefas F9](f9_acceptance_script.md#tarefas), agora na fixture
 atual, substituindo apenas o antigo local `.tools/f9_aceite`. A tarefa 1 já foi
 aceita pela pessoa em 2/11; repeti-la ajuda a avaliar o percurso como um todo.

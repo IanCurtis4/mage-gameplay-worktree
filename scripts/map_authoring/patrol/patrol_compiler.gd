@@ -67,7 +67,9 @@ static func validate_package(package: Dictionary) -> bool:
 	var copy := package.duplicate(true); copy.erase("package_hash")
 	if ExpeditionCanonical.digest(copy) != package.package_hash: return false
 	if Engine.is_editor_hint(): return request({"package":package}).ok
+	var diagnostic_stamp := Time.get_ticks_usec()
 	if not Population.validate_package(package.population_package): return false
+	var population_validation_ms := (Time.get_ticks_usec()-diagnostic_stamp)/1000.0
 	var base: Dictionary = package.population_package.manifest.duplicate(true)
 	base.input["phase_id"] = PREVIEW_PHASE
 	var candidate: Dictionary = package.manifest.duplicate(true)
@@ -84,7 +86,10 @@ static func validate_package(package: Dictionary) -> bool:
 	var proof_key: String = Schema.bytes_hash(bytes)+"/"+loaded.hash+"/"+loaded.policy_hash
 	_proof_mutex.lock(); var known: bool = _proofs.has(proof_key); _proof_mutex.unlock()
 	if known: return true
+	diagnostic_stamp = Time.get_ticks_usec()
 	var planned := ExpeditionPopulationPlanner.build(manifest(package),loaded.catalog,package.population_package.rules)
+	if OS.get_environment("RAGRPG_PREPARATION_PROFILE") == "1":
+		print("F10_PACKAGE_VALIDATION_PROFILE "+JSON.stringify({"package_hash":package.package_hash,"population_validation_ms":population_validation_ms,"population_admission_ms":(Time.get_ticks_usec()-diagnostic_stamp)/1000.0,"navigation":planned.get("navigation_metrics",[])}))
 	if not planned.ok: return false
 	for slot: Dictionary in planned.slots.values():
 		if not slot.has("patrol"): continue

@@ -2,17 +2,32 @@ class_name ExpeditionPresentation
 extends RefCounted
 ## Pure text projection of service DTOs. No eligibility or reward decisions.
 
-static func stage_name(id: String) -> String:
-	return {"entry": "Entrada", "left": "Ramo lateral", "right": "Caminho principal", "final": "Destino final"}.get(id, "Estágio %s" % id)
+static func stage_name(id: String, manifest: Dictionary = {}) -> String:
+	var input: Variant = manifest.get("input", {})
+	if input is Dictionary:
+		var references: Variant = input.get("authored_presentations", {})
+		if references is Dictionary:
+			var reference: Variant = references.get(id, {})
+			if reference is Dictionary:
+				var title: Variant = reference.get("name", "")
+				if title is String and not title.strip_edges().is_empty(): return title.strip_edges()
+	var legacy := {"entry": "Entrada", "left": "Ramo lateral", "right": "Caminho principal", "final": "Destino final"}
+	if legacy.has(id): return legacy[id]
+	var stages: Variant = manifest.get("stages", [])
+	if stages is Array:
+		for index: int in stages.size():
+			var stage: Variant = stages[index]
+			if stage is Dictionary and stage.get("stage_id") == id: return "Estágio %d" % (index + 1)
+	return "Estágio desconhecido" if id.strip_edges().is_empty() else "Estágio %s" % id
 
-static func portal_text(view: Dictionary) -> String:
+static func portal_text(view: Dictionary, manifest: Dictionary = {}) -> String:
 	if view.is_empty(): return "Portal indisponível"
-	return "%s · %s" % [stage_name(view["to_stage"]), "Aberto" if view["open"] else "Fechado — conclua a limpeza"]
+	return "%s · %s" % [stage_name(view["to_stage"], manifest), "Aberto" if view["open"] else "Fechado — conclua a limpeza"]
 
-static func campaign_text(view: Dictionary) -> String:
+static func campaign_text(view: Dictionary, manifest: Dictionary = {}) -> String:
 	var lifecycle: String = view["lifecycle"]
 	var state: String = {"active": "Em exploração", "suspended": "Suspensa", "recovering": "Aguardando retorno após morte", "completed": "Concluída"}.get(lifecycle, "Aguardando recuperação")
-	return "%s · %s\nOnda %d · relógio da fase: %.0f s" % [stage_name(view["stage_id"]), state, int(view["wave_index"]), float(view["remaining"])]
+	return "%s · %s\nOnda %d · relógio da fase: %.0f s" % [stage_name(view["stage_id"], manifest), state, int(view["wave_index"]), float(view["remaining"])]
 
 static func threat_text(view: ThreatView) -> String:
 	var lines: Array[String] = ["Ameaça do alvo selecionado", "Alvo atual: %s" % participant_name(view.current_id), "Limiar de troca: %.1f" % view.switch_threshold]

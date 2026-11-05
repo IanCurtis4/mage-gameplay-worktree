@@ -11,6 +11,67 @@ confrontando a matriz F9 e os recibos F0–F8 com operações existentes. Evidê
 recebida de F9, reprodução F10, supervisão Luna e aceite humano são separados.
 Aceite humano permanece pendente até a decisão da pessoa sobre o candidato.
 
+## Continuação sobre o checkpoint15
+
+Autorização humana: “Vamos continuar Q5.” Base documental
+`d49dc1603ca6ab0e380054c45b0adcaecb3a10ab`, código `8bbfb6c3`.
+Mesmo worktree/fixture; quatro backups locais preservados. O CLI de retomada
+continua ausente; diagnóstico por Git/checkpoint, sem inventar tooling.
+
+Fatia UI Terra: propriedade exclusiva de
+`scripts/ui/expedition/{expedition_presentation,expedition_status_panel}.gd`,
+`scripts/world/{expedition_portal,expedition_geometry_view}.gd` (somente rótulos),
+`addons/ragrpg_map_editor/shell.gd`,
+`scripts/map_authoring/terrain/terrain_panel.gd`,
+`scripts/map_authoring/workflow/workflow_bar.gd`,
+`tests/e07_f7_presentation_test.gd` e `tests/map_editor_q5_usability_test.gd`
+(novo). Nomes visíveis vêm da referência publicada já fixada na fase; IDs,
+manifesto, elegibilidade e estado não mudam. Reduzir controles antes da prévia
+sem perder descoberta, foco, roteiro ou ações AX. Medir área realmente visível
+e provar que dobrar controles/alternar modo não altera a fonte. Sol integra UIDs
+e runners. Sem engine enquanto houver escritores de fonte.
+
+Sol: propriedade de `scripts/map_authoring/preview/gameplay_candidate.gd`,
+`scripts/map_authoring/release/{map_release,phase_release}.gd`,
+`tests/map_editor_forest_phase_test.gd`, testes dirigidos de preparação existentes
+e runners. O perfil usa a etapa ForestPhase já existente. Primeiro medir os blocos da preparação sobre
+os mesmos pacotes/perfis; depois reduzir trabalho repetido sem retirar prova
+de ida/volta, alterar a primeira falha relatada ou reutilizar mundo vivo.
+Métricas são locais da operação, fora de manifesto/snapshot. Não muda transação,
+writer, barreira, conteúdo da floresta ou política de compatibilidade.
+O perfil inicial localizou a maior parcela na leitura/validação fria dos
+pacotes (147 s dos 179 s). Sol recebe também
+`scripts/map_authoring/patrol/patrol_compiler.gd` para detalhar validação interna
+versus admissão de população, com log diagnóstico opt-in, sem cache de estado vivo.
+Sonda dirigida em `tools/map_editor_completion/profile_package.gd` e respectivo
+UID/etapa PackageProfile; usa o mesmo primeiro mapa publicado, sem gerar conteúdo.
+
+O detalhamento mediu 114 s na admissão fria: construção de grafo 22 s e
+fechamentos completos de ida/volta 90 s para 62 destinos. Sol recebeu
+`scripts/core/expedition/spatial/world_connectivity_batch.gd` e
+`tests/map_editor_height_grid_navigation_test.gd`. A tentativa de limitar a
+busca aos destinos passou nas invariantes, mas não reduziu o custo real
+(118,77 s → 121,27 s no carregamento); foi descartada, restaurando o algoritmo
+da base. As novas provas de consulta curta seguida de destinos novos, corte,
+sentido único, cancelamento e invalidação permanecem.
+
+Sol assume `scripts/core/expedition/spatial/world_height_grid.gd` e
+`tests/map_editor_height_grid_test.gd` para eliminar projeções XZ repetidas:
+coordenadas idênticas às dos Vector3 standard, sem carregar alturas inúteis,
+e projeções dos triângulos íngremes preparadas no índice antes de compartilhá-lo.
+São dados geométricos imutáveis; não retêm ator, mundo vivo ou resultado de
+travessia. Comparar as duas diagonais em várias escalas/origens e os vereditos
+de disco/cápsula com e sem índice, mantendo todos os orçamentos e testemunhos.
+Essa segunda tentativa passou 17/17 provas geométricas e 16/16 de navegação,
+mas mediu 127,55 s no mesmo carregamento, sem ganho confirmado. Também foi
+descartada, incluindo o teste específico de projeções. Os dois arquivos do
+núcleo voltaram exatamente à base; a continuidade desta entrega consolida as
+correções visuais, a instrumentação e a evidência, sem anunciar redução de tempo.
+
+Luna assume engine/fixture somente após transferência e congelamento explícitos.
+Após o perfil inicial, a implementação volta a Sol e é congelada novamente antes
+da validação. Sol mantém documentação fora dos inputs durante o lote.
+
 ## Propriedade sequencial
 
 - Terra: `scripts/map_authoring/terrain/{brush,terrain_canvas,terrain_panel}.gd`

@@ -117,12 +117,18 @@ static func manifest(package_id: String, listing: Dictionary = {}) -> Dictionary
 ## body, encounter homes and patrol routes certified by the game authorities.
 ## Returns manifest, rules, map_package, entry point and candidate_hash.
 static func prepare(package_id: String, listing: Dictionary = {}) -> Dictionary:
+	var stamp := Time.get_ticks_usec()
 	var loaded := load_package(package_id,listing)
 	if not loaded.ok: return loaded
+	var load_ms := (Time.get_ticks_usec()-stamp)/1000.0
+	stamp = Time.get_ticks_usec()
 	var made := Candidate.create("patrol",loaded.package,loaded.package.source_hash)
 	if not made.ok: return made
+	var create_ms := (Time.get_ticks_usec()-stamp)/1000.0
 	var prepared := Candidate.prepare(made.candidate)
 	if not prepared.ok: return prepared
+	prepared.prepare_timings["load_package_ms"] = load_ms
+	prepared.prepare_timings["create_candidate_ms"] = create_ms
 	prepared["package"] = loaded.package; prepared["release"] = loaded.entry
 	return prepared
 

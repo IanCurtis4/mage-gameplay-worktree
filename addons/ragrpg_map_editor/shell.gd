@@ -35,6 +35,8 @@ const WorkflowBar = preload("res://scripts/map_authoring/workflow/workflow_bar.g
 var exchange_panel: Control
 var flow: RefCounted
 var workflow_bar: VBoxContainer
+var metadata_toggle: Button
+var metadata_panel: VBoxContainer
 func _ready() -> void:
 	exchange_panel = preload("res://scripts/map_authoring/exchange/exchange_panel.gd").mount(self,"piece",func() -> Dictionary: return session.document().to_data().duplicate(true),session.apply)
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -57,7 +59,7 @@ func _ready() -> void:
 	_button(toolbar, "Salvar como…", _choose_save)
 	undo_button = _button(toolbar, "Desfazer", func() -> void: session.undo())
 	redo_button = _button(toolbar, "Refazer", func() -> void: session.redo())
-	var path_row := HBoxContainer.new()
+	var path_row := HFlowContainer.new()
 	add_child(path_row)
 	path_edit = LineEdit.new()
 	path_edit.placeholder_text = "Caminho do arquivo de fonte (.json)"
@@ -96,19 +98,26 @@ func _ready() -> void:
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	split.add_child(scroll)
 	scroll.add_child(right)
+	metadata_toggle = Button.new(); metadata_toggle.text = "Mostrar dados da peça"; metadata_toggle.toggle_mode = true; metadata_toggle.set_meta("authoring_keep_visible",true); right.add_child(metadata_toggle)
+	metadata_panel = VBoxContainer.new(); metadata_panel.visible = false; right.add_child(metadata_panel)
+	heading.reparent(metadata_panel)
+	path_row.reparent(metadata_panel)
+	metadata_toggle.toggled.connect(func(open: bool) -> void:
+		metadata_panel.visible = open
+		metadata_toggle.text = "Ocultar dados da peça" if open else "Mostrar dados da peça")
 	var name_label := Label.new()
 	name_label.text = "Nome da peça"
-	right.add_child(name_label)
+	metadata_panel.add_child(name_label)
 	title_edit = LineEdit.new()
 	title_edit.max_length = 65536
 	title_edit.placeholder_text = "Nome visível"
-	right.add_child(title_edit)
+	metadata_panel.add_child(title_edit)
 	title_edit.text_submitted.connect(rename_document)
 	title_edit.focus_exited.connect(_commit_name)
-	_button(right, "Aplicar nome", func() -> void: rename_document(title_edit.text))
+	_button(metadata_panel, "Aplicar nome", func() -> void: rename_document(title_edit.text))
 	info = Label.new()
 	info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	right.add_child(info)
+	metadata_panel.add_child(info)
 	terrain = Terrain.new()
 	right.add_child(terrain)
 	terrain.layer_selected.connect(func(id: String) -> void:
@@ -150,7 +159,9 @@ func _button(parent: Node, text: String, action: Callable) -> Button:
 	return button
 
 func focus_primary() -> void:
-	if is_instance_valid(title_edit): title_edit.grab_focus()
+	if is_instance_valid(title_edit):
+		metadata_toggle.button_pressed = true
+		title_edit.grab_focus()
 
 func open_composition() -> void:
 	if composition_window == null:

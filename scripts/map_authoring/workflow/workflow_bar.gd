@@ -28,6 +28,8 @@ var publish_plan: Dictionary = {}
 var _dirty := true
 var _clock := 0.0
 var _shown: Dictionary = {}
+var steps_toggle: Button
+var steps_row: HFlowContainer
 
 static func mount(parent: Control, shared: RefCounted, step: String, screen_id: String, owner: bool) -> VBoxContainer:
 	var bar: VBoxContainer = load("res://scripts/map_authoring/workflow/workflow_bar.gd").new()
@@ -38,19 +40,24 @@ static func mount(parent: Control, shared: RefCounted, step: String, screen_id: 
 func setup(shared: RefCounted, step: String, screen_id: String, owner: bool) -> void:
 	flow = shared; step_id = step; screen = screen_id; owns_flow = owner; name = "AuthoringWorkflow"
 	set_meta("authoring_command_provider",true); set_meta("authoring_skip_collect",true)
-	var row := HFlowContainer.new(); add_child(row)
-	var title := Label.new(); title.text = "Roteiro do mapa"; row.add_child(title)
+	var actions := HFlowContainer.new(); add_child(actions)
+	steps_toggle = Button.new(); steps_toggle.text = "Mostrar roteiro do mapa"; steps_toggle.toggle_mode = true; actions.add_child(steps_toggle)
+	steps_row = HFlowContainer.new(); steps_row.visible = false; add_child(steps_row)
+	steps_toggle.toggled.connect(func(open: bool) -> void:
+		steps_row.visible = open
+		detail.visible = open
+		steps_toggle.text = "Ocultar roteiro do mapa" if open else "Mostrar roteiro do mapa")
+	var row := steps_row
 	for index: int in Flow.ORDER.size():
 		var id: String = Flow.ORDER[index]
-		var button := Button.new(); button.toggle_mode = true; button.focus_mode = Control.FOCUS_NONE
+		var button := Button.new(); button.toggle_mode = true
 		button.pressed.connect(func() -> void: button.set_pressed_no_signal(id == step_id); flow.open(id))
 		row.add_child(button); step_buttons[id] = button
-	var actions := HFlowContainer.new(); add_child(actions)
 	var label := Label.new(); label.text = "Próximo passo:"; actions.add_child(label)
 	next_button = Button.new(); next_button.pressed.connect(func() -> void: run_next()); actions.add_child(next_button)
 	show_button = Button.new(); show_button.text = "Mostrar o problema"; show_button.pressed.connect(func() -> void: show_problem()); actions.add_child(show_button)
 	cancel_button = Button.new(); cancel_button.text = "Cancelar atualização"; cancel_button.pressed.connect(func() -> void: flow.cancel()); actions.add_child(cancel_button)
-	detail = Label.new(); detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; add_child(detail)
+	detail = Label.new(); detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; detail.visible = false; add_child(detail)
 	confirmation = ConfirmationDialog.new(); confirmation.title = "Atualizar a etapa"; add_child(confirmation)
 	confirmation.ok_button_text = "Aplicar (um desfazer)"; confirmation.cancel_button_text = "Descartar"
 	confirmation.confirmed.connect(func() -> void: flow.apply_pending(String(confirmation.get_meta("proposal_hash",""))))

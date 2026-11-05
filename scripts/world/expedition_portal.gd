@@ -6,7 +6,7 @@ var kind := "travel"
 var open := false
 var anchor: ExpeditionWorldPoint
 
-func configure(view: Dictionary) -> void:
+func configure(view: Dictionary, manifest: Dictionary = {}) -> void:
 	portal_id = view["portal_id"]
 	kind = view["kind"]
 	open = view["open"]
@@ -20,7 +20,7 @@ func configure(view: Dictionary) -> void:
 		caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		caption.add_theme_font_size_override("font_size", 15)
 		add_child(caption)
-	caption.text = "%s\n%s" % [ExpeditionPresentation.stage_name(view["to_stage"]), "Portal aberto" if open else "Aguardando limpeza"]
+	caption.text = "%s\n%s" % [ExpeditionPresentation.stage_name(view["to_stage"], manifest), "Portal aberto" if open else "Aguardando limpeza"]
 	caption.modulate = Color("6ddac2") if open else Color("c4bdd7")
 	queue_redraw()
 

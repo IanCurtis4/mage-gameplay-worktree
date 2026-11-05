@@ -48,7 +48,7 @@ func _process(delta: float) -> void:
 func refresh() -> void:
 	visible = is_instance_valid(host) and host.campaign_runtime != null
 	if not visible or summary == null: return
-	summary.text = ExpeditionPresentation.campaign_text(host.campaign_runtime.state.view())
+	summary.text = ExpeditionPresentation.campaign_text(host.campaign_runtime.state.view(), host.campaign_runtime.state.manifest_data)
 	var target := host._selected_enemy as EnemyActor
 	threats.text = ExpeditionPresentation.threat_text(target.threat.view()) if is_instance_valid(target) and target.is_alive() else "Selecione um inimigo para consultar a ameaça."
 	var state := host.campaign_runtime.state
@@ -76,7 +76,7 @@ func refresh() -> void:
 	if not next_ticket.is_empty():
 		_button("Coletar próxima recompensa", run_action.bind({"kind": "collect", "ticket_id": next_ticket["ticket_id"]}))
 	for view: Dictionary in views:
-		var button := _button(ExpeditionPresentation.portal_text(view), run_action.bind({"kind": "travel", "portal_id": view["portal_id"], "stage_id": state.current_stage_id}))
+		var button := _button(ExpeditionPresentation.portal_text(view, state.manifest_data), run_action.bind({"kind": "travel", "portal_id": view["portal_id"], "stage_id": state.current_stage_id}))
 		button.tooltip_text = "Aproxime-se do portal indicado no mapa antes de viajar."
 		button.disabled = not view["open"]
 	for objective: Dictionary in state.manifest_data["objectives"]:

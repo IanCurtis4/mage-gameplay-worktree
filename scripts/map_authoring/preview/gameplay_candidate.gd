@@ -43,8 +43,11 @@ static func map_package(candidate: Dictionary) -> Dictionary:
 	return {}
 
 static func prepare(candidate: Dictionary) -> Dictionary:
+	var timings: Dictionary = {}
+	var stamp := Time.get_ticks_usec()
 	if Engine.is_editor_hint(): return fail("runtime_required")
 	if not valid(candidate): return fail("candidate_invalid")
+	stamp = _prepare_stamp(timings,"validate_ms",stamp)
 	var value: Dictionary = candidate.package
 	var raw: Dictionary = value.manifest.duplicate(true)
 	var rules: Dictionary = {}
@@ -72,14 +75,17 @@ static func prepare(candidate: Dictionary) -> Dictionary:
 		for socket: Dictionary in stage.sockets:
 			if socket.socket_id == stage.entrance: entry = ExpeditionWorldPoint.create("map_preview",socket.surface_id,socket.position)
 	if entry == null or not world.position_query(entry,profile,world.geometry_revision).ok: return fail("entrance_unsafe",stage.entrance)
+	stamp = _prepare_stamp(timings,"world_and_entry_ms",stamp)
 	var destinations: Array[ExpeditionWorldPoint] = []
 	for cell: Dictionary in stage.surfaces:
 		var point := Maps._walkable_point(world,cell,profile)
 		if point == null: return fail("body_unreachable",cell.surface_id)
 		destinations.append(point)
+	stamp = _prepare_stamp(timings,"surface_probes_ms",stamp)
 	var access := world.connectivity_batch(entry,destinations,profile,world.geometry_revision)
 	if not access.ok: return access
 	if not access.data.complete or not access.data.all_reachable: return fail("body_unreachable","",access.data)
+	stamp = _prepare_stamp(timings,"surface_connectivity_ms",stamp)
 	# Preparation needs round-trip existence, never a shortest movement cost.
 	var interactions: Array[ExpeditionWorldPoint] = []; var interaction_ids: Array[String] = []
 	for objective: Dictionary in raw.objectives:
@@ -89,10 +95,13 @@ static func prepare(candidate: Dictionary) -> Dictionary:
 			interactions.append(ExpeditionPopulationPlanner.point(portal[anchor])); interaction_ids.append(String(portal.portal_id))
 	var reached := _round_trips(world,entry,interactions,profile,interaction_ids,"interaction_unreachable")
 	if not reached.ok: return reached
+	stamp = _prepare_stamp(timings,"interaction_proofs_ms",stamp)
 	var loaded := Catalog.load_current()
 	if not loaded.ok: return loaded
+	stamp = _prepare_stamp(timings,"catalog_ms",stamp)
 	var planned := ExpeditionPopulationPlanner.build(manifest,loaded.catalog,rules)
 	if not planned.ok: return planned
+	stamp = _prepare_stamp(timings,"population_build_ms",stamp)
 	# Group slot homes by stage authority and entire traversal profile, keeping slot order.
 	var groups: Dictionary = {}; var group_order: Array[String] = []
 	for slot: Dictionary in planned.slots.values():
@@ -108,6 +117,7 @@ static func prepare(candidate: Dictionary) -> Dictionary:
 		if not checked.ok:
 			if checked.code != "body_unreachable": return checked
 			failures[checked.entity] = checked
+	stamp = _prepare_stamp(timings,"home_round_trips_ms",stamp)
 	for slot: Dictionary in planned.slots.values():
 		var authority: WorldGeometry = planned.worlds[slot.stage_id]
 		if failures.has(String(slot.slot_id)): return failures[String(slot.slot_id)]
@@ -115,7 +125,14 @@ static func prepare(candidate: Dictionary) -> Dictionary:
 			var mob: MobDefinition = loaded.catalog.get_definition(StringName(slot.species_id))
 			var route := Patrols.Patrol.validate_route(slot.patrol,authority,ExpeditionPopulationPlanner.point(slot.home),slot.traversal,mob.leash_radius)
 			if not route.ok: return route
-	return {"ok":true,"manifest":manifest,"rules":rules,"map_package":map_package(candidate),"entry":entry.to_data(),"ephemeral_entry":ephemeral,"candidate_hash":candidate.candidate_hash,"metrics":access.data.metrics}
+	_prepare_stamp(timings,"patrol_proofs_ms",stamp)
+	return {"ok":true,"prepare_timings":timings,"manifest":manifest,"rules":rules,"map_package":map_package(candidate),"entry":entry.to_data(),"ephemeral_entry":ephemeral,"candidate_hash":candidate.candidate_hash,"metrics":access.data.metrics}
+
+## Diagnostics stay local to preparation, outside the candidate and manifest.
+static func _prepare_stamp(timings: Dictionary, label: String, previous: int) -> int:
+	var now := Time.get_ticks_usec()
+	timings[label] = (now-previous)/1000.0
+	return now
 
 static func _both(world: WorldGeometry, a: ExpeditionWorldPoint, b: ExpeditionWorldPoint, profile: Dictionary) -> bool:
 	# Individual reference kept for differential tests; preparation uses _round_trips.

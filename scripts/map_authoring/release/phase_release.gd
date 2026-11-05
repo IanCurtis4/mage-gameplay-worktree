@@ -58,7 +58,7 @@ static func prepare(phase_id: String, listing: Dictionary = {}, folder: String =
 		var map := MapRelease.prepare(item.package_id,listing)
 		if not map.ok: return map
 		prepared.append(map)
-		metrics.append({"package_id":item.package_id,"prepare_ms":(Time.get_ticks_usec()-started)/1000.0})
+		metrics.append({"package_id":item.package_id,"prepare_ms":(Time.get_ticks_usec()-started)/1000.0,"details":map.get("prepare_timings",{}).duplicate(true)})
 	var composed := compose(read.definition,prepared)
 	if composed.ok: composed["metrics"] = metrics
 	return composed

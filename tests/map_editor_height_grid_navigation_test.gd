@@ -31,7 +31,7 @@ func seam(connectors: Array, connections: Array, a: Dictionary, b: Dictionary, s
 		connectors.append({"connector_id":key+"_a","surface_id":a.surface_id,"position":middle,"outward":Grid.side_outward(side),"kind":"walk","tags":[],"width":p.distance_to(q),"headroom":200.0,"direction":"both"})
 		connectors.append({"connector_id":key+"_b","surface_id":b.surface_id,"position":middle,"outward":-Grid.side_outward(side),"kind":"walk","tags":[],"width":p.distance_to(q),"headroom":200.0,"direction":"both"})
 		connections.append({"connection_id":key,"a_connector":key+"_a","b_connector":key+"_b","forward":true,"backward":true})
-func build(gap: bool) -> Dictionary:
+func build(gap: bool, grids_only: bool = false) -> Dictionary:
 	var a := stretch("A",0,gap); var b := stretch("B",16,gap); var c := stretch("C",32,gap)
 	var edge_y := height(48,0,gap)
 	var d := {"surface_id":"D","headroom":200.0,"vertices":[Vector3(3072,edge_y,0),Vector3(3400,edge_y,0),Vector3(3400,edge_y,1024),Vector3(3072,edge_y,1024)]}
@@ -41,6 +41,10 @@ func build(gap: bool) -> Dictionary:
 	connectors.append({"connector_id":"C_D_b","surface_id":"D","position":Vector3(3072,edge_y,512),"outward":Vector3(-1,0,0),"kind":"walk","tags":[],"width":1024.0,"headroom":200.0,"direction":"both"})
 	connections.append({"connection_id":"C_D","a_connector":"C_D_a","b_connector":"C_D_b","forward":true,"backward":true})
 	var stage := {"stage_id":"grid_nav","biome":"ruin","entrance":"","part_instances":[],"surfaces":[a,b,c,d],"connectors":connectors,"connections":connections,"sockets":[],"volumes":[],"solid_prisms":[]}
+	if grids_only:
+		stage.surfaces = [a,b,c]
+		stage.connectors = connectors.filter(func(port: Dictionary) -> bool: return not port.connector_id.begins_with("C_D_"))
+		stage.connections = connections.filter(func(link: Dictionary) -> bool: return link.connection_id != "C_D")
 	var manifest := ExpeditionManifest.new()
 	manifest._data = {"manifest_revision":1,"geometry_revision":1,"input":{"parts":[]},"stages":[stage],"traversal":PROFILE.duplicate(true),"population":{"slots":[]},"objectives":[],"portals":[],"witnesses":{}}
 	var world := WorldGeometry.new()
@@ -113,7 +117,52 @@ func run() -> void:
 		for target: Dictionary in refused.data.targets: reach.append(target.outward_reachable and target.inward_reachable)
 	check("certification_sees_the_cut",refused.ok and refused.data.complete and not refused.data.all_reachable and reach == [true,false,false])
 	print("F10_GRID_NAV_TIMING "+JSON.stringify({"cold_ms":snappedf(cold_ms,0.1),"warm_ms":snappedf(warm_ms,0.1),"batch_ms":snappedf(batch_ms,0.1),"points":route.data.points.size() if route.ok else 0}))
+	requested_batches()
 	finish()
+
+func witnesses_valid(world: WorldGeometry, certificate: Dictionary) -> bool:
+	if not certificate.ok or not certificate.data.complete or not certificate.data.all_reachable: return false
+	for index: int in certificate.data.targets.size():
+		for outward: bool in [true,false]:
+			var witness := world.connectivity_witness(certificate,index,outward,world.geometry_revision)
+			if not witness.ok or not route_valid(world,witness.data.points): return false
+	return true
+
+func requested_batches() -> void:
+	var built := build(true,true)
+	var world: WorldGeometry = built.world
+	var root := at(built,"A",200.0,150.0)
+	var near := at(built,"A",400.0,150.0)
+	var far := at(built,"C",2900.0,150.0)
+	var small: Array[ExpeditionWorldPoint] = [near,root,near]
+	var short := world.connectivity_batch(root,small,PROFILE,world.geometry_revision)
+	check("grid_short_batch_keeps_duplicates_root_and_valid_routes",built.ok and witnesses_valid(world,short) and short.data.targets[0].node_id == short.data.targets[2].node_id and world.connectivity_witness(short,1,true,world.geometry_revision).data.points.size() == 1)
+	var more: Array[ExpeditionWorldPoint] = [near,far]
+	var expanded := world.connectivity_batch(root,more,PROFILE,world.geometry_revision)
+	check("grid_new_destinations_after_short_query_are_fully_proved",witnesses_valid(world,expanded))
+	var reversed: Array[ExpeditionWorldPoint] = [far,near]
+	var reordered := world.connectivity_batch(root,reversed,PROFILE,world.geometry_revision)
+	check("grid_target_order_preserves_witnesses",witnesses_valid(world,reordered) and world.connectivity_witness(reordered,0,true,world.geometry_revision).data == world.connectivity_witness(expanded,1,true,world.geometry_revision).data)
+	var limited := world.connectivity_batch(root,more,PROFILE,world.geometry_revision,Callable(),{"max_expansions":0})
+	check("grid_warm_graph_preserves_budget_failure_without_certificate",not limited.ok and limited.error_code == &"navigation_budget_exceeded" and not limited.data.has("complete"))
+	var cancelled := world.connectivity_batch(root,more,PROFILE,world.geometry_revision,func() -> bool: return true)
+	check("grid_warm_graph_preserves_cancellation_without_certificate",not cancelled.ok and cancelled.error_code == &"cancelled" and not cancelled.data.has("complete"))
+	world.insert_obstacle("q5_gap",AABB(Vector3(1480,-50,0),Vector3(100,400,1024)),world.geometry_revision)
+	var obstructed := world.connectivity_batch(root,more,PROFILE,world.geometry_revision)
+	check("grid_obstacle_invalidates_graph_and_old_certificate",obstructed.ok and obstructed.data.complete and not obstructed.data.targets[1].outward_reachable and not world.connectivity_witness(expanded,1,true,world.geometry_revision).ok)
+	var cut := build(false,true)
+	var cut_world: WorldGeometry = cut.world
+	var cut_targets: Array[ExpeditionWorldPoint] = [at(cut,"B",1300.0,800.0),at(cut,"C",2900.0,150.0)]
+	var denied := cut_world.connectivity_batch(at(cut,"A",200.0,150.0),cut_targets,PROFILE,cut_world.geometry_revision)
+	check("grid_negative_exhausts_search_after_partial_success",denied.ok and denied.data.complete and denied.data.targets[0].outward_reachable and not denied.data.targets[1].outward_reachable)
+	var directed := build(true,true)
+	var directed_stage: Dictionary = directed.stage.duplicate(true)
+	for link: Dictionary in directed_stage.connections: link.backward = false
+	var manifest := ExpeditionManifest.new(); manifest._data = {"input":{"parts":[]},"stages":[directed_stage]}
+	var directed_world := WorldGeometry.new(); directed_world.configure(manifest,"grid_nav")
+	var directed_targets: Array[ExpeditionWorldPoint] = [at(directed,"C",2900.0,150.0)]
+	var one_way := directed_world.connectivity_batch(at(directed,"A",200.0,150.0),directed_targets,PROFILE,directed_world.geometry_revision)
+	check("grid_directed_searches_keep_outward_and_return_separate",one_way.ok and one_way.data.complete and one_way.data.targets[0].outward_reachable and not one_way.data.targets[0].inward_reachable and directed_world.connectivity_witness(one_way,0,true,directed_world.geometry_revision).ok)
 func finish() -> void:
 	var ok := not checks.is_empty() and checks.all(func(item: Dictionary) -> bool: return item.ok)
 	print("F10_GRID_NAV_RESULT "+JSON.stringify({"ok":ok,"count":checks.size(),"checks":checks})); quit(0 if ok else 1)

@@ -111,7 +111,7 @@ func _ready() -> void:
 	grid_z = _number(grid,"Z",-8192,8192,0)
 	grid_y = _number(grid,"Altura",-512,512,0)
 	_button(grid,"Nova grade",add_grid)
-	canvas = Canvas.new(); add_child(canvas)
+	canvas = Canvas.new(); add_child(canvas); canvas.custom_minimum_size.y = 420
 	canvas.stroke_finished.connect(apply_stroke)
 	canvas.temporal_finished.connect(_apply_temporal)
 	canvas.status.connect(func(message: String) -> void: status.text = message)
@@ -157,6 +157,8 @@ func _ready() -> void:
 	_refresh_presets()
 	preload("res://scripts/map_authoring/preview/viewport_tools.gd").mount(canvas,"terrain")
 	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"terrain",func() -> Dictionary: return session.document().to_data() if session != null else {},null,{"Pincel":[row,settings,preset_row],"Nova grade":[grid],"Ponte":[bridge],"Conexões":[connection_toggle,connections],"Variação regional":[synthesis]})
+	# Keep the drawing area above the longer tool forms inside the scroll view.
+	move_child(canvas.get_parent(),1)
 
 func _number(parent: Node, caption: String, low: float, high: float, value: float, step: float = 1.0) -> SpinBox:
 	var label := Label.new(); label.text = caption; parent.add_child(label)

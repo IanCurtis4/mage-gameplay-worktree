@@ -67,7 +67,7 @@ func present_campaign(host: RunController) -> void:
 			marker_node = ExpeditionPortal.new()
 			marker_node.name = marker_name
 			_effects.add_child(marker_node)
-		marker_node.configure(state.portal_view(portal["portal_id"]))
+		marker_node.configure(state.portal_view(portal["portal_id"]), state.manifest_data)
 	for objective: Dictionary in state.manifest_data["objectives"]:
 		if objective["stage_id"] != state.current_stage_id: continue
 		var marker_name := "Objective_" + String(objective["objective_id"])
