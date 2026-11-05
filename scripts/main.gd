@@ -1095,6 +1095,7 @@ func _build_stage_minimap() -> void:
 	stage_minimap.minimum_size_changed.connect(_layout_stage_minimap)
 	ui_root.resized.connect(_layout_stage_minimap)
 	bottom_controls.item_rect_changed.connect(_layout_stage_minimap)
+	class_button.item_rect_changed.connect(_layout_stage_minimap)
 	_configure_stage_minimap()
 	_layout_stage_minimap()
 	_update_stage_minimap(0.1)
@@ -1106,12 +1107,14 @@ func _layout_stage_minimap() -> void:
 	var bar_top := ui_root.size.y - 286.0
 	if is_instance_valid(bottom_controls) and bottom_controls.size.y > 0.0:
 		bar_top = minf(bar_top, bottom_controls.position.y)
-	var fit := clampf((bar_top - 88.0) / extent.y, 0.55, 1.0)
+	var map_top := 76.0
+	if is_instance_valid(class_button): map_top = maxf(map_top, class_button.position.y + class_button.size.y + 12.0)
+	var fit := clampf((bar_top - map_top - 12.0) / extent.y, 0.45, 1.0)
 	stage_minimap.scale = Vector2.ONE * fit
 	stage_minimap.offset_left = -24.0 - extent.x * fit
 	stage_minimap.offset_right = stage_minimap.offset_left + extent.x
-	stage_minimap.offset_top = 76.0
-	stage_minimap.offset_bottom = 76.0 + extent.y
+	stage_minimap.offset_top = map_top
+	stage_minimap.offset_bottom = map_top + extent.y
 	if is_instance_valid(help_panel):
 		help_panel.offset_top = stage_minimap.offset_top + extent.y * fit + 12.0
 		help_panel.offset_bottom = help_panel.offset_top + 146.0

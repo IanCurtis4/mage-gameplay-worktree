@@ -152,11 +152,15 @@ func run() -> void:
 
 func check_minimap(host: RunController) -> void:
 	var minimap := host.stage_minimap
+	# The preview normally hides this control; ordinary gameplay displays it.
+	host.class_button.show()
+	host._layout_stage_minimap()
 	host.player.world_motion.cancel()
 	host._update_stage_minimap(0.1)
 	await frames(3)
 	var square := visual(minimap._background)
 	check("minimap_is_visible_square", minimap.visible and is_equal_approx(square.size.x, square.size.y) and square.size.x > 100.0, square)
+	check("minimap_clears_class_button", not visual(minimap).intersects(visual(host.class_button)), [visual(minimap), visual(host.class_button)])
 	var inside := true
 	for polygon: PackedVector2Array in minimap._background.surfaces:
 		for point: Vector2 in polygon:
