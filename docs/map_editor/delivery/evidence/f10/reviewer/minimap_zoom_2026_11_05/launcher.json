@@ -1,0 +1,9 @@
+{
+  "shortcut": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\Jogar RagRPG F10 - Mapa.lnk",
+  "sha256": "c00de8b4556f7ae45da25072fd1677ea16c2255ce31f16e59143c36b6d7faa10",
+  "target": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\minimap_c9a3673f\\RagRPG-F10-Q5-Mapa.exe",
+  "arguments": "",
+  "working_directory": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\minimap_c9a3673f",
+  "normal_main_scene": "res://scenes/character_menu.tscn",
+  "save_namespace": "RagRPG F10 Q5 Mapa"
+}

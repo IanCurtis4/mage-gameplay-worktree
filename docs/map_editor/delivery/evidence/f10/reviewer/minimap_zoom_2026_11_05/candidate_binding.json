@@ -1,0 +1,262 @@
+{
+  "base": "f01d4cd215ddb5c161930cf2399a33d2e29f88e9",
+  "code_candidate": "c9a3673f201f38f33d2a7200b61de12d3ebce84e",
+  "prior_feature_commit": "8ca89b1b5b7ff6f538898f6f62b3c6cf9e9c8e86",
+  "candidate_branch": "codex/map-editor-f10",
+  "source": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5",
+  "fixture": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+  "release_inputs_checked": 2241,
+  "completion_inputs_checked": 2247,
+  "all_final_source_fixture_inputs_match": true,
+  "core_validation": {
+    "folder": "validation/verify_04",
+    "selected_ids": 14,
+    "available_ids": 303,
+    "checks": 873,
+    "ok": true
+  },
+  "compatible_final_delta": "main.gd reserves vertical space below class button; final integration oracle and runner count updated",
+  "final_delta_validation": {
+    "folder": "validation/verify_05",
+    "selected_ids": 3,
+    "checks": 93,
+    "ok": true
+  },
+  "native_interface": {
+    "folder": "validation/interface_06",
+    "checks": 31,
+    "ok": true
+  },
+  "build": {
+    "fixture": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+    "application_name": "RagRPG F10 Q5 Mapa",
+    "artifacts": [
+      {
+        "bytes": 109127680,
+        "sha256": "4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668",
+        "file": "RagRPG-F10-Q5-Mapa.exe"
+      },
+      {
+        "bytes": 94891528,
+        "sha256": "231561ef4c35c655466e65619de181d34f8d8999bcb70dea76fadf16cfbba848",
+        "file": "RagRPG-F10-Q5-Mapa.pck"
+      }
+    ],
+    "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "forest_map_result": {
+      "checks": [
+        {
+          "detail": "",
+          "id": "packaged_menu_creates_character",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "forest_available",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "forest_enters_from_exported_pack",
+          "ok": true
+        },
+        {
+          "detail": "[62, 62]",
+          "id": "whole_forest_population_marked",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "offscreen_enemies_marked",
+          "ok": true
+        },
+        {
+          "detail": "[P: (1064.1, 132.6), S: (183.6, 183.6)]",
+          "id": "square_map_on_screen",
+          "ok": true
+        },
+        {
+          "detail": "[[P: (1052.2, 101.15), S: (207.4, 281.35)], [P: (1103.2, 54.4), S: (156.4, 36.55)]]",
+          "id": "map_clears_class_button",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "player_marker_and_heading_match",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "zoom_out_without_changing_map_or_hud",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "native_map_capture",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "forest_suspends_with_minimap",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "forest_resumes_with_zoom_preference",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "minimap_rebuilt_from_resumed_world",
+          "ok": true
+        }
+      ],
+      "count": 13,
+      "mode": "standard_engine_with_exported_pack",
+      "ok": true,
+      "timings": {
+        "entry_ms": 69513.673,
+        "resume_ms": 22067.063,
+        "suspend_ms": 8581.881
+      }
+    },
+    "runs": [
+      {
+        "started_utc": "2026-11-05T16:27:13.3268685Z",
+        "timed_out": false,
+        "finished_utc": "2026-11-05T16:27:44.4894779Z",
+        "name": "export",
+        "ok": true,
+        "exit_code": 0,
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+          "--export-release",
+          "Windows Desktop",
+          "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\minimap_c9a3673f\\RagRPG-F10-Q5-Mapa.exe"
+        ]
+      },
+      {
+        "started_utc": "2026-11-05T16:27:44.5446586Z",
+        "timed_out": false,
+        "finished_utc": "2026-11-05T16:27:45.1152820Z",
+        "name": "inspect_pack_editor",
+        "ok": true,
+        "exit_code": 0,
+        "arguments": [
+          "--headless",
+          "--main-pack",
+          "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\minimap_c9a3673f\\RagRPG-F10-Q5-Mapa.pck",
+          "--script",
+          "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\minimap_c9a3673f\\validation\\inspect_pack.gd"
+        ]
+      },
+      {
+        "started_utc": "2026-11-05T16:27:45.1325799Z",
+        "timed_out": false,
+        "finished_utc": "2026-11-05T16:27:51.6898930Z",
+        "name": "normal_boot",
+        "ok": true,
+        "exit_code": 0,
+        "arguments": [
+          "--rendering-method",
+          "gl_compatibility",
+          "--quit-after",
+          "120",
+          "--verbose"
+        ]
+      },
+      {
+        "started_utc": "2026-11-05T16:27:51.6946672Z",
+        "timed_out": false,
+        "finished_utc": "2026-11-05T16:27:59.0677191Z",
+        "name": "normal_menu_pack",
+        "ok": true,
+        "exit_code": 0,
+        "arguments": [
+          "--main-pack",
+          "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\minimap_c9a3673f\\RagRPG-F10-Q5-Mapa.pck",
+          "--rendering-method",
+          "gl_compatibility",
+          "--script",
+          "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\minimap_c9a3673f\\validation\\normal_menu_probe.gd"
+        ]
+      },
+      {
+        "started_utc": "2026-11-05T16:28:01.5897242Z",
+        "timed_out": false,
+        "finished_utc": "2026-11-05T16:29:49.3792174Z",
+        "name": "forest_map_pack",
+        "ok": true,
+        "exit_code": 0,
+        "arguments": [
+          "--main-pack",
+          "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\minimap_c9a3673f\\RagRPG-F10-Q5-Mapa.pck",
+          "--rendering-method",
+          "gl_compatibility",
+          "--script",
+          "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\minimap_c9a3673f\\validation\\forest_map_probe.gd"
+        ]
+      }
+    ],
+    "packaging_deltas": [
+      "VCS autoload disabled",
+      "Map editor export plugin enabled to preserve original dependency bytes",
+      "Release template absolute path",
+      "Git plugin excluded",
+      "Console wrapper disabled",
+      "Application name isolates saves"
+    ],
+    "engine": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+    "source": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5",
+    "source_inputs_checked": 2241,
+    "generated_utc": "2026-11-05T16:28:01.5824830Z",
+    "template_sha256": "d34d36f3be1a6c49c56525ae86469b92e4f417ddf0b43cf00dd80c385c4b0562",
+    "candidate_commit": "c9a3673f201f38f33d2a7200b61de12d3ebce84e",
+    "fixture_project_restored": true,
+    "main_scene": "res://scenes/character_menu.tscn",
+    "template": "C:/Users/João Pedro/AppData/Roaming/Godot/export_templates/4.7.2.stable/windows_release_x86_64.exe",
+    "fixture_preset_restored": true,
+    "test_save_directory": "C:\\Users\\João Pedro\\AppData\\Roaming\\Godot\\app_userdata\\RagRPG F10 Q5 Mapa",
+    "runtime_commit": "c9a3673f201f38f33d2a7200b61de12d3ebce84e",
+    "normal_profile_file": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\minimap_c9a3673f\\validation\\normal_menu_pack_profile\\Godot\\app_userdata\\RagRPG F10 Q5 Mapa\\profile.json"
+  },
+  "release_executable_boot": "actual exported exe with normal main scene and bounded automatic exit",
+  "gameplay_proof_mode": "native standard engine mounts exact exported PCK; not a full human exe playthrough",
+  "screenshot_inspection": "Sol inspected final forest_minimap_zoom.png: whole square, red enemies, golden arrow, 70%, class button clear",
+  "luna_supervision": "docs/map_editor/delivery/evidence/f10/luna/minimap_zoom_2026_11_05/supervision.md",
+  "luna_supervision_sha256": "9831c2f9b6c4856af8ebcd3f214c4e9a71a4e2aceda8d662a7a383d8008e71b0",
+  "final_pack_receipt_audit": "Sol checked final manifest, process exits, log errors, hashes and screenshot; Luna receipt covers core and final UI tail",
+  "backups_preserved": [
+    {
+      "sha256": "65a26754c437695d7e7d60e93980c187371fddeec4fb71f78323104dbb55ced5",
+      "path": "data/map_authoring/sanctuary_woods_clearing.source.json.bak"
+    },
+    {
+      "sha256": "d0071096addfefcefad1f1df849c3977064a741b4ed1446ffaf50a3f25a95d7e",
+      "path": "data/map_authoring/sanctuary_woods_overpass.source.json.bak"
+    },
+    {
+      "sha256": "6b8d52095b0d98ba4a436fd5b192ff732b98a8f5da02855646e7e21b9792bb4f",
+      "path": "data/map_authoring/sanctuary_woods.map.json.bak"
+    },
+    {
+      "sha256": "3debc7674a1770702639e8bb33b1e6598c52929e9230395ccfbf505c1ed04889",
+      "path": "data/map_authoring/sanctuary_woods.population.json.bak"
+    }
+  ],
+  "main_status_entries_preserved": 216,
+  "old_build_preserved": {
+    "7ac05ff2/RagRPG-F10-Q5.exe": "4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668",
+    "7ac05ff2/RagRPG-F10-Q5.pck": "09a10b111b37ea3f9cd0a759ac189a15b3e69ee221820f917def99990facad41",
+    "Jogar RagRPG F10.lnk": "195054101652c50eb6d7cb3b0d293512aec2c08d11a7da62ac91cfa6f718b140",
+    "7ac05ff2/build_manifest.json": "dabe701c649c0b36feda30b62a5773c7a4ff1ce673111745f32baceb9b69f16d"
+  },
+  "new_save_namespace": "RagRPG F10 Q5 Mapa",
+  "old_test_and_personal_profiles_modified": false,
+  "human_acceptance_of_new_functions": false,
+  "global_q5_approval": false,
+  "merge_or_push": false,
+  "workflow_cli": "absent; diagnostic via Git, contract and checkpoint"
+}

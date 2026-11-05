@@ -1,0 +1,14 @@
+RagRPG F10 Q5 — Minimapa e zoom
+
+Abra RagRPG-F10-Q5-Mapa.exe ou o atalho Jogar RagRPG F10 - Mapa.
+Mantenha o arquivo .pck ao lado do executável.
+Crie um personagem de teste e escolha Expedições → Floresta do Santuário.
+
+O minimapa mostra o mapa atual inteiro: inimigos vermelhos e você em dourado.
+Use a roda sobre o cenário ou os botões − / + para mudar o zoom de 50% a 160%.
+Clique no percentual para restaurar 100%. O minimapa continua inteiro.
+
+Esta versão usa o perfil separado RagRPG F10 Q5 Mapa.
+A versão anterior e seus personagens continuam preservados no atalho antigo.
+Checkpoint de uma versão não é migrado para outra: termine a expedição antiga
+no executável antigo. O save pessoal RagRPG não foi alterado.

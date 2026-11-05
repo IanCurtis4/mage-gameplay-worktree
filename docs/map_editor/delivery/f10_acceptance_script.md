@@ -49,9 +49,17 @@ preservada e a gravação deve exigir a revisão do plano.
 
 ## Jogo
 
-Para testar sem abrir o editor, há um [executável Windows com perfil próprio](f10_windows_playtest.md).
+Para testar sem abrir o editor, há uma [versão Windows com minimapa e zoom](f10_minimap_zoom.md).
 Ele abre no menu normal e permite criar personagens, entrar na floresta,
 suspender e retomar. O executável não substitui as tarefas de autoria acima.
+
+No build com minimapa, crie um personagem novo no perfil **RagRPG F10 Q5 Mapa**.
+Confira o mapa inteiro no quadrado, bolinhas vermelhas e seta dourada que gira
+com o jogador. Cace inimigos fora da câmera e confira que os mortos somem.
+Use roda sobre o cenário e botões −/+; clique no percentual para voltar a 100%.
+O HUD/minimapa devem conservar sua escala, e clicar no painel não deve mover
+o jogador. Confira a preferência após suspender/retomar e o mapa ao viajar.
+Checkpoints do executável anterior continuam sendo testados naquela versão.
 
 Se optar pelo editor descartável, abra o jogo e crie um personagem de teste.
 Em qualquer opção, no lobby, escolha **Floresta do Santuário**. Percorra Prado dos Terraços, Vales da

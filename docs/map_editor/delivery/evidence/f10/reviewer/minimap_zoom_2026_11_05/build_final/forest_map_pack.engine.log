@@ -1,0 +1,17 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+F10_FOREST_MAP_CHECK packaged_menu_creates_character true 
+F10_FOREST_MAP_CHECK forest_available true 
+F10_FOREST_MAP_CHECK forest_enters_from_exported_pack true 
+F10_FOREST_MAP_CHECK whole_forest_population_marked true [62, 62]
+F10_FOREST_MAP_CHECK offscreen_enemies_marked true 
+F10_FOREST_MAP_CHECK square_map_on_screen true [P: (1064.1, 132.6), S: (183.6, 183.6)]
+F10_FOREST_MAP_CHECK map_clears_class_button true [[P: (1052.2, 101.15), S: (207.4, 281.35)], [P: (1103.2, 54.4), S: (156.4, 36.55)]]
+F10_FOREST_MAP_CHECK player_marker_and_heading_match true 
+F10_FOREST_MAP_CHECK zoom_out_without_changing_map_or_hud true 
+F10_FOREST_MAP_CHECK native_map_capture true 
+F10_FOREST_MAP_CHECK forest_suspends_with_minimap true 
+F10_FOREST_MAP_CHECK forest_resumes_with_zoom_preference true 
+F10_FOREST_MAP_CHECK minimap_rebuilt_from_resumed_world true 
+F10_FOREST_MAP_RESULT {"checks":[{"detail":"","id":"packaged_menu_creates_character","ok":true},{"detail":"","id":"forest_available","ok":true},{"detail":"","id":"forest_enters_from_exported_pack","ok":true},{"detail":"[62, 62]","id":"whole_forest_population_marked","ok":true},{"detail":"","id":"offscreen_enemies_marked","ok":true},{"detail":"[P: (1064.1, 132.6), S: (183.6, 183.6)]","id":"square_map_on_screen","ok":true},{"detail":"[[P: (1052.2, 101.15), S: (207.4, 281.35)], [P: (1103.2, 54.4), S: (156.4, 36.55)]]","id":"map_clears_class_button","ok":true},{"detail":"","id":"player_marker_and_heading_match","ok":true},{"detail":"","id":"zoom_out_without_changing_map_or_hud","ok":true},{"detail":"","id":"native_map_capture","ok":true},{"detail":"","id":"forest_suspends_with_minimap","ok":true},{"detail":"","id":"forest_resumes_with_zoom_preference","ok":true},{"detail":"","id":"minimap_rebuilt_from_resumed_world","ok":true}],"count":13,"mode":"standard_engine_with_exported_pack","ok":true,"timings":{"entry_ms":69513.673,"resume_ms":22067.063,"suspend_ms":8581.881}}

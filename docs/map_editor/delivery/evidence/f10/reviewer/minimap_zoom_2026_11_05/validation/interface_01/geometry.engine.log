@@ -1,0 +1,33 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+F10_INTERFACE_CHECK fixture_character_has_a_robe_and_skills true ["", "", ""]
+F10_INTERFACE_CHECK status_panel_click_does_not_move true [(682.5, 415.25), 0.0]
+F10_INTERFACE_CHECK inventory_clears_the_action_bar true [[P: (158.05, 410.55), S: (613.7, 37.39999)], [P: (130.0, 476.9), S: (1020.0, 122.4)], 286.000035061555, (632.0, 248.0), (742.0, 513.0587), (180.0, 150.0), ["HBoxContainer:48.0", "Label:23.0", "ScrollContainer:0.0", "RichTextLabel:60.0", "Label:23.0", "Button:44.0"]]
+F10_INTERFACE_CHECK bag_filter_is_explicit true [true, true, 1]
+F10_INTERFACE_CHECK double_click_equips true 1
+F10_INTERFACE_CHECK clicked_skill_description_is_pinned true [&"electric_discharge", &"fire_spear"]
+F10_INTERFACE_CHECK interface_scale_is_offered true 
+F10_INTERFACE_CHECK cursor_capture_is_offered true 
+F10_INTERFACE_CHECK interface_scale_applies_and_persists true 
+F10_INTERFACE_CHECK minimap_is_visible_square true [P: (1064.1, 96.05), S: (183.6, 183.6)]
+F10_INTERFACE_CHECK minimap_fits_entire_map true 
+F10_INTERFACE_CHECK minimap_player_matches_world_projection true 
+F10_INTERFACE_CHECK minimap_tracks_player_heading true 
+F10_INTERFACE_CHECK minimap_click_does_not_move true 
+F10_INTERFACE_CHECK world_wheel_zooms_in true (1.1, 1.1)
+F10_INTERFACE_CHECK world_wheel_zooms_out true (1.0, 1.0)
+F10_INTERFACE_CHECK minimap_zoom_button_changes_camera true (1.1, 1.1)
+F10_INTERFACE_CHECK minimap_wheel_does_not_reach_world true 
+F10_INTERFACE_CHECK camera_zoom_leaves_hud_and_minimap_unchanged true 
+F10_INTERFACE_CHECK camera_zoom_upper_limit true 
+F10_INTERFACE_CHECK camera_zoom_lower_limit true 
+F10_INTERFACE_CHECK camera_zoom_reset false 
+F10_INTERFACE_CHECK modal_blocks_camera_zoom false 
+F10_INTERFACE_CHECK camera_zoom_preference_saved false 
+F10_INTERFACE_CHECK minimap_clears_action_bar_at_large_ui_scale false [[P: (984.0532, 91.2), S: (267.1469, 362.4)], [P: (-80.00003, 376.8), S: (1440.0, 172.8)]]
+F10_INTERFACE_CHECK minimap_does_not_prevent_checkpoint true 
+F10_INTERFACE_CHECK minimap_checkpoint_resumes true 
+F10_INTERFACE_CHECK minimap_rebuilt_after_resume true 
+F10_INTERFACE_CHECK camera_zoom_survives_resume false 
+F10_INTERFACE_RESULT {"checks":[{"detail":"[\"\", \"\", \"\"]","id":"fixture_character_has_a_robe_and_skills","ok":true},{"detail":"[(682.5, 415.25), 0.0]","id":"status_panel_click_does_not_move","ok":true},{"detail":"[[P: (158.05, 410.55), S: (613.7, 37.39999)], [P: (130.0, 476.9), S: (1020.0, 122.4)], 286.000035061555, (632.0, 248.0), (742.0, 513.0587), (180.0, 150.0), [\"HBoxContainer:48.0\", \"Label:23.0\", \"ScrollContainer:0.0\", \"RichTextLabel:60.0\", \"Label:23.0\", \"Button:44.0\"]]","id":"inventory_clears_the_action_bar","ok":true},{"detail":"[true, true, 1]","id":"bag_filter_is_explicit","ok":true},{"detail":"1","id":"double_click_equips","ok":true},{"detail":"[&\"electric_discharge\", &\"fire_spear\"]","id":"clicked_skill_description_is_pinned","ok":true},{"detail":"","id":"interface_scale_is_offered","ok":true},{"detail":"","id":"cursor_capture_is_offered","ok":true},{"detail":"","id":"interface_scale_applies_and_persists","ok":true},{"detail":"[P: (1064.1, 96.05), S: (183.6, 183.6)]","id":"minimap_is_visible_square","ok":true},{"detail":"","id":"minimap_fits_entire_map","ok":true},{"detail":"","id":"minimap_player_matches_world_projection","ok":true},{"detail":"","id":"minimap_tracks_player_heading","ok":true},{"detail":"","id":"minimap_click_does_not_move","ok":true},{"detail":"(1.1, 1.1)","id":"world_wheel_zooms_in","ok":true},{"detail":"(1.0, 1.0)","id":"world_wheel_zooms_out","ok":true},{"detail":"(1.1, 1.1)","id":"minimap_zoom_button_changes_camera","ok":true},{"detail":"","id":"minimap_wheel_does_not_reach_world","ok":true},{"detail":"","id":"camera_zoom_leaves_hud_and_minimap_unchanged","ok":true},{"detail":"","id":"camera_zoom_upper_limit","ok":true},{"detail":"","id":"camera_zoom_lower_limit","ok":true},{"detail":"","id":"camera_zoom_reset","ok":false},{"detail":"","id":"modal_blocks_camera_zoom","ok":false},{"detail":"","id":"camera_zoom_preference_saved","ok":false},{"detail":"[[P: (984.0532, 91.2), S: (267.1469, 362.4)], [P: (-80.00003, 376.8), S: (1440.0, 172.8)]]","id":"minimap_clears_action_bar_at_large_ui_scale","ok":false},{"detail":"","id":"minimap_does_not_prevent_checkpoint","ok":true},{"detail":"","id":"minimap_checkpoint_resumes","ok":true},{"detail":"","id":"minimap_rebuilt_after_resume","ok":true},{"detail":"","id":"camera_zoom_survives_resume","ok":false}],"count":29,"ok":false}

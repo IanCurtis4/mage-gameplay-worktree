@@ -1,5 +1,8 @@
 # F10 — executável Windows para revisão humana
 
+Versão posterior disponível: [minimapa e zoom](f10_minimap_zoom.md). Esta página
+preserva a distribuição anterior para continuar seus testes/checkpoints.
+
 5/11/2026. Pedido humano: “Você criou um executável com as mudanças? Acho que
 seria melhor para testar.” Entrega operacional do candidato já validado, sem
 alterar gameplay ou aplicar mudanças ao checkout habitual. Q5 continua aberto.

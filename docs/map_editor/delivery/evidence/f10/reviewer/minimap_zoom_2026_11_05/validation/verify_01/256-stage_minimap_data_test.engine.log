@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ERROR: Dead actor binds to its intended world
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/stage_minimap_data_test.gd:14)
+       [1] _marker_actor (res://tests/stage_minimap_data_test.gd:133)
+       [2] _check_actor_markers (res://tests/stage_minimap_data_test.gd:110)
+       [3] _run (res://tests/stage_minimap_data_test.gd:22)
+F10 minimap data: 30 checks, 1 failures

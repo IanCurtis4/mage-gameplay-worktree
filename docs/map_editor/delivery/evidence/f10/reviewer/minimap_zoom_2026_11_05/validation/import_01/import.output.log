@@ -1,0 +1,57 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Started Inicialização do Projeto (5 steps)[39m[0m
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Escaneando estrutura de arquivos...[39m[0m
+[  16% ] [90m[1mfirst_scan_filesystem[22m | Carregando nomes de classe globais...[39m[0m
+[  33% ] [90m[1mfirst_scan_filesystem[22m | Verificando GDExtensions...[39m[0m
+[  50% ] [90m[1mfirst_scan_filesystem[22m | Criando scripts autoload...[39m[0m
+[  66% ] [90m[1mfirst_scan_filesystem[22m | Inicializando plugins...[39m[0m
+[  83% ] [90m[1mfirst_scan_filesystem[22m | Iniciando escaneamento de arquivos...[39m[0m
+[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
+[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | Started Registrando classes globais... (7 steps)[39m[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | ControlPreferences[39m[0m
+[  12% ] [90m[1mupdate_scripts_classes[22m | StageMinimap[39m[0m
+[  25% ] [90m[1mupdate_scripts_classes[22m | StageMinimapData[39m[0m
+[  37% ] [90m[1mupdate_scripts_classes[22m | RunController[39m[0m
+[  50% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  62% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  75% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[92m[ DONE ][39m [1mupdate_scripts_classes[22m
+[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Started Carregando editor (5 steps)[39m[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Carregando layout do editor...[39m[0m
+[  16% ] [90m[1mloading_editor_layout[22m | Carregando abas...[39m[0m
+[  33% ] [90m[1mloading_editor_layout[22m | Reabrindo cenas...[39m[0m
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+SCRIPT ERROR: Parse Error: The member "Projection" cannot have the same name as a builtin type.
+   at: GDScript::reload (res://scripts/ui/expedition/stage_minimap_data.gd:4)
+SCRIPT ERROR: Parse Error: Cannot find member "project" in base "Projection".
+   at: GDScript::reload (res://scripts/ui/expedition/stage_minimap_data.gd:12)
+SCRIPT ERROR: Parse Error: Function "project()" not found in base Projection.
+   at: GDScript::reload (res://scripts/ui/expedition/stage_minimap_data.gd:12)
+SCRIPT ERROR: Parse Error: Cannot find member "project" in base "Projection".
+   at: GDScript::reload (res://scripts/ui/expedition/stage_minimap_data.gd:19)
+SCRIPT ERROR: Parse Error: Function "project()" not found in base Projection.
+   at: GDScript::reload (res://scripts/ui/expedition/stage_minimap_data.gd:19)
+SCRIPT ERROR: Parse Error: Cannot find member "project" in base "Projection".
+   at: GDScript::reload (res://scripts/ui/expedition/stage_minimap_data.gd:51)
+SCRIPT ERROR: Parse Error: Function "project()" not found in base Projection.
+   at: GDScript::reload (res://scripts/ui/expedition/stage_minimap_data.gd:51)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "player_point" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/ui/expedition/stage_minimap_data.gd:51)
+SCRIPT ERROR: Parse Error: Cannot find member "project" in base "Projection".
+   at: GDScript::reload (res://scripts/ui/expedition/stage_minimap_data.gd:59)
+SCRIPT ERROR: Parse Error: Function "project()" not found in base Projection.
+   at: GDScript::reload (res://scripts/ui/expedition/stage_minimap_data.gd:59)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/main.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/actors/player_actor.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/core/expedition/spatial/world_skill_cast.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/core/expedition/spatial/world_support_region.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/core/expedition/spatial/world_solid_segment.gd:0)

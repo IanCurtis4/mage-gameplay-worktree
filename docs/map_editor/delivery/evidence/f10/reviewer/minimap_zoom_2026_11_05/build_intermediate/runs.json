@@ -1,0 +1,80 @@
+[
+  {
+    "timed_out": false,
+    "started_utc": "2026-11-05T16:17:48.1311006Z",
+    "name": "export",
+    "exit_code": 0,
+    "ok": true,
+    "finished_utc": "2026-11-05T16:18:18.0236454Z",
+    "arguments": [
+      "--headless",
+      "--path",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+      "--export-release",
+      "Windows Desktop",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\minimap_8ca89b1b\\RagRPG-F10-Q5-Mapa.exe"
+    ]
+  },
+  {
+    "timed_out": false,
+    "started_utc": "2026-11-05T16:18:18.0630898Z",
+    "name": "inspect_pack_editor",
+    "exit_code": 0,
+    "ok": true,
+    "finished_utc": "2026-11-05T16:18:18.8693472Z",
+    "arguments": [
+      "--headless",
+      "--main-pack",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\minimap_8ca89b1b\\RagRPG-F10-Q5-Mapa.pck",
+      "--script",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\minimap_8ca89b1b\\validation\\inspect_pack.gd"
+    ]
+  },
+  {
+    "timed_out": false,
+    "started_utc": "2026-11-05T16:18:18.8851936Z",
+    "name": "normal_boot",
+    "exit_code": 0,
+    "ok": true,
+    "finished_utc": "2026-11-05T16:18:25.9459757Z",
+    "arguments": [
+      "--rendering-method",
+      "gl_compatibility",
+      "--quit-after",
+      "120",
+      "--verbose"
+    ]
+  },
+  {
+    "timed_out": false,
+    "started_utc": "2026-11-05T16:18:25.9664191Z",
+    "name": "normal_menu_pack",
+    "exit_code": 0,
+    "ok": true,
+    "finished_utc": "2026-11-05T16:18:32.2202009Z",
+    "arguments": [
+      "--main-pack",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\minimap_8ca89b1b\\RagRPG-F10-Q5-Mapa.pck",
+      "--rendering-method",
+      "gl_compatibility",
+      "--script",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\minimap_8ca89b1b\\validation\\normal_menu_probe.gd"
+    ]
+  },
+  {
+    "timed_out": false,
+    "started_utc": "2026-11-05T16:18:34.5986510Z",
+    "name": "forest_map_pack",
+    "exit_code": 0,
+    "ok": true,
+    "finished_utc": "2026-11-05T16:20:21.4285320Z",
+    "arguments": [
+      "--main-pack",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\minimap_8ca89b1b\\RagRPG-F10-Q5-Mapa.pck",
+      "--rendering-method",
+      "gl_compatibility",
+      "--script",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\minimap_8ca89b1b\\validation\\forest_map_probe.gd"
+    ]
+  }
+]

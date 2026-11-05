@@ -37,6 +37,13 @@ esse resultado entre sweep e fração; certificados/DTOs externos não o podem.
 Discos `usable` do lattice também evitam repetir a mesma prova dentro de
 `_attach`. Não altera máscaras físicas, custos, candidatos ou desempate.
 
+Minimapa/zoom F10 são apresentação descartável sobre os dados do world:
+[contrato](map_editor/contracts/f10_minimap_zoom.md). O fundo estático usa a
+projeção compartilhada; marcadores não fazem navegação ou decidem gameplay.
+O minimapa e a preferência de câmera são omissões explícitas do snapshot;
+o zoom é relido de `controls.cfg`. Migração de checkpoint entre builds
+continua indisponível; [teste Windows separado](map_editor/delivery/f10_minimap_zoom.md).
+
 ## Composição técnica E07 —23/10/2026
 
 [F8](epics/e07/delivery/f8.md) consolida F0–F7 sobre runtime 7775f44: geometria com
