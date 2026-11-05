@@ -1,0 +1,276 @@
+{
+  "base": "f06a383782078eb2030cb1fc2ecccea2bb11662e",
+  "code_candidate": "2ff1c00f923e3811b0aa7ebcbeddafe7731d640f",
+  "branch": "codex/map-editor-f10",
+  "source": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5",
+  "fixture": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+  "release_inputs_checked": 2251,
+  "completion_inputs_checked": 2257,
+  "all_source_fixture_inputs_match": true,
+  "directed_verify_unique_ids": 16,
+  "directed_verify_unique_checks": 712,
+  "final_plan_ids": 307,
+  "compatible_slices": {
+    "verify_01": [
+      "animation39",
+      "resume91"
+    ],
+    "verify_02": [
+      "StageMinimap21",
+      "MinimapData38",
+      "ActorPresentation12"
+    ],
+    "verify_03": "9 IDs/489",
+    "verify_04": "CandidateHandoffLimits4 passed; shadow test failed, preserved",
+    "verify_05": "ShadowCache18 and repeated F3snapshot52; do not sum duplicate52"
+  },
+  "delta_after_core": "Candidate helpers retain existing5MiB size caps; draw-only flat shadow cache with dedicated tests and full generic fallback",
+  "completion": {
+    "interface_01": 31,
+    "preparation_proofs_01": 23,
+    "phase_release_01": 11,
+    "shadows_01": 28,
+    "height_grid_world_01": 15
+  },
+  "shadow_pixels": "6 nonblank RGBA8 comparisons, no different bytes; boundary/ramp paths included",
+  "build": {
+    "generated_utc": "2026-11-05T21:42:04.3844996Z",
+    "candidate_commit": "2ff1c00f923e3811b0aa7ebcbeddafe7731d640f",
+    "packaging_deltas": [
+      "VCS autoload disabled",
+      "Map editor export plugin enabled to preserve original dependency bytes",
+      "Release template absolute path",
+      "Git plugin excluded",
+      "Console wrapper disabled",
+      "Application name isolates saves"
+    ],
+    "fixture": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+    "template": "C:/Users/João Pedro/AppData/Roaming/Godot/export_templates/4.7.2.stable/windows_release_x86_64.exe",
+    "engine": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+    "application_name": "RagRPG F10 Q5 Terreno",
+    "test_save_directory": "C:\\Users\\João Pedro\\AppData\\Roaming\\Godot\\app_userdata\\RagRPG F10 Q5 Terreno",
+    "template_sha256": "d34d36f3be1a6c49c56525ae86469b92e4f417ddf0b43cf00dd80c385c4b0562",
+    "fixture_preset_restored": true,
+    "normal_profile_file": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\terrain_2ff1c00f\\validation\\normal_menu_pack_profile\\Godot\\app_userdata\\RagRPG F10 Q5 Terreno\\profile.json",
+    "forest_map_result": {
+      "checks": [
+        {
+          "detail": "",
+          "id": "packaged_menu_creates_character",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "forest_available",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "forest_enters_from_exported_pack",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "canonical_terrain_mesh_installed",
+          "ok": true
+        },
+        {
+          "detail": "[46078, 5122]",
+          "id": "walkable_and_steep_terrain_visible",
+          "ok": true
+        },
+        {
+          "detail": "[62, 62]",
+          "id": "whole_forest_population_marked",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "offscreen_enemies_marked",
+          "ok": true
+        },
+        {
+          "detail": "[P: (1064.1, 132.6), S: (183.6, 183.6)]",
+          "id": "square_map_on_screen",
+          "ok": true
+        },
+        {
+          "detail": "[[P: (1052.2, 101.15), S: (207.4, 298.35)], [P: (1103.2, 54.4), S: (156.4, 36.55)]]",
+          "id": "map_clears_class_button",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "player_marker_and_heading_match",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "zoom_out_without_changing_map_or_hud",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "native_map_capture",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "forest_suspends_with_minimap",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "forest_resumes_with_zoom_preference",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "minimap_rebuilt_from_resumed_world",
+          "ok": true
+        }
+      ],
+      "count": 15,
+      "mode": "standard_engine_with_exported_pack",
+      "ok": true,
+      "timings": {
+        "entry_ms": 49212.521,
+        "resume_ms": 23480.704,
+        "suspend_ms": 9032.651
+      }
+    },
+    "runs": [
+      {
+        "ok": true,
+        "finished_utc": "2026-11-05T21:41:42.2799303Z",
+        "name": "export",
+        "started_utc": "2026-11-05T21:40:44.6160177Z",
+        "timed_out": false,
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+          "--export-release",
+          "Windows Desktop",
+          "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\terrain_2ff1c00f\\RagRPG-F10-Q5-Terreno.exe"
+        ],
+        "exit_code": 0
+      },
+      {
+        "ok": true,
+        "finished_utc": "2026-11-05T21:41:43.2932760Z",
+        "name": "inspect_pack_editor",
+        "started_utc": "2026-11-05T21:41:42.3894560Z",
+        "timed_out": false,
+        "arguments": [
+          "--headless",
+          "--main-pack",
+          "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\terrain_2ff1c00f\\RagRPG-F10-Q5-Terreno.pck",
+          "--script",
+          "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\terrain_2ff1c00f\\validation\\inspect_pack.gd"
+        ],
+        "exit_code": 0
+      },
+      {
+        "ok": true,
+        "finished_utc": "2026-11-05T21:41:53.7199265Z",
+        "name": "normal_boot",
+        "started_utc": "2026-11-05T21:41:43.3071600Z",
+        "timed_out": false,
+        "arguments": [
+          "--rendering-method",
+          "gl_compatibility",
+          "--quit-after",
+          "120",
+          "--verbose"
+        ],
+        "exit_code": 0
+      },
+      {
+        "ok": true,
+        "finished_utc": "2026-11-05T21:42:01.6276411Z",
+        "name": "normal_menu_pack",
+        "started_utc": "2026-11-05T21:41:53.7240893Z",
+        "timed_out": false,
+        "arguments": [
+          "--main-pack",
+          "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\terrain_2ff1c00f\\RagRPG-F10-Q5-Terreno.pck",
+          "--rendering-method",
+          "gl_compatibility",
+          "--script",
+          "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\terrain_2ff1c00f\\validation\\normal_menu_probe.gd"
+        ],
+        "exit_code": 0
+      },
+      {
+        "ok": true,
+        "finished_utc": "2026-11-05T21:43:35.6073417Z",
+        "name": "forest_map_pack",
+        "started_utc": "2026-11-05T21:42:04.4092797Z",
+        "timed_out": false,
+        "arguments": [
+          "--main-pack",
+          "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\terrain_2ff1c00f\\RagRPG-F10-Q5-Terreno.pck",
+          "--rendering-method",
+          "gl_compatibility",
+          "--script",
+          "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\terrain_2ff1c00f\\validation\\forest_terrain_probe.gd"
+        ],
+        "exit_code": 0
+      }
+    ],
+    "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "runtime_commit": "2ff1c00f923e3811b0aa7ebcbeddafe7731d640f",
+    "main_scene": "res://scenes/character_menu.tscn",
+    "fixture_project_restored": true,
+    "source": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5",
+    "artifacts": [
+      {
+        "sha256": "4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668",
+        "file": "RagRPG-F10-Q5-Terreno.exe",
+        "bytes": 109127680
+      },
+      {
+        "sha256": "136d35e0d059572b633e2d743fba839e97273b1aaa11d7f41c28ad9b0b9dee3a",
+        "file": "RagRPG-F10-Q5-Terreno.pck",
+        "bytes": 94914128
+      }
+    ],
+    "source_inputs_checked": 2251
+  },
+  "screenshot_inspected": "Sol: forest height/steep coloring, all62 markers, golden player, UI and class clear",
+  "supervision": "docs/map_editor/delivery/evidence/f10/luna/terrain_performance_2026_11_05/supervision.md",
+  "supervision_sha256": "0d848e6f450994b0961ec18d642e21204ac31c6715cfe041d2d989986f282c14",
+  "main_status_entries_preserved": 216,
+  "backups_preserved": [
+    {
+      "sha256": "65a26754c437695d7e7d60e93980c187371fddeec4fb71f78323104dbb55ced5",
+      "path": "data/map_authoring/sanctuary_woods_clearing.source.json.bak"
+    },
+    {
+      "sha256": "d0071096addfefcefad1f1df849c3977064a741b4ed1446ffaf50a3f25a95d7e",
+      "path": "data/map_authoring/sanctuary_woods_overpass.source.json.bak"
+    },
+    {
+      "sha256": "6b8d52095b0d98ba4a436fd5b192ff732b98a8f5da02855646e7e21b9792bb4f",
+      "path": "data/map_authoring/sanctuary_woods.map.json.bak"
+    },
+    {
+      "sha256": "3debc7674a1770702639e8bb33b1e6598c52929e9230395ccfbf505c1ed04889",
+      "path": "data/map_authoring/sanctuary_woods.population.json.bak"
+    }
+  ],
+  "old_user_builds_preserved": [
+    "7ac05ff2",
+    "minimap_c9a3673f"
+  ],
+  "old_shortcuts_preserved": true,
+  "old_test_and_personal_profiles_modified": false,
+  "new_namespace": "RagRPG F10 Q5 Terreno",
+  "human_acceptance_of_this_candidate": false,
+  "global_q5_approval": false,
+  "merge_or_push": false,
+  "workflow_cli": "absent; Git/project/contracts/checkpoint diagnosis",
+  "release_boot_proof": "actual exe normal main scene; native standard engine mounts exact PCK for scripted gameplay",
+  "documentation_only_closure": "links/coherence/hashes/diff checked; no further gameplay rerun for docs"
+}

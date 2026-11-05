@@ -1,0 +1,60 @@
+{
+  "ok": true,
+  "exit_code": 0,
+  "seconds": 3.2918894290924072,
+  "arguments": [
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+    "--path",
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+    "--rendering-method",
+    "gl_compatibility",
+    "--log-file",
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\terrain_performance_2026_11_05\\shadow_pixels_01\\engine.log",
+    "--script",
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\shadow_compare_probe.gd"
+  ],
+  "result": [
+    {
+      "checks": [
+        {
+          "different_bytes": 0,
+          "id": "flat",
+          "max_channel_delta": 0,
+          "ok": true
+        },
+        {
+          "different_bytes": 0,
+          "id": "moving_flat",
+          "max_channel_delta": 0,
+          "ok": true
+        },
+        {
+          "different_bytes": 0,
+          "id": "outer_edge",
+          "max_channel_delta": 0,
+          "ok": true
+        },
+        {
+          "different_bytes": 0,
+          "id": "quad_seam",
+          "max_channel_delta": 0,
+          "ok": true
+        },
+        {
+          "different_bytes": 0,
+          "id": "ramp",
+          "max_channel_delta": 0,
+          "ok": true
+        },
+        {
+          "different_bytes": 0,
+          "id": "large_world_coordinates",
+          "max_channel_delta": 0,
+          "ok": true
+        }
+      ],
+      "count": 6,
+      "ok": true
+    }
+  ]
+}

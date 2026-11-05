@@ -49,13 +49,16 @@ preservada e a gravação deve exigir a revisão do plano.
 
 ## Jogo
 
-Para testar sem abrir o editor, há uma [versão Windows com minimapa e zoom](f10_minimap_zoom.md).
+Para testar sem abrir o editor, há uma [versão Windows com terreno e desempenho revisados](f10_terrain_performance.md).
 Ele abre no menu normal e permite criar personagens, entrar na floresta,
 suspender e retomar. O executável não substitui as tarefas de autoria acima.
 
-No build com minimapa, crie um personagem novo no perfil **RagRPG F10 Q5 Mapa**.
+No build atual, crie um personagem novo no perfil **RagRPG F10 Q5 Terreno**.
 Confira o mapa inteiro no quadrado, bolinhas vermelhas e seta dourada que gira
 com o jogador. Cace inimigos fora da câmera e confira que os mortos somem.
+Compare cristas, rampas e obstáculos com o chão do jogo: verde é terreno
+caminhável, cobre é íngreme e escuro é bloqueio. Observe grupos parados e
+em movimento, inclusive perto de bordas, rampas e pontes, mantendo as sombras.
 Use roda sobre o cenário e botões −/+; clique no percentual para voltar a 100%.
 O HUD/minimapa devem conservar sua escala, e clicar no painel não deve mover
 o jogador. Confira a preferência após suspender/retomar e o mapa ao viajar.

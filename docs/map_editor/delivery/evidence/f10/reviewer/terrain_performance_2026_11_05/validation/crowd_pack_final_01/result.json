@@ -1,0 +1,57 @@
+{
+  "ok": true,
+  "exit_code": 0,
+  "seconds": 16.994035720825195,
+  "arguments": [
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+    "--main-pack",
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\terrain_2ff1c00f\\RagRPG-F10-Q5-Terreno.pck",
+    "--rendering-method",
+    "gl_compatibility",
+    "--log-file",
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\terrain_performance_2026_11_05\\crowd_pack_final_01\\engine.log",
+    "--script",
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\crowd_draw_probe.gd"
+  ],
+  "result": [
+    {
+      "draw_calls": 288.0,
+      "ok": true,
+      "rows": [
+        {
+          "actors": 96,
+          "animation_seconds": 2.99581225925926,
+          "draw_callbacks": 1152,
+          "frames": 835,
+          "max_ms": 18.845,
+          "mean_ms": 3.59382395209581,
+          "p95_ms": 6.051,
+          "p99_ms": 8.429,
+          "pass": 0
+        },
+        {
+          "actors": 96,
+          "animation_seconds": 3.05181924242421,
+          "draw_callbacks": 1152,
+          "frames": 818,
+          "max_ms": 156.011,
+          "mean_ms": 3.76376161369193,
+          "p95_ms": 5.876,
+          "p99_ms": 6.87,
+          "pass": 1
+        },
+        {
+          "actors": 96,
+          "animation_seconds": 3.13771627609433,
+          "draw_callbacks": 1248,
+          "frames": 885,
+          "max_ms": 8.093,
+          "mean_ms": 3.39385649717514,
+          "p95_ms": 5.37,
+          "p99_ms": 6.675,
+          "pass": 2
+        }
+      ]
+    }
+  ]
+}

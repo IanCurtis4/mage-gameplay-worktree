@@ -1,0 +1,57 @@
+{
+  "ok": true,
+  "exit_code": 0,
+  "seconds": 18.035395860671997,
+  "arguments": [
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+    "--path",
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+    "--rendering-method",
+    "gl_compatibility",
+    "--log-file",
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\terrain_performance_2026_11_05\\world_crowd_after_01\\engine.log",
+    "--script",
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\world_crowd_probe.gd"
+  ],
+  "result": [
+    {
+      "draw_calls": 288.0,
+      "ok": true,
+      "rows": [
+        {
+          "actors": 96,
+          "animation_seconds": 3.00504744444445,
+          "draw_callbacks": 33408,
+          "frames": 348,
+          "max_ms": 21.311,
+          "mean_ms": 8.63312931034482,
+          "p95_ms": 13.81,
+          "p99_ms": 17.511,
+          "pass": 0
+        },
+        {
+          "actors": 96,
+          "animation_seconds": 3.02223233333339,
+          "draw_callbacks": 34464,
+          "frames": 359,
+          "max_ms": 22.14,
+          "mean_ms": 8.36752646239554,
+          "p95_ms": 11.505,
+          "p99_ms": 15.521,
+          "pass": 1
+        },
+        {
+          "actors": 96,
+          "animation_seconds": 3.00869905820109,
+          "draw_callbacks": 33984,
+          "frames": 354,
+          "max_ms": 15.627,
+          "mean_ms": 8.47756497175141,
+          "p95_ms": 11.793,
+          "p99_ms": 14.49,
+          "pass": 2
+        }
+      ]
+    }
+  ]
+}

@@ -11,10 +11,13 @@ navegação e corrigiu leitura dos portais, incluindo títulos sem espaços.
 [matriz Q5](map_editor/delivery/f10_q5_matrix.md). Entrada e portais ainda levam
 dezenas de segundos/minutos; não há certificação de fluidez ou abertura de E08+.
 
-O [teste Windows atualizado](map_editor/delivery/f10_minimap_zoom.md) inclui
+O [teste Windows atualizado](map_editor/delivery/f10_terrain_performance.md) inclui
 minimapa quadrado do mapa atual inteiro, inimigos vermelhos, seta dourada com
 direção do jogador e zoom de câmera independente da interface. O perfil de
 teste desta versão é separado; checkpoints antigos permanecem no build anterior.
+O relevo agora usa a triangulação e o declive canônicos; a apresentação evita
+redesenhos e recortes de sombra repetidos. Preparação em até duas lanes e
+handoff interno de pacotes validados reduzem trabalho antes de entrar na fase.
 
 ## Candidato técnico E07 —23/10/2026
 

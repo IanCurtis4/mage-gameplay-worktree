@@ -1,0 +1,13 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+TERRAIN_PERF_SAMPLE natural_all_on {"cpu_ms":23.8404682926829,"draw_calls":614.0,"frames":205,"max_ms":25.448,"mean_ms":14.6539463414634,"p95_ms":21.769,"p99_ms":24.403}
+TERRAIN_PERF_SAMPLE natural_enemy_process_off {"cpu_ms":25.4987214285715,"draw_calls":614.0,"frames":420,"max_ms":11.81,"mean_ms":7.14938095238095,"p95_ms":9.84,"p99_ms":10.821}
+TERRAIN_PERF_SAMPLE natural_view_sync_off {"cpu_ms":10.6316785009862,"draw_calls":614.0,"frames":507,"max_ms":11.678,"mean_ms":5.93818934911243,"p95_ms":8.742,"p99_ms":10.04}
+TERRAIN_PERF_SAMPLE crowd_animated_shadows {"cpu_ms":29.7665981012659,"draw_calls":800.0,"frames":316,"max_ms":16.298,"mean_ms":9.51562658227848,"p95_ms":12.561,"p99_ms":14.844}
+TERRAIN_PERF_SAMPLE crowd_animated_no_shadows {"cpu_ms":16.6858726790452,"draw_calls":738.0,"frames":377,"max_ms":17.99,"mean_ms":7.9724323607427,"p95_ms":10.843,"p99_ms":13.462}
+TERRAIN_PERF_SAMPLE crowd_cached_drawing {"cpu_ms":24.6564121338913,"draw_calls":738.0,"frames":478,"max_ms":12.958,"mean_ms":6.28202928870293,"p95_ms":9.196,"p99_ms":10.765}
+TERRAIN_PERF_SAMPLE crowd_hidden {"cpu_ms":18.5938057553959,"draw_calls":614.0,"frames":556,"max_ms":10.277,"mean_ms":5.40362949640288,"p95_ms":7.978,"p99_ms":9.28}
+TERRAIN_PERF_SKIN 0 1115.565 true
+TERRAIN_PERF_SKIN 1 1393.663 true
+TERRAIN_PERF_RESULT {"ok":true,"report":{"crowd_animated_no_shadows":{"cpu_ms":16.6858726790452,"draw_calls":738.0,"frames":377,"max_ms":17.99,"mean_ms":7.9724323607427,"p95_ms":10.843,"p99_ms":13.462},"crowd_animated_shadows":{"cpu_ms":29.7665981012659,"draw_calls":800.0,"frames":316,"max_ms":16.298,"mean_ms":9.51562658227848,"p95_ms":12.561,"p99_ms":14.844},"crowd_cached_drawing":{"cpu_ms":24.6564121338913,"draw_calls":738.0,"frames":478,"max_ms":12.958,"mean_ms":6.28202928870293,"p95_ms":9.196,"p99_ms":10.765},"crowd_hidden":{"cpu_ms":18.5938057553959,"draw_calls":614.0,"frames":556,"max_ms":10.277,"mean_ms":5.40362949640288,"p95_ms":7.978,"p99_ms":9.28},"entry_ms":52381.843,"natural_all_on":{"cpu_ms":23.8404682926829,"draw_calls":614.0,"frames":205,"max_ms":25.448,"mean_ms":14.6539463414634,"p95_ms":21.769,"p99_ms":24.403},"natural_enemy_process_off":{"cpu_ms":25.4987214285715,"draw_calls":614.0,"frames":420,"max_ms":11.81,"mean_ms":7.14938095238095,"p95_ms":9.84,"p99_ms":10.821},"natural_view_sync_off":{"cpu_ms":10.6316785009862,"draw_calls":614.0,"frames":507,"max_ms":11.678,"mean_ms":5.93818934911243,"p95_ms":8.742,"p99_ms":10.04},"population":62,"skin_build_ms":[1115.565,1393.663]}}

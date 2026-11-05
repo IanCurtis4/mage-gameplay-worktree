@@ -1,0 +1,330 @@
+{
+  "baseline_pck": {
+    "bytes": 94891528,
+    "sha256": "231561ef4c35c655466e65619de181d34f8d8999bcb70dea76fadf16cfbba848",
+    "file": "RagRPG-F10-Q5-Mapa.pck"
+  },
+  "final_pck": {
+    "sha256": "136d35e0d059572b633e2d743fba839e97273b1aaa11d7f41c28ad9b0b9dee3a",
+    "file": "RagRPG-F10-Q5-Terreno.pck",
+    "bytes": 94914128
+  },
+  "moving": {
+    "before": {
+      "actors": 96,
+      "draw_calls": 288.0,
+      "mean_ms_median": 22.6280977443609,
+      "p95_ms_median": 26.417,
+      "max_ms": 58.236,
+      "draw_callbacks_median": 12768
+    },
+    "after": {
+      "actors": 96,
+      "draw_calls": 288.0,
+      "mean_ms_median": 9.57177707006369,
+      "p95_ms_median": 14.013,
+      "max_ms": 20.584,
+      "draw_callbacks_median": 30144
+    }
+  },
+  "idle": {
+    "before": {
+      "actors": 96,
+      "draw_calls": 288.0,
+      "mean_ms_median": 5.66062641509434,
+      "p95_ms_median": 9.11,
+      "max_ms": 15.181,
+      "draw_callbacks_median": 50880
+    },
+    "after": {
+      "actors": 96,
+      "draw_calls": 288.0,
+      "mean_ms_median": 3.59382395209581,
+      "p95_ms_median": 5.876,
+      "max_ms": 156.011,
+      "draw_callbacks_median": 1152
+    }
+  },
+  "forest_same_protocol": {
+    "before": {
+      "crowd_animated_no_shadows": {
+        "cpu_ms": 25.5649420289857,
+        "draw_calls": 836.0,
+        "frames": 276,
+        "max_ms": 31.252,
+        "mean_ms": 10.8977971014493,
+        "p95_ms": 20.36,
+        "p99_ms": 27.626
+      },
+      "crowd_animated_shadows": {
+        "cpu_ms": 14.7156064516129,
+        "draw_calls": 898.0,
+        "frames": 310,
+        "max_ms": 17.389,
+        "mean_ms": 9.69015161290323,
+        "p95_ms": 13.463,
+        "p99_ms": 15.284
+      },
+      "crowd_cached_drawing": {
+        "cpu_ms": 12.3638660907128,
+        "draw_calls": 836.0,
+        "frames": 463,
+        "max_ms": 12.42,
+        "mean_ms": 6.48289200863931,
+        "p95_ms": 8.819,
+        "p99_ms": 10.09
+      },
+      "crowd_hidden": {
+        "cpu_ms": 18.0781847826086,
+        "draw_calls": 712.0,
+        "frames": 552,
+        "max_ms": 10.503,
+        "mean_ms": 5.4427481884058,
+        "p95_ms": 7.556,
+        "p99_ms": 8.863
+      },
+      "entry_ms": 72952.213,
+      "natural_all_on": {
+        "cpu_ms": 26.5579378238341,
+        "draw_calls": 712.0,
+        "frames": 193,
+        "max_ms": 37.753,
+        "mean_ms": 15.5708341968912,
+        "p95_ms": 19.831,
+        "p99_ms": 25.581
+      },
+      "natural_enemy_process_off": {
+        "cpu_ms": 16.8863954659951,
+        "draw_calls": 712.0,
+        "frames": 397,
+        "max_ms": 15.645,
+        "mean_ms": 7.56320906801007,
+        "p95_ms": 10.315,
+        "p99_ms": 12.281
+      },
+      "natural_view_sync_off": {
+        "cpu_ms": 14.2979225663717,
+        "draw_calls": 712.0,
+        "frames": 452,
+        "max_ms": 15.869,
+        "mean_ms": 6.63743141592921,
+        "p95_ms": 9.702,
+        "p99_ms": 11.626
+      },
+      "population": 62,
+      "skin_build_ms": [
+        1081.952,
+        1014.822
+      ]
+    },
+    "after": {
+      "crowd_animated_no_shadows": {
+        "cpu_ms": 16.6858726790452,
+        "draw_calls": 738.0,
+        "frames": 377,
+        "max_ms": 17.99,
+        "mean_ms": 7.9724323607427,
+        "p95_ms": 10.843,
+        "p99_ms": 13.462
+      },
+      "crowd_animated_shadows": {
+        "cpu_ms": 29.7665981012659,
+        "draw_calls": 800.0,
+        "frames": 316,
+        "max_ms": 16.298,
+        "mean_ms": 9.51562658227848,
+        "p95_ms": 12.561,
+        "p99_ms": 14.844
+      },
+      "crowd_cached_drawing": {
+        "cpu_ms": 24.6564121338913,
+        "draw_calls": 738.0,
+        "frames": 478,
+        "max_ms": 12.958,
+        "mean_ms": 6.28202928870293,
+        "p95_ms": 9.196,
+        "p99_ms": 10.765
+      },
+      "crowd_hidden": {
+        "cpu_ms": 18.5938057553959,
+        "draw_calls": 614.0,
+        "frames": 556,
+        "max_ms": 10.277,
+        "mean_ms": 5.40362949640288,
+        "p95_ms": 7.978,
+        "p99_ms": 9.28
+      },
+      "entry_ms": 52381.843,
+      "natural_all_on": {
+        "cpu_ms": 23.8404682926829,
+        "draw_calls": 614.0,
+        "frames": 205,
+        "max_ms": 25.448,
+        "mean_ms": 14.6539463414634,
+        "p95_ms": 21.769,
+        "p99_ms": 24.403
+      },
+      "natural_enemy_process_off": {
+        "cpu_ms": 25.4987214285715,
+        "draw_calls": 614.0,
+        "frames": 420,
+        "max_ms": 11.81,
+        "mean_ms": 7.14938095238095,
+        "p95_ms": 9.84,
+        "p99_ms": 10.821
+      },
+      "natural_view_sync_off": {
+        "cpu_ms": 10.6316785009862,
+        "draw_calls": 614.0,
+        "frames": 507,
+        "max_ms": 11.678,
+        "mean_ms": 5.93818934911243,
+        "p95_ms": 8.742,
+        "p99_ms": 10.04
+      },
+      "population": 62,
+      "skin_build_ms": [
+        1115.565,
+        1393.663
+      ]
+    }
+  },
+  "final_preparation": {
+    "ok": true,
+    "rows": [
+      {
+        "label": "cold_process",
+        "lanes": 2,
+        "manifest_digest": "12271a4e44f456e7e2993bcd4d81a405717ab2463be0697a969964bac5916707",
+        "metrics": [
+          {
+            "details": {
+              "catalog_ms": 12.425,
+              "create_candidate_ms": 1198.22,
+              "home_round_trips_ms": 1371.604,
+              "interaction_proofs_ms": 865.47,
+              "load_package_ms": 8006.988,
+              "patrol_proofs_ms": 0.152,
+              "population_build_ms": 573.732,
+              "surface_connectivity_ms": 2209.627,
+              "surface_probes_ms": 812.958,
+              "validate_ms": 31.424,
+              "world_and_entry_ms": 543.034
+            },
+            "package_id": "forest_terraces",
+            "prepare_ms": 15638.215
+          },
+          {
+            "details": {
+              "catalog_ms": 14.174,
+              "create_candidate_ms": 975.633,
+              "home_round_trips_ms": 1092.669,
+              "interaction_proofs_ms": 834.236,
+              "load_package_ms": 7112.921,
+              "patrol_proofs_ms": 0.083,
+              "population_build_ms": 546.097,
+              "surface_connectivity_ms": 1749.992,
+              "surface_probes_ms": 378.222,
+              "validate_ms": 25.954,
+              "world_and_entry_ms": 490.059
+            },
+            "package_id": "forest_valleys",
+            "prepare_ms": 13231.237
+          },
+          {
+            "details": {
+              "catalog_ms": 11.904,
+              "create_candidate_ms": 86.1,
+              "home_round_trips_ms": 116.013,
+              "interaction_proofs_ms": 58.195,
+              "load_package_ms": 867.57,
+              "patrol_proofs_ms": 0.011,
+              "population_build_ms": 50.566,
+              "surface_connectivity_ms": 103.675,
+              "surface_probes_ms": 8.973,
+              "validate_ms": 3.311,
+              "world_and_entry_ms": 36.385
+            },
+            "package_id": "forest_lair",
+            "prepare_ms": 1344.242
+          }
+        ],
+        "ok": true,
+        "proof_hits_cumulative": 14,
+        "rules_digest": "369eaa4b7b69614cb34f1a2def38f1ed1c8f221860273ce28409cd67e3690e9d",
+        "searches_cumulative": 0,
+        "total_ms": 17076.607
+      },
+      {
+        "label": "warm_process",
+        "lanes": 2,
+        "manifest_digest": "12271a4e44f456e7e2993bcd4d81a405717ab2463be0697a969964bac5916707",
+        "metrics": [
+          {
+            "details": {
+              "catalog_ms": 12.05,
+              "create_candidate_ms": 1029.621,
+              "home_round_trips_ms": 1162.802,
+              "interaction_proofs_ms": 888.798,
+              "load_package_ms": 3230.344,
+              "patrol_proofs_ms": 0.081,
+              "population_build_ms": 501.822,
+              "surface_connectivity_ms": 2045.938,
+              "surface_probes_ms": 840.441,
+              "validate_ms": 44.951,
+              "world_and_entry_ms": 483.168
+            },
+            "package_id": "forest_terraces",
+            "prepare_ms": 10251.796
+          },
+          {
+            "details": {
+              "catalog_ms": 12.326,
+              "create_candidate_ms": 1036.095,
+              "home_round_trips_ms": 1066.424,
+              "interaction_proofs_ms": 675.24,
+              "load_package_ms": 3018.218,
+              "patrol_proofs_ms": 0.089,
+              "population_build_ms": 548.354,
+              "surface_connectivity_ms": 1619.729,
+              "surface_probes_ms": 424.685,
+              "validate_ms": 32.908,
+              "world_and_entry_ms": 452.315
+            },
+            "package_id": "forest_valleys",
+            "prepare_ms": 8895.092
+          },
+          {
+            "details": {
+              "catalog_ms": 12.081,
+              "create_candidate_ms": 90.802,
+              "home_round_trips_ms": 112.645,
+              "interaction_proofs_ms": 61.049,
+              "load_package_ms": 334.928,
+              "patrol_proofs_ms": 0.011,
+              "population_build_ms": 47.522,
+              "surface_connectivity_ms": 106.012,
+              "surface_probes_ms": 9.137,
+              "validate_ms": 4.181,
+              "world_and_entry_ms": 35.45
+            },
+            "package_id": "forest_lair",
+            "prepare_ms": 815.568
+          }
+        ],
+        "ok": true,
+        "proof_hits_cumulative": 24,
+        "rules_digest": "369eaa4b7b69614cb34f1a2def38f1ed1c8f221860273ce28409cd67e3690e9d",
+        "searches_cumulative": 0,
+        "total_ms": 11167.067
+      }
+    ]
+  },
+  "limits": [
+    "Three ~3s crowd windows per side, one native entry sample per side; not OS disk-cache flushing or a statistical guarantee",
+    "Moving crowd isolates presentation at known safe positions; not 96-enemy combat",
+    "Final idle sample contains 156.011ms maximum; natural forest p95 did not improve",
+    "Old concurrency prototype headless; final cold/warm preparation native; do not conflate their render modes",
+    "UI/functional forest uses default vsync; whole-forest profile disables vsync; modes remain separate"
+  ]
+}

@@ -1,0 +1,15 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F10_PHASE_RELEASE_CHECK registry_shape_is_closed true 
+F10_PHASE_RELEASE_CHECK published_map_prepares true 
+F10_PHASE_RELEASE_CHECK phase_composes true 
+F10_PHASE_RELEASE_CHECK two_stages_renamed true 
+F10_PHASE_RELEASE_CHECK slots_prefixed_and_unique true 
+F10_PHASE_RELEASE_CHECK exit_becomes_travel_both_ways true 
+F10_PHASE_RELEASE_CHECK only_the_last_map_completes true 
+F10_PHASE_RELEASE_CHECK no_single_map_stage_left true 
+F10_PHASE_RELEASE_CHECK phase_hash_is_stable true 
+F10_PHASE_RELEASE_CHECK campaign_accepts_the_phase true 
+F10_PHASE_RELEASE_CHECK missing_exit_is_refused true 
+F10_PHASE_RELEASE_TIMING {"prepare_ms":60969.0}
+F10_PHASE_RELEASE_RESULT {"checks":[{"detail":"","id":"registry_shape_is_closed","ok":true},{"detail":"","id":"published_map_prepares","ok":true},{"detail":"","id":"phase_composes","ok":true},{"detail":"","id":"two_stages_renamed","ok":true},{"detail":"","id":"slots_prefixed_and_unique","ok":true},{"detail":"","id":"exit_becomes_travel_both_ways","ok":true},{"detail":"","id":"only_the_last_map_completes","ok":true},{"detail":"","id":"no_single_map_stage_left","ok":true},{"detail":"","id":"phase_hash_is_stable","ok":true},{"detail":"","id":"campaign_accepts_the_phase","ok":true},{"detail":"","id":"missing_exit_is_refused","ok":true}],"count":11,"ok":true}

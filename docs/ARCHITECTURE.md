@@ -44,6 +44,15 @@ O minimapa e a preferência de câmera são omissões explícitas do snapshot;
 o zoom é relido de `controls.cfg`. Migração de checkpoint entre builds
 continua indisponível; [teste Windows separado](map_editor/delivery/f10_minimap_zoom.md).
 
+O [delta de terreno/desempenho](map_editor/contracts/f10_terrain_performance.md)
+consome a máscara de triângulos do HeightGrid e usa uma malha de cores estática
+no minimapa. Cache de desenho de atores/sombras é apresentação descartável:
+quad horizontal totalmente coberto pode compartilhar a malha radial; outros
+casos mantêm o recorte anterior. Nenhum tick ou consulta de gameplay é omitido.
+PhaseRelease prepara até dois mapas ao mesmo tempo e recompõe na ordem original.
+MapRelease transfere o pacote validado a helpers internos de Candidate; entradas
+externas conservam as validações públicas e os limites de 5 MiB do candidato.
+
 ## Composição técnica E07 —23/10/2026
 
 [F8](epics/e07/delivery/f8.md) consolida F0–F7 sobre runtime 7775f44: geometria com

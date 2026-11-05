@@ -1,0 +1,15 @@
+RagRPG F10 Q5 — Terreno e desempenho
+
+Abra RagRPG-F10-Q5-Terreno.exe ou o atalho Jogar RagRPG F10 - Terreno.
+Mantenha o .pck ao lado do executável.
+Crie um personagem e escolha Expedições → Floresta do Santuário.
+
+Minimapa: verde é terreno caminhável; cobre é íngreme; escuro é bloqueio.
+Relevo mais claro indica altura. Inimigos são vermelhos; você é a seta dourada.
+A leitura é um mapa do terreno; a rota e a folga do corpo são validadas no jogo.
+Roda sobre o cenário ou botões −/+ controlam o zoom de 50% a 160%.
+Clique no percentual para restaurar 100%.
+
+Esta versão usa o perfil separado RagRPG F10 Q5 Terreno.
+Crie um personagem novo. Saves e executáveis anteriores permanecem intactos;
+checkpoints de outra versão continuam no executável correspondente.

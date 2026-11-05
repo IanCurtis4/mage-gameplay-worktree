@@ -1,5 +1,8 @@
 # F10 — minimapa e zoom para teste
 
+Atualização posterior: [terreno e desempenho](f10_terrain_performance.md).
+Este build permanece disponível para continuar seus personagens/checkpoints.
+
 5/11/2026. Após jogar o executável anterior, o usuário pediu um minimapa
 quadrado com inimigos vermelhos e seta dourada do jogador, além de zoom.
 [Contrato e propriedade](../contracts/f10_minimap_zoom.md).

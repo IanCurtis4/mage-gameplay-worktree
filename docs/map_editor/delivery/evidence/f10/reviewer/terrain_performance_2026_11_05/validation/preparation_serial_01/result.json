@@ -1,0 +1,76 @@
+{
+  "ok": true,
+  "exit_code": 0,
+  "arguments": [
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+    "--headless",
+    "--main-pack",
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\minimap_c9a3673f\\RagRPG-F10-Q5-Mapa.pck",
+    "--script",
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\preparation_lanes_probe.gd"
+  ],
+  "wall_seconds": 45.041324615478516,
+  "result": [
+    {
+      "cpus": 12,
+      "manifest_digest": "12271a4e44f456e7e2993bcd4d81a405717ab2463be0697a969964bac5916707",
+      "metrics": [
+        {
+          "details": {
+            "catalog_ms": 12.264,
+            "create_candidate_ms": 3782.163,
+            "home_round_trips_ms": 1131.945,
+            "interaction_proofs_ms": 801.112,
+            "load_package_ms": 6958.113,
+            "patrol_proofs_ms": 0.093,
+            "population_build_ms": 510.848,
+            "surface_connectivity_ms": 1841.177,
+            "surface_probes_ms": 787.194,
+            "validate_ms": 3782.82,
+            "world_and_entry_ms": 478.798
+          },
+          "package_id": "forest_terraces",
+          "prepare_ms": 20096.805
+        },
+        {
+          "details": {
+            "catalog_ms": 11.68,
+            "create_candidate_ms": 3434.048,
+            "home_round_trips_ms": 938.459,
+            "interaction_proofs_ms": 679.666,
+            "load_package_ms": 5779.037,
+            "patrol_proofs_ms": 0.072,
+            "population_build_ms": 475.086,
+            "surface_connectivity_ms": 1381.015,
+            "surface_probes_ms": 341.182,
+            "validate_ms": 3336.28,
+            "world_and_entry_ms": 452.655
+          },
+          "package_id": "forest_valleys",
+          "prepare_ms": 16837.919
+        },
+        {
+          "details": {
+            "catalog_ms": 13.98,
+            "create_candidate_ms": 492.518,
+            "home_round_trips_ms": 127.038,
+            "interaction_proofs_ms": 65.499,
+            "load_package_ms": 884.693,
+            "patrol_proofs_ms": 0.01,
+            "population_build_ms": 47.427,
+            "surface_connectivity_ms": 124.521,
+            "surface_probes_ms": 9.319,
+            "validate_ms": 545.832,
+            "world_and_entry_ms": 43.987
+          },
+          "package_id": "forest_lair",
+          "prepare_ms": 2356.404
+        }
+      ],
+      "mode": "serial",
+      "ok": true,
+      "rules_digest": "369eaa4b7b69614cb34f1a2def38f1ed1c8f221860273ce28409cd67e3690e9d",
+      "total_ms": 39380.705
+    }
+  ]
+}

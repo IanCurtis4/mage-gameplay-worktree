@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+SHADOW_COMPARE_CHECK {"different_bytes":0,"id":"flat","max_channel_delta":0,"ok":true}
+SHADOW_COMPARE_CHECK {"different_bytes":0,"id":"moving_flat","max_channel_delta":0,"ok":true}
+SHADOW_COMPARE_CHECK {"different_bytes":0,"id":"outer_edge","max_channel_delta":0,"ok":true}
+SHADOW_COMPARE_CHECK {"different_bytes":0,"id":"quad_seam","max_channel_delta":0,"ok":true}
+SHADOW_COMPARE_CHECK {"different_bytes":0,"id":"ramp","max_channel_delta":0,"ok":true}
+SHADOW_COMPARE_CHECK {"different_bytes":0,"id":"large_world_coordinates","max_channel_delta":0,"ok":true}
+SHADOW_COMPARE_RESULT {"checks":[{"different_bytes":0,"id":"flat","max_channel_delta":0,"ok":true},{"different_bytes":0,"id":"moving_flat","max_channel_delta":0,"ok":true},{"different_bytes":0,"id":"outer_edge","max_channel_delta":0,"ok":true},{"different_bytes":0,"id":"quad_seam","max_channel_delta":0,"ok":true},{"different_bytes":0,"id":"ramp","max_channel_delta":0,"ok":true},{"different_bytes":0,"id":"large_world_coordinates","max_channel_delta":0,"ok":true}],"count":6,"ok":true}

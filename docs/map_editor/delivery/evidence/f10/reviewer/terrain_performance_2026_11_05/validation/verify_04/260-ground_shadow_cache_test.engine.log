@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ERROR: flat footprint uses exact canonical linear projection
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/ground_shadow_cache_test.gd:11)
+       [1] run (res://tests/ground_shadow_cache_test.gd:23)
+Ground shadow cache: 18 checks, 1 failures

@@ -1,0 +1,76 @@
+{
+  "ok": true,
+  "exit_code": 0,
+  "arguments": [
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+    "--headless",
+    "--main-pack",
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\minimap_c9a3673f\\RagRPG-F10-Q5-Mapa.pck",
+    "--script",
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_f10\\preparation_lanes_probe.gd"
+  ],
+  "wall_seconds": 28.982319116592407,
+  "result": [
+    {
+      "cpus": 12,
+      "manifest_digest": "12271a4e44f456e7e2993bcd4d81a405717ab2463be0697a969964bac5916707",
+      "metrics": [
+        {
+          "details": {
+            "catalog_ms": 11.499,
+            "create_candidate_ms": 4589.911,
+            "home_round_trips_ms": 1134.986,
+            "interaction_proofs_ms": 761.567,
+            "load_package_ms": 7253.62,
+            "patrol_proofs_ms": 0.085,
+            "population_build_ms": 515.084,
+            "surface_connectivity_ms": 2059.782,
+            "surface_probes_ms": 838.278,
+            "validate_ms": 4458.448,
+            "world_and_entry_ms": 445.045
+          },
+          "index": 0,
+          "ms": 22085.387
+        },
+        {
+          "details": {
+            "catalog_ms": 20.314,
+            "create_candidate_ms": 460.299,
+            "home_round_trips_ms": 129.682,
+            "interaction_proofs_ms": 60.259,
+            "load_package_ms": 852.111,
+            "patrol_proofs_ms": 0.011,
+            "population_build_ms": 143.684,
+            "surface_connectivity_ms": 115.012,
+            "surface_probes_ms": 9.145,
+            "validate_ms": 453.742,
+            "world_and_entry_ms": 33.894
+          },
+          "index": 2,
+          "ms": 2279.736
+        },
+        {
+          "details": {
+            "catalog_ms": 12.389,
+            "create_candidate_ms": 3977.265,
+            "home_round_trips_ms": 1040.175,
+            "interaction_proofs_ms": 770.686,
+            "load_package_ms": 6433.38,
+            "patrol_proofs_ms": 0.099,
+            "population_build_ms": 528.98,
+            "surface_connectivity_ms": 1637.66,
+            "surface_probes_ms": 359.549,
+            "validate_ms": 4222.872,
+            "world_and_entry_ms": 444.646
+          },
+          "index": 1,
+          "ms": 19437.267
+        }
+      ],
+      "mode": "parallel",
+      "ok": true,
+      "rules_digest": "369eaa4b7b69614cb34f1a2def38f1ed1c8f221860273ce28409cd67e3690e9d",
+      "total_ms": 24428.839
+    }
+  ]
+}

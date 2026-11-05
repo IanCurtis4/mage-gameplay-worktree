@@ -1,0 +1,7 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+WORLD_CROWD_SAMPLE {"actors":96,"animation_seconds":3.00041833333333,"draw_callbacks":31776,"frames":331,"max_ms":19.124,"mean_ms":9.08006344410875,"p95_ms":13.118,"p99_ms":14.22,"pass":0}
+WORLD_CROWD_SAMPLE {"actors":96,"animation_seconds":3.02800680952382,"draw_callbacks":30144,"frames":314,"max_ms":17.792,"mean_ms":9.57177707006369,"p95_ms":14.013,"p99_ms":15.489,"pass":1}
+WORLD_CROWD_SAMPLE {"actors":96,"animation_seconds":3.01610182683985,"draw_callbacks":28512,"frames":297,"max_ms":20.584,"mean_ms":10.1030235690236,"p95_ms":17.175,"p99_ms":19.314,"pass":2}
+WORLD_CROWD_RESULT {"draw_calls":288.0,"ok":true,"rows":[{"actors":96,"animation_seconds":3.00041833333333,"draw_callbacks":31776,"frames":331,"max_ms":19.124,"mean_ms":9.08006344410875,"p95_ms":13.118,"p99_ms":14.22,"pass":0},{"actors":96,"animation_seconds":3.02800680952382,"draw_callbacks":30144,"frames":314,"max_ms":17.792,"mean_ms":9.57177707006369,"p95_ms":14.013,"p99_ms":15.489,"pass":1},{"actors":96,"animation_seconds":3.01610182683985,"draw_callbacks":28512,"frames":297,"max_ms":20.584,"mean_ms":10.1030235690236,"p95_ms":17.175,"p99_ms":19.314,"pass":2}]}

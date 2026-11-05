@@ -1,0 +1,269 @@
+WorkerThreadPool: 12 threads, 3 max low-priority.
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+TextServer: Added interface "Dummy"
+TextServer: Added interface "ICU / HarfBuzz / Graphite (Built-in)"
+Accessibility: AccessKit driver loaded.
+Native OpenGL API detected: 3.3: NVIDIA - NVIDIA GeForce GTX 1080
+NVAPI: Init OK!
+NVAPI: Profile not found, creating...
+NVAPI: Application not found in profile, creating...
+NVAPI: Disabled OpenGL threaded optimization successfully
+NVAPI: Disabled G-SYNC for windowed mode successfully
+Accessibility: window 0 adapter created.
+SDL: Init OK!
+Using "winink" pen tablet driver...
+Shader 'CanvasSdfShaderGLES3' SHA256: 645c28b6249badd31770084c5f5ec87299587466fe666f369bdbfde860c660f4
+Shader 'SkeletonShaderGLES3' SHA256: 9bc8249cb19d7685d28265f0335563396670cb46b9ccce27840a716ba7c642c1
+Shader 'ParticlesShaderGLES3' SHA256: 7886610433593c29107a52c115d56106d6950a38568d40cb3564f7814faeb0b1
+Shader 'ParticlesCopyShaderGLES3' SHA256: 12d3c6373ff5589d7d89e47eac4a0938d4bf12f3e2924ef40119afdf58c8991d
+Shader 'CopyShaderGLES3' SHA256: 01e731892a306b1dcbf8dff6319fc31eaf0a63a96a2125280956f61a566a7ff8
+Shader 'CubemapFilterShaderGLES3' SHA256: f5838a337b99af0425b5e23b02012e49a4799fb6777916ee9e4ca94d7969b6c1
+Shader 'GlowShaderGLES3' SHA256: 19ace7bf0dd20af35ffb0b1709d60948306611ddd74562302981d41b4c25ddd9
+Shader 'PostShaderGLES3' SHA256: 912c3ddd699cf65161e57e6f8633bd7e67be3e0236c084bc93c702e260715db9
+Shader 'FeedShaderGLES3' SHA256: 36e566cf2e94d1251172682052fed8f0c5d0e2ccfbb63f42501f4decffe37a13
+Shader 'CanvasShaderGLES3' SHA256: 4b21f9059454d39659ceb15c1dcc5415f5af1b9f967129090f7224e294a76f43
+Shader 'CanvasOcclusionShaderGLES3' SHA256: 0881a0e71b6e652fdea8d40e8647e4329c734821c3c8318ffde21989481d8724
+Shader 'SceneShaderGLES3' SHA256: 98cacf09a74d815867c211597b078f6a2e0efd43b48403f40e1bce109c4241aa
+Shader 'SkyShaderGLES3' SHA256: 4562c4134e2ff0c5a7c2ba11a117c957040dd650c70b07780d4f8f4b58a82761
+Shader 'TexBlitShaderGLES3' SHA256: 8ba1361e4e8e7db66ffef20044cace9b6cd1748b65575926cac644afaeb7a5ad
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+WASAPI: Activated output_device using IAudioClient3 interface
+WASAPI: wFormatTag = 65534
+WASAPI: nChannels = 2
+WASAPI: nSamplesPerSec = 48000
+WASAPI: nAvgBytesPerSec = 384000
+WASAPI: nBlockAlign = 8
+WASAPI: wBitsPerSample = 32
+WASAPI: cbSize = 22
+WASAPI: mix_rate = 48000
+WASAPI: fundamental_period_frames = 480
+WASAPI: min_period_frames = 480
+WASAPI: max_period_frames = 480
+WASAPI: selected a period frame size of 480
+WASAPI: detected 2 channels
+WASAPI: audio buffer frames: 480 calculated latency: 10ms
+
+TextServer: Primary interface set to: "ICU / HarfBuzz / Graphite (Built-in)".
+CORE API HASH: 0
+EDITOR API HASH: 0
+SceneTreeFTI: traversal method DEFAULT
+MbedTLS: Some X509 certificates could not be parsed (1 certificates skipped).
+Loaded system CA certificates
+Loading resource: res://.godot/exported/133200997/export-bfa6e7846427a5ddd396e9abda953e61-character_menu.scn remapped: res://.godot/exported/133200997/export-bfa6e7846427a5ddd396e9abda953e61-character_menu.scn
+Loading resource: res://scripts/ui/character_menu.gdc remapped: res://scripts/ui/character_menu.gdc
+Loading resource: res://scripts/world/pilot_ground.gdshader remapped: res://scripts/world/pilot_ground.gdshader
+Completed load for: 'res://scripts/world/pilot_ground.gdshader' remapped 'res://scripts/world/pilot_ground.gdshader' at thread -1
+Loading resource: res://assets/art/pilot/grass.png remapped: res://assets/art/pilot/grass.png
+Loading resource: res://.godot/imported/grass.png-4faa437c1453fa7f51e0221074aca56e.ctex remapped: res://.godot/imported/grass.png-4faa437c1453fa7f51e0221074aca56e.ctex
+Completed load for: 'res://assets/art/pilot/grass.png' remapped 'res://assets/art/pilot/grass.png' at thread -1
+Loading resource: res://assets/art/pilot/dirt.png remapped: res://assets/art/pilot/dirt.png
+Loading resource: res://.godot/imported/dirt.png-085310560a42764aecc88a68c83b40f0.ctex remapped: res://.godot/imported/dirt.png-085310560a42764aecc88a68c83b40f0.ctex
+Completed load for: 'res://assets/art/pilot/dirt.png' remapped 'res://assets/art/pilot/dirt.png' at thread -1
+Loading resource: res://assets/art/pilot/stone.png remapped: res://assets/art/pilot/stone.png
+Loading resource: res://.godot/imported/stone.png-cbca4f845e7f503677a3d68412c29181.ctex remapped: res://.godot/imported/stone.png-cbca4f845e7f503677a3d68412c29181.ctex
+Completed load for: 'res://assets/art/pilot/stone.png' remapped 'res://assets/art/pilot/stone.png' at thread -1
+Loading resource: res://assets/art/vfx/spiritualist_curse_sigil.png remapped: res://assets/art/vfx/spiritualist_curse_sigil.png
+Loading resource: res://.godot/imported/spiritualist_curse_sigil.png-42c693b46b4cfa7fb350bf888b9f06a1.ctex remapped: res://.godot/imported/spiritualist_curse_sigil.png-42c693b46b4cfa7fb350bf888b9f06a1.ctex
+Completed load for: 'res://assets/art/vfx/spiritualist_curse_sigil.png' remapped 'res://assets/art/vfx/spiritualist_curse_sigil.png' at thread -1
+Loading resource: res://assets/art/vfx/spiritualist_spectral_burst.png remapped: res://assets/art/vfx/spiritualist_spectral_burst.png
+Loading resource: res://.godot/imported/spiritualist_spectral_burst.png-9afbb25a31abd8a5c74a409c0df64efb.ctex remapped: res://.godot/imported/spiritualist_spectral_burst.png-9afbb25a31abd8a5c74a409c0df64efb.ctex
+Completed load for: 'res://assets/art/vfx/spiritualist_spectral_burst.png' remapped 'res://assets/art/vfx/spiritualist_spectral_burst.png' at thread -1
+Loading resource: res://assets/art/vfx/spiritualist_soul_wisp.png remapped: res://assets/art/vfx/spiritualist_soul_wisp.png
+Loading resource: res://.godot/imported/spiritualist_soul_wisp.png-5597e05938aa5f63247a7daaf7d2f73d.ctex remapped: res://.godot/imported/spiritualist_soul_wisp.png-5597e05938aa5f63247a7daaf7d2f73d.ctex
+Completed load for: 'res://assets/art/vfx/spiritualist_soul_wisp.png' remapped 'res://assets/art/vfx/spiritualist_soul_wisp.png' at thread -1
+Loading resource: res://assets/art/vfx/spiritualist_ritual_halo.png remapped: res://assets/art/vfx/spiritualist_ritual_halo.png
+Loading resource: res://.godot/imported/spiritualist_ritual_halo.png-af9948c545a758f944192a5523233a57.ctex remapped: res://.godot/imported/spiritualist_ritual_halo.png-af9948c545a758f944192a5523233a57.ctex
+Completed load for: 'res://assets/art/vfx/spiritualist_ritual_halo.png' remapped 'res://assets/art/vfx/spiritualist_ritual_halo.png' at thread -1
+Loading resource: res://scripts/ui/action_cooldown.gdshader remapped: res://scripts/ui/action_cooldown.gdshader
+Completed load for: 'res://scripts/ui/action_cooldown.gdshader' remapped 'res://scripts/ui/action_cooldown.gdshader' at thread -1
+Loading resource: res://assets/art/vfx/soul_impact_orb.png remapped: res://assets/art/vfx/soul_impact_orb.png
+Loading resource: res://.godot/imported/soul_impact_orb.png-f86d4c1af542360f88e449be7fa05cfd.ctex remapped: res://.godot/imported/soul_impact_orb.png-f86d4c1af542360f88e449be7fa05cfd.ctex
+Completed load for: 'res://assets/art/vfx/soul_impact_orb.png' remapped 'res://assets/art/vfx/soul_impact_orb.png' at thread -1
+Completed load for: 'res://scripts/ui/character_menu.gd' remapped 'res://scripts/ui/character_menu.gdc' at thread -1
+Completed load for: 'res://scenes/character_menu.tscn' remapped 'res://.godot/exported/133200997/export-bfa6e7846427a5ddd396e9abda953e61-character_menu.scn' at thread -1
+Loading resource: res://.godot/exported/133200997/export-2a26bc6b8faee803235f9d87ceeda5d6-bulwark_card.res remapped: res://.godot/exported/133200997/export-2a26bc6b8faee803235f9d87ceeda5d6-bulwark_card.res
+Completed load for: 'res://resources/build_effects/card/bulwark_card.tres' remapped 'res://.godot/exported/133200997/export-2a26bc6b8faee803235f9d87ceeda5d6-bulwark_card.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-6c6dc67dcddbc191ae89ca2fbf731d16-echo_card.res remapped: res://.godot/exported/133200997/export-6c6dc67dcddbc191ae89ca2fbf731d16-echo_card.res
+Completed load for: 'res://resources/build_effects/card/echo_card.tres' remapped 'res://.godot/exported/133200997/export-6c6dc67dcddbc191ae89ca2fbf731d16-echo_card.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-eca8fcb1ad25182dcf539fc4d706bb2e-ember_card.res remapped: res://.godot/exported/133200997/export-eca8fcb1ad25182dcf539fc4d706bb2e-ember_card.res
+Completed load for: 'res://resources/build_effects/card/ember_card.tres' remapped 'res://.godot/exported/133200997/export-eca8fcb1ad25182dcf539fc4d706bb2e-ember_card.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-0986c3aa308e48256ce9ab5230401dcb-frost_card.res remapped: res://.godot/exported/133200997/export-0986c3aa308e48256ce9ab5230401dcb-frost_card.res
+Completed load for: 'res://resources/build_effects/card/frost_card.tres' remapped 'res://.godot/exported/133200997/export-0986c3aa308e48256ce9ab5230401dcb-frost_card.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-38e26f785f9aee55339cd9410da9a1f9-precision_card.res remapped: res://.godot/exported/133200997/export-38e26f785f9aee55339cd9410da9a1f9-precision_card.res
+Completed load for: 'res://resources/build_effects/card/precision_card.tres' remapped 'res://.godot/exported/133200997/export-38e26f785f9aee55339cd9410da9a1f9-precision_card.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-6d67e6148e9c2401f2c2ca6679d0b897-trail_card.res remapped: res://.godot/exported/133200997/export-6d67e6148e9c2401f2c2ca6679d0b897-trail_card.res
+Completed load for: 'res://resources/build_effects/card/trail_card.tres' remapped 'res://.godot/exported/133200997/export-6d67e6148e9c2401f2c2ca6679d0b897-trail_card.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-dabf80d6ee57882907368fb53206e827-arena_channeler_robe.res remapped: res://.godot/exported/133200997/export-dabf80d6ee57882907368fb53206e827-arena_channeler_robe.res
+Completed load for: 'res://resources/build_effects/equipment/arena_channeler_robe.tres' remapped 'res://.godot/exported/133200997/export-dabf80d6ee57882907368fb53206e827-arena_channeler_robe.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-a123803eb3ec7c5029fad96c1f7cc041-arena_ember_staff.res remapped: res://.godot/exported/133200997/export-a123803eb3ec7c5029fad96c1f7cc041-arena_ember_staff.res
+Completed load for: 'res://resources/build_effects/equipment/arena_ember_staff.tres' remapped 'res://.godot/exported/133200997/export-a123803eb3ec7c5029fad96c1f7cc041-arena_ember_staff.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-dd7510bf5d7e44035f151a2c5f7ebcf6-arena_hunters_bow.res remapped: res://.godot/exported/133200997/export-dd7510bf5d7e44035f151a2c5f7ebcf6-arena_hunters_bow.res
+Completed load for: 'res://resources/build_effects/equipment/arena_hunters_bow.tres' remapped 'res://.godot/exported/133200997/export-dd7510bf5d7e44035f151a2c5f7ebcf6-arena_hunters_bow.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-f6bc450843cb3655dfec2d38a2ae01f8-arena_prismatic_charm.res remapped: res://.godot/exported/133200997/export-f6bc450843cb3655dfec2d38a2ae01f8-arena_prismatic_charm.res
+Completed load for: 'res://resources/build_effects/equipment/arena_prismatic_charm.tres' remapped 'res://.godot/exported/133200997/export-f6bc450843cb3655dfec2d38a2ae01f8-arena_prismatic_charm.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-39abdc10229bf91717408af880f947c8-arena_riposte_blade.res remapped: res://.godot/exported/133200997/export-39abdc10229bf91717408af880f947c8-arena_riposte_blade.res
+Completed load for: 'res://resources/build_effects/equipment/arena_riposte_blade.tres' remapped 'res://.godot/exported/133200997/export-39abdc10229bf91717408af880f947c8-arena_riposte_blade.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-c09035148568c77aada2497be3eeae6a-arena_starter_blade.res remapped: res://.godot/exported/133200997/export-c09035148568c77aada2497be3eeae6a-arena_starter_blade.res
+Completed load for: 'res://resources/build_effects/equipment/arena_starter_blade.tres' remapped 'res://.godot/exported/133200997/export-c09035148568c77aada2497be3eeae6a-arena_starter_blade.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-51359199ebbd6e37adc5e99b35735119-arena_starter_bow.res remapped: res://.godot/exported/133200997/export-51359199ebbd6e37adc5e99b35735119-arena_starter_bow.res
+Completed load for: 'res://resources/build_effects/equipment/arena_starter_bow.tres' remapped 'res://.godot/exported/133200997/export-51359199ebbd6e37adc5e99b35735119-arena_starter_bow.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-992b3696f973c7ef70009031f82fe56a-arena_starter_staff.res remapped: res://.godot/exported/133200997/export-992b3696f973c7ef70009031f82fe56a-arena_starter_staff.res
+Completed load for: 'res://resources/build_effects/equipment/arena_starter_staff.tres' remapped 'res://.godot/exported/133200997/export-992b3696f973c7ef70009031f82fe56a-arena_starter_staff.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-ad1bc3d1087e5e8cff628025dbca8a8a-arena_trailcoat.res remapped: res://.godot/exported/133200997/export-ad1bc3d1087e5e8cff628025dbca8a8a-arena_trailcoat.res
+Completed load for: 'res://resources/build_effects/equipment/arena_trailcoat.tres' remapped 'res://.godot/exported/133200997/export-ad1bc3d1087e5e8cff628025dbca8a8a-arena_trailcoat.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-fc51c5ad9f8d5d8914ce954023685d20-arena_traveler_charm.res remapped: res://.godot/exported/133200997/export-fc51c5ad9f8d5d8914ce954023685d20-arena_traveler_charm.res
+Completed load for: 'res://resources/build_effects/equipment/arena_traveler_charm.tres' remapped 'res://.godot/exported/133200997/export-fc51c5ad9f8d5d8914ce954023685d20-arena_traveler_charm.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-a95d0fbc00faad88035be0adaa06d256-arena_traveler_vest.res remapped: res://.godot/exported/133200997/export-a95d0fbc00faad88035be0adaa06d256-arena_traveler_vest.res
+Completed load for: 'res://resources/build_effects/equipment/arena_traveler_vest.tres' remapped 'res://.godot/exported/133200997/export-a95d0fbc00faad88035be0adaa06d256-arena_traveler_vest.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-417e6bfb3c3d17946ca77fd226100eaf-arena_warden_mail.res remapped: res://.godot/exported/133200997/export-417e6bfb3c3d17946ca77fd226100eaf-arena_warden_mail.res
+Completed load for: 'res://resources/build_effects/equipment/arena_warden_mail.tres' remapped 'res://.godot/exported/133200997/export-417e6bfb3c3d17946ca77fd226100eaf-arena_warden_mail.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-f6b660b8e1e78be5d1ee7df782ddfb85-channeler_robe.res remapped: res://.godot/exported/133200997/export-f6b660b8e1e78be5d1ee7df782ddfb85-channeler_robe.res
+Completed load for: 'res://resources/build_effects/equipment/channeler_robe.tres' remapped 'res://.godot/exported/133200997/export-f6b660b8e1e78be5d1ee7df782ddfb85-channeler_robe.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-9c8c7c125cd411827e1f2f04d829014b-ember_staff.res remapped: res://.godot/exported/133200997/export-9c8c7c125cd411827e1f2f04d829014b-ember_staff.res
+Completed load for: 'res://resources/build_effects/equipment/ember_staff.tres' remapped 'res://.godot/exported/133200997/export-9c8c7c125cd411827e1f2f04d829014b-ember_staff.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-a6f412c466d06de432ed950a727a75eb-hunters_bow.res remapped: res://.godot/exported/133200997/export-a6f412c466d06de432ed950a727a75eb-hunters_bow.res
+Completed load for: 'res://resources/build_effects/equipment/hunters_bow.tres' remapped 'res://.godot/exported/133200997/export-a6f412c466d06de432ed950a727a75eb-hunters_bow.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-317c08a7184c0a8e9f93b2d6c4728173-pilot_arms.res remapped: res://.godot/exported/133200997/export-317c08a7184c0a8e9f93b2d6c4728173-pilot_arms.res
+Completed load for: 'res://resources/build_effects/equipment/pilot_arms.tres' remapped 'res://.godot/exported/133200997/export-317c08a7184c0a8e9f93b2d6c4728173-pilot_arms.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-aa8215934ef6014bdbc85bd4a41b616c-pilot_cloak.res remapped: res://.godot/exported/133200997/export-aa8215934ef6014bdbc85bd4a41b616c-pilot_cloak.res
+Completed load for: 'res://resources/build_effects/equipment/pilot_cloak.tres' remapped 'res://.godot/exported/133200997/export-aa8215934ef6014bdbc85bd4a41b616c-pilot_cloak.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-7818a71caba550dcec544241326ff0c0-pilot_feet.res remapped: res://.godot/exported/133200997/export-7818a71caba550dcec544241326ff0c0-pilot_feet.res
+Completed load for: 'res://resources/build_effects/equipment/pilot_feet.tres' remapped 'res://.godot/exported/133200997/export-7818a71caba550dcec544241326ff0c0-pilot_feet.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-c970e61e66253dd80dba4c8f58de15c1-pilot_focus.res remapped: res://.godot/exported/133200997/export-c970e61e66253dd80dba4c8f58de15c1-pilot_focus.res
+Completed load for: 'res://resources/build_effects/equipment/pilot_focus.tres' remapped 'res://.godot/exported/133200997/export-c970e61e66253dd80dba4c8f58de15c1-pilot_focus.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-2cc5ee16675cabae739a6666185d9273-pilot_head.res remapped: res://.godot/exported/133200997/export-2cc5ee16675cabae739a6666185d9273-pilot_head.res
+Completed load for: 'res://resources/build_effects/equipment/pilot_head.tres' remapped 'res://.godot/exported/133200997/export-2cc5ee16675cabae739a6666185d9273-pilot_head.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-cf9c7f16871d6183fe13386a0b141521-pilot_legs.res remapped: res://.godot/exported/133200997/export-cf9c7f16871d6183fe13386a0b141521-pilot_legs.res
+Completed load for: 'res://resources/build_effects/equipment/pilot_legs.tres' remapped 'res://.godot/exported/133200997/export-cf9c7f16871d6183fe13386a0b141521-pilot_legs.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-59868f1f207849fd341b1b5c40f119f0-pilot_shield.res remapped: res://.godot/exported/133200997/export-59868f1f207849fd341b1b5c40f119f0-pilot_shield.res
+Completed load for: 'res://resources/build_effects/equipment/pilot_shield.tres' remapped 'res://.godot/exported/133200997/export-59868f1f207849fd341b1b5c40f119f0-pilot_shield.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-38b0a7edb664419dd20614357be22287-pilot_shoulders.res remapped: res://.godot/exported/133200997/export-38b0a7edb664419dd20614357be22287-pilot_shoulders.res
+Completed load for: 'res://resources/build_effects/equipment/pilot_shoulders.tres' remapped 'res://.godot/exported/133200997/export-38b0a7edb664419dd20614357be22287-pilot_shoulders.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-d134127908c8316726a9212c94b96ae2-pilot_sp_jewel.res remapped: res://.godot/exported/133200997/export-d134127908c8316726a9212c94b96ae2-pilot_sp_jewel.res
+Completed load for: 'res://resources/build_effects/equipment/pilot_sp_jewel.tres' remapped 'res://.godot/exported/133200997/export-d134127908c8316726a9212c94b96ae2-pilot_sp_jewel.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-98c616e63c4a9ed24f9fa06392c4e7aa-pilot_step_neck.res remapped: res://.godot/exported/133200997/export-98c616e63c4a9ed24f9fa06392c4e7aa-pilot_step_neck.res
+Completed load for: 'res://resources/build_effects/equipment/pilot_step_neck.tres' remapped 'res://.godot/exported/133200997/export-98c616e63c4a9ed24f9fa06392c4e7aa-pilot_step_neck.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-43742e75188d204a805dd69ec6a45685-pilot_stride_jewel.res remapped: res://.godot/exported/133200997/export-43742e75188d204a805dd69ec6a45685-pilot_stride_jewel.res
+Completed load for: 'res://resources/build_effects/equipment/pilot_stride_jewel.tres' remapped 'res://.godot/exported/133200997/export-43742e75188d204a805dd69ec6a45685-pilot_stride_jewel.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-96265f384b2f8f98a844d18cb288c5a9-pilot_wand.res remapped: res://.godot/exported/133200997/export-96265f384b2f8f98a844d18cb288c5a9-pilot_wand.res
+Completed load for: 'res://resources/build_effects/equipment/pilot_wand.tres' remapped 'res://.godot/exported/133200997/export-96265f384b2f8f98a844d18cb288c5a9-pilot_wand.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-3339967f9737ecd415ad3a54252c4769-pilot_ward_jewel.res remapped: res://.godot/exported/133200997/export-3339967f9737ecd415ad3a54252c4769-pilot_ward_jewel.res
+Completed load for: 'res://resources/build_effects/equipment/pilot_ward_jewel.tres' remapped 'res://.godot/exported/133200997/export-3339967f9737ecd415ad3a54252c4769-pilot_ward_jewel.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-9a64dad82c2600a8c29fcd8b4b4b1431-prismatic_charm.res remapped: res://.godot/exported/133200997/export-9a64dad82c2600a8c29fcd8b4b4b1431-prismatic_charm.res
+Completed load for: 'res://resources/build_effects/equipment/prismatic_charm.tres' remapped 'res://.godot/exported/133200997/export-9a64dad82c2600a8c29fcd8b4b4b1431-prismatic_charm.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-3a3da9e0a099bb18e1216d4c9b1677f1-riposte_blade.res remapped: res://.godot/exported/133200997/export-3a3da9e0a099bb18e1216d4c9b1677f1-riposte_blade.res
+Completed load for: 'res://resources/build_effects/equipment/riposte_blade.tres' remapped 'res://.godot/exported/133200997/export-3a3da9e0a099bb18e1216d4c9b1677f1-riposte_blade.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-2a27c13c98a39f2a0b927c3157d2d5cc-starter_blade.res remapped: res://.godot/exported/133200997/export-2a27c13c98a39f2a0b927c3157d2d5cc-starter_blade.res
+Completed load for: 'res://resources/build_effects/equipment/starter_blade.tres' remapped 'res://.godot/exported/133200997/export-2a27c13c98a39f2a0b927c3157d2d5cc-starter_blade.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-cee278f3d0890f3050736cc540d01c13-starter_bow.res remapped: res://.godot/exported/133200997/export-cee278f3d0890f3050736cc540d01c13-starter_bow.res
+Completed load for: 'res://resources/build_effects/equipment/starter_bow.tres' remapped 'res://.godot/exported/133200997/export-cee278f3d0890f3050736cc540d01c13-starter_bow.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-965cbc57a171e36e1faa6571e21ed30c-starter_staff.res remapped: res://.godot/exported/133200997/export-965cbc57a171e36e1faa6571e21ed30c-starter_staff.res
+Completed load for: 'res://resources/build_effects/equipment/starter_staff.tres' remapped 'res://.godot/exported/133200997/export-965cbc57a171e36e1faa6571e21ed30c-starter_staff.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-3a9e8c159b6069ccda048b099548234c-trailcoat.res remapped: res://.godot/exported/133200997/export-3a9e8c159b6069ccda048b099548234c-trailcoat.res
+Completed load for: 'res://resources/build_effects/equipment/trailcoat.tres' remapped 'res://.godot/exported/133200997/export-3a9e8c159b6069ccda048b099548234c-trailcoat.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-e55442551447a395ae96f35815649205-traveler_charm.res remapped: res://.godot/exported/133200997/export-e55442551447a395ae96f35815649205-traveler_charm.res
+Completed load for: 'res://resources/build_effects/equipment/traveler_charm.tres' remapped 'res://.godot/exported/133200997/export-e55442551447a395ae96f35815649205-traveler_charm.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-77420f56bb97ca913af8617d733cb28b-traveler_vest.res remapped: res://.godot/exported/133200997/export-77420f56bb97ca913af8617d733cb28b-traveler_vest.res
+Completed load for: 'res://resources/build_effects/equipment/traveler_vest.tres' remapped 'res://.godot/exported/133200997/export-77420f56bb97ca913af8617d733cb28b-traveler_vest.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-5f7bd5a1afc4b05bbd54817d8b9f5f53-warden_mail.res remapped: res://.godot/exported/133200997/export-5f7bd5a1afc4b05bbd54817d8b9f5f53-warden_mail.res
+Completed load for: 'res://resources/build_effects/equipment/warden_mail.tres' remapped 'res://.godot/exported/133200997/export-5f7bd5a1afc4b05bbd54817d8b9f5f53-warden_mail.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-3e78d9acae8f17f1ce3585f246221e3f-arena_epic_ward.res remapped: res://.godot/exported/133200997/export-3e78d9acae8f17f1ce3585f246221e3f-arena_epic_ward.res
+Completed load for: 'res://resources/loot_progression/equipment/arena_epic_ward.tres' remapped 'res://.godot/exported/133200997/export-3e78d9acae8f17f1ce3585f246221e3f-arena_epic_ward.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-5a30595f7637436ca25cbdebf9d612c8-arena_legendary_ward.res remapped: res://.godot/exported/133200997/export-5a30595f7637436ca25cbdebf9d612c8-arena_legendary_ward.res
+Completed load for: 'res://resources/loot_progression/equipment/arena_legendary_ward.tres' remapped 'res://.godot/exported/133200997/export-5a30595f7637436ca25cbdebf9d612c8-arena_legendary_ward.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-64da7e88b0530249c39f8a923171af3f-class_set_archer_feet.res remapped: res://.godot/exported/133200997/export-64da7e88b0530249c39f8a923171af3f-class_set_archer_feet.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_archer_feet.tres' remapped 'res://.godot/exported/133200997/export-64da7e88b0530249c39f8a923171af3f-class_set_archer_feet.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-52c735d830e0ab6d998106edff51812a-class_set_archer_head.res remapped: res://.godot/exported/133200997/export-52c735d830e0ab6d998106edff51812a-class_set_archer_head.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_archer_head.tres' remapped 'res://.godot/exported/133200997/export-52c735d830e0ab6d998106edff51812a-class_set_archer_head.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-d3158493c903fbf457fdd9d055411f03-class_set_archer_torso.res remapped: res://.godot/exported/133200997/export-d3158493c903fbf457fdd9d055411f03-class_set_archer_torso.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_archer_torso.tres' remapped 'res://.godot/exported/133200997/export-d3158493c903fbf457fdd9d055411f03-class_set_archer_torso.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-714dc7e2f4ada2d31620be005642a22f-class_set_berserker_feet.res remapped: res://.godot/exported/133200997/export-714dc7e2f4ada2d31620be005642a22f-class_set_berserker_feet.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_berserker_feet.tres' remapped 'res://.godot/exported/133200997/export-714dc7e2f4ada2d31620be005642a22f-class_set_berserker_feet.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-cfb86d9b54be443d55840a22881a4dd1-class_set_berserker_head.res remapped: res://.godot/exported/133200997/export-cfb86d9b54be443d55840a22881a4dd1-class_set_berserker_head.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_berserker_head.tres' remapped 'res://.godot/exported/133200997/export-cfb86d9b54be443d55840a22881a4dd1-class_set_berserker_head.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-563b2aed7e3d4eecb7b7e999cfebd3b0-class_set_berserker_torso.res remapped: res://.godot/exported/133200997/export-563b2aed7e3d4eecb7b7e999cfebd3b0-class_set_berserker_torso.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_berserker_torso.tres' remapped 'res://.godot/exported/133200997/export-563b2aed7e3d4eecb7b7e999cfebd3b0-class_set_berserker_torso.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-3a44ee7c4dc61cb1109ddc14d76eed3d-class_set_defender_feet.res remapped: res://.godot/exported/133200997/export-3a44ee7c4dc61cb1109ddc14d76eed3d-class_set_defender_feet.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_defender_feet.tres' remapped 'res://.godot/exported/133200997/export-3a44ee7c4dc61cb1109ddc14d76eed3d-class_set_defender_feet.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-e9f09f3f0003b3bff7c5f883e42ea4bb-class_set_defender_head.res remapped: res://.godot/exported/133200997/export-e9f09f3f0003b3bff7c5f883e42ea4bb-class_set_defender_head.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_defender_head.tres' remapped 'res://.godot/exported/133200997/export-e9f09f3f0003b3bff7c5f883e42ea4bb-class_set_defender_head.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-1a282f6132cc3d626861e861e204e15c-class_set_defender_torso.res remapped: res://.godot/exported/133200997/export-1a282f6132cc3d626861e861e204e15c-class_set_defender_torso.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_defender_torso.tres' remapped 'res://.godot/exported/133200997/export-1a282f6132cc3d626861e861e204e15c-class_set_defender_torso.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-2dded5aedf3067da67ab7b9bfd5fb1a0-class_set_elementalist_feet.res remapped: res://.godot/exported/133200997/export-2dded5aedf3067da67ab7b9bfd5fb1a0-class_set_elementalist_feet.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_elementalist_feet.tres' remapped 'res://.godot/exported/133200997/export-2dded5aedf3067da67ab7b9bfd5fb1a0-class_set_elementalist_feet.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-005df3249411adc34f01395acc0b22a0-class_set_elementalist_head.res remapped: res://.godot/exported/133200997/export-005df3249411adc34f01395acc0b22a0-class_set_elementalist_head.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_elementalist_head.tres' remapped 'res://.godot/exported/133200997/export-005df3249411adc34f01395acc0b22a0-class_set_elementalist_head.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-9593d26694a58cab77cb1f8d78764e5b-class_set_elementalist_torso.res remapped: res://.godot/exported/133200997/export-9593d26694a58cab77cb1f8d78764e5b-class_set_elementalist_torso.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_elementalist_torso.tres' remapped 'res://.godot/exported/133200997/export-9593d26694a58cab77cb1f8d78764e5b-class_set_elementalist_torso.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-495a7d462c1d68061eea3f3f65bf2d22-class_set_hunter_feet.res remapped: res://.godot/exported/133200997/export-495a7d462c1d68061eea3f3f65bf2d22-class_set_hunter_feet.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_hunter_feet.tres' remapped 'res://.godot/exported/133200997/export-495a7d462c1d68061eea3f3f65bf2d22-class_set_hunter_feet.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-a95a9f38528a7de5f19ffe0f0d9e2c41-class_set_hunter_head.res remapped: res://.godot/exported/133200997/export-a95a9f38528a7de5f19ffe0f0d9e2c41-class_set_hunter_head.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_hunter_head.tres' remapped 'res://.godot/exported/133200997/export-a95a9f38528a7de5f19ffe0f0d9e2c41-class_set_hunter_head.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-43e4cfb1beb45e595aff5933b04ab815-class_set_hunter_torso.res remapped: res://.godot/exported/133200997/export-43e4cfb1beb45e595aff5933b04ab815-class_set_hunter_torso.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_hunter_torso.tres' remapped 'res://.godot/exported/133200997/export-43e4cfb1beb45e595aff5933b04ab815-class_set_hunter_torso.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-0d0c159e59c12a2b86408371abf35113-class_set_mage_feet.res remapped: res://.godot/exported/133200997/export-0d0c159e59c12a2b86408371abf35113-class_set_mage_feet.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_mage_feet.tres' remapped 'res://.godot/exported/133200997/export-0d0c159e59c12a2b86408371abf35113-class_set_mage_feet.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-58c60d0283223a07d36ee19b1ad9f8a4-class_set_mage_head.res remapped: res://.godot/exported/133200997/export-58c60d0283223a07d36ee19b1ad9f8a4-class_set_mage_head.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_mage_head.tres' remapped 'res://.godot/exported/133200997/export-58c60d0283223a07d36ee19b1ad9f8a4-class_set_mage_head.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-bdf55044039a2796a68cebe5f0310564-class_set_mage_torso.res remapped: res://.godot/exported/133200997/export-bdf55044039a2796a68cebe5f0310564-class_set_mage_torso.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_mage_torso.tres' remapped 'res://.godot/exported/133200997/export-bdf55044039a2796a68cebe5f0310564-class_set_mage_torso.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-195808e12f7e435ce84e5a4e2686d501-class_set_mg_ar_feet.res remapped: res://.godot/exported/133200997/export-195808e12f7e435ce84e5a4e2686d501-class_set_mg_ar_feet.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_mg_ar_feet.tres' remapped 'res://.godot/exported/133200997/export-195808e12f7e435ce84e5a4e2686d501-class_set_mg_ar_feet.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-f19c028d4b97ea61989920bbeb40d9bf-class_set_mg_ar_head.res remapped: res://.godot/exported/133200997/export-f19c028d4b97ea61989920bbeb40d9bf-class_set_mg_ar_head.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_mg_ar_head.tres' remapped 'res://.godot/exported/133200997/export-f19c028d4b97ea61989920bbeb40d9bf-class_set_mg_ar_head.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-7de9437017db074fb9e009fc10ed7a2e-class_set_mg_ar_torso.res remapped: res://.godot/exported/133200997/export-7de9437017db074fb9e009fc10ed7a2e-class_set_mg_ar_torso.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_mg_ar_torso.tres' remapped 'res://.godot/exported/133200997/export-7de9437017db074fb9e009fc10ed7a2e-class_set_mg_ar_torso.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-c8e203248d1e80addef61ceafb22ffab-class_set_sentinel_feet.res remapped: res://.godot/exported/133200997/export-c8e203248d1e80addef61ceafb22ffab-class_set_sentinel_feet.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_sentinel_feet.tres' remapped 'res://.godot/exported/133200997/export-c8e203248d1e80addef61ceafb22ffab-class_set_sentinel_feet.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-5fc945b4fc5a8c4c181ce88a267554b8-class_set_sentinel_head.res remapped: res://.godot/exported/133200997/export-5fc945b4fc5a8c4c181ce88a267554b8-class_set_sentinel_head.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_sentinel_head.tres' remapped 'res://.godot/exported/133200997/export-5fc945b4fc5a8c4c181ce88a267554b8-class_set_sentinel_head.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-b85b8c469f26211653cb22209f584b98-class_set_sentinel_torso.res remapped: res://.godot/exported/133200997/export-b85b8c469f26211653cb22209f584b98-class_set_sentinel_torso.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_sentinel_torso.tres' remapped 'res://.godot/exported/133200997/export-b85b8c469f26211653cb22209f584b98-class_set_sentinel_torso.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-bfd293c0ce9a0024015986642bcd0f12-class_set_spiritualist_feet.res remapped: res://.godot/exported/133200997/export-bfd293c0ce9a0024015986642bcd0f12-class_set_spiritualist_feet.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_spiritualist_feet.tres' remapped 'res://.godot/exported/133200997/export-bfd293c0ce9a0024015986642bcd0f12-class_set_spiritualist_feet.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-541113da39b21f802d7b431596bf5b87-class_set_spiritualist_head.res remapped: res://.godot/exported/133200997/export-541113da39b21f802d7b431596bf5b87-class_set_spiritualist_head.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_spiritualist_head.tres' remapped 'res://.godot/exported/133200997/export-541113da39b21f802d7b431596bf5b87-class_set_spiritualist_head.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-2c55a819b876a214ebd1f852ff768610-class_set_spiritualist_torso.res remapped: res://.godot/exported/133200997/export-2c55a819b876a214ebd1f852ff768610-class_set_spiritualist_torso.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_spiritualist_torso.tres' remapped 'res://.godot/exported/133200997/export-2c55a819b876a214ebd1f852ff768610-class_set_spiritualist_torso.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-b050838514ba8dd8051e1a2a7369cba9-class_set_swordsman_feet.res remapped: res://.godot/exported/133200997/export-b050838514ba8dd8051e1a2a7369cba9-class_set_swordsman_feet.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_swordsman_feet.tres' remapped 'res://.godot/exported/133200997/export-b050838514ba8dd8051e1a2a7369cba9-class_set_swordsman_feet.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-abb688e1fa85e0f28892fcc07f09362c-class_set_swordsman_head.res remapped: res://.godot/exported/133200997/export-abb688e1fa85e0f28892fcc07f09362c-class_set_swordsman_head.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_swordsman_head.tres' remapped 'res://.godot/exported/133200997/export-abb688e1fa85e0f28892fcc07f09362c-class_set_swordsman_head.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-34db26017ff2025e987799c81bf3aa8e-class_set_swordsman_torso.res remapped: res://.godot/exported/133200997/export-34db26017ff2025e987799c81bf3aa8e-class_set_swordsman_torso.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/class_set_swordsman_torso.tres' remapped 'res://.godot/exported/133200997/export-34db26017ff2025e987799c81bf3aa8e-class_set_swordsman_torso.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-83b28abe4fef825dc2c0ee564499eff0-elementalist_prism.res remapped: res://.godot/exported/133200997/export-83b28abe4fef825dc2c0ee564499eff0-elementalist_prism.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/elementalist_prism.tres' remapped 'res://.godot/exported/133200997/export-83b28abe4fef825dc2c0ee564499eff0-elementalist_prism.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-c4cb41917f9a95b5c9c2209bab78d51c-shared_axe.res remapped: res://.godot/exported/133200997/export-c4cb41917f9a95b5c9c2209bab78d51c-shared_axe.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/shared_axe.tres' remapped 'res://.godot/exported/133200997/export-c4cb41917f9a95b5c9c2209bab78d51c-shared_axe.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-562c87901aad0aa9bd58d1c35f5fe6e6-shared_bow.res remapped: res://.godot/exported/133200997/export-562c87901aad0aa9bd58d1c35f5fe6e6-shared_bow.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/shared_bow.tres' remapped 'res://.godot/exported/133200997/export-562c87901aad0aa9bd58d1c35f5fe6e6-shared_bow.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-ba1a2c7657099a2776a8dcfb992e18a7-shared_set_high_feet.res remapped: res://.godot/exported/133200997/export-ba1a2c7657099a2776a8dcfb992e18a7-shared_set_high_feet.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/shared_set_high_feet.tres' remapped 'res://.godot/exported/133200997/export-ba1a2c7657099a2776a8dcfb992e18a7-shared_set_high_feet.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-bcb535227adcbe355025765fc72aa127-shared_set_high_head.res remapped: res://.godot/exported/133200997/export-bcb535227adcbe355025765fc72aa127-shared_set_high_head.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/shared_set_high_head.tres' remapped 'res://.godot/exported/133200997/export-bcb535227adcbe355025765fc72aa127-shared_set_high_head.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-e40f26d886f546c987f8b82d79e7cc83-shared_set_high_torso.res remapped: res://.godot/exported/133200997/export-e40f26d886f546c987f8b82d79e7cc83-shared_set_high_torso.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/shared_set_high_torso.tres' remapped 'res://.godot/exported/133200997/export-e40f26d886f546c987f8b82d79e7cc83-shared_set_high_torso.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-d112b578f7f1e188182a823d6af48bda-shared_set_low_feet.res remapped: res://.godot/exported/133200997/export-d112b578f7f1e188182a823d6af48bda-shared_set_low_feet.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/shared_set_low_feet.tres' remapped 'res://.godot/exported/133200997/export-d112b578f7f1e188182a823d6af48bda-shared_set_low_feet.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-d921012a9f87a6f57c06f3e67eac04e3-shared_set_low_head.res remapped: res://.godot/exported/133200997/export-d921012a9f87a6f57c06f3e67eac04e3-shared_set_low_head.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/shared_set_low_head.tres' remapped 'res://.godot/exported/133200997/export-d921012a9f87a6f57c06f3e67eac04e3-shared_set_low_head.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-195fbedb95b76e5c0a7b8ba4da057639-shared_set_low_torso.res remapped: res://.godot/exported/133200997/export-195fbedb95b76e5c0a7b8ba4da057639-shared_set_low_torso.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/shared_set_low_torso.tres' remapped 'res://.godot/exported/133200997/export-195fbedb95b76e5c0a7b8ba4da057639-shared_set_low_torso.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-8b8ff2ce97ab5c8f3d7ea91a958dc3ca-shared_set_mid_feet.res remapped: res://.godot/exported/133200997/export-8b8ff2ce97ab5c8f3d7ea91a958dc3ca-shared_set_mid_feet.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/shared_set_mid_feet.tres' remapped 'res://.godot/exported/133200997/export-8b8ff2ce97ab5c8f3d7ea91a958dc3ca-shared_set_mid_feet.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-6d042696cd079fcd51d46a259d156cde-shared_set_mid_head.res remapped: res://.godot/exported/133200997/export-6d042696cd079fcd51d46a259d156cde-shared_set_mid_head.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/shared_set_mid_head.tres' remapped 'res://.godot/exported/133200997/export-6d042696cd079fcd51d46a259d156cde-shared_set_mid_head.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-2e219e984b804e4ae44c373a0d3019c0-shared_set_mid_torso.res remapped: res://.godot/exported/133200997/export-2e219e984b804e4ae44c373a0d3019c0-shared_set_mid_torso.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/shared_set_mid_torso.tres' remapped 'res://.godot/exported/133200997/export-2e219e984b804e4ae44c373a0d3019c0-shared_set_mid_torso.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-89f9bd9b0e7b6c58a9a9f1f5fe28fb53-shared_shield.res remapped: res://.godot/exported/133200997/export-89f9bd9b0e7b6c58a9a9f1f5fe28fb53-shared_shield.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/shared_shield.tres' remapped 'res://.godot/exported/133200997/export-89f9bd9b0e7b6c58a9a9f1f5fe28fb53-shared_shield.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-7297a0338961824c3287f9b2afeb7e84-shared_sword.res remapped: res://.godot/exported/133200997/export-7297a0338961824c3287f9b2afeb7e84-shared_sword.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/shared_sword.tres' remapped 'res://.godot/exported/133200997/export-7297a0338961824c3287f9b2afeb7e84-shared_sword.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-2a9908d29e686951c6823e912cdcf044-shared_wand.res remapped: res://.godot/exported/133200997/export-2a9908d29e686951c6823e912cdcf044-shared_wand.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/shared_wand.tres' remapped 'res://.godot/exported/133200997/export-2a9908d29e686951c6823e912cdcf044-shared_wand.res' at thread -1
+Loading resource: res://.godot/exported/133200997/export-cea6b6142aea11843c05c0cddf8253e8-spiritualist_prayer_beads.res remapped: res://.godot/exported/133200997/export-cea6b6142aea11843c05c0cddf8253e8-spiritualist_prayer_beads.res
+Completed load for: 'res://resources/e06_inventory_content/equipment/spiritualist_prayer_beads.tres' remapped 'res://.godot/exported/133200997/export-cea6b6142aea11843c05c0cddf8253e8-spiritualist_prayer_beads.res' at thread -1
+XR: Clearing primary interface
+XR: Removed interface "Native mobile"
+XR: Removed interface "OpenXR"
+Accessibility: window 0 adapter destroyed.

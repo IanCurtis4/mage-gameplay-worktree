@@ -1,0 +1,18 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F10_GRID_WORLD_CHECK stretch_is_a_valid_cell true
+F10_GRID_WORLD_CHECK support_is_the_stretch true
+F10_GRID_WORLD_CHECK body_on_walkable_ground true
+F10_GRID_WORLD_CHECK body_refused_on_and_near_steep_ground true
+F10_GRID_WORLD_CHECK segment_over_the_ridge_is_walkable true
+F10_GRID_WORLD_CHECK segment_through_the_bump_is_not true
+F10_GRID_WORLD_CHECK ridge_blocks_sight true
+F10_GRID_WORLD_CHECK open_ground_and_planar_slope_do_not true
+F10_GRID_WORLD_CHECK attack_sight_follows_the_ground true
+F10_GRID_WORLD_CHECK ground_line_follows_the_support true
+F10_GRID_WORLD_CHECK trace_stops_before_steep_ground true
+F10_GRID_WORLD_CHECK pick_lands_on_the_support true
+F10_GRID_WORLD_CHECK region_on_the_stretch true
+F10_GRID_WORLD_CHECK overlap_uses_the_height_range true
+F10_GRID_WORLD_CHECK shadow_lies_on_the_support true
+F10_GRID_WORLD_RESULT {"checks":[{"id":"stretch_is_a_valid_cell","ok":true},{"id":"support_is_the_stretch","ok":true},{"id":"body_on_walkable_ground","ok":true},{"id":"body_refused_on_and_near_steep_ground","ok":true},{"id":"segment_over_the_ridge_is_walkable","ok":true},{"id":"segment_through_the_bump_is_not","ok":true},{"id":"ridge_blocks_sight","ok":true},{"id":"open_ground_and_planar_slope_do_not","ok":true},{"id":"attack_sight_follows_the_ground","ok":true},{"id":"ground_line_follows_the_support","ok":true},{"id":"trace_stops_before_steep_ground","ok":true},{"id":"pick_lands_on_the_support","ok":true},{"id":"region_on_the_stretch","ok":true},{"id":"overlap_uses_the_height_range","ok":true},{"id":"shadow_lies_on_the_support","ok":true}],"count":15,"ok":true}
