@@ -1124,13 +1124,19 @@ func _configure_stage_minimap(force: bool = false) -> void:
 	if not is_instance_valid(stage_minimap) or not is_instance_valid(player): return
 	var world := player.world_motion.geometry if player.world_motion != null else null
 	if world != null:
-		if not force and stage_minimap.has_meta("geometry") and stage_minimap.get_meta("geometry") == world and stage_minimap.get_meta("configuration", -1) == world.configuration_revision: return
+		var same_map: bool = not force and stage_minimap.has_meta("geometry") and stage_minimap.get_meta("geometry") == world and stage_minimap.get_meta("configuration", -1) == world.configuration_revision
+		if same_map and stage_minimap.get_meta("revision",-1) == world.geometry_revision: return
 		var snapshot := world.presentation_snapshot(world.geometry_revision)
 		if not snapshot["ok"]: return
-		var data := StageMinimapData.world_map(snapshot["data"])
-		stage_minimap.configure_map(data["bounds"], data["surfaces"], data["obstacles"])
+		if same_map:
+			stage_minimap.update_obstacles(StageMinimapData.world_obstacles(snapshot["data"]["volumes"]))
+			stage_minimap.set_meta("revision",world.geometry_revision)
+			return
+		var data := StageMinimapData.world_map(snapshot["data"],float(player.world_motion.profile().height))
+		stage_minimap.configure_map(data["bounds"], data["surfaces"], data["obstacles"], data["terrain"])
 		stage_minimap.set_meta("geometry", world)
 		stage_minimap.set_meta("configuration", world.configuration_revision)
+		stage_minimap.set_meta("revision",world.geometry_revision)
 	elif is_instance_valid(arena_view):
 		if not force and stage_minimap.has_meta("flat_map"): return
 		var data := StageMinimapData.flat_map(arena_view.bounds, arena_view.obstacles)

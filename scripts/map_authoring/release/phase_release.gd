@@ -11,6 +11,7 @@ const Canonical = preload("res://scripts/core/expedition/generation/canonical.gd
 const FOLDER := "res://data/expedition/phases"
 const REVISION := "authored_phase_v2"
 const MAX_MAPS := 8
+const BoundedPreparation = preload("res://scripts/core/bounded_preparation.gd")
 const STAGE_KEYS := ["stage_id","from_stage","to_stage"]
 
 static func fail(code: String, id: String = "") -> Dictionary:
@@ -49,19 +50,23 @@ static func phases(folder: String = FOLDER) -> Array:
 	return result
 
 ## Runtime only: prepares every map like the gameplay test, then composes.
-static func prepare(phase_id: String, listing: Dictionary = {}, folder: String = FOLDER) -> Dictionary:
+static func prepare(phase_id: String, listing: Dictionary = {}, folder: String = FOLDER, lanes: int = 2) -> Dictionary:
 	var read := definition(phase_id,folder)
 	if not read.ok: return read
 	var prepared: Array = []; var metrics: Array = []
-	for item: Dictionary in read.definition.maps:
-		var started := Time.get_ticks_usec()
-		var map := MapRelease.prepare(item.package_id,listing)
+	var jobs := BoundedPreparation.run(read.definition.maps,_prepare_map.bind(listing),lanes)
+	for row: Dictionary in jobs.rows:
+		var item: Dictionary = read.definition.maps[row.index]
+		var map: Dictionary = row.built
 		if not map.ok: return map
 		prepared.append(map)
-		metrics.append({"package_id":item.package_id,"prepare_ms":(Time.get_ticks_usec()-started)/1000.0,"details":map.get("prepare_timings",{}).duplicate(true)})
+		metrics.append({"package_id":item.package_id,"prepare_ms":row.prepare_ms,"details":map.get("prepare_timings",{}).duplicate(true)})
 	var composed := compose(read.definition,prepared)
-	if composed.ok: composed["metrics"] = metrics
+	if composed.ok: composed["metrics"] = metrics; composed["preparation_lanes"] = jobs.lanes
 	return composed
+
+static func _prepare_map(item: Dictionary, listing: Dictionary) -> Dictionary:
+	return MapRelease.prepare(item.package_id,listing)
 
 ## Pure: prepared[i] is MapRelease.prepare of definition.maps[i].
 static func compose(phase: Dictionary, prepared: Array) -> Dictionary:

@@ -18,6 +18,7 @@ func _initialize() -> void:
 
 func _run() -> void:
 	_check_world_map()
+	_check_terrain()
 	_check_flat_map()
 	_check_actor_markers()
 	_check_camera_preference()
@@ -60,6 +61,27 @@ func _projected(vertices: PackedVector3Array) -> PackedVector2Array:
 	for vertex: Vector3 in vertices:
 		points.append(ProjectionMath.project(vertex))
 	return points
+
+func _check_terrain() -> void:
+	# Four flat corner samples hide a sharp interior peak from the old outline.
+	var grid := {"origin_xz":[0.0,0.0],"sample_spacing":20.0,"columns":3,"rows":3,"heights":[0.0,0.0,0.0,0.0,100.0,0.0,0.0,0.0,0.0]}
+	var view: Dictionary = MinimapData.HeightGrid.view(grid)
+	var cell := {"vertices":MinimapData.HeightGrid.corners(view),"height_grid":grid,"headroom":80.0}
+	var snapshot := {"surfaces":[cell],"volumes":[]}
+	var unchanged := var_to_bytes(snapshot)
+	var result := MinimapData.world_map(snapshot,40.0)
+	check(result.terrain.vertices.size() == 24,"all eight real terrain triangles are represented")
+	var expected_walk := 0
+	for i: int in 8:
+		if MinimapData.HeightGrid.triangle_walkable(view,i): expected_walk += 1
+	check(result.terrain.walkable == expected_walk and result.terrain.steep == 8-expected_walk,"slope colors consume canonical triangle walkability")
+	check(result.terrain.steep > 0 and result.terrain.walkable > 0,"fixture distinguishes steep and walkable terrain within one outline")
+	check(result.terrain.vertices.has(ProjectionMath.project(Vector3(20,100,20))),"interior summit uses its real height in projection")
+	check(_contains_all(result.bounds,result.terrain.vertices),"bounds include interior peaks outside old corner outline")
+	check(result.terrain.colors.size() == result.terrain.vertices.size(),"every terrain vertex has a semantic shaded color")
+	check(var_to_bytes(snapshot) == unchanged,"minimap does not mutate canonical terrain")
+	var low_ceiling := MinimapData.world_map(snapshot,100.0)
+	check(low_ceiling.terrain.walkable == 0 and low_ceiling.terrain.blocked == expected_walk,"low headroom is displayed as blocked for player height")
 
 func _contains_all(bounds: Rect2, points: PackedVector2Array) -> bool:
 	for point: Vector2 in points:

@@ -6,6 +6,7 @@ const GroundShadow = preload("res://scripts/world/ground_shadow.gd")
 const ProjectionMath = preload("res://scripts/world/expedition_projection.gd")
 var contact_shadows_enabled := true
 var _ground_shadow_cache := {}
+var _presentation_key: Array = []
 
 const MAX_SLOW_FRACTION := 0.50
 const MAX_WEAKEN_FRACTION := 0.50
@@ -93,6 +94,7 @@ func set_animation_kind(kind: StringName) -> void:
 func _animate_action(action: StringName, direction: Vector2, duration: float) -> void:
 	if character_animation != null:
 		character_animation.play(action, direction, duration)
+		queue_redraw()
 
 func set_pilot_sprite(texture: Texture2D) -> void:
 	sprite_texture = texture
@@ -386,6 +388,15 @@ func _process(delta: float) -> void:
 		return
 	if character_animation != null:
 		character_animation.observe(global_position, delta)
+	var anchor := world_point()
+	var key: Array = [character_animation.draw_key() if character_animation != null else [],
+		anchor.position if anchor != null else global_position,anchor.surface_id if anchor != null else "",
+		world_motion.geometry.configuration_revision if world_motion != null else -1,
+		world_motion.geometry.geometry_revision if world_motion != null else -1,
+		health.current_hp if health != null else 0.0,health.max_hp if health != null else 0.0,
+		sprite_visual_scale,contact_shadows_enabled]
+	if key != _presentation_key or body_drawer.is_valid():
+		_presentation_key = key
 		queue_redraw()
 	advance_statuses(delta)
 	if _flash_time > 0.0:
@@ -498,6 +509,7 @@ func _on_health_died(_actor_id: int) -> void:
 	queue_redraw()
 
 func _sync_burn_display() -> void:
+	var was_burning := is_burning()
 	burn_remaining = 0.0
 	burn_tick_remaining = 0.0
 	for stream: Dictionary in burn_streams.values():
@@ -505,6 +517,7 @@ func _sync_burn_display() -> void:
 		burn_tick_remaining = float(stream["tick_remaining"])
 	if burn_streams.is_empty():
 		burn_request = null
-	queue_redraw()
+	if was_burning != is_burning() or berserker_wound_visual_stacks > 0:
+		queue_redraw()
 func _exit_tree() -> void:
 	if world_motion != null: world_motion.release()

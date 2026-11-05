@@ -46,6 +46,15 @@ func _run() -> void:
 	check(minimap._markers.enemies.size() == 1 and minimap._background.surfaces[0].size() == 3 and minimap._background.obstacles[0].size() == 3, "presentation owns copies of caller data")
 	minimap.configure_map(Rect2(), [], [])
 	check(minimap._markers.enemies.is_empty() and not minimap._markers.has_player, "new map clears old markers")
+	var terrain := {"vertices":PackedVector2Array([Vector2.ZERO,Vector2.RIGHT,Vector2.DOWN]),"colors":PackedColorArray([Color.GREEN,Color.GREEN,Color.BROWN])}
+	minimap.configure_map(bounds,[],[],terrain)
+	var mesh: ArrayMesh = minimap._background.terrain_mesh
+	check(mesh != null and mesh.surface_get_array_len(0) == 3,"terrain is installed as one vertex-colored mesh")
+	minimap.update_markers(Vector2.ZERO,Vector2.RIGHT,PackedVector2Array())
+	minimap.update_obstacles([PackedVector2Array([Vector2.ZERO,Vector2.RIGHT,Vector2.DOWN])])
+	check(minimap._background.terrain_mesh == mesh and minimap._background.obstacles.size() == 1,"markers and temporary obstacles reuse the static terrain mesh")
+	minimap.configure_map(Rect2(),[],[])
+	check(minimap._background.terrain_mesh == null,"changing stage clears the previous terrain resource")
 	check(minimap.mouse_filter == Control.MOUSE_FILTER_STOP and minimap._background.mouse_filter == Control.MOUSE_FILTER_STOP and minimap._markers.mouse_filter == Control.MOUSE_FILTER_STOP, "panel and map consume pointer input")
 	check(minimap._background.custom_minimum_size == canvas, "map has 216 logical unit minimum square")
 	var steps: Array[int] = []

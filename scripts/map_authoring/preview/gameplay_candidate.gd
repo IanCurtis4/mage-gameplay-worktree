@@ -24,6 +24,14 @@ static func create(kind: String, value: Dictionary, current_source_hash: String)
 	if kind not in ["map","population","patrol"]: return fail("candidate_kind")
 	if not ExpeditionCanonical.valid(value) or var_to_bytes(value).size() > MAX_BYTES or not package_valid(kind,value): return fail("candidate_invalid")
 	if value.source_hash != current_source_hash: return fail("candidate_stale")
+	return _create_approved(kind,value,current_source_hash)
+
+## Private immediate handoff, only after create() or the pinned release loader
+## has validated these exact bytes. No caller-supplied trust flag or cache.
+static func _create_approved(kind: String, value: Dictionary, current_source_hash: String) -> Dictionary:
+	# The loader has its own larger transport limit. Preserve the candidate's
+	# existing 5 MiB admission boundary even on this closed handoff.
+	if var_to_bytes(value).size() > MAX_BYTES: return fail("candidate_invalid")
 	var candidate := {"format_version":VERSION,"kind":kind,"source_hash":current_source_hash,"package":value.duplicate(true)}
 	candidate["candidate_hash"] = ExpeditionCanonical.digest(candidate)
 	return {"ok":true,"candidate":candidate}
@@ -43,10 +51,21 @@ static func map_package(candidate: Dictionary) -> Dictionary:
 	return {}
 
 static func prepare(candidate: Dictionary) -> Dictionary:
+	if Engine.is_editor_hint(): return fail("runtime_required")
+	var started := Time.get_ticks_usec()
+	if not valid(candidate): return fail("candidate_invalid")
+	var validation_ms := (Time.get_ticks_usec()-started)/1000.0
+	var result := _prepare_approved(candidate)
+	if result.ok: result.prepare_timings["validate_ms"] = validation_ms
+	return result
+
+## All geometry/admission checks below still run; only repeated validation of
+## the exact package just returned by the loader is avoided.
+static func _prepare_approved(candidate: Dictionary) -> Dictionary:
 	var timings: Dictionary = {}
 	var stamp := Time.get_ticks_usec()
 	if Engine.is_editor_hint(): return fail("runtime_required")
-	if not valid(candidate): return fail("candidate_invalid")
+	if var_to_bytes(candidate).size() > MAX_BYTES: return fail("candidate_invalid")
 	stamp = _prepare_stamp(timings,"validate_ms",stamp)
 	var value: Dictionary = candidate.package
 	var raw: Dictionary = value.manifest.duplicate(true)

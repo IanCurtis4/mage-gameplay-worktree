@@ -85,6 +85,14 @@ func observe(position: Vector2, delta: float) -> void:
 func play(action: StringName, direction: Vector2 = Vector2.ZERO, duration: float = 0.25) -> void:
 	state.trigger(action, direction, duration)
 
+## Every state used by the atlas and equipment drawers, independent of the
+## continuous presentation clock. Equal keys produce identical draw commands.
+func draw_key() -> Array:
+	return [state.frame_index(),state.flip_h,state.dead,state.hurt_remaining > 0.0,
+		state.action_remaining > 0.0,state.action,
+		state.action_duration > 0.0 and 1.0-state.action_remaining/state.action_duration < 0.75,
+		atlas,_equipment_visual.duplicate()]
+
 func draw_on(canvas: CanvasItem, tint: Color = Color.WHITE, visual_scale: float = 1.0) -> void:
 	if atlas == null:
 		return

@@ -11,11 +11,28 @@ class MapBackground extends Control:
 	var bounds := Rect2()
 	var surfaces: Array[PackedVector2Array] = []
 	var obstacles: Array[PackedVector2Array] = []
+	var terrain_mesh: ArrayMesh
+
+	func set_terrain(value: Dictionary) -> void:
+		terrain_mesh = null
+		var vertices: PackedVector2Array = value.get("vertices",PackedVector2Array())
+		var colors: PackedColorArray = value.get("colors",PackedColorArray())
+		if vertices.size() < 3 or vertices.size() != colors.size(): return
+		var arrays: Array = []; arrays.resize(Mesh.ARRAY_MAX)
+		arrays[Mesh.ARRAY_VERTEX] = vertices; arrays[Mesh.ARRAY_COLOR] = colors
+		terrain_mesh = ArrayMesh.new()
+		terrain_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
 
 	func _draw() -> void:
 		draw_rect(Rect2(Vector2.ZERO, size), Color("161e26"))
-		for polygon in surfaces:
-			_draw_shape(polygon, Color("667b74"))
+		if terrain_mesh != null:
+			var extent := maxf(bounds.size.x,bounds.size.y)
+			var factor := maxf(0.0,minf(size.x,size.y)-2.0*StageMinimap.MARGIN)/maxf(0.000001,extent)
+			draw_set_transform(StageMinimap.map_point(bounds,Vector2.ZERO,size),0.0,Vector2.ONE*factor)
+			draw_mesh(terrain_mesh,null)
+			draw_set_transform(Vector2.ZERO,0.0,Vector2.ONE)
+		else:
+			for polygon in surfaces: _draw_shape(polygon, Color("667b74"))
 		for polygon in obstacles:
 			_draw_shape(polygon, Color("303b42"))
 
@@ -69,7 +86,7 @@ func _init() -> void:
 	_background.custom_minimum_size = Vector2(MAP_SIZE, MAP_SIZE)
 	_background.mouse_filter = Control.MOUSE_FILTER_STOP
 	_background.clip_contents = true
-	_background.tooltip_text = "Mapa inteiro. Vermelho: inimigos vivos; dourado: você.\nUse a roda sobre o cenário para aproximar ou afastar a câmera."
+	_background.tooltip_text = "Mapa inteiro. Verde: terreno caminhável; cobre: íngreme; escuro: bloqueio.\nRelevo claro indica maior altura. Passagens ainda dependem do corpo e da rota.\nVermelho: inimigos vivos; dourado: você. Roda sobre o cenário: zoom."
 	centering.add_child(_background)
 	_markers = MapMarkers.new()
 	_markers.name = "Markers"
@@ -80,6 +97,10 @@ func _init() -> void:
 	legend.text = "▲ Você   ● Inimigos"
 	legend.add_theme_font_size_override("font_size", 12)
 	column.add_child(legend)
+	var terrain_legend := Label.new()
+	terrain_legend.text = "Verde: chão · Cobre: íngreme"
+	terrain_legend.add_theme_font_size_override("font_size",11)
+	column.add_child(terrain_legend)
 	var controls := HBoxContainer.new()
 	controls.alignment = BoxContainer.ALIGNMENT_CENTER
 	column.add_child(controls)
@@ -108,10 +129,11 @@ static func map_point(bounds: Rect2, point: Vector2, canvas_size: Vector2) -> Ve
 	var scale_factor := maxf(0.0, side - 2.0 * MARGIN) / extent if extent > 0.000001 else 0.0
 	return canvas_size * 0.5 + (point - rect.get_center()) * scale_factor
 
-func configure_map(bounds: Rect2, surfaces: Array[PackedVector2Array], obstacles: Array[PackedVector2Array]) -> void:
+func configure_map(bounds: Rect2, surfaces: Array[PackedVector2Array], obstacles: Array[PackedVector2Array], terrain: Dictionary = {}) -> void:
 	_background.bounds = bounds
 	_background.surfaces = surfaces.duplicate(true)
 	_background.obstacles = obstacles.duplicate(true)
+	_background.set_terrain(terrain)
 	_markers.bounds = bounds
 	_markers.enemies = PackedVector2Array()
 	_markers.has_player = false
@@ -126,6 +148,12 @@ func update_markers(player_point: Vector2, player_heading: Vector2, enemies: Pac
 	_markers.enemies = enemies.duplicate()
 	_markers.has_player = true
 	_markers.queue_redraw()
+
+## Temporary geometry changes replace only the obstacle overlay. The terrain
+## mesh remains the same GPU resource until the stage is reconfigured.
+func update_obstacles(obstacles: Array[PackedVector2Array]) -> void:
+	_background.obstacles = obstacles.duplicate(true)
+	_background.queue_redraw()
 
 func set_camera_zoom(value: float) -> void:
 	_zoom_reset.text = "%d%%" % roundi(value * 100.0)

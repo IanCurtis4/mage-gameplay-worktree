@@ -71,7 +71,8 @@
     ],
     "omitted": {
       "contact_shadows_enabled": "local presentation preference; defaults to enabled on restore",
-      "_ground_shadow_cache": "derived receiver mesh and process-local geometry epoch; rebuilt from restored world support"
+      "_ground_shadow_cache": "derived receiver mesh and process-local geometry epoch; rebuilt from restored world support",
+      "_presentation_key": "derived draw-command inputs; empty after restore, rebuilt without changing animation or gameplay clocks"
     }
   },
   "res://scripts/actors/enemy_actor.gd": {

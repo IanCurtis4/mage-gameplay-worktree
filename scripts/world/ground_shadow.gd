@@ -5,9 +5,12 @@ extends RefCounted
 const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
 const Patch = preload("res://scripts/core/expedition/spatial/world_support_patch.gd")
 const HeightGrid = preload("res://scripts/core/expedition/spatial/world_height_grid.gd")
+const ProjectionMath = preload("res://scripts/world/expedition_projection.gd")
 const EPS := Kernel.EPSILON
 const MAX_RECEIVERS := 128
 static var _texture: GradientTexture2D
+const MAX_FLAT_MESHES := 128
+static var _flat_meshes: Dictionary = {}
 
 static func texture() -> Texture2D:
 	if _texture == null:
@@ -103,11 +106,53 @@ static func attach(sprite: Sprite2D, anchor: Vector3, radii: Vector2, index: Dic
 
 static func draw_on(canvas: CanvasItem, anchor: Vector3, radii: Vector2, index: Dictionary, surface_id: String, project: Callable, cache: Dictionary, epoch: Array) -> bool:
 	if cache.get("anchor") != anchor or cache.get("radii") != radii or cache.get("surface_id") != surface_id or cache.get("epoch") != epoch:
-		var built := mesh_data(anchor,radii,index,surface_id,project)
-		cache.clear(); cache["anchor"] = anchor; cache["radii"] = radii; cache["surface_id"] = surface_id; cache["epoch"] = epoch.duplicate()
-		if built.ok: cache["mesh"] = mesh(built)
+		if not _flat_cached(anchor,radii,index,surface_id,project,cache,epoch):
+			var built := mesh_data(anchor,radii,index,surface_id,project)
+			cache.clear(); cache["anchor"] = anchor; cache["radii"] = radii; cache["surface_id"] = surface_id; cache["epoch"] = epoch.duplicate()
+			if built.ok: cache["mesh"] = mesh(built)
 	if not cache.has("mesh"): return false
 	canvas.draw_mesh(cache.mesh,texture()); return true
+
+## The canonical projection is linear. A full shadow footprint on one flat
+## quad therefore has the same local mesh at every point of its inset box.
+## Clipping at edges, seams and non-flat terrain keeps the original algorithm.
+static func _flat_cached(anchor: Vector3, radii: Vector2, index: Dictionary, surface_id: String, project: Callable, cache: Dictionary, epoch: Array) -> bool:
+	if project != ProjectionMath.project or not anchor.is_finite() or not radii.is_finite() or minf(radii.x,radii.y) <= EPS or maxf(radii.x,radii.y) > 512.0: return false
+	if cache.get("radii") == radii and cache.get("surface_id") == surface_id and cache.get("epoch") == epoch and cache.has("flat_rect") and cache.get("flat_height") == anchor.y and _flat_covers(cache.flat_rect,anchor,radii):
+		cache["anchor"] = anchor
+		return true
+	if not index.get("grids",{}).has(surface_id): return false
+	var grid: Dictionary = index.grids[surface_id]
+	var t := HeightGrid.triangle_at(grid,anchor.x,anchor.z)
+	if t < 0: return false
+	var quad := t >> 1; var x := quad % int(grid.qx); var z := quad / int(grid.qx)
+	var a := HeightGrid.point(grid,x,z); var b := HeightGrid.point(grid,x+1,z)
+	var c := HeightGrid.point(grid,x+1,z+1); var d := HeightGrid.point(grid,x,z+1)
+	if anchor.y != a.y or b.y != a.y or c.y != a.y or d.y != a.y: return false
+	if not HeightGrid.triangle_walkable(grid,quad*2) or not HeightGrid.triangle_walkable(grid,quad*2+1): return false
+	var available := Rect2(Vector2(a.x,a.z),Vector2(c.x-a.x,c.z-a.z))
+	if not _flat_covers(available,anchor,radii): return false
+	cache.clear(); cache["anchor"] = anchor; cache["radii"] = radii; cache["surface_id"] = surface_id; cache["epoch"] = epoch.duplicate()
+	cache["flat_rect"] = available; cache["flat_height"] = a.y; cache["mesh"] = _flat_mesh(radii)
+	return true
+
+static func _flat_covers(rect: Rect2, anchor: Vector3, radii: Vector2) -> bool:
+	# Scalar f64 comparisons avoid rounding an inset rectangle outwards in f32.
+	return float(anchor.x)-float(radii.x) >= float(rect.position.x) and float(anchor.x)+float(radii.x) <= float(rect.end.x) and float(anchor.z)-float(radii.y) >= float(rect.position.y) and float(anchor.z)+float(radii.y) <= float(rect.end.y)
+
+static func _flat_mesh(radii: Vector2) -> ArrayMesh:
+	if _flat_meshes.has(radii): return _flat_meshes[radii]
+	var positions := PackedVector2Array()
+	for corner: Vector2 in [Vector2(-radii.x,-radii.y),Vector2(radii.x,-radii.y),radii,Vector2(-radii.x,radii.y)]:
+		positions.append(ProjectionMath.project(Vector3(corner.x,0.0,corner.y)))
+	var arrays: Array = []; arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = positions
+	arrays[Mesh.ARRAY_TEX_UV] = PackedVector2Array([Vector2.ZERO,Vector2.RIGHT,Vector2.ONE,Vector2.DOWN])
+	arrays[Mesh.ARRAY_INDEX] = PackedInt32Array([0,1,2,0,2,3])
+	var result := mesh({"arrays":arrays})
+	if _flat_meshes.size() >= MAX_FLAT_MESHES: _flat_meshes.clear()
+	_flat_meshes[radii] = result
+	return result
 
 static func draw_flat(canvas: CanvasItem, radius: float = 15.0) -> void:
 	canvas.draw_texture_rect(texture(),Rect2(Vector2(-radius,-radius*0.3),Vector2(radius*2.0,radius*0.6)),false)

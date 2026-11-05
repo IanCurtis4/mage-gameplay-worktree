@@ -123,10 +123,12 @@ static func prepare(package_id: String, listing: Dictionary = {}) -> Dictionary:
 	if not loaded.ok: return loaded
 	var load_ms := (Time.get_ticks_usec()-stamp)/1000.0
 	stamp = Time.get_ticks_usec()
-	var made := Candidate.create("patrol",loaded.package,loaded.package.source_hash)
+	# load_package already validated the full package and pinned dependencies.
+	# This private ownership transfer cannot be requested through an input flag.
+	var made := Candidate._create_approved("patrol",loaded.package,loaded.package.source_hash)
 	if not made.ok: return made
 	var create_ms := (Time.get_ticks_usec()-stamp)/1000.0
-	var prepared := Candidate.prepare(made.candidate)
+	var prepared := Candidate._prepare_approved(made.candidate)
 	if not prepared.ok: return prepared
 	prepared.prepare_timings["load_package_ms"] = load_ms
 	prepared.prepare_timings["create_candidate_ms"] = create_ms

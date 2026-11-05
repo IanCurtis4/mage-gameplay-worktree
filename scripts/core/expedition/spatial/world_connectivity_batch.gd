@@ -8,6 +8,7 @@ const REVISION := "canonical_connectivity_batch_v2"
 const LAZY_DIRECT_TARGETS := 64
 static var preparation_proof_hits := 0
 static var preparation_searches := 0
+static var _preparation_metrics_mutex := Mutex.new()
 const LIMITS := {"max_targets":4096,"max_states":131072,"max_pair_candidates":8000000,"max_edge_tests":4000000,"max_expansions":262144,"max_storage_bytes":268435456,"max_usec":240000000}
 
 ## Conservative allocation-accounting units, not an OS heap/RSS measurement.
@@ -198,10 +199,10 @@ static func execute(world: WorldGeometry, root: ExpeditionWorldPoint, targets: A
 	if not cancellation.is_valid() and budget.is_empty():
 		var proved := PreparationProofCache.try_certificate(world,start,captured,traversal,revision,ctx)
 		if not proved.is_empty():
-			preparation_proof_hits += 1
+			_preparation_metrics_mutex.lock(); preparation_proof_hits += 1; _preparation_metrics_mutex.unlock()
 			PreparationProofCache.record(world,start,captured,traversal,proved)
 			return proved
-	preparation_searches += 1
+	_preparation_metrics_mutex.lock(); preparation_searches += 1; _preparation_metrics_mutex.unlock()
 	if _reusable(shadow): return _execute_reused(world,shadow,start,captured,nodes,ids,points,sorted,traversal,revision,ctx)
 	var pairs: Array = []; var direct_edges: Dictionary = {}; var trusted_direct: Dictionary = {}; var all_direct := true
 	var lazy: bool = ids.size() > LAZY_DIRECT_TARGETS and not shadow._support_index.get("grids",{}).is_empty()
