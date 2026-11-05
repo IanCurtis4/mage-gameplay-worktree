@@ -1,0 +1,37 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_SNAPSHOT_DENSITY_CHECK real_player_actor_run_state_acquires_cut true
+F9_SNAPSHOT_DENSITY_CHECK one_thousand_cell_metadata_graph_captures_under_four_mib true
+F9_SNAPSHOT_DENSITY_CHECK capture_preserves_source_metadata_graph true
+F9_SNAPSHOT_DENSITY_CHECK snapshot_payload_validates true
+F9_SNAPSHOT_DENSITY_CHECK capture_metrics_separate_encoded_and_logical_sizes true
+F9_SNAPSHOT_DENSITY_CHECK structural_encoding_is_uncompressed_and_within_budget true
+F9_SNAPSHOT_DENSITY_CHECK structural_encoding_round_trips_exact_logical_bytes true
+F9_SNAPSHOT_DENSITY_CHECK wire_v1_expanded_dictionary_descriptors_remain_compatible true
+F9_SNAPSHOT_DENSITY_CHECK wire_v2_rejects_out_of_range_key_layout_reference true
+F9_SNAPSHOT_DENSITY_CHECK wire_v2_rejects_key_layout_arity_mismatch true
+F9_SNAPSHOT_DENSITY_CHECK wire_v2_rejects_duplicate_key_layout_entries true
+F9_SNAPSHOT_DENSITY_CHECK wire_encoding_version_ninety_nine_is_rejected true
+F9_SNAPSHOT_DENSITY_CHECK structural_encoding_rejects_dangling_container_reference true
+F9_SNAPSHOT_DENSITY_CHECK codec_writes_transport_format_two_with_encoded_byte_count true
+F9_SNAPSHOT_DENSITY_CHECK codec_v2_pack_unpack_preserves_exact_var_bytes true
+F9_SNAPSHOT_DENSITY_CHECK logical_expansion_is_opt_in_without_skipping_compact_encoding true
+F9_SNAPSHOT_DENSITY_CHECK legacy_format_one_deflate_bytes_still_restore true
+F9_SNAPSHOT_DENSITY_CHECK transport_format_three_is_rejected true
+F9_SNAPSHOT_DENSITY_CHECK truncated_transport_payload_is_rejected true
+F9_SNAPSHOT_DENSITY_CHECK transport_digest_mismatch_is_rejected true
+F9_SNAPSHOT_DENSITY_CHECK well_hashed_invalid_snapshot_payload_is_rejected true
+F9_SNAPSHOT_DENSITY_CHECK metadata_graph_restores_with_actor_and_run_state true
+F9_SNAPSHOT_DENSITY_CHECK one_thousand_cells_round_trip true
+F9_SNAPSHOT_DENSITY_CHECK typed_vector_arrays_keep_builtin_type true
+F9_SNAPSHOT_DENSITY_CHECK typed_string_int_dictionary_keeps_both_types true
+F9_SNAPSHOT_DENSITY_CHECK cyclic_metadata_reference_is_preserved true
+F9_SNAPSHOT_DENSITY_CHECK repeated_shared_container_alias_is_preserved true
+F9_SNAPSHOT_DENSITY_CHECK equal_but_distinct_arrays_stay_distinct true
+F9_SNAPSHOT_DENSITY_CHECK fingerprint_collision_does_not_merge_distinct_arrays true
+F9_SNAPSHOT_DENSITY_CHECK full_untyped_legacy_descriptors_validate_and_restore true
+F9_SNAPSHOT_DENSITY_CHECK partial_legacy_descriptor_is_rejected true
+F9_SNAPSHOT_DENSITY_CHECK malformed_typed_container_is_rejected true
+F9_SNAPSHOT_DENSITY_CHECK later_capture_does_not_mutate_earlier_payload true
+F9_SNAPSHOT_DENSITY_CHECK oversized_graph_still_fails_four_mib_budget true
+F9_SNAPSHOT_DENSITY_RESULT {"checks":[{"id":"real_player_actor_run_state_acquires_cut","ok":true},{"id":"one_thousand_cell_metadata_graph_captures_under_four_mib","ok":true},{"id":"capture_preserves_source_metadata_graph","ok":true},{"id":"snapshot_payload_validates","ok":true},{"id":"capture_metrics_separate_encoded_and_logical_sizes","ok":true},{"id":"structural_encoding_is_uncompressed_and_within_budget","ok":true},{"id":"structural_encoding_round_trips_exact_logical_bytes","ok":true},{"id":"wire_v1_expanded_dictionary_descriptors_remain_compatible","ok":true},{"id":"wire_v2_rejects_out_of_range_key_layout_reference","ok":true},{"id":"wire_v2_rejects_key_layout_arity_mismatch","ok":true},{"id":"wire_v2_rejects_duplicate_key_layout_entries","ok":true},{"id":"wire_encoding_version_ninety_nine_is_rejected","ok":true},{"id":"structural_encoding_rejects_dangling_container_reference","ok":true},{"id":"codec_writes_transport_format_two_with_encoded_byte_count","ok":true},{"id":"codec_v2_pack_unpack_preserves_exact_var_bytes","ok":true},{"id":"logical_expansion_is_opt_in_without_skipping_compact_encoding","ok":true},{"id":"legacy_format_one_deflate_bytes_still_restore","ok":true},{"id":"transport_format_three_is_rejected","ok":true},{"id":"truncated_transport_payload_is_rejected","ok":true},{"id":"transport_digest_mismatch_is_rejected","ok":true},{"id":"well_hashed_invalid_snapshot_payload_is_rejected","ok":true},{"id":"metadata_graph_restores_with_actor_and_run_state","ok":true},{"id":"one_thousand_cells_round_trip","ok":true},{"id":"typed_vector_arrays_keep_builtin_type","ok":true},{"id":"typed_string_int_dictionary_keeps_both_types","ok":true},{"id":"cyclic_metadata_reference_is_preserved","ok":true},{"id":"repeated_shared_container_alias_is_preserved","ok":true},{"id":"equal_but_distinct_arrays_stay_distinct","ok":true},{"id":"fingerprint_collision_does_not_merge_distinct_arrays","ok":true},{"id":"full_untyped_legacy_descriptors_validate_and_restore","ok":true},{"id":"partial_legacy_descriptor_is_rejected","ok":true},{"id":"malformed_typed_container_is_rejected","ok":true},{"id":"later_capture_does_not_mutate_earlier_payload","ok":true},{"id":"oversized_graph_still_fails_four_mib_budget","ok":true}],"count":34,"ok":true}

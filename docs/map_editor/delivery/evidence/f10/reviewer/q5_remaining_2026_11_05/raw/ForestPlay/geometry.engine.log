@@ -1,0 +1,26 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+F10_FOREST_PLAY_CHECK panel_lists_the_phase true 1
+F10_FOREST_PLAY_CHECK phase_enters_through_the_panel true 
+F10_FOREST_PLAY_CHECK first_field_is_installed true 
+F10_FOREST_PLAY_CHECK first_field_uses_authored_presentation true 
+F10_FOREST_PLAY_CHECK first_play_portal_starts_closed true 
+F10_FOREST_PLAY_CHECK profile_fits_its_ceiling true [568752, 575652]
+F10_FOREST_PLAY_CHECK first_far_route_crosses_supports true 
+F10_FOREST_COLD_ROUTE {"distance":10620.966796875,"elapsed_ms":94892.831,"lattices_after":35,"lattices_before":0,"ok":true,"proof_hits":14,"searches":0}
+F10_FOREST_PLAY_CHECK player_walks_the_field true [true, 399.9990234375]
+F10_FOREST_PLAY_CHECK first_field_clears true 
+F10_FOREST_PLAY_CHECK travels_to_the_second_field true [true, ""]
+F10_FOREST_PLAY_CHECK travel_keeps_authored_presentation true 
+F10_FOREST_PLAY_CHECK suspends_to_the_lobby true 
+F10_FOREST_PLAY_CHECK resumes_the_phase true 
+F10_FOREST_PLAY_CHECK resume_keeps_authored_presentation true 
+F10_FOREST_PLAY_CHECK second_field_clears true 
+F10_FOREST_PLAY_CHECK travels_to_boss_field true 
+F10_FOREST_PLAY_CHECK boss_keeps_authored_presentation true 
+F10_FOREST_PLAY_CHECK boss_field_clears true 
+F10_FOREST_PLAY_CHECK reaches_final_exit true 
+F10_FOREST_PLAY_CHECK phase_completes true 
+F10_FOREST_PLAY_TIMING {"checkpoint_base64_bytes":568196,"checkpoint_bytes":568752,"enter_ms":66235.0,"entry_terminal_frame_ms":27025.3,"longest_frame_while_preparing_ms":27025.3,"profile_bytes":575652,"resume_ms":22437.0,"slots_field_1":62,"snapshot_raw_bytes":4958640,"suspend_ms":10577.0,"travel_ms":33939.0,"walk_frames":206,"walk_mean_ms":19.4,"walk_worst_ms":94.7}
+F10_FOREST_PLAY_RESULT {"checks":[{"detail":"1","id":"panel_lists_the_phase","ok":true},{"detail":"","id":"phase_enters_through_the_panel","ok":true},{"detail":"","id":"first_field_is_installed","ok":true},{"detail":"","id":"first_field_uses_authored_presentation","ok":true},{"detail":"","id":"first_play_portal_starts_closed","ok":true},{"detail":"[568752, 575652]","id":"profile_fits_its_ceiling","ok":true},{"detail":"","id":"first_far_route_crosses_supports","ok":true},{"detail":"[true, 399.9990234375]","id":"player_walks_the_field","ok":true},{"detail":"","id":"first_field_clears","ok":true},{"detail":"[true, \"\"]","id":"travels_to_the_second_field","ok":true},{"detail":"","id":"travel_keeps_authored_presentation","ok":true},{"detail":"","id":"suspends_to_the_lobby","ok":true},{"detail":"","id":"resumes_the_phase","ok":true},{"detail":"","id":"resume_keeps_authored_presentation","ok":true},{"detail":"","id":"second_field_clears","ok":true},{"detail":"","id":"travels_to_boss_field","ok":true},{"detail":"","id":"boss_keeps_authored_presentation","ok":true},{"detail":"","id":"boss_field_clears","ok":true},{"detail":"","id":"reaches_final_exit","ok":true},{"detail":"","id":"phase_completes","ok":true}],"count":20,"ok":true}

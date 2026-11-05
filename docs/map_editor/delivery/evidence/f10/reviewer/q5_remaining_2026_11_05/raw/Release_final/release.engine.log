@@ -1,0 +1,4 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+M8_RELEASE_RESULT {"checks":[{"id":"new_release_process","ok":true},{"id":"immutable_package","ok":true},{"id":"seven_real_actors","ok":true},{"id":"patrol_bound","ok":true},{"id":"traverse_0.0","ok":true},{"id":"traverse_40.0","ok":true}],"count":6,"engine":"4.7.2-stable (official)","ok":true,"package_hash":"b6ffc4b62c6dfc7583351bc8adc24d707b42e0282c8502ac635a829e1355f024","package_id":"","source_hash":"a208ac25d0ca039b22d1a7c7c4537ee4bf04f66ee0f747bfe07cd82fd9d07870"}

@@ -1,0 +1,75 @@
+[
+  {
+    "started_utc": "2026-11-05T13:44:22.9209281Z",
+    "aborted": false,
+    "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+    "timed_out": false,
+    "ok": true,
+    "sampled_peak_working_set_bytes": 475348992,
+    "mode": "current",
+    "result": {
+      "distance": 10620.966796875,
+      "elapsed_ms": 75167.606,
+      "fields_built": 454,
+      "goal": {
+        "position": "(3368.0, 240.0, -3448.0)",
+        "stage_id": "map_preview",
+        "surface_id": "field/g_dbb3b50e59c7326b_128_16"
+      },
+      "lattices_after": 35,
+      "lattices_before": 0,
+      "mode": "current",
+      "ok": true,
+      "origin": {
+        "position": "(-4200.0, 0.0, 4000.0)",
+        "stage_id": "map_preview",
+        "surface_id": "field/g_dbb3b50e59c7326b_0_128"
+      },
+      "package_hash": "d9d52701a7a40124969d94f1770ef9f3cc3d0f609691afc02ebae48ccdf665ce",
+      "profile": {
+        "connector_kinds": [
+          "walk"
+        ],
+        "height": 32.0,
+        "profile_id": "ruins_player",
+        "radius": 20.0,
+        "revision": 1
+      },
+      "route_bytes": 9968,
+      "route_sha256": "b758f63b7a36b7bcbeb3e35f03794d6e949dea87454f6486af7b52c2878044b6",
+      "same_full_result": true,
+      "trace": {
+        "build_usec": 10220076,
+        "clear_usec": 20659753,
+        "contains_entries": 14844,
+        "contains_evaluations": 14844,
+        "contains_hits": 360664,
+        "direct_usec": 8059,
+        "edge_skipped": 505575,
+        "edge_tests": 170798,
+        "enabled": true,
+        "expansions": 3631,
+        "grid_fields": 454,
+        "grid_straight_rejections": 36009,
+        "members_usec": 9072212,
+        "memo_entries": 262144,
+        "memo_hits": 83139,
+        "memo_misses": 323555,
+        "memo_peak": 262144,
+        "memo_released": 0,
+        "memo_stored": 262144,
+        "point_overflow_entries": 1980,
+        "point_overflow_hits": 2431,
+        "states": 7677,
+        "support_usec": 15383522,
+        "surfaces": 42,
+        "total_usec": 74876608
+      }
+    },
+    "source_hashes_sha256": "329947552ACD639997985F164EB84ABB0F33774DDC25CA0479CBB234DAE976BE",
+    "source_head": "954341d5721ea6959fb89b1458ce17242e3ce6f6",
+    "output_sha256": "BF5946AE77C265678FD399C5D2BF82062E32EF2EC2EDE354331FC17D7DE59F71",
+    "elapsed_ms": 90853,
+    "exit_code": 0
+  }
+]

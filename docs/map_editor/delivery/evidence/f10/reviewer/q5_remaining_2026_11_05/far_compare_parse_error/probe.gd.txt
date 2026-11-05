@@ -1,0 +1,37 @@
+extends SceneTree
+const Release = preload("res://scripts/map_authoring/release/map_release.gd")
+const Compiler = preload("res://scripts/map_authoring/patrol/patrol_compiler.gd")
+const Differential = preload("res://tests/map_editor_far_navigation_test.gd")
+func _initialize() -> void: run.call_deferred()
+func run() -> void:
+	var args := OS.get_cmdline_user_args()
+	var mode: String = args[0]; var folder: String = args[1]
+	var loaded := Release.load_package("forest_terraces")
+	if not loaded.ok: quit(1); return
+	var manifest := Compiler.manifest(loaded.package)
+	var world: WorldGeometry = Differential.ReferenceWorld.new() if mode == "reference" else WorldGeometry.new()
+	var configured := world.configure(manifest,"map_preview")
+	if not configured.ok: quit(1); return
+	var profile: Dictionary = manifest._data.input.traversal.duplicate(true)
+	var origin: ExpeditionWorldPoint
+	for socket: Dictionary in world._stage.sockets:
+		if socket.socket_id == world._stage.entrance: origin = ExpeditionWorldPoint.create("map_preview",socket.surface_id,socket.position)
+	var goal: ExpeditionWorldPoint; var distance := -1.0
+	for slot: Dictionary in manifest.population_plan().slots():
+		var point := ExpeditionPopulationPlanner.point(slot.home)
+		if point.position.distance_to(origin.position) > distance:
+			distance = point.position.distance_to(origin.position); goal = point
+	var trace := {"enabled":true}
+	var lattices_before := WorldGeometry.HeightGrid.lattices_built
+	var started := Time.get_ticks_usec()
+	var route := world._path(origin,goal,profile,world.geometry_revision,null,true,trace)
+	var elapsed_ms := (Time.get_ticks_usec()-started)/1000.0
+	var bytes := var_to_bytes(route)
+	var out := FileAccess.open(folder.path_join(mode+".route"),FileAccess.WRITE)
+	out.store_buffer(bytes); out.close()
+	var same := mode == "reference" or route == bytes_to_var(FileAccess.get_file_as_bytes(folder.path_join("reference.route")))
+	var report := {"ok":route.ok and same,"same_full_result":same,"mode":mode,"elapsed_ms":elapsed_ms,"lattices_before":lattices_before,"lattices_after":WorldGeometry.HeightGrid.lattices_built,"fields_built":world.get("fields_built") if mode == "reference" else trace.get("grid_fields",-1),"trace":trace,"distance":distance,"profile":profile,"origin":origin.to_data(),"goal":goal.to_data(),"route_sha256":ExpeditionCheckpointCodec.digest_bytes(bytes),"route_bytes":bytes.size(),"package_hash":loaded.package.package_hash}
+	out = FileAccess.open(folder.path_join(mode+".json"),FileAccess.WRITE)
+	out.store_string(JSON.stringify(report,"\t")); out.close()
+	print("Q5_FAR_COMPARE "+JSON.stringify(report))
+	quit(0 if report.ok else 1)

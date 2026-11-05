@@ -1,0 +1,62 @@
+{
+  "all_final_release_source_fixture_inputs_match": true,
+  "main_status_entries_preserved": 216,
+  "completion_inputs": 2239,
+  "supervision": "docs/map_editor/delivery/evidence/f10/luna/q5_remaining_2026_11_05/supervision.md",
+  "supervision_sha256": "1D394AD2A16244220C1E384018565E970C1CAE4316EB59E2389315FA5238AB67",
+  "builds": [
+    {
+      "path": ".godot/m8_release/RagRPG-Map-Candidate.exe",
+      "sha256": "4A9EADED8955EF789AB02651ED9D2DDE80328FBB342BD2A6DB4DB33E86305668",
+      "bytes": 109127680
+    },
+    {
+      "path": ".godot/m8_release/RagRPG-Map-Candidate.pck",
+      "sha256": "C59F7E5B88D366CF015CF8025A5E1C805D64FE34ACC658C9DD17682C74428B88",
+      "bytes": 94861832
+    }
+  ],
+  "base": "954341d5721ea6959fb89b1458ce17242e3ce6f6",
+  "human_acceptance": false,
+  "compatible_ui_delta_after_core_validation": [
+    {
+      "path": "scripts/ui/expedition/expedition_status_panel.gd",
+      "final_sha256": "E6477F964189B60C0EC60DC7F9811FF0E418178728806B75E2E8EE8D015B6852",
+      "tested_sha256": "9D484069CF5ABA9026CC98EBE832606A5C78357007765CC6AC50B957B4000527"
+    },
+    {
+      "path": "tests/e07_f7_presentation_test.gd",
+      "final_sha256": "9B806BFFCE62C36D4E6635AC63EDB2E2C625DC76146ABD7E3862AF379DE076B7",
+      "tested_sha256": "E53B0AF042F4F1117BFE3A7CA61BE9A6F363FBAFE1D1C2F1B88F3709C475FC02"
+    }
+  ],
+  "global_q5_approval": false,
+  "core_runtime_unchanged_after_final_validation": true,
+  "tested_before_commit_with_frozen_inputs": true,
+  "ui_retested": [
+    "portal_word_after: F7 27/27",
+    "portal_word_GameInterface: 9/9",
+    "Release_final: 6/8/14"
+  ],
+  "code_candidate": "dc563d2e1c59e949591e1d25a4f5e21f274d3fe4",
+  "backups_preserved": [
+    {
+      "sha256": "65a26754c437695d7e7d60e93980c187371fddeec4fb71f78323104dbb55ced5",
+      "path": "data/map_authoring/sanctuary_woods_clearing.source.json.bak"
+    },
+    {
+      "sha256": "d0071096addfefcefad1f1df849c3977064a741b4ed1446ffaf50a3f25a95d7e",
+      "path": "data/map_authoring/sanctuary_woods_overpass.source.json.bak"
+    },
+    {
+      "sha256": "6b8d52095b0d98ba4a436fd5b192ff732b98a8f5da02855646e7e21b9792bb4f",
+      "path": "data/map_authoring/sanctuary_woods.map.json.bak"
+    },
+    {
+      "sha256": "3debc7674a1770702639e8bb33b1e6598c52929e9230395ccfbf505c1ed04889",
+      "path": "data/map_authoring/sanctuary_woods.population.json.bak"
+    }
+  ],
+  "manifest_hash_unchanged": "12271a4e44f456e7e2993bcd4d81a405717ab2463be0697a969964bac5916707",
+  "release_inputs": 2233
+}

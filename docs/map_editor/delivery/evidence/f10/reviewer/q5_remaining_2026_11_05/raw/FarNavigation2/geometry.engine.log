@@ -1,0 +1,41 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F10_FAR_NAV_CHECK representative_stretches_configure true
+F10_FAR_NAV_CHECK mass_detour_same_complete_result true
+F10_FAR_NAV_CHECK mass_detour_body_walks true
+F10_FAR_NAV_CASE {"cost":3141.49810791016,"current_fields":0,"current_usec":23862,"id":"mass_detour","reference_fields":2,"reference_usec":83368,"straight_rejections":9}
+F10_FAR_NAV_CHECK terrain_clear_mass_failure_avoids_fields true
+F10_FAR_NAV_CHECK mass_detour_reverse_same_complete_result true
+F10_FAR_NAV_CHECK mass_detour_reverse_body_walks true
+F10_FAR_NAV_CASE {"cost":3141.49810791016,"current_fields":0,"current_usec":33004,"id":"mass_detour_reverse","reference_fields":5,"reference_usec":78173,"straight_rejections":8}
+F10_FAR_NAV_CHECK mass_detour_wide_body_same_complete_result true
+F10_FAR_NAV_CHECK mass_detour_wide_body_body_walks true
+F10_FAR_NAV_CASE {"cost":3193.36596679688,"current_fields":0,"current_usec":39652,"id":"mass_detour_wide_body","reference_fields":2,"reference_usec":71449,"straight_rejections":9}
+F10_FAR_NAV_CHECK steep_gap_same_complete_result true
+F10_FAR_NAV_CHECK steep_gap_body_walks true
+F10_FAR_NAV_CASE {"cost":2852.6561126709,"current_fields":3,"current_usec":66711,"id":"steep_gap","reference_fields":3,"reference_usec":93886,"straight_rejections":0}
+F10_FAR_NAV_CHECK terrain_detour_still_builds_fields true
+F10_FAR_NAV_CHECK steep_gap_reverse_same_complete_result true
+F10_FAR_NAV_CHECK steep_gap_reverse_body_walks true
+F10_FAR_NAV_CASE {"cost":2853.30268859863,"current_fields":3,"current_usec":74947,"id":"steep_gap_reverse","reference_fields":3,"reference_usec":74976,"straight_rejections":0}
+F10_FAR_NAV_CHECK steep_wall_unreachable_same_complete_result true
+F10_FAR_NAV_CASE {"cost":0.0,"current_fields":0,"current_usec":30758,"id":"steep_wall_unreachable","reference_fields":0,"reference_usec":53773,"straight_rejections":0}
+F10_FAR_NAV_CHECK directed_forward_same_complete_result true
+F10_FAR_NAV_CHECK directed_forward_body_walks true
+F10_FAR_NAV_CASE {"cost":2852.6561126709,"current_fields":3,"current_usec":74728,"id":"directed_forward","reference_fields":3,"reference_usec":80991,"straight_rejections":0}
+F10_FAR_NAV_CHECK directed_reverse_same_complete_result true
+F10_FAR_NAV_CASE {"cost":0.0,"current_fields":0,"current_usec":9487,"id":"directed_reverse","reference_fields":0,"reference_usec":15629,"straight_rejections":0}
+F10_FAR_NAV_CHECK speculative_segment_same_complete_result true
+F10_FAR_NAV_CASE {"cost":3283.37091064453,"current_fields":0,"current_usec":35347,"id":"speculative_segment","reference_fields":2,"reference_usec":55226,"straight_rejections":11}
+F10_FAR_NAV_CHECK temporary_wall_inserts true
+F10_FAR_NAV_CHECK temporary_wall_unreachable_same_complete_result true
+F10_FAR_NAV_CASE {"cost":0.0,"current_fields":0,"current_usec":8974,"id":"temporary_wall_unreachable","reference_fields":1,"reference_usec":30291,"straight_rejections":4}
+F10_FAR_NAV_CHECK warm_result_does_not_hide_temporary true
+F10_FAR_NAV_CHECK old_revision_rejected true
+F10_FAR_NAV_CHECK temporary_removed_same_complete_result true
+F10_FAR_NAV_CHECK temporary_removed_body_walks true
+F10_FAR_NAV_CASE {"cost":2700.0,"current_fields":0,"current_usec":4544,"id":"temporary_removed","reference_fields":0,"reference_usec":5985,"straight_rejections":0}
+F10_FAR_NAV_CHECK reconfigured_wall_unreachable_same_complete_result true
+F10_FAR_NAV_CASE {"cost":0.0,"current_fields":0,"current_usec":34015,"id":"reconfigured_wall_unreachable","reference_fields":0,"reference_usec":35467,"straight_rejections":0}
+F10_FAR_NAV_METRICS [{"cost":3141.49810791016,"current_fields":0,"current_usec":23862,"id":"mass_detour","reference_fields":2,"reference_usec":83368,"straight_rejections":9},{"cost":3141.49810791016,"current_fields":0,"current_usec":33004,"id":"mass_detour_reverse","reference_fields":5,"reference_usec":78173,"straight_rejections":8},{"cost":3193.36596679688,"current_fields":0,"current_usec":39652,"id":"mass_detour_wide_body","reference_fields":2,"reference_usec":71449,"straight_rejections":9},{"cost":2852.6561126709,"current_fields":3,"current_usec":66711,"id":"steep_gap","reference_fields":3,"reference_usec":93886,"straight_rejections":0},{"cost":2853.30268859863,"current_fields":3,"current_usec":74947,"id":"steep_gap_reverse","reference_fields":3,"reference_usec":74976,"straight_rejections":0},{"cost":0.0,"current_fields":0,"current_usec":30758,"id":"steep_wall_unreachable","reference_fields":0,"reference_usec":53773,"straight_rejections":0},{"cost":2852.6561126709,"current_fields":3,"current_usec":74728,"id":"directed_forward","reference_fields":3,"reference_usec":80991,"straight_rejections":0},{"cost":0.0,"current_fields":0,"current_usec":9487,"id":"directed_reverse","reference_fields":0,"reference_usec":15629,"straight_rejections":0},{"cost":3283.37091064453,"current_fields":0,"current_usec":35347,"id":"speculative_segment","reference_fields":2,"reference_usec":55226,"straight_rejections":11},{"cost":0.0,"current_fields":0,"current_usec":8974,"id":"temporary_wall_unreachable","reference_fields":1,"reference_usec":30291,"straight_rejections":4},{"cost":2700.0,"current_fields":0,"current_usec":4544,"id":"temporary_removed","reference_fields":0,"reference_usec":5985,"straight_rejections":0},{"cost":0.0,"current_fields":0,"current_usec":34015,"id":"reconfigured_wall_unreachable","reference_fields":0,"reference_usec":35467,"straight_rejections":0}]
+F10_FAR_NAV_RESULT {"checks":[{"id":"representative_stretches_configure","ok":true},{"id":"mass_detour_same_complete_result","ok":true},{"id":"mass_detour_body_walks","ok":true},{"id":"terrain_clear_mass_failure_avoids_fields","ok":true},{"id":"mass_detour_reverse_same_complete_result","ok":true},{"id":"mass_detour_reverse_body_walks","ok":true},{"id":"mass_detour_wide_body_same_complete_result","ok":true},{"id":"mass_detour_wide_body_body_walks","ok":true},{"id":"steep_gap_same_complete_result","ok":true},{"id":"steep_gap_body_walks","ok":true},{"id":"terrain_detour_still_builds_fields","ok":true},{"id":"steep_gap_reverse_same_complete_result","ok":true},{"id":"steep_gap_reverse_body_walks","ok":true},{"id":"steep_wall_unreachable_same_complete_result","ok":true},{"id":"directed_forward_same_complete_result","ok":true},{"id":"directed_forward_body_walks","ok":true},{"id":"directed_reverse_same_complete_result","ok":true},{"id":"speculative_segment_same_complete_result","ok":true},{"id":"temporary_wall_inserts","ok":true},{"id":"temporary_wall_unreachable_same_complete_result","ok":true},{"id":"warm_result_does_not_hide_temporary","ok":true},{"id":"old_revision_rejected","ok":true},{"id":"temporary_removed_same_complete_result","ok":true},{"id":"temporary_removed_body_walks","ok":true},{"id":"reconfigured_wall_unreachable_same_complete_result","ok":true}],"count":25,"ok":true}

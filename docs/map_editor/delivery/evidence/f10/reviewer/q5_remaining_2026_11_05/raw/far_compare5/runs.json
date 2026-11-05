@@ -1,0 +1,73 @@
+[
+  {
+    "elapsed_ms": 89988,
+    "mode": "current",
+    "timed_out": false,
+    "ok": true,
+    "source_head": "954341d5721ea6959fb89b1458ce17242e3ce6f6",
+    "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+    "result": {
+      "distance": 10620.966796875,
+      "elapsed_ms": 77037.11,
+      "fields_built": 454,
+      "goal": {
+        "position": "(3368.0, 240.0, -3448.0)",
+        "stage_id": "map_preview",
+        "surface_id": "field/g_dbb3b50e59c7326b_128_16"
+      },
+      "lattices_after": 35,
+      "lattices_before": 0,
+      "mode": "current",
+      "ok": true,
+      "origin": {
+        "position": "(-4200.0, 0.0, 4000.0)",
+        "stage_id": "map_preview",
+        "surface_id": "field/g_dbb3b50e59c7326b_0_128"
+      },
+      "package_hash": "d9d52701a7a40124969d94f1770ef9f3cc3d0f609691afc02ebae48ccdf665ce",
+      "profile": {
+        "connector_kinds": [
+          "walk"
+        ],
+        "height": 32.0,
+        "profile_id": "ruins_player",
+        "radius": 20.0,
+        "revision": 1
+      },
+      "route_bytes": 9968,
+      "route_sha256": "b758f63b7a36b7bcbeb3e35f03794d6e949dea87454f6486af7b52c2878044b6",
+      "same_full_result": true,
+      "trace": {
+        "build_usec": 10405364,
+        "clear_usec": 20432623,
+        "contains_entries": 14844,
+        "contains_evaluations": 14844,
+        "contains_hits": 374002,
+        "direct_usec": 12211,
+        "edge_skipped": 505575,
+        "edge_tests": 170798,
+        "enabled": true,
+        "expansions": 3631,
+        "grid_fields": 454,
+        "grid_straight_rejections": 36009,
+        "members_usec": 8956075,
+        "memo_entries": 262144,
+        "memo_hits": 80708,
+        "memo_misses": 325986,
+        "memo_peak": 262144,
+        "memo_released": 0,
+        "memo_stored": 262144,
+        "states": 7677,
+        "support_usec": 14727418,
+        "surfaces": 42,
+        "total_usec": 76752434
+      }
+    },
+    "aborted": false,
+    "started_utc": "2026-11-05T13:53:13.4989724Z",
+    "exit_code": 0,
+    "source_hashes_sha256": "6FC8CB690534DAEB7FD773A67C769173B6CA1A94CAD90184BE49C27FD46BA216",
+    "output_sha256": "1970AA0A08335F9D4CB440539061BBD77980D0E6BE1665078F3FE36F29996CBB",
+    "sampled_peak_working_set_bytes": 474345472
+  }
+]

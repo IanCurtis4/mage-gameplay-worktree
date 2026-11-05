@@ -1,0 +1,6 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F4_METRIC {"base64_bytes":67992,"elapsed_usec":657361,"profile_bytes":77276,"request":"base","snapshot_bytes":323664}
+F4_METRIC {"base64_bytes":67996,"elapsed_usec":621655,"profile_bytes":77305,"request":"suspended","snapshot_bytes":323664}
+E07 F4 e07_f4_compatibility_test.gd: 16 checks, 0 failures
+

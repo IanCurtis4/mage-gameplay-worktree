@@ -1,0 +1,138 @@
+[
+  {
+    "mode": "reference",
+    "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+    "elapsed_ms": 115743,
+    "started_utc": "2026-11-05T09:13:37.4014726Z",
+    "ok": true,
+    "source_head": "954341d5721ea6959fb89b1458ce17242e3ce6f6",
+    "timed_out": false,
+    "exit_code": 0,
+    "aborted": false,
+    "source_hashes_sha256": "1D5BA8FAD56221AFE5809A80FD78DFA967ADEA04729BE44D9D01410F1264B319",
+    "result": {
+      "distance": 10620.966796875,
+      "elapsed_ms": 103806.713,
+      "fields_built": 1752,
+      "goal": {
+        "position": "(3368.0, 240.0, -3448.0)",
+        "stage_id": "map_preview",
+        "surface_id": "field/g_dbb3b50e59c7326b_128_16"
+      },
+      "lattices_after": 35,
+      "lattices_before": 0,
+      "mode": "reference",
+      "ok": true,
+      "origin": {
+        "position": "(-4200.0, 0.0, 4000.0)",
+        "stage_id": "map_preview",
+        "surface_id": "field/g_dbb3b50e59c7326b_0_128"
+      },
+      "package_hash": "d9d52701a7a40124969d94f1770ef9f3cc3d0f609691afc02ebae48ccdf665ce",
+      "profile": {
+        "connector_kinds": [
+          "walk"
+        ],
+        "height": 32.0,
+        "profile_id": "ruins_player",
+        "radius": 20.0,
+        "revision": 1
+      },
+      "route_bytes": 9968,
+      "route_sha256": "b758f63b7a36b7bcbeb3e35f03794d6e949dea87454f6486af7b52c2878044b6",
+      "same_full_result": true,
+      "trace": {
+        "build_usec": 10258163,
+        "clear_usec": 29771083,
+        "direct_usec": 8134,
+        "edge_skipped": 505575,
+        "edge_tests": 170798,
+        "enabled": true,
+        "expansions": 3631,
+        "grid_fields": 1752,
+        "grid_straight_rejections": 0,
+        "members_usec": 8743932,
+        "memo_entries": 262144,
+        "memo_hits": 80708,
+        "memo_misses": 325986,
+        "memo_peak": 262144,
+        "memo_released": 0,
+        "memo_stored": 262144,
+        "states": 7677,
+        "support_usec": 21841063,
+        "surfaces": 42,
+        "total_usec": 103520522
+      }
+    },
+    "sampled_peak_working_set_bytes": 471011328,
+    "output_sha256": "D8E671B0E233AB6B65787A9D67250F8C3D9B751746325059E067DB9B8CDD0D0E"
+  },
+  {
+    "mode": "current",
+    "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+    "elapsed_ms": 106475,
+    "started_utc": "2026-11-05T09:15:34.1146400Z",
+    "ok": true,
+    "source_head": "954341d5721ea6959fb89b1458ce17242e3ce6f6",
+    "timed_out": false,
+    "exit_code": 0,
+    "aborted": false,
+    "source_hashes_sha256": "1D5BA8FAD56221AFE5809A80FD78DFA967ADEA04729BE44D9D01410F1264B319",
+    "result": {
+      "distance": 10620.966796875,
+      "elapsed_ms": 94410.71,
+      "fields_built": 454,
+      "goal": {
+        "position": "(3368.0, 240.0, -3448.0)",
+        "stage_id": "map_preview",
+        "surface_id": "field/g_dbb3b50e59c7326b_128_16"
+      },
+      "lattices_after": 35,
+      "lattices_before": 0,
+      "mode": "current",
+      "ok": true,
+      "origin": {
+        "position": "(-4200.0, 0.0, 4000.0)",
+        "stage_id": "map_preview",
+        "surface_id": "field/g_dbb3b50e59c7326b_0_128"
+      },
+      "package_hash": "d9d52701a7a40124969d94f1770ef9f3cc3d0f609691afc02ebae48ccdf665ce",
+      "profile": {
+        "connector_kinds": [
+          "walk"
+        ],
+        "height": 32.0,
+        "profile_id": "ruins_player",
+        "radius": 20.0,
+        "revision": 1
+      },
+      "route_bytes": 9968,
+      "route_sha256": "b758f63b7a36b7bcbeb3e35f03794d6e949dea87454f6486af7b52c2878044b6",
+      "same_full_result": true,
+      "trace": {
+        "build_usec": 10313459,
+        "clear_usec": 29643931,
+        "direct_usec": 8643,
+        "edge_skipped": 505575,
+        "edge_tests": 170798,
+        "enabled": true,
+        "expansions": 3631,
+        "grid_fields": 454,
+        "grid_straight_rejections": 36009,
+        "members_usec": 8695264,
+        "memo_entries": 262144,
+        "memo_hits": 80708,
+        "memo_misses": 325986,
+        "memo_peak": 262144,
+        "memo_released": 0,
+        "memo_stored": 262144,
+        "states": 7677,
+        "support_usec": 21862568,
+        "surfaces": 42,
+        "total_usec": 94143385
+      }
+    },
+    "sampled_peak_working_set_bytes": 471941120,
+    "output_sha256": "2CC06363897F566AF59049560475F0E34BB83D7B2C2930586F2F9AD63E525DF2"
+  }
+]

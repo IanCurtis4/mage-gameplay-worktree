@@ -1,0 +1,65 @@
+{
+  "created_utc": "2026-11-05T14:28:10.6063971Z",
+  "f1_native_fixture": true,
+  "source_commit": "954341d5721ea6959fb89b1458ce17242e3ce6f6",
+  "working_tree_status": [
+    " M .gitattributes",
+    " M docs/ARCHITECTURE.md",
+    " M docs/map_editor/delivery/f10.md",
+    " M docs/map_editor/delivery/f10_q5_matrix.md",
+    " M scripts/core/expedition/expedition_service.gd",
+    " M scripts/core/expedition/snapshot/snapshot_registry.gd",
+    " M scripts/core/expedition/spatial/world_geometry.gd",
+    " M scripts/core/expedition/spatial/world_height_grid.gd",
+    " M scripts/core/expedition/spatial/world_support_patch.gd",
+    " M scripts/ui/expedition/expedition_presentation.gd",
+    " M scripts/ui/expedition/expedition_status_panel.gd",
+    " M scripts/world/expedition_portal.gd",
+    " M tests/e07_f1_presentation_test.gd",
+    " M tests/e07_f7_presentation_test.gd",
+    " M tests/map_editor_snapshot_density_test.gd",
+    " M tools/map_editor_completion/run.ps1",
+    " M tools/verify.ps1",
+    "?? data/map_authoring/sanctuary_woods.map.json.bak",
+    "?? data/map_authoring/sanctuary_woods.population.json.bak",
+    "?? data/map_authoring/sanctuary_woods_clearing.source.json.bak",
+    "?? data/map_authoring/sanctuary_woods_overpass.source.json.bak",
+    "?? docs/map_editor/contracts/f10_q5_remaining.md",
+    "?? docs/map_editor/delivery/evidence/f10/luna/q5_remaining_2026_11_05/",
+    "?? docs/map_editor/delivery/evidence/f10/reviewer/q5_remaining_2026_11_05/",
+    "?? tests/e07_f4_resume_staging_test.gd",
+    "?? tests/e07_f4_resume_staging_test.gd.uid",
+    "?? tests/map_editor_far_navigation_test.gd",
+    "?? tests/map_editor_far_navigation_test.gd.uid",
+    "?? tests/map_editor_grid_attachment_test.gd",
+    "?? tests/map_editor_grid_attachment_test.gd.uid"
+  ],
+  "runner_sha256": "7B99350BF37544BB1CF02A977097904BD7DDA2519EF7FDA8CBB1D57DEA7D5410",
+  "engine_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+  "timeout_seconds": 300,
+  "selection": {
+    "test": [
+      "e07_f7_presentation_test"
+    ],
+    "test_filter_specified": true,
+    "from_step": 1,
+    "to_step": 301,
+    "skip_editor_import": true
+  },
+  "total_steps": 301,
+  "selected_steps": 1,
+  "checks": [
+    {
+      "index": 254,
+      "name": "e07_f7_presentation_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f7_presentation_test.gd"
+      ]
+    }
+  ]
+}

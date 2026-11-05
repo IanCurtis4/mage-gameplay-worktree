@@ -1,0 +1,17 @@
+[
+  {
+    "source_head": "954341d5721ea6959fb89b1458ce17242e3ce6f6",
+    "started_utc": "2026-11-05T09:11:58.3318879Z",
+    "result": null,
+    "mode": "reference",
+    "sampled_peak_working_set_bytes": 0,
+    "aborted": false,
+    "output_sha256": "D0B4799BA12CFB7E63CE13648769D1599635CA0C67323F2CC4162A406EEE64CF",
+    "ok": false,
+    "exit_code": 1,
+    "timed_out": false,
+    "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+    "elapsed_ms": 504,
+    "source_hashes_sha256": "1D5BA8FAD56221AFE5809A80FD78DFA967ADEA04729BE44D9D01410F1264B319"
+  }
+]

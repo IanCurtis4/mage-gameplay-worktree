@@ -1,0 +1,45 @@
+param([Parameter(Mandatory)][string]$SourceRoot,[Parameter(Mandatory)][string]$GodotPath)
+$ErrorActionPreference = 'Stop'
+$q5Fixture = Join-Path $SourceRoot '.godot/verification/e07_f1/fixture_project'
+$q5Evidence = Join-Path $SourceRoot '.godot/q5_remaining/far_compare3'
+if (Test-Path -LiteralPath $q5Evidence) { throw 'Use an absent evidence directory.' }
+if (@(Get-Process -Name '*Godot*' -ErrorAction SilentlyContinue).Count) { throw 'Engine already running.' }
+[void](New-Item -ItemType Directory -Force -Path $q5Evidence)
+Copy-Item -LiteralPath (Join-Path $SourceRoot '.godot/q5_remaining/far_compare2/reference.route') -Destination (Join-Path $q5Evidence 'reference.route')
+Copy-Item -LiteralPath (Join-Path $SourceRoot '.godot/q5_remaining/far_compare2/reference.json') -Destination (Join-Path $q5Evidence 'reference.json')
+$q5Runs = @()
+foreach ($q5Mode in @('current')) {
+ $q5Log = Join-Path $q5Evidence ($q5Mode+'.engine.log')
+ $q5Info = [Diagnostics.ProcessStartInfo]::new()
+ $q5Info.FileName = $GodotPath
+ $q5Info.UseShellExecute = $false
+ $q5Info.CreateNoWindow = $true
+ $q5Info.WindowStyle = [Diagnostics.ProcessWindowStyle]::Hidden
+ $q5Info.RedirectStandardOutput = $true; $q5Info.RedirectStandardError = $true
+ $q5Info.Environment['APPDATA'] = Join-Path $q5Fixture '.godot/discardable_profile'
+ $q5Info.Environment['LOCALAPPDATA'] = $q5Info.Environment['APPDATA']
+ foreach ($q5Arg in @('--path',$q5Fixture,'--headless','--log-file',$q5Log,'--script','res://.godot/q5_far_compare/probe.gd','--',$q5Mode,$q5Evidence)) { $q5Info.ArgumentList.Add($q5Arg) }
+ $q5Process = [Diagnostics.Process]::new(); $q5Process.StartInfo = $q5Info
+ $q5Started = [DateTime]::UtcNow.ToString('o'); [void]$q5Process.Start()
+ $q5Out = $q5Process.StandardOutput.ReadToEndAsync(); $q5Err = $q5Process.StandardError.ReadToEndAsync()
+ $q5Watch = [Diagnostics.Stopwatch]::StartNew(); $q5Peak = 0L; $q5Timeout = $false; $q5Aborted = $false
+ while (-not $q5Process.WaitForExit(500)) {
+  try { $q5Process.Refresh(); $q5Peak = [Math]::Max($q5Peak,$q5Process.PeakWorkingSet64) } catch [InvalidOperationException] {}
+  if ($q5Watch.ElapsedMilliseconds -gt 300000) { $q5Timeout = $true; break }
+  if (Test-Path -LiteralPath $q5Log) {
+   try { if ([IO.File]::ReadAllText($q5Log) -match 'SCRIPT ERROR:|Parse Error:|ERROR:') { $q5Aborted=$true; break } } catch [IO.IOException] {}
+  }
+ }
+ if ($q5Timeout -or $q5Aborted) { $q5Process.Kill($true); $q5Process.WaitForExit() }
+ $q5OutputPath = Join-Path $q5Evidence ($q5Mode+'.output.log')
+ $q5Text = $q5Out.GetAwaiter().GetResult()+$q5Err.GetAwaiter().GetResult()
+ [IO.File]::WriteAllText($q5OutputPath,$q5Text)
+ $q5ResultPath = Join-Path $q5Evidence ($q5Mode+'.json')
+ $q5Report = if (Test-Path -LiteralPath $q5ResultPath) { [IO.File]::ReadAllText($q5ResultPath) | ConvertFrom-Json } else { $null }
+ $q5Ok = $q5Process.ExitCode -eq 0 -and -not $q5Timeout -and -not $q5Aborted -and $null -ne $q5Report -and $q5Report.ok -and $q5Text -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:'
+ $q5Runs += @{mode=$q5Mode;ok=$q5Ok;exit_code=$q5Process.ExitCode;timed_out=$q5Timeout;aborted=$q5Aborted;started_utc=$q5Started;elapsed_ms=$q5Watch.ElapsedMilliseconds;sampled_peak_working_set_bytes=$q5Peak;output_sha256=(Get-FileHash -LiteralPath $q5OutputPath).Hash;result=$q5Report;engine_sha256=(Get-FileHash -LiteralPath $GodotPath).Hash;source_head=(git -C $SourceRoot rev-parse HEAD);source_hashes_sha256=(Get-FileHash -LiteralPath (Join-Path $q5Fixture 'source_hashes.json')).Hash}
+ [IO.File]::WriteAllText((Join-Path $q5Evidence 'runs.json'),(ConvertTo-Json -InputObject $q5Runs -Depth 20))
+ $q5Process.Dispose()
+ Write-Output ($q5Mode+': '+$q5Ok)
+ if (-not $q5Ok) { throw 'Far-route control failed; logs preserved.' }
+}

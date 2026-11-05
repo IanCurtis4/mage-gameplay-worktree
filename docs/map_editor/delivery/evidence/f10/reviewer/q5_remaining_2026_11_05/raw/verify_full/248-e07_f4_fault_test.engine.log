@@ -1,0 +1,17 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F4_METRIC {"base64_bytes":67988,"elapsed_usec":678877,"profile_bytes":77272,"request":"base","snapshot_bytes":323660}
+F4_METRIC {"base64_bytes":68444,"elapsed_usec":502935,"profile_bytes":77890,"request":"issued","snapshot_bytes":325432}
+F4_METRIC {"base64_bytes":67980,"elapsed_usec":532603,"profile_bytes":77264,"request":"base","snapshot_bytes":323660}
+F4_METRIC {"base64_bytes":68436,"elapsed_usec":569619,"profile_bytes":77882,"request":"issued","snapshot_bytes":325432}
+F4_METRIC {"base64_bytes":67972,"elapsed_usec":706004,"profile_bytes":77256,"request":"base","snapshot_bytes":323660}
+F4_METRIC {"base64_bytes":68428,"elapsed_usec":679023,"profile_bytes":77874,"request":"issued","snapshot_bytes":325432}
+F4_METRIC {"base64_bytes":67968,"elapsed_usec":587652,"profile_bytes":77252,"request":"base","snapshot_bytes":323660}
+F4_METRIC {"base64_bytes":68424,"elapsed_usec":658604,"profile_bytes":77870,"request":"issued","snapshot_bytes":325432}
+F4_METRIC {"base64_bytes":67968,"elapsed_usec":482482,"profile_bytes":77252,"request":"base","snapshot_bytes":323660}
+F4_METRIC {"base64_bytes":68424,"elapsed_usec":529658,"profile_bytes":77870,"request":"issued","snapshot_bytes":325432}
+F4_METRIC {"base64_bytes":67972,"elapsed_usec":493261,"profile_bytes":77256,"request":"base","snapshot_bytes":323660}
+F4_METRIC {"base64_bytes":68424,"elapsed_usec":539045,"profile_bytes":77870,"request":"issued","snapshot_bytes":325432}
+F4_METRIC {"base64_bytes":67976,"elapsed_usec":488040,"profile_bytes":77260,"request":"base","snapshot_bytes":323660}
+F4_METRIC {"base64_bytes":68432,"elapsed_usec":557140,"profile_bytes":77878,"request":"issued","snapshot_bytes":325432}
+E07 F4 e07_f4_fault_test.gd: 53 checks, 0 failures

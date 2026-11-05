@@ -1,0 +1,73 @@
+[
+  {
+    "source_hashes_sha256": "F3252CBA0FB8D036A3A5537739BBB1DF2DEB63BD59D79B8AD590D1AB2CAE36F5",
+    "started_utc": "2026-11-05T09:37:44.9899645Z",
+    "result": {
+      "distance": 10620.966796875,
+      "elapsed_ms": 76180.848,
+      "fields_built": 454,
+      "goal": {
+        "position": "(3368.0, 240.0, -3448.0)",
+        "stage_id": "map_preview",
+        "surface_id": "field/g_dbb3b50e59c7326b_128_16"
+      },
+      "lattices_after": 35,
+      "lattices_before": 0,
+      "mode": "current",
+      "ok": true,
+      "origin": {
+        "position": "(-4200.0, 0.0, 4000.0)",
+        "stage_id": "map_preview",
+        "surface_id": "field/g_dbb3b50e59c7326b_0_128"
+      },
+      "package_hash": "d9d52701a7a40124969d94f1770ef9f3cc3d0f609691afc02ebae48ccdf665ce",
+      "profile": {
+        "connector_kinds": [
+          "walk"
+        ],
+        "height": 32.0,
+        "profile_id": "ruins_player",
+        "radius": 20.0,
+        "revision": 1
+      },
+      "route_bytes": 9968,
+      "route_sha256": "b758f63b7a36b7bcbeb3e35f03794d6e949dea87454f6486af7b52c2878044b6",
+      "same_full_result": true,
+      "trace": {
+        "build_usec": 10159000,
+        "clear_usec": 20199110,
+        "contains_entries": 14844,
+        "contains_evaluations": 14844,
+        "contains_hits": 374002,
+        "direct_usec": 8940,
+        "edge_skipped": 505575,
+        "edge_tests": 170798,
+        "enabled": true,
+        "expansions": 3631,
+        "grid_fields": 454,
+        "grid_straight_rejections": 36009,
+        "members_usec": 8852965,
+        "memo_entries": 262144,
+        "memo_hits": 80708,
+        "memo_misses": 325986,
+        "memo_peak": 262144,
+        "memo_released": 0,
+        "memo_stored": 262144,
+        "states": 7677,
+        "support_usec": 15020436,
+        "surfaces": 42,
+        "total_usec": 75913077
+      }
+    },
+    "mode": "current",
+    "output_sha256": "569779CD3D6543D69546A893B3BA99275F43E4634FB7D102F0AA3B598A00BE3D",
+    "sampled_peak_working_set_bytes": 474124288,
+    "aborted": false,
+    "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+    "elapsed_ms": 88765,
+    "ok": true,
+    "exit_code": 0,
+    "source_head": "954341d5721ea6959fb89b1458ce17242e3ce6f6",
+    "timed_out": false
+  }
+]

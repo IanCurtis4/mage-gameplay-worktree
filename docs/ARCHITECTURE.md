@@ -1,6 +1,6 @@
 # Arquitetura vigente — índice de autoridades e contratos
 
-## Delta do editor F10 — 4/11/2026
+## Delta do editor F10 — 5/11/2026
 
 F10 está ativo; Q5 em revisão, sem fechamento técnico ou aceite humano final.
 O [contrato de grade Q1](map_editor/contracts/f10_height_grid.md) substituiu o
@@ -20,6 +20,22 @@ revisão RPP e verificadas geometricamente em mundos novos. A autoridade
 `PreparationProofCache` não carrega estado de run nem vereditos persistidos;
 pedidos sem cobertura usam a busca anterior. Contrato e limites:
 [provas completas](map_editor/contracts/f10_preparation_proofs.md).
+
+Na continuação Q5, `resume` mantém o grafo validado destacado e desativado até
+o writer confirmar a operação; confirmação religa autoridade/lifecycle,
+falha definitiva libera o grafo e resultado incerto conserva staging até
+reconciliação. Não há segunda reconstrução nessa operação. Transações de
+portal que modificam o mundo mantêm as duas reconstruções contratadas.
+Diagnóstico de bytes lógicos de snapshot é opt-in; encoding e validação
+semântica continuam obrigatórios. [Delta e prova](map_editor/contracts/f10_q5_remaining.md).
+
+O memo transitório de navegação conserva até 32.768 resultados canônicos de
+apoio de raio zero por superfície/Vector3, separado da capacidade de pares.
+Mesma geometria/perfil/invalidação; saturação conserva cálculo integral. Só
+um contexto privado ligado ao world e aos endpoints/revisões pode compartilhar
+esse resultado entre sweep e fração; certificados/DTOs externos não o podem.
+Discos `usable` do lattice também evitam repetir a mesma prova dentro de
+`_attach`. Não altera máscaras físicas, custos, candidatos ou desempate.
 
 ## Composição técnica E07 —23/10/2026
 

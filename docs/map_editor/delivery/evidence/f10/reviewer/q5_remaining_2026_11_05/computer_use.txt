@@ -1,0 +1,12 @@
+2026-11-05, Q5 continuation. Computer-use initialization failed before any UI operation.
+The installed computer-use skill and guidance were read; @oai/sky initialization
+through node_repl returned:
+failed to write kernel assets: O sistema não pode encontrar o caminho especificado. (os error 3)
+
+The available dedicated cua_repl entry point was also attempted:
+await cua.getState();
+It returned the same error above before providing documentation/state.
+
+No Windows UI action was performed by either tool. Native Godot tests and
+application-generated screenshots remain automated evidence, not an operator
+walkthrough or human acceptance of the nine tasks, combat, or visual readability.

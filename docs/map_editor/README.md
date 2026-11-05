@@ -1,6 +1,6 @@
 # Editor de mapas — proposta de arquitetura e execução
 
-**Estado vigente em 4/11/2026:** F9 foi entregue e integrada em master em
+**Estado vigente em 5/11/2026:** F9 foi entregue e integrada em master em
 2/11 (`3c35f7f2`), com aceite humano parcial e pendências manuais transferidas.
 F10 foi ativada em 2/11 e Q5 foi autorizado em 4/11. Execução no único worktree
 `.tools/map-editor-m5`, branch `codex/map-editor-f10`.

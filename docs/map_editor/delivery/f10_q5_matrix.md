@@ -1,9 +1,9 @@
 # F10 Q5 — rastreabilidade e revisão integrada
 
-4–5/11/2026. Base `34bf16511019e88bf34ddfabfab624e533d7c20d`, contrato
-[Q5](../contracts/f10_q5_review.md). Candidato deste incremento fixado no
-[checkpoint16](f10.md)
-e em seu vínculo de inputs; o incremento anterior é `8bbfb6c3ab39411fb27942d6d659ac94dc94aa6c`. Os incrementos
+5/11/2026. Base `954341d5721ea6959fb89b1458ce17242e3ce6f6`, contratos
+[Q5](../contracts/f10_q5_review.md) e [pendências](../contracts/f10_q5_remaining.md). Candidato deste incremento fixado no
+[checkpoint18](f10.md)
+e em seu vínculo de inputs; código anterior de preparação `06abdd917`. Os incrementos
 foram validados; não é aprovação técnica global de F10 nem aceite humano. As provas autorais e a reprodução anterior continuam
 nos recibos [F0–F8](m8.md), [F9](f9.md) e [F10](f10.md).
 
@@ -39,13 +39,13 @@ estão no checkpoint e nos recibos do lote.
 | 1 · todas as promessas | grupos acima e matriz F9 confrontados; Core 641 checks/8 produtores e 11 etapas dirigidas/234 checks passaram | completar percurso manual e avaliar os limites identificados |
 | 2 · peça pequena/área ampla e fluxo sem código | ManualBrush 20, nativo atualizado 20, TerrainNative 45, WorkflowNative 28 | percurso completo por um operador sem código |
 | 3 · contexto e raros | população 91 no Core, EncounterAuthoringNative 25; provas F9 de raro fixo e reservas reaproveitadas sobre APIs sem delta | leitura editorial/temática humana; não criar gate de palco para raro manual |
-| 4 · UX/AX | Q5UsabilityNative 12: 323 px úteis UX/304 AX em 1440×1000, dobras/foco/hash; F7 presentation 19 corrige nomes a partir do pin publicado; demais provas compatíveis do checkpoint15 | descoberta/usabilidade humana e outras resoluções ainda precisam avaliação; prévia curta e nomes técnicos foram corrigidos nesta amostra |
-| 5 · navegação/altura/ponte/corpo/LoS | TerrainNative 45, OcclusionNative 12 e provas F9 de Ports/Navigation/SurfacePick sobre geometria sem delta Q5 | inspeção visual de ator/rampa/ponte/passagem inferior |
+| 4 · UX/AX | Q5UsabilityNative 12: 323 px úteis UX/304 AX em 1440×1000, dobras/foco/hash; F7 presentation 27, nome acessível, largura real, título sem espaços e legenda neutra; capturas 1280×720 com destinos/estados completos; demais provas compatíveis | descoberta/usabilidade humana e outras resoluções ainda precisam avaliação |
+| 5 · navegação/altura/ponte/corpo/LoS | TerrainNative 45, OcclusionNative 12, SurfacePick 24, F1 presentation 39; FarNavigation 33 e GridAttachments 439 preservam predicados/rotas; provas F9 de Ports/Navigation compatíveis | inspeção visual de ator/rampa/ponte/passagem inferior; latência extrema ainda alta |
 | 6 · identidade/revisão/determinismo/pins/stale | PhasePresentation 10, ReleaseApi 11, geração 89, RootSynthesisNative 11, ExchangeMergeNative 10 e hashes fonte/fixture | candidato fixado no checkpoint; provas limitadas aos casos/corpus executados |
-| 7 · dados adversos/recuperação/conflito | documento 70, intercâmbio 113, journal_capacity 53, F5 fault/recovery 20/33, F7 flow 23 | sem falha técnica identificada nesses cenários; percurso manual completo permanece pendente |
-| 8 · população/patrulha/combate/continuidade | patrulha 60, 16 IDs oficiais F3/F4/F5, ForestPlay 19 com arte até conclusão, diário sem duplicação | combate/legibilidade humanos; ForestPlay simula mortes e não prova diversão ou combate real |
-| 9 · GUI/AX/headless/skills/release limpo | provas compatíveis do checkpoint15; release atualizado 6/6, Bosque 8/8, floresta 14/14, nomes conferidos na captura; fonte da skill validada | percurso manual por operador ainda indisponível; instrução longa de limpeza segue truncada no botão |
-| 10 · tempos/memória/limites | checkpoint17: provas completas, preparação 178,986→43,774 s com 14 hits/zero buscas, entrada release 171,07→63,799 s; manifesto igual; tentativas antigas sem ganho continuam descartadas | resíduo síncrono/portais/retomada e rota extrema ainda lentos; sem certificação universal de fluidez/escala |
+| 7 · dados adversos/recuperação/conflito | documento 70, intercâmbio 113, journal_capacity 53, F5 fault/recovery 20/33, F7 flow 23; resume staging 91 com falha definitiva/incerta, reconciliação, dono/revisão e replay | sem falha técnica identificada nesses cenários; percurso manual completo permanece pendente |
+| 8 · população/patrulha/combate/continuidade | patrulha 60, IDs oficiais F3/F4/F5, ForestPlay 20 com arte até conclusão, diário sem duplicação | combate/legibilidade humanos; ForestPlay simula mortes e não prova diversão ou combate real |
+| 9 · GUI/AX/headless/skills/release limpo | release final 6/6, Bosque 8/8, floresta 14/14; 11 IDs oficiais/18 etapas dirigidas, F7 27 e Interface 9 após ajuste final; fonte da skill validada | percurso manual por operador ainda indisponível; texto truncado dos portais corrigido e inspecionado nas capturas |
+| 10 · tempos/memória/limites | checkpoint18: release entrada 63,799→53,444 s/retomada 26,261→17,068 s; rota nativa extrema 102,175→81,182 s; manifesto igual, 14 hits/zero buscas; RSS release 1.028.395.008 B; controles sem ganho descartados | pausas de entrada/portal ainda altas (portal nativo 37,361 s), rota extrema lenta; sem certificação universal de fluidez/escala |
 | 11 · guias/recibos/roteiro/limpeza | cabeçalhos históricos, consumo/arquitetura/skill corrigidos; roteiro e abertura isolada preparados | recibo/hashes/limpeza concluídos; uma fixture retida temporariamente para o roteiro humano |
 
 ## Limites de reprodução e retomada

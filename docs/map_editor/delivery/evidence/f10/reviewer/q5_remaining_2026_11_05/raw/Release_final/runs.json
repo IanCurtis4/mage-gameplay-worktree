@@ -1,0 +1,242 @@
+[
+  {
+    "name": "import",
+    "output_sha256": "5665AD16845E0C97608BBF41230077A6A796E04C4BD40F46E10A66CB1B4D1D51",
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "sampled_peak_working_set_bytes": 914010112,
+    "exit_code": 0,
+    "started_utc": "2026-11-05T14:31:08.1412400Z",
+    "ok": true,
+    "aborted": false,
+    "result": null,
+    "finished_utc": "2026-11-05T14:31:19.3614560Z",
+    "timed_out": false
+  },
+  {
+    "name": "export_release",
+    "output_sha256": "ABFF0D4D1FA93C9C3F8BEC876FA5043ABBA62845CC74BDFF935D0088725808D6",
+    "arguments": [
+      "--headless",
+      "--export-release",
+      "Windows Desktop",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\m8_release\\RagRPG-Map-Candidate.exe"
+    ],
+    "sampled_peak_working_set_bytes": 1035546624,
+    "exit_code": 0,
+    "started_utc": "2026-11-05T14:31:19.3972919Z",
+    "ok": true,
+    "aborted": false,
+    "result": null,
+    "finished_utc": "2026-11-05T14:31:52.0780678Z",
+    "timed_out": false
+  },
+  {
+    "name": "release",
+    "output_sha256": "184EF7397410C709EE40CD8351DD101B7A01CCCFDC5A58267E5EE9CC079A8DA4",
+    "arguments": [
+      "--",
+      "--m8-probe"
+    ],
+    "sampled_peak_working_set_bytes": 623931392,
+    "exit_code": 0,
+    "started_utc": "2026-11-05T14:31:52.2372459Z",
+    "ok": true,
+    "aborted": false,
+    "result": {
+      "checks": [
+        {
+          "id": "new_release_process",
+          "ok": true
+        },
+        {
+          "id": "immutable_package",
+          "ok": true
+        },
+        {
+          "id": "seven_real_actors",
+          "ok": true
+        },
+        {
+          "id": "patrol_bound",
+          "ok": true
+        },
+        {
+          "id": "traverse_0.0",
+          "ok": true
+        },
+        {
+          "id": "traverse_40.0",
+          "ok": true
+        }
+      ],
+      "count": 6,
+      "engine": "4.7.2-stable (official)",
+      "ok": true,
+      "package_hash": "b6ffc4b62c6dfc7583351bc8adc24d707b42e0282c8502ac635a829e1355f024",
+      "package_id": "",
+      "source_hash": "a208ac25d0ca039b22d1a7c7c4537ee4bf04f66ee0f747bfe07cd82fd9d07870"
+    },
+    "finished_utc": "2026-11-05T14:32:02.6678095Z",
+    "timed_out": false
+  },
+  {
+    "name": "release_bosque",
+    "output_sha256": "D2B0347B3908A44DF43F5CF6258950ED4C9224A5B9E02246BDAB507D882D2690",
+    "arguments": [
+      "--",
+      "--m8-probe",
+      "--m8-package=sanctuary_woods"
+    ],
+    "sampled_peak_working_set_bytes": 879800320,
+    "exit_code": 0,
+    "started_utc": "2026-11-05T14:32:02.7762827Z",
+    "ok": true,
+    "aborted": false,
+    "result": {
+      "checks": [
+        {
+          "id": "new_release_process",
+          "ok": true
+        },
+        {
+          "id": "clean_install",
+          "ok": true
+        },
+        {
+          "id": "registered_package",
+          "ok": true
+        },
+        {
+          "id": "immutable_package",
+          "ok": true
+        },
+        {
+          "id": "real_actors",
+          "ok": true
+        },
+        {
+          "id": "patrol_bound",
+          "ok": true
+        },
+        {
+          "id": "gameplay_prepared",
+          "ok": true
+        },
+        {
+          "id": "reach_shrine_completion",
+          "ok": true
+        }
+      ],
+      "count": 8,
+      "engine": "4.7.2-stable (official)",
+      "ok": true,
+      "package_hash": "41a8e11a6c70fdc9c87cec67a2c9f8fc8fb7af5ecfdc1690ba532472c0e52587",
+      "package_id": "sanctuary_woods",
+      "source_hash": "58df5d6386a6222e838763d92a96072ff71ebf2daed168b475ab003d95e29dc1"
+    },
+    "finished_utc": "2026-11-05T14:33:11.0853801Z",
+    "timed_out": false
+  },
+  {
+    "name": "release_forest",
+    "output_sha256": "62BC5F3A3C8A1CBB0040CE922B84C2D87EBEF1DBBF802C97333083D6A525231C",
+    "arguments": [
+      "--",
+      "--m8-phase"
+    ],
+    "sampled_peak_working_set_bytes": 1028395008,
+    "exit_code": 0,
+    "started_utc": "2026-11-05T14:33:11.0888141Z",
+    "ok": true,
+    "aborted": false,
+    "result": {
+      "checks": [
+        {
+          "detail": "",
+          "id": "release_process",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "clean_install",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "packaged_phase_definition",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "synthetic_character",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "phase_listed_in_lobby",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "enters_from_lobby",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "three_stages_and_population",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "authored_game_presentation",
+          "ok": true
+        },
+        {
+          "detail": "238",
+          "id": "authored_props_present",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "player_walks",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "native_game_draws",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "suspends",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "resume_keeps_authored_presentation",
+          "ok": true
+        },
+        {
+          "detail": "",
+          "id": "no_source_checkout_in_install",
+          "ok": true
+        }
+      ],
+      "count": 14,
+      "engine": "4.7.2-stable (official)",
+      "ok": true,
+      "timings": {
+        "entry_ms": 53443.613,
+        "resume_ms": 17067.827,
+        "suspend_ms": 6636.961
+      }
+    },
+    "finished_utc": "2026-11-05T14:34:37.5493902Z",
+    "timed_out": false
+  }
+]

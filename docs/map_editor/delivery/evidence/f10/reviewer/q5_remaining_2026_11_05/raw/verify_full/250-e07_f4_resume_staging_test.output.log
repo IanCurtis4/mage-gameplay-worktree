@@ -1,0 +1,12 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F4_METRIC {"base64_bytes":67988,"elapsed_usec":654047,"profile_bytes":77135,"request":"suspend","snapshot_bytes":323660}
+F4_METRIC {"base64_bytes":67980,"elapsed_usec":455454,"profile_bytes":77127,"request":"suspend","snapshot_bytes":323660}
+F4_METRIC {"base64_bytes":67972,"elapsed_usec":455281,"profile_bytes":77119,"request":"suspend","snapshot_bytes":323660}
+F4_METRIC {"base64_bytes":67968,"elapsed_usec":585586,"profile_bytes":77115,"request":"suspend","snapshot_bytes":323660}
+F4_METRIC {"base64_bytes":67968,"elapsed_usec":556100,"profile_bytes":77115,"request":"suspend","snapshot_bytes":323660}
+F4_METRIC {"base64_bytes":67968,"elapsed_usec":538653,"profile_bytes":77115,"request":"suspend","snapshot_bytes":323660}
+F4_METRIC {"base64_bytes":67968,"elapsed_usec":481526,"profile_bytes":77115,"request":"suspend","snapshot_bytes":323660}
+F4_METRIC {"base64_bytes":67964,"elapsed_usec":529058,"profile_bytes":77111,"request":"suspend","snapshot_bytes":323660}
+E07 F4 e07_f4_resume_staging_test.gd: 91 checks, 0 failures
+

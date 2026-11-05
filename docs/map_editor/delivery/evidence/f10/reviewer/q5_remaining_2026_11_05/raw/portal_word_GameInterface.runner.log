@@ -1,0 +1,15 @@
+F9 GameInterface: True
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+F10_INTERFACE_CHECK fixture_character_has_a_robe_and_skills true ["", "", ""]
+F10_INTERFACE_CHECK status_panel_click_does_not_move true [(682.5, 415.25), 0.0]
+F10_INTERFACE_CHECK inventory_clears_the_action_bar true [[P: (158.05, 410.55), S: (613.7, 37.39999)], [P: (130.0, 476.9), S: (1020.0, 122.4)], 286.000035061555, (632.0, 248.0), (742.0, 513.0587), (180.0, 150.0), ["HBoxContainer:48.0", "Label:23.0", "ScrollContainer:0.0", "RichTextLabel:60.0", "Label:23.0", "Button:44.0"]]
+F10_INTERFACE_CHECK bag_filter_is_explicit true [true, true, 0]
+F10_INTERFACE_CHECK double_click_equips true 0
+F10_INTERFACE_CHECK clicked_skill_description_is_pinned true [&"electric_discharge", &"fire_spear"]
+F10_INTERFACE_CHECK interface_scale_is_offered true 
+F10_INTERFACE_CHECK cursor_capture_is_offered true 
+F10_INTERFACE_CHECK interface_scale_applies_and_persists true 
+F10_INTERFACE_RESULT {"checks":[{"detail":"[\"\", \"\", \"\"]","id":"fixture_character_has_a_robe_and_skills","ok":true},{"detail":"[(682.5, 415.25), 0.0]","id":"status_panel_click_does_not_move","ok":true},{"detail":"[[P: (158.05, 410.55), S: (613.7, 37.39999)], [P: (130.0, 476.9), S: (1020.0, 122.4)], 286.000035061555, (632.0, 248.0), (742.0, 513.0587), (180.0, 150.0), [\"HBoxContainer:48.0\", \"Label:23.0\", \"ScrollContainer:0.0\", \"RichTextLabel:60.0\", \"Label:23.0\", \"Button:44.0\"]]","id":"inventory_clears_the_action_bar","ok":true},{"detail":"[true, true, 0]","id":"bag_filter_is_explicit","ok":true},{"detail":"0","id":"double_click_equips","ok":true},{"detail":"[&\"electric_discharge\", &\"fire_spear\"]","id":"clicked_skill_description_is_pinned","ok":true},{"detail":"","id":"interface_scale_is_offered","ok":true},{"detail":"","id":"cursor_capture_is_offered","ok":true},{"detail":"","id":"interface_scale_applies_and_persists","ok":true}],"count":9,"ok":true}
+
