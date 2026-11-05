@@ -1,0 +1,20 @@
+[
+  {
+    "result": null,
+    "ok": true,
+    "sampled_peak_working_set_bytes": 913305600,
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "aborted": false,
+    "output_sha256": "5F1E41511BAC859A083AFEF7000608939F504507F92F4F9966431266EB6DA260",
+    "exit_code": 0,
+    "timed_out": false,
+    "finished_utc": "2026-11-04T23:35:15.0052398Z",
+    "started_utc": "2026-11-04T23:35:04.0166254Z",
+    "name": "import"
+  }
+]

@@ -1,7 +1,9 @@
 # F10 Q5 — rastreabilidade e revisão integrada
 
-4/11/2026. Base `34bf16511019e88bf34ddfabfab624e533d7c20d`, contrato
-[Q5](../contracts/f10_q5_review.md). Candidato de código `8bbfb6c3ab39411fb27942d6d659ac94dc94aa6c`. Os incrementos
+4–5/11/2026. Base `34bf16511019e88bf34ddfabfab624e533d7c20d`, contrato
+[Q5](../contracts/f10_q5_review.md). Candidato deste incremento fixado no
+[checkpoint16](f10.md)
+e em seu vínculo de inputs; o incremento anterior é `8bbfb6c3ab39411fb27942d6d659ac94dc94aa6c`. Os incrementos
 foram validados; não é aprovação técnica global de F10 nem aceite humano. As provas autorais e a reprodução anterior continuam
 nos recibos [F0–F8](m8.md), [F9](f9.md) e [F10](f10.md).
 
@@ -28,7 +30,7 @@ estão no checkpoint e nos recibos do lote.
 | F9-07 | ações parametrizadas com IDs estáveis, estado/falhas/hash/confirmar, roteiro entre telas, alternar UX/AX | AX e Workflow; pincel temporal é entrada manual explícita, `Brush.stroke` mantém contrato congelado |
 | F9-08/09 | identidades/revisões imutáveis, stale de fontes, preservar edição humana, reconciliação | revisão de pins/recibos e recusas; publicação nova não substitui revisão já consumida |
 | F9-10 | progresso/cancelar/stale, cache/invalidação, pequeno/amplo/estresse, load/save/bake/generation | GridRegional Q1, worker/cache e medidas do checkpoint14; pausas de transição ainda existem |
-| F9-11 | pacote imutável/API, prévia real, restart, release limpo, versão antiga, consumidor futuro | Q5 encontrou vista técnica no lobby: referência visual por estágio e `AuthoredExpeditionView`; prova de release em andamento |
+| F9-11 | pacote imutável/API, prévia real, restart, release limpo, versão antiga, consumidor futuro | Q5 corrigiu vista técnica no lobby: referência visual por estágio e `AuthoredExpeditionView`; release atual 6/8/14 passou em perfil novo |
 
 ## Onze itens obrigatórios do contrato F10
 
@@ -37,13 +39,13 @@ estão no checkpoint e nos recibos do lote.
 | 1 · todas as promessas | grupos acima e matriz F9 confrontados; Core 641 checks/8 produtores e 11 etapas dirigidas/234 checks passaram | completar percurso manual e avaliar os limites identificados |
 | 2 · peça pequena/área ampla e fluxo sem código | ManualBrush 20, nativo atualizado 20, TerrainNative 45, WorkflowNative 28 | percurso completo por um operador sem código |
 | 3 · contexto e raros | população 91 no Core, EncounterAuthoringNative 25; provas F9 de raro fixo e reservas reaproveitadas sobre APIs sem delta | leitura editorial/temática humana; não criar gate de palco para raro manual |
-| 4 · UX/AX | WorkflowNative 28, ViewportNative 52, encontros 25, merge 10 e F7 presentation/flow/actions 10/23/28 | descoberta/usabilidade humana; capturas mostram prévia curta e IDs técnicos nos nomes de estágio/portal |
+| 4 · UX/AX | Q5UsabilityNative 12: 323 px úteis UX/304 AX em 1440×1000, dobras/foco/hash; F7 presentation 19 corrige nomes a partir do pin publicado; demais provas compatíveis do checkpoint15 | descoberta/usabilidade humana e outras resoluções ainda precisam avaliação; prévia curta e nomes técnicos foram corrigidos nesta amostra |
 | 5 · navegação/altura/ponte/corpo/LoS | TerrainNative 45, OcclusionNative 12 e provas F9 de Ports/Navigation/SurfacePick sobre geometria sem delta Q5 | inspeção visual de ator/rampa/ponte/passagem inferior |
 | 6 · identidade/revisão/determinismo/pins/stale | PhasePresentation 10, ReleaseApi 11, geração 89, RootSynthesisNative 11, ExchangeMergeNative 10 e hashes fonte/fixture | candidato fixado no checkpoint; provas limitadas aos casos/corpus executados |
 | 7 · dados adversos/recuperação/conflito | documento 70, intercâmbio 113, journal_capacity 53, F5 fault/recovery 20/33, F7 flow 23 | sem falha técnica identificada nesses cenários; percurso manual completo permanece pendente |
 | 8 · população/patrulha/combate/continuidade | patrulha 60, 16 IDs oficiais F3/F4/F5, ForestPlay 19 com arte até conclusão, diário sem duplicação | combate/legibilidade humanos; ForestPlay simula mortes e não prova diversão ou combate real |
-| 9 · GUI/AX/headless/skills/release limpo | GUI nativa/AX e Core passaram; fonte da skill validada; export e Bosque limpo passaram | floresta release 14/14 também passou; percurso manual por operador ainda indisponível |
-| 10 · tempos/memória/limites | pincel, GridRegional, diário, transições e memória do processo medidos; amostras identificadas, sem percentis artificiais | pausas longas persistem; não certificar fluidez/escala universal |
+| 9 · GUI/AX/headless/skills/release limpo | provas compatíveis do checkpoint15; release atualizado 6/6, Bosque 8/8, floresta 14/14, nomes conferidos na captura; fonte da skill validada | percurso manual por operador ainda indisponível; instrução longa de limpeza segue truncada no botão |
+| 10 · tempos/memória/limites | medidas do checkpoint15 e decomposição fria: admissão do primeiro campo 114 s/173.648 arestas; duas tentativas sem ganho descartadas, núcleo restaurado | pausas longas persistem; nenhuma redução nova de latência ou certificação universal de fluidez/escala |
 | 11 · guias/recibos/roteiro/limpeza | cabeçalhos históricos, consumo/arquitetura/skill corrigidos; roteiro e abertura isolada preparados | recibo/hashes/limpeza concluídos; uma fixture retida temporariamente para o roteiro humano |
 
 ## Limites de reprodução e retomada

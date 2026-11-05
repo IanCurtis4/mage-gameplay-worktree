@@ -67,6 +67,8 @@ mas mediu 127,55 s no mesmo carregamento, sem ganho confirmado. Também foi
 descartada, incluindo o teste específico de projeções. Os dois arquivos do
 núcleo voltaram exatamente à base; a continuidade desta entrega consolida as
 correções visuais, a instrumentação e a evidência, sem anunciar redução de tempo.
+Na consolidação, Sol recebe `.gitattributes` somente para preservar os bytes
+das duas novas pastas de evidência Q5; não renormaliza recibos anteriores.
 
 Luna assume engine/fixture somente após transferência e congelamento explícitos.
 Após o perfil inicial, a implementação volta a Sol e é congelada novamente antes

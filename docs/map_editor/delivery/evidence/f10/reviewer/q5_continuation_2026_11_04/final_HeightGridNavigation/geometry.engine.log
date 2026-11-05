@@ -1,0 +1,20 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F10_GRID_NAV_CHECK seams_from_shared_spans true
+F10_GRID_NAV_CHECK route_crosses_the_stretches_through_the_gap true
+F10_GRID_NAV_CHECK route_is_deterministic true
+F10_GRID_NAV_CHECK route_reaches_the_planar_surface true
+F10_GRID_NAV_CHECK worker_view_agrees true
+F10_GRID_NAV_CHECK wall_without_gap_splits_the_field true
+F10_GRID_NAV_CHECK certification_reaches_every_target true
+F10_GRID_NAV_CHECK certification_sees_the_cut true
+F10_GRID_NAV_TIMING {"batch_ms":128.6,"cold_ms":101.9,"points":11,"warm_ms":37.1}
+F10_GRID_NAV_CHECK grid_short_batch_keeps_duplicates_root_and_valid_routes true
+F10_GRID_NAV_CHECK grid_new_destinations_after_short_query_are_fully_proved true
+F10_GRID_NAV_CHECK grid_target_order_preserves_witnesses true
+F10_GRID_NAV_CHECK grid_warm_graph_preserves_budget_failure_without_certificate true
+F10_GRID_NAV_CHECK grid_warm_graph_preserves_cancellation_without_certificate true
+F10_GRID_NAV_CHECK grid_obstacle_invalidates_graph_and_old_certificate true
+F10_GRID_NAV_CHECK grid_negative_exhausts_search_after_partial_success true
+F10_GRID_NAV_CHECK grid_directed_searches_keep_outward_and_return_separate true
+F10_GRID_NAV_RESULT {"checks":[{"id":"seams_from_shared_spans","ok":true},{"id":"route_crosses_the_stretches_through_the_gap","ok":true},{"id":"route_is_deterministic","ok":true},{"id":"route_reaches_the_planar_surface","ok":true},{"id":"worker_view_agrees","ok":true},{"id":"wall_without_gap_splits_the_field","ok":true},{"id":"certification_reaches_every_target","ok":true},{"id":"certification_sees_the_cut","ok":true},{"id":"grid_short_batch_keeps_duplicates_root_and_valid_routes","ok":true},{"id":"grid_new_destinations_after_short_query_are_fully_proved","ok":true},{"id":"grid_target_order_preserves_witnesses","ok":true},{"id":"grid_warm_graph_preserves_budget_failure_without_certificate","ok":true},{"id":"grid_warm_graph_preserves_cancellation_without_certificate","ok":true},{"id":"grid_obstacle_invalidates_graph_and_old_certificate","ok":true},{"id":"grid_negative_exhausts_search_after_partial_success","ok":true},{"id":"grid_directed_searches_keep_outward_and_return_separate","ok":true}],"count":16,"ok":true}

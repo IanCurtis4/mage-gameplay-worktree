@@ -1,0 +1,53 @@
+{
+  "preserved_user_backups": [
+    {
+      "sha256": "65a26754c437695d7e7d60e93980c187371fddeec4fb71f78323104dbb55ced5",
+      "path": "data/map_authoring/sanctuary_woods_clearing.source.json.bak",
+      "matches_prior": true
+    },
+    {
+      "sha256": "d0071096addfefcefad1f1df849c3977064a741b4ed1446ffaf50a3f25a95d7e",
+      "path": "data/map_authoring/sanctuary_woods_overpass.source.json.bak",
+      "matches_prior": true
+    },
+    {
+      "sha256": "6b8d52095b0d98ba4a436fd5b192ff732b98a8f5da02855646e7e21b9792bb4f",
+      "path": "data/map_authoring/sanctuary_woods.map.json.bak",
+      "matches_prior": true
+    },
+    {
+      "sha256": "3debc7674a1770702639e8bb33b1e6598c52929e9230395ccfbf505c1ed04889",
+      "path": "data/map_authoring/sanctuary_woods.population.json.bak",
+      "matches_prior": true
+    }
+  ],
+  "source_and_fixture_match_both_manifests": true,
+  "tested_before_commit_with_frozen_dirty_inputs": true,
+  "mismatches": [],
+  "base": "d49dc1603ca6ab0e380054c45b0adcaecb3a10ab",
+  "code_candidate": "d54526502f536f695bd5982d50f5c4ef93441efe",
+  "restored_core": [
+    {
+      "git_blob": "dcf8e39606ab73c61787d26e438ef4edf5646515",
+      "path": "scripts/core/expedition/spatial/world_connectivity_batch.gd",
+      "matches_baseline": true
+    },
+    {
+      "git_blob": "b0701e696519a971d231a8839c3160ab69fb6040",
+      "path": "scripts/core/expedition/spatial/world_height_grid.gd",
+      "matches_baseline": true
+    },
+    {
+      "git_blob": "1a64f35b594b194707340ef39003506341f2cc30",
+      "path": "tests/map_editor_height_grid_test.gd",
+      "matches_baseline": true
+    }
+  ],
+  "native_inputs": 2224,
+  "archived_bytes": 12062812.0,
+  "release_inputs": 2218,
+  "release_manifest_sha256": "1d66d633f1c1a7e87e1aa113cda6a0ba115f8f55a71ded76580cd2aa3a8fe263",
+  "archived_files": 91,
+  "supervision_receipt": "docs/map_editor/delivery/evidence/f10/luna/q5_continuation_2026_11_04/supervision_final.md",
+  "supervision_sha256": "76cbdbeaf5b51738149b4406df1d59bc4bc4011573488c6da14f97b8903653b4"
+}

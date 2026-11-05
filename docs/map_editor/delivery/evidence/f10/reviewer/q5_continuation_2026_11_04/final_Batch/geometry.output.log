@@ -1,0 +1,40 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_BATCH_CHECK direct_batch_complete true
+F9_BATCH_CHECK duplicate_inputs_keep_result_indices true
+F9_BATCH_CHECK stationary_root_witness true
+F9_BATCH_CHECK direct_forward_witness_walks true
+F9_BATCH_CHECK direct_reverse_witness_walks true
+F9_BATCH_CHECK stationary_connected_support_transition_keeps_both_contexts true
+F9_BATCH_CHECK stationary_connected_support_transition_reverse_walks true
+F9_BATCH_CHECK witness_recomputes_geometry_cost_and_links true
+F9_BATCH_CHECK negative_certificate_cost_is_rejected true
+F9_BATCH_CHECK witness_is_bound_to_requested_terminal true
+F9_BATCH_CHECK snapshot_storage_budget_is_enforced true
+F9_BATCH_CHECK fixture_needs_a_real_detour true
+F9_BATCH_CHECK batch_finds_fragmented_detour true
+F9_BATCH_METRICS {"detour":{"connections":23,"direct_pairs":4,"edge_tests":170,"elapsed_ms":188.21,"endpoint_checks":46,"expansions":174,"landmark_checks":167,"offset_checks":670,"operations":1,"pair_candidates":466,"peak_storage_bytes":2625208,"phase_usec":{"construct":121988,"direct":7811,"inward":17370,"outward":22764,"prepare":6097,"publish":2247,"witnesses":9928},"portal_checks":118,"portal_pairs":92,"reconstruction_steps":14,"snapshot_storage_units":567288,"states":165,"storage_bytes":2559192,"straight_usec":33188,"terminal_checks":2,"witness_points":34,"witness_segments":30},"direct":{"direct_pairs":2,"direct_witness_proofs_reused":3,"elapsed_ms":15.236,"expansions":2,"operations":1,"peak_storage_bytes":1158436,"phase_usec":{"direct":6670,"inward":18,"outward":24,"prepare":5832,"publish":2597,"witnesses":89},"snapshot_storage_units":566640,"states":2,"storage_bytes":1157544,"terminal_checks":3}}
+F9_BATCH_CHECK storage_accounts_for_graph_and_proof_growth true
+F9_BATCH_CHECK construction_storage_exhaustion_has_no_certificate true
+F9_BATCH_CHECK individual_graphs_embed_in_batch_union true
+F9_BATCH_CHECK individual_success_included_and_witness_walks true
+F9_BATCH_CHECK target_order_does_not_change_witness true
+F9_BATCH_CHECK budget_failure_has_no_partial_certificate true
+F9_BATCH_CHECK cancellation_has_no_partial_certificate true
+F9_BATCH_CHECK callback_mutation_invalidates_batch true
+F9_BATCH_CHECK certificate_rejected_after_reconfigure true
+F9_BATCH_CHECK empty_targets_validate_only_root true
+F9_BATCH_CHECK invalid_profile_rejected true
+F9_BATCH_CHECK invalid_support_rejected true
+F9_BATCH_CHECK stale_request_revision_rejected true
+F9_BATCH_CHECK same_revision_effective_obstacle_is_seen true
+F9_BATCH_CHECK rollback_does_not_poison_next_batch true
+F9_BATCH_CHECK closed_opening_is_complete_negative true
+F9_BATCH_CHECK transposed_search_preserves_one_way true
+F9_BATCH_CHECK larger_body_does_not_reuse_smaller_profile true
+F9_BATCH_CHECK profile_change_back_is_clean true
+F9_BATCH_CHECK segment_snapshot_keeps_exact_geometry true
+F9_BATCH_CHECK segment_roundtrip_has_same_contacts true
+F9_BATCH_CHECK snapshot_preserves_segment_geometry true
+F9_BATCH_CHECK coincident_disconnected_supports_are_not_merged true
+F9_BATCH_RESULT {"checks":[{"id":"direct_batch_complete","ok":true},{"id":"duplicate_inputs_keep_result_indices","ok":true},{"id":"stationary_root_witness","ok":true},{"id":"direct_forward_witness_walks","ok":true},{"id":"direct_reverse_witness_walks","ok":true},{"id":"stationary_connected_support_transition_keeps_both_contexts","ok":true},{"id":"stationary_connected_support_transition_reverse_walks","ok":true},{"id":"witness_recomputes_geometry_cost_and_links","ok":true},{"id":"negative_certificate_cost_is_rejected","ok":true},{"id":"witness_is_bound_to_requested_terminal","ok":true},{"id":"snapshot_storage_budget_is_enforced","ok":true},{"id":"fixture_needs_a_real_detour","ok":true},{"id":"batch_finds_fragmented_detour","ok":true},{"id":"storage_accounts_for_graph_and_proof_growth","ok":true},{"id":"construction_storage_exhaustion_has_no_certificate","ok":true},{"id":"individual_graphs_embed_in_batch_union","ok":true},{"id":"individual_success_included_and_witness_walks","ok":true},{"id":"target_order_does_not_change_witness","ok":true},{"id":"budget_failure_has_no_partial_certificate","ok":true},{"id":"cancellation_has_no_partial_certificate","ok":true},{"id":"callback_mutation_invalidates_batch","ok":true},{"id":"certificate_rejected_after_reconfigure","ok":true},{"id":"empty_targets_validate_only_root","ok":true},{"id":"invalid_profile_rejected","ok":true},{"id":"invalid_support_rejected","ok":true},{"id":"stale_request_revision_rejected","ok":true},{"id":"same_revision_effective_obstacle_is_seen","ok":true},{"id":"rollback_does_not_poison_next_batch","ok":true},{"id":"closed_opening_is_complete_negative","ok":true},{"id":"transposed_search_preserves_one_way","ok":true},{"id":"larger_body_does_not_reuse_smaller_profile","ok":true},{"id":"profile_change_back_is_clean","ok":true},{"id":"segment_snapshot_keeps_exact_geometry","ok":true},{"id":"segment_roundtrip_has_same_contacts","ok":true},{"id":"snapshot_preserves_segment_geometry","ok":true},{"id":"coincident_disconnected_supports_are_not_merged","ok":true}],"count":36,"ok":true}

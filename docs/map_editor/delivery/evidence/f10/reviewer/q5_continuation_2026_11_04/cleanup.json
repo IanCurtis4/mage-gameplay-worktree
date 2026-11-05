@@ -1,0 +1,21 @@
+{
+  "retained_fixture": ".godot/verification/e07_f1/fixture_project",
+  "main_head": "fba777b3822356a10e7f6e050971e54ab1a9819b",
+  "main_existing_status_lines": 216,
+  "source_root_preserved": true,
+  "deleted_builds": [
+    {
+      "sha256": "4A9EADED8955EF789AB02651ED9D2DDE80328FBB342BD2A6DB4DB33E86305668",
+      "path": ".godot/m8_release/RagRPG-Map-Candidate.exe"
+    },
+    {
+      "sha256": "4E320C9078F2FF735BDB6FFAFD64101DA64BC103F8DDC9CB8DD0257336068D2A",
+      "path": ".godot/m8_release/RagRPG-Map-Candidate.pck"
+    }
+  ],
+  "removed_bytes": 214107216,
+  "retained_user_backups": 4,
+  "archived_files": 91,
+  "deleted_generated_directory": ".godot/q5_continue",
+  "no_engine_processes": true
+}

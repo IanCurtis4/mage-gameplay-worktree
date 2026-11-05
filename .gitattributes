@@ -28,3 +28,7 @@ data/map_authoring/asset_manifest.json text eol=lf
 
 # Published map packages are immutable bytes.
 data/map_authoring/*.rpp binary
+
+# Q5 continuation receipts retain their measured bytes across native checkouts.
+docs/map_editor/delivery/evidence/f10/reviewer/q5_continuation_2026_11_04/** -text
+docs/map_editor/delivery/evidence/f10/luna/q5_continuation_2026_11_04/** -text
