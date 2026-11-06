@@ -58,3 +58,19 @@ Uma fixture/cache .godot/verification/e07_f1/fixture_project,2322fontes no
 preflight de embalagem; perfis de teste isolados. CLI tools/workflow/workflow.py
 e docs/WORKFLOW_TOOLING.md ausentes nesta base: retomada Git/contratos sem copiar
 tooling adivinhado. Diagnóstico e aprovação técnica não equivalem a aceite humano.
+## Limpeza autorizada de disco — 6/11/2026
+
+Após a entrega, o usuário pediu remover testes antigos e deixar o disco C mais
+limpo. Foram removidos caches de importação, a fixture descartável em
+.godot/verification (incluindo e07_f1/fixture_project), cópias antigas F9,
+builds superados e resultados temporários já consolidados. Os arquivos-fonte
+dos testes, os dois checkouts Git, quatro backups, saves pessoais e evidência
+versionada foram preservados. Os21arquivos do piloto E08 e o PCK F10 de referência
+conferiram pelos mesmos hashes após a limpeza. O candidato e seu aceite não mudam.
+
+A fixture/cache já não está instalada: antes de uma nova validação -F1Fixture,
+recriar pelo bootstrap existente tools/verify.ps1 -Test e07_f1_import_test,
+com o engine standard fixado. A reimportação é esperada; não restaurar cópias
+antigas de testes. Registro operacional fora do Git em
+C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/cleanup_2026_11_06/.
+Nenhuma suíte de gameplay foi repetida por esta limpeza de arquivos gerados.
