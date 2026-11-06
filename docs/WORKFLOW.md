@@ -1,5 +1,9 @@
 # Desenvolvimento, revisão e playtest
 
+## E08 aprovado — 5/11/2026
+
+Decisão humana posterior: [plano E08](epics/e08_approved_plan.md), [contrato operacional](epics/e08_p0_contract.md) e [dispatch](epics/e08_dispatch.md). P0 coordena P1/P2 Sol 6.1 high e P3 Terra 6.1 high sequencialmente; Luna low supervisiona testes. P4–P7 dependem do aceite humano P3. Este roteamento prevalece sobre a exceção Claude histórica F9; não altera as demais regras de preservação e aceite.
+
 ## Atualização humana de 5/11/2026 — transição E07/F10 para E08
 
 A pessoa pediu encerrar o estágio e avançar. [Aceite de produto com ressalvas](epics/e07/e07_closure_2026_11_05.md)

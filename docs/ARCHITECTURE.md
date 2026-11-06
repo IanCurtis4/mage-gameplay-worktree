@@ -1,5 +1,9 @@
 # Arquitetura vigente — índice de autoridades e contratos
 
+## E08 — apresentação e áudio aprovados
+
+[Plano aprovado](epics/e08_approved_plan.md) e [contrato concreto P0–P3](epics/e08_p0_contract.md): preservar atlas/renderer, autoridades de combate e geometria; bridge de eventos confirmados, ciclo de vida e áudio local separado do save. [Inventário real](epics/e08_inventory.md). APIs novas só são consumidoras após entrega validada; esta entrada não afirma que P1/P2 já foram implementados.
+
 ## Delta do editor F10 — 5/11/2026
 
 F10 recebeu aceite de produto com ressalvas em5/11; [encerramento E07/F10](epics/e07/e07_closure_2026_11_05.md).

@@ -1,5 +1,9 @@
 # Chats e retomada — conferido em 17/10/2026
 
+## Execução E08 — autorização posterior em5/11
+
+[Plano aprovado](epics/e08_approved_plan.md) e [registro operacional de dispatch](epics/e08_dispatch.md). Arquitetura existente: chat 01a1ae95-13a2-71c2-84d6-8f98c23b57d6. P0/P7 é a coordenação operacional designada. P1/P2/P3 serão criados sequencialmente com IDs efetivos no registro; P4–P6 não serão reservados antes do aceite P3. O estado abaixo antecede essa decisão.
+
 ## Transição vigente — 5/11/2026
 
 [E07/F10 aceitos em produto com ressalvas](epics/e07/e07_closure_2026_11_05.md).
