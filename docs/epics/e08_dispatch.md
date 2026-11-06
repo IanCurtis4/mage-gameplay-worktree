@@ -358,3 +358,25 @@ P3 mais12paths de fontes/atlas no delta de e08_p3_contract.md. main.gd e runner
 voltam P1→P0→P3 somente no escopo consumidor/registro de teste; preservar layout,
 API e todos arquivos P1/P2. CharacterAnimation/testeP1/UI não foram transferidos.
 P3 único escritor, P0 somente leitura até handback. Não houve aceite de produto.
+
+### P3 entregue / checkpoint Luna piloto
+
+Terra devolveu posse no commit3ea5e9086da11c51d81d5a85b8f29d464b04c3d8,
+pai22f5788882622d733ab822c4caa08692ceb7226d. Índice/árvore rastreada limpos,
+quatro backups intactos. [Recibo final do executor](e08_p3_delivery.md).
+P0 inspecionou os dois atlas32frames e capturas da floresta: lobo/javali distintos,
+HUDespaçado e preenchido, sem troca dos atlas compartilhados. API/código preserva
+estado/clock/morte/snapshot; sem dados de gameplay/RPP alterados. Desempenho,
+release e aceite visual/sonoro ainda pendentes. Não declarar candidato final pronto.
+
+Luna low recebe candidato3ea5e9086da11c51d81d5a85b8f29d464b04c3d8, mesma
+branch/checkout, base22f5788882622d733ab822c4caa08692ceb7226d. Conferir inputs/
+hashes/ZIP no pacote e08_evidence/p3 e provenance de arte/áudio,2316fontes da
+fixture/engine/config/backups,14/14etapas concluídas, piloto125headless e126nativo.
+Único delta posterior aos testes foi recipes.md com prompts literais; versão
+testada/manifesto brutos noZIP permitem compatibilidade documental. Não ocultar
+diferença de bytes nem rerodar gameplay por receita documental.
+Dono exclusivo Luna: docs/epics/e08_evidence/luna_p3/supervision.md e hashes.json.
+P0/P1/P2/P3 somente leitura; sem alteração de código/fixture/expectativas ou
+certificação artística. Após conferência P0 prepara comparação F10 e release,
+preservando habitual/save, antes de oferecer o piloto ao usuário.
