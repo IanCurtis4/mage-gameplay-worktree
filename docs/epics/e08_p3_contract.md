@@ -98,3 +98,41 @@ fontes/licenças/receitas e limitações concretas. ZIP mínimo conserva bytes b
 dos logs quando necessário; sem projeto inteiro. Parar de escrever e devolver
 posse ao P0 para revisão, Luna e embalagem do candidato jogável. Gate de produto
 é o usuário ver/ouvir/testar esse candidato; este dispatch não é seu aceite.
+
+## Correção obrigatória de identidade — retomada após P1
+
+A revisão do WIP7f04830e mostrou que só recolorir animal_companion deixa javali
+e lobo com a mesma silhueta de orelhas grandes. Isso não encerra o piloto.
+Produzir agora atlas próprios de forest_wolf e forest_boar na linguagem aprovada,
+sem modificar os atlases compartilhados dos demais atores. P1 entregou e validou
+set_body_atlas(Texture2D)->bool: [API e precondições](e08_p1_pilot_corrections_delivery.md).
+Usar uma vez após configure do EnemyActor, fora do desenho, via helper P3/main;
+verificar retorno. Os dois animais usam kind animal_companion sem equipamento,
+aceito pela API. Não acessar campos privados nem mudar animation_kind/catalog.
+Texturas imutáveis e offsets/clock/cópia/snapshot seguem o contrato P1 existente.
+
+Paths adicionais EXATOS de propriedade Terra nesta retomada:
+
+- assets/art/e08_pilot/forest_wolf_source.png e .png.import;
+- assets/art/e08_pilot/forest_wolf_extra_source.png e .png.import;
+- assets/art/e08_pilot/forest_boar_source.png e .png.import;
+- assets/art/e08_pilot/forest_boar_extra_source.png e .png.import;
+- assets/art/animations/e08_forest_wolf.png e .png.import;
+- assets/art/animations/e08_forest_boar.png e .png.import.
+
+Receitas/proveniência, prepare_e08_pilot_art.py, relatório de preparação,
+helper/main e testes/recibo P3 já pertencem à lista original. Mesmos32frames,
+256×512,64×64/pivô32,58; fonte/prompts preservados, produção raster por imagegen
+e processamento existente. Identidade por forma, não só cor: lobo quadrúpede
+canino e javali quadrúpede suíno com corpo/focinho/orelhas/presas reconhecíveis.
+Manter escala/contato/direções e poses adequadas; não criar espécie ou habilidade.
+Inspecionar todos os frames e leitura nativa, inclusive morte/cópia/revive e
+retomada com o recurso próprio. Fontes adequadas dos demais consumidores ficam.
+
+P1 também corrigiu UI120% e help1280: não reeditar layout nem reduzir escala.
+Preservar esse diff em main ao ligar variantes. Recapturar depois nativo com HUD
+preenchido, rolagem acessível e mesmos parâmetros da comparação; pares antigos
+com UI/HUD anteriores permanecem referências de origem identificadas. Qualquer
+falha concreta retorna ao mesmo produtor; não falsificar prova ou apagar histórico.
+A prévia sonora informa seus ganhos (ambiente/cues) e ordem; não alegar que uma
+montagem sequencial é a mixagem ao vivo. P0 embalagem/comparaçãoF10 ainda pendentes.

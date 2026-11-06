@@ -18,15 +18,14 @@ com hashes no recibo P0. Não trocar o habitual nem copiar seu save.
 | Pacote | Estado real | Referência |
 |---|---|---|
 | P0 | Contratos/inventário/donos registrados; coordenação continua | e08_p0_receipt.md |
-| P1 apresentação | Ponte validada/integrada; correção atlas/UI entregue, aguardando conferência Luna | e08_p1_delivery.md; e08_p1_pilot_corrections_delivery.md |
+| P1 apresentação | Ponte e correção atlas/UI validadas/integradas por Sol/Luna | e08_p1_delivery.md; e08_p1_pilot_corrections_delivery.md |
 | P2 áudio | Serviço e correção de soma validados/integrados | e08_p2_delivery.md; e08_p2_mix_delivery.md |
 | P3 piloto | INCOMPLETO; WIP preservado em7f04830e01db0f49acefd47899c271b45b65adaf, Terra parado para produtor | e08_p3_delivery.md |
 | P4–P7 | BLOQUEADOS pelo aceite humano do piloto completo | e08_approved_plan.md |
 
 ## Próximo passo autorizado
 
-Luna confere o checkpoint P1 de atlas/UI, somente recibos próprios e evidência
-congelada, sem rerun rotineiro. P0 consolida e devolve escrita ao MESMO Terra
+Luna concluiu o checkpoint P1 de atlas/UI sem divergência ou rerun. P0 devolve escrita ao MESMO Terra
 P3 (`01a1aede-5799-76f2-835d-5418b5e395d9`) com novoHEAD/API e lista de arte.
 Terra produzirá e integrará os atlas próprios de lobo/javali, concluirá provas
 nativas/regressões e devolverá posse. P0 não substitui essa implementação.
@@ -43,7 +42,7 @@ explícita registrada. Sem chats P4–P6 reservados, master/push ou migração.
 P1 correção:9/9 etapas e61checks nativos em1280×720/1920×1080, UI efetiva120%.
 API set_body_atlas mantém estado, offsets, death_copy e snapshot por campos atuais.
 UI real preenchida passou acesso por roda/foco e encaixe; ui_layout_test30PASS
-resolveu a falha herdada sem mudar o oráculo. Supervisão desse checkpoint pendente.
+resolveu a falha herdada sem mudar o oráculo. Supervisão desse checkpoint concluída.
 P2mix validado por Sol/Luna:24impactos e32slots com pico protegido≈0,89026,
 zero quadros>1; impacto isolado preservado após2,042ms de atraso de áudio.
 

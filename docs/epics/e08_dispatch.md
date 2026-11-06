@@ -341,3 +341,20 @@ backups e114caminhosWIP preservados; conclusões reais de9etapas e61nativas.
 Sem rerun rotineiro, mudança de expectativa, edição de código/fixture ou recibo
 alheio. P0/P1/P2/P3 somente leitura. Não certificaP3 nem aceite artístico.
 P0 consolida e despacha retomada de Terra depois desse checkpoint.
+
+### P1 atlas/UI validado / retomada final da arte P3
+
+Luna confirmou17inputs,29membrosZIP,6PNGs/native_ui,114WIPpreservados,4backups,
+dependências P2mix e2.301fontes;9/9logs e61checks nativos sem divergência.
+[Supervisão](e08_evidence/luna_p1_pilot_corrections/supervision.md). Sol P0 consolidou
+contrato/diff e inspeção nativa: P1correções VALIDADO/INTEGRADO em3c405e9903ae930b719020b402afe65fc62caa22,
+recibo55960be86ffe9e4b7ddec4570cd84abd1c184a15. UI120% e help1280 agora corrigidos;
+não reescrever recibos históricos como se a falha nunca tivesse existido.
+
+P1 parou. Após este commit P0 devolve escrita ao mesmo Terra P3, chat
+01a1aede-5799-76f2-835d-5418b5e395d9, high. Base executável55960be86ffe9e4b7ddec4570cd84abd1c184a15,
+WIP7f04830e já ancestral; HEADdocumental efetivo na mensagem. Propriedade original
+P3 mais12paths de fontes/atlas no delta de e08_p3_contract.md. main.gd e runner
+voltam P1→P0→P3 somente no escopo consumidor/registro de teste; preservar layout,
+API e todos arquivos P1/P2. CharacterAnimation/testeP1/UI não foram transferidos.
+P3 único escritor, P0 somente leitura até handback. Não houve aceite de produto.
