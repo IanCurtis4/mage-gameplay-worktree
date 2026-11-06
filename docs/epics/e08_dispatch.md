@@ -242,3 +242,28 @@ Recibo e hashes mínimos próprios; commit somente quatro caminhos próprios aci
 sem stage-all. Devolver posse P0 para conferir preservação, validação/Luna por
 impacto e devolver P3 ao mesmo Terra. Correção contratual automática; sem Astra
 ou nova decisão de produto. P3 segue incompleto e gates P4–P7 continuam fechados.
+
+### Correção P2 recebida / checkpoint Luna mix
+
+Runtime/evidência `05acf494b6acc50b3ee793635a8191809c296770`, recibo/handback
+`310fef0c93cfa9a957f965b0e838eec4f8093833`. P2 parou de escrever. P0 confirmou
+80/80 hashes do WIP Terra intactos; índice sem arquivos P3. [Recibo](e08_p2_mix_delivery.md).
+Proteção nativa única no Geral privado, API intacta. Pico real24impactos
+7,8327608→0,8902556; mix32slots8,0291433→0,8902561; zero quadros>1 na saída
+protegida. BusEffects bruto permanece alto antes da proteção e não é sua saída.
+Impacto isolado conserva waveform após atraso de áudio2,042ms; nenhum tempo de
+simulação mudou. Autor: verify3/3 (áudio132, apresentação2122, lifecycle90),
+nativo268checks; tudoPASS no escopo. P0 conferiu diff pequeno do serviço e prova.
+
+Luna low recebe candidato `310fef0c93cfa9a957f965b0e838eec4f8093833`, mesmo checkout/
+branch, base do handoff `a0f09771a0d5928b81c6ad0b5c08788fb284517c` + WIP congelado.
+Conferir docs/epics/e08_evidence/p2_mix/{inputs.json,hashes.json,raw_evidence.zip,
+comparison.json,native_before_metrics.json,native_after_metrics.json,wip_before.json,
+wip_after.json}: 44membros/14blobs únicos noZIP,24capturasfloat, conclusões/erros/
+timeouts/inputs reais e2.299fontes da fixture, engine/config/runner e80hashesP3.
+Recalcular picos/quadros acima da escala dos buffers conforme o recibo e comparar
+antes/depois, pontos de captura e32vozes, sem rerodar suíte por rotina. Histórico
+de falhas e rawEffects não são PASS da saída nem falha da saída protegida.
+Dono exclusivo Luna: docs/epics/e08_evidence/luna_p2_mix/supervision.md e hashes.json.
+P0/P2/P3 somente leitura; nenhum outro arquivo/fixture editado. Não certificaP3.
+Após consolidação P0 devolverá escrita ao mesmo Terra com novoHEAD e WIP preservado.
