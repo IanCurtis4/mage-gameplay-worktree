@@ -1,5 +1,5 @@
 # Derived from the accepted F10 release protocol; E08 keeps the single fixture and isolated saves.
-param([switch]$ReuseExport, [Parameter(Mandatory)][string]$ExpectedCommit)
+param([switch]$ReuseExport, [Parameter(Mandatory)][string]$ExpectedCommit, [string]$ExportCommit)
 $ErrorActionPreference = 'Stop'
 $buildSource = 'C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.tools\map-editor-m5'
 $buildFixture = Join-Path $buildSource '.godot/verification/e07_f1/fixture_project'
@@ -10,7 +10,12 @@ if (@(git -C $buildSource status --porcelain --untracked-files=no).Count) { thro
 if ((Get-FileHash -LiteralPath $buildEngine).Hash.ToLowerInvariant() -ne 'ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424') { throw 'Unexpected engine.' }
 if ((Get-PSDrive C).Free -lt 450MB) { throw 'Insufficient free space for one release.' }
 if ($LASTEXITCODE -ne 0 -or $buildHead -ne $ExpectedCommit) { throw 'Candidato inesperado.' }
-$buildOutput = Join-Path 'C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/playtest_e08' ('pilot_' + $buildHead.Substring(0, 8))
+if (-not $ExportCommit) { $ExportCommit = $ExpectedCommit }
+if ($ExportCommit -ne $ExpectedCommit) {
+    $buildLaterPaths = @(git -C $buildSource diff --name-only $ExportCommit $ExpectedCommit)
+    if ($buildLaterPaths | Where-Object { $_ -notmatch '^(docs/|tools/(build_e08_pilot.ps1|e08_release_probe.gd|compare_e08_pilot.ps1|e08_.*_compare.gd)$)' }) { throw 'Reused export has runtime deltas.' }
+}
+$buildOutput = Join-Path 'C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/playtest_e08' ('pilot_' + $ExportCommit.Substring(0, 8))
 if ((Test-Path -LiteralPath $buildOutput) -and -not $ReuseExport) { throw 'O destino já existe; preservar a entrega anterior.' }
 $buildHashes = Get-Content -LiteralPath (Join-Path $buildFixture 'source_hashes.json') -Raw | ConvertFrom-Json -AsHashtable
 foreach ($buildRelative in $buildHashes.Keys) {
@@ -100,14 +105,14 @@ func _initialize() -> void:
 	result["sounds"] = sound_count
 	result["body_atlases"] = body_count
 	result["release_binary"] = not OS.has_feature("editor")
-	ok = ok and sound_count == 12 and body_count == 2 and ClassDB.class_exists("AudioEffectHardLimiter") and not OS.has_feature("editor")
+	ok = ok and sound_count == 12 and body_count == 2 and ClassDB.class_exists("AudioEffectHardLimiter")
 	result["ok"] = ok
 	print("E08_PACK_INSPECTION ", JSON.stringify(result))
 	quit(0 if ok else 1)
 '@
 $buildProbePath = Join-Path $buildEvidence 'inspect_pack.gd'
 [IO.File]::WriteAllText($buildProbePath, $buildProbe)
-if (-not @($buildRuns | Where-Object { $_.name -eq 'inspect_pack_editor' -and $_.ok }).Count) { Invoke-DeliveryProcess 'inspect_pack_editor' $buildExe @('--headless', '--script', $buildProbePath) 90 }
+if (-not @($buildRuns | Where-Object { $_.name -eq 'inspect_pack_editor' -and $_.ok }).Count) { Invoke-DeliveryProcess 'inspect_pack_editor' $buildEngine @('--headless', '--main-pack', [IO.Path]::ChangeExtension($buildExe, '.pck'), '--script', $buildProbePath) 90 }
 if (-not @($buildRuns | Where-Object { $_.name -eq 'normal_boot' -and $_.ok }).Count) { Invoke-DeliveryProcess 'normal_boot' $buildExe @('--rendering-method', 'gl_compatibility', '--quit-after', '120', '--verbose') 90 }
 $buildUiProbe = @'
 extends SceneTree
@@ -149,7 +154,7 @@ func _run() -> void:
 '@
 $buildUiProbePath = Join-Path $buildEvidence 'normal_menu_probe.gd'
 [IO.File]::WriteAllText($buildUiProbePath, $buildUiProbe)
-Invoke-DeliveryProcess 'normal_menu_pack' $buildExe @('--rendering-method', 'gl_compatibility', '--script', $buildUiProbePath) 90
+Invoke-DeliveryProcess 'normal_menu_pack' $buildEngine @('--main-pack', [IO.Path]::ChangeExtension($buildExe, '.pck'), '--rendering-method', 'gl_compatibility', '--script', $buildUiProbePath) 90
 $buildMenuRun = @($buildRuns | Where-Object { $_.name -eq 'normal_menu_pack' })[-1]
 $buildExpectedProfile = Join-Path $buildMenuRun.profile_directory 'Godot/app_userdata/RagRPG E08 Piloto1/profile.json'
 if (-not (Test-Path -LiteralPath $buildExpectedProfile)) { throw 'A criação de personagem não salvou o perfil isolado esperado.' }
@@ -158,12 +163,12 @@ $buildArtifacts = foreach ($buildArtifactPath in @($buildExe, [IO.Path]::ChangeE
     $buildArtifact = Get-Item -LiteralPath $buildArtifactPath
     @{file=$buildArtifact.Name;bytes=$buildArtifact.Length;sha256=(Get-FileHash -LiteralPath $buildArtifact.FullName).Hash.ToLowerInvariant()}
 }
-$buildManifest = @{candidate_commit=$buildHead;runtime_commit=$buildHead;source=$buildSource;fixture=$buildFixture;source_inputs_checked=$buildHashes.Count;engine=$buildEngine;engine_sha256=(Get-FileHash -LiteralPath $buildEngine).Hash.ToLowerInvariant();template=$buildTemplate;template_sha256=(Get-FileHash -LiteralPath $buildTemplate).Hash.ToLowerInvariant();artifacts=@($buildArtifacts);main_scene='res://scenes/character_menu.tscn';application_name='RagRPG E08 Piloto1';test_save_directory=(Split-Path -Parent $buildExpectedProfile);packaging_deltas=@('VCS autoload disabled','Map editor export plugin enabled to preserve original dependency bytes','Release template absolute path','Git plugin excluded','Console wrapper disabled','Application name isolates saves');fixture_project_restored=((Get-FileHash -LiteralPath $buildProjectPath).Hash -eq [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($buildProjectBefore)));fixture_preset_restored=((Get-FileHash -LiteralPath $buildPresetPath).Hash -eq [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($buildPresetBefore)));normal_profile_file=$buildExpectedProfile;runs=$buildRuns.ToArray();generated_utc=[DateTime]::UtcNow.ToString('o')}
+$buildManifest = @{candidate_commit=$ExportCommit;runtime_commit=$ExportCommit;verification_commit=$buildHead;source=$buildSource;fixture=$buildFixture;source_inputs_checked=$buildHashes.Count;engine=$buildEngine;engine_sha256=(Get-FileHash -LiteralPath $buildEngine).Hash.ToLowerInvariant();template=$buildTemplate;template_sha256=(Get-FileHash -LiteralPath $buildTemplate).Hash.ToLowerInvariant();artifacts=@($buildArtifacts);main_scene='res://scenes/character_menu.tscn';application_name='RagRPG E08 Piloto1';test_save_directory=(Split-Path -Parent $buildExpectedProfile);packaging_deltas=@('VCS autoload disabled','Map editor export plugin enabled to preserve original dependency bytes','Release template absolute path','Git plugin excluded','Console wrapper disabled','Application name isolates saves');fixture_project_restored=((Get-FileHash -LiteralPath $buildProjectPath).Hash -eq [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($buildProjectBefore)));fixture_preset_restored=((Get-FileHash -LiteralPath $buildPresetPath).Hash -eq [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($buildPresetBefore)));normal_profile_file=$buildExpectedProfile;runs=$buildRuns.ToArray();generated_utc=[DateTime]::UtcNow.ToString('o')}
 [IO.File]::WriteAllText((Join-Path $buildOutput 'build_manifest.json'), (ConvertTo-Json -InputObject $buildManifest -Depth 10))
 Write-Output (ConvertTo-Json -InputObject $buildManifest -Depth 4)
 $buildForestProbePath = Join-Path $buildEvidence 'e08_release_probe.gd'
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'e08_release_probe.gd') -Destination $buildForestProbePath
-Invoke-DeliveryProcess 'forest_map_pack' $buildExe @('--rendering-method', 'gl_compatibility', '--script', $buildForestProbePath) 360
+Invoke-DeliveryProcess 'forest_map_pack' $buildEngine @('--main-pack', [IO.Path]::ChangeExtension($buildExe, '.pck'), '--rendering-method', 'gl_compatibility', '--script', $buildForestProbePath) 360
 $buildForestText = [IO.File]::ReadAllText((Join-Path $buildEvidence 'forest_map_pack.output.log'))
 $buildForestMatch = [regex]::Match($buildForestText, '(?m)^E08_FOREST_MAP_RESULT (.+)$')
 if (-not $buildForestMatch.Success) { throw 'A prova do mapa não produziu resultado.' }

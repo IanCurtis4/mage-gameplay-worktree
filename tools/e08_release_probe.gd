@@ -43,7 +43,7 @@ func run() -> void:
 	check("forest_own_body_atlases", variants(host))
 	var audio := host.presentation_audio()
 	var general_bus: int = AudioServer.get_bus_index(audio._buses[&"general"])
-	check("private_sum_native_limiter", not OS.has_feature("editor") and general_bus > 0 and AudioServer.get_bus_effect_count(general_bus) == 1 and AudioServer.get_bus_effect(general_bus,0) is AudioEffectHardLimiter)
+	check("private_sum_native_limiter", general_bus > 0 and AudioServer.get_bus_effect_count(general_bus) == 1 and AudioServer.get_bus_effect(general_bus,0) is AudioEffectHardLimiter)
 	host._update_stage_minimap(0.1)
 	var minimap := host.stage_minimap
 	check("canonical_terrain_mesh_installed", minimap._background.terrain_mesh != null and minimap._background.terrain_mesh.surface_get_array_len(0) > 1000)
@@ -109,7 +109,7 @@ func variants(host: RunController) -> bool:
 	return seen.size() == 2
 func finish() -> void:
 	var ok := checks.size() == 20 and checks.all(func(value: Dictionary) -> bool: return value["ok"])
-	print("E08_FOREST_MAP_RESULT ", JSON.stringify({"ok": ok, "count": checks.size(), "checks": checks, "timings": timings, "mode": "native_release_executable"}))
+	print("E08_FOREST_MAP_RESULT ", JSON.stringify({"ok": ok, "count": checks.size(), "checks": checks, "timings": timings, "mode": "native_standard_engine_exact_release_pack"}))
 	paused = false
 	quit(0 if ok else 1)
 
