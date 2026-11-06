@@ -251,7 +251,13 @@ func _begin_presentation_stage(id: String, resumed: bool = false) -> void:
 	if bridge.stage_id != id: bridge.begin_stage(id, resumed)
 	if is_instance_valid(battle_controls): battle_controls.audio_panel.bind_service(audio)
 
+func _pilot_actor_entered(node: Node) -> void:
+	if node is EnemyActor and node.occurrence != null and node.occurrence.mob_base_id in [&"forest_wolf", &"forest_boar"]:
+		if not preload("res://scripts/presentation/e08_pilot_visual.gd").install_forest_atlas(node):
+			push_error("Não foi possível aplicar o atlas visual da espécie " + str(node.occurrence.mob_base_id))
+
 func _ready() -> void:
+	if not child_entered_tree.is_connected(_pilot_actor_entered): child_entered_tree.connect(_pilot_actor_entered)
 	if snapshot_passive: return
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	y_sort_enabled = true

@@ -1,0 +1,42 @@
+{
+  "head": "22f5788882622d733ab822c4caa08692ceb7226d",
+  "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "fixture": "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+  "sources_count": 2316,
+  "manifest_after_documentation_sha256": "236060a2447ead32b724c8521b4b3bf76b1381a1a271f7893ae1fb80deb3ce1c",
+  "project_sha256": "33726afe86093a0d6f580114f803045e4f6624dc94528ecbebd61fb199a06517",
+  "inputs": {
+    "scripts/main.gd": "f8ecbe667e38243a8e3801ba5499217a1facdf0ecf628c8364a76a80b304e7cf",
+    "scripts/presentation/e08_pilot_visual.gd": "ca8525df374fe619f3d42deee3c93e0ec6c9d88f8e0655abfac08f7c53acc9c3",
+    "tests/e08_pilot_test.gd": "d846b1eb7189d88f54adaa03db421e4a8991ac8f1030dff003a49b2bf363e5e1",
+    "tools/prepare_e08_pilot_art.py": "faeb7856a3e39fe32f1b05422b91cbdea1c0685becdd5790373316cf07614b77",
+    "assets/art/animations/preparation_report.json": "8dcc456674cece98de74c1deafa21dea38e69265dc530fe812364ba77ecdbab3",
+    "assets/art/e08_pilot/forest_boar_extra_source.png": "0559aa79b7528bab445d5fc8bbfefba198768703ea153dde7249f2bb9ff36427",
+    "assets/art/e08_pilot/forest_boar_extra_source.png.import": "748deff0b3ddddc290d255a3597fd7bafd7aef12aaeb24452cf4bb202b3cfe9c",
+    "assets/art/e08_pilot/forest_boar_source.png": "519f2d40695283b2dfcc496a1c5b8ecfe86e2f4211595210b072ebaaa0a979c5",
+    "assets/art/e08_pilot/forest_boar_source.png.import": "b2fa647d82d0535a3d31c1a5bd1287a950010e09a86837a66ed3eec419d95ec4",
+    "assets/art/e08_pilot/forest_wolf_extra_source.png": "c7d2a361cdb99778de9d809dfde46b05314d8db622b4f5800395c76b3ca33440",
+    "assets/art/e08_pilot/forest_wolf_extra_source.png.import": "e7934d183ca0d65d2e2ee73c93ad7cbc097983e10f2757318895b04a468433eb",
+    "assets/art/e08_pilot/forest_wolf_source.png": "32972bd7666749c2bc49b5721a624b9257a77c637d1c894726d499fef53eb40a",
+    "assets/art/e08_pilot/forest_wolf_source.png.import": "a0e648ad90d5147eeebe8d24385f73d80e6c8122b66e0fa58aca3bfd60346e17",
+    "assets/art/e08_pilot/provenance.json": "a3bc3ecb6b9b8b1d8a3b72d20bf7ff84e7f508d628814e4a0aba7770f34057ca",
+    "assets/art/e08_pilot/recipes.md": "c647b6bf127d31bc97183925aed47bb0004678853b84ac328139c9018dad2535",
+    "assets/art/animations/e08_forest_boar.png": "64b7f40190cd22b17a1e99daf94f56d4b2070baeb7584cb25b4855ea1318b373",
+    "assets/art/animations/e08_forest_boar.png.import": "64f6a7e36631b1508f7680c91c433b3067ce182b5cad0c8df2e3a8974152c928",
+    "assets/art/animations/e08_forest_wolf.png": "e36b9195562f812580fead73ad01acbc884dc27d0e2f89450dbb63c53c95770a",
+    "assets/art/animations/e08_forest_wolf.png.import": "73d6d7f56875835e88d282af4ea5e0d7a00d88d8f6e623878f70e40ee49a5483"
+  },
+  "captures": {
+    "docs/epics/e08_evidence/p3/forest_variants/forest.log": "194d874ab910a6d83713e8d147d857aec2c54bd76e55617f3379004657b8bc1b",
+    "docs/epics/e08_evidence/p3/forest_variants/forest_entry_100.png": "44849d81d044addddb6831fb29a8a7ea30a4c87c20b83647517d3465c3c9b1f3",
+    "docs/epics/e08_evidence/p3/forest_variants/forest_entry_160.png": "732bd36977b4e6e7625deb22817c17fcc4a7f4245417508b3ebc8ae463c63068",
+    "docs/epics/e08_evidence/p3/forest_variants/forest_entry_50.png": "5c38555b884becbd1a06a6aeed2ab17a271c03fb552c4ee737cdfb95b2929cb2",
+    "docs/epics/e08_evidence/p3/forest_variants/forest_forest_boar.png": "9a6ba6089e4e0b35afae9f8935e4dc30192d2d5da1c6b2d28f4a901ee2c85753",
+    "docs/epics/e08_evidence/p3/forest_variants/forest_forest_canopy_archer.png": "0897e5442957b4c50244bfe487234415f17fd319b36fccbd86978227fa0c8b6a",
+    "docs/epics/e08_evidence/p3/forest_variants/forest_forest_stalker.png": "1c25974c61cdebed2760dc95002c00c1b7c262a043a5070e6cee67208eb6be0d",
+    "docs/epics/e08_evidence/p3/forest_variants/forest_forest_wolf.png": "c6b891812e45c1d4deb670177c816530c423757f6c35e5849dcd5e91ac7f587d",
+    "docs/epics/e08_evidence/p3/forest_variants/forest_inputs.json": "b07e7b860df5e6309eb97d05832741c54f27c8b14f29199657ff1147f1d93638"
+  },
+  "evidence_zip_sha256": "953f37a5697841727457fb2a8f4704feaba9dabab8cdcf5ae755f6abbd169941",
+  "note": "Only recipes.md changed after verification: completed literal prompts. Original tested recipe and manifest are inside ZIP. Runtime/test/images unchanged."
+}

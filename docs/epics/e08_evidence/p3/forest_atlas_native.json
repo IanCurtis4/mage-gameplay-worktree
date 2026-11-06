@@ -1,0 +1,11 @@
+{
+  "exit_code": 0,
+  "log_sha256": "73f9787fd0c862e7b08420dff9aefe9108a76e2fabd06213ff6867c49ef5d82e",
+  "timed_out": false,
+  "arguments": [
+    "--path",
+    "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+    "--script",
+    "res://tests/e08_pilot_test.gd"
+  ]
+}
