@@ -152,3 +152,53 @@ Sem rerun rotineiro; falha/incompletude retorna a P0. Dono exclusivo Luna:
 docs/epics/e08_evidence/luna_p2/supervision.md e hashes.json. Não editar outros
 arquivos, runtime/tests/oráculos, fixture ou recibos P1/P2. P0 fica somente leitura.
 P3 continua não despachado até esta consolidação.
+
+### P2 validado / P3 pronto
+
+P0 consolidou P2 com [Luna](e08_evidence/luna_p2/supervision.md): integridade de
+23 inputs/13 blobs/63 membros ZIP/2.265 fontes de fixture, engine/config/captura
+e quatro backups; seleção composta conferida. P2 VALIDADO/INTEGRADO na composição
+para seu escopo de áudio, com FAIL herdado de ajuda1/30 explícito e não bloqueante
+do painel áudio inspecionado. Não é certificado de toda UI nem aceite sonoro.
+P2 está parado para correções. P0/P7: chat01a1ae9c-2471-74d2-84ad-9805a14dc543.
+
+P3 Terra6.1 high: base executável `66209511813628b1b78d21426824cee5bbedcf22`,
+base documental `38cfb7c3790e5283555fcb26b507d72dedff8ffb`; este registro e
+[contrato P3](e08_p3_contract.md) são documentais. Branch/checkout únicos acima.
+Depois do commit documental P0 fornecerá o HEAD completo efetivo no dispatch.
+Posse sequencial transferida P0→P3, sem outro escritor. Arquivos EXATOS permitidos:
+
+- scripts/actors/combat_actor.gd (somente desenho/helper visual estático; sem campos);
+- scripts/actors/mage_projectile.gd (somente _draw, sem colisão/modificadores);
+- scripts/world/world_field_view.gd (somente desenho, sem geometria canônica);
+- scripts/main.gd (somente instalação/limpeza do consumidor visual Control);
+- scripts/presentation/e08_pilot_visual.gd e .uid;
+- scripts/presentation/e08_pilot_feedback.gd e .uid;
+- tools/verify.ps1 (registro e08_pilot_test);
+- tests/e08_pilot_test.gd e .uid;
+- tools/e08_pilot_probe.gd e .uid;
+- tools/prepare_e08_pilot_audio.py;
+- tools/prepare_e08_pilot_art.py;
+- assets/art/animations/mage.png, mage.png.import, mage_weaponless.png,
+  mage_weaponless.png.import, preparation_report.json;
+- assets/art/e08_pilot/mage_source.png, mage_extra_source.png,
+  mage_weaponless_source.png, mage_weaponless_extra_source.png, grass_source.png,
+  os cinco .png.import correspondentes, provenance.json e recipes.md;
+- assets/art/map_authoring/grass_tile.png e .import, materials_provenance.json,
+  materials.md;
+- assets/audio/e08/world_cast_start.wav, world_cast_cancel.wav,
+  world_projectile_launch.wav, world_impact.wav, world_area_start.wav,
+  world_area_end.wav, world_teleport.wav, world_death.wav, world_revive.wav,
+  ui_confirm.wav, ui_cancel.wav, ambience_stage.wav, os12 .wav.import
+  correspondentes, provenance.json e recipes.md;
+- docs/epics/e08_p3_delivery.md;
+- docs/epics/e08_evidence/p3/ (evidência mínima do piloto, incluindo antes/depois).
+
+Lista permitida não obriga editar tudo. Não editar ponte/serviço/catálogo áudio,
+CharacterAnimation/CombatAnimationState, fórmulas, schema, mapas/populações/RPP,
+outros atlas/classes ou docs P0. Necessidade adicional requer pedido delimitado
+com pausa de escrita para P0 registrar transferência; correção usa o mesmo chat.
+Dependências/API/aceites/testes completos no contrato P3 e recibos P1/P2.
+P0 possui export_presets/runner de embalagem e release, não delegados a Terra.
+Luna supervisionará checkpoint congelado após entrega; P0 consolida contrato e
+release/playtest. P4–P7 continuam BLOQUEADOS_ACEITE_HUMANO_P3, sem chats criados.
