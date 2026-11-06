@@ -1,0 +1,23 @@
+{
+  "candidate": "d84991e52bf724284f0bf8310de525104f563b81",
+  "runtime": "04c77c9c36f5ee86a89a266b0d3a3a07e74fccac",
+  "observed_head": "971a7cf693c9c858e8c5fc7683cac88bbffb105f",
+  "inputs": "docs/epics/e08_evidence/p1/inputs.json",
+  "inputs_files_verified": 20,
+  "git_blob_hashes_claimed": 9,
+  "git_blob_hashes_verified": 9,
+  "backups_verified": 4,
+  "raw_logs_zip_sha256": "99e99dc7b18cca9c2b36fdd4b3cab4ab19546a4b8aceb634c64fb4bd28dae54e",
+  "raw_log_members_verified": 19,
+  "fixture_manifest_files_verified_against_source_and_fixture": 2255,
+  "engine_binary_sha256_verified": true,
+  "fixture_project_godot_sha256_verified": true,
+  "fixture_manifest_sha256_verified": true,
+  "final_checks": 12,
+  "final_outputs_conclusions_verified": 12,
+  "final_outputs_error_markers": 0,
+  "reported_failures": 0,
+  "reported_timeouts": 0,
+  "repeated_tests": false,
+  "result": "PASS"
+}

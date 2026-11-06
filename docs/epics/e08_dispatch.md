@@ -79,3 +79,50 @@ Dono exclusivo Luna low: docs/epics/e08_evidence/luna_p1/supervision.md e hashes
 nenhuma edição de runtime/testes/oráculos/manifesto. P0 permanece somente leitura
 enquanto Luna escreve. Não é auditoria semântica independente. P2 ainda bloqueado
 pela consolidação deste checkpoint.
+
+### P1 validado e integrado / P2 pronto
+
+P0 consolidou o contrato e a conferência Luna em
+[supervisão P1](e08_evidence/luna_p1/supervision.md). 20 inputs de checkout,
+9 blobs explicitamente registrados, 19 membros do ZIP, 2.255 arquivos da fixture
+contra origem/manifesto, engine/config/runner e quatro backups conferidos;
+12/12 conclusões finais sem erro/timeout. P1 VALIDADO/INTEGRADO na composição,
+sem aceite artístico ou áudio e sem master/playtest. Chat mantido para correções.
+
+P2: base de código `d84991e52bf724284f0bf8310de525104f563b81`, base documental
+`971a7cf693c9c858e8c5fc7683cac88bbffb105f`; commit deste registro apenas documental.
+Modelo Sol 6.1 high, checkout/branch acima. Dependência P1 satisfeita. P0 transfere
+scripts/main.gd e tools/verify.ps1 a P2; P1 está parado. P2 é único escritor.
+Lista EXATA autorizada:
+
+- scripts/presentation/audio_service.gd e .uid;
+- scripts/presentation/audio_event_catalog.gd e .uid;
+- scripts/presentation/audio_preferences.gd e .uid;
+- scripts/ui/audio_settings_panel.gd e .uid;
+- scripts/ui/battle_controls.gd (host rolável de configurações existente);
+- scripts/main.gd;
+- tools/verify.ps1 (apenas registrar o teste e suporte necessário E08);
+- tests/e08_audio_test.gd e .uid;
+- docs/epics/e08_p2_delivery.md;
+- docs/epics/e08_evidence/p2/ (logs/hashes/recibos mínimos, sem fixture inteira).
+
+APIs: contrato P0 e tabela executável do recibo P1, inclusive token de época e
+pausa. UI visible em pt-BR com Geral/Efeitos/Interface/Ambiente. Catálogo inicial
+com IDs estáveis/paths definidos para P3, sem sons de produção neste pacote;
+fixture usa AudioStream sintético. Serviço participa da fronteira Control
+descartável existente, sem ampliar snapshot. Sem plugins, música ou save novo.
+Volume/mute independentes persistem em audio.cfg separado. Eventos de UI confirmam
+ações reais; não converter input tentado/recusado em impacto. Instalação/rebind
+não acumula assinaturas/vozes/buses e retomada só reinicia ambiente atual.
+
+Testes P2: e08_audio_test (mute/volume/config inválida e erro de gravação,
+dedup/rebind/época, 32 vozes e prioridades, pausa mundo/UI, limpeza/retomada),
+e08_presentation_test, combat_animation_test, e07_f1_presentation_test,
+e07_f3_lifecycle_test, e07_f3_action_matrix_test e e07_f7_presentation_test;
+acrescentar UI por impacto e inspeção nativa do painel em UI120%.
+tools/verify.ps1, mesma fixture e standard 4.7.2 pareado já validado (wrapper
+console tem falha local193). APPDATA isolado. Sem repetir fronteiras sem delta.
+Luna low supervisionará outputs/inputs congelados; Sol P0 consolida antes de P3.
+Aceite: API e serviço funcionais com fixture sintética, controles acessíveis,
+sem mutação de gameplay/save nem alegação de sound design final. Commit próprios,
+recibo autossuficiente com APIs/IDs/paths, hashes e limitações; devolver posse.
