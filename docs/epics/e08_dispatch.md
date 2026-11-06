@@ -316,3 +316,28 @@ P3 e devolve posse explicitamente. Não alterar MobDefinition/animation_kind,
 arquivos compartilhados de outras identidades, comportamento ou mapas. São
 variantes cosméticas por instância no renderer existente, não arquitetura nova.
 P4–P7 continuam fechados pelo aceite humano do piloto completo.
+
+### P1 atlas/UI recebido / checkpoint Luna
+
+Código/evidência `3c405e9903ae930b719020b402afe65fc62caa22`, recibo/handback
+`55960be86ffe9e4b7ddec4570cd84abd1c184a15`. P1 parou de escrever. Base
+`b105dbc6884395edac9f7478b0afe200a4a0940d`, WIP P3 preservado nos114caminhos
+fora dos arquivos transferidos. [Recibo](e08_p1_pilot_corrections_delivery.md).
+P0 conferiu diff/API e PNG nativo preenchido com painel separado da barra.
+set_body_atlas é restrito a kind fora de WEAPONLESS_KINDS e equipamento vazio;
+Texture2D persistível256×512, mesmos campos e CombatAnimationState. death_copy
+copia orientação exata sem renormalização; nenhum clock/schema novo.
+
+Autor:9/9 etapas, apresentação2204, UI55headless/61nativo, áudio132, animação39,
+battleUI47, layout30, actionbar80, F7presentação27, lifecycle90. Zero erros/timeouts.
+Falha histórica de help1280 agora resolvida pelo código, sem mudar ui_layout_test.
+Capturas nativas mostram UI120% real, rolagem/foco/roda/Escape e resize sem acúmulo.
+
+Luna low recebe candidato55960be86ffe9e4b7ddec4570cd84abd1c184a15, mesma branch/
+checkout e base acima. Dono exclusivo: docs/epics/e08_evidence/luna_p1_pilot_corrections/
+supervision.md e hashes.json. Conferir inputs.json/hashes.json/raw_evidence.zip,
+29membros brutos,6PNGs e native_ui.json,2.301fontes da fixture, engine/config,
+backups e114caminhosWIP preservados; conclusões reais de9etapas e61nativas.
+Sem rerun rotineiro, mudança de expectativa, edição de código/fixture ou recibo
+alheio. P0/P1/P2/P3 somente leitura. Não certificaP3 nem aceite artístico.
+P0 consolida e despacha retomada de Terra depois desse checkpoint.
