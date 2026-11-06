@@ -1,0 +1,18 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+E08_CAPTURE C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.tools\map-editor-m5\docs\epics\e08_evidence\p3\after/geometry_ground.png error=0
+E08_CAPTURE C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.tools\map-editor-m5\docs\epics\e08_evidence\p3\after/geometry_ramp.png error=0
+E08_CAPTURE C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.tools\map-editor-m5\docs\epics\e08_evidence\p3\after/geometry_bridge.png error=0
+E08_ACTION cast=true
+E08_CAPTURE C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.tools\map-editor-m5\docs\epics\e08_evidence\p3\after/geometry_cast.png error=0
+E08_CAPTURE C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.tools\map-editor-m5\docs\epics\e08_evidence\p3\after/geometry_cancel.png error=0
+E08_ACTION release=true
+E08_CAPTURE C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.tools\map-editor-m5\docs\epics\e08_evidence\p3\after/geometry_projectile.png error=0
+E08_ACTION area=true
+E08_CAPTURE C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.tools\map-editor-m5\docs\epics\e08_evidence\p3\after/geometry_area.png error=0
+E08_ACTION teleport=true
+E08_CAPTURE C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.tools\map-editor-m5\docs\epics\e08_evidence\p3\after/geometry_teleport.png error=0
+E08_CAPTURE C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.tools\map-editor-m5\docs\epics\e08_evidence\p3\after/geometry_walk_pose.png error=0
+E08_CAPTURE C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.tools\map-editor-m5\docs\epics\e08_evidence\p3\after/geometry_death_pose.png error=0
+E08_CAPTURE C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.tools\map-editor-m5\docs\epics\e08_evidence\p3\after/geometry_revive_pose.png error=0

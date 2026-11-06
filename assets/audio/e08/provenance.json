@@ -1,0 +1,93 @@
+{
+  "author": "RagRPG E08 P3 deterministic synthesis",
+  "source": "original procedural waveforms, no external recordings",
+  "license": "project-original",
+  "rate_hz": 44100,
+  "format": "PCM16 mono",
+  "samples": {
+    "world_cast_start": {
+      "sha256": "ab46a1911b1c5b9b0135b0fcdb01a81379e90fb7aafc0d4ca512641d4a73db1b",
+      "frames": 18522,
+      "peak": 0.179173,
+      "rms": 0.074346,
+      "edge_delta": 0.0
+    },
+    "world_cast_cancel": {
+      "sha256": "7df48d89f660f5ef975c232cd93460f561b955370ff3edc5c407b4d7297a8a63",
+      "frames": 10143,
+      "peak": 0.165521,
+      "rms": 0.068751,
+      "edge_delta": 0.0
+    },
+    "world_projectile_launch": {
+      "sha256": "faa2f94cf417d497f44d5bfead6b9f96efbf13a288d66b0b35b93eb198a2fb79",
+      "frames": 8820,
+      "peak": 0.219893,
+      "rms": 0.088146,
+      "edge_delta": 0.0
+    },
+    "world_impact": {
+      "sha256": "5320f407bd2f2d4910233498a0969110fc13ff9e7e7387cbb2289505b208cf32",
+      "frames": 10584,
+      "peak": 0.332038,
+      "rms": 0.111275,
+      "edge_delta": 0.0
+    },
+    "world_area_start": {
+      "sha256": "48b6d7c73862dfb71a3f0b9b7c0bd07460d269e3b6decb9bf30f267a0787c6c8",
+      "frames": 22932,
+      "peak": 0.203746,
+      "rms": 0.078283,
+      "edge_delta": 0.0
+    },
+    "world_area_end": {
+      "sha256": "bc0d4346cb1ddec2c431e920878620775e734960ba2caa4727971b88b1b884f6",
+      "frames": 15435,
+      "peak": 0.167081,
+      "rms": 0.066311,
+      "edge_delta": 0.0
+    },
+    "world_teleport": {
+      "sha256": "041b370eb903d1027fa82de84be2efdd739ccd5ff2d04fe20b3b223cb81d0819",
+      "frames": 21168,
+      "peak": 0.196648,
+      "rms": 0.077669,
+      "edge_delta": 0.0
+    },
+    "world_death": {
+      "sha256": "0450b7953bc1a1bc22da82667bb0cd4711e1637422d36b83eaa6ccabd38d8ddf",
+      "frames": 28665,
+      "peak": 0.191627,
+      "rms": 0.077896,
+      "edge_delta": 0.0
+    },
+    "world_revive": {
+      "sha256": "afffe2acb9e8ce39cb03241a2a2405de1d23a0c735a96e925115f7cef5090160",
+      "frames": 25578,
+      "peak": 0.18529,
+      "rms": 0.07735,
+      "edge_delta": 0.0
+    },
+    "ui_confirm": {
+      "sha256": "ea91e80c7341409adaa64011a7f0d7be435653a61bf117dd55e68416146f8995",
+      "frames": 5292,
+      "peak": 0.133392,
+      "rms": 0.058735,
+      "edge_delta": 0.0
+    },
+    "ui_cancel": {
+      "sha256": "cf01d7fff645fe3c074515dd0ce30f60e930aee52a49bd97359344d70a923bb9",
+      "frames": 6174,
+      "peak": 0.135505,
+      "rms": 0.058736,
+      "edge_delta": 0.0
+    },
+    "ambience_stage": {
+      "sha256": "dbcfa1f68e585ee361626678861ae520d1a7274bb62b7a24f74c66785deef370",
+      "frames": 352800,
+      "peak": 0.064856,
+      "rms": 0.011337,
+      "edge_delta": 6.6e-05
+    }
+  }
+}

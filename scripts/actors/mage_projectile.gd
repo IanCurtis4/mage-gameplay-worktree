@@ -18,12 +18,17 @@ func _prepare_impact(victim: CombatActor) -> void:
 
 func _draw() -> void:
 	if request != null and request.skill_id in [&"lightning", &"electric_discharge"]:
-		draw_polyline(PackedVector2Array([Vector2(-18, -5), Vector2(-8, 2), Vector2(-2, -5), Vector2(5, 3), Vector2(16, 0)]), color, 3.0, true)
+		var bolt := PackedVector2Array([Vector2(-18, -5), Vector2(-8, 2), Vector2(-2, -5), Vector2(5, 3), Vector2(16, 0)])
+		draw_polyline(bolt, Color(color, 0.25), 7.0, true)
+		draw_polyline(bolt, color, 3.0, true)
+		draw_polyline(bolt, Color(1, 1, 1, 0.85), 1.0, true)
 		return
 	if request != null and request.skill_id in [&"fire_spear", &"ice_spear"]:
+		draw_colored_polygon(PackedVector2Array([Vector2(-24, 0), Vector2(-10, -6), Vector2(8, -6), Vector2(20, 0), Vector2(8, 6), Vector2(-10, 6)]), Color(color, 0.20))
 		draw_colored_polygon(PackedVector2Array([Vector2(-19, -3), Vector2(5, -4), Vector2(16, 0), Vector2(5, 4), Vector2(-19, 3)]), color)
 		draw_line(Vector2(-13, 0), Vector2(9, 0), color.lightened(0.65), 2.0)
 		return
 	draw_circle(Vector2.ZERO, projectile_radius + 2.0, Color(color, 0.25))
 	draw_circle(Vector2.ZERO, projectile_radius, color)
+	draw_circle(Vector2(-1, -1), projectile_radius * 0.42, color.lightened(0.7))
 	draw_line(Vector2(-15, 0), Vector2(-5, 0), Color(color, 0.45), 3.0)

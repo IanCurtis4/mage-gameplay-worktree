@@ -244,6 +244,10 @@ func _begin_presentation_stage(id: String, resumed: bool = false) -> void:
 		audio = PresentationAudioService.new()
 		bridge.add_child(audio)
 		audio.configure(bridge)
+	if bridge.get_node_or_null("E08PilotFeedback") == null:
+		var feedback := preload("res://scripts/presentation/e08_pilot_feedback.gd").new()
+		bridge.add_child(feedback)
+		feedback.configure(bridge, self)
 	if bridge.stage_id != id: bridge.begin_stage(id, resumed)
 	if is_instance_valid(battle_controls): battle_controls.audio_panel.bind_service(audio)
 

@@ -1,0 +1,23 @@
+{
+  "audio_driver": "WASAPI",
+  "captured_frames": 20992,
+  "diagnostics": {
+    "active": {
+      "ambience": 1,
+      "effects": 0,
+      "interface": 0
+    },
+    "capacity": 32,
+    "dropped": 0,
+    "epoch": 2,
+    "missing_samples": [],
+    "played": 25,
+    "seen": 25,
+    "stage_id": "mix"
+  },
+  "event": "world.impact",
+  "frames_above_full_scale": 7943,
+  "peak": 7.83276081085205,
+  "voices": 24,
+  "volume": 1.0
+}

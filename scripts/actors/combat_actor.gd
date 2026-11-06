@@ -4,6 +4,7 @@ extends Node2D
 
 const GroundShadow = preload("res://scripts/world/ground_shadow.gd")
 const ProjectionMath = preload("res://scripts/world/expedition_projection.gd")
+const PilotVisual = preload("res://scripts/presentation/e08_pilot_visual.gd")
 var contact_shadows_enabled := true
 var _ground_shadow_cache := {}
 var _presentation_key: Array = []
@@ -425,7 +426,7 @@ func _draw() -> void:
 	if body_drawer.is_valid():
 		body_drawer.call(self)
 	elif character_animation != null:
-		character_animation.draw_on(self, Color(2.0, 2.0, 2.0) if _flash_time > 0.0 else Color.WHITE, sprite_visual_scale)
+		character_animation.draw_on(self, Color(2.0, 2.0, 2.0) if _flash_time > 0.0 else PilotVisual.forest_tint(self), sprite_visual_scale)
 	elif sprite_texture != null:
 		var tint := Color(2.0, 2.0, 2.0) if _flash_time > 0.0 else Color.WHITE
 		draw_texture_rect(sprite_texture, sprite_rect, false, tint)

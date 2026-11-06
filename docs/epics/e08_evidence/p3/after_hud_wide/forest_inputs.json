@@ -1,0 +1,55 @@
+{
+  "camera_start": "(0.0, 0.0)",
+  "enemy_count": 62,
+  "engine": {
+    "build": "official",
+    "hash": "ed1daf0bf001b61586d9930840f2f1394092c079",
+    "hex": 263938,
+    "major": 4,
+    "minor": 7,
+    "patch": 2,
+    "status": "stable",
+    "string": "4.7.2-stable (official)",
+    "timestamp": 0
+  },
+  "host_disabled": true,
+  "manifest_sha256": "bc2636376d293462bcd95bac813b37d1e55c49dc0244cff7ab69c82bb6b30813",
+  "occurrences": {
+    "forest_boar": {
+      "camera_offset": "(12165.2, 83.00001)",
+      "occurrence": "occ_f4e7de9c78479fa4dc301e64ea1dc79bd216a80273359ecd710e8cd0659f",
+      "position": "(5195.2, -1.999993)"
+    },
+    "forest_canopy_archer": {
+      "camera_offset": "(10628.4, -182.2)",
+      "occurrence": "occ_2b1d7f7ff220d6efe250edc2398ed7ab5ad79e9f063f7bac921b3745520f",
+      "position": "(3658.4, -267.2)"
+    },
+    "forest_stalker": {
+      "camera_offset": "(4712.4, 12.6)",
+      "occurrence": "occ_f0606f12f3a5e74e9661930b8205cee2fb9c2467c0a860772e299d4ffd4d",
+      "position": "(-2257.6, -72.4)"
+    },
+    "forest_wolf": {
+      "camera_offset": "(9295.6, 903.4)",
+      "occurrence": "occ_3a89e78ef6afeff7e0ddff256b9b3e49230ad9adf2f8a845ec4b4d18456d",
+      "position": "(2325.6, 818.4)"
+    }
+  },
+  "phase": "forest_sanctuary",
+  "player_position": "(-6970.0, -85.0)",
+  "renderer": "gl_compatibility",
+  "seed_input": "42",
+  "stage": "forest_sanctuary_1",
+  "tree_paused": true,
+  "ui_scale": 1.2,
+  "viewport": [
+    1920,
+    1080
+  ],
+  "zooms": [
+    0.5,
+    1.0,
+    1.6
+  ]
+}

@@ -22,8 +22,10 @@ class Fragment extends Node2D:
 		if kind == "fire_wall":
 			var flicker := sin(elapsed*13.0+seed_index*1.8)*0.08
 			var h := height; var w := height*0.40
+			draw_colored_polygon(PackedVector2Array([Vector2(-w*1.18,0),Vector2(-w*0.9,-h*0.38),Vector2(-w*0.2,-h*0.65),Vector2(w*0.14,-h*(1.04+flicker)),Vector2(w*0.85,-h*0.48),Vector2(w*1.18,0)]),Color(1,0.38,0.08,0.18))
 			draw_colored_polygon(PackedVector2Array([Vector2(-w,0),Vector2(-w*1.1,-h*0.35),Vector2(-w*0.5,-h*0.68),Vector2(-w*0.2,-h*0.45),Vector2(w*0.12,-h*(0.92+flicker)),Vector2(w*0.6,-h*0.58),Vector2(w,0)]),Color(1,0.27,0.045,0.9))
 			draw_colored_polygon(PackedVector2Array([Vector2(-w*0.5,0),Vector2(-w*0.22,-h*0.35),Vector2(w*0.15,-h*0.68),Vector2(w*0.5,0)]),Color(1,0.82,0.22,1))
+			draw_colored_polygon(PackedVector2Array([Vector2(-w*0.19,0),Vector2(0,-h*0.28),Vector2(w*0.12,-h*0.42),Vector2(w*0.28,0)]),Color(1,0.96,0.68,0.9))
 			return
 		var tint: Color = {"lightning_wall":Color("f3d762"),"phantom_barrier":Color("b88af7"),"ice_wall":Color("9ae8ff")}[kind]
 		if base.size() < 3: return

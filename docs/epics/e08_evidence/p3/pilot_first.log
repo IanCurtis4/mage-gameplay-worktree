@@ -1,0 +1,103 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ERROR: fixture sources match frozen inputs
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e08_pilot_test.gd:11)
+       [1] _run (res://tests/e08_pilot_test.gd:16)
+ERROR: production WAV valid: res://assets/audio/e08/world_cast_start.wav
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e08_pilot_test.gd:11)
+       [1] _run (res://tests/e08_pilot_test.gd:41)
+ERROR: production WAV valid: res://assets/audio/e08/world_cast_cancel.wav
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e08_pilot_test.gd:11)
+       [1] _run (res://tests/e08_pilot_test.gd:41)
+ERROR: audible non-clipped PCM: res://assets/audio/e08/world_cast_cancel.wav
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e08_pilot_test.gd:11)
+       [1] _run (res://tests/e08_pilot_test.gd:47)
+ERROR: production WAV valid: res://assets/audio/e08/world_projectile_launch.wav
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e08_pilot_test.gd:11)
+       [1] _run (res://tests/e08_pilot_test.gd:41)
+ERROR: audible non-clipped PCM: res://assets/audio/e08/world_projectile_launch.wav
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e08_pilot_test.gd:11)
+       [1] _run (res://tests/e08_pilot_test.gd:47)
+ERROR: production WAV valid: res://assets/audio/e08/world_impact.wav
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e08_pilot_test.gd:11)
+       [1] _run (res://tests/e08_pilot_test.gd:41)
+ERROR: production WAV valid: res://assets/audio/e08/world_area_start.wav
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e08_pilot_test.gd:11)
+       [1] _run (res://tests/e08_pilot_test.gd:41)
+ERROR: audible non-clipped PCM: res://assets/audio/e08/world_area_start.wav
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e08_pilot_test.gd:11)
+       [1] _run (res://tests/e08_pilot_test.gd:47)
+ERROR: production WAV valid: res://assets/audio/e08/world_area_end.wav
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e08_pilot_test.gd:11)
+       [1] _run (res://tests/e08_pilot_test.gd:41)
+ERROR: production WAV valid: res://assets/audio/e08/world_teleport.wav
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e08_pilot_test.gd:11)
+       [1] _run (res://tests/e08_pilot_test.gd:41)
+ERROR: production WAV valid: res://assets/audio/e08/world_death.wav
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e08_pilot_test.gd:11)
+       [1] _run (res://tests/e08_pilot_test.gd:41)
+ERROR: audible non-clipped PCM: res://assets/audio/e08/world_death.wav
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e08_pilot_test.gd:11)
+       [1] _run (res://tests/e08_pilot_test.gd:47)
+ERROR: production WAV valid: res://assets/audio/e08/world_revive.wav
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e08_pilot_test.gd:11)
+       [1] _run (res://tests/e08_pilot_test.gd:41)
+ERROR: audible non-clipped PCM: res://assets/audio/e08/world_revive.wav
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e08_pilot_test.gd:11)
+       [1] _run (res://tests/e08_pilot_test.gd:47)
+ERROR: production WAV valid: res://assets/audio/e08/ui_confirm.wav
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e08_pilot_test.gd:11)
+       [1] _run (res://tests/e08_pilot_test.gd:41)
+ERROR: production WAV valid: res://assets/audio/e08/ui_cancel.wav
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e08_pilot_test.gd:11)
+       [1] _run (res://tests/e08_pilot_test.gd:41)
+ERROR: audible non-clipped PCM: res://assets/audio/e08/ui_cancel.wav
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e08_pilot_test.gd:11)
+       [1] _run (res://tests/e08_pilot_test.gd:47)
+ERROR: production WAV valid: res://assets/audio/e08/ambience_stage.wav
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e08_pilot_test.gd:11)
+       [1] _run (res://tests/e08_pilot_test.gd:41)
+ERROR: audible non-clipped PCM: res://assets/audio/e08/ambience_stage.wav
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/e08_pilot_test.gd:11)
+       [1] _run (res://tests/e08_pilot_test.gd:47)
+E08 PILOT: 32 checks, 20 failures

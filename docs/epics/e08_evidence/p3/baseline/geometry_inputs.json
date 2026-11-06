@@ -1,0 +1,19 @@
+{
+  "camera_offset": "(120.0, 80.0)",
+  "commands": "synchronous unpause/re-pause without advancing frames",
+  "death_revive": "animation-only sample, not gameplay lifecycle",
+  "fixture": "res://tests/fixtures/e07/f1/presentation_sample.tscn",
+  "points": [
+    "root (90,0,150)",
+    "slope (340,16,150)",
+    "bridge (120,120,440)"
+  ],
+  "seed": "711",
+  "tree_paused": true,
+  "ui_scale": 1.2,
+  "viewport": [
+    1280,
+    720
+  ],
+  "zoom": "(1.0, 1.0)"
+}

@@ -1,0 +1,64 @@
+{
+  "rate": 44100,
+  "ambient_gain": 0.3,
+  "cue_gain": 1.0,
+  "timeline": [
+    {
+      "cue": "world_cast_start",
+      "start_seconds": 0.5,
+      "duration_seconds": 0.42
+    },
+    {
+      "cue": "world_cast_cancel",
+      "start_seconds": 1.27,
+      "duration_seconds": 0.23
+    },
+    {
+      "cue": "world_projectile_launch",
+      "start_seconds": 1.85,
+      "duration_seconds": 0.2
+    },
+    {
+      "cue": "world_impact",
+      "start_seconds": 2.4,
+      "duration_seconds": 0.24
+    },
+    {
+      "cue": "world_area_start",
+      "start_seconds": 2.99,
+      "duration_seconds": 0.52
+    },
+    {
+      "cue": "world_area_end",
+      "start_seconds": 3.86,
+      "duration_seconds": 0.35
+    },
+    {
+      "cue": "world_teleport",
+      "start_seconds": 4.56,
+      "duration_seconds": 0.48
+    },
+    {
+      "cue": "world_death",
+      "start_seconds": 5.39,
+      "duration_seconds": 0.65
+    },
+    {
+      "cue": "world_revive",
+      "start_seconds": 6.39,
+      "duration_seconds": 0.58
+    },
+    {
+      "cue": "ui_confirm",
+      "start_seconds": 7.32,
+      "duration_seconds": 0.12
+    },
+    {
+      "cue": "ui_cancel",
+      "start_seconds": 7.79,
+      "duration_seconds": 0.14
+    }
+  ],
+  "sha256": "7a556f976afa9e923b1f06e25f7af9b3cbae76d6e128b462863f731a225888d7",
+  "note": "Sequential audition only; not a simultaneous-mix test."
+}
