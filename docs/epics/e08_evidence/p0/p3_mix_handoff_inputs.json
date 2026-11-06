@@ -1,0 +1,409 @@
+{
+  "candidate_base": "cdf34b6c6292716722069ff49cd9eac49323551b",
+  "branch": "codex/e08",
+  "checkout": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5",
+  "owner_paused": "P3 Terra",
+  "reason": "P2 correction of confirmed simultaneous audio saturation",
+  "files": {
+    "assets/audio/e08/ambience_stage.wav": {
+      "sha256": "dbcfa1f68e585ee361626678861ae520d1a7274bb62b7a24f74c66785deef370",
+      "bytes": 705644,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/ambience_stage.wav.import": {
+      "sha256": "b40beb9255fab40703cc44b027d44701088303eab3e8b60c93aebb59d391a18c",
+      "bytes": 517,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/provenance.json": {
+      "sha256": "86c97e45ca393b144344c7298b9da17eef48d624e00dc4df8e828831f25a9f23",
+      "bytes": 2824,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/recipes.md": {
+      "sha256": "790dc5f273ead92b1ddd2f9a78d8e6f7e05b6a62373d2e7beb51ca51943ad863",
+      "bytes": 836,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/ui_cancel.wav": {
+      "sha256": "cf01d7fff645fe3c074515dd0ce30f60e930aee52a49bd97359344d70a923bb9",
+      "bytes": 12392,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/ui_cancel.wav.import": {
+      "sha256": "b515ad242a98ef20ee6720754309856c5e56a545b64a31e998fdd51857764fd7",
+      "bytes": 502,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/ui_confirm.wav": {
+      "sha256": "ea91e80c7341409adaa64011a7f0d7be435653a61bf117dd55e68416146f8995",
+      "bytes": 10628,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/ui_confirm.wav.import": {
+      "sha256": "e4f7b9f4a4613052d609182fd5186f8fb7e4ad290508b36f68cfde760589ae74",
+      "bytes": 504,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/world_area_end.wav": {
+      "sha256": "bc0d4346cb1ddec2c431e920878620775e734960ba2caa4727971b88b1b884f6",
+      "bytes": 30914,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/world_area_end.wav.import": {
+      "sha256": "bbbbe4ce4b0cabfc05ef9dac69bcf852263de58312768ef2a47aa35fa699b3cb",
+      "bytes": 517,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/world_area_start.wav": {
+      "sha256": "48b6d7c73862dfb71a3f0b9b7c0bd07460d269e3b6decb9bf30f267a0787c6c8",
+      "bytes": 45908,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/world_area_start.wav.import": {
+      "sha256": "5641830e768f9439d33b0842cce002549d3e360d975b18d8629d1df8cf6d27f1",
+      "bytes": 523,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/world_cast_cancel.wav": {
+      "sha256": "7df48d89f660f5ef975c232cd93460f561b955370ff3edc5c407b4d7297a8a63",
+      "bytes": 20330,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/world_cast_cancel.wav.import": {
+      "sha256": "de15028dd3b5e6a632ae52e2f92b07c66e268a59246ee6914a9e6c743d2a14e6",
+      "bytes": 526,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/world_cast_start.wav": {
+      "sha256": "ab46a1911b1c5b9b0135b0fcdb01a81379e90fb7aafc0d4ca512641d4a73db1b",
+      "bytes": 37088,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/world_cast_start.wav.import": {
+      "sha256": "8db3fc977af8cd5a6809400b13b3039be6a1a671dba9e0f887cffd804b8c8c82",
+      "bytes": 523,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/world_death.wav": {
+      "sha256": "0450b7953bc1a1bc22da82667bb0cd4711e1637422d36b83eaa6ccabd38d8ddf",
+      "bytes": 57374,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/world_death.wav.import": {
+      "sha256": "b71cf62a4dcccfe02ed68c122a65bce2d7a1566a2cd648e582dd60078bf244fa",
+      "bytes": 508,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/world_impact.wav": {
+      "sha256": "5320f407bd2f2d4910233498a0969110fc13ff9e7e7387cbb2289505b208cf32",
+      "bytes": 21212,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/world_impact.wav.import": {
+      "sha256": "bb3ea21fd197cef23702cdd56e63903c7c1be43066df484096ac34e775d89750",
+      "bytes": 510,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/world_projectile_launch.wav": {
+      "sha256": "faa2f94cf417d497f44d5bfead6b9f96efbf13a288d66b0b35b93eb198a2fb79",
+      "bytes": 17684,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/world_projectile_launch.wav.import": {
+      "sha256": "28b0b45cfbf2a26982d22a746389dc60ca1117a3338b2e3d2e556128357c3f21",
+      "bytes": 543,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/world_revive.wav": {
+      "sha256": "afffe2acb9e8ce39cb03241a2a2405de1d23a0c735a96e925115f7cef5090160",
+      "bytes": 51200,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/world_revive.wav.import": {
+      "sha256": "1b10307edc2ca7a3285ae75eaba1f01962be69d1a93fed12e21588f4f2b1ed92",
+      "bytes": 510,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/world_teleport.wav": {
+      "sha256": "041b370eb903d1027fa82de84be2efdd739ccd5ff2d04fe20b3b223cb81d0819",
+      "bytes": 42380,
+      "tracked_modified": false
+    },
+    "assets/audio/e08/world_teleport.wav.import": {
+      "sha256": "053c220d7ca3e6a4d1de6099120c8f5638ecd903d24d9c507010d36117b82c57",
+      "bytes": 516,
+      "tracked_modified": false
+    },
+    "data/map_authoring/sanctuary_woods.map.json.bak": {
+      "sha256": "6b8d52095b0d98ba4a436fd5b192ff732b98a8f5da02855646e7e21b9792bb4f",
+      "bytes": 45355,
+      "tracked_modified": false
+    },
+    "data/map_authoring/sanctuary_woods.population.json.bak": {
+      "sha256": "3debc7674a1770702639e8bb33b1e6598c52929e9230395ccfbf505c1ed04889",
+      "bytes": 55703,
+      "tracked_modified": false
+    },
+    "data/map_authoring/sanctuary_woods_clearing.source.json.bak": {
+      "sha256": "65a26754c437695d7e7d60e93980c187371fddeec4fb71f78323104dbb55ced5",
+      "bytes": 15116,
+      "tracked_modified": false
+    },
+    "data/map_authoring/sanctuary_woods_overpass.source.json.bak": {
+      "sha256": "d0071096addfefcefad1f1df849c3977064a741b4ed1446ffaf50a3f25a95d7e",
+      "bytes": 8142,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/audio_mix.json": {
+      "sha256": "a35e600d70196e5cd9ba9c6f7213948b8f2ae2a30bab80ebc5d349eb4c91aa11",
+      "bytes": 427,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/audio_mix.log": {
+      "sha256": "7567e6c2f36a2f184baad6385c834c2a844a44f3dde71e38fb44bfda59ee7c2f",
+      "bytes": 496,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/forest_enemy_100.png": {
+      "sha256": "17570b7e2dc275f62396fc0d606f106f03ff623652ab567a7c03b62ba88876d4",
+      "bytes": 1083145,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/forest_entry_100.png": {
+      "sha256": "bca53bc92fd54cee9cd672155c4a3a0dbc913f1f0c020d9232b8786bcb2f1703",
+      "bytes": 998353,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/forest_entry_160.png": {
+      "sha256": "dacd44e32794df82599362f04c057e16b051c6f0a0d182ed9ed79804df812b80",
+      "bytes": 1068870,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/forest_entry_50.png": {
+      "sha256": "1220543ddbc85ab032f46af8c7055dc51929d25d1e5789c03c9d250029db042c",
+      "bytes": 1003281,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/forest_forest_boar.png": {
+      "sha256": "6652f51819043b6bed0bd7f5ec43a22c44b120b7ebd7f182af078de0e321c910",
+      "bytes": 1014116,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/forest_forest_canopy_archer.png": {
+      "sha256": "67584a91cc2ab25a3d278fee5e4de9d65413004cb5a7a1c29cc8bec971e3b8e2",
+      "bytes": 1115943,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/forest_forest_stalker.png": {
+      "sha256": "263afaa89e4124605847c95c78b11f9cbfd916e74bb52007ca74e0a5a27297c8",
+      "bytes": 1093901,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/forest_forest_wolf.png": {
+      "sha256": "399ada2288e1fc94954e198fcdbdf23b9b7c9a465b2ae31966bd65d994c9d68e",
+      "bytes": 1083427,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/forest_inputs.json": {
+      "sha256": "9e0bef7ea92568ca4e89a132fcae67ee810a341c00f128caca7ef900fedb7c61",
+      "bytes": 1528,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/geometry_area.png": {
+      "sha256": "e4e734b0cccf961dc6e615e4b42a68badd801431b90d25dfb6cefb9777228323",
+      "bytes": 639444,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/geometry_bridge.png": {
+      "sha256": "9dfc5387864e4a20109928fae3b763ed5a960a471e053018d1cb7611bdf38015",
+      "bytes": 683667,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/geometry_cancel.png": {
+      "sha256": "433d3d5a5a801dcd58a55ac4981f9b8ce756042d19507b115352a1189d690747",
+      "bytes": 684301,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/geometry_cast.png": {
+      "sha256": "75f35da67debdd883088c525b311dab7b32d1fd854d0c5d8d271ff9a196f1041",
+      "bytes": 684251,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/geometry_death_pose.png": {
+      "sha256": "ad9b87c7d88d19a1addfeca02e2f9fe1398122c11afde89aefd34c227a3c7c89",
+      "bytes": 650742,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/geometry_ground.png": {
+      "sha256": "ce521a7158bf7813099cb54bc731a53e4449f94255eec568f365195f41106fb3",
+      "bytes": 635695,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/geometry_inputs.json": {
+      "sha256": "ece68068d4dc693c20b36dbf4a63145dea2249e0a02d47f2454cc9d0e62ef486",
+      "bytes": 462,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/geometry_projectile.png": {
+      "sha256": "5a5238f0e81429f54ed130639e3c604cd27d0df7ad458846fe202e586d5cf015",
+      "bytes": 684131,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/geometry_ramp.png": {
+      "sha256": "2b43115bcfab8e9949a1db42e93746d51132cfa2e07e1ceb88f3c30c4fb15fd1",
+      "bytes": 634852,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/geometry_revive_pose.png": {
+      "sha256": "6f7c84c2f7ec3b1fdd89d44454c0cf990d5bf2af5c14baf713a71b02cb0c87e5",
+      "bytes": 651520,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/geometry_teleport.png": {
+      "sha256": "9b76f3a01e1fce0d9204cc20872611b5ee49b6c2adf06c3c6691b3242de92161",
+      "bytes": 651501,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/geometry_walk_pose.png": {
+      "sha256": "aa5716bd98533f90da4b3e2af578cf49ef90648aa2ff4fd816bbeaf09c1b502c",
+      "bytes": 651426,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/lair_guardian.png": {
+      "sha256": "323df1879efdfd5d1fd2a8d2d6de0a7b8024a0ad0a78228deb971783ad4d0d8d",
+      "bytes": 1055323,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline/lair_inputs.json": {
+      "sha256": "af2235c67f6126e8f94378e67b26c0e2c4abd3ad538bbf42586e3e95a8f6eef7",
+      "bytes": 404,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline_forest.png": {
+      "sha256": "1a983325230bc713510a0e9fe28bed07c2ee69837bb6b24e5472a4b3117711cc",
+      "bytes": 1181832,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/baseline_training.png": {
+      "sha256": "4c385a80bcd937fc84df16bcf6a63fb3737d52c31efe70404353b511e0df8b46",
+      "bytes": 1361831,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/forest_enemy_100.png": {
+      "sha256": "8a1a010021f6e09b4689c76a293bb6ffd154d316a06b351d8a72e55c45baf7f4",
+      "bytes": 1097149,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/forest_entry_100.png": {
+      "sha256": "5b7b70af8a85539e2f5d76c563eb28c263b05cf12c45006956c3d5b5e0ce2bba",
+      "bytes": 1012431,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/forest_entry_160.png": {
+      "sha256": "9b7a24a6379d32080bbfd6233761ee4b3b8a17ccd419c5acb54f12067200bd93",
+      "bytes": 1082388,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/forest_entry_50.png": {
+      "sha256": "21d3b28db020005083e5d367119de554bd5c65be334afa3abb3249274dbf84b8",
+      "bytes": 1016412,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/import.log": {
+      "sha256": "d0d5864824b9f827771b456fcee25e3bb8d5a56fc972c9e4e0c140d0552d8f25",
+      "bytes": 1626,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/import_pcm.log": {
+      "sha256": "11815449bc49a2425775a25931d56613ad254a3b3ea520a63591b3a83043d6e6",
+      "bytes": 5005,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/pilot_first.log": {
+      "sha256": "1f7ab4a324c4ba70352c0387788131efc17fade899c18710c4bc96fe75888548",
+      "bytes": 5807,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/pilot_occlusion.log": {
+      "sha256": "e34a72950b10ca646e663fdb9fa4eeb7bc6686d2abeec956d5e4c9b9fbed757c",
+      "bytes": 109,
+      "tracked_modified": false
+    },
+    "docs/epics/e08_evidence/p3/pilot_pcm.log": {
+      "sha256": "9d2491fb3ccc08711e5376b365a11e6335cc3541f19212b41f234a572d8d6fea",
+      "bytes": 109,
+      "tracked_modified": false
+    },
+    "scripts/actors/combat_actor.gd": {
+      "sha256": "76cbe5e9f375439a26a172f392a11afa7da106d57660da49840c915e38094e32",
+      "bytes": 24672,
+      "tracked_modified": true
+    },
+    "scripts/actors/mage_projectile.gd": {
+      "sha256": "d09b8ee4e9c882a39a4c46c29c709a89bd2836672bc1c03fa8ab36df11e0bf0a",
+      "bytes": 1772,
+      "tracked_modified": true
+    },
+    "scripts/main.gd": {
+      "sha256": "5a04f7c333bc1dff7eac414531b59a9befa37adce24a3a9fef75f94d7100a1e2",
+      "bytes": 251098,
+      "tracked_modified": true
+    },
+    "scripts/presentation/e08_pilot_feedback.gd": {
+      "sha256": "6211976a18c3f8a1ffae5f20d42fe0558f23a8471acd25498d074a4cba3ebdf1",
+      "bytes": 3386,
+      "tracked_modified": false
+    },
+    "scripts/presentation/e08_pilot_feedback.gd.uid": {
+      "sha256": "f30a5b5e890bed24ce87c16d260433483068e30c0c048c22f9dfa91015b5694f",
+      "bytes": 20,
+      "tracked_modified": false
+    },
+    "scripts/presentation/e08_pilot_visual.gd": {
+      "sha256": "c4707210a85d6c4bec3aa1b7a15cb5245ec5b7e01dd502ff720deb2b1c47b8bd",
+      "bytes": 622,
+      "tracked_modified": false
+    },
+    "scripts/presentation/e08_pilot_visual.gd.uid": {
+      "sha256": "e445c0cf2c8b66fdb100d80f1b8005ee0db4ce6cbbe751d84723a7184e567050",
+      "bytes": 20,
+      "tracked_modified": false
+    },
+    "scripts/world/world_field_view.gd": {
+      "sha256": "be6d36af1320701cc319e43fc9fad0d86cb980ef7b2b29299882d66a0c1c36c9",
+      "bytes": 11208,
+      "tracked_modified": true
+    },
+    "tests/e08_pilot_test.gd": {
+      "sha256": "f64fad978a776643b28126ed58d72a0f66d72d2083d8951ecbf77f3ffa83f338",
+      "bytes": 4319,
+      "tracked_modified": false
+    },
+    "tests/e08_pilot_test.gd.uid": {
+      "sha256": "cba9ae8954e25fb7d4df6a8e5fc28a4e514ab1c3deda6bcb30a0179bb4a26978",
+      "bytes": 20,
+      "tracked_modified": false
+    },
+    "tools/e08_pilot_probe.gd": {
+      "sha256": "2ba79888976d7606446618df658ad90441019f3893dcff3c47650dd8c87417ea",
+      "bytes": 11032,
+      "tracked_modified": false
+    },
+    "tools/e08_pilot_probe.gd.uid": {
+      "sha256": "f86737366d11491f50906446aae1ceee0af34099c6b65c13bde3f17a9cfe2ab2",
+      "bytes": 20,
+      "tracked_modified": false
+    },
+    "tools/prepare_e08_pilot_audio.py": {
+      "sha256": "98730f77f8968f265ac406afa08b2aaddffec1244a455f5b173cf0b276c08e19",
+      "bytes": 3152,
+      "tracked_modified": false
+    },
+    "tools/verify.ps1": {
+      "sha256": "55a4b99935546e667584446e8483b748627182d2fe848419b3b7249ae3735086",
+      "bytes": 46182,
+      "tracked_modified": true
+    }
+  }
+}

@@ -202,3 +202,43 @@ Dependências/API/aceites/testes completos no contrato P3 e recibos P1/P2.
 P0 possui export_presets/runner de embalagem e release, não delegados a Terra.
 Luna supervisionará checkpoint congelado após entrega; P0 consolida contrato e
 release/playtest. P4–P7 continuam BLOQUEADOS_ACEITE_HUMANO_P3, sem chats criados.
+
+### P3 em execução / devolução temporária para correção P2
+
+Dispatch P3 efetivo `cdf34b6c6292716722069ff49cd9eac49323551b`, chat Terra
+`01a1aede-5799-76f2-835d-5418b5e395d9`, host local, high. Interrupção por limite
+de uso preservou o trabalho; usuário retomou o mesmo chat com ragrpg-resume em6/11.
+Não houve substituição do executor. Baselines nativos e manifests de parâmetros
+estão no pacote P3; não constituem entrega nem aprovação técnica do piloto.
+
+P3 reproduziu saturação: 24 world.impact confirmados no mesmo quadro, canais100%,
+WASAPI, captura no bus effects, pico7,8327608 e7.943/20.992 quadros acima de1,0.
+[JSON](e08_evidence/p3/audio_mix.json) e log mantidos no pacote P3. Isso é uma
+medida antes da correção, não de ganho/limitação da futura saída corrigida.
+P3 parou de escrever e testar explicitamente; P0 assumiu somente registro.
+[Manifesto de preservação](e08_evidence/p0/p3_mix_handoff_inputs.json) fixa hashes
+de todos os arquivos modificados/não rastreados, incluindo backups e arte parcial.
+Não commitar ou sobrescrever esses arquivos por efeito da correção P2.
+
+P2 recebe correção no MESMO chat01a1aebf-dbc4-7701-8b17-1441618fb9c6, Sol6.1 high.
+Base integral `cdf34b6c6292716722069ff49cd9eac49323551b` mais WIP P3 congelado
+no manifesto; HEAD documental do handoff será passado na mensagem. Branch/checkout
+acima. Dono exclusivo de escrita P2 durante correção, arquivos EXATOS:
+scripts/presentation/audio_service.gd, tests/e08_audio_test.gd,
+docs/epics/e08_p2_mix_delivery.md e docs/epics/e08_evidence/p2_mix/.
+P0/P3 ficam somente leitura. Sem alterar WAVs/catálogo/ponte/probeP3/runner/mapas,
+expectativas existentes, limite de32vozes, prioridades, eventos, mute/volume,
+pausa/staging ou gameplay/save. Usar recursos nativos Godot, sem plugin externo.
+
+Resultado: impedir saturação na saída privada somada do serviço com as vozes
+contratadas; preservar timbres/níveis úteis e mutabilidade somente por instância.
+Capturar sinal APÓS proteção e soma no bus Geral privado; o raw bus Effects pode
+continuar excedendo1 antes dessa proteção. Provar 24impactos reais e mistura de
+canais/limites, configurações100%, com captura nativa e relatório de pico/quadros
+acima da escala, sem esconder falha baixando o perfil ou descartando vozes.
+Reexecutar e08_audio_test (inclui staging/loop/mute/caps/config), regressões de
+apresentação e lifecycle por impacto. Mesma fixture/engine, inputs WIP explícitos.
+Recibo e hashes mínimos próprios; commit somente quatro caminhos próprios acima,
+sem stage-all. Devolver posse P0 para conferir preservação, validação/Luna por
+impacto e devolver P3 ao mesmo Terra. Correção contratual automática; sem Astra
+ou nova decisão de produto. P3 segue incompleto e gates P4–P7 continuam fechados.
