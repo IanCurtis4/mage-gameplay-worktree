@@ -287,3 +287,32 @@ commitP3, sem refazerP0/P1/P2 ou abrirP4–P7. Conservar prova antiga audio_mix.
 log como rawEffects ANTES da proteção; captura posterior usa novo diretório/nome,
 medindo Geral DEPOIS da proteção. Não sobrescrever a evidência histórica.
 P0 fica somente leitura até handbackP3. Candidato jogável/release ainda pendente.
+
+### P3 WIP preservado / correções de atlas e UI voltam P1
+
+Terra parou e criou checkpoint explicitamente INCOMPLETO/EM_CORREÇÃO
+`7f04830e01db0f49acefd47899c271b45b65adaf`, sem novos testes nessa transferência.
+Índice/árvore rastreada limpos, quatro backups fora do commit. P0 inspecionou imagens:
+recoloração não resolve identidade do javali; UI120% real preenchida sobrepõe
+painel de estágio e barra. Não aceitar essas duas lacunas como fechamento deP3.
+P0 não implementa arte nem substitui Terra; producerAPI/UI com mesmoSolP1 precede
+consumidor. [Contrato fechado](e08_p1_pilot_corrections_contract.md).
+
+Base integral acima, branch/checkout únicos, chat P1
+01a1aea0-d67a-7023-9fcf-dbecfe5cef85, Sol6.1 high. Lista EXATA, API, testes e
+aceites no contrato. P0 transfere main.gd, gui_metrics.gd, battle_controls.gd,
+expedition_status_panel.gd, character_animation.gd, runner e testes listados
+sequencialmente aP1; P2/P3 parados. P1 único escritor, P0 somente leitura após
+dispatch. HEADdocumental efetivo será informado na mensagem. Commit do WIP
+permite P1 tocar main.gd sem incorporar mudanças de Terra como autoria própria.
+
+Expansão de arte P3 PREPARADA, AINDA NÃO DESPACHADA: fontes
+assets/art/e08_pilot/forest_wolf_source.png, forest_wolf_extra_source.png,
+forest_boar_source.png, forest_boar_extra_source.png e seus quatro .png.import;
+runtime assets/art/animations/e08_forest_wolf.png e e08_forest_boar.png e seus
+dois .png.import; receitas/proveniência e tools/prepare_e08_pilot_art.py já previstos.
+Depois de validar P1, P0 resolve novoHEAD/API, amplia ligação em main.gd/helper
+P3 e devolve posse explicitamente. Não alterar MobDefinition/animation_kind,
+arquivos compartilhados de outras identidades, comportamento ou mapas. São
+variantes cosméticas por instância no renderer existente, não arquitetura nova.
+P4–P7 continuam fechados pelo aceite humano do piloto completo.
