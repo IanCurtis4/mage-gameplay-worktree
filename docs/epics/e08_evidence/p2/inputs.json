@@ -1,0 +1,105 @@
+{
+  "base_sha": "61d91a65d6673f12bfc8915061668d1d56b6c770",
+  "branch": "codex/e08",
+  "checkout": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5",
+  "files": {
+    "scripts/main.gd": "679868e07951daa5df6139e3fe238a2082fc70547987694184e07acf4534e5f9",
+    "scripts/presentation/audio_event_catalog.gd": "ec1ab0cfbbe4551ca97318c1b85e5cc9e4b68d490b55cc7211571c8b663ed00a",
+    "scripts/presentation/audio_event_catalog.gd.uid": "9b91332365f2e9e1632df8149e6362cf137ad72ee80819dd47f460b84d87d8dd",
+    "scripts/presentation/audio_preferences.gd": "7315d64d5ead1395f53fa85902e74e49a7343404491fbef5562b08c2ca3c6d9e",
+    "scripts/presentation/audio_preferences.gd.uid": "4c2896857bded995bc8a985cd3fdaa7221da19042fa3c361940f3b8aa479985b",
+    "scripts/presentation/audio_service.gd": "cd6f8150945dfaf61040e7f62cb3b4ab6c04957f33f5ca93e6b4714d1dc6ec3b",
+    "scripts/presentation/audio_service.gd.uid": "929ee133c94236ab7ffd82863c51ea22be6d2ade28bee1d101d5df1d23648cf8",
+    "scripts/ui/audio_settings_panel.gd": "13c337dd05c688d68015e8fc3fff50131341f2111056bab745857ee2cf75cc8b",
+    "scripts/ui/audio_settings_panel.gd.uid": "290fad8a48f5b247a99fe0b082d484eaba23d1a779fd90558bcf482355df5f57",
+    "scripts/ui/battle_controls.gd": "ef1806d318cf5b5684c903f1af672743293abeea3bb5103ed1f85cae66206591",
+    "tests/e08_audio_test.gd": "6e82525491614694b7579a25c1de219e2e6384fa935bb125eae5934ece83ce78",
+    "tests/e08_audio_test.gd.uid": "46eb33a966681a3bd8dcd51b0e982547bf732d0dee9762b9371d2f994e5fb81b",
+    "tools/verify.ps1": "2ab414662cd92b6f0df78fec13c27c616ffc9c9bc8bd8ca22035b97699660a3b",
+    "tests/combat_animation_test.gd": "f90090d3e8c16832f7cdcf68d53f5afd08138044f1eab84755f86709d20ee16c",
+    "tests/e08_presentation_test.gd": "70102d152642a4ac1c6b6cae18af4accf0d9c95a85905c9f6326af50cd618172",
+    "tests/battle_ui_test.gd": "c4ddf8e6b2956a7cbf9f306f88f3f998ffb7b44ada421ef8d0078c1960377779",
+    "tests/action_bar_ui_test.gd": "fd6f3cde5509d443203cecc0ec64352e4931b695f2d4e8126ee72494fe8c5c1f",
+    "tests/e07_f7_presentation_test.gd": "9b806bffce62c36d4e6635ac63edb2e2c625dc76146abd7e3862af379de076b7",
+    "tests/e07_f3_action_matrix_test.gd": "182fcd20ec897cf4bf85ff9fa8e3b7f062d6ed3ec26f0640606a4d6514957155",
+    "tests/e07_f3_lifecycle_test.gd": "5c3d85afaffd68062519e5518ad7eb99dd63a89041cc436b16c553880b6ec4f4",
+    "tests/e07_f1_presentation_test.gd": "190896b007f56c3029a53e2e4c22283624daa998cf769b42e94e49a3e55201f8",
+    "scripts/presentation/presentation_event_bridge.gd": "e4c8de99518908690879e845b099bec4e67e8c706576b705455ed1ad0f311d14",
+    "scripts/core/expedition/snapshot/snapshot_registry.gd": "3fd8bebacd0794f1b224dcd14cf45bdc8a9414ae4efc45cbdaeb447922977289"
+  },
+  "own_files": [
+    "scripts/main.gd",
+    "scripts/presentation/audio_event_catalog.gd",
+    "scripts/presentation/audio_event_catalog.gd.uid",
+    "scripts/presentation/audio_preferences.gd",
+    "scripts/presentation/audio_preferences.gd.uid",
+    "scripts/presentation/audio_service.gd",
+    "scripts/presentation/audio_service.gd.uid",
+    "scripts/ui/audio_settings_panel.gd",
+    "scripts/ui/audio_settings_panel.gd.uid",
+    "scripts/ui/battle_controls.gd",
+    "tests/e08_audio_test.gd",
+    "tests/e08_audio_test.gd.uid",
+    "tools/verify.ps1"
+  ],
+  "git_blob_sha256": {
+    "scripts/main.gd": "679868e07951daa5df6139e3fe238a2082fc70547987694184e07acf4534e5f9",
+    "scripts/presentation/audio_event_catalog.gd": "ec1ab0cfbbe4551ca97318c1b85e5cc9e4b68d490b55cc7211571c8b663ed00a",
+    "scripts/presentation/audio_event_catalog.gd.uid": "9b91332365f2e9e1632df8149e6362cf137ad72ee80819dd47f460b84d87d8dd",
+    "scripts/presentation/audio_preferences.gd": "7315d64d5ead1395f53fa85902e74e49a7343404491fbef5562b08c2ca3c6d9e",
+    "scripts/presentation/audio_preferences.gd.uid": "4c2896857bded995bc8a985cd3fdaa7221da19042fa3c361940f3b8aa479985b",
+    "scripts/presentation/audio_service.gd": "cd6f8150945dfaf61040e7f62cb3b4ab6c04957f33f5ca93e6b4714d1dc6ec3b",
+    "scripts/presentation/audio_service.gd.uid": "929ee133c94236ab7ffd82863c51ea22be6d2ade28bee1d101d5df1d23648cf8",
+    "scripts/ui/audio_settings_panel.gd": "13c337dd05c688d68015e8fc3fff50131341f2111056bab745857ee2cf75cc8b",
+    "scripts/ui/audio_settings_panel.gd.uid": "290fad8a48f5b247a99fe0b082d484eaba23d1a779fd90558bcf482355df5f57",
+    "scripts/ui/battle_controls.gd": "ef1806d318cf5b5684c903f1af672743293abeea3bb5103ed1f85cae66206591",
+    "tests/e08_audio_test.gd": "6e82525491614694b7579a25c1de219e2e6384fa935bb125eae5934ece83ce78",
+    "tests/e08_audio_test.gd.uid": "46eb33a966681a3bd8dcd51b0e982547bf732d0dee9762b9371d2f994e5fb81b",
+    "tools/verify.ps1": "2ab414662cd92b6f0df78fec13c27c616ffc9c9bc8bd8ca22035b97699660a3b"
+  },
+  "fixture": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+  "fixture_source_manifest_sha256": "dffd93370f03b0a1009b78cb14b5c6fc86ea76f24b45624379e27a996ab82dc7",
+  "fixture_sources_count": 2265,
+  "fixture_project_sha256": "33726afe86093a0d6f580114f803045e4f6624dc94528ecbebd61fb199a06517",
+  "appdata": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\e08_user",
+  "engine_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+  "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "version": "4.7.2.stable.official.ed1daf0bf",
+  "backups_preserved": {
+    "data/map_authoring/sanctuary_woods.map.json.bak": "6b8d52095b0d98ba4a436fd5b192ff732b98a8f5da02855646e7e21b9792bb4f",
+    "data/map_authoring/sanctuary_woods.population.json.bak": "3debc7674a1770702639e8bb33b1e6598c52929e9230395ccfbf505c1ed04889",
+    "data/map_authoring/sanctuary_woods_clearing.source.json.bak": "65a26754c437695d7e7d60e93980c187371fddeec4fb71f78323104dbb55ced5",
+    "data/map_authoring/sanctuary_woods_overpass.source.json.bak": "d0071096addfefcefad1f1df849c3977064a741b4ed1446ffaf50a3f25a95d7e"
+  },
+  "coverage": {
+    "contracted_final": {
+      "directory": "e08_p2_final",
+      "steps": 9,
+      "failures": 0,
+      "timeouts": 0,
+      "audio_checks_before_loop": 78
+    },
+    "loop_delta": {
+      "directory": "e08_p2_loop_final",
+      "steps": 1,
+      "checks": 82,
+      "failures": 0,
+      "timeouts": 0
+    },
+    "native": {
+      "directory": "e08_p2_native",
+      "checks": 83,
+      "failures": 0,
+      "timeouts": 0
+    },
+    "ui_inherited_failure": {
+      "directory": "e08_p2_ui_dev",
+      "test": "ui_layout_test",
+      "failed_checks": 1,
+      "total_checks": 30,
+      "reproduced_baseline": "e08_p2_ui_baseline",
+      "base": "61d91a65d6673f12bfc8915061668d1d56b6c770"
+    }
+  },
+  "compatibility": "After the nine-step run only audio_service.gd whole-sample looping for non-looped WAV ambience and the new matching audio test changed. Final audio re-executed headless and natively; all other source files unchanged. Earlier regressions have no samples and cannot enter the new WAV branch. No repeated count is presented as independent coverage."
+}

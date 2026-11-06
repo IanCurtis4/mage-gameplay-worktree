@@ -10,6 +10,7 @@ signal preferences_changed(mode: int, smart_lock: bool)
 signal interface_changed(ui_scale: float, confine_cursor: bool)
 signal layout_changed(slots: Array[Variant])
 signal bindings_changed
+signal ui_action_confirmed(cancelled: bool)
 
 var skill_buttons: Dictionary[StringName, Button] = {}
 var settings_overlay: ColorRect
@@ -24,6 +25,7 @@ var aim_label: Label
 var settings_button: Button
 var skill_bar: GridContainer
 var action_editor: ActionBarEditor
+var audio_panel: AudioSettingsPanel
 var capture_binding := -1
 var learned_skills: Array[StringName] = []
 var action_slots: Array[Variant] = []
@@ -86,6 +88,7 @@ func _build_settings() -> void:
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation", 6)
 	var settings_scroll := ScrollContainer.new()
+	settings_scroll.follow_focus = true
 	settings_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	settings_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	margin.add_child(settings_scroll)
@@ -134,13 +137,15 @@ func _build_settings() -> void:
 	action_editor.capture_requested.connect(begin_binding_capture)
 	action_editor.clear_binding_requested.connect(clear_binding)
 	action_editor.restore_bindings_requested.connect(restore_bindings)
+	audio_panel = AudioSettingsPanel.new()
+	column.add_child(audio_panel)
 	var note := Label.new()
 	note.text = "Esc / direito cancela mira. Elementos: F1/F2/F3 · Limpar figura: F6 · Recompensa: F8 · Reinício: F9."
 	note.add_theme_font_size_override("font_size", 14)
 	column.add_child(note)
 	var close := Button.new()
 	close.text = "Voltar à batalha"
-	close.focus_mode = Control.FOCUS_NONE
+	close.focus_mode = Control.FOCUS_ALL
 	close.custom_minimum_size.y = 36
 	close.pressed.connect(func() -> void:
 		cancel_binding_capture()
@@ -148,6 +153,15 @@ func _build_settings() -> void:
 	)
 	column.add_child(close)
 	settings_overlay.hide()
+	resized.connect(_layout_settings)
+	_layout_settings()
+
+func _layout_settings() -> void:
+	var extent := Vector2(minf(960.0, maxf(320.0, size.x - 32.0)), minf(660.0, maxf(240.0, size.y - 32.0)))
+	settings_panel.offset_left = -extent.x * 0.5
+	settings_panel.offset_right = extent.x * 0.5
+	settings_panel.offset_top = -extent.y * 0.5
+	settings_panel.offset_bottom = extent.y * 0.5
 
 func set_action_bar(skill_ids: Array[StringName], slots: Array[Variant], preferences: ControlPreferences) -> void:
 	learned_skills = skill_ids.duplicate()
@@ -246,6 +260,7 @@ func handle_binding_event(event: InputEventKey) -> bool:
 	if event.keycode == KEY_ESCAPE or event.physical_keycode == KEY_ESCAPE:
 		cancel_binding_capture()
 		action_editor.message_label.text = "Captura cancelada."
+		ui_action_confirmed.emit(true)
 		return true
 	if event.keycode in [KEY_ALT, KEY_SHIFT, KEY_CTRL, KEY_META] or event.physical_keycode in [KEY_ALT, KEY_SHIFT, KEY_CTRL, KEY_META]:
 		return true
@@ -257,6 +272,7 @@ func handle_binding_event(event: InputEventKey) -> bool:
 	cancel_binding_capture()
 	_rebuild_bar()
 	action_editor.message_label.text = "Atalho alterado."
+	ui_action_confirmed.emit(false)
 	bindings_changed.emit()
 	return true
 

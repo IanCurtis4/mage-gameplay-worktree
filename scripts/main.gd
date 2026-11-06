@@ -225,13 +225,27 @@ var class_label: Label
 func presentation_events() -> PresentationEventBridge:
 	return get_node_or_null("PresentationEvents") as PresentationEventBridge
 
+func presentation_audio() -> PresentationAudioService:
+	var bridge := presentation_events()
+	return bridge.get_node_or_null("PresentationAudio") as PresentationAudioService if bridge != null else null
+
+func _present_ui(cancelled: bool = false) -> void:
+	var audio := presentation_audio()
+	if audio != null: audio.confirm_ui(cancelled)
+
 func _begin_presentation_stage(id: String, resumed: bool = false) -> void:
 	var bridge := presentation_events()
 	if bridge == null:
 		bridge = PresentationEventBridge.new()
 		add_child(bridge)
 		bridge.bind_controller(self)
+	var audio := presentation_audio()
+	if audio == null:
+		audio = PresentationAudioService.new()
+		bridge.add_child(audio)
+		audio.configure(bridge)
 	if bridge.stage_id != id: bridge.begin_stage(id, resumed)
+	if is_instance_valid(battle_controls): battle_controls.audio_panel.bind_service(audio)
 
 func _ready() -> void:
 	if snapshot_passive: return
@@ -1019,7 +1033,9 @@ func _change_action_slots(slots: Array[Variant]) -> void:
 			status_label.text = "Não foi possível salvar os atalhos; organização anterior mantida."
 			battle_controls.set_action_bar(player.available_skill_ids(), action_slots, control_preferences)
 			return
+	var changed := action_slots != slots
 	action_slots = slots.duplicate(true)
+	if changed: _present_ui()
 	# No build, rank, stats, cooldown or resource recalculation for shortcut edits.
 
 func _change_action_bindings() -> void:
@@ -1052,6 +1068,7 @@ func _notification(what: int) -> void:
 		_apply_cursor_mode(true)
 
 func _toggle_settings(open: bool) -> void:
+	if battle_controls.settings_overlay.visible == open: return
 	if open and (get_tree().paused or run_finished):
 		return
 	_cancel_casting(false)
@@ -1061,6 +1078,7 @@ func _toggle_settings(open: bool) -> void:
 	if not open:
 		battle_controls.cancel_binding_capture()
 	get_tree().paused = open
+	_present_ui(not open)
 
 ## F10 Q3: scale and cursor capture are applied live and kept in controls.cfg.
 func change_interface_preferences(ui_scale: float, confine_cursor: bool) -> void:
@@ -3889,6 +3907,8 @@ func _build_ui() -> void:
 	result_overlay.visible = false
 	battle_controls = BattleControls.new()
 	ui_root.add_child(battle_controls)
+	battle_controls.audio_panel.bind_service(presentation_audio())
+	battle_controls.ui_action_confirmed.connect(_present_ui)
 	battle_controls.set_options(control_preferences.cast_mode, control_preferences.smart_lock)
 	battle_controls.set_interface_options(control_preferences.ui_scale, control_preferences.confine_cursor)
 	battle_controls.interface_changed.connect(change_interface_preferences)
