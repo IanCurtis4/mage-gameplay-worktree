@@ -1,0 +1,388 @@
+{
+  "cases": [
+    {
+      "aligned_relative_waveform_error": 0.963551389726143,
+      "all_channel_mutes": false,
+      "all_channel_volumes": 1.0,
+      "capture_files": {
+        "protected_general": {
+          "bytes": 307200,
+          "file": "synthetic_full_pools_protected_general.f32le",
+          "format": "interleaved stereo little-endian float32",
+          "sha256": "9195f0a6c960aa925f9da6d9861cbb8df3ea659859bc5ae4531da2b6ced50dee"
+        },
+        "raw_effects": {
+          "bytes": 307200,
+          "file": "synthetic_full_pools_raw_effects.f32le",
+          "format": "interleaved stereo little-endian float32",
+          "sha256": "cc07442e26f5912e65ffffb8035ed58b0237e567dad0103c77e22a8bdb0013da"
+        },
+        "raw_general_sum": {
+          "bytes": 307200,
+          "file": "synthetic_full_pools_raw_general_sum.f32le",
+          "format": "interleaved stereo little-endian float32",
+          "sha256": "86f0479f0d8a5175e656a42501ea097ce07fa432b39adef206ef510eaccab6db"
+        }
+      },
+      "capture_points": {
+        "protected_general": "General last effect, after limiter and sum; General fader unity",
+        "raw_effects": "Effects bus before send to General",
+        "raw_general_sum": "General effect slot0, before limiter, all channels summed"
+      },
+      "case": "synthetic_full_pools",
+      "ceiling_linear": 0.891250938133746,
+      "driver": "WASAPI",
+      "final_diagnostics": {
+        "active": {
+          "ambience": 4,
+          "effects": 0,
+          "interface": 0
+        },
+        "capacity": 32,
+        "dropped": 0,
+        "epoch": 2,
+        "missing_samples": [],
+        "played": 33,
+        "seen": 29,
+        "stage_id": ""
+      },
+      "immediate_diagnostics": {
+        "active": {
+          "ambience": 4,
+          "effects": 24,
+          "interface": 4
+        },
+        "capacity": 32,
+        "dropped": 0,
+        "epoch": 2,
+        "missing_samples": [],
+        "played": 33,
+        "seen": 29,
+        "stage_id": ""
+      },
+      "mix_rate": 48000.0,
+      "protected_general": {
+        "frames": 38400,
+        "frames_above_ceiling": 0,
+        "frames_above_full_scale": 0,
+        "peak": 0.89030522108078,
+        "peak_index": 355,
+        "rms": 0.615504380578595
+      },
+      "raw_effects": {
+        "frames": 38400,
+        "frames_above_ceiling": 11672,
+        "frames_above_full_scale": 11633,
+        "peak": 21.9736595153809,
+        "peak_index": 1348,
+        "rms": 8.66497563795461
+      },
+      "raw_general_sum": {
+        "frames": 38400,
+        "frames_above_ceiling": 33982,
+        "frames_above_full_scale": 33434,
+        "peak": 29.298210144043,
+        "peak_index": 1348,
+        "rms": 11.7516586890486
+      },
+      "requested_active": {
+        "ambience": 4,
+        "effects": 24,
+        "interface": 4
+      },
+      "single_waveform_lag_frames": -993,
+      "synthetic": true
+    },
+    {
+      "aligned_relative_waveform_error": 0.0,
+      "all_channel_mutes": false,
+      "all_channel_volumes": 1.0,
+      "capture_files": {
+        "protected_general": {
+          "bytes": 307200,
+          "file": "real_single_impact_protected_general.f32le",
+          "format": "interleaved stereo little-endian float32",
+          "sha256": "775a5aed6c79a6774ebda7acd6b92e42c898be3e257de9d0e7cee1234f2790f8"
+        },
+        "raw_effects": {
+          "bytes": 307200,
+          "file": "real_single_impact_raw_effects.f32le",
+          "format": "interleaved stereo little-endian float32",
+          "sha256": "37ca32e0f6b0ef91e969a82feba5ba53ba2e24b3fcb071490334181781242f8c"
+        },
+        "raw_general_sum": {
+          "bytes": 307200,
+          "file": "real_single_impact_raw_general_sum.f32le",
+          "format": "interleaved stereo little-endian float32",
+          "sha256": "37ca32e0f6b0ef91e969a82feba5ba53ba2e24b3fcb071490334181781242f8c"
+        }
+      },
+      "capture_points": {
+        "protected_general": "General last effect, after limiter and sum; General fader unity",
+        "raw_effects": "Effects bus before send to General",
+        "raw_general_sum": "General effect slot0, before limiter, all channels summed"
+      },
+      "case": "real_single_impact",
+      "ceiling_linear": 0.891250938133746,
+      "driver": "WASAPI",
+      "final_diagnostics": {
+        "active": {
+          "ambience": 0,
+          "effects": 0,
+          "interface": 0
+        },
+        "capacity": 32,
+        "dropped": 0,
+        "epoch": 2,
+        "missing_samples": [],
+        "played": 2,
+        "seen": 2,
+        "stage_id": ""
+      },
+      "immediate_diagnostics": {
+        "active": {
+          "ambience": 0,
+          "effects": 1,
+          "interface": 0
+        },
+        "capacity": 32,
+        "dropped": 0,
+        "epoch": 2,
+        "missing_samples": [],
+        "played": 2,
+        "seen": 2,
+        "stage_id": ""
+      },
+      "mix_rate": 48000.0,
+      "protected_general": {
+        "frames": 38400,
+        "frames_above_ceiling": 0,
+        "frames_above_full_scale": 0,
+        "peak": 0.326365083456039,
+        "peak_index": 4861,
+        "rms": 0.0600526291762908
+      },
+      "raw_effects": {
+        "frames": 38400,
+        "frames_above_ceiling": 0,
+        "frames_above_full_scale": 0,
+        "peak": 0.326365083456039,
+        "peak_index": 4763,
+        "rms": 0.0600526291762908
+      },
+      "raw_general_sum": {
+        "frames": 38400,
+        "frames_above_ceiling": 0,
+        "frames_above_full_scale": 0,
+        "peak": 0.326365083456039,
+        "peak_index": 4763,
+        "rms": 0.0600526291762908
+      },
+      "requested_active": {
+        "ambience": 0,
+        "effects": 1,
+        "interface": 0
+      },
+      "single_waveform_lag_frames": 98,
+      "synthetic": false
+    },
+    {
+      "aligned_relative_waveform_error": 0.865017107348451,
+      "all_channel_mutes": false,
+      "all_channel_volumes": 1.0,
+      "capture_files": {
+        "protected_general": {
+          "bytes": 307200,
+          "file": "real_24_impacts_protected_general.f32le",
+          "format": "interleaved stereo little-endian float32",
+          "sha256": "1503c235fc4daffb438741458858bf3d67a583b0022cd49682ccffbd28433b1f"
+        },
+        "raw_effects": {
+          "bytes": 307200,
+          "file": "real_24_impacts_raw_effects.f32le",
+          "format": "interleaved stereo little-endian float32",
+          "sha256": "99f71045744a865522223cc2ceb4f9204d9ce6ad584a48a2b3691fb57976165c"
+        },
+        "raw_general_sum": {
+          "bytes": 307200,
+          "file": "real_24_impacts_raw_general_sum.f32le",
+          "format": "interleaved stereo little-endian float32",
+          "sha256": "99f71045744a865522223cc2ceb4f9204d9ce6ad584a48a2b3691fb57976165c"
+        }
+      },
+      "capture_points": {
+        "protected_general": "General last effect, after limiter and sum; General fader unity",
+        "raw_effects": "Effects bus before send to General",
+        "raw_general_sum": "General effect slot0, before limiter, all channels summed"
+      },
+      "case": "real_24_impacts",
+      "ceiling_linear": 0.891250938133746,
+      "driver": "WASAPI",
+      "final_diagnostics": {
+        "active": {
+          "ambience": 0,
+          "effects": 0,
+          "interface": 0
+        },
+        "capacity": 32,
+        "dropped": 0,
+        "epoch": 2,
+        "missing_samples": [],
+        "played": 25,
+        "seen": 25,
+        "stage_id": ""
+      },
+      "immediate_diagnostics": {
+        "active": {
+          "ambience": 0,
+          "effects": 24,
+          "interface": 0
+        },
+        "capacity": 32,
+        "dropped": 0,
+        "epoch": 2,
+        "missing_samples": [],
+        "played": 25,
+        "seen": 25,
+        "stage_id": ""
+      },
+      "mix_rate": 48000.0,
+      "protected_general": {
+        "frames": 38400,
+        "frames_above_ceiling": 0,
+        "frames_above_full_scale": 0,
+        "peak": 0.890255570411682,
+        "peak_index": 4861,
+        "rms": 0.204732772514636
+      },
+      "raw_effects": {
+        "frames": 38400,
+        "frames_above_ceiling": 8315,
+        "frames_above_full_scale": 7943,
+        "peak": 7.83276081085205,
+        "peak_index": 4763,
+        "rms": 1.44126309901625
+      },
+      "raw_general_sum": {
+        "frames": 38400,
+        "frames_above_ceiling": 8315,
+        "frames_above_full_scale": 7943,
+        "peak": 7.83276081085205,
+        "peak_index": 4763,
+        "rms": 1.44126309901625
+      },
+      "requested_active": {
+        "ambience": 0,
+        "effects": 24,
+        "interface": 0
+      },
+      "single_waveform_lag_frames": 98,
+      "synthetic": false
+    },
+    {
+      "aligned_relative_waveform_error": 0.866443363336691,
+      "all_channel_mutes": false,
+      "all_channel_volumes": 1.0,
+      "capture_files": {
+        "protected_general": {
+          "bytes": 307200,
+          "file": "real_full_pools_protected_general.f32le",
+          "format": "interleaved stereo little-endian float32",
+          "sha256": "2098e18cfe9f25e3faa563aeb2273210635bc8f3e4fc110939265fbf395e7ecd"
+        },
+        "raw_effects": {
+          "bytes": 307200,
+          "file": "real_full_pools_raw_effects.f32le",
+          "format": "interleaved stereo little-endian float32",
+          "sha256": "99f71045744a865522223cc2ceb4f9204d9ce6ad584a48a2b3691fb57976165c"
+        },
+        "raw_general_sum": {
+          "bytes": 307200,
+          "file": "real_full_pools_raw_general_sum.f32le",
+          "format": "interleaved stereo little-endian float32",
+          "sha256": "7addcc0ecbce61b8867c8c169680b738fa73d5ec772f76e9bf590e0476832075"
+        }
+      },
+      "capture_points": {
+        "protected_general": "General last effect, after limiter and sum; General fader unity",
+        "raw_effects": "Effects bus before send to General",
+        "raw_general_sum": "General effect slot0, before limiter, all channels summed"
+      },
+      "case": "real_full_pools",
+      "ceiling_linear": 0.891250938133746,
+      "driver": "WASAPI",
+      "final_diagnostics": {
+        "active": {
+          "ambience": 4,
+          "effects": 0,
+          "interface": 0
+        },
+        "capacity": 32,
+        "dropped": 0,
+        "epoch": 2,
+        "missing_samples": [],
+        "played": 33,
+        "seen": 29,
+        "stage_id": ""
+      },
+      "immediate_diagnostics": {
+        "active": {
+          "ambience": 4,
+          "effects": 24,
+          "interface": 4
+        },
+        "capacity": 32,
+        "dropped": 0,
+        "epoch": 2,
+        "missing_samples": [],
+        "played": 33,
+        "seen": 29,
+        "stage_id": ""
+      },
+      "mix_rate": 48000.0,
+      "protected_general": {
+        "frames": 38400,
+        "frames_above_ceiling": 0,
+        "frames_above_full_scale": 0,
+        "peak": 0.890256106853485,
+        "peak_index": 4856,
+        "rms": 0.206961424475189
+      },
+      "raw_effects": {
+        "frames": 38400,
+        "frames_above_ceiling": 8315,
+        "frames_above_full_scale": 7943,
+        "peak": 7.83276081085205,
+        "peak_index": 4763,
+        "rms": 1.44126309901625
+      },
+      "raw_general_sum": {
+        "frames": 38400,
+        "frames_above_ceiling": 8294,
+        "frames_above_full_scale": 7937,
+        "peak": 7.96512174606323,
+        "peak_index": 4758,
+        "rms": 1.44276336248029
+      },
+      "requested_active": {
+        "ambience": 4,
+        "effects": 24,
+        "interface": 4
+      },
+      "single_waveform_lag_frames": 98,
+      "synthetic": false
+    }
+  ],
+  "engine": {
+    "build": "official",
+    "hash": "ed1daf0bf001b61586d9930840f2f1394092c079",
+    "hex": 263938,
+    "major": 4,
+    "minor": 7,
+    "patch": 2,
+    "status": "stable",
+    "string": "4.7.2-stable (official)",
+    "timestamp": 0
+  },
+  "failures": 0
+}

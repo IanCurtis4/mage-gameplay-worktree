@@ -1,0 +1,54 @@
+{
+  "base_sha": "a0f09771a0d5928b81c6ad0b5c08788fb284517c",
+  "branch": "codex/e08",
+  "checkout": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5",
+  "files": {
+    "scripts/presentation/audio_service.gd": "9f15d2bc133161829c5e57885a8845dc44d27995dbb6d4420e5a6a5885fd0de1",
+    "tests/e08_audio_test.gd": "9f031ab8f264068bc44ba2e5bb490c38045c58c679a56d61c1995d724d45360a",
+    "scripts/presentation/presentation_event_bridge.gd": "e4c8de99518908690879e845b099bec4e67e8c706576b705455ed1ad0f311d14",
+    "scripts/presentation/audio_event_catalog.gd": "ec1ab0cfbbe4551ca97318c1b85e5cc9e4b68d490b55cc7211571c8b663ed00a",
+    "scripts/presentation/audio_preferences.gd": "7315d64d5ead1395f53fa85902e74e49a7343404491fbef5562b08c2ca3c6d9e",
+    "tests/e08_presentation_test.gd": "70102d152642a4ac1c6b6cae18af4accf0d9c95a85905c9f6326af50cd618172",
+    "tests/e07_f3_lifecycle_test.gd": "5c3d85afaffd68062519e5518ad7eb99dd63a89041cc436b16c553880b6ec4f4",
+    "scripts/core/expedition/snapshot/snapshot_registry.gd": "3fd8bebacd0794f1b224dcd14cf45bdc8a9414ae4efc45cbdaeb447922977289",
+    "tools/verify.ps1": "55a4b99935546e667584446e8483b748627182d2fe848419b3b7249ae3735086"
+  },
+  "engine_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+  "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "engine_version": "4.7.2.stable.official.ed1daf0bf",
+  "fixture": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+  "fixture_manifest_sha256": "50ff620362b922aae15aeeb220d19febdcc7777f13c4f5598389e6e914f7d25a",
+  "fixture_sources_count": 2299,
+  "fixture_project_sha256": "33726afe86093a0d6f580114f803045e4f6624dc94528ecbebd61fb199a06517",
+  "appdata": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\e08_user",
+  "p3_wip_manifest": "docs/epics/e08_evidence/p0/p3_mix_handoff_inputs.json",
+  "p3_wip_manifest_sha256": "3d23313c65faccdd141ad7faef0287bfa31d072da62ba931dcf667aa9097d626",
+  "p3_wip_files_preserved": 80,
+  "p3_wip_delivery_status": "INCOMPLETE, frozen inputs only; not certified by P2 correction",
+  "fixture_manifest_note": "P3 probe bytes already matched both roots and handoff; only its stale manifest entry was corrected. Only own service/test files were synchronized as deltas.",
+  "previous_82_checks_preserved": true,
+  "native_before_failures": 7,
+  "final_selection": {
+    "steps": 3,
+    "e08_presentation_test_checks": 2122,
+    "e08_audio_test_checks": 132,
+    "e07_f3_lifecycle_test_checks": 90,
+    "failures": 0,
+    "timeouts": 0
+  },
+  "native_after": {
+    "checks": 268,
+    "failures": 0,
+    "timeouts": 0,
+    "audio_driver": "WASAPI",
+    "mix_rate": 48000
+  },
+  "limiter": {
+    "class": "AudioEffectHardLimiter",
+    "location": "private general bus after sum",
+    "pre_gain_db": 0.0,
+    "ceiling_db": -1.01,
+    "release_seconds": 0.1,
+    "verified_output_ceiling_db": -1.0
+  }
+}

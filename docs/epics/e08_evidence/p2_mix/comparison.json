@@ -1,0 +1,176 @@
+{
+  "baseline_protection_installed": false,
+  "after_protection_installed": true,
+  "baseline_note": "protected_general names the prospective output tap; no limiter existed in baseline. It measures the unprotected summed output.",
+  "previous_82_checks_preserved": true,
+  "wip_80_preserved": true,
+  "single_impact_aligned_max_abs_difference": 0.0,
+  "single_impact_delay_frames": 98,
+  "single_impact_delay_seconds": 0.0020416666666666665,
+  "independent_float_capture_analysis": {
+    "native_before": {
+      "synthetic_full_pools": {
+        "protected_general": {
+          "frames": 38912,
+          "peak": 29.29821014404297,
+          "frames_above_full_scale": 33850,
+          "rms": 11.677749852060822
+        },
+        "raw_effects": {
+          "frames": 38912,
+          "peak": 21.97365951538086,
+          "frames_above_full_scale": 11633,
+          "rms": 8.607780454238275
+        },
+        "raw_general_sum": {
+          "frames": 38912,
+          "peak": 29.29821014404297,
+          "frames_above_full_scale": 33850,
+          "rms": 11.677749852060822
+        }
+      },
+      "real_single_impact": {
+        "protected_general": {
+          "frames": 38400,
+          "peak": 0.32636508345603943,
+          "frames_above_full_scale": 0,
+          "rms": 0.06005262917629051
+        },
+        "raw_effects": {
+          "frames": 38400,
+          "peak": 0.32636508345603943,
+          "frames_above_full_scale": 0,
+          "rms": 0.06005262917629051
+        },
+        "raw_general_sum": {
+          "frames": 38400,
+          "peak": 0.32636508345603943,
+          "frames_above_full_scale": 0,
+          "rms": 0.06005262917629051
+        }
+      },
+      "real_24_impacts": {
+        "protected_general": {
+          "frames": 35840,
+          "peak": 7.832760810852051,
+          "frames_above_full_scale": 7943,
+          "rms": 1.4918490398731965
+        },
+        "raw_effects": {
+          "frames": 35840,
+          "peak": 7.832760810852051,
+          "frames_above_full_scale": 7943,
+          "rms": 1.4918490398731965
+        },
+        "raw_general_sum": {
+          "frames": 35840,
+          "peak": 7.832760810852051,
+          "frames_above_full_scale": 7943,
+          "rms": 1.4918490398731965
+        }
+      },
+      "real_full_pools": {
+        "protected_general": {
+          "frames": 35328,
+          "peak": 8.029143333435059,
+          "frames_above_full_scale": 7979,
+          "rms": 1.5059708198232349
+        },
+        "raw_effects": {
+          "frames": 35328,
+          "peak": 7.832760810852051,
+          "frames_above_full_scale": 7943,
+          "rms": 1.5026206529672668
+        },
+        "raw_general_sum": {
+          "frames": 35328,
+          "peak": 8.029143333435059,
+          "frames_above_full_scale": 7979,
+          "rms": 1.5059708198232349
+        }
+      }
+    },
+    "native_after": {
+      "synthetic_full_pools": {
+        "protected_general": {
+          "frames": 38400,
+          "peak": 0.89030522108078,
+          "frames_above_full_scale": 0,
+          "rms": 0.6155043805785869
+        },
+        "raw_effects": {
+          "frames": 38400,
+          "peak": 21.97365951538086,
+          "frames_above_full_scale": 11633,
+          "rms": 8.664975637954484
+        },
+        "raw_general_sum": {
+          "frames": 38400,
+          "peak": 29.29821014404297,
+          "frames_above_full_scale": 33434,
+          "rms": 11.751658689048382
+        }
+      },
+      "real_single_impact": {
+        "protected_general": {
+          "frames": 38400,
+          "peak": 0.32636508345603943,
+          "frames_above_full_scale": 0,
+          "rms": 0.06005262917629051
+        },
+        "raw_effects": {
+          "frames": 38400,
+          "peak": 0.32636508345603943,
+          "frames_above_full_scale": 0,
+          "rms": 0.06005262917629051
+        },
+        "raw_general_sum": {
+          "frames": 38400,
+          "peak": 0.32636508345603943,
+          "frames_above_full_scale": 0,
+          "rms": 0.06005262917629051
+        }
+      },
+      "real_24_impacts": {
+        "protected_general": {
+          "frames": 38400,
+          "peak": 0.8902555704116821,
+          "frames_above_full_scale": 0,
+          "rms": 0.20473277251463418
+        },
+        "raw_effects": {
+          "frames": 38400,
+          "peak": 7.832760810852051,
+          "frames_above_full_scale": 7943,
+          "rms": 1.441263099016232
+        },
+        "raw_general_sum": {
+          "frames": 38400,
+          "peak": 7.832760810852051,
+          "frames_above_full_scale": 7943,
+          "rms": 1.441263099016232
+        }
+      },
+      "real_full_pools": {
+        "protected_general": {
+          "frames": 38400,
+          "peak": 0.8902561068534851,
+          "frames_above_full_scale": 0,
+          "rms": 0.2069614244751853
+        },
+        "raw_effects": {
+          "frames": 38400,
+          "peak": 7.832760810852051,
+          "frames_above_full_scale": 7943,
+          "rms": 1.441263099016232
+        },
+        "raw_general_sum": {
+          "frames": 38400,
+          "peak": 7.965121746063232,
+          "frames_above_full_scale": 7937,
+          "rms": 1.4427633624802798
+        }
+      }
+    }
+  }
+}

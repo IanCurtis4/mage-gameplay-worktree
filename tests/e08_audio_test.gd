@@ -145,6 +145,7 @@ func _run() -> void:
 	host.free()
 	await _test_staging()
 	await _test_controller()
+	await _test_mix_protection()
 	print("E08 audio: %s (%d checks)" % ["PASS" if failures == 0 else "FAIL",checks])
 	quit(0 if failures == 0 else 1)
 func _test_panel(service: PresentationAudioService, bridge: PresentationEventBridge) -> void:
@@ -236,3 +237,126 @@ func _test_staging() -> void:
 	root.remove_child(aborted); aborted.free()
 	await _frames()
 	check(AudioServer.bus_count == bus_baseline, "abort drops pending ambience without leaked buses or deferred replay")
+
+# Output safety oracle is independent of the runtime's effect settings.
+const MIX_CEILING := 0.8912509381337456 # -1 dBFS, linear amplitude.
+func _assert_mix_effect(service: PresentationAudioService) -> void:
+	var general := AudioServer.get_bus_index(service._buses[&"general"])
+	check(AudioServer.get_bus_effect_count(general) == 1, "one output protection effect per private general bus")
+	if AudioServer.get_bus_effect_count(general) != 1: return
+	var effect := AudioServer.get_bus_effect(general,0) as AudioEffectHardLimiter
+	check(effect != null and AudioServer.is_bus_effect_enabled(general,0), "native hard limiter enabled after the channel sum")
+	if effect != null:
+		check(is_equal_approx(effect.ceiling_db,-1.01) and effect.pre_gain_db == 0.0 and is_equal_approx(effect.release,0.1), "unity input gain, -1.01 dB internal ceiling margin and 100 ms release")
+	for channel: StringName in [&"effects", &"interface", &"ambience"]:
+		check(AudioServer.get_bus_effect_count(AudioServer.get_bus_index(service._buses[channel])) == 0, "child channel is unmodified before private output protection")
+	service.configure(service._bridge,service.preferences.path)
+	check(AudioServer.get_bus_effect_count(general) == 1, "idempotent configure never stacks limiters")
+	var other := Service.new(); service._bridge.add_child(other); other.install_streams(_streams()); other.configure(service._bridge,service.preferences.path)
+	var other_bus := AudioServer.get_bus_index(other._buses[&"general"])
+	if effect != null and AudioServer.get_bus_effect_count(other_bus) == 1:
+		check(effect != AudioServer.get_bus_effect(other_bus,0), "limiter state belongs to each service instance")
+	other.dispose(); other.free()
+func _mix_stream() -> AudioStreamWAV:
+	var stream := AudioStreamWAV.new(); stream.format = AudioStreamWAV.FORMAT_16_BITS; stream.mix_rate = 44100
+	var bytes := PackedByteArray(); bytes.resize(22050)
+	for index: int in 11025: bytes.encode_s16(index*2,roundi(sin(float(index)*TAU*440.0/44100.0)*30000.0))
+	stream.data = bytes
+	return stream
+func _mix_stats(samples: PackedVector2Array) -> Dictionary:
+	var peak := 0.0; var above := 0; var above_ceiling := 0; var squares := 0.0; var peak_index := 0
+	for index: int in samples.size():
+		var frame := samples[index]; var amplitude := maxf(absf(frame.x),absf(frame.y))
+		if amplitude > peak: peak = amplitude; peak_index = index
+		if amplitude > 1.0: above += 1
+		if amplitude > MIX_CEILING+0.00001: above_ceiling += 1
+		squares += float(frame.x)*frame.x+float(frame.y)*frame.y
+	return {"frames":samples.size(),"peak":peak,"peak_index":peak_index,"frames_above_full_scale":above,"frames_above_ceiling":above_ceiling,"rms":sqrt(squares/maxf(1.0,float(samples.size()*2)))}
+func _waveform_difference(raw: PackedVector2Array, output: PackedVector2Array, lag: int) -> float:
+	var signal_squared := 0.0; var error_squared := 0.0
+	for index: int in raw.size():
+		var target := index+lag
+		if target < 0 or target >= output.size(): continue
+		var error := raw[index]-output[target]
+		error_squared += float(error.x)*error.x+float(error.y)*error.y
+		signal_squared += float(raw[index].x)*raw[index].x+float(raw[index].y)*raw[index].y
+	return sqrt(error_squared/maxf(signal_squared,0.000000000001))
+func _save_mix_capture(folder: String, name: String, samples: PackedVector2Array) -> Dictionary:
+	var bytes := PackedByteArray(); bytes.resize(samples.size()*8)
+	for index: int in samples.size(): bytes.encode_float(index*8,samples[index].x); bytes.encode_float(index*8+4,samples[index].y)
+	var path := folder.path_join(name+".f32le")
+	var file := FileAccess.open(path,FileAccess.WRITE)
+	check(file != null, "raw stereo float capture opens: "+name)
+	if file == null: return {}
+	file.store_buffer(bytes); file.close()
+	return {"file":name+".f32le","sha256":FileAccess.get_sha256(path),"format":"interleaved stereo little-endian float32","bytes":bytes.size()}
+func _mix_case(label: String, effects: int, interface_count: int, ambient: int, synthetic: bool, folder: String) -> Dictionary:
+	var bus_baseline := AudioServer.bus_count
+	var host := Node2D.new(); root.add_child(host)
+	var bridge := Bridge.new(); host.add_child(bridge); bridge.bind_controller(host)
+	var service := Service.new(); bridge.add_child(service)
+	if synthetic:
+		var streams := {}; for id: StringName in Catalog.ids(): streams[id] = _mix_stream()
+		service.install_streams(streams)
+	DirAccess.make_dir_recursive_absolute("user://e08_audio_mix_fixture")
+	service.configure(bridge,"user://e08_audio_mix_fixture/audio.cfg")
+	_assert_mix_effect(service)
+	for channel: StringName in Catalog.CHANNELS:
+		check(service.set_volume(channel,1.0) == OK and service.set_muted(channel,false) == OK, "mix at exactly 100 percent, unmuted: "+String(channel))
+	var general := AudioServer.get_bus_index(service._buses[&"general"])
+	var raw_bus := AudioServer.get_bus_index(service._buses[&"effects"])
+	var raw_effects := AudioEffectCapture.new(); raw_effects.buffer_length = 2.0
+	var raw_sum := AudioEffectCapture.new(); raw_sum.buffer_length = 2.0
+	var protected := AudioEffectCapture.new(); protected.buffer_length = 2.0
+	AudioServer.add_bus_effect(raw_bus,raw_effects)
+	AudioServer.add_bus_effect(general,raw_sum,0) # Before the limiter: sum of every child channel.
+	AudioServer.add_bus_effect(general,protected) # After limiter, before general fader (fixed at 1).
+	bridge.begin_stage("mix_"+label); service.clear_stage()
+	await create_timer(0.15).timeout
+	raw_effects.clear_buffer(); raw_sum.clear_buffer(); protected.clear_buffer()
+	var played: int = service.diagnostics().played
+	for index: int in effects: check(bridge.emit_confirmed(_event(bridge,label+"/impact/%d" % index)), "confirmed real/synthetic impact admitted")
+	for index: int in interface_count: check(bridge.emit_confirmed(_event(bridge,label+"/ui/%d" % index,&"ui_confirm")), "confirmed UI admitted to full mix")
+	for unused: int in ambient: check(service._play(&"ambience.stage"), "current ambience admitted to full mix")
+	var immediate := service.diagnostics()
+	check(immediate.active == {&"effects":effects,&"interface":interface_count,&"ambience":ambient} and immediate.played == played+effects+interface_count+ambient and immediate.dropped == 0 and immediate.missing_samples.is_empty(), "all requested voices actually active, no drops or missing samples")
+	await create_timer(0.8).timeout
+	var effects_samples := raw_effects.get_buffer(raw_effects.get_frames_available())
+	var sum_samples := raw_sum.get_buffer(raw_sum.get_frames_available())
+	var output_samples := protected.get_buffer(protected.get_frames_available())
+	var raw_stats := _mix_stats(effects_samples); var sum_stats := _mix_stats(sum_samples); var output_stats := _mix_stats(output_samples)
+	check(output_stats.frames >= 10000 and output_stats.peak > 0.01 and output_stats.rms > 0.001, "nonempty useful-level protected output, never a silent success")
+	check(output_stats.frames_above_full_scale == 0 and output_stats.frames_above_ceiling == 0 and output_stats.peak <= MIX_CEILING+0.00001, "summed private output never exceeds the -1 dB safety ceiling")
+	if effects == 24:
+		check(raw_stats.peak > 1.0 and sum_stats.peak > 1.0, "stress input still overloads raw Effects and General sum; no gain reduction or voice culling hides it")
+		check(output_stats.peak > 0.4, "limited dense mix retains a useful output level")
+	var lag: int = int(output_stats.peak_index)-int(sum_stats.peak_index)
+	var difference := _waveform_difference(sum_samples,output_samples,lag)
+	if effects == 1:
+		check(sum_stats.peak < MIX_CEILING and absf(output_stats.peak-sum_stats.peak) < 0.0001 and difference < 0.001, "single real impact below threshold preserves level and waveform after latency alignment")
+	var record := {"case":label,"synthetic":synthetic,"requested_active":{&"effects":effects,&"interface":interface_count,&"ambience":ambient},"immediate_diagnostics":immediate,"final_diagnostics":service.diagnostics(),"all_channel_volumes":1.0,"all_channel_mutes":false,"driver":AudioServer.get_driver_name(),"mix_rate":AudioServer.get_mix_rate(),"ceiling_linear":MIX_CEILING,"raw_effects":raw_stats,"raw_general_sum":sum_stats,"protected_general":output_stats,"single_waveform_lag_frames":lag,"aligned_relative_waveform_error":difference,"capture_points":{"raw_effects":"Effects bus before send to General","raw_general_sum":"General effect slot0, before limiter, all channels summed","protected_general":"General last effect, after limiter and sum; General fader unity"},"capture_files":{}}
+	if not folder.is_empty():
+		record.capture_files.raw_effects = _save_mix_capture(folder,label+"_raw_effects",effects_samples)
+		record.capture_files.raw_general_sum = _save_mix_capture(folder,label+"_raw_general_sum",sum_samples)
+		record.capture_files.protected_general = _save_mix_capture(folder,label+"_protected_general",output_samples)
+	print("E08_OUTPUT_MIX "+JSON.stringify(record))
+	service.dispose(); host.free()
+	check(AudioServer.bus_count == bus_baseline, "capture and limiter buses cleaned after mix case")
+	return record
+func _test_mix_protection() -> void:
+	var folder := ""
+	for argument: String in OS.get_cmdline_user_args():
+		if argument.begins_with("--audio-mix-output="): folder = argument.trim_prefix("--audio-mix-output=")
+	if not folder.is_empty(): DirAccess.make_dir_recursive_absolute(folder)
+	var cases: Array[Dictionary] = []
+	cases.append(await _mix_case("synthetic_full_pools",24,4,4,true,folder))
+	if "--audio-mix-native" in OS.get_cmdline_user_args():
+		check(AudioServer.get_driver_name() != "Dummy", "real sample proof uses a native audio driver")
+		for id: StringName in Catalog.ids(): check(ResourceLoader.exists(Catalog.definition(id).path), "real P3 WAV required for native proof: "+String(id))
+		cases.append(await _mix_case("real_single_impact",1,0,0,false,folder))
+		cases.append(await _mix_case("real_24_impacts",24,0,0,false,folder))
+		cases.append(await _mix_case("real_full_pools",24,4,4,false,folder))
+	if not folder.is_empty():
+		var file := FileAccess.open(folder.path_join("mix_metrics.json"),FileAccess.WRITE)
+		check(file != null,"mix metrics file opens")
+		if file != null: file.store_string(JSON.stringify({"engine":Engine.get_version_info(),"cases":cases,"failures":failures},"  ",true)); file.close()

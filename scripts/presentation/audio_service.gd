@@ -6,6 +6,9 @@ signal configuration_error(operation: StringName, error: int)
 const Catalog = preload("res://scripts/presentation/audio_event_catalog.gd")
 const Preferences = preload("res://scripts/presentation/audio_preferences.gd")
 const DEDUP_LIMIT := 2048
+const OUTPUT_CEILING_DB := -1.0
+const OUTPUT_RELEASE_SECONDS := 0.1
+const OUTPUT_LIMITER_MARGIN_DB := 0.01 # Native gain interpolation can slightly overshoot its nominal ceiling.
 var preferences := Preferences.new()
 var _bridge: PresentationEventBridge
 var _buses: Dictionary = {}
@@ -64,6 +67,14 @@ func _create_buses() -> void:
 		AudioServer.set_bus_name(AudioServer.bus_count-1, bus)
 		_buses[channel] = bus
 		AudioServer.set_bus_send(AudioServer.get_bus_index(bus), &"Master" if channel == &"general" else _buses[&"general"])
+
+	# Protect the combined private output, not individual samples or the shared Master.
+	# A fresh native effect per service keeps gain/release state instance-local.
+	var limiter := AudioEffectHardLimiter.new()
+	limiter.pre_gain_db = 0.0
+	limiter.ceiling_db = OUTPUT_CEILING_DB - OUTPUT_LIMITER_MARGIN_DB
+	limiter.release = OUTPUT_RELEASE_SECONDS
+	AudioServer.add_bus_effect(AudioServer.get_bus_index(_buses[&"general"]),limiter)
 
 func _create_voices() -> void:
 	for channel: StringName in Catalog.LIMITS:
