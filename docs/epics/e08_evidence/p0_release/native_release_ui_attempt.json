@@ -1,0 +1,7 @@
+{
+  "reason": "Both node_repl/Sky and cua_repl failed to write kernel assets; retry/reset unsuccessful.",
+  "deliberate_test_process_cleanup": true,
+  "existing_normal_exe_boot": "passed",
+  "status": "not_executed",
+  "functional_forest_proof": "standard engine with exact PCK, not interactive release EXE"
+}

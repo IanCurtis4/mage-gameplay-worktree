@@ -421,3 +421,27 @@ com modo explícito. Não declarar sondas editor como gameplay dentro do EXE.
 Logs/run records anteriores preservados no diretório do primeiro candidato;
 nomes de sonda repetidos tiveram logs substituídos pela nova execução e os
 resultados cronológicos permanecem em runs.json; não alegar log único por tentativa.
+
+### Freeze do piloto para conferência final Luna
+
+Candidato Windows ad09b99d5e70385d4532b478931c85629f5de849, sem novo runtime.
+Sol consolidou contrato e composição.5processos da nova embalagem PASS,20checks
+standard+PCK,assetmanifest7PASS; P3 anterior14/14 e126nativos preservados.
+Comparação6processos+repetição2+ablação_v2 2 sem erro/timeout. Segunda rodada
+cruzou10%; ablação válida não reproduziu custo persistente>10%. Todas as rodadas,
+limites de memória/RSS e tentativas inválidas preservados, sem mudar expectativa.
+Inspeção interativa EXE não ocorreu: node_repl/Sky e cua_repl falharam no kernel;
+processo de teste isolado encerrado deliberadamente, não contar como PASS.
+EXE/PCK pareados, atalho, LEIA-ME,VALIDACAO,review com8imagens e áudio preparados.
+Recibo e checkpoint apontam candidato; o habitual/save continuam preservados.
+
+Luna low recebe o HEAD deste freeze após commit. Única propriedade de escrita:
+docs/epics/e08_evidence/luna_pilot_release/supervision.md e hashes.json.
+Conferir93membrosZIP/SHA,manifestos2322export reconstruído/2323atual,fontes/fixture,
+engine/config/backups,EXE/PCK/atalho/review,5processos export,10comparativos e7asset.
+Recalcular tabelas, separar logs inválidos/E06 histórico, e registrar impedimento
+UI como não realizado. Wrapper RSS0→null é único delta pós-execução do wrapper;
+versão testada e atual arquivadas. Sondas testadas têm hashes próprios.
+Sem rerun rotineiro, mudar código/fixture/oráculos, audição ou certificação artística.
+P0/P1/P2/P3 somente leitura até devolução explícita. Se houver divergência,
+P0 corrige o escopo responsável; não registrar aceite humano nem liberarP4–P7.

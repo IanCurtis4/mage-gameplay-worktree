@@ -44,10 +44,10 @@ func run() -> void:
 	report["population"] = host.enemies.size()
 	for window: int in 3: await sample("natural_all_on_%d" % window)
 	for enemy: CombatActor in host.enemies: enemy.set_process(false)
-	await sample("natural_enemy_process_off")
+	await diagnostic("natural_enemy_process_off")
 	var view := host.expedition_view
 	view.set_process(false)
-	await sample("natural_view_sync_off")
+	await diagnostic("natural_view_sync_off")
 	for enemy: CombatActor in host.enemies:
 		crowd.append(enemy); enemy.visible = true
 		var i := crowd.size()-1
@@ -56,7 +56,7 @@ func run() -> void:
 	animate = true
 	await sample("crowd_animated_shadows")
 	for enemy: CombatActor in crowd: enemy.contact_shadows_enabled = false
-	await sample("crowd_animated_no_shadows")
+	await diagnostic("crowd_animated_no_shadows")
 	animate = false
 	await sample("crowd_cached_drawing")
 	for enemy: CombatActor in crowd: enemy.hide()
@@ -84,3 +84,8 @@ func run() -> void:
 	quit(0)
 
 
+
+func diagnostic(label: String) -> void:
+	if "--repeat-diagnostics" in OS.get_cmdline_user_args():
+		for window: int in 3: await sample(label+"_%d" % window)
+	else: await sample(label)

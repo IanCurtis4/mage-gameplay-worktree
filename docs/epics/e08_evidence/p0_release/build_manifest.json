@@ -1,0 +1,236 @@
+{
+  "verification_commit": "ad09b99d5e70385d4532b478931c85629f5de849",
+  "candidate_commit": "ad09b99d5e70385d4532b478931c85629f5de849",
+  "source_inputs_checked": 2322,
+  "application_name": "RagRPG E08 Piloto1",
+  "runtime_commit": "ad09b99d5e70385d4532b478931c85629f5de849",
+  "normal_profile_file": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_e08\\pilot_ad09b99d\\validation\\normal_menu_pack_profile_3\\Godot\\app_userdata\\RagRPG E08 Piloto1\\profile.json",
+  "fixture_project_restored": true,
+  "forest_map_result": {
+    "checks": [
+      {
+        "detail": "",
+        "id": "packaged_menu_creates_character",
+        "ok": true
+      },
+      {
+        "detail": "",
+        "id": "forest_available",
+        "ok": true
+      },
+      {
+        "detail": "",
+        "id": "forest_enters_from_exported_pack",
+        "ok": true
+      },
+      {
+        "detail": "",
+        "id": "ui120_panel_clears_footer_bar",
+        "ok": true
+      },
+      {
+        "detail": "",
+        "id": "forest_own_body_atlases",
+        "ok": true
+      },
+      {
+        "detail": "",
+        "id": "private_sum_native_limiter",
+        "ok": true
+      },
+      {
+        "detail": "",
+        "id": "canonical_terrain_mesh_installed",
+        "ok": true
+      },
+      {
+        "detail": "[46078, 5122]",
+        "id": "walkable_and_steep_terrain_visible",
+        "ok": true
+      },
+      {
+        "detail": "[62, 62]",
+        "id": "whole_forest_population_marked",
+        "ok": true
+      },
+      {
+        "detail": "",
+        "id": "offscreen_enemies_marked",
+        "ok": true
+      },
+      {
+        "detail": "[P: (1063.268, 173.0325), S: (176.4923, 176.4923)]",
+        "id": "square_map_on_screen",
+        "ok": true
+      },
+      {
+        "detail": "[[P: (1051.829, 142.8), S: (199.371, 286.8)], [P: (1030.4, 76.8), S: (220.8, 51.60001)]]",
+        "id": "map_clears_class_button",
+        "ok": true
+      },
+      {
+        "detail": "",
+        "id": "player_marker_and_heading_match",
+        "ok": true
+      },
+      {
+        "detail": "",
+        "id": "zoom_out_without_changing_map_or_hud",
+        "ok": true
+      },
+      {
+        "detail": "",
+        "id": "native_map_capture",
+        "ok": true
+      },
+      {
+        "detail": "",
+        "id": "forest_suspends_with_minimap",
+        "ok": true
+      },
+      {
+        "detail": "",
+        "id": "forest_resumes_with_zoom_preference",
+        "ok": true
+      },
+      {
+        "detail": "",
+        "id": "own_body_atlases_survive_resume",
+        "ok": true
+      },
+      {
+        "detail": "{ &\"effects\": 0, &\"interface\": 0, &\"ambience\": 1 }",
+        "id": "resume_current_ambient_no_transients",
+        "ok": true
+      },
+      {
+        "detail": "",
+        "id": "minimap_rebuilt_from_resumed_world",
+        "ok": true
+      }
+    ],
+    "count": 20,
+    "mode": "native_standard_engine_exact_release_pack",
+    "ok": true,
+    "timings": {
+      "entry_ms": 50809.687,
+      "resume_ms": 26675.039,
+      "suspend_ms": 8907.533
+    }
+  },
+  "fixture": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+  "packaging_deltas": [
+    "VCS autoload disabled",
+    "Map editor export plugin enabled to preserve original dependency bytes",
+    "Release template absolute path",
+    "Git plugin excluded",
+    "Console wrapper disabled",
+    "Application name isolates saves"
+  ],
+  "generated_utc": "2026-11-06T18:17:30.6327565Z",
+  "artifacts": [
+    {
+      "bytes": 109127680,
+      "sha256": "4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668",
+      "file": "RagRPG-E08-Piloto1.exe"
+    },
+    {
+      "bytes": 125350284,
+      "sha256": "d91bc71373ec370e744b61032b7aed036f4895620241027b29c0b505c81246e2",
+      "file": "RagRPG-E08-Piloto1.pck"
+    }
+  ],
+  "test_save_directory": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_e08\\pilot_ad09b99d\\validation\\normal_menu_pack_profile_3\\Godot\\app_userdata\\RagRPG E08 Piloto1",
+  "engine": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+  "main_scene": "res://scenes/character_menu.tscn",
+  "fixture_preset_restored": true,
+  "source": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5",
+  "template_sha256": "d34d36f3be1a6c49c56525ae86469b92e4f417ddf0b43cf00dd80c385c4b0562",
+  "template": "C:/Users/João Pedro/AppData/Roaming/Godot/export_templates/4.7.2.stable/windows_release_x86_64.exe",
+  "runs": [
+    {
+      "exit_code": 0,
+      "started_utc": "2026-11-06T18:16:33.7657322Z",
+      "finished_utc": "2026-11-06T18:17:12.0379933Z",
+      "timed_out": false,
+      "profile_directory": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_e08\\pilot_ad09b99d\\validation\\export_profile_0",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--export-release",
+        "Windows Desktop",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_e08\\pilot_ad09b99d\\RagRPG-E08-Piloto1.exe"
+      ],
+      "ok": true,
+      "name": "export"
+    },
+    {
+      "exit_code": 0,
+      "started_utc": "2026-11-06T18:17:12.1487805Z",
+      "finished_utc": "2026-11-06T18:17:12.8099704Z",
+      "timed_out": false,
+      "profile_directory": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_e08\\pilot_ad09b99d\\validation\\inspect_pack_editor_profile_1",
+      "arguments": [
+        "--headless",
+        "--main-pack",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_e08\\pilot_ad09b99d\\RagRPG-E08-Piloto1.pck",
+        "--script",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_e08\\pilot_ad09b99d\\validation\\inspect_pack.gd"
+      ],
+      "ok": true,
+      "name": "inspect_pack_editor"
+    },
+    {
+      "exit_code": 0,
+      "started_utc": "2026-11-06T18:17:12.8167459Z",
+      "finished_utc": "2026-11-06T18:17:20.2153009Z",
+      "timed_out": false,
+      "profile_directory": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_e08\\pilot_ad09b99d\\validation\\normal_boot_profile_2",
+      "arguments": [
+        "--rendering-method",
+        "gl_compatibility",
+        "--quit-after",
+        "120",
+        "--verbose"
+      ],
+      "ok": true,
+      "name": "normal_boot"
+    },
+    {
+      "exit_code": 0,
+      "started_utc": "2026-11-06T18:17:20.2216665Z",
+      "finished_utc": "2026-11-06T18:17:27.3718781Z",
+      "timed_out": false,
+      "profile_directory": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_e08\\pilot_ad09b99d\\validation\\normal_menu_pack_profile_3",
+      "arguments": [
+        "--main-pack",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_e08\\pilot_ad09b99d\\RagRPG-E08-Piloto1.pck",
+        "--rendering-method",
+        "gl_compatibility",
+        "--script",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_e08\\pilot_ad09b99d\\validation\\normal_menu_probe.gd"
+      ],
+      "ok": true,
+      "name": "normal_menu_pack"
+    },
+    {
+      "exit_code": 0,
+      "started_utc": "2026-11-06T18:17:30.6465468Z",
+      "finished_utc": "2026-11-06T18:19:08.5376576Z",
+      "timed_out": false,
+      "profile_directory": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_e08\\pilot_ad09b99d\\validation\\forest_map_pack_profile_4",
+      "arguments": [
+        "--main-pack",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_e08\\pilot_ad09b99d\\RagRPG-E08-Piloto1.pck",
+        "--rendering-method",
+        "gl_compatibility",
+        "--script",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\playtest_e08\\pilot_ad09b99d\\validation\\e08_release_probe.gd"
+      ],
+      "ok": true,
+      "name": "forest_map_pack"
+    }
+  ],
+  "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424"
+}

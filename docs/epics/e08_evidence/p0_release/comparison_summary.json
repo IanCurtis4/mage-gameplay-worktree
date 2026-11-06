@@ -1,0 +1,206 @@
+{
+  "candidate": "ad09b99d5e70385d4532b478931c85629f5de849",
+  "protocol": "Native standard 4.7.2 engine, exact PCKs, GTX1080/NVIDIA582.66,1280x720,GL Compatibility,vsync off,seed42; separate processes and profiles; process-cold then same-process warm, OS caches not flushed. Summaries are medians of window statistics, not pooled frame percentiles.",
+  "tables": [
+    {
+      "control": "96_moving",
+      "baseline": {
+        "window_count": 3,
+        "median_of_window_medians_ms": 8.717,
+        "median_of_window_p95_ms": 12.178,
+        "max_frame_ms": 45.604
+      },
+      "pilot": {
+        "window_count": 3,
+        "median_of_window_medians_ms": 7.569,
+        "median_of_window_p95_ms": 9.166,
+        "max_frame_ms": 16.57
+      },
+      "delta_percent": {
+        "median_of_window_medians_ms": -13.16966846392108,
+        "median_of_window_p95_ms": -24.733125307932337
+      }
+    },
+    {
+      "control": "96_idle",
+      "baseline": {
+        "window_count": 3,
+        "median_of_window_medians_ms": 4.069,
+        "median_of_window_p95_ms": 7.371,
+        "max_frame_ms": 37.679
+      },
+      "pilot": {
+        "window_count": 3,
+        "median_of_window_medians_ms": 3.644,
+        "median_of_window_p95_ms": 4.66,
+        "max_frame_ms": 14.605
+      },
+      "delta_percent": {
+        "median_of_window_medians_ms": -10.444826738756452,
+        "median_of_window_p95_ms": -36.77927011260345
+      }
+    },
+    {
+      "control": "forest_comparison",
+      "baseline": {
+        "window_count": 3,
+        "median_of_window_medians_ms": 11.641,
+        "median_of_window_p95_ms": 16.92,
+        "max_frame_ms": 32.104
+      },
+      "pilot": {
+        "window_count": 3,
+        "median_of_window_medians_ms": 12.378,
+        "median_of_window_p95_ms": 16.552,
+        "max_frame_ms": 22.957
+      },
+      "delta_percent": {
+        "median_of_window_medians_ms": 6.331071213813244,
+        "median_of_window_p95_ms": -2.174940898345168
+      }
+    },
+    {
+      "control": "forest_comparison_repeat",
+      "baseline": {
+        "window_count": 3,
+        "median_of_window_medians_ms": 11.686,
+        "median_of_window_p95_ms": 16.453,
+        "max_frame_ms": 23.515
+      },
+      "pilot": {
+        "window_count": 3,
+        "median_of_window_medians_ms": 13.086,
+        "median_of_window_p95_ms": 21.086,
+        "max_frame_ms": 45.072
+      },
+      "delta_percent": {
+        "median_of_window_medians_ms": 11.980147184665423,
+        "median_of_window_p95_ms": 28.158998358961895
+      }
+    },
+    {
+      "control": "forest_combined_primary_six",
+      "baseline": {
+        "window_count": 6,
+        "median_of_window_medians_ms": 11.663499999999999,
+        "median_of_window_p95_ms": 16.5625,
+        "max_frame_ms": 32.104
+      },
+      "pilot": {
+        "window_count": 6,
+        "median_of_window_medians_ms": 12.4845,
+        "median_of_window_p95_ms": 17.4295,
+        "max_frame_ms": 45.072
+      },
+      "delta_percent": {
+        "median_of_window_medians_ms": 7.039053457367017,
+        "median_of_window_p95_ms": 5.23471698113207
+      }
+    },
+    {
+      "control": "forest_comparison_ablation_v2",
+      "baseline": {
+        "window_count": 3,
+        "median_of_window_medians_ms": 11.464,
+        "median_of_window_p95_ms": 14.313,
+        "max_frame_ms": 20.954
+      },
+      "pilot": {
+        "window_count": 3,
+        "median_of_window_medians_ms": 11.6,
+        "median_of_window_p95_ms": 14.907,
+        "max_frame_ms": 25.485
+      },
+      "delta_percent": {
+        "median_of_window_medians_ms": 1.1863224005582707,
+        "median_of_window_p95_ms": 4.150073359882622
+      }
+    }
+  ],
+  "ablations": {
+    "baseline": {
+      "normal": {
+        "window_count": 3,
+        "median_of_window_medians_ms": 11.464,
+        "median_of_window_p95_ms": 14.313,
+        "max_frame_ms": 20.954
+      },
+      "without_bridge_tick": {
+        "window_count": 3,
+        "median_of_window_medians_ms": 11.553,
+        "median_of_window_p95_ms": 14.742,
+        "max_frame_ms": 27.011
+      },
+      "without_stage_panel": {
+        "window_count": 3,
+        "median_of_window_medians_ms": 11.259,
+        "median_of_window_p95_ms": 13.859,
+        "max_frame_ms": 27.506
+      },
+      "without_world_audio": {
+        "window_count": 3,
+        "median_of_window_medians_ms": 11.458,
+        "median_of_window_p95_ms": 14.266,
+        "max_frame_ms": 24.556
+      }
+    },
+    "pilot": {
+      "normal": {
+        "window_count": 3,
+        "median_of_window_medians_ms": 11.6,
+        "median_of_window_p95_ms": 14.907,
+        "max_frame_ms": 25.485
+      },
+      "without_bridge_tick": {
+        "window_count": 3,
+        "median_of_window_medians_ms": 11.6,
+        "median_of_window_p95_ms": 14.652,
+        "max_frame_ms": 27.012
+      },
+      "without_stage_panel": {
+        "window_count": 3,
+        "median_of_window_medians_ms": 11.534,
+        "median_of_window_p95_ms": 14.482,
+        "max_frame_ms": 25.165
+      },
+      "without_world_audio": {
+        "window_count": 3,
+        "median_of_window_medians_ms": 11.748,
+        "median_of_window_p95_ms": 14.352,
+        "max_frame_ms": 23.876
+      }
+    }
+  },
+  "memory_and_loading": {
+    "baseline": {
+      "entry_ms": 50987.118,
+      "memory_before_stage_bytes": 147219929,
+      "memory_after_clear_bytes": 231853109,
+      "memory_retained_bytes": 84633180,
+      "loaded_static_bytes": 377569545,
+      "preparation_ms": [
+        14931.889,
+        10853.035
+      ]
+    },
+    "pilot": {
+      "entry_ms": 47412.286,
+      "memory_before_stage_bytes": 148125394,
+      "memory_after_clear_bytes": 232822044,
+      "memory_retained_bytes": 84696650,
+      "loaded_static_bytes": 385289630,
+      "preparation_ms": [
+        15260.876,
+        10925.573
+      ]
+    }
+  },
+  "rss_peak_available": false,
+  "rss_note": "Raw wrapper PeakWorkingSet64 returned zero after process exit; zero is unavailable, not measured zero memory. Static allocator usage is the memory metric above.",
+  "triage": "Round2 forest crossed10%; valid ablation-v2 normal control did not reproduce it (+1.2% median,+4.2%p95). Bridge/panel/audio isolation did not identify persistent >10% E08 cost. Preserve all rounds; do not claim universal performance or a speedup.",
+  "excluded_attempts": [
+    "comparison_ablation: duplicate variable parse error",
+    "comparison_ablation_final: cached audio bus index became stale after staging disposal; panel hide was undone by refresh. Do not certify these rows."
+  ],
+  "all_valid_processes_ok": true
+}

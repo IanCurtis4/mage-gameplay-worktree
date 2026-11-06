@@ -1,61 +1,55 @@
-# E08 — checkpoint portátil de execução
+# E08 — checkpoint portátil
 
-6/11/2026. Coordenação P0/P7, chat `01a1ae9c-2471-74d2-84ad-9805a14dc543`.
-[Autorização](e08_approved_plan.md), [contrato](e08_p0_contract.md),
-[dispatch/donos](e08_dispatch.md). Este arquivo resume o ponto atual; recibos e
-hashes detalhados continuam nas entregas. Não é aceite de produto.
+6/11/2026. P0/P7:01a1ae9c-2471-74d2-84ad-9805a14dc543.
+[Autorização](e08_approved_plan.md),[contrato](e08_p0_contract.md),[donos](e08_dispatch.md).
 
-## Checkout e estado
+Checkout C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5,
+branch codex/e08. Código P3:3ea5e9086da11c51d81d5a85b8f29d464b04c3d8.
+Candidato empacotado:ad09b99d5e70385d4532b478931c85629f5de849.
+Commits posteriores de ferramentas/documentos não substituem esse PCK.
+Base F10:c8b80b13d29c468afb7f2ad7ba75eec838e7df32.
 
-`C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5`, branch
-`codex/e08`. Base F10 `c8b80b13d29c468afb7f2ad7ba75eec838e7df32`.
-Último candidato recebido `55960be86ffe9e4b7ddec4570cd84abd1c184a15`, código
-de correção P1 `3c405e9903ae930b719020b402afe65fc62caa22`. Apenas documentos
-de coordenação serão commitados depois dessa base nesta rodada.
-Quatro .bak de data/map_authoring permanecem não rastreados e preservados,
-com hashes no recibo P0. Não trocar o habitual nem copiar seu save.
+P1 ponte/atlas/UI120%, P2 áudio/limiter e P3 arte/VFX/12sons tecnicamente
+VALIDADOS/INTEGRADOS. [P3 final](e08_p3_delivery.md),[Luna](e08_evidence/luna_p3/supervision.md).
+14/14etapas+126checks nativos; ZIP35membros,2316fontes. Receita documental
+pós-teste identificada; versão testada preservada. Sem aceite artístico/auditivo.
+P4–P7 BLOQUEADOS_ACEITE_P3; não declarar E08 inteiro ou P7 final concluído.
 
-| Pacote | Estado real | Referência |
-|---|---|---|
-| P0 | Contratos/inventário/donos registrados; coordenação continua | e08_p0_receipt.md |
-| P1 apresentação | Ponte e correção atlas/UI validadas/integradas por Sol/Luna | e08_p1_delivery.md; e08_p1_pilot_corrections_delivery.md |
-| P2 áudio | Serviço e correção de soma validados/integrados | e08_p2_delivery.md; e08_p2_mix_delivery.md |
-| P3 piloto | INCOMPLETO; WIP preservado em7f04830e01db0f49acefd47899c271b45b65adaf, Terra parado para produtor | e08_p3_delivery.md |
-| P4–P7 | BLOQUEADOS pelo aceite humano do piloto completo | e08_approved_plan.md |
+Habitual permanece codex/playtest em fba777b3822356a10e7f6e050971e54ab1a9819b,
+216 alterações locais na inspeção. Nenhuma aplicação/rebase/limpeza no habitual,
+save pessoal e4backups preservados; sem master/push/terceiro checkout.
+P1:01a1aea0-d67a-7023-9fcf-dbecfe5cef85; P2:01a1aebf-dbc4-7701-8b17-1441618fb9c6;
+P3:01a1aede-5799-76f2-835d-5418b5e395d9 estão parados, disponíveis para correções.
+Usuário autorizou expressamente acompanhamento/mensagens corretivas P1–P3.
 
-## Próximo passo autorizado
+Release separado .tools/playtest_e08/pilot_ad09b99d, app RagRPG E08 Piloto1,
+save separado. EXE109127680B, SHA256
+4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668;
+PCK125350284B, SHA256
+d91bc71373ec370e744b61032b7aed036f4895620241027b29c0b505c81246e2.
+Export/inspeção/menu/boot EXE passaram. Engine standard+PCK exato passou20checks:
+62inimigos,UI120%,atlas,limiter,suspensão/retomada e ambiente atual sem replay.
+Entrada50,810s;suspensão8,908s;retomada26,675s nessa amostra. Asset manifest7/7
+PASS via verify.ps1. Teste antigo E06 de exportação falha2/162 por11mobs esperados
+contra16atuais; mesma falha no PCK F10. Não alterar expectativa. Primeiro pack
+teve .import reescrito; correção de exportação conserva bytes originais e texturas
+importadas. Binários obsoletos removidos por caminhos/hashes verificados;
+logs/manifestos preservados, não são candidatos jogáveis.
 
-Luna concluiu o checkpoint P1 de atlas/UI sem divergência ou rerun. P0 devolve escrita ao MESMO Terra
-P3 (`01a1aede-5799-76f2-835d-5418b5e395d9`) com novoHEAD/API e lista de arte.
-Terra produzirá e integrará os atlas próprios de lobo/javali, concluirá provas
-nativas/regressões e devolverá posse. P0 não substitui essa implementação.
-Somente depois: supervisão do piloto, comparação F10/embalagem e candidato jogável
-com antes/depois e roteiro para o usuário. Ainda NÃO há release E08 aprovado.
+Próximo passo: Sol concluiu consolidação e preparou [recibo](e08_pilot_release.md)
+e [roteiro/antes-depois](e08_pilot_route.md). Comparações6+2+2processos válidos,
+triagem investigada por ablação v2; desempenho varia entre janelas, sem promessa
+universal. Inspeção interativa do EXE não foi executada porque os dois mecanismos
+de automação falharam ao criar o kernel; boot normal EXE e20checks standard+PCK
+passaram. Processo do teste adicional encerrado deliberadamente, não PASS.
+P0 entrega posse a Luna para a conferência final e fica somente leitura.
+Depois da devolução, registrar conclusão e entregar atalho/roteiro para o aceite
+humano. P4–P7 continuam bloqueados. Nunca dois escritores no checkout.
+ZIP93membros, SHA256be2adeb28932a001630ec66e17ba8931582c215889f3c45f635ad42b9cafa949.
 
-P1 (`01a1aea0-d67a-7023-9fcf-dbecfe5cef85`) e P2
-(`01a1aebf-dbc4-7701-8b17-1441618fb9c6`) continuam disponíveis para correções.
-Nunca dois escritores no checkout; novos dispatches precisam da transferência
-explícita registrada. Sem chats P4–P6 reservados, master/push ou migração.
-
-## Evidência e limites atuais
-
-P1 correção:9/9 etapas e61checks nativos em1280×720/1920×1080, UI efetiva120%.
-API set_body_atlas mantém estado, offsets, death_copy e snapshot por campos atuais.
-UI real preenchida passou acesso por roda/foco e encaixe; ui_layout_test30PASS
-resolveu a falha herdada sem mudar o oráculo. Supervisão desse checkpoint concluída.
-P2mix validado por Sol/Luna:24impactos e32slots com pico protegido≈0,89026,
-zero quadros>1; impacto isolado preservado após2,042ms de atraso de áudio.
-
-P3 WIP: primeiros12WAVs e feedback/cores existem, mas recoloração não resolve
-identidade de lobo/javali; não declarar acabamento concluído. Pares técnicos
-antigos com HUD vazio são limitação de preparação da captura; provas reais de UI
-preenchida pertencem à correção P1. Imagens/poses não certificam timing percebido.
-Desempenho/release final e aceite visual/sonoro continuam pendentes.
-
-Engine fixada: standard4.7.2.stable.official.ed1daf0bf no principal .tools/godot,
-SHA256ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424.
-Uma fixture reutilizável em .godot/verification/e07_f1/fixture_project;
-APPDATA isolado. CLI tools/workflow/workflow.py e WORKFLOW_TOOLING.md não existem
-nesta base: retomadas usam Git/contratos, sem copiar tooling adivinhado.
-O habitual não foi modificado por esta coordenação; inspecionar novamente antes
-de qualquer aplicação. Não houve nova execução de gameplay por este resumo.
+Engine standard4.7.2.stable.official.ed1daf0bf, SHA256
+ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424.
+Uma fixture/cache .godot/verification/e07_f1/fixture_project,2322fontes no
+preflight de embalagem; perfis de teste isolados. CLI tools/workflow/workflow.py
+e docs/WORKFLOW_TOOLING.md ausentes nesta base: retomada Git/contratos sem copiar
+tooling adivinhado. Diagnóstico e aprovação técnica não equivalem a aceite humano.

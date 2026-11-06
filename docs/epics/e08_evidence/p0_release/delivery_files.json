@@ -1,0 +1,86 @@
+{
+  "build_manifest.json": {
+    "bytes": 8431,
+    "sha256": "04ef4b58194795837002d37bbb2c9d23c746f6cdbe7ab154e117ee8438be8522"
+  },
+  "comparison_summary.json": {
+    "bytes": 6785,
+    "sha256": "29ba3d8dd6f37755f3b757c33ccc0c6cae342be0a4e00f29a8d06b9ffc75fcd0"
+  },
+  "Jogar piloto E08.lnk": {
+    "bytes": 1846,
+    "sha256": "92159b61ed4508895cb80624d3b4e1506e8065e59f60f753cec6cb878ed37c3f"
+  },
+  "LEIA-ME.md": {
+    "bytes": 1090,
+    "sha256": "34b5bc96813dbb4ef1122092528917d6c3c09cbdf8c9d21167e279d69893e960"
+  },
+  "RagRPG-E08-Piloto1.exe": {
+    "bytes": 109127680,
+    "sha256": "4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668"
+  },
+  "RagRPG-E08-Piloto1.pck": {
+    "bytes": 125350284,
+    "sha256": "d91bc71373ec370e744b61032b7aed036f4895620241027b29c0b505c81246e2"
+  },
+  "review/area_after.png": {
+    "bytes": 640432,
+    "sha256": "a5a13d4af1230dac92e2aa769fa6691540e132d2dd8b3246d46a7773d0480ef5"
+  },
+  "review/area_before.png": {
+    "bytes": 639444,
+    "sha256": "e4e734b0cccf961dc6e615e4b42a68badd801431b90d25dfb6cefb9777228323"
+  },
+  "review/art_provenance.json": {
+    "bytes": 6618,
+    "sha256": "a3bc3ecb6b9b8b1d8a3b72d20bf7ff84e7f508d628814e4a0aba7770f34057ca"
+  },
+  "review/art_recipes.md": {
+    "bytes": 4320,
+    "sha256": "c647b6bf127d31bc97183925aed47bb0004678853b84ac328139c9018dad2535"
+  },
+  "review/audio_preview.json": {
+    "bytes": 1435,
+    "sha256": "a7d680bfee2a6991b9e9b2df7cfa655361230daf9db44adf3b4a499b374b9ee5"
+  },
+  "review/audio_preview.wav": {
+    "bytes": 730340,
+    "sha256": "7a556f976afa9e923b1f06e25f7af9b3cbae76d6e128b462863f731a225888d7"
+  },
+  "review/audio_provenance.json": {
+    "bytes": 2824,
+    "sha256": "86c97e45ca393b144344c7298b9da17eef48d624e00dc4df8e828831f25a9f23"
+  },
+  "review/audio_recipes.md": {
+    "bytes": 836,
+    "sha256": "790dc5f273ead92b1ddd2f9a78d8e6f7e05b6a62373d2e7beb51ca51943ad863"
+  },
+  "review/boar_after.png": {
+    "bytes": 1053858,
+    "sha256": "9a6ba6089e4e0b35afae9f8935e4dc30192d2d5da1c6b2d28f4a901ee2c85753"
+  },
+  "review/boar_before.png": {
+    "bytes": 1014116,
+    "sha256": "6652f51819043b6bed0bd7f5ec43a22c44b120b7ebd7f182af078de0e321c910"
+  },
+  "review/guardian_after.png": {
+    "bytes": 1054605,
+    "sha256": "427c3a558b59cbb447c3d260d196d3d3a4d9ddf271673a52b48523658a8dcbd0"
+  },
+  "review/guardian_before.png": {
+    "bytes": 1055323,
+    "sha256": "323df1879efdfd5d1fd2a8d2d6de0a7b8024a0ad0a78228deb971783ad4d0d8d"
+  },
+  "review/ROTEIRO.md": {
+    "bytes": 3436,
+    "sha256": "4a6d904c6dfeb13f9400e6a4ff960fe9bbbbac7938e5ed09af2eca9d5ba51ee2"
+  },
+  "review/wolf_after.png": {
+    "bytes": 1120680,
+    "sha256": "c6b891812e45c1d4deb670177c816530c423757f6c35e5849dcd5e91ac7f587d"
+  },
+  "review/wolf_before.png": {
+    "bytes": 1083427,
+    "sha256": "399ada2288e1fc94954e198fcdbdf23b9b7c9a465b2ae31966bd65d994c9d68e"
+  }
+}
