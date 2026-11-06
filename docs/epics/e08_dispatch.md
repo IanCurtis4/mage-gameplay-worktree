@@ -267,3 +267,23 @@ de falhas e rawEffects não são PASS da saída nem falha da saída protegida.
 Dono exclusivo Luna: docs/epics/e08_evidence/luna_p2_mix/supervision.md e hashes.json.
 P0/P2/P3 somente leitura; nenhum outro arquivo/fixture editado. Não certificaP3.
 Após consolidação P0 devolverá escrita ao mesmo Terra com novoHEAD e WIP preservado.
+
+### Mix validado / posse devolvida P3
+
+6/11. [Supervisão Luna mix](e08_evidence/luna_p2_mix/supervision.md) confirmou
+44/44membrosZIP,24capturas em14blobs,9inputs,2.299fontes,engine/config e80/80WIP
+idênticos; recalculou métricas e alinhamento98frames sem divergência. Verify3/3 e
+nativo268PASS no escopo, falhas anteriores preservadas. P0 consolida correção
+VALIDADA/INTEGRADA `05acf494b6acc50b3ee793635a8191809c296770`, recibo
+`310fef0c93cfa9a957f965b0e838eec4f8093833`; nenhum carimbo de aprovação deP3.
+
+Após este commit documental, P0 devolve a posse EXCLUSIVA ao mesmo Terra P3,
+chat01a1aede-5799-76f2-835d-5418b5e395d9. Base efetiva do código atualizado é
+310fef0c93cfa9a957f965b0e838eec4f8093833 mais80WIPpreservados; HEADdocumental
+completo passado na mensagem de retomada. Propriedade EXATA originalP3 continua;
+P2estáparado e seus arquivos serviço/teste não foram transferidos aTerra.
+Continuar de onde parou: depois nativo comparável, regressões, roteiro/recibo e
+commitP3, sem refazerP0/P1/P2 ou abrirP4–P7. Conservar prova antiga audio_mix.json/
+log como rawEffects ANTES da proteção; captura posterior usa novo diretório/nome,
+medindo Geral DEPOIS da proteção. Não sobrescrever a evidência histórica.
+P0 fica somente leitura até handbackP3. Candidato jogável/release ainda pendente.

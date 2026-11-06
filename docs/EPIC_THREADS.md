@@ -14,6 +14,12 @@ P3 aguarda consolidação P2; sem chats P4–P6. Todos no host local, mesmo chec
 de execução/branch codex/e08 conforme dispatch, sem escritores simultâneos.
 P0/P7 permanece este chat para a rodada final autorizada após os gates.
 
+Em6/11 P3foi despachado ao chat `01a1aede-5799-76f2-835d-5418b5e395d9`,
+Terra6.1high; interrompido por limite de uso e retomado no mesmo chat por pedido
+humano. Correção de soma de áudio voltou sequencialmente ao mesmoP2, foi validada
+porSol/Luna e devolvidaP3; [estado e posse atuais](epics/e08_dispatch.md).
+Sem substituição do executor, sem segundo escritor e sem chatsP4–P6.
+
 [E07/F10 aceitos em produto com ressalvas](epics/e07/e07_closure_2026_11_05.md).
 O [brief de arquitetura E08](epics/e08_opening_2026_11_05.md) está preparado;
 novo Astra permanente ainda não criado. Não inventar ID nem retomar reserva

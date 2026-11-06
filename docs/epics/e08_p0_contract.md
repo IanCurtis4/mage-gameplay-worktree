@@ -138,3 +138,10 @@ paredes Fire/Lightning/Phantom/Ice por WorldFieldView. HunterTarField/estados
 RefCounted especializados conservam indicadores atuais, sem novo adaptador de área.
 Impacto tem âncora do alvo, com contact_position_unavailable explícito; não é
 coordenada exata de colisão. Esses limites não autorizam geometria inventada.
+
+Delta técnico áudio6/11: [correção de soma](e08_p2_mix_delivery.md) instala
+AudioEffectHardLimiter nativo por instância no Geral privado. API/catálogo/caps
+permanecem; Master não muda. Saída verificada≤−1dBFS com teto interno−1,01dB,
+pré-ganho0 e release100ms. Capturas nativas WASAPI48k demonstram24impactos e32vozes
+sem quadros fora da escala; impacto isolado preservado após atraso de áudio2,042ms.
+Isso não altera timing de combate nem certifica toda placa/configuração de áudio.
