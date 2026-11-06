@@ -421,6 +421,7 @@ Add-GodotCheck @('--headless', '--path', $projectPath, 'res://tools/e07_f8_candi
 Add-GodotCheck @('--headless', '--path', $projectPath, 'res://tools/e07_f8_candidate_probe.tscn', '--', '--f8-mode=resume')
 
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/map_editor_journal_capacity_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/map_editor_asset_manifest_test.gd')
 
 if (-not $PSBoundParameters.ContainsKey('ToStep')) { $ToStep = $checkPlan.Count }
 if ($FromStep -gt $ToStep -or $ToStep -gt $checkPlan.Count) {

@@ -399,3 +399,25 @@ UI120%,floresta publicada, suspensão/retomada e ausência de replay.
 Comparação reaproveita sondas F10, mesmo engine/PCK/protocolo sequencial, três
 janelas, frio/quente de processo sem esvaziar cache do sistema. Ferramentas
 versionadas não iniciam P4–P7 nem substituem o aceite humano.
+
+### Correção de empacotamento P0 — 6/11
+
+Primeira exportação76a9f863 abriu menu, mas a prova editor+PCK rejeitou floresta:
+Godot exportou woodland_shrub.png.import abreviado e sobrescreveu o original
+adicionado em _export_begin. Baseline F10 conserva o original; RPP/fontes intactos.
+P0 assume também addons/ragrpg_map_editor/export_plugin.gd e tools/verify.ps1
+somente para embalagem/registro de teste existente. _export_file evita a
+reescrita das texturas certificadas, conserva PNG/.import originais e embarca
+os mesmos dest_files importados. Sem mudança de gameplay, referência ou mapa.
+API conforme documentação oficial EditorExportPlugin (skip/add_file/_export_file).
+
+verify.ps1: map_editor_asset_manifest_test7/7 PASS, exit0, sem erro/timeout.
+e06_export_content_test falhou162checks/2falhas porque espera11mobs e encontra16;
+mesmo teste contra PCK F10 aceito reproduz16/11 e2falhas. Não alterar oráculo.
+Arte/áudio E08 mantêm14/14 e126nativos anteriores; nova rodada é embalagem.
+Primeiro --script externo no release não executou a sonda e teve timeout;
+abertura normal do EXE passou. Sondas funcionais usam engine standard+PCK exato,
+com modo explícito. Não declarar sondas editor como gameplay dentro do EXE.
+Logs/run records anteriores preservados no diretório do primeiro candidato;
+nomes de sonda repetidos tiveram logs substituídos pela nova execução e os
+resultados cronológicos permanecem em runs.json; não alegar log único por tentativa.
