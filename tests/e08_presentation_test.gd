@@ -109,6 +109,8 @@ func _run() -> void:
 	check(bridge._connections.is_empty() and not bridge.emit_confirmed(_event(bridge)), "clear and dispose idempotent")
 	host.free()
 	events.clear()
+	_atlas_invariants()
+	await _atlas_snapshot()
 	await _native_integration()
 	print("E08 presentation %s: %d checks, failures=%d" % ["PASS" if failures == 0 else "FAIL", checks, failures])
 	quit(1 if failures else 0)
@@ -160,4 +162,72 @@ func _native_integration() -> void:
 	bridge._damage({"landed":true,"skill_id":&"late_hit"}, weakref(sample.lower), bridge.current_epoch())
 	check(events.size() == baseline, "old-world actors cannot emit into new stage")
 	sample.free()
+	await process_frame
+
+func _atlas_invariants() -> void:
+	var original := load("res://assets/art/animations/animal_companion.png") as Texture2D
+	var variant := load("res://assets/art/animations/gel.png") as Texture2D
+	var animation := CharacterAnimation.new(); animation.configure(&"animal_companion")
+	var other := CharacterAnimation.new(); other.configure(&"animal_companion")
+	var clock := animation.state
+	animation.observe(Vector2.ZERO, 0.1); animation.observe(Vector2(-20,-20), 0.1)
+	animation.play(&"cast", Vector2(-1,-1), 0.9); animation.state.advance(0.2, Vector2.ZERO)
+	animation.play(&"hurt")
+	var before := [clock.facing,clock.back_view,clock.flip_h,clock.walk_distance,clock.action,clock.action_remaining,clock.action_duration,clock.hurt_remaining,clock.idle_time,clock.death_time]
+	check(animation.set_body_atlas(variant), "catalog enemy variant accepted")
+	check(animation.state == clock and before == [clock.facing,clock.back_view,clock.flip_h,clock.walk_distance,clock.action,clock.action_remaining,clock.action_duration,clock.hurt_remaining,clock.idle_time,clock.death_time], "body swap preserves same clock, facing, walk, action and hurt")
+	check(animation.atlas == variant and other.atlas == original, "variant changes one instance without mutating shared catalog")
+	var bitmap := variant.get_image()
+	for index: int in 32:
+		var bounds := bitmap.get_region(Rect2i(Vector2i(index%4*64,index/4*64),Vector2i(64,64))).get_used_rect()
+		check(is_equal_approx(animation.destination_rect(index).position.y+float(bounds.end.y-1),0.0), "variant alpha ground contact frame %d" % index)
+	var rects: Array[Rect2] = []
+	for index: int in 32: rects.append(animation.destination_rect(index))
+	var nonpersistent := ImageTexture.create_from_image(bitmap)
+	var wrong := load("res://assets/art/vfx/spiritualist_curse_sigil.png") as Texture2D
+	check(wrong.get_size() != Vector2(256,512), "negative dimension uses existing unrelated PNG")
+	check(not animation.set_body_atlas(null) and not animation.set_body_atlas(nonpersistent) and not animation.set_body_atlas(wrong), "null, nonpersistent and wrong dimensions rejected")
+	check(animation.state == clock and animation.atlas == variant and animation.destination_rect(26) == rects[26] and clock.action_remaining == before[5], "invalid variants leave atlas/offsets/state untouched")
+	var dead := animation.death_copy()
+	check(dead.atlas == variant and dead.state.dead and dead.state != clock and dead.state.facing == clock.facing, "death copy preserves variant with independent terminal state")
+	for index: int in 32: check(dead.destination_rect(index) == rects[index], "death copy preserves variant contact frame %d" % index)
+	clock.trigger(&"death"); clock.advance(0.2,Vector2.ZERO)
+	var death_time := clock.death_time
+	check(animation.set_body_atlas(original) and animation.state == clock and clock.dead and clock.death_time == death_time, "dead body swap preserves terminal clock")
+	clock.revive()
+	check(not clock.dead and animation.atlas == original, "revive keeps selected body")
+	var player_animation := CharacterAnimation.new(); player_animation.configure(&"mage")
+	var player_atlas := player_animation.atlas
+	check(not player_animation.set_body_atlas(variant) and player_animation.atlas == player_atlas, "player kind explicitly refuses enemy body API even before equipment")
+	animation.equipment_visual = {"main_hand":{}}
+	check(not animation.set_body_atlas(variant) and animation.atlas == original, "equipped enemy body explicitly refuses override")
+	animation.equipment_visual = {}; animation.configure(&"animal_companion")
+	check(animation.atlas == original and animation.state != clock, "configure remains explicit default reset")
+
+func _atlas_snapshot() -> void:
+	RunController.selected_class_id = &"mage"
+	var controller := RunController.new(); root.add_child(controller)
+	controller.set_process(false); controller.player.set_process(false)
+	var enemy: CombatActor = controller.enemies[0]; enemy.set_process(false)
+	enemy.set_animation_kind(&"animal_companion")
+	var variant := load("res://assets/art/animations/gel.png") as Texture2D
+	check(enemy.character_animation.set_body_atlas(variant), "snapshot source accepts persistent enemy variant")
+	enemy.character_animation.play(&"cast", Vector2(-1,-1), 0.8)
+	enemy.character_animation.state.advance(0.2,Vector2.ZERO)
+	var before := enemy.character_animation.destination_rect(26)
+	var barrier := SnapshotTickBarrier.new(); paused = true
+	check(barrier.acquire(controller).ok, "atlas snapshot uses real tick barrier")
+	var registry := SnapshotRegistry.new(); var captured := registry.capture(controller,barrier)
+	check(captured.ok, "variant captured through existing schema: "+str(captured.get("detail","")))
+	if captured.ok:
+		var restored := SnapshotRegistry.new().restore(captured.snapshot)
+		check(restored.ok, "variant restores through existing resource binding: "+str(restored.get("detail","")))
+		if restored.ok:
+			var copy: RunController = restored.root
+			var restored_enemy: CombatActor = copy.enemies[0]
+			var animation := restored_enemy.character_animation
+			check(animation.atlas.resource_path == variant.resource_path and animation.destination_rect(26) == before and animation.state.action == &"cast" and is_equal_approx(animation.state.action_remaining,0.6) and animation.state.back_view and animation.state.flip_h, "restored variant retains pose, clock, facing and contact without new schema")
+			check(animation.death_copy().atlas.resource_path == variant.resource_path, "restored base atlas survives death copy and visual reselection")
+			copy.free()
+	barrier.release(); paused = false; controller.free()
 	await process_frame

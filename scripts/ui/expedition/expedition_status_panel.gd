@@ -22,9 +22,16 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_preset(Control.PRESET_TOP_LEFT)
 	offset_left = 24; offset_right = 414; offset_top = 220
+	var scroll := ScrollContainer.new()
+	scroll.name = "ContentScroll"
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.follow_focus = true
+	scroll.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(scroll)
 	var column := VBoxContainer.new()
+	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(column)
+	scroll.add_child(column)
 	summary = Label.new()
 	summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	summary.custom_minimum_size.x = 350
@@ -38,6 +45,23 @@ func _ready() -> void:
 	message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	column.add_child(message)
 	refresh()
+	if is_instance_valid(host) and is_instance_valid(host.ui_root):
+		# Campaign information must stay below every modal and its input shield.
+		host.ui_root.move_child(self, host.hud_panel.get_index())
+		host.ui_root.resized.connect(fit_available_space)
+		host.hud_panel.item_rect_changed.connect(fit_available_space)
+		host.bottom_controls.item_rect_changed.connect(fit_available_space)
+	fit_available_space.call_deferred()
+
+## Bound the panel, never its content or text. Scroll/focus keeps every action
+## reachable even at 120% with a short viewport or a long portal name.
+func fit_available_space() -> void:
+	if not is_instance_valid(host) or host.ui_root == null: return
+	var top := maxf(220.0, host.hud_panel.position.y + host.hud_panel.size.y + 12.0)
+	var bottom := host.bottom_controls.position.y - 12.0
+	var width := minf(390.0, host.ui_root.size.x - 48.0)
+	position = Vector2(24.0, top)
+	size = Vector2(width, maxf(1.0, bottom - top))
 
 func _process(delta: float) -> void:
 	elapsed += delta

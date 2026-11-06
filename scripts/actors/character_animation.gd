@@ -42,6 +42,23 @@ func configure(kind: StringName) -> void:
 	state = CombatAnimationState.new()
 	_observed_position = false
 
+## Per-instance catalog body for unequipped enemy kinds. Player/equipment
+## contracts require their dedicated weaponless body and are explicitly refused.
+## Only existing atlas fields change; the current animation state stays alive.
+func set_body_atlas(texture: Texture2D) -> bool:
+	if texture == null or actor_kind in WEAPONLESS_KINDS or not _equipment_visual.is_empty(): return false
+	var path := texture.resource_path
+	if not path.begins_with("res://") or path.contains("::") or not ResourceLoader.exists(path, "Texture2D"): return false
+	if texture.get_size() != Vector2(256, 512): return false
+	var bitmap := texture.get_image()
+	if bitmap == null or bitmap.is_empty(): return false
+	var offsets := _measure_ground_offsets(texture)
+	_base_atlas = texture
+	_base_ground_offsets = offsets
+	atlas = texture
+	_ground_offsets = offsets
+	return true
+
 func set_equipment_visual(value: Dictionary) -> void:
 	_equipment_visual = value.duplicate(true)
 	_select_atlas_for_visual()
@@ -123,6 +140,10 @@ func death_copy() -> CharacterAnimation:
 	result._base_atlas = _base_atlas
 	result._base_ground_offsets = _base_ground_offsets
 	result.equipment_visual = equipment_visual.duplicate(true)
-	result.state.face(state.facing)
+	# Preserve the exact selected orientation; normalizing an already unit
+	# vector again can round its components during a death copy.
+	result.state.facing = state.facing
+	result.state.back_view = state.back_view
+	result.state.flip_h = state.flip_h
 	result.state.trigger(&"death")
 	return result

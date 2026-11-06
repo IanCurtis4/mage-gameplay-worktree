@@ -1,0 +1,62 @@
+{
+  "checks": 61,
+  "engine": {
+    "build": "official",
+    "hash": "ed1daf0bf001b61586d9930840f2f1394092c079",
+    "hex": 263938,
+    "major": 4,
+    "minor": 7,
+    "patch": 2,
+    "status": "stable",
+    "string": "4.7.2-stable (official)",
+    "timestamp": 0
+  },
+  "failures": 0,
+  "phase": "forest_sanctuary",
+  "records": [
+    {
+      "action_count": 3,
+      "bar": "[P: (181.6, 549.6), S: (916.8, 148.8)]",
+      "footer": "[P: (28.8, 444.0), S: (1222.4, 91.19998)]",
+      "hud": "VIDA  150 / 150 / SP  85 / 85",
+      "logical_viewport": "[P: (0.0, 0.0), S: (1280.0, 720.0)]",
+      "panel": "[P: (28.8, 264.0), S: (468.0, 165.6)]",
+      "root_resize_handlers": 2,
+      "scroll_max": 288.0,
+      "scroll_page": 118.0,
+      "stage": "Prado dos Terraços · Em exploração\nOnda 0 · relógio da fase: 0 s",
+      "ui_scale": 1.20000004768372,
+      "viewport": "(1280, 720)"
+    },
+    {
+      "action_count": 3,
+      "bar": "[P: (181.6, 549.6), S: (916.8, 148.8)]",
+      "footer": "[P: (28.8, 444.0), S: (1222.4, 91.19998)]",
+      "hud": "VIDA  150 / 150 / SP  85 / 85",
+      "logical_viewport": "[P: (0.0, 0.0), S: (1280.0, 720.0)]",
+      "panel": "[P: (28.8, 264.0), S: (468.0, 165.6)]",
+      "root_resize_handlers": 2,
+      "scroll_max": 288.0,
+      "scroll_page": 118.0,
+      "stage": "Prado dos Terraços · Em exploração\nOnda 0 · relógio da fase: 0 s",
+      "ui_scale": 1.20000004768372,
+      "viewport": "(1920, 1080)"
+    },
+    {
+      "action_count": 3,
+      "bar": "[P: (181.6, 549.6), S: (916.8, 148.8)]",
+      "footer": "[P: (28.8, 444.0), S: (1222.4, 91.19998)]",
+      "hud": "VIDA  150 / 150 / SP  85 / 85",
+      "logical_viewport": "[P: (0.0, 0.0), S: (1280.0, 720.0)]",
+      "panel": "[P: (28.8, 264.0), S: (468.0, 165.6)]",
+      "root_resize_handlers": 2,
+      "scroll_max": 288.0,
+      "scroll_page": 118.0,
+      "stage": "Prado dos Terraços · Em exploração\nOnda 0 · relógio da fase: 0 s",
+      "ui_scale": 1.20000004768372,
+      "viewport": "(1280, 720)"
+    }
+  ],
+  "renderer": "gl_compatibility",
+  "seed": 42
+}

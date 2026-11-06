@@ -1128,6 +1128,7 @@ func _build_stage_minimap() -> void:
 	stage_minimap.minimum_size_changed.connect(_layout_stage_minimap)
 	ui_root.resized.connect(_layout_stage_minimap)
 	bottom_controls.item_rect_changed.connect(_layout_stage_minimap)
+	bottom_controls.minimum_size_changed.connect(_layout_stage_minimap)
 	class_button.item_rect_changed.connect(_layout_stage_minimap)
 	_configure_stage_minimap()
 	_layout_stage_minimap()
@@ -1135,11 +1136,17 @@ func _build_stage_minimap() -> void:
 
 func _layout_stage_minimap() -> void:
 	if not is_instance_valid(stage_minimap) or ui_root == null: return
+	# Use real footer content height and the available root width at the chosen
+	# scale. FlowContainer keeps all buttons when a narrower window wraps them.
+	if is_instance_valid(bottom_controls) and is_instance_valid(battle_controls):
+		var width := minf(1200.0, ui_root.size.x - 48.0)
+		bottom_controls.offset_left = -width * 0.5
+		bottom_controls.offset_right = width * 0.5
+		bottom_controls.offset_bottom = battle_controls.skill_bar.offset_top - 12.0
+		bottom_controls.offset_top = bottom_controls.offset_bottom - bottom_controls.get_combined_minimum_size().y
 	var extent := stage_minimap.get_combined_minimum_size()
 	if extent.x <= 0.0 or extent.y <= 0.0: return
-	var bar_top := ui_root.size.y - 286.0
-	if is_instance_valid(bottom_controls) and bottom_controls.size.y > 0.0:
-		bar_top = minf(bar_top, bottom_controls.position.y)
+	var bar_top := bottom_controls.position.y if is_instance_valid(bottom_controls) else ui_root.size.y - 286.0
 	var map_top := 76.0
 	if is_instance_valid(class_button): map_top = maxf(map_top, class_button.position.y + class_button.size.y + 12.0)
 	var fit := clampf((bar_top - map_top - 12.0) / extent.y, 0.45, 1.0)
@@ -1149,9 +1156,12 @@ func _layout_stage_minimap() -> void:
 	stage_minimap.offset_top = map_top
 	stage_minimap.offset_bottom = map_top + extent.y
 	if is_instance_valid(help_panel):
-		help_panel.offset_top = stage_minimap.offset_top + extent.y * fit + 12.0
+		var desired_top := stage_minimap.offset_top + extent.y * fit + 12.0
+		# Hidden help still needs a valid rectangle: reopening/resizing must never
+		# leave its last layout outside the root. Existing contextual visibility stays.
+		help_panel.offset_top = minf(desired_top, ui_root.size.y - 158.0)
 		help_panel.offset_bottom = help_panel.offset_top + 146.0
-		help_panel.visible = geometer_casting == null and help_panel.offset_bottom < bar_top - 12.0
+		help_panel.visible = geometer_casting == null and desired_top + 146.0 < bar_top - 12.0
 
 func _configure_stage_minimap(force: bool = false) -> void:
 	if not is_instance_valid(stage_minimap) or not is_instance_valid(player): return
@@ -3796,6 +3806,7 @@ func _build_ui() -> void:
 	bottom_controls.alignment = BoxContainer.ALIGNMENT_CENTER
 	status_label = _make_label("", 20, Color.WHITE)
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	bottom_controls.add_child(status_label)
 	var buttons := HFlowContainer.new()
 	buttons.alignment = FlowContainer.ALIGNMENT_CENTER
