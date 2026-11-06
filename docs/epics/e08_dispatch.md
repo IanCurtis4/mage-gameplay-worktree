@@ -126,3 +126,29 @@ Luna low supervisionará outputs/inputs congelados; Sol P0 consolida antes de P3
 Aceite: API e serviço funcionais com fixture sintética, controles acessíveis,
 sem mutação de gameplay/save nem alegação de sound design final. Commit próprios,
 recibo autossuficiente com APIs/IDs/paths, hashes e limitações; devolver posse.
+
+### P2 recebido / checkpoint Luna
+
+Dispatch efetivo P2 na base `61d91a65d6673f12bfc8915061668d1d56b6c770`, chat
+`01a1aebf-dbc4-7701-8b17-1441618fb9c6`, host local, Sol 6.1 high.
+Runtime/evidência `2f72322a3b419eb04eef92a83cbba15ba40214d3`; recibo/handback
+`66209511813628b1b78d21426824cee5bbedcf22`. Escrita encerrada, árvore rastreada
+limpa e quatro backups intactos. [Recibo P2](e08_p2_delivery.md).
+P0 conferiu API, snapshot/staging e captura nativa UI120%; sem schema novo.
+Proteção de staging e loop WAV foram corrigidos no mesmo P2. A comparação da
+ajuda em1280×720 falha1/30 também na base: limitação herdada, sem falso PASS.
+
+Luna low recebe candidato `66209511813628b1b78d21426824cee5bbedcf22`, mesma
+branch/checkout, seleção composta explícita no recibo: 9 etapas pré-loop,
+delta final áudio82 checks e nativo83. Mudança entre as rodadas é somente
+loop WAV privado e teste correspondente; oito regressões não entram nesse ramo
+sem samples e conservam inputs pertinentes. P0 aceita essa compatibilidade
+delimitada; não somar repetições como cobertura nova.
+Inputs/evidência: docs/epics/e08_evidence/p2/{inputs.json,hashes.json,raw_logs.zip,
+audio_settings_ui120.png}. Conferir 23 inputs, 13 blobs, 63 membros do ZIP,
+2.265 fontes da fixture, engine/config/manifesto/runner/backups, conclusões reais
+e outputs das rodadas finais. Verificar FAIL herdado e seu controle na base.
+Sem rerun rotineiro; falha/incompletude retorna a P0. Dono exclusivo Luna:
+docs/epics/e08_evidence/luna_p2/supervision.md e hashes.json. Não editar outros
+arquivos, runtime/tests/oráculos, fixture ou recibos P1/P2. P0 fica somente leitura.
+P3 continua não despachado até esta consolidação.

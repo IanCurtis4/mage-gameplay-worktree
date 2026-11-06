@@ -6,6 +6,14 @@
 
 ## Transição vigente — 5/11/2026
 
+Registro operacional atualizado em6/11: P0/P7
+`01a1ae9c-2471-74d2-84ad-9805a14dc543`; P1 Apresentação
+`01a1aea0-d67a-7023-9fcf-dbecfe5cef85` (validado/integrado); P2 Áudio
+`01a1aebf-dbc4-7701-8b17-1441618fb9c6` (entregue, supervisão pendente).
+P3 aguarda consolidação P2; sem chats P4–P6. Todos no host local, mesmo checkout
+de execução/branch codex/e08 conforme dispatch, sem escritores simultâneos.
+P0/P7 permanece este chat para a rodada final autorizada após os gates.
+
 [E07/F10 aceitos em produto com ressalvas](epics/e07/e07_closure_2026_11_05.md).
 O [brief de arquitetura E08](epics/e08_opening_2026_11_05.md) está preparado;
 novo Astra permanente ainda não criado. Não inventar ID nem retomar reserva
