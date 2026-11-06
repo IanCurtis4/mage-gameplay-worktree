@@ -1,24 +1,24 @@
-# Chats e retomada — conferido em 17/10/2026
+# Chats e retomada — atualizado em6/11/2026
 
-## Execução E08 — autorização posterior em5/11
+## E08 — piloto entregue, aguardando aceite humano
 
-[Plano aprovado](epics/e08_approved_plan.md) e [registro operacional de dispatch](epics/e08_dispatch.md). Arquitetura existente: chat 01a1ae95-13a2-71c2-84d6-8f98c23b57d6. P0/P7 é a coordenação operacional designada. P1/P2/P3 serão criados sequencialmente com IDs efetivos no registro; P4–P6 não serão reservados antes do aceite P3. O estado abaixo antecede essa decisão.
+[Plano aprovado](epics/e08_approved_plan.md), [dispatch/donos](epics/e08_dispatch.md),
+[checkpoint](epics/e08_checkpoint.md) e [candidato jogável](epics/e08_pilot_release.md).
+Arquitetura: `01a1ae95-13a2-71c2-84d6-8f98c23b57d6`.
 
-## Transição vigente — 5/11/2026
+| Papel | Chat | Estado |
+|---|---|---|
+|P0/P7 Sol|01a1ae9c-2471-74d2-84ad-9805a14dc543|P0/piloto consolidado; P7 final ainda bloqueado|
+|P1 Sol|01a1aea0-d67a-7023-9fcf-dbecfe5cef85|Ponte e atlas/UI validados/integrados|
+|P2 Sol|01a1aebf-dbc4-7701-8b17-1441618fb9c6|Áudio e soma validados/integrados|
+|P3 Terra|01a1aede-5799-76f2-835d-5418b5e395d9|Piloto validado/integrado; aguardando aceite humano|
 
-Registro operacional atualizado em6/11: P0/P7
-`01a1ae9c-2471-74d2-84ad-9805a14dc543`; P1 Apresentação
-`01a1aea0-d67a-7023-9fcf-dbecfe5cef85` (validado/integrado); P2 Áudio
-`01a1aebf-dbc4-7701-8b17-1441618fb9c6` (entregue, supervisão pendente).
-P3 aguarda consolidação P2; sem chats P4–P6. Todos no host local, mesmo checkout
-de execução/branch codex/e08 conforme dispatch, sem escritores simultâneos.
-P0/P7 permanece este chat para a rodada final autorizada após os gates.
+Host local, checkout de execução/branch codex/e08 conforme dispatch; nunca dois
+escritores. P1–P3 continuam disponíveis para correções no mesmo chat, com mensagens
+autorizadas pelo usuário. Luna low concluiu conferência dos checkpoints e release.
+Sem chats P4–P6 reservados, sem master/push. P4–P7 aguardam aceite humano do piloto.
 
-Em6/11 P3foi despachado ao chat `01a1aede-5799-76f2-835d-5418b5e395d9`,
-Terra6.1high; interrompido por limite de uso e retomado no mesmo chat por pedido
-humano. Correção de soma de áudio voltou sequencialmente ao mesmoP2, foi validada
-porSol/Luna e devolvidaP3; [estado e posse atuais](epics/e08_dispatch.md).
-Sem substituição do executor, sem segundo escritor e sem chatsP4–P6.
+## Histórico da abertura — 5/11/2026
 
 [E07/F10 aceitos em produto com ressalvas](epics/e07/e07_closure_2026_11_05.md).
 O [brief de arquitetura E08](epics/e08_opening_2026_11_05.md) está preparado;

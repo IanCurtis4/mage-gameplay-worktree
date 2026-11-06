@@ -1,0 +1,21 @@
+{
+  "candidate": "ad09b99d5e70385d4532b478931c85629f5de849",
+  "freeze_head": "aed3caf5e2eb55623f56437b0d845787d9e546f2",
+  "evidence_zip_sha256": "be2adeb28932a001630ec66e17ba8931582c215889f3c45f635ad42b9cafa949",
+  "evidence_members_verified": 93,
+  "exe_sha256": "4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668",
+  "pck_sha256": "d91bc71373ec370e744b61032b7aed036f4895620241027b29c0b505c81246e2",
+  "delivery_files_verified": 21,
+  "export_sources": 2322,
+  "fixture_sources_verified": 2323,
+  "backups_verified": 4,
+  "build_processes_passed": 5,
+  "pck_checks_passed": 20,
+  "asset_manifest_checks_passed": 7,
+  "valid_comparison_processes": 10,
+  "comparison_errors_or_timeouts": 0,
+  "native_exe_ui_tested": false,
+  "legacy_e06_export_failures": "2/162, reproduced on F10",
+  "tests_repeated": false,
+  "result": "PASS for evidence integrity; product acceptance pending"
+}

@@ -445,3 +445,19 @@ versão testada e atual arquivadas. Sondas testadas têm hashes próprios.
 Sem rerun rotineiro, mudar código/fixture/oráculos, audição ou certificação artística.
 P0/P1/P2/P3 somente leitura até devolução explícita. Se houver divergência,
 P0 corrige o escopo responsável; não registrar aceite humano nem liberarP4–P7.
+
+
+### Entrega do piloto / gate humano
+
+Luna devolveu posse: PASS limitado à execução/integridade, sem divergência nova,
+sem rerun/commit.93membrosZIP,2322export/2323atuais,21payloads,5processos embalagem,
+20checksPCK,asset7 e10comparativos conferidos. Report em
+[e08_evidence/luna_pilot_release/supervision.md](e08_evidence/luna_pilot_release/supervision.md).
+Sol consolida ad09b99d5e70385d4532b478931c85629f5de849 APROVADO TECNICAMENTE
+PARA PLAYTEST COM RESSALVAS. Atalho,LEIA-ME,VALIDACAO editorial,review com pares e
+prévia sonora entregues. Atualização posterior somente documental/registro Luna;
+EXE/PCK/assets imutáveis. Correção documental do caminho de engine no contrato
+remove o wrapper console já diagnosticado; não altera versão ou evidência.
+Habitual codex/playtest/216alterações e save pessoal preservados. Sem master/push.
+Próximo passo permitido: aceite/feedback humano do piloto. P4–P7 bloqueados;
+nenhum chat extra reservado e nenhum arquivamento automático de executor.

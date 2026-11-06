@@ -160,3 +160,9 @@ A conclusão ali registrada rege seu escopo de execução/hashes; não é audito
 semântica independente, audição ou aceite de produto. Sol validou contratos,
 invariantes e a composição; ressalvas de desempenho e inspeção interativa acima
 continuam explícitas. Documentação e anexos de validação não repetem gameplay.
+
+Fechamento6/11: Luna devolveu posse e concluiu PASS no escopo acima, sem divergência
+nova. Sol consolida candidato **APROVADO TECNICAMENTE PARA PLAYTEST COM RESSALVAS**.
+O próximo passo é exclusivamente o teste/aceite humano do piloto ou correções
+nesse mesmo escopo; P4–P7 continuam bloqueados. Não houve nova execução de gameplay
+por este fechamento documental.

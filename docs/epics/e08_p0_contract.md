@@ -97,7 +97,7 @@ ficam preparados, BLOQUEADOS_ACEITE_P3; suas bases/listas finais só no dispatch
 ## Validação e orçamento comparativo
 
 Runtime executa `tools/verify.ps1 -F1Fixture -Test ...`, engine standard 4.7.2
-do principal `.tools/godot/Godot_v4.7.2-stable_win64_console.exe`, uma fixture
+do principal `.tools/godot/Godot_v4.7.2-stable_win64.exe`, uma fixture
 reutilizada em `.godot/verification/e07_f1/fixture_project`.
 Seleção mínima P1: combat_animation_test, e07_f1_presentation_test,
 e07_f3_lifecycle_test, e07_f3_action_matrix_test, e07_f7_presentation_test,
@@ -145,3 +145,7 @@ permanecem; Master não muda. Saída verificada≤−1dBFS com teto interno−1,
 pré-ganho0 e release100ms. Capturas nativas WASAPI48k demonstram24impactos e32vozes
 sem quadros fora da escala; impacto isolado preservado após atraso de áudio2,042ms.
 Isso não altera timing de combate nem certifica toda placa/configuração de áudio.
+
+Correção documental6/11: o wrapper console falhou localmente com erro193; as
+execuções deste contrato usam o standard.exe acima, pareado pelo SHA do checkpoint.
+Não houve troca de versão de engine nem repetição de gameplay por esta correção.

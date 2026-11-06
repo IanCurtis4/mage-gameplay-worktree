@@ -42,9 +42,14 @@ triagem investigada por ablação v2; desempenho varia entre janelas, sem promes
 universal. Inspeção interativa do EXE não foi executada porque os dois mecanismos
 de automação falharam ao criar o kernel; boot normal EXE e20checks standard+PCK
 passaram. Processo do teste adicional encerrado deliberadamente, não PASS.
-P0 entrega posse a Luna para a conferência final e fica somente leitura.
-Depois da devolução, registrar conclusão e entregar atalho/roteiro para o aceite
-humano. P4–P7 continuam bloqueados. Nunca dois escritores no checkout.
+Luna devolveu posse sem divergência:93/93membros,2323fontes atuais/2322export,
+21arquivos de jogo/avaliação,5processos de embalagem,20checksPCK,7asset e10processos
+comparativos conferidos. [Supervisão final](e08_evidence/luna_pilot_release/supervision.md).
+Sol consolida aprovação técnica PARA PLAYTEST COM RESSALVAS. P0 entregou atalho,
+roteiro,antes/depois e som. Próximo passo é o usuário testar este candidato e
+registrar aceite ou correções. P4–P7 continuam BLOQUEADOS_ACEITE_P3. Não criar
+chats bloqueados nem inferir aceite de produto; correções reutilizam P1–P3.
+Nunca dois escritores no checkout. Nenhum runtime mudou após o export.
 ZIP93membros, SHA256be2adeb28932a001630ec66e17ba8931582c215889f3c45f635ad42b9cafa949.
 
 Engine standard4.7.2.stable.official.ed1daf0bf, SHA256
