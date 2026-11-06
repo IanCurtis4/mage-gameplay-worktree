@@ -380,3 +380,22 @@ Dono exclusivo Luna: docs/epics/e08_evidence/luna_p3/supervision.md e hashes.jso
 P0/P1/P2/P3 somente leitura; sem alteração de código/fixture/expectativas ou
 certificação artística. Após conferência P0 prepara comparação F10 e release,
 preservando habitual/save, antes de oferecer o piloto ao usuário.
+
+### P3 validado / posse P0 para entrega do piloto
+
+Luna devolveu posse em6/11:35membros ZIP,14/14etapas e126checks nativos,
+19inputs,2316fontes,4backups,atlas32/32 e12WAVs conferidos; exceção documental
+recipes.md testada/atual identificada sem reclassificar bytes. P0 consolidou
+contrato e inspeção já registrada: P3 TECNICAMENTE VALIDADO/INTEGRADO em
+3ea5e9086da11c51d81d5a85b8f29d464b04c3d8. Não é aceite de produto.
+
+P0 único escritor para embalagem/comparação: tools/build_e08_pilot.ps1,
+e08_release_probe.gd, compare_e08_pilot.ps1, e08_{crowd,terrain,preparation}_compare.gd,
+docs/epics/e08_pilot_release.md, checkpoint/índices e evidência p0_release.
+Usa a fixture existente e release separado .tools/playtest_e08; nenhuma mudança
+de runtime ou save pessoal. P1–P3 parados; falha de produtor retorna ao mesmo chat.
+Provas de embalagem executam o binário release real, menu/Mago,12sons/2atlas,
+UI120%,floresta publicada, suspensão/retomada e ausência de replay.
+Comparação reaproveita sondas F10, mesmo engine/PCK/protocolo sequencial, três
+janelas, frio/quente de processo sem esvaziar cache do sistema. Ferramentas
+versionadas não iniciam P4–P7 nem substituem o aceite humano.
