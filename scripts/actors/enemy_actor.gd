@@ -130,17 +130,17 @@ func _advance_world_ai(delta: float) -> void:
 	if not world_motion.is_current_world() or player.world_motion == null or not player.world_motion.is_current_world() or player.world_motion.geometry != world_motion.geometry:
 		player_target_acquired = false
 		world_motion.cancel()
-		_mob_cast.clear()
+		_cancel_mob_cast_presentation()
 		return
 	if _world_geometry_revision != world_motion.geometry.geometry_revision:
 		_world_geometry_revision = world_motion.geometry.geometry_revision
 		world_motion.cancel()
 		_repath_time = 0.0
 	_repath_time -= delta
-	if is_stunned(): _mob_cast.clear(); world_motion.cancel(); return
+	if is_stunned(): _cancel_mob_cast_presentation(); world_motion.cancel(); return
 	if is_feared():
 		Patrol.interrupt(self)
-		_mob_cast.clear()
+		_cancel_mob_cast_presentation()
 		if is_rooted(): world_motion.cancel(); return
 		_world_fear_path()
 		_world_walk(delta)
@@ -315,7 +315,7 @@ func configure_occurrence(spawn: MobOccurrence, catalog: MobCatalog, nav: ArenaN
 	_last_seen_position = Vector2.INF
 	_sight_lost_time = 0.0
 	player_target_acquired = false
-	_mob_cast.clear()
+	_cancel_mob_cast_presentation()
 	_mob_cooldowns.clear()
 	_mob_sp = derived["breakdown"].value(&"max_sp")
 	setup(definition.display_name, definition.tint, derived["breakdown"], definition.collision_radius)
@@ -355,12 +355,12 @@ func _process(delta: float) -> void:
 	if _uses_engagement():
 		_refresh_engagement(delta)
 	if is_stunned():
-		_mob_cast.clear()
+		_cancel_mob_cast_presentation()
 		_path.clear()
 		_path_index = 0
 		return
 	if is_feared():
-		_mob_cast.clear()
+		_cancel_mob_cast_presentation()
 		if is_rooted():
 			_path.clear()
 			_path_index = 0
@@ -477,7 +477,7 @@ func apply_taunt(duration: float, source_actor: PlayerActor = null) -> bool:
 	return true
 
 func clear_statuses() -> void:
-	_mob_cast.clear()
+	_cancel_mob_cast_presentation()
 	threat.forced_id = ""
 	threat.forced_remaining = 0.0
 	threat._choose()
@@ -594,6 +594,7 @@ func _try_declared_skill() -> bool:
 			continue
 		captured["remaining"] = captured["cast_time"]
 		_mob_cast = captured
+		if float(captured["cast_time"]) > 0.0: presentation_action.emit(&"cast", global_position.direction_to(player.global_position), float(captured["cast_time"]))
 		_world_cast_revision = world_motion.geometry.geometry_revision if world_motion != null else 0
 		_path.clear()
 		if float(captured["remaining"]) <= 0.0:
@@ -606,15 +607,20 @@ func _advance_mob_cast(delta: float) -> void:
 	_mob_cast["remaining"] = maxf(0.0, float(_mob_cast["remaining"]) - delta)
 	if float(_mob_cast["remaining"]) > 0.0: return
 	if _uses_engagement() and (not _refresh_engagement(0.0) or engagement_mode != &"engaged"):
-		_mob_cast.clear()
+		_cancel_mob_cast_presentation()
 		return
 	var captured := _mob_cast
 	_mob_cast = {}
-	if world_motion != null and _world_cast_revision != world_motion.geometry.geometry_revision: return
+	if world_motion != null and _world_cast_revision != world_motion.geometry.geometry_revision:
+		presentation_action.emit(&"cast_cancel", Vector2.ZERO, 0.0)
+		return
 	var rank: SkillRankDefinition = captured["rank_definition"]
 	if not is_alive() or player == null or not player.is_alive() or is_stunned() or is_feared() or not _combat_target_reachable(rank.range) or _mob_sp < rank.sp_cost or not effect_ledger.can_create_root():
+		presentation_action.emit(&"cast_cancel", Vector2.ZERO, 0.0)
 		return
-	if is_inside_tree() and not EffectProcLedger.projectile_slots_available(get_tree(), 1): return
+	if is_inside_tree() and not EffectProcLedger.projectile_slots_available(get_tree(), 1):
+		presentation_action.emit(&"cast_cancel", Vector2.ZERO, 0.0)
+		return
 	var request: DamageRequest = captured["request"]
 	request.context = effect_ledger.new_root(get_instance_id(), false, "", false, _causal_plan())
 	request.damage_dealt_multiplier = outgoing_damage_multiplier() * scenario_damage_multiplier
@@ -733,7 +739,7 @@ func _begin_return() -> void:
 	engagement_mode = &"returning"
 	threat.disengage()
 	player_target_acquired = false
-	_mob_cast.clear()
+	_cancel_mob_cast_presentation()
 	_clear_engagement_path()
 
 func _clear_engagement_path() -> void:
@@ -858,5 +864,9 @@ func _select_threat_target() -> void:
 		var target: PlayerActor = threat_actors[threat.current_id]
 		if player != target:
 			player = target
-			_mob_cast.clear() # Never redirect an already captured cast to another actor.
+			_cancel_mob_cast_presentation() # Never redirect an already captured cast to another actor.
 			_clear_engagement_path()
+
+func _cancel_mob_cast_presentation() -> void:
+	if not _mob_cast.is_empty(): presentation_action.emit(&"cast_cancel", Vector2.ZERO, 0.0)
+	_mob_cast.clear()

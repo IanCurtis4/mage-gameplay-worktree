@@ -15,6 +15,7 @@ signal actor_died(actor: CombatActor)
 signal damage_number(actor: CombatActor, amount: int, critical: bool)
 signal attack_missed(actor: CombatActor)
 signal status_damage_requested(request: DamageRequest, target: CombatActor)
+signal presentation_health_ready(state: HealthState)
 signal presentation_action(action: StringName, direction: Vector2, duration: float)
 
 var actor_name := "Ator"
@@ -117,6 +118,7 @@ func setup(display_name: String, color: Color, derived_stats: StatBreakdown, rad
 	health = HealthState.new(get_instance_id(), stat_breakdown)
 	health.damage_applied.connect(_on_damage_applied)
 	health.actor_died.connect(_on_health_died)
+	presentation_health_ready.emit(health)
 	queue_redraw()
 
 func apply_damage(request: DamageRequest, rng: RandomNumberGenerator) -> Dictionary:

@@ -222,6 +222,17 @@ var class_button: Button
 var class_overlay: Control
 var class_label: Label
 
+func presentation_events() -> PresentationEventBridge:
+	return get_node_or_null("PresentationEvents") as PresentationEventBridge
+
+func _begin_presentation_stage(id: String, resumed: bool = false) -> void:
+	var bridge := presentation_events()
+	if bridge == null:
+		bridge = PresentationEventBridge.new()
+		add_child(bridge)
+		bridge.bind_controller(self)
+	if bridge.stage_id != id: bridge.begin_stage(id, resumed)
+
 func _ready() -> void:
 	if snapshot_passive: return
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -4057,6 +4068,7 @@ func _configure_world(stage: int) -> void:
 	active_bounds = PlaytestGameplay.BOUNDS if gameplay_extension else ARENA_BOUNDS
 	var obstacles: Array[Rect2] = PlaytestGameplay.obstacles(stage) if gameplay_extension else ARENA_OBSTACLES.duplicate()
 	if expedition_entry_mode: obstacles.clear()
+	_begin_presentation_stage("legacy/%d" % stage)
 	navigation.configure(active_bounds, obstacles, 22.0)
 	arena_view.configure(active_bounds, obstacles)
 	_configure_stage_minimap(true)
@@ -4396,6 +4408,7 @@ func attach_expedition_view(view: ExpeditionGeometryView, field_height: float) -
 		var bound := geometer_casting.bind_world_construction(field_height)
 		if not bound["ok"]: return bound
 	expedition_view = view; expedition_field_height = field_height; view.controller = self
+	_begin_presentation_stage(player.world_point().stage_id, snapshot_passive)
 	_configure_stage_minimap()
 	# Interactive play searches long routes on a worker thread; headless runs,
 	# tests and RAGRPG_SYNC_NAVIGATION=1 stay synchronous.

@@ -1,0 +1,26 @@
+{
+  "archive": "raw_logs.zip",
+  "archive_sha256": "99e99dc7b18cca9c2b36fdd4b3cab4ab19546a4b8aceb634c64fb4bd28dae54e",
+  "members_sha256": {
+    "010-combat_animation_test.output.log": "df1d52002e18c5524fa60801186a018cdbc71c91e0248051e38f6565c154fb1e",
+    "011-e08_presentation_test.output.log": "1e6284e6870ff4cd6c9e9905ccb104cc599d69b0fbfc8b235f9b96a31da996f3",
+    "017-mage_gameplay_test.output.log": "02d14e4b0067a2fc483b56f165ec8534c00262007966f3d45930d287e2919c5c",
+    "044-e04_teleport_rank_integration_test.output.log": "09a9df630c4ce22000062ea5b4cccb31c63fbdef89b12a539f9e77d6ff97d9ac",
+    "193-e06_rx_mob_ai_test.output.log": "b9569774452019c5a7a2f3c085320fe2cf4b747a45adf3bbbac256ffc674109a",
+    "255-e07_f7_presentation_test.output.log": "e6dbd869650df8aff1e156d2300fbaaac49a2d4251c4951b5c97e17592da5f38",
+    "278-e07_f3_action_matrix_test.output.log": "98a042cb25723ef716898497cd97f16fbb23db6c28a806e9be5ddd79a106d57a",
+    "279-e07_f3_lifecycle_test.output.log": "b5d444e6416a3460f73d27d1600dbf3be01c60cf59a689224fd01264c121d886",
+    "282-e07_f1_actor_integration_test.output.log": "3228e013c9dc947b57fb21801d73c20ce639257e73554894961555fd5960a14e",
+    "287-e07_f1_cast_test.output.log": "f2ea264cbe518eba237358b28ee0454b57ffc5f887b80f1fd1c8725498954f2a",
+    "298-e07_f1_fields_test.output.log": "744a407eea74cade6e02c79293fe926814cb6085a173b58ba9dd2cd860d0a0c8",
+    "305-e07_f1_presentation_test.output.log": "69f688370370f9985ccb61ac420f739ce3c7cec813d86a5f5c7026eae5639429",
+    "checks.jsonl": "b4a9b4619f45ed56ca82de44166f54d6576f91ca937440822313aa839c87c69e",
+    "console_wrapper_failure_001.output.log": "d328419b6a911bea89917c87480583950bbb685ae77e12a25c1eb3f9d821f744",
+    "development_fixture_failure_001.output.log": "25fca8a857a8124f4ce408cd0c0220024ce77463c49cfc70dbd6de33a5ef97f0",
+    "development_fixture_failure_011-e08_presentation_test.output.log": "ce10f2cb1048004176bd4848120dc3144bd9748b2525fe5ffc8b84919a90b8eb",
+    "development_world_cast_failure_011-e08_presentation_test.output.log": "f03e32601ffff4601fe87a31da1449e6ee539fc83a497a315958a9cb57b0a9e9",
+    "editor_settings_failure_001.output.log": "452a02420983c9f2696817c7d2e1a84bbbf6e5d1db7907941b6411b9e6e0fd10",
+    "plan.json": "bbc632674e502326fb1bef89f8d1ca9a28cfa0e486c3813616ec9406924ca31b"
+  },
+  "reason": "Raw bytes inside binary ZIP preserve runner hashes across Git autocrlf checkouts."
+}

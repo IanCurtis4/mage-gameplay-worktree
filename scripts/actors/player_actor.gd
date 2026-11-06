@@ -2662,6 +2662,15 @@ var _world_executing_cast: WorldSkillCast
 var _world_cast_result: Dictionary = {}
 var _world_requesting := false
 
+func presentation_cast_context() -> Dictionary:
+	var command := _world_prepared_cast if _world_prepared_cast != null else _world_executing_cast
+	if command == null:
+		return {"target_id":str(_active_cast_target_id), "legacy_target_2d":_active_cast_point} if world_motion == null else {}
+	var data := {"direction":command.direction(self), "target_id":str(command.target().get_instance_id()) if is_instance_valid(command.target()) else ""}
+	var anchor := command.anchor()
+	if anchor != null: data["target_anchor"] = anchor.to_data()
+	return data
+
 func world_cast_status() -> Dictionary:
 	return _world_cast_result.duplicate(true)
 func world_cast_direction() -> Vector3:
@@ -2717,6 +2726,8 @@ func _request_captured_world_skill(command: WorldSkillCast) -> Dictionary:
 			active_cast_remaining = duration
 			world_motion.cancel()
 			_stop_world_travel()
+			var facing := command.direction(self)
+			presentation_action.emit(&"cast", Vector2(facing.x,facing.z), duration)
 			result = {"ok":true,"error_code":&"","data":{"state":&"preparing"}}
 		else: result = _commit_world_skill(command)
 	_world_requesting = false
@@ -3005,6 +3016,7 @@ func use_world_teleport(destination: ExpeditionWorldPoint, revision: int) -> boo
 	_attack_engaged = false
 	_attack_recovery = 0.0
 	_repath_time = 0.0
+	presentation_action.emit(&"teleport", _last_facing, 0.12)
 	resources_changed.emit()
 	return true
 
