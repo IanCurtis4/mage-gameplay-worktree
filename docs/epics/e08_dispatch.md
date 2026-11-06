@@ -53,3 +53,29 @@ Cada dispatch futuro registra SHA completo, arquivos e transferência efetiva.
 
 P0: documentação e índices em fechamento; próximo SHA será resolvido pelo commit,
 nunca substituir SHA executável por nome simbólico. P1 só inicia após esse registro.
+
+### P1 entregue / checkpoint Luna
+
+P0 documental integrado `f1f53693823ce5a97518a25fa7bd831874161261`.
+Dispatch P1 efetivo nessa base, chat `01a1aea0-d67a-7023-9fcf-dbecfe5cef85`,
+host local, Sol 6.1 high. Runtime recebido
+`04c77c9c36f5ee86a89a266b0d3a3a07e74fccac`; recibo candidato
+`d84991e52bf724284f0bf8310de525104f563b81`. Posse devolvida e árvore rastreada
+limpa; quatro backups intactos. [APIs/evidência autoral](e08_p1_delivery.md).
+12/12 etapas autorais, sem erros/timeouts; não é suíte completa nem aceite visual.
+
+P0 conferiu o diff: hooks de apresentação sem nova fórmula/query/timer de dano;
+ponte excluída pela fronteira Control existente, sem schema novo. Corrupção UTF-8
+intermediária corrigida pelo próprio P1 antes da rodada final. Engine standard
+pareada autorizada em substituição ao wrapper console local que falhou ao iniciar.
+
+Checkpoint Luna P1, pacote fechado: base/candidato
+`d84991e52bf724284f0bf8310de525104f563b81`, branch/checkout acima. Inputs congelados
+em e08_evidence/p1/inputs.json; seleção final, logs brutos e hashes em hashes.json
+e raw_logs.zip. Conferir 12 conclusões, nomes/seleção, exit/erros/timeouts, bytes
+dos logs, fontes/fixture/engine/runner/backups e blobs Git. Não repetir suíte
+compatível por efeito da supervisão. Se evidência incompleta, reportar falha a P0.
+Dono exclusivo Luna low: docs/epics/e08_evidence/luna_p1/supervision.md e hashes.json;
+nenhuma edição de runtime/testes/oráculos/manifesto. P0 permanece somente leitura
+enquanto Luna escreve. Não é auditoria semântica independente. P2 ainda bloqueado
+pela consolidação deste checkpoint.

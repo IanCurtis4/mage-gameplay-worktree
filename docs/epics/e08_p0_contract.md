@@ -123,3 +123,18 @@ P0 documental: valida código/referências/donos; não repete gameplay nem certi
 qualidade visual, som ou desempenho E08. CLI de resume versionado e
 WORKFLOW_TOOLING não existem nesta base; diagnóstico Git/documental registrado,
 sem copiar ferramenta de origem não autorizada.
+
+## API P1 recebida — contrato auxiliar para P2/P3
+
+[Entrega P1](e08_p1_delivery.md), runtime
+`04c77c9c36f5ee86a89a266b0d3a3a07e74fccac`: evento explícito inclui
+`payload.presentation_epoch = bridge.current_epoch()` capturado na confirmação;
+callback conserva token capturado, nunca troca pelo atual. `current_state()`
+copia atores, áreas e projéteis ativos sem replay. `world_paused()`,
+`world_pause_changed(bool)` e `world_advanced(float)` são APIs de apresentação.
+Dedup FIFO 2.048 IDs por época; impactos também conservam identidade de aplicação
+confirmada. Áreas cobertas: ArrowRain, FoliageShelter, PlayerTrap/derivados e
+paredes Fire/Lightning/Phantom/Ice por WorldFieldView. HunterTarField/estados
+RefCounted especializados conservam indicadores atuais, sem novo adaptador de área.
+Impacto tem âncora do alvo, com contact_position_unavailable explícito; não é
+coordenada exata de colisão. Esses limites não autorizam geometria inventada.
