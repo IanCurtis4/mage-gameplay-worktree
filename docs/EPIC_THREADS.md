@@ -1,6 +1,9 @@
 # Chats e retomada — atualizado em6/11/2026
 
-## E08 — piloto entregue, aguardando aceite humano
+> Estado vigente em 6/11: [piloto aceito com ressalva sonora](epics/e08_p3_product_acceptance.md); P4 autorizado, [contrato](epics/e08_p4_contract.md). Bloqueios por aceite P3 nos registros abaixo são históricos. P5/P6/P7 ainda dependem das entregas anteriores; não despachados.
+
+
+## E08 — piloto aceito com ressalva sonora; P4 autorizado
 
 [Plano aprovado](epics/e08_approved_plan.md), [dispatch/donos](epics/e08_dispatch.md),
 [checkpoint](epics/e08_checkpoint.md) e [candidato jogável](epics/e08_pilot_release.md).
@@ -11,7 +14,8 @@ Arquitetura: `01a1ae95-13a2-71c2-84d6-8f98c23b57d6`.
 |P0/P7 Sol|01a1ae9c-2471-74d2-84ad-9805a14dc543|P0/piloto consolidado; P7 final ainda bloqueado|
 |P1 Sol|01a1aea0-d67a-7023-9fcf-dbecfe5cef85|Ponte e atlas/UI validados/integrados|
 |P2 Sol|01a1aebf-dbc4-7701-8b17-1441618fb9c6|Áudio e soma validados/integrados|
-|P3 Terra|01a1aede-5799-76f2-835d-5418b5e395d9|Piloto validado/integrado; aguardando aceite humano|
+|P3 Terra|01a1aede-5799-76f2-835d-5418b5e395d9|Piloto validado/integrado e aceito com ressalva sonora|
+|P4 Terra 6.1 médio|01a1b369-442b-7f91-82a1-2316a4a0514d|Contrato pronto; execução após dispatch com SHA completo|
 
 Host local, checkout de execução/branch codex/e08 conforme dispatch; nunca dois
 escritores. P1–P3 continuam disponíveis para correções no mesmo chat, com mensagens

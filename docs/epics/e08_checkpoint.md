@@ -1,5 +1,8 @@
 # E08 — checkpoint portátil
 
+> Estado vigente em 6/11: [piloto aceito com ressalva sonora](e08_p3_product_acceptance.md); P4 autorizado, [contrato](e08_p4_contract.md). Bloqueios por aceite P3 nos registros abaixo são históricos. P5/P6/P7 ainda dependem das entregas anteriores; não despachados.
+
+
 6/11/2026. P0/P7:01a1ae9c-2471-74d2-84ad-9805a14dc543.
 [Autorização](e08_approved_plan.md),[contrato](e08_p0_contract.md),[donos](e08_dispatch.md).
 
@@ -74,3 +77,15 @@ com o engine standard fixado. A reimportação é esperada; não restaurar cópi
 antigas de testes. Registro operacional fora do Git em
 C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/cleanup_2026_11_06/.
 Nenhuma suíte de gameplay foi repetida por esta limpeza de arquivos gerados.
+
+## Aceite humano e P4 — 6/11/2026
+
+Usuário aceitou o piloto ad09b99d com sons ainda bit-crushed, adequados como
+placeholder, e autorizou continuar P4. Contrato/lista exclusiva publicados;
+próximo passo é execução Terra Personagens, esforço médio, checkout codex/e08.
+P5/P6 aguardam dependências. Nenhum merge/push ou alteração de save.
+A preparação documental não repetiu gameplay.
+
+Chat P4: 01a1b369-442b-7f91-82a1-2316a4a0514d, host local, Terra6.1 médio.
+O SHA deste registro será informado no dispatch. Depois da transferência,
+P4 é único escritor dos arquivos listados; P0 somente leitura até handback.

@@ -1,5 +1,8 @@
 # E08 — propriedade e dispatch
 
+> Estado vigente em 6/11: [piloto aceito com ressalva sonora](e08_p3_product_acceptance.md); P4 autorizado, [contrato](e08_p4_contract.md). Bloqueios por aceite P3 nos registros abaixo são históricos. P5/P6/P7 ainda dependem das entregas anteriores; não despachados.
+
+
 Contrato: [P0–P7](e08_p0_contract.md); autorização [plano](e08_approved_plan.md).
 Checkout único de escrita: `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5`;
 branch `codex/e08`; base P0 `c8b80b13d29c468afb7f2ad7ba75eec838e7df32`.
@@ -461,3 +464,14 @@ remove o wrapper console já diagnosticado; não altera versão ou evidência.
 Habitual codex/playtest/216alterações e save pessoal preservados. Sem master/push.
 Próximo passo permitido: aceite/feedback humano do piloto. P4–P7 bloqueados;
 nenhum chat extra reservado e nenhum arquivamento automático de executor.
+
+## P4 autorizado — 6/11/2026
+
+Aceite humano P3 com sons placeholders; contrato e08_p4_contract.md e lista
+e08_p4_files.json. Base b6cd0184062fbf1c6b0288773ef0344ebd316b1b. P0 prepara registro e transfere
+posse exclusiva ao Terra P4 após SHA documental completo e chat identificados.
+P1–P3 parados, P5/P6 não despachados. Sem runtime/testes nesta preparação.
+
+Chat P4: 01a1b369-442b-7f91-82a1-2316a4a0514d, host local, Terra6.1 médio.
+O SHA deste registro será informado no dispatch. Depois da transferência,
+P4 é único escritor dos arquivos listados; P0 somente leitura até handback.

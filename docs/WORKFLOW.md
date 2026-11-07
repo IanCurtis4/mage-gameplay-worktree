@@ -1,5 +1,8 @@
 # Desenvolvimento, revisão e playtest
 
+> Estado vigente em 6/11: [piloto aceito com ressalva sonora](epics/e08_p3_product_acceptance.md); P4 autorizado, [contrato](epics/e08_p4_contract.md). Bloqueios por aceite P3 nos registros abaixo são históricos. P5/P6/P7 ainda dependem das entregas anteriores; não despachados.
+
+
 ## E08 aprovado — 5/11/2026
 
 Decisão humana posterior: [plano E08](epics/e08_approved_plan.md), [contrato operacional](epics/e08_p0_contract.md) e [dispatch](epics/e08_dispatch.md). P0 coordena P1/P2 Sol 6.1 high e P3 Terra 6.1 high sequencialmente; Luna low supervisiona testes. P4–P7 dependem do aceite humano P3. Este roteamento prevalece sobre a exceção Claude histórica F9; não altera as demais regras de preservação e aceite.

@@ -1,5 +1,8 @@
 # Arquitetura vigente — índice de autoridades e contratos
 
+> Estado vigente em 6/11: [piloto aceito com ressalva sonora](epics/e08_p3_product_acceptance.md); P4 autorizado, [contrato](epics/e08_p4_contract.md). Bloqueios por aceite P3 nos registros abaixo são históricos. P5/P6/P7 ainda dependem das entregas anteriores; não despachados.
+
+
 ## E08 — apresentação e áudio aprovados
 
 [Plano aprovado](epics/e08_approved_plan.md) e [contrato P0–P3](epics/e08_p0_contract.md): preservar atlas/renderer, autoridades de combate e geometria. Ponte de eventos confirmados, ciclo de vida, áudio local separado do save e API de atlas por inimigo foram entregues e validados em P1/P2; o piloto P3 integra os consumidores. [Inventário real](epics/e08_inventory.md), [entrega do piloto e limitações](epics/e08_pilot_release.md). P4–P7 dependem do aceite humano. Não houve mudança de schema, autoridade ou geometria.
