@@ -130,3 +130,16 @@ arquivos somente leitura até handback. Código/fonte do PCK não mudarão por
 conferência. Próximo consumidor é UMA identidade artística V2 em staging,
 com corpo/equipamentos completos e testes reais; P4 inteiro/P5 continuam abertos/
 bloqueado respectivamente. Habitual, status local e saves preservados.
+
+## Produtor direcional consolidado — 7/11/2026
+
+Implementação6b33dce1, candidato congelado3637f260, na branch codex/e08.
+[Luna](e08_evidence/p4_directional/luna_supervision.md) conferiu389/389membros,
+2.352fontes, engine/backups/PCKs e execuções25/13.829, nativo82/6, pacote814+84;
+devolveu posse a Sol. Corrigido somente o caminho mal codificado da engine no
+manifesto externo, com reconciliação antes/depois. ZIP/runtime inalterados.
+Três PCKs temporários conferidos foram removidos (~208MiB); fontes/fixture/logs,
+piloto aceito, habitual e saves preservados. Detalhes no recibo direcional.
+Consolidação documental não repetiu gameplay. Produtor disponível para UMA
+identidade artística V2 em staging; P4 continua incompleto, P5 bloqueado.
+Sem ativação de arte, transferência de edição de APIs, merge ou push.

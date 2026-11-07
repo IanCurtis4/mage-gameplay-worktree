@@ -1,0 +1,90 @@
+{
+  "implementation_commit": "6b33dce1d100019d753b50d442dd60ec1b56ef66",
+  "freeze_head": "3637f260a5680516caa5de078ca28bf904e986c7",
+  "evidence": {
+    "path": "docs/epics/e08_evidence/p4_directional/evidence.zip",
+    "sha256": "34168de68ce6ac43927c93a27892cece30f6b8ef5e6395e1f33734531b2d36c2",
+    "bytes": 3904642,
+    "members_verified": 389,
+    "member_hash_mismatches": 0
+  },
+  "source_manifest": {
+    "count": 2352,
+    "sha256": "832230320dbf502c5fc4ac3baccbfcc0a1de99309954077bbca2e18956d5a1d8",
+    "checkout_matches": true,
+    "fixture_matches": true
+  },
+  "engine": {
+    "actual_path": ".tools/godot/Godot_v4.7.2-stable_win64.exe",
+    "sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "source_manifest_path_encoding_error": true
+  },
+  "backups_verified": 4,
+  "validation_packs": {
+    "attempt1": {"sha256": "3f478b8a01bba56f172dc78a7cb4d03c2849cb9b68d1b7a0d90a63ce9da7f935", "bytes": 72684952},
+    "final": {"sha256": "b8d34cf3fd159e4f70c419707d0bd7a9098e1e932edeb7ba439ee196d5240a3b", "bytes": 72685080},
+    "optimized": {"sha256": "5e40a44eb7a7085b1e3026b5c312d33e2db90f90858ed6159935dff72063acaf", "bytes": 72685720}
+  },
+  "diff_checks": {
+    "production_assets_and_snapshot_schema_unchanged": true,
+    "old_tests_preserved": true,
+    "only_directional_tests_and_fixtures_added": true,
+    "runtime_source_hashes_match_manifest": true
+  },
+  "verification": {
+    "final_steps": 25,
+    "final_checks": 13829,
+    "final_failures_errors_timeouts": 0,
+    "optimized_pck_unit_checks": 814,
+    "optimized_pck_integration_checks": 84,
+    "native_checks": 82,
+    "native_captures": 6,
+    "native_failures": 0,
+    "native_exit_code": 0,
+    "native_timed_out": false
+  },
+  "wrapper_post_validation": {
+    "tested_sha256": "35bf0a2e294d05b289e88a72ad2c9817101d86729edf8c5a350666d6983eb73e",
+    "current_sha256": "db043dfe00a307f9b1cba18fbc69b95f6b7bcbc28a7488924fc5a279ce318af1",
+    "difference": "one trailing ASCII space removed from CandidatePack parameter; CRLF preserved"
+  },
+  "performance_aggregate_six_windows_ms": {
+    "pilot_unarmed_moving": [2.0135, 4.0445],
+    "pilot_unarmed_idle": [1.875, 3.6055],
+    "pilot_v1_moving": [11.0305, 15.868],
+    "pilot_v1_idle": [10.825, 14.27],
+    "new_unarmed_v1_moving": [0.9995, 2.227],
+    "new_unarmed_v1_idle": [0.872, 1.7695],
+    "new_unarmed_v2_moving": [1.0485, 2.307],
+    "new_unarmed_v2_idle": [0.9905, 3.136],
+    "new_v1_moving": [7.922, 10.1895],
+    "new_v1_idle": [7.8745, 10.261],
+    "new_v2_moving": [7.879, 10.1855],
+    "new_v2_idle": [7.9365, 10.748]
+  },
+  "cpu_draw_on_diagnostic_median_p95_ms": {
+    "pilot_unarmed_moving": [1.273, 1.865],
+    "new_unarmed_v1_moving": [0.414, 0.63],
+    "new_unarmed_v2_moving": [0.498, 0.756],
+    "pilot_v1_moving": [8.882, 13.686],
+    "new_v1_moving": [5.76, 7.391],
+    "new_v2_moving": [5.294, 6.208]
+  },
+  "static_allocator_retained_incremental_bytes_by_round": {
+    "unarmed_v1_vs_control": [288040, 230488, 345544],
+    "unarmed_v2_synthetic_vs_control": [703480, 847360, 1019968],
+    "equipped_v1_vs_control": [23124, 23128, 50920],
+    "equipped_v2_synthetic_vs_control": [16820, 16824, 44616]
+  },
+  "rgba_v1_control_parity_sha256": {
+    "equipped": "0b899dc962d83368bcc135dff782fc22a89235e5e76645ef8b6d97744e2afbf8",
+    "unarmed": "7f57f3512efa69df7d49287d7ec443a9e25801eab452e33f52911b45cc1458db",
+    "matched_each_round": ["cost_optimized", "cost_repeat", "cost_cpu_diagnostic"]
+  },
+  "limitations": [
+    "Some V2 synthetic frame p95 windows varied above 10% in one round; this did not persist in aggregation, and cause is undetermined.",
+    "Renderer harness is not map/gameplay FPS; static allocator is not RSS/VRAM or leak certification.",
+    "Directional art is geometric fixture content; shared pilot_head is not production art approval; P4 content remains open.",
+    "unit2 preflight did not execute and is not PASS; historical failures and deltas remain preserved in the archive."
+  ]
+}

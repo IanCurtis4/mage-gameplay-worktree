@@ -5,8 +5,9 @@
 Base e10bf71d91d0e9271d9792ed04e211ab8ca17112, checkout exclusivo
 C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5, branch codex/e08.
 [Contrato/API de autoria](e08_p4_directional_contract.md),
-[lista de propriedade](e08_p4_directional_files.json). Terra permanece parado;
-a conferência Luna de execução/inputs será incorporada antes da consolidação.
+[lista de propriedade](e08_p4_directional_files.json). Terra permanece parado.
+Implementação6b33dce1d100019d753b50d442dd60ec1b56ef66; candidato técnico
+3637f260a5680516caa5de078ca28bf904e986c7. Conferência Luna incorporada abaixo.
 
 ## Comportamento entregue
 
@@ -151,3 +152,24 @@ A revisão de formato após o primeiro commit removeu um único espaço final no
 parâmetro CandidatePack do wrapper. Versão executada e manifesto testado foram
 preservados em inputs/tested; current/final_manifest refletem a correção somente
 de formato. Nenhum runtime/teste/textura mudou nem se repetiu gameplay por isso.
+
+## Consolidação técnica — 7/11/2026
+
+[Luna](e08_evidence/p4_directional/luna_supervision.md) conferiu389/389membros,
+2.352fontes em origem/fixture, engine, backups, três PCKs, execução final e
+aritmética das medidas; devolveu posse a Sol. PASS limitado à integridade e às
+execuções registradas, sem auditoria semântica independente nem aceite artístico.
+O SHA da engine já era correto; corrigiu-se somente seu caminho mal codificado
+no manifesto externo após a conferência. [Reconciliação](e08_evidence/p4_directional/consolidation.json)
+registra hashes antes/depois; ZIP, runtime, testes e imagens permanecem iguais.
+
+Após Luna conferir os hashes, removeram-se somente os três PCKs descartáveis
+desta validação:218.055.752bytes (~208MiB). [Registro de limpeza](e08_evidence/p4_directional/validation_pack_cleanup.json)
+preserva tamanho/SHA/caminho de cada arquivo. O piloto aceito, fontes, fixture,
+logs, evidência portátil e saves foram preservados. Para repetir provas no PCK,
+regenerar o pacote pelo harness; os hashes históricos continuam sendo evidência
+da execução original. Não se repetiu gameplay por estas alterações documentais.
+
+Produtor tecnicamente consolidado. Próximo pacote permitido: autoria de UMA
+identidade V2 completa em staging sobre esta API. P4 artístico permanece
+incompleto e P5 bloqueado; não houve nova execução Terra, merge ou push.

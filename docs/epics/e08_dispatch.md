@@ -508,3 +508,17 @@ Depois do commit deste freeze, Luna low é único escritor de
 p4_directional/luna_supervision.md e luna_hashes.json. Verifica inputs/execução,
 sem rerun/alterar expectativas ou certificar arte. Root/Sol somente leitura.
 Terra continua parado; P4 artístico não está integrado, P5 não foi liberado.
+
+## Handback Luna e consolidação do produtor — 7/11/2026
+
+Luna devolveu posse após conferir o candidato3637f260a5680516caa5de078ca28bf904e986c7
+(implementação6b33dce1d100019d753b50d442dd60ec1b56ef66), ZIP389membros e fontes/
+execuções. P0/Sol retomou escrita somente documental na lista já autorizada e
+pasta de evidência. Corrigiu o caminho da engine no manifesto externo; reconciliação
+preserva hashes antes/depois e ZIP/runtime. Limpou somente os três PCKs descartáveis
+após conferência; fontes/fixture/logs e piloto aceito preservados. [Recibo](e08_p4_directional_delivery.md).
+
+Produtor/API tecnicamente consolidado, sem novo dispatch de implementação.
+Próximo pacote de conteúdo deve começar com UMA identidade completa em staging,
+com propriedade exclusiva antes de editar. Terra P4 segue parado e não arquivado;
+arte V2 e restante do P4 pendentes, P5 bloqueado. Sem merge/master/push.

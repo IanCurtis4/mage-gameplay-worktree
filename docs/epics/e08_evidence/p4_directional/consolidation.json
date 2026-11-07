@@ -1,0 +1,19 @@
+{
+  "frozen_candidate": "3637f260a5680516caa5de078ca28bf904e986c7",
+  "supervision": "luna_supervision.md",
+  "supervision_sha256": "601070b547e87debf64a6f3b118bd2ffbd172bcee0a5d9445df9ae43d682f461",
+  "luna_hashes_sha256": "8eb021405f4fc50b1d32ffa9481fddb221d95263bc4cdfef30912d11a2643994",
+  "manifest_correction": {
+    "field": "engine.path",
+    "before": "C:\\Users\\JoÃƒÂ£o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+    "after": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+    "before_manifest_sha256": "f0b848a70bd79143f53067606dff702ac5efbdc940400535f0c5d241276019b4",
+    "after_manifest_sha256": "3ea56d55eb825f39eccb4d61f83b2d5faf4f202727f1d724f28d450b321d9e34",
+    "only_json_value_changed": true
+  },
+  "archive_and_runtime_hashes_unchanged": true,
+  "validation_packs_removed_after_supervision": "validation_pack_cleanup.json",
+  "runtime_rerun": false,
+  "status": "producer technically consolidated; artistic P4 content pending; P5 blocked",
+  "validation_pack_cleanup_sha256": "ead34d5c2e8d789b178ce745d4b6890007447a1515a569b66ebc890a35263eae"
+}

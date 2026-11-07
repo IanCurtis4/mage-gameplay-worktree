@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-07T00:05:14-03:00",
+  "reason": "Disposable P4 validation packs removed after Luna verified hashes; accepted pilot, sources, fixture, logs and portable evidence preserved",
+  "files": [
+    {
+      "path": ".godot/verification/p4_directional/export_attempt1/directional_validation.pck",
+      "sha256": "3f478b8a01bba56f172dc78a7cb4d03c2849cb9b68d1b7a0d90a63ce9da7f935",
+      "bytes": 72684952,
+      "absolute_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\p4_directional\\export_attempt1\\directional_validation.pck"
+    },
+    {
+      "path": ".godot/verification/p4_directional/export_final/directional_validation.pck",
+      "sha256": "b8d34cf3fd159e4f70c419707d0bd7a9098e1e932edeb7ba439ee196d5240a3b",
+      "bytes": 72685080,
+      "absolute_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\p4_directional\\export_final\\directional_validation.pck"
+    },
+    {
+      "path": ".godot/verification/p4_directional/export_optimized/directional_validation.pck",
+      "sha256": "5e40a44eb7a7085b1e3026b5c312d33e2db90f90858ed6159935dff72063acaf",
+      "bytes": 72685720,
+      "absolute_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\p4_directional\\export_optimized\\directional_validation.pck"
+    }
+  ],
+  "bytes_reclaimed": 218055752
+}

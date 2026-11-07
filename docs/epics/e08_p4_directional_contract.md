@@ -73,12 +73,12 @@ Recurso de teste existente não é promessa de que aparece na fase publicada.
    escuro, rampas/pontes/oclusão, zoom de câmera50/100/160 e UI120. Validar todas
    as combinações de equipamento atuais, não só sobreposição de marcadores.
 
-Implementação produtora Sol ainda não transferida nesta rodada: escopo previsto
-CombatAnimationState/CharacterAnimation, EquipmentHandRig/Attachment/HeadVisual,
-catálogo/descritor de apresentação, testes de animação/alinhamento/direções,
-probes/runner e metadados de fixture. Registrar lista EXATA e SHA no dispatch de
-implementação antes de escrever. Terra não edita APIs compartilhadas por inferência.
-A parte concluída nesta rodada é a triagem e prova atual da interface.
+Produtor Sol implementado em6b33dce1, candidato técnico congelado3637f260 e
+conferido por Luna. [Recibo e evidência](e08_p4_directional_delivery.md),
+[lista exata de propriedade](e08_p4_directional_files.json) e dispatch registram
+base, escopo e transferência. A API abaixo está disponível para o próximo pacote
+de conteúdo, começando por UMA identidade completa em staging. Terra não edita
+APIs compartilhadas por inferência; nenhuma arte V2 foi ativada nesta entrega.
 
 ## Invariantes e aceites
 
