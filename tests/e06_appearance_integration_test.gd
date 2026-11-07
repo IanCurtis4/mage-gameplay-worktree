@@ -1,5 +1,6 @@
 extends SceneTree
 ## Actual player/run transactions, death copies and shared artwork; isolated profiles.
+const DIRECTIONAL_KINDS: Array[StringName] = [&"spiritualist"]
 var checks := 0
 var failures := 0
 const IDENTITIES := {&"swordsman":&"swordsman",&"mage":&"mage",&"archer":&"archer",&"defender":&"swordsman",&"berserker":&"swordsman",&"elementalist":&"mage",&"spiritualist":&"mage",&"sentinel":&"archer",&"hunter":&"archer",&"mg_ar":&"mage"}
@@ -33,7 +34,8 @@ func _run() -> void:
 		controller.encounter_active = false
 		var actor_kind := &"geometer" if identity == &"mg_ar" else identity
 		var animation := controller.player.character_animation
-		var expected := "res://assets/art/animations/%s%s.png" % [actor_kind,"_weaponless"]
+		var directional := actor_kind in DIRECTIONAL_KINDS
+		var expected := "res://assets/art/animations/directional/%s/weaponless.png" % actor_kind if directional else "res://assets/art/animations/%s_weaponless.png" % actor_kind
 		check(animation.actor_kind == actor_kind and animation.atlas.resource_path == expected,"player bridge selects body without baked weapon "+String(identity))
 		check(not StringName(animation.equipment_visual["main_hand"]).is_empty(),"starter weapon appears "+String(identity))
 		var independent := CharacterAnimation.new()
@@ -50,7 +52,8 @@ func _run() -> void:
 		dead.equipment_visual["main_hand"] = &"axe"
 		check(animation.equipment_visual["main_hand"]==&"","death gear mutation cannot alter player "+String(identity))
 		independent.set_equipment_visual({})
-		check(independent.atlas.resource_path == "res://assets/art/animations/%s.png" % actor_kind,"original atlas remains available "+String(identity))
+		var base_path := "res://assets/art/animations/directional/%s/body.png" % actor_kind if directional else "res://assets/art/animations/%s.png" % actor_kind
+		check(independent.atlas.resource_path==base_path,"active base atlas remains available "+String(identity))
 		controller.queue_free()
 		await process_frame
 	for kind: StringName in [&"gel",&"beast_master",&"animal_companion"]:

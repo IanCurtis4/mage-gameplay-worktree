@@ -1,0 +1,49 @@
+{
+  "scope": "same runtime/engine/fixture,96equipped Spiritualists,3x3s moving+idle,forced redraw; not map FPS",
+  "thresholds": "triage reproducible>10% or>16MiB retention; no threshold exceeded in aggregate",
+  "rounds": {
+    "cost_legacy": {
+      "moving": {
+        "median_ms": 13.384,
+        "p95_ms": 17.008,
+        "cpu_median_ms": 8.443,
+        "cpu_p95_ms": 10.904
+      },
+      "idle": {
+        "median_ms": 14.249,
+        "p95_ms": 22.411,
+        "cpu_median_ms": 8.946,
+        "cpu_p95_ms": 14.804
+      },
+      "static_retained_bytes": 922276.0
+    },
+    "cost_content": {
+      "moving": {
+        "median_ms": 13.717,
+        "p95_ms": 18.071,
+        "cpu_median_ms": 8.66,
+        "cpu_p95_ms": 11.724
+      },
+      "idle": {
+        "median_ms": 13.624,
+        "p95_ms": 18.822,
+        "cpu_median_ms": 8.607,
+        "cpu_p95_ms": 12.488
+      },
+      "static_retained_bytes": 879564.0
+    }
+  },
+  "moving_changes_percent": {
+    "median_ms": 2.4880454273759733,
+    "p95_ms": 6.250000000000022,
+    "cpu_median_ms": 2.570176477555375,
+    "cpu_p95_ms": 7.520176082171681
+  },
+  "idle_changes_percent": {
+    "median_ms": -4.386272720892692,
+    "p95_ms": -16.014457186203213,
+    "cpu_median_ms": -3.789403085177734,
+    "cpu_p95_ms": -15.644420426911655
+  },
+  "static_retention_delta_bytes": -42712.0
+}

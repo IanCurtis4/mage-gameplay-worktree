@@ -1,0 +1,7 @@
+{
+  "branch": "codex/playtest",
+  "head": "fba777b3822356a10e7f6e050971e54ab1a9819b",
+  "status_records": 216,
+  "accepted_pilot_sha256": "d91bc71373ec370e744b61032b7aed036f4895620241027b29c0b505c81246e2",
+  "scope": "read-only preservation check; personal saves were not opened or modified"
+}

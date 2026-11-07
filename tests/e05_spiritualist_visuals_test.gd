@@ -6,12 +6,12 @@ var failures := 0
 func _initialize() -> void:
 	var animation := CharacterAnimation.new()
 	animation.configure(&"spiritualist")
-	_check(animation.actor_kind == &"spiritualist" and animation.atlas != null and animation.atlas.get_size() == Vector2(256, 512), "atlas do Espiritualista ocupa 32 células de 64px")
+	_check(animation.actor_kind == &"spiritualist" and animation.atlas != null and animation.atlas.get_size() == Vector2(256, 1024) and animation.render_descriptor().version==2, "atlas do Espiritualista ocupa 64 células de quatro vistas")
 	if animation.atlas != null:
 		var bitmap := animation.atlas.get_image()
 		var grounded := true
 		var alpha_gutters := true
-		for index: int in range(32):
+		for index: int in range(64):
 			var region := Rect2i(Vector2i(index % 4 * 64, index / 4 * 64), Vector2i(64, 64))
 			var frame := bitmap.get_region(region)
 			var bounds := frame.get_used_rect()
@@ -19,11 +19,11 @@ func _initialize() -> void:
 			alpha_gutters = alpha_gutters and frame.get_pixel(0, 0).a == 0.0 and frame.get_pixel(63, 63).a == 0.0 and animation.source_region(index) == Rect2(region)
 		_check(grounded and alpha_gutters, "todas as poses mantêm contato no chão sem cortar a célula vizinha")
 		var distinct_steps := true
-		for index: int in range(4, 7):
-			distinct_steps = distinct_steps and bitmap.get_region(Rect2i(animation.source_region(index))).get_data() != bitmap.get_region(Rect2i(animation.source_region(index + 1))).get_data()
-		for index: int in range(12, 15):
-			distinct_steps = distinct_steps and bitmap.get_region(Rect2i(animation.source_region(index))).get_data() != bitmap.get_region(Rect2i(animation.source_region(index + 1))).get_data()
-		_check(distinct_steps, "passos alternam de frente e de costas")
+		for direction: int in 4:
+			for pose: int in range(4,7):
+				var index := direction*16+pose
+				distinct_steps = distinct_steps and bitmap.get_region(Rect2i(animation.source_region(index))).get_data() != bitmap.get_region(Rect2i(animation.source_region(index + 1))).get_data()
+		_check(distinct_steps, "passos alternam nas quatro vistas autoradas")
 	_check(animation.death_copy().atlas == animation.atlas, "cópia de morte preserva a identidade visual")
 	var mage := CharacterAnimation.new()
 	mage.configure(&"mage")

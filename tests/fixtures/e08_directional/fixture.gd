@@ -21,3 +21,13 @@ static func animation(direction: int, pose: int, equipped: bool = true) -> Chara
 	if equipped:result.set_equipment_visual({"main_hand":&"staff","off_hand":&"shield","arms":&"wooden_beads","head":&"pilot_head"})
 	result.state=state(direction,pose)
 	return result
+
+static func legacy_animation(kind: StringName) -> CharacterAnimation:
+	# Deliberate V1 fixture, independent of the production default discovery.
+	# Keep the old atlas/rig oracle while active identities migrate to V2.
+	var result := CharacterAnimation.new()
+	result.configure(kind)
+	result._base_atlas=load("res://assets/art/animations/%s.png" % kind) as Texture2D
+	result._base_ground_offsets=result._measure_ground_offsets(result._base_atlas)
+	result.set_equipment_visual({})
+	return result

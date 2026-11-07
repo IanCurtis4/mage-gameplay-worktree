@@ -1,0 +1,25 @@
+{
+  "changed": {
+    "assets/art/e08_characters/directional/spiritualist/calibration.json": {
+      "tested": "d59bad87206e583f65eec33ccc7e16d06ca0a55e46d893a6fcb8f5b5ca4d12d7",
+      "final": "55288a67d779b018627d45ed14b34da85edd221f581567dfa0c77d6b2e114cf7"
+    },
+    "assets/art/e08_characters/directional/spiritualist/provenance.json": {
+      "tested": "b5369cad0580c8ef7b34bd67d22e66628c0cabf1e491167349fddb1c8becaf87",
+      "final": "f36dca0e5932518a1f8c51bd95fb7248e5dfeffdb786ed3179197bbf03f5abdb"
+    },
+    "assets/art/e08_characters/directional/spiritualist/recipe.md": {
+      "tested": "4554849fc59b562c0db739b2a1e9e6182e94a01b469f9269887e71e988fa2ddd",
+      "final": "a4d0cba753aab69fbf8f41d955ad9562b33fdf6d27900766d407c6fe114e0a34"
+    },
+    "assets/art/e08_characters/directional/spiritualist/delivery.md": {
+      "tested": "1e583d084e40923d1c9a46699dd1564b30ce9981beeddd5042765d4a4805fff0",
+      "final": "8ca5cd9cce07844d82b229b2ca38ae2fb990c209361b2a458b16d983463d02c1"
+    }
+  },
+  "same_source_keys_and_count": true,
+  "runtime_test_tool_and_png_hashes_unchanged": true,
+  "calibration_frames_and_rgba_binding_unchanged": true,
+  "reproduction_retained_png_and_manifest_bytes": true,
+  "gameplay_rerun_for_documentary_delta": false
+}

@@ -73,7 +73,7 @@ func run() -> void:
 	DirectionalAnimationSet._textures.clear();DirectionalAnimationSet._manifests.clear()
 	check(selected.render_descriptor().version==2 and selected.state==state,"cold catalog lookup preserves current animation state")
 	for kind: StringName in CharacterAnimation.WEAPONLESS_KINDS:
-		var legacy := CharacterAnimation.new();legacy.configure(kind);legacy.set_equipment_visual({"main_hand":&"staff","head":&"pilot_head"})
+		var legacy := F.legacy_animation(kind);legacy.set_equipment_visual({"main_hand":&"staff","head":&"pilot_head"})
 		check(legacy.render_descriptor().version==1 and legacy.atlas.get_size()==Vector2(256,512),"legacy full body and rig untouched "+String(kind))
 		check(not legacy.render_descriptor().head.is_empty(),"shared legacy helmet descriptor "+String(kind))
 	print("E08 directional animation: %d checks, %d failures" % [checks,failures])

@@ -1,6 +1,7 @@
 extends SceneTree
 ## Source-pixel and transform invariants for calibrated hand equipment.
 
+const V1 = preload("res://tests/fixtures/e08_directional/fixture.gd")
 const RIG := preload("res://scripts/actors/equipment_hand_rig.gd")
 const VISUAL := preload("res://scripts/actors/equipment_attachment_visual.gd")
 const KINDS: Array[StringName] = [&"swordsman", &"archer", &"berserker", &"defender", &"elementalist", &"hunter", &"mage", &"sentinel", &"spiritualist", &"geometer"]
@@ -25,8 +26,7 @@ func _run() -> void:
 	for kind: StringName in KINDS:
 		var atlas_path := "res://assets/art/animations/%s_weaponless.png" % kind
 		_check(FileAccess.get_sha256(atlas_path).to_lower() == String(rig_data["identities"][String(kind)]["atlas_sha256"]), "source atlas hash matches rig calibration %s" % kind)
-		var animation := CharacterAnimation.new()
-		animation.configure(kind)
+		var animation := V1.legacy_animation(kind)
 		animation.set_equipment_visual(equipment)
 		_check(animation.atlas != null and animation.atlas.get_size() == Vector2(256, 512), "32-frame source atlas: %s" % kind)
 		var atlas_image := animation.atlas.get_image()
@@ -79,8 +79,7 @@ func _scale_flip_and_grounding() -> bool:
 	var ok := true
 	var equipment := {"main_hand": &"", "off_hand": &"", "arms": &""}
 	for kind: StringName in KINDS:
-		var animation := CharacterAnimation.new()
-		animation.configure(kind)
+		var animation := V1.legacy_animation(kind)
 		animation.set_equipment_visual(equipment)
 		var body_image := animation.atlas.get_image()
 		for frame: int in range(32):

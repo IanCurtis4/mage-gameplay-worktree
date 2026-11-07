@@ -531,3 +531,54 @@ em staging, Terra6.1médio como subagente de conteúdo, Sol harness/teste e inte
 Base48058190d9a7e12dce7319b6d25020e0befacfd1; mesmo checkout codex/e08.
 Produtor pronto e conferido; demais identidades vêm após provar a primeira.
 P4 permanece em execução; P5 bloqueado. Habitual/piloto/save preservados.
+
+### Calibração da primeira unidade — 7/11/2026
+
+Terra produziu as fontes e atlas preliminares; devolveu calibration.json e
+presentation.json a Sol para calibração manual, pois a fronteira pose a pose
+exige sua intervenção. Atlas ficam congelados durante essa etapa. Lista exclusiva
+atualizada antes da escrita; Terra termina receita/wrapper/proveniência em seus
+arquivos, sem executar a saída do manifesto até handback. Não é unidade pronta.
+
+Terra devolveu integralmente os arquivos após fontes/atlas/wrapper/receita. Sol
+assume calibração e validação. Inspeção do leste v2 revelou uma terceira mão
+na caminhada, pose6: correção localizada via imagegen devolvida a Terra apenas
+em east_source_v3.png, provenance.json e delivery.md. Demais arquivos permanecem
+com Sol; nenhum atlas será refeito por Terra durante calibração. Esse defeito
+anatômico precisa ser corrigido antes de tratar a unidade como produção final.
+
+### Primeira unidade aprovada para integração técnica — 7/11/2026
+
+Espiritualista staging: conteúdo3.291checks PASS, renderer401checks/12PNGs PASS,
+inspeção Sol nas64poses/anexos/retrato e custo96atores abaixo do limiar de triagem
+(movimento p95+6,25%; repouso menor). Sem promessa de FPS de mapa ou aceite humano.
+Sol promove cópia do conjunto para o caminho padrão da identidade. Transferidos
+explicitamente e05_spiritualist_visuals_test.gd, e08_characters_test.gd e
+equipment_hand_alignment_test.gd: migração visual64células + fixture V1 explícita,
+conservando todos os oráculos de rigs/transformações legadas e acrescentando a
+prova de descoberta automática/64poses. Não ajustar expectativas para ocultar
+defeitos. Fontes originais e atlas V1 permanecem. P4 inteiro aberto; P5 bloqueado.
+
+A inspeção da seleção encontrou mais duas expectativas de path/V1 afetadas
+(e08_directional_animation_test e e06_appearance_integration_test). Transferidas
+a Sol junto da fixture e08_directional/fixture.gd antes de editar: manter prova
+V1 explícita por fonte, e exigir path V2 exato no fluxo real da Espiritualista.
+Nenhum erro de teste foi ocultado: essas migrações correspondem ao consumidor
+deliberadamente promovido, com32células legadas ainda conferidas separadamente.
+
+## Espiritualista V2 — primeira unidade integrada em7/11/2026
+
+[Recibo artístico](e08_p4_art_delivery.md):4vistas/64poses,112grips vivos,
+fontes imagegen e calibração Sol, promoção para caminho padrão.21etapas/17.440checks,
+nativo447/15PNGs,64frames de movimento; PCK3.293+814PASS. Primeira tentativa de
+áudio falhou por APPDATA não isolado, repetição isolada passou sem alterar áudio.
+Oráculos V1 preservados por fixture explícita; migração de paths V2 documentada.
+ZIP275membros,2.377inputs congelados, sem cache/perfis/builds. Após commit, posse
+Luna somente dos dois recibos de conferência p4_art/luna_supervision.md e
+luna_hashes.json; inputs desta unidade não mudam até handback. Outros conjuntos
+ainda podem ser produzidos em arquivos disjuntos, sem editar esses inputs.
+
+Elementalista entregue em staging por Terra, calibração inicial pronta e inspeção
+Sol pendente; [contrato independente](e08_p4_elementalist_contract.md)0ddad09f.
+Demais identidades/inimigos ainda pendentes; P4 continua em execução, P5 bloqueado.
+Habitual/piloto/saves preservados; sem master/push/arquivamento de chat P4.

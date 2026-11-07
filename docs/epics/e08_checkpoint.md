@@ -152,3 +152,20 @@ em staging, Terra6.1médio como subagente de conteúdo, Sol harness/teste e inte
 Base48058190d9a7e12dce7319b6d25020e0befacfd1; mesmo checkout codex/e08.
 Produtor pronto e conferido; demais identidades vêm após provar a primeira.
 P4 permanece em execução; P5 bloqueado. Habitual/piloto/save preservados.
+
+## Espiritualista V2 — primeira unidade integrada em7/11/2026
+
+[Recibo artístico](e08_p4_art_delivery.md):4vistas/64poses,112grips vivos,
+fontes imagegen e calibração Sol, promoção para caminho padrão.21etapas/17.440checks,
+nativo447/15PNGs,64frames de movimento; PCK3.293+814PASS. Primeira tentativa de
+áudio falhou por APPDATA não isolado, repetição isolada passou sem alterar áudio.
+Oráculos V1 preservados por fixture explícita; migração de paths V2 documentada.
+ZIP275membros,2.377inputs congelados, sem cache/perfis/builds. Após commit, posse
+Luna somente dos dois recibos de conferência p4_art/luna_supervision.md e
+luna_hashes.json; inputs desta unidade não mudam até handback. Outros conjuntos
+ainda podem ser produzidos em arquivos disjuntos, sem editar esses inputs.
+
+Elementalista entregue em staging por Terra, calibração inicial pronta e inspeção
+Sol pendente; [contrato independente](e08_p4_elementalist_contract.md)0ddad09f.
+Demais identidades/inimigos ainda pendentes; P4 continua em execução, P5 bloqueado.
+Habitual/piloto/saves preservados; sem master/push/arquivamento de chat P4.

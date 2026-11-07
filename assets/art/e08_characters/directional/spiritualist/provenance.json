@@ -1,0 +1,43 @@
+{
+  "generator": "image_gen integrado",
+  "reference": "docs/epics/e08_evidence/p4/elementalist_spiritualist_concept.png (linha inferior)",
+  "source_sha256": {
+    "east_source_v1.png": "e7015e4864b2bae038407bf5ef362cbfabfb5d164da13a18bbccf55ff271691d",
+    "east_source_v2.png": "e4cd4f5b90409b9ec55054a1c8c3accd3002c8cbfcc8383bbfbfc1e4c91601c9",
+    "north_source_v1.png": "8cba46ac111af9fa2cca23d557c357629f098ef01595731217992506f3a148ff",
+    "south_source_v1.png": "ecdf35d5d94fb29733f5fd1372a3c39d3e56456048bfe471dcb6964fc19c2ac6",
+    "south_source_v2.png": "2ed9b38d5774b8b590e580cd554ee07bc31d8ecc09362966350c23eebd84e4f7",
+    "south_source_v3.png": "0881d0223d0416cc1a72750da5c14399306490c1c5ef6efa09468997adb92dc5",
+    "west_source_v1.png": "ca30ceba1e8d096c544fdb74cae954157e5e99da1daf1a367b3c23d6bd6982ce",
+    "west_source_v2.png": "8d0c89d8e25901a013d8ee19433d78370110e805bac5b5b1ee8e80e688ebf1f6",
+    "east_source_v3.png": "9a7b9ea0cddec50548cdfc7df7fe27c7787fe64fbbe911ec8eb71f3482a063ae"
+  },
+  "prompts": {
+    "south_source_v3.png": "Use case: precise-object-edit. Edit this exact 4x4 game sprite sheet. Change ONLY the first two sprites of the bottom row: two front-facing recoil and crouch hurt poses with BOTH empty hands fully visible and separated, held out to the sides near waist, no hand on chest and no hand behind clothing. Both hands anatomically believable, fingers visible, with space for separately attached equipment. Preserve the exact remaining fourteen sprites, regular grid, character identity, silver bun, asymmetrical ritual costume, colors, scale and crisp pixel style. Genuine transparent background; no weapons, props, effects, grid, text or shadow.",
+    "north_source_v1.png": "Use case: stylized-concept. Production game animation sprite sheet. Reference: same silver-haired female spiritualist, bun and asymmetrical charcoal-gray and silver layered ritual costume, crisp pixel art, same proportions and scale. Create exactly 4x4 separate sprites in equal cells with transparent gaps, full body, all facing NORTH/back. Row 1 idle 4; row 2 walk 4; row 3 action 4 with empty hands; row 4 hurt 2 and collapsed death 2, all in that direction. Both hands of every living pose visible and separated from body; physically plausible anatomy and visible fingers. In profile, distinguish near and far hands in depth with clear separation. Two hurt poses hold both hands outward at waist. Keep character identity, hair bun and asymmetrical costume consistent across poses. No weapons, shields, objects, magical effects, ground, captions, grid lines or text. Genuine transparent background.",
+    "east_source_v1.png": "Use case: stylized-concept. Production game animation sprite sheet. Reference: same silver-haired female spiritualist, bun and asymmetrical charcoal-gray and silver layered ritual costume, crisp pixel art, same proportions and scale. Create exactly 4x4 separate sprites in equal cells with transparent gaps, full body, all facing EAST/right profile. Row 1 idle 4; row 2 walk 4; row 3 action 4 with empty hands; row 4 hurt 2 and collapsed death 2, all in that direction. Both hands of every living pose visible and separated from body; physically plausible anatomy and visible fingers. In profile, distinguish near and far hands in depth with clear separation. Two hurt poses hold both hands outward at waist. Keep character identity, hair bun and asymmetrical costume consistent across poses. No weapons, shields, objects, magical effects, ground, captions, grid lines or text. Genuine transparent background.",
+    "west_source_v1.png": "Use case: stylized-concept. Production game animation sprite sheet. Reference: same silver-haired female spiritualist, bun and asymmetrical charcoal-gray and silver layered ritual costume, crisp pixel art, same proportions and scale. Create exactly 4x4 separate sprites in equal cells with transparent gaps, full body, all facing WEST/left profile. Row 1 idle 4; row 2 walk 4; row 3 action 4 with empty hands; row 4 hurt 2 and collapsed death 2, all in that direction. Both hands of every living pose visible and separated from body; physically plausible anatomy and visible fingers. In profile, distinguish near and far hands in depth with clear separation. Two hurt poses hold both hands outward at waist. Keep character identity, hair bun and asymmetrical costume consistent across poses. No weapons, shields, objects, magical effects, ground, captions, grid lines or text. Genuine transparent background.",
+    "east_source_v2.png": "Use case: precise-object-edit. Preserve this exact 4x4 east-facing sprite sheet and character identity. Correct only the fourth sprite in the second row: show BOTH empty hands in the walking pose clearly separated in profile, one hand in front of torso and the other behind torso, connected to plausible arms. Preserve all other 15 sprites, scale, style, hairstyle and costume. No props, weapon, effects, text or grid. Genuine transparent background.",
+    "west_source_v2.png": "Use case: precise-object-edit. Edit this sprite sheet, preserve silver-haired spiritualist identity, 4x4 layout, scale, pixel style and all other poses. Correct bottom row first two hurt sprites so each body and face is unmistakably WEST/left profile, recoiling and crouching, NOT facing the viewer. In EVERY living frame including the fourth walking sprite in row 2, show BOTH distinct empty hands, near and far hand separated spatially, fingers visible, and plausible arms. Both hurt hands extend apart near waist. No weapons or effects. True transparent background, no captions or grid.",
+    "east_source_v3.png": "Use case: precise-object-edit. Edit the attached transparent 4 by 4 game sprite sheet. Change ONLY the sprite in row 2 column 3 (third sprite of walking row): it mistakenly has THREE hands. Remove the middle dangling hand at the abdomen AND its duplicated arm, reconstruct the uninterrupted layered costume there. Keep the existing rear hand behind the body and the existing forward hand in front of the body; exactly two anatomically connected arms and two empty hands total. Preserve the same lifted-leg walking pose, east-facing profile, hair, outfit, proportions, lighting, scale and crisp pixel art. The neighboring sprite row 2 column 4 illustrates the two-arm front/back arrangement but do not copy its pose. Preserve all other fifteen sprites and the regular grid. True transparent background; no props, effects, text, grid or shadow."
+  },
+  "historical_south_prompts": "delivery.md",
+  "selected": [
+    "south_source_v3.png",
+    "north_source_v1.png",
+    "east_source_v2.png",
+    "west_source_v2.png"
+  ],
+  "east_v3_usage": "Candidata para célula índice 6 somente; demais células permanecem da v2, sujeita à inspeção e seleção de Sol.",
+  "sol_integration": {
+    "status": "Spiritualist V2 technically integrated into candidate; P4 other content pending",
+    "raster_selection": "southv3,northv1,eastv2 except pose6 from eastv3,westv2",
+    "body_png_sha256": "dd3df46e2a80926b7e67f175bcd05397ae4e37f096b0a694a4d343975036ec8a",
+    "runtime_directory": "assets/art/animations/directional/spiritualist",
+    "content_checks": 3293,
+    "native_checks": 447,
+    "native_images": 15,
+    "generator": "built-in image_gen; mechanical packing only by existing pipeline",
+    "note": "Historical source findings/prompts above preserved; no three-hand pose promoted"
+  }
+}

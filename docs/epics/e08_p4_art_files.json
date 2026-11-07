@@ -5,8 +5,6 @@
     "assets/art/e08_characters/directional/spiritualist/body.png.import",
     "assets/art/e08_characters/directional/spiritualist/weaponless.png",
     "assets/art/e08_characters/directional/spiritualist/weaponless.png.import",
-    "assets/art/e08_characters/directional/spiritualist/presentation.json",
-    "assets/art/e08_characters/directional/spiritualist/calibration.json",
     "assets/art/e08_characters/directional/spiritualist/provenance.json",
     "assets/art/e08_characters/directional/spiritualist/recipe.md",
     "assets/art/e08_characters/directional/spiritualist/delivery.md",
@@ -42,7 +40,17 @@
     "assets/art/animations/directional/spiritualist/body.png.import",
     "assets/art/animations/directional/spiritualist/weaponless.png",
     "assets/art/animations/directional/spiritualist/weaponless.png.import",
-    "assets/art/animations/directional/spiritualist/presentation.json"
+    "assets/art/animations/directional/spiritualist/presentation.json",
+    "assets/art/e08_characters/directional/spiritualist/calibration.json",
+    "assets/art/e08_characters/directional/spiritualist/presentation.json",
+    "tests/e05_spiritualist_visuals_test.gd",
+    "tests/e08_characters_test.gd",
+    "tests/equipment_hand_alignment_test.gd",
+    "tests/e08_directional_animation_test.gd",
+    "tests/e06_appearance_integration_test.gd",
+    "tests/fixtures/e08_directional/fixture.gd"
   ],
-  "root_evidence_directory": "docs/epics/e08_evidence/p4_art/"
+  "root_evidence_directory": "docs/epics/e08_evidence/p4_art/",
+  "transfer_note": "Terra returned calibration.json/presentation.json to Sol before metadata authoring; raster atlases frozen during calibration.",
+  "current_owner": "P0/Sol, full Terra handback complete; active unit integration"
 }

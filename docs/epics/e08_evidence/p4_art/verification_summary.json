@@ -1,0 +1,82 @@
+{
+  "steps": 21,
+  "checks": 17440,
+  "by_test": {
+    "e06_inventory_test": 68,
+    "combat_animation_test": 39,
+    "e08_presentation_test": 2204,
+    "e08_pilot_ui_test": 55,
+    "e08_audio_test": 132,
+    "e08_pilot_test": 125,
+    "e08_characters_test": 774,
+    "e08_directional_animation_test": 814,
+    "e08_directional_integration_test": 84,
+    "e08_directional_content_test": 3293,
+    "e05_spiritualist_visuals_test": 23,
+    "e06_ui_inventory_test": 51,
+    "e06_appearance_integration_test": 206,
+    "equipment_hand_alignment_test": 4593,
+    "e06_icon_bar_test": 24,
+    "e07_f7_presentation_test": 27,
+    "e07_f3_snapshot_test": 52,
+    "e07_f3_continuation_test": 2743,
+    "e07_f3_action_matrix_test": 2004,
+    "e07_f3_lifecycle_test": 90,
+    "e07_f1_presentation_test": 39
+  },
+  "errors_failures_timeouts": 0,
+  "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "declared_source_count": 2377,
+  "native": {
+    "art_status": "staging, technical visual inspection required",
+    "captures": [
+      "01_all_64_bare.png",
+      "01b_four_views_gallery.png",
+      "02_equipment_pose_0.png",
+      "02_equipment_pose_9.png",
+      "03_calibration_0.png",
+      "03_calibration_1.png",
+      "03_calibration_2.png",
+      "03_calibration_3.png",
+      "04_camera_50.png",
+      "04_camera_100.png",
+      "04_camera_160.png",
+      "05_actual_inventory_ui120.png",
+      "06_actual_world_ui120.png",
+      "07_actual_inventory_uncovered_ui120.png",
+      "08_actual_world_uncovered_ui120.png"
+    ],
+    "checks": 447,
+    "failures": 0,
+    "real_content_manifest": "res://assets/art/e08_characters/directional/spiritualist/presentation.json",
+    "scope": "64 poses; supported cosmetic keys; real durable Spiritualist/helmet inventory; not gameplay eligibility or full campaign",
+    "ui_scale": 1.2
+  },
+  "motion": {
+    "checks": 72,
+    "duration_ms_per_frame": 100,
+    "failures": 0,
+    "frames": 64,
+    "scope": "same visual clock advanced in 0.1s steps; PNGs from native renderer; animation preview, not map FPS measurement"
+  },
+  "scope": "selected impacted tests; all316steps not rerun; new Elementalist authoring files outside this frozen fixture are separate work",
+  "historical_attempts": {
+    "regression1": "four successful steps then audio preferences failures under default Windows APPDATA; original logs retained; regression2 isolates APPDATA/LOCALAPPDATA without changing audio code/oracles",
+    "first_native": "401checks/12captures stage before default activation; final447checks/15captures adds automatic real actor/portrait and durable unequip",
+    "author1": "authorship sheet clipped by project content scale; fixed explicit viewport in author2; no gameplay acceptance claimed"
+  },
+  "packed_content_checks": 3293,
+  "packed_producer_checks": 814,
+  "pack": {
+    "sha256": "bd4701f3d5ab099250f44832fb000ac769f70a7c79c8554b872bd64f0693c6f8",
+    "bytes": 83157672
+  },
+  "tested_source_manifest_sha256": "772d4dfeb047b07018ce182813f8fcdd9a8498de8d1e036643fc5799eb28675d",
+  "final_source_manifest_sha256": "2378ee7e0b9632e1b7d6b15827d7ba70a03cebfc29608a2722e929207d49abad",
+  "post_validation_metadata_only": [
+    "assets/art/e08_characters/directional/spiritualist/calibration.json",
+    "assets/art/e08_characters/directional/spiritualist/provenance.json",
+    "assets/art/e08_characters/directional/spiritualist/recipe.md",
+    "assets/art/e08_characters/directional/spiritualist/delivery.md"
+  ]
+}
