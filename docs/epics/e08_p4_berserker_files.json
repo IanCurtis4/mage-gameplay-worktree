@@ -1,0 +1,28 @@
+{
+  "base": "0b8c962c1efde0c37962eb20aeb6df7c00570193",
+  "owner": "Terra Berserker only",
+  "files": [
+    "assets/art/e08_characters/directional/berserker/source_recipe.json",
+    "assets/art/e08_characters/directional/berserker/body.png",
+    "assets/art/e08_characters/directional/berserker/body.png.import",
+    "assets/art/e08_characters/directional/berserker/weaponless.png",
+    "assets/art/e08_characters/directional/berserker/weaponless.png.import",
+    "assets/art/e08_characters/directional/berserker/calibration.json",
+    "assets/art/e08_characters/directional/berserker/presentation.json",
+    "assets/art/e08_characters/directional/berserker/provenance.json",
+    "assets/art/e08_characters/directional/berserker/recipe.md",
+    "assets/art/e08_characters/directional/berserker/delivery.md",
+    "assets/art/e08_characters/directional/berserker/east_source_v1.png",
+    "assets/art/e08_characters/directional/berserker/east_source_v2.png",
+    "assets/art/e08_characters/directional/berserker/east_source_v3.png",
+    "assets/art/e08_characters/directional/berserker/west_source_v1.png",
+    "assets/art/e08_characters/directional/berserker/west_source_v2.png",
+    "assets/art/e08_characters/directional/berserker/west_source_v3.png"
+  ],
+  "shared_tools_read_only": [
+    "tools/prepare_e08_directional_art.py",
+    "tools/prepare_animation_assets.py"
+  ],
+  "native_source_read_only": "assets/art/animations/berserker_weaponless.png",
+  "stage_path": "res://assets/art/e08_characters/directional/berserker/presentation.json"
+}
