@@ -1,0 +1,10 @@
+ERROR: Index p_index = 0 is out of bounds ((int)data.children_cache.size() - data.internal_children_front_count_cache - data.internal_children_back_count_cache = 0).
+   at: get_child (scene/main/node.cpp:1861)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tools/action_bar_renderer_probe.gd:46)
+       [1] _capture (res://tools/action_bar_renderer_probe.gd:103)
+SCRIPT ERROR: Cannot call method 'get_global_rect' on a null value.
+   at: _run (res://tools/action_bar_renderer_probe.gd:48)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tools/action_bar_renderer_probe.gd:48)
+       [1] _capture (res://tools/action_bar_renderer_probe.gd:103)

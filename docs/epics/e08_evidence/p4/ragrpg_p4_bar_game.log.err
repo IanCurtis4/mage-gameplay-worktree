@@ -1,0 +1,272 @@
+ERROR: legal rank1 piercing_arrow
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+ERROR: legal rank1 arrow_rain
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+ERROR: legal rank1 explosive_trap
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+ERROR: legal rank1 archer_cadence
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+ERROR: legal rank1 trap_technique
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+ERROR: legal rank1 sentinel_precision_stance
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+ERROR: legal rank1 sentinel_piercing_shot
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+ERROR: legal rank1 sentinel_opening_read
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+ERROR: legal rank1 sentinel_concussion_shot
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+ERROR: legal rank1 sentinel_absolute_focus
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+SCRIPT ERROR: Invalid access to property or key 'size' on a base object of type 'Nil'.
+   at: _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+   GDScript backtrace (most recent call first):
+       [0] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [1] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 fire_spear
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 electric_discharge
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 lightning_wall
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 haunt
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 ice_wall
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 geometer_incidence
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 geometer_translation
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 geometer_collapse
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 geometer_rewrite
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+SCRIPT ERROR: Invalid access to property or key 'size' on a base object of type 'Nil'.
+   at: _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+   GDScript backtrace (most recent call first):
+       [0] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [1] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 fire_spear
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 electric_discharge
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 lightning_wall
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 haunt
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 ice_wall
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 spiritualist_echo_recovery
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 spiritualist_spectral_veil
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 spiritualist_channel_focus
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 spiritualist_procession
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 spiritualist_dissipation
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+SCRIPT ERROR: Invalid access to property or key 'size' on a base object of type 'Nil'.
+   at: _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+   GDScript backtrace (most recent call first):
+       [0] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [1] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 fire_spear
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 electric_discharge
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 lightning_wall
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 haunt
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+ERROR: legal rank1 ice_wall
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tools/action_bar_game_renderer_probe.gd:108)
+       [1] _show_identity (res://tools/action_bar_game_renderer_probe.gd:28)
+       [2] _run (res://tools/action_bar_game_renderer_probe.gd:16)
+       [3] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [4] _frames (res://tools/action_bar_game_renderer_probe.gd:96)
+SCRIPT ERROR: Invalid access to property or key 'size' on a base object of type 'Nil'.
+   at: _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+   GDScript backtrace (most recent call first):
+       [0] _show_identity (res://tools/action_bar_game_renderer_probe.gd:89)
+       [1] _frames (res://tools/action_bar_game_renderer_probe.gd:96)

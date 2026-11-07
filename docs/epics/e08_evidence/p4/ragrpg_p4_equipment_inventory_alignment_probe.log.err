@@ -1,0 +1,4 @@
+SCRIPT ERROR: Assertion failed.
+   at: _run (res://tools/equipment_inventory_alignment_probe.gd:33)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tools/equipment_inventory_alignment_probe.gd:33)

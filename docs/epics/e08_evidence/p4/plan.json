@@ -1,0 +1,174 @@
+{
+  "created_utc": "2026-11-07T00:36:13.1864507Z",
+  "f1_native_fixture": true,
+  "source_commit": "7f432e3335bab8b7413e40fe8f4679948f98c0d3",
+  "working_tree_status": [
+    " M tools/verify.ps1",
+    "?? data/map_authoring/sanctuary_woods.map.json.bak",
+    "?? data/map_authoring/sanctuary_woods.population.json.bak",
+    "?? data/map_authoring/sanctuary_woods_clearing.source.json.bak",
+    "?? data/map_authoring/sanctuary_woods_overpass.source.json.bak",
+    "?? tests/e08_characters_test.gd",
+    "?? tools/e08_characters_probe.gd"
+  ],
+  "runner_sha256": "4BD0C2EF71D3268E431C0169F211F24FE1C9A120E5D8EEDEF5643164248C0A2D",
+  "engine_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+  "timeout_seconds": 300,
+  "selection": {
+    "test": [
+      "e08_characters_test",
+      "combat_animation_test",
+      "equipment_hand_alignment_test",
+      "e06_icon_bar_test",
+      "e08_pilot_test",
+      "e08_presentation_test",
+      "e08_pilot_ui_test",
+      "e08_audio_test",
+      "e07_f1_presentation_test",
+      "e07_f3_lifecycle_test",
+      "e07_f3_action_matrix_test",
+      "e07_f7_presentation_test"
+    ],
+    "test_filter_specified": true,
+    "from_step": 1,
+    "to_step": 313,
+    "skip_editor_import": false
+  },
+  "total_steps": 313,
+  "selected_steps": 12,
+  "checks": [
+    {
+      "index": 10,
+      "name": "combat_animation_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/combat_animation_test.gd"
+      ]
+    },
+    {
+      "index": 11,
+      "name": "e08_presentation_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e08_presentation_test.gd"
+      ]
+    },
+    {
+      "index": 12,
+      "name": "e08_pilot_ui_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e08_pilot_ui_test.gd"
+      ]
+    },
+    {
+      "index": 13,
+      "name": "e08_audio_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e08_audio_test.gd"
+      ]
+    },
+    {
+      "index": 14,
+      "name": "e08_pilot_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e08_pilot_test.gd"
+      ]
+    },
+    {
+      "index": 15,
+      "name": "e08_characters_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e08_characters_test.gd"
+      ]
+    },
+    {
+      "index": 227,
+      "name": "equipment_hand_alignment_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/equipment_hand_alignment_test.gd"
+      ]
+    },
+    {
+      "index": 234,
+      "name": "e06_icon_bar_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e06_icon_bar_test.gd"
+      ]
+    },
+    {
+      "index": 259,
+      "name": "e07_f7_presentation_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f7_presentation_test.gd"
+      ]
+    },
+    {
+      "index": 282,
+      "name": "e07_f3_action_matrix_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f3_action_matrix_test.gd"
+      ]
+    },
+    {
+      "index": 283,
+      "name": "e07_f3_lifecycle_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f3_lifecycle_test.gd"
+      ]
+    },
+    {
+      "index": 309,
+      "name": "e07_f1_presentation_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_presentation_test.gd"
+      ]
+    }
+  ]
+}

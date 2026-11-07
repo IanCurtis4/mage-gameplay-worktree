@@ -1,0 +1,14 @@
+{
+  "status": "candidate_not_integrated",
+  "generator": "built-in image_gen",
+  "source": "assets/art/e08_characters/spiritualist_source.png",
+  "source_sha256": "6baa57fa5d473634f978bbfd7ed56a304480c13d681673ab32a22fb5a17a58a5",
+  "concept_reference": "docs/epics/e08_evidence/p4/elementalist_spiritualist_concept.png",
+  "concept_sha256": "424481ecdc4c49f54de762d5364ab3bb2efaf79f6cabe52824906abdd8172ac2",
+  "layout_reference": "assets/art/animations/spiritualist_weaponless.png",
+  "layout_reference_sha256": "cdaf6eafedadac2909550e92295abbd1275f359ea64807a480b1c2e7b7b02a4b",
+  "candidate": "docs/epics/e08_evidence/p4/spiritualist_candidate.png",
+  "candidate_sha256": "784e307c6c378bd48938bf0bc705c9e938fbe958a21209ea1b25c6aaf20b6963",
+  "prompt": "Create a production SOURCE sprite sheet for one playable character, the Spiritualist from the LOWER ROW of the first image. The first image is the approved character design reference: silver hair with bun, pale silver and charcoal asymmetrical ritual garments, no weapon. The second image is the existing animation-layout reference: copy its arrangement of 32 frames and poses exactly while replacing the character design with that Spiritualist. Pixel-art chibi isometric game sprite, coherent silhouette and clothing in every frame, empty hands, no effects, no props, no labels. Exact 4 columns by 8 rows with equal independent cells and generous separation. Rows 1 idle front, 2 walking front, 3 casting front, 4 walking rear, 5 idle rear, 6 casting rear, 7 hurt front and rear, 8 falling/dead front and rear; four poses per row. Full body within every cell, consistent scale and centered feet. Transparent background.",
+  "limitation": "Existing hand rig misses opaque pixels in 24 of 56 living-pose anchors; not calibrated or approved."
+}
