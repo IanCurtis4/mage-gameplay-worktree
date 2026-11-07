@@ -1,0 +1,22 @@
+{
+  "generator": "image_gen integrado",
+  "inputs": "four mechanical 4x nearest-neighbor direction sheets extracted from original atlas",
+  "reference_sha256": {
+    "assets\\art\\e08_characters\\directional\\mage\\body.png": "7fbf2b93a17168b0d6b5893fcf8315cc50eb5395b12245011bd54c3099ca026a",
+    "assets\\art\\e08_characters\\directional\\mage\\calibration.json": "0ab8843c60b46603c29d19c5fecca90421d6e638caf194675f845ccb0ecbcdbc"
+  },
+  "source_sha256": {
+    "east_source_v1.png": "58bde2a85f2674087bf58083f05acdf58d3c0205c9fb4dbd9dca48b7c5dee0a0",
+    "north_source_v1.png": "8e72aa64f6a8886b8ec421159fd0719c782fb56bd1847e49f3daa351d09a1179",
+    "south_source_v1.png": "975b5b4f25c297a7862a2c0f23cb4b27735abd0b7d370be6fa89d6f71f9accac",
+    "west_source_v1.png": "901e11ecf31d54ae481142edc16eed1fcc8f7a6e8b04e705d7d5462d957545e7"
+  },
+  "prompt": "Use case: precise-object-edit. Edit this exact 4x4 pixel-art animation sheet of the same brown-haired mage. In every one of the 16 cells remove ONLY the purple pointed hat and cream hatband, replacing the covered area with plausible brown hair matching the existing hair and view, preserving the same visible face, facial expression, outline and hairstyle. Keep every pose, direction, hands, raised arms, torso, clothing, legs and original sprite position completely unchanged. Keep the precise 4x4 cell alignment and pixel art scale; no added headwear, props, captions, background or shadow. Genuine transparent background.",
+  "original_rgba_sha256": "2defd07b164fa78c9e61292e2d240fdae89dc2eae6549ca57d765fb82f5f10df",
+  "bare_rgba_sha256": "ce94ffabe8c1dcd02538bf5264584a916ef7a54b098fbb90eaffe547685e63f8",
+  "contact_studies_sha256": {
+    "assets\\art\\e08_equipment_redesign\\pilot_head.png": "d106c284e42d96f1274f993291b411fc2f3d2c18c92b621589b3e2153e1ed309",
+    "assets\\art\\e08_equipment_redesign\\apple_arrow_study.png": "f4cad7996f14a686f4ce1d7efda286153ae728a4bb713e274c6cecf3028f1232",
+    "assets\\art\\e08_equipment_redesign\\eggshell_study.png": "08b005b5bae6a2c38e7bfa7092bdb39c3660c2b9f475110d8d0bb239c1d8e810"
+  }
+}

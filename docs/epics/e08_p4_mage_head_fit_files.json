@@ -1,6 +1,6 @@
 {
   "base": "01d7eda9ba39af414e55c278c1c0dbade29f4168",
-  "owner": "Terra spiritualist reused artist after dispatch173c8e4d; replaces planned gear_redesign without file conflict",
+  "owner": "Root after complete Terra Mage bare-head handback; immutable input to Sol integration",
   "files": [
     "assets/art/e08_head_fit/mage/body.png",
     "assets/art/e08_head_fit/mage/body.png.import",
@@ -25,5 +25,6 @@
     "tools/prepare_e08_mage_bare_head.py"
   ],
   "read_only_body": "assets/art/e08_characters/directional/mage/body.png",
-  "read_only_rgba_sha256": "2defd07b164fa78c9e61292e2d240fdae89dc2eae6549ca57d765fb82f5f10df"
+  "read_only_rgba_sha256": "2defd07b164fa78c9e61292e2d240fdae89dc2eae6549ca57d765fb82f5f10df",
+  "handback_rgba_sha256": "ce94ffabe8c1dcd02538bf5264584a916ef7a54b098fbb90eaffe547685e63f8"
 }

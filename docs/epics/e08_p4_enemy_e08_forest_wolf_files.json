@@ -1,0 +1,28 @@
+{
+  "base": "94d68c98cf1d9e93de23e184cfdf0fd62f85d8ab",
+  "owner": "Root reserved until explicit artist dispatch",
+  "visual_id": "e08_forest_wolf",
+  "actor_kind": "animal_companion",
+  "native_read_only": "assets/art/animations/e08_forest_wolf.png",
+  "files": [
+    "assets/art/e08_enemies/directional/e08_forest_wolf/source_recipe.json",
+    "assets/art/e08_enemies/directional/e08_forest_wolf/body.png",
+    "assets/art/e08_enemies/directional/e08_forest_wolf/body.png.import",
+    "assets/art/e08_enemies/directional/e08_forest_wolf/calibration.json",
+    "assets/art/e08_enemies/directional/e08_forest_wolf/presentation.json",
+    "assets/art/e08_enemies/directional/e08_forest_wolf/provenance.json",
+    "assets/art/e08_enemies/directional/e08_forest_wolf/recipe.md",
+    "assets/art/e08_enemies/directional/e08_forest_wolf/delivery.md",
+    "assets/art/e08_enemies/directional/e08_forest_wolf/east_source_v1.png",
+    "assets/art/e08_enemies/directional/e08_forest_wolf/east_source_v2.png",
+    "assets/art/e08_enemies/directional/e08_forest_wolf/east_source_v3.png",
+    "assets/art/e08_enemies/directional/e08_forest_wolf/west_source_v1.png",
+    "assets/art/e08_enemies/directional/e08_forest_wolf/west_source_v2.png",
+    "assets/art/e08_enemies/directional/e08_forest_wolf/west_source_v3.png"
+  ],
+  "shared_tools_read_only": [
+    "tools/prepare_e08_enemy_directional_art.py",
+    "tools/prepare_e08_directional_art.py",
+    "tools/prepare_animation_assets.py"
+  ]
+}

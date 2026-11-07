@@ -1,0 +1,65 @@
+{
+  "scope": "Mechanical in-memory controls using native cells only; these controls are NOT authored four-direction art and no assets were written",
+  "tool_sha256": "c44f0a89a9241b9effd5e0b8e8f252735c4c192a03b0b4f6679118c62da91fd6",
+  "units": {
+    "warrior": {
+      "native_idle_height": 50.0,
+      "native_SN_cells_exact": 32,
+      "frame_metadata": 64,
+      "kind": "warrior",
+      "passes": true
+    },
+    "beast_master": {
+      "native_idle_height": 50.0,
+      "native_SN_cells_exact": 32,
+      "frame_metadata": 64,
+      "kind": "beast_master",
+      "passes": true
+    },
+    "gel": {
+      "native_idle_height": 38.5,
+      "native_SN_cells_exact": 32,
+      "frame_metadata": 64,
+      "kind": "gel",
+      "passes": true
+    },
+    "animal_companion": {
+      "native_idle_height": 50.0,
+      "native_SN_cells_exact": 32,
+      "frame_metadata": 64,
+      "kind": "animal_companion",
+      "passes": true
+    },
+    "e08_forest_wolf": {
+      "native_idle_height": 46.5,
+      "native_SN_cells_exact": 32,
+      "frame_metadata": 64,
+      "kind": "animal_companion",
+      "passes": true
+    },
+    "e08_forest_boar": {
+      "native_idle_height": 50.0,
+      "native_SN_cells_exact": 32,
+      "frame_metadata": 64,
+      "kind": "animal_companion",
+      "passes": true
+    }
+  },
+  "negative_cases": [
+    {
+      "case": "kind_mismatch",
+      "rejected": true,
+      "reason": "Recipe visual identity/kind mismatch"
+    },
+    {
+      "case": "native_height_mismatch",
+      "rejected": true,
+      "reason": "Target height must match the native idle median"
+    },
+    {
+      "case": "duplicate_blocks",
+      "rejected": true,
+      "reason": "Four distinct authored direction blocks required"
+    }
+  ]
+}

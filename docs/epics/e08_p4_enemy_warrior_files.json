@@ -1,0 +1,28 @@
+{
+  "base": "94d68c98cf1d9e93de23e184cfdf0fd62f85d8ab",
+  "owner": "Root reserved until explicit artist dispatch",
+  "visual_id": "warrior",
+  "actor_kind": "warrior",
+  "native_read_only": "assets/art/animations/warrior.png",
+  "files": [
+    "assets/art/e08_enemies/directional/warrior/source_recipe.json",
+    "assets/art/e08_enemies/directional/warrior/body.png",
+    "assets/art/e08_enemies/directional/warrior/body.png.import",
+    "assets/art/e08_enemies/directional/warrior/calibration.json",
+    "assets/art/e08_enemies/directional/warrior/presentation.json",
+    "assets/art/e08_enemies/directional/warrior/provenance.json",
+    "assets/art/e08_enemies/directional/warrior/recipe.md",
+    "assets/art/e08_enemies/directional/warrior/delivery.md",
+    "assets/art/e08_enemies/directional/warrior/east_source_v1.png",
+    "assets/art/e08_enemies/directional/warrior/east_source_v2.png",
+    "assets/art/e08_enemies/directional/warrior/east_source_v3.png",
+    "assets/art/e08_enemies/directional/warrior/west_source_v1.png",
+    "assets/art/e08_enemies/directional/warrior/west_source_v2.png",
+    "assets/art/e08_enemies/directional/warrior/west_source_v3.png"
+  ],
+  "shared_tools_read_only": [
+    "tools/prepare_e08_enemy_directional_art.py",
+    "tools/prepare_e08_directional_art.py",
+    "tools/prepare_animation_assets.py"
+  ]
+}

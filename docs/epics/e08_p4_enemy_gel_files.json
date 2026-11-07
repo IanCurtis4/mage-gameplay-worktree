@@ -1,0 +1,28 @@
+{
+  "base": "94d68c98cf1d9e93de23e184cfdf0fd62f85d8ab",
+  "owner": "Root reserved until explicit artist dispatch",
+  "visual_id": "gel",
+  "actor_kind": "gel",
+  "native_read_only": "assets/art/animations/gel.png",
+  "files": [
+    "assets/art/e08_enemies/directional/gel/source_recipe.json",
+    "assets/art/e08_enemies/directional/gel/body.png",
+    "assets/art/e08_enemies/directional/gel/body.png.import",
+    "assets/art/e08_enemies/directional/gel/calibration.json",
+    "assets/art/e08_enemies/directional/gel/presentation.json",
+    "assets/art/e08_enemies/directional/gel/provenance.json",
+    "assets/art/e08_enemies/directional/gel/recipe.md",
+    "assets/art/e08_enemies/directional/gel/delivery.md",
+    "assets/art/e08_enemies/directional/gel/east_source_v1.png",
+    "assets/art/e08_enemies/directional/gel/east_source_v2.png",
+    "assets/art/e08_enemies/directional/gel/east_source_v3.png",
+    "assets/art/e08_enemies/directional/gel/west_source_v1.png",
+    "assets/art/e08_enemies/directional/gel/west_source_v2.png",
+    "assets/art/e08_enemies/directional/gel/west_source_v3.png"
+  ],
+  "shared_tools_read_only": [
+    "tools/prepare_e08_enemy_directional_art.py",
+    "tools/prepare_e08_directional_art.py",
+    "tools/prepare_animation_assets.py"
+  ]
+}
