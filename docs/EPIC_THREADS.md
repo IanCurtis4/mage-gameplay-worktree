@@ -15,7 +15,7 @@ Arquitetura: `01a1ae95-13a2-71c2-84d6-8f98c23b57d6`.
 |P1 Sol|01a1aea0-d67a-7023-9fcf-dbecfe5cef85|Ponte e atlas/UI validados/integrados|
 |P2 Sol|01a1aebf-dbc4-7701-8b17-1441618fb9c6|Áudio e soma validados/integrados|
 |P3 Terra|01a1aede-5799-76f2-835d-5418b5e395d9|Piloto validado/integrado e aceito com ressalva sonora|
-|P4 Terra 6.1 médio|01a1b369-442b-7f91-82a1-2316a4a0514d|Espiritualista V2 integrada tecnicamente; conferência Luna em preparo; Elementalista em staging e demais artes pendentes|
+|P4 Terra 6.1 médio|01a1b369-442b-7f91-82a1-2316a4a0514d|Espiritualista V2 consolidada/Luna conferida; Elementalista em staging e demais artes pendentes|
 
 Host local, checkout de execução/branch codex/e08 conforme dispatch; nunca dois
 escritores. P1–P3 continuam disponíveis para correções no mesmo chat, com mensagens

@@ -1,0 +1,10 @@
+{
+  "frozen_candidate": "a195c8de29ce436520548a44268d412df69f6b49",
+  "supervision_sha256": "35ecb2b83ea98f226585ef5f18261478a5101b84dd930bd759382d96d08f5f82",
+  "luna_hashes_sha256": "691ab8ac9b5c24d2ca77fdf5f4332873edcd8ec1d53763e8df88546c5f0b3011",
+  "validation_pack_cleanup_sha256": "91bc71cbc3367b821b74eb0a6fb5ed385ca85f96d5d0207b0822b69d6f829216",
+  "runtime_and_art_inputs_changed_for_consolidation": false,
+  "gameplay_rerun": false,
+  "status": "Spiritualist V2 technically consolidated; other P4 units in progress; product acceptance pending",
+  "supervision_documentary_correction": "Corrected stray prior-packet unit2 wording to sync_authored1 shell-guard history; no rerun or input change."
+}

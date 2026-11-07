@@ -126,3 +126,15 @@ e08_evidence/p4_art/luna_supervision.md e luna_hashes.json. Inputs desta unidade
 ficam somente leitura até handback. Produção de outros conjuntos pode continuar
 em arquivos disjuntos, sem alterar este corpo, teste, ferramenta ou manifesto
 da fixture enquanto Luna confere. Supervisão não concede aceite de produto.
+
+## Handback Luna da Espiritualista — 7/11/2026
+
+Candidato a195c8de29ce436520548a44268d412df69f6b49 conferido por Luna:275/275
+membros,2.377inputs em origem/fixture, engine/backups/PCK,21/17.440checks,
+nativo447/15, pacote3.293+814 e movimento64PNG/GIF6,4s. Devolveu posse, sem
+rerun ou aceite artístico/produto. [Conferência](e08_evidence/p4_art/luna_supervision.md).
+Removido somente o PCK temporário83.157.672bytes após conferir seu hash/tamanho;
+fontes/fixture/evidência/piloto/save preservados. [Consolidação](e08_evidence/p4_art/consolidation.json).
+A narrativa de espera por Luna acima é histórica. Espiritualista tecnicamente
+consolidada; Elementalista em staging sob inspeção Sol e Mago preparado como
+próximo pacote em arquivos disjuntos. P4 continua aberto, P5 bloqueado.

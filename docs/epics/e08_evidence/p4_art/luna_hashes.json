@@ -1,0 +1,95 @@
+{
+  "candidate": "a195c8de29ce436520548a44268d412df69f6b49",
+  "branch": "codex/e08",
+  "archive": {
+    "sha256": "8de2e58e008db7496408ee79ec64ffcb3e712857add44af42ae5596d1192db9e",
+    "bytes": 10399499,
+    "members_verified": 275,
+    "member_hash_mismatches": 0
+  },
+  "source_manifest": {
+    "sha256": "2378ee7e0b9632e1b7d6b15827d7ba70a03cebfc29608a2722e929207d49abad",
+    "tested_sha256": "772d4dfeb047b07018ce182813f8fcdd9a8498de8d1e036643fc5799eb28675d",
+    "declared_inputs": 2377,
+    "checkout_matches": true,
+    "fixture_matches": true,
+    "elementalist_outside_snapshot": true
+  },
+  "engine": {
+    "path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/godot/Godot_v4.7.2-stable_win64.exe",
+    "sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424"
+  },
+  "backups_verified": 4,
+  "pack": {
+    "path": ".godot/verification/p4_art/export_promoted1/art_validation.pck",
+    "sha256": "bd4701f3d5ab099250f44832fb000ac769f70a7c79c8554b872bd64f0693c6f8",
+    "bytes": 83157672
+  },
+  "verification": {
+    "regression2_steps_passed": 21,
+    "regression2_checks": 17440,
+    "regression2_errors_failures_timeouts": 0,
+    "regression1_passed_steps": 4,
+    "regression1_audio_checks": 132,
+    "regression1_audio_failed": true,
+    "packed_content_checks": 3293,
+    "packed_producer_checks": 814,
+    "packed_exit_codes": [0, 0],
+    "native_checks": 447,
+    "native_captures": 15,
+    "native_exit_code": 0,
+    "native_timed_out": false,
+    "motion_checks": 72,
+    "motion_png_frames": 64,
+    "motion_exit_code": 0,
+    "sync_authored1_completed": true,
+    "stale_last_exit_guard_interrupted_before_import": true,
+    "import_authored1_pass": true
+  },
+  "performance_recomputed": {
+    "scope": "96 equipped Spiritualists; three 3-second windows per moving/idle state; forced redraw",
+    "frame_ms_median_p95": {
+      "control_moving": [13.384, 17.008],
+      "v2_moving": [13.717, 18.071],
+      "control_idle": [14.249, 22.411],
+      "v2_idle": [13.624, 18.822]
+    },
+    "draw_cpu_ms_median_p95": {
+      "control_moving": [8.443, 10.904],
+      "v2_moving": [8.66, 11.724],
+      "control_idle": [8.946, 14.804],
+      "v2_idle": [8.607, 12.488]
+    },
+    "static_allocator_retained_control_bytes": 922276,
+    "static_allocator_retained_v2_bytes": 879564,
+    "static_allocator_retention_delta_bytes": -42712
+  },
+  "motion_preview": {
+    "native_pngs_hashed": 64,
+    "gif_sha256": "3a5a42c7e5300b8d4e2caa46da28b08f5e6b64f428a420c96702b30d17caaffc",
+    "gif_encoded_frames": 26,
+    "gif_total_duration_ms": 6400,
+    "palette_colors": 256,
+    "dithering": false,
+    "consecutive_identical_frames_coalesced": true
+  },
+  "post_validation_metadata_delta": {
+    "changed_files": 4,
+    "paths": [
+      "assets/art/e08_characters/directional/spiritualist/calibration.json",
+      "assets/art/e08_characters/directional/spiritualist/provenance.json",
+      "assets/art/e08_characters/directional/spiritualist/recipe.md",
+      "assets/art/e08_characters/directional/spiritualist/delivery.md"
+    ],
+    "hashes_tested_to_final": {
+      "calibration.json": ["d59bad87206e583f65eec33ccc7e16d06ca0a55e46d893a6fcb8f5b5ca4d12d7", "55288a67d779b018627d45ed14b34da85edd221f581567dfa0c77d6b2e114cf7"],
+      "provenance.json": ["b5369cad0580c8ef7b34bd67d22e66628c0cabf1e491167349fddb1c8becaf87", "f36dca0e5932518a1f8c51bd95fb7248e5dfeffdb786ed3179197bbf03f5abdb"],
+      "recipe.md": ["4554849fc59b562c0db739b2a1e9e6182e94a01b469f9269887e71e988fa2ddd", "a4d0cba753aab69fbf8f41d955ad9562b33fdf6d27900766d407c6fe114e0a34"],
+      "delivery.md": ["1e583d084e40923d1c9a46699dd1564b30ce9981beeddd5042765d4a4805fff0", "8ca5cd9cce07844d82b229b2ca38ae2fb990c209361b2a458b16d983463d02c1"]
+    },
+    "calibration_frames_and_authored_rgba_unchanged": true,
+    "runtime_test_tool_and_png_hashes_unchanged": true,
+    "reproduction_byte_identical_per_archived_record": true
+  },
+  "limitation": "Supervision covers integrity and archived execution only; it is not independent semantic/art review, product acceptance, map FPS, RSS/VRAM, or leak certification. P4 remains open."
+}
