@@ -503,7 +503,7 @@ Nenhum master/push/save pessoal, fonte histórica ou novo kit autorizado.
 ## Produtor V2 em freeze para Luna
 
 Sol concluiu e08_p4_directional_delivery.md.25etapas/13.829checks,
-nativo82/6PNGs, PCK814+84. ZIP385membros em p4_directional, manifest2.352fontes.
+nativo82/6PNGs, PCK814+84. ZIP388membros em p4_directional, manifest2.352fontes.
 Depois do commit deste freeze, Luna low é único escritor de
 p4_directional/luna_supervision.md e luna_hashes.json. Verifica inputs/execução,
 sem rerun/alterar expectativas ou certificar arte. Root/Sol somente leitura.

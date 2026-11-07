@@ -128,8 +128,8 @@ instrumentada usa o mesmo PCK otimizado e o MESMO script externo nos seis casos.
 [medidas](e08_evidence/p4_directional/performance_summary.json),
 [ZIP portátil](e08_evidence/p4_directional/evidence.zip).
 
-ZIP385membros,3789595B, SHA256
-9d4db9ca485f792803a981c51bf6c3c06b6ada7c556e6584ae746cc1726c4757. Perfis/saves/cache/builds não entram no ZIP.
+ZIP388membros,3904171B, SHA256
+34e87db2b69198297dc8065255b1f7a464d15eb4077af823aaed9ccfe352eda0. Perfis/saves/cache/builds não entram no ZIP.
 
 ## Próximo consumidor e preservação
 
@@ -146,3 +146,8 @@ precisam de migração explícita de fixture/contrato, sem relaxar expectativas 
 ocultar defeito. A produção de todo o restante e a entrega P4 permanecem pendentes.
 P5 não iniciado, chat Terra não arquivado. Código habitual codex/playtest e seu
 status local preservados, saves e quatro .bak intactos. Sem master/push.
+
+A revisão de formato após o primeiro commit removeu um único espaço final no
+parâmetro CandidatePack do wrapper. Versão executada e manifesto testado foram
+preservados em inputs/tested; current/final_manifest refletem a correção somente
+de formato. Nenhum runtime/teste/textura mudou nem se repetiu gameplay por isso.

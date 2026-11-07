@@ -4,9 +4,9 @@
   "source_manifest_sha256": "b7ef571bbeebf0d9332bef474384d6f7177f0ac1409312922e24459a5a0984da",
   "archive": {
     "path": "docs/epics/e08_evidence/p4_directional/evidence.zip",
-    "sha256": "9d4db9ca485f792803a981c51bf6c3c06b6ada7c556e6584ae746cc1726c4757",
-    "bytes": 3789595,
-    "members": 385
+    "sha256": "34e87db2b69198297dc8065255b1f7a464d15eb4077af823aaed9ccfe352eda0",
+    "bytes": 3904171,
+    "members": 388
   },
   "members": {
     "bootstrap1/246-e07_f1_import_test.engine.log": "5c66d84c8e0c37f7532b03c09aa106211a47a91eb531c35980082849c2d65a65",
@@ -229,6 +229,8 @@
     "inputs/current/tools/validate_e08_directional.ps1": "35bf0a2e294d05b289e88a72ad2c9817101d86729edf8c5a350666d6983eb73e",
     "inputs/current/tools/verify.ps1": "528307e536ef5b14b3f680f32c230be75d3cfca4c67a3c2c23729d3018e1543d",
     "inputs/final_source_hashes.json": "b7ef571bbeebf0d9332bef474384d6f7177f0ac1409312922e24459a5a0984da",
+    "inputs/tested/validate_e08_directional.ps1": "35bf0a2e294d05b289e88a72ad2c9817101d86729edf8c5a350666d6983eb73e",
+    "inputs/tested_source_hashes.json": "b7ef571bbeebf0d9332bef474384d6f7177f0ac1409312922e24459a5a0984da",
     "integration1/017-e08_directional_integration_test.engine.log": "4c8e5c5aa0de49a905dc44b11fa3ba6e4a53b037a949004f153e058141e681a3",
     "integration1/017-e08_directional_integration_test.output.log": "3fc476b212c3ea35e759814449defb09bd2ec90d72adf7d6596a19361b478628",
     "integration1/checks.jsonl": "b8cbdd5b53586b662e528eb76bc3fb4f12ca10c98c8b6da087c672daab024035",
@@ -268,6 +270,7 @@
     "performance_fix/previous/tests/e08_directional_animation_test.gd": "c98c20d9226a217a09404dd531fcc2d949fdd63a6fb2633ee92e8127629ff86c",
     "performance_fix/previous/tools/e08_directional_cost_probe.gd": "203d60f2cd884610fefc8b69ed53e28a6fd3f2091e267ab65c5e0522fbcf149f",
     "performance_fix/previous/tools/validate_e08_directional.ps1": "74e08a55890eef5f8ab2d8f5c01f00fa6255c5a3ed1d183381306d5b90742e73",
+    "post_validation/wrapper_whitespace_delta.json": "32f636879e0803fddc8030c0273fe0d73f4c16723b38ab7a50f61375a8fd8fce",
     "regression1/003-e06_inventory_test.engine.log": "4267a1d9b78dd981f096442a85e76f3d9a97593e8f0dc1d66a0db7441cbcd22d",
     "regression1/003-e06_inventory_test.output.log": "1bd9a4b87f549316d171ddef1a2cacf156ea80ec76a1af3de9d7d091192722a5",
     "regression1/010-combat_animation_test.engine.log": "93de56f18131527bef7e074074477b21e409365bd02c190b9d05a2293ae9d42d",
@@ -410,7 +413,7 @@
     }
   },
   "engine": {
-    "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+    "path": "C:\\Users\\JoÃ£o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
     "sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424"
   },
   "backups": {
@@ -430,5 +433,12 @@
     "scripts/presentation/directional_animation_set.gd": "c2b1fda7d43f82ff867032fbcd7345be70643ace5d54af791b282b74257c8f2f"
   },
   "compatible_tool_delta": "After final PCK/native/regression only external cost probe and wrapper got CPU instrumentation and explicit probe hash recording. Same production code, tests, texture data; exact older scripts in delta/cpu_diagnostic previous blobs and manifests. The packed diagnostic uses the exact existing optimized PCK with the current external script in all cases.",
-  "status": "producer ready for limited technical consolidation; P4 content not complete"
+  "status": "producer ready for limited technical consolidation; P4 content not complete",
+  "post_validation_whitespace": {
+    "before_wrapper_sha256": "35bf0a2e294d05b289e88a72ad2c9817101d86729edf8c5a350666d6983eb73e",
+    "after_wrapper_sha256": "35bf0a2e294d05b289e88a72ad2c9817101d86729edf8c5a350666d6983eb73e",
+    "tested_wrapper_member": "inputs/tested/validate_e08_directional.ps1",
+    "tested_manifest_member": "inputs/tested_source_hashes.json",
+    "detail": "Only one trailing space removed from CandidatePack parameter; staged check now clean. No runtime/test/texture changes or rerun."
+  }
 }
