@@ -7,16 +7,19 @@ const SUPPORTED: Array[StringName] = [&"sword", &"axe", &"staff", &"bow", &"shie
 static var _texture_cache: Dictionary = {}
 
 static func describe(snapshot: BuildSnapshot, catalog: BuildEffectCatalog) -> Dictionary:
-	var result := {"main_hand": &"", "off_hand": &"", "arms": &""}
+	var result := {"main_hand": &"", "off_hand": &"", "arms": &"", "head": &""}
 	if snapshot == null or catalog == null:
 		return result
-	for slot: StringName in [&"main_hand", &"off_hand", &"arms"]:
+	for slot: StringName in [&"main_hand", &"off_hand", &"arms", &"head"]:
 		var instance_id: Variant = snapshot.equipped.get(slot)
 		if instance_id == null or not snapshot.equipment_instances.has(instance_id):
 			continue
 		var instance: EquipmentInstance = snapshot.equipment_instances[instance_id]
 		var definition := catalog.get_definition(&"equipment", instance.definition_id) as EquipmentDefinition
 		if definition == null:
+			continue
+		if slot == &"head":
+			result[slot] = &"pilot_head" if definition.id == &"pilot_head" else &""
 			continue
 		var key := definition.visual_key
 		if key.is_empty():
@@ -147,3 +150,50 @@ static func _fallback_key(slot: StringName, definition: EquipmentDefinition, bas
 		return &"bow"
 	return &"sword"
 
+
+## Resolved exactly once with the body frame. Legacy placement API stays intact.
+static func resolve_equipment(kind: StringName, state: CombatAnimationState, visual: Dictionary, origin: Vector2, frame: Dictionary = {}) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for slot: StringName in [&"main_hand",&"off_hand",&"arms"]:
+		var key := StringName(visual.get(slot,&""))
+		if key not in PROFILES: continue
+		var placed: Dictionary
+		if frame.is_empty():
+			placed=placement(kind,state,key,slot,origin)
+			if not placed.is_empty(): placed["flip"]=false
+		else:
+			var pose: Dictionary = frame.slots[String(slot)]
+			var hand := Vector2(pose.point[0],pose.point[1])
+			var fingers: Array = pose.fingers
+			placed={"point":origin+hand,"angle":pose.get("angle_overrides",{}).get(String(key),float(PROFILES[key].angle)+float(pose.angle)),"depth":pose.get("depth_overrides",{}).get(String(key),int(pose.depth)),"flip":pose.flip,"grip":PROFILES[key].grip,"size":PROFILES[key].size,"finger_rect":Rect2(fingers[0],fingers[1],fingers[2],fingers[3]),"slot":slot,"key":key}
+		if not placed.is_empty(): result.append(placed)
+	return result
+
+static func resolved_transform(placed: Dictionary, scale: float, body_flip: bool) -> Transform2D:
+	var body := Transform2D(0.0,Vector2(-scale if body_flip else scale,scale),0.0,Vector2.ZERO)
+	return body*Transform2D(float(placed.angle),Vector2(-1.0 if placed.get("flip",false) else 1.0,1.0),0.0,Vector2(placed.point))
+
+static func draw_resolved(canvas: CanvasItem, descriptor: Dictionary, tint: Color, scale: float, depth: int) -> void:
+	for placed: Dictionary in descriptor.equipment:
+		if placed.depth!=depth: continue
+		var texture := _texture(placed.key)
+		if texture==null: continue
+		canvas.draw_set_transform_matrix(resolved_transform(placed,scale,descriptor.flip))
+		canvas.draw_texture(texture,-Vector2(placed.grip),tint)
+		if placed.key==&"bow" and descriptor.arrow_visible:
+			# Same cosmetic arrow as V1, using the resolved hand transform.
+			var from := Vector2(-11,0); var to := Vector2(20,0)
+			canvas.draw_line(from,to,Color(0.32,0.22,0.16,tint.a),1,false)
+			canvas.draw_line(from+Vector2(0,-1),to-Vector2(3,1),Color(0.84,0.69,0.43,tint.a),1,false)
+			canvas.draw_colored_polygon(PackedVector2Array([to+Vector2(0,-2),to+Vector2(5,0),to+Vector2(0,2)]),Color(0.78,0.85,0.85,tint.a))
+			canvas.draw_line(from,from+Vector2(-3,-2),Color(0.79,0.72,0.56,tint.a),1,false)
+	canvas.draw_set_transform(Vector2.ZERO,0.0,Vector2.ONE)
+
+static func draw_resolved_fingers(canvas: CanvasItem, descriptor: Dictionary, tint: Color, scale: float) -> void:
+	if descriptor.dead: return
+	for placed: Dictionary in descriptor.equipment:
+		if placed.slot not in [&"main_hand",&"off_hand"]: continue
+		var crop: Rect2 = placed.finger_rect
+		canvas.draw_set_transform(Vector2.ZERO,0.0,Vector2(-scale if descriptor.flip else scale,scale))
+		canvas.draw_texture_rect_region(descriptor.atlas,Rect2(descriptor.origin+crop.position,crop.size),Rect2(descriptor.region.position+crop.position,crop.size),tint)
+	canvas.draw_set_transform(Vector2.ZERO,0.0,Vector2.ONE)

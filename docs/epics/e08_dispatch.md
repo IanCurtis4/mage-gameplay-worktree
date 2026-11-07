@@ -491,3 +491,20 @@ posse. Nenhum runtime/asset/teste antigo mudou. Próximo produtor Sol descrito
 em e08_p4_directional_contract.md ainda sem implementação; resolve direções e
 contrato de corpo/mãos/equipamentos/cabeça antes de devolver consumo a Terra.
 P4 parcial não autoriza P5 e chat não deve ser arquivado.
+
+## Produtor direcional Sol em execução — 6/11/2026
+
+Usuário autorizou implementar. Base e10bf71d91d0e9271d9792ed04e211ab8ca17112;
+lista exclusiva e08_p4_directional_files.json, contrato direcional atualizado.
+P0/Sol único escritor; Terra/P1–P3 parados. Snapshot continua com campos existentes;
+empate cardinal vertical determinístico evita estado direcional paralelo.
+Nenhum master/push/save pessoal, fonte histórica ou novo kit autorizado.
+
+## Produtor V2 em freeze para Luna
+
+Sol concluiu e08_p4_directional_delivery.md.25etapas/13.829checks,
+nativo82/6PNGs, PCK814+84. ZIP385membros em p4_directional, manifest2.352fontes.
+Depois do commit deste freeze, Luna low é único escritor de
+p4_directional/luna_supervision.md e luna_hashes.json. Verifica inputs/execução,
+sem rerun/alterar expectativas ou certificar arte. Root/Sol somente leitura.
+Terra continua parado; P4 artístico não está integrado, P5 não foi liberado.

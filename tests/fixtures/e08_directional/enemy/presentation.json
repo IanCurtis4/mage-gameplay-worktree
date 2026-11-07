@@ -1,0 +1,4239 @@
+{
+  "format": "ragrpg_directional_animation_v2",
+  "actor_kind": "warrior",
+  "pivot": [
+    32,
+    58
+  ],
+  "body": {
+    "path": "res://tests/fixtures/e08_directional/enemy/body.png",
+    "rgba_sha256": "2bbb150952d41dd67b57a5ca7588dd7387a0c126ff7afc4cde3a1166544ffb99"
+  },
+  "weaponless": null,
+  "frames": [
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 1.2,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 1.2,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 1.2,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 1.2,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 1.2,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 1.2,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 1.2,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            34
+          ],
+          "fingers": [
+            23,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            34
+          ],
+          "fingers": [
+            39,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            38,
+            34
+          ],
+          "fingers": [
+            37,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {},
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 1.2,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    }
+  ]
+}

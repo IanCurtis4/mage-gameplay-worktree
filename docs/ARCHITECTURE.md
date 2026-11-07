@@ -1,5 +1,14 @@
 # Arquitetura vigente — índice de autoridades e contratos
 
+## E08 P4 — produtor direcional
+
+[Contrato/API](epics/e08_p4_directional_contract.md), [entrega e limites](epics/e08_p4_directional_delivery.md).
+V1/32 e V2/64 compartilham relógio/facing existentes; catálogo imutável derivado
+do path da textura, sem novos campos de snapshot. Corpo/anexos/cabeça usam
+seleção comum; retrato e ator renderizam capacete pela mesma rotina. Conteúdo
+artístico V2 ainda pendente; P4 não concluído.
+
+
 > Estado vigente em 6/11: [piloto aceito com ressalva sonora](epics/e08_p3_product_acceptance.md); P4 autorizado, [contrato](epics/e08_p4_contract.md). Bloqueios por aceite P3 nos registros abaixo são históricos. P5/P6/P7 ainda dependem das entregas anteriores; não despachados.
 
 

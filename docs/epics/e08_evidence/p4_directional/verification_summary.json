@@ -1,0 +1,57 @@
+{
+  "steps": 25,
+  "checks": 13829,
+  "by_test": {
+    "e06_inventory_test": 68,
+    "combat_animation_test": 39,
+    "e08_presentation_test": 2204,
+    "e08_pilot_ui_test": 55,
+    "e08_audio_test": 132,
+    "e08_pilot_test": 125,
+    "e08_directional_animation_test": 814,
+    "e08_directional_integration_test": 84,
+    "e05_hunter_atlas_test": 158,
+    "e05_spiritualist_visuals_test": 23,
+    "e05_geometer_animation_test": 101,
+    "e05_sentinel_atlas_test": 137,
+    "e05_elementalist_animation_test": 7,
+    "e06_ui_inventory_test": 51,
+    "e06_inventory_profile_panel_test": 19,
+    "e06_inventory_window_input_test": 34,
+    "e06_appearance_integration_test": 206,
+    "equipment_hand_alignment_test": 4593,
+    "e06_icon_bar_test": 24,
+    "e07_f7_presentation_test": 27,
+    "e07_f3_snapshot_test": 52,
+    "e07_f3_continuation_test": 2743,
+    "e07_f3_action_matrix_test": 2004,
+    "e07_f3_lifecycle_test": 90,
+    "e07_f1_presentation_test": 39
+  },
+  "native": {
+    "camera_zooms": [
+      0.5,
+      1.0,
+      1.60000002384186
+    ],
+    "captures": [
+      "synthetic_64_poses.png",
+      "synthetic_camera_50.png",
+      "synthetic_camera_100.png",
+      "synthetic_camera_160.png",
+      "production_mage_inventory_helmet_120.png",
+      "production_mage_world_helmet_120.png"
+    ],
+    "checks": 82,
+    "failures": 0,
+    "production_helmet_fixture": "actual isolated Mage profile; durable equip; production art unchanged",
+    "synthetic": true,
+    "ui_scale": 1.2,
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  "packed_unit_checks": 814,
+  "packed_integration_checks": 84
+}

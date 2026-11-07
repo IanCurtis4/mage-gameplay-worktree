@@ -107,3 +107,26 @@ Arte candidata Espiritualista24/56grips semalpha não promovida. Preview do
 inventário não desenha capacete: pendência real de integração, não resolvida
 por captura ou mudança do oráculo. Terra permanece parado para essa fronteira.
 Release ad09b99d e habitual/save não mudaram; sem master/push.
+
+## Produtor direcional implementado — 6/11/2026
+
+Autorização humana posterior: continuar a implementação técnica por Sol.
+Base e10bf71d91d0e9271d9792ed04e211ab8ca17112. Implementação e evidência em
+[e08_p4_directional_delivery.md](e08_p4_directional_delivery.md), API/contrato
+em e08_p4_directional_contract.md.64poses/quatro vistas e V1 preservado,
+mesmo relógio e campos de snapshot, rig/head compartilhados; capacete aparece
+no retrato real. Arte de produto e candidata Espiritualista não foram alteradas.
+
+25/25etapas,13.829checks; nativo82/6capturas; PCK814+84PASS. Regressão de custo
+sem anexos foi detectada e corrigida; paridade RGBA exata com o piloto e CPU
+de desenho menor. P95 de quadro variou em algumas janelas sintéticas; triagem,
+repetição e instrumento CPU preservados, sem promessa de FPS universal.
+2.352fontes, uma fixture reutilizada, engine4.7.2standard e backups conferidos.
+CLI workflow continua ausente; não foi copiado tooling.
+
+Freeze deste registro entrega apenas dois arquivos de conferência a Luna:
+e08_evidence/p4_directional/luna_supervision.md e luna_hashes.json. Demais
+arquivos somente leitura até handback. Código/fonte do PCK não mudarão por
+conferência. Próximo consumidor é UMA identidade artística V2 em staging,
+com corpo/equipamentos completos e testes reais; P4 inteiro/P5 continuam abertos/
+bloqueado respectivamente. Habitual, status local e saves preservados.

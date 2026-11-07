@@ -19,7 +19,7 @@ var hurt_remaining := 0.0
 var death_time := 0.0
 
 func face(direction: Vector2) -> void:
-	if direction.is_zero_approx():
+	if dead or not direction.is_finite() or direction.is_zero_approx():
 		return
 	facing = direction.normalized()
 	back_view = facing.y < -0.25
@@ -84,3 +84,19 @@ func frame_index() -> int:
 	if moving:
 		return (12 if back_view else 4) + int(floor(walk_distance / WALK_FRAME_DISTANCE + 0.00001)) % 4
 	return (16 if back_view else 0) + int(idle_time * 4.0) % 4
+
+## Four cardinal views derive from the already persisted facing. Exact diagonal
+## ties use the vertical view, so a cold restore cannot choose another direction.
+func direction_index() -> int:
+	if absf(facing.x)>absf(facing.y): return 2 if facing.x>0.0 else 3
+	return 1 if facing.y<0.0 else 0
+
+## Same clock and precedence as the legacy atlas, reduced to a 16-pose block.
+func pose_index() -> int:
+	var legacy := frame_index()
+	if legacy<12: return legacy
+	if legacy<16: return legacy-8
+	if legacy<20: return legacy-16
+	if legacy<24: return legacy-12
+	if legacy<28: return 12+legacy%2
+	return 14+legacy%2
