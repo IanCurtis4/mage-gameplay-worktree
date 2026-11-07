@@ -1,0 +1,94 @@
+{
+  "reviewer": "Luna automated integrity supervision",
+  "date": "2026-11-07",
+  "scope": "read-only archive, source hashes, receipts and existing logs; no Godot rerun; no independent visual audit",
+  "candidate_commit": "5756f0944f129792f9c53f565ede9956b48ca8b9",
+  "commit_paths": 107,
+  "archive": {
+    "path": "evidence.zip",
+    "members": 657,
+    "bytes": 50670917,
+    "sha256": "59801ad23a11396bdee7f80dd2bca880a0ce19bb49ab1f650aeab11ead4be6e5",
+    "member_hash_mismatches": 0
+  },
+  "freeze": {
+    "input_count": 2431,
+    "manifest": "inputs/final_source_hashes.json",
+    "manifest_sha256": "6f1cc9573f0d59e83fd1a84e0d7c3039686515c49f779360de6e6545e6294129",
+    "current_missing_or_mismatched": 0,
+    "owned_source_hashes_checked": 85,
+    "owned_source_mismatches": 0,
+    "documented_post_snapshot_exception": "docs/epics/e08_p4_units_sol_files.json ownership consolidation only"
+  },
+  "engine": {
+    "version": "Godot 4.7.2 standard",
+    "sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424"
+  },
+  "native": {
+    "elementalist": {
+      "checks": 661,
+      "captures": 15,
+      "failures": 0
+    },
+    "mage": {
+      "checks": 661,
+      "captures": 15,
+      "failures": 0
+    },
+    "swordsman": {
+      "checks": 661,
+      "captures": 15,
+      "failures": 0
+    },
+    "spiritualist": {
+      "checks": 447,
+      "captures": 15,
+      "failures": 0
+    }
+  },
+  "motion": {
+    "each_unit": {
+      "checks": 77,
+      "frames": 64,
+      "failures": 0,
+      "gif_duration_seconds": 6.4,
+      "gif_encoded_frames": 26
+    }
+  },
+  "verify": {
+    "unique_steps": 23,
+    "plan_steps": 317,
+    "checks": 28694,
+    "failures": 0,
+    "execution_errors": 0,
+    "timeouts": 0,
+    "composition": "10 valid regression_final1 head + 13 regression_final2 tail; repeats excluded"
+  },
+  "final_pck_harness": {
+    "units_checks": 10887,
+    "content_checks": 3461,
+    "producer_checks": 814,
+    "status": "PASS"
+  },
+  "retained_packs": [
+    {
+      "attempt": "promoted1",
+      "bytes": 100111052,
+      "sha256": "cd645c5df6da1d598904f99c1c42ab146caeb20a00e6047ef572a55fdadb7d00",
+      "present_and_matching": true
+    },
+    {
+      "attempt": "final2",
+      "bytes": 100111388,
+      "sha256": "778afecffdead1c060b98105ae6ffedc2a4a38e1706e38a4fd869aace3f2cb6b",
+      "present_and_matching": true
+    }
+  ],
+  "earlier_failures_preserved": [
+    "Elementalist staging1: Vector2 inference error",
+    "calibrated1: Array[StringName] typing error and 120s timeout",
+    "regression_final1 stage 19 parse error: three inferred bools"
+  ],
+  "report_sha256": "7ecd8529c5347dc7cf1a20101ac2443d18d290ad2d14c94e7df49cf265739f73",
+  "status": "integrity_pass; technical evidence review only; no product acceptance"
+}

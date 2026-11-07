@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-07",
+  "removed": [
+    {
+      "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\p4_units\\elementalist\\export_promoted1\\art_unit_validation.pck",
+      "action": "verified then removed exact temporary validation PCK only",
+      "sha256": "cd645c5df6da1d598904f99c1c42ab146caeb20a00e6047ef572a55fdadb7d00",
+      "bytes": 100111052,
+      "reviewed_by": "Luna"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\p4_units\\elementalist\\export_final2\\art_unit_validation.pck",
+      "action": "verified then removed exact temporary validation PCK only",
+      "sha256": "778afecffdead1c060b98105ae6ffedc2a4a38e1706e38a4fd869aace3f2cb6b",
+      "bytes": 100111388,
+      "reviewed_by": "Luna"
+    }
+  ],
+  "total_bytes": 200222440.0,
+  "preserved": "source assets, ZIP, hashes, logs, fixture, personal saves and accepted P3 playtest pack",
+  "luna_sha256": "a61c70157e04b697e225149aeeb8a58027d3fdedb028c0d3f924c01eae8a13bc",
+  "prior_guard": "First guard used a transcription typo in the message checksum; stopped before deletion. Actual report measured independently and matching report content then pinned."
+}

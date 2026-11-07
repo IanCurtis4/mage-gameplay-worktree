@@ -1,0 +1,38 @@
+{
+  "generator": "built-in imagegen",
+  "reference": "assets/art/animations/sentinel_weaponless.png",
+  "reference_sha256": "61fbea20734f64f35cfcc7e3d40e00c800a0ea47be69f085f2d61e56eaa7d6ea",
+  "sources": {
+    "east_source_v1.png": {
+      "sha256": "f1e7a7a4948f885f501390b0d4028c37e0af71a719cc9147c989546d362326ba",
+      "prompt": "Use case: stylized-concept. Asset: 4x4 pixel-art game animation sheet, real transparent RGBA background. Input is identity/style reference. Create independent RIGHT-facing profile Sentinel with silver hair, gray-green hood and cloak, ivory cloth and dark leather, light vigilant silhouette; match reference chibi proportions and soft pixel art. Four idle, four walk, four unarmed action, two hurt, two fallen death poses, in that row order. Each full figure fits its equal cell, consistent scale, floor and spacing. Exactly two arms and two separately visible empty gloved hands in every live pose; hands available for separately attached props. No bow, arrow, weapon, shield, effects, text, extra limbs, floor shadow or background."
+    },
+    "east_source_v2.png": {
+      "sha256": "a26450314052fd75e36268b11526a385c457a75cbee7e54651f4b056c197c004",
+      "prompt": "Use case: stylized-concept. Asset: square 4 columns by 4 rows game animation sprite sheet with exactly 16 total separate figures, transparent background, no extra rows. Reference: silver-haired Sentinel with gray-green hood and cloak, ivory cloth and dark leather. Distinct right-facing side profile, chibi pixel art. Row 1: four idle poses. Row 2: four walk poses. Row 3: four unarmed strike poses. Row 4: two hurt followed by two fallen death. Exactly two arms and two separated empty gloved hands on each standing figure. Consistent full-body scale and spacing. No weapons, bow, arrows, effects, text, shadow or background."
+    },
+    "west_source_v1.png": {
+      "sha256": "af58891742089c08f3581765c2047fb35f9f07f1548b6191ee5945949c7c3905",
+      "prompt": "Use case: stylized-concept. Asset: square 4 columns by 4 rows game animation sprite sheet with exactly 16 total separate figures, transparent background, no extra rows. Reference: silver-haired Sentinel with gray-green hood and cloak, ivory cloth and dark leather. Distinct LEFT-facing side profile, chibi pixel art. Row 1: four idle poses. Row 2: four walk poses. Row 3: four unarmed strike poses. Row 4: two hurt followed by two fallen death. Exactly two arms and two separated empty gloved hands on each standing figure. Consistent full-body scale and spacing. No weapons, bow, arrows, effects, text, shadow or background."
+    },
+    "east_source_v3.png": {
+      "sha256": "b8ba7630d6dadec7f5fa4530fc08228301c9befddab63586724241c24d0070fe",
+      "prompt": "Use case: precise-object-edit. Transparent 4x4 pixel-art spritesheet. Correct row 3 column 3: the right-facing Sentinel extends one fist forward; reveal the other empty gloved fist and attached forearm bent near torso, distinct from forward arm. Exactly two arms, two empty hands. Preserve the hood, silver hair, identity, pose, layout and other cells. No weapons, effects, text or background."
+    },
+    "west_source_v2.png": {
+      "sha256": "4cb8b966205af780e535da3bde7c8eff4ca533ecc736627ca7d878347497f86d",
+      "prompt": "Use case: precise-object-edit. Transparent 4x4 pixel-art spritesheet. Correct only row 2 column 4: show the walking left-facing Sentinel with two distinct empty gloved hands connected to exactly two arms; reveal hidden far glove from under cloak, keeping her pose. Preserve the hood, silver hair, identity, style, layout and other cells. No weapons, effects, text or background."
+    },
+    "east_source_v4.png": {
+      "sha256": "f6b91c6dfa5eff8940e500051b9351c84b47584cecc4ef592cdaeedd8aa9fcb3",
+      "prompt": "Use case: precise-object-edit. Transparent 4x4 pixel-art spritesheet. Correct ONLY row 3 column 2: the right-facing Sentinel has one forward fist visible; reveal her second empty gloved fist and forearm bent at side of torso, clearly distinct and connected to her shoulder. Exactly two arms, two empty hands; no third arm. Preserve hood, silver hair, identity, pose, pixel style, layout and all other cells. No weapons, effects, text or background."
+    }
+  },
+  "outputs": {
+    "body.png": "9b6d9855a24efbbf6593d7f43fd6c2aeae5d4b24d93e82e1e5e8122ca0e5180d",
+    "weaponless.png": "9b6d9855a24efbbf6593d7f43fd6c2aeae5d4b24d93e82e1e5e8122ca0e5180d",
+    "calibration.json": "50e5ee30a3ba24452013ad9ab3dbc43d65d0640f311b05bbb5ace1390b490443",
+    "presentation.json": "739d9f24aa3b5590fa4413a72b485afeabe3a2ec868d6e8ecb5b3434cc0af718"
+  },
+  "rgba_sha256": "23598d39b8a191a4956f8116c52e7d127bc538c2c0f708278d792cd5f9fc1611"
+}

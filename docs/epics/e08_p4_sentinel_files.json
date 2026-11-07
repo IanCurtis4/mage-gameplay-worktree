@@ -1,6 +1,6 @@
 {
   "base": "276efa9e6313a4d6bbef823adcf83a60f0f2f20f",
-  "owner": "Terra Sentinela only after dispatch",
+  "owner": "Root after complete Terra sentinel handback",
   "files": [
     "assets/art/e08_characters/directional/sentinel/source_recipe.json",
     "assets/art/e08_characters/directional/sentinel/body.png",
@@ -17,12 +17,14 @@
     "assets/art/e08_characters/directional/sentinel/east_source_v3.png",
     "assets/art/e08_characters/directional/sentinel/west_source_v1.png",
     "assets/art/e08_characters/directional/sentinel/west_source_v2.png",
-    "assets/art/e08_characters/directional/sentinel/west_source_v3.png"
+    "assets/art/e08_characters/directional/sentinel/west_source_v3.png",
+    "assets/art/e08_characters/directional/sentinel/east_source_v4.png"
   ],
   "shared_tools_read_only": [
     "tools/prepare_e08_directional_art.py",
     "tools/prepare_animation_assets.py"
   ],
   "native_source_read_only": "assets/art/animations/sentinel_weaponless.png",
-  "stage_path": "res://assets/art/e08_characters/directional/sentinel/presentation.json"
+  "stage_path": "res://assets/art/e08_characters/directional/sentinel/presentation.json",
+  "ownership_addition": "Root authorized v4 only for E action9 second real empty glove after3sources"
 }

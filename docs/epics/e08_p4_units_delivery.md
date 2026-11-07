@@ -127,3 +127,17 @@ executados permaneceram iguais; não foi repetida a suíte por essa edição
 documental. Novos assets/contratos futuros em arquivos disjuntos não entram
 nos2.431inputs congelados. Luna recebe esta prova por Root; nenhum rerun ou
 aceite de produto foi inferido do freeze.
+
+### Consolidação posterior Root/Luna
+
+Luna conferiu seleção válida, ZIP657,2431inputs e85hashes próprios, sem rerun ou
+auditoria visual independente. Recibos adicionais luna_supervision.md
+(SHA7ecd8529c5347dc7cf1a20101ac2443d18d290ad2d14c94e7df49cf265739f73)
+e luna_hashes.json (SHAa61c70157e04b697e225149aeeb8a58027d3fdedb028c0d3f924c01eae8a13bc)
+no diretório de evidência. A checksumJSON foi medida diretamente: a mensagem do
+agente continha erro de transcrição, que o guard detectou antes de remover nada.
+Após conferir relatório/arquivos, Root removeu somente os2PCKs temporários exatos,
+novamente comparando tamanho/SHA/path;200.222.440bytes liberados. Recibo
+validation_pack_cleanup.json. ZIP/fontes/logs/fixture/PCK aceito P3/save pessoal
+preservados. Presença relatada porLuna é anterior à remoção controlada. Próxima
+revisão de equipamento/cabelo terá inputs/recibo próprios.
