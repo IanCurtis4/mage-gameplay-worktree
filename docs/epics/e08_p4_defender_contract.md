@@ -41,3 +41,17 @@ toda calibração faltando. Entregar atlas+manifesto+calibração/receita/proven
 delivery, conferir32células nativas e112grips, devolver posse explicitamente a
 Root para posterior handoff Sol. Staging não é produto aceito/P4 completo;
 P5/master/push fora do escopo, habitual e saves preservados.
+
+## Correção concreta após inspeção ampliada —7/11
+
+O weaponless legado contém escudo em índice28 e espada em29. A preservação
+byte a byte acima é substituída SOMENTE para essas2células sul, permitindo
+limpeza autorada imagegen;30demais células S/N e todas E/W permanecem byte-id.
+Não é razão para congelar defeito conhecido num sprite definitivo. Root retomou
+posse após handback; nova delegação de correção depende deste contrato versionado.
+Fontes novas native_death_source_v1..v3 e native_cleaned.png256x512 preservam
+originais. A folha cleaned copia30células intactas e substitui28/29 por crops
+mecânicos dos2novos quadros sem arma/escudo, na escala/pivô nativos; não apagar
+raster por código. Receita usa cleaned como native_cells S/N. Recalibrar SOMENTE
+frames14/15 afetados e hash/metadata derivados; declarar30/32preservadas.
+Sem Godot/importação/fixture/commit ou alteração do packer compartilhado.
