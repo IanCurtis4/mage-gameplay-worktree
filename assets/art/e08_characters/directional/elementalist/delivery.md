@@ -1,0 +1,5 @@
+# Elementalista — entrega em staging
+
+Fonte do conceito da linha superior, quatro vistas independentes, 64 poses. Correções geradas de mãos na caminhada norte (poses 4 e 6) e repouso leste (pose 3); fontes e prompts mantidos em `provenance.json`, seleção exata em `source_recipe.json`. Atlas/weaponless e manifesto reproduzidos pelo produtor compartilhado, RGBA canônico `e529af7bd622457e8e659406d6060a84ca0a1607b34f55f9b66d6218d82f349a`.
+
+`calibration.json` contém 64 registros e 112 grips vivos. Pontos escolhidos em pranchas ampliadas, com candidatos de pele e verificação por pose; recortes 3×3. Verificação offline encontrou alpha nos 112 pontos dos dois corpos idênticos. As mãos em perfil têm poucos pixels, e os ângulos, recortes, profundidades e posição de capacete precisam de prova visual com equipamentos no renderer. Cabeças em poses de morte são aproximações autoradas, ainda não validadas em jogo. Nenhuma importação, fixture, runtime ou teste de gameplay foi executado por Terra. Staging não representa aceite artístico ou P4 concluído.

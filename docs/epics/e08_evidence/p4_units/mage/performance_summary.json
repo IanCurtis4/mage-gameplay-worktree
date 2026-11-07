@@ -1,0 +1,51 @@
+{
+  "states": {
+    "moving": {
+      "cost_legacy": {
+        "median_ms": 13.543,
+        "p95_ms": 17.258,
+        "cpu_median_ms": 8.541,
+        "cpu_p95_ms": 10.914
+      },
+      "cost_content": {
+        "median_ms": 13.26,
+        "p95_ms": 16.014,
+        "cpu_median_ms": 8.372,
+        "cpu_p95_ms": 10.312
+      },
+      "delta_percent": {
+        "median_ms": -2.089640404637083,
+        "p95_ms": -7.208251245799047,
+        "cpu_median_ms": -1.9786910197869156,
+        "cpu_p95_ms": -5.515851200293209
+      }
+    },
+    "idle": {
+      "cost_legacy": {
+        "median_ms": 13.217,
+        "p95_ms": 16.368,
+        "cpu_median_ms": 8.298,
+        "cpu_p95_ms": 10.798
+      },
+      "cost_content": {
+        "median_ms": 13.463,
+        "p95_ms": 17.591,
+        "cpu_median_ms": 8.39,
+        "cpu_p95_ms": 11.547
+      },
+      "delta_percent": {
+        "median_ms": 1.861239313005969,
+        "p95_ms": 7.471896383186727,
+        "cpu_median_ms": 1.108700891781167,
+        "cpu_p95_ms": 6.936469716614191
+      }
+    }
+  },
+  "retained_static_bytes": {
+    "cost_legacy": 927276.0,
+    "cost_content": 917828.0
+  },
+  "retained_incremental_bytes": -9448.0,
+  "triage_over_10_percent": false,
+  "triage_over_16_mib": false
+}

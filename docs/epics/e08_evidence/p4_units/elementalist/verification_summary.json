@@ -1,0 +1,29 @@
+{
+  "unit": "elementalist",
+  "status": "technically validated; product/gear redesign pending",
+  "unit_checks": 3629,
+  "unit_default_cold_restore": true,
+  "all_default_pixels_and64calibrations_match_staging": true,
+  "native": {
+    "checks": 661,
+    "captures": 15,
+    "binding": "default"
+  },
+  "motion": {
+    "raw_renderer_frames": 64,
+    "raw_frame_duration_ms": 100,
+    "encoded_frames": 26,
+    "duration_ms": 6400,
+    "shared_palette_colors": 256,
+    "dither": false,
+    "sha256": "1af239b692cfa2175cff64cc107047f87c5dc1f813dc85a2f1425ad0dae8c196"
+  },
+  "packed_checks": 3629,
+  "shared_pack": {
+    "sha256": "778afecffdead1c060b98105ae6ffedc2a4a38e1706e38a4fd869aace3f2cb6b",
+    "bytes": 100111388
+  },
+  "shared_regression_steps": 23,
+  "shared_regression_checks": 28694,
+  "supervision": "Sol author/technical validation; Luna integrity pending"
+}

@@ -1,0 +1,21 @@
+{
+  "generator": "image_gen integrado",
+  "reference_sha256": {
+    "assets\\art\\animations\\swordsman_weaponless.png": "03650b272fa0313b6742886f7e23905811b9b7ae3932a89c1841f2acb8dc346a",
+    "assets\\art\\animation_sources\\swordsman.png": "018470d303a57ebf95133516b2279cc083abdeb73845dde33b78e47728fb8d0c",
+    "assets\\art\\animation_sources\\swordsman_extra.png": "0cd777d83141e13c9ada694fb807d1feaf590ec21001d0dfeb20ea1a16b33359",
+    "assets\\art\\equipment\\hand_rigs.json": "bb02da7fc360a43930cd5cc155f1bc6c01985db802f78bf583a47ab611ea335c"
+  },
+  "source_sha256": {
+    "east_source_v1.png": "7f3f040b338577ac4e12c2f090e292663f2c263c1190c38fd1dd55173c489e83",
+    "west_source_v1.png": "6d54ef019fc4b0deae3f50cbc955b0f1b16e757f048ba356dae078380f7e9d67",
+    "west_source_v2.png": "0388bcef8ba8d1200168d894e1784c546cf5aba9e3a00f310cfa662187e0641e"
+  },
+  "prompts": {
+    "east_source_v1.png": "Use case: stylized-concept. Production 2D pixel-art game animation sheet. Reference SAME existing swordsman: short tousled brown hair, teal-blue and cream tunic, one simple steel shoulder guard, brown leather gloves, belt and boots, chibi proportions. Preserve design and existing pixel style. Create 4x4 separate full-body sprites in regular cells with transparent gaps, all facing EAST/right profile. Row1 idle four; row2 walking four; row3 four distinct sword-swing gestures (windup, raise, strike, recovery); row4 two hurt and two collapsed death poses in that profile. EXACTLY two anatomically connected arms and two distinct empty gloved hands in all living poses, clearly visible near and far, including hurt. No sword embedded: hands empty for separate equipment. No magical gestures, effects, text, grid, background or shadows. Genuine transparent background.",
+    "west_source_v1.png": "Use case: stylized-concept. Production 2D pixel-art game animation sheet. Reference SAME existing swordsman: short tousled brown hair, teal-blue and cream tunic, one simple steel shoulder guard, brown leather gloves, belt and boots, chibi proportions. Preserve design and existing pixel style. Create 4x4 separate full-body sprites in regular cells with transparent gaps, all facing WEST/left profile. Row1 idle four; row2 walking four; row3 four distinct sword-swing gestures (windup, raise, strike, recovery); row4 two hurt and two collapsed death poses in that profile. EXACTLY two anatomically connected arms and two distinct empty gloved hands in all living poses, clearly visible near and far, including hurt. No sword embedded: hands empty for separate equipment. No magical gestures, effects, text, grid, background or shadows. Genuine transparent background.",
+    "west_source_v2.png": "Precise edit this 4x4 swordsman sprite sheet. Change ONLY walking row 2 columns 2 and 4: both gloved empty hands clearly visible and separated, one hand in front and one behind torso in left profile, exactly two anatomically connected arms. Preserve the pose, identity, tunic, shoulder armor, scale and all other 14 sprites. No weapon or magic effects, genuine transparent background."
+  },
+  "recipe": "E v1; W v1 com poses 5 e 7 de v2; S/N nativos",
+  "atlas_rgba_sha256": "f58c0c4dfe628f71ae10d60e1d23a54eb69cf414304bf547e4a878baa2afb321"
+}

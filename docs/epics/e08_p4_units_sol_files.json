@@ -1,0 +1,90 @@
+{
+  "base": "6beb01cb4cd03d6e6133e7ac2a961aa151020875",
+  "owner": "Root; delegated Sol integration complete and listed ownership returned",
+  "files": [
+    "docs/epics/e08_p4_units_sol_contract.md",
+    "docs/epics/e08_p4_units_sol_files.json",
+    "docs/epics/e08_p4_units_delivery.md",
+    "docs/epics/e08_checkpoint.md",
+    "docs/epics/e08_dispatch.md",
+    "docs/EPIC_THREADS.md",
+    "docs/ARCHITECTURE.md",
+    "tools/e08_directional_unit_probe.gd",
+    "tools/e08_directional_unit_probe.gd.uid",
+    "tools/validate_e08_art_unit.ps1",
+    "tests/e08_directional_units_test.gd",
+    "tests/e08_directional_units_test.gd.uid",
+    "tests/fixtures/e08_directional/content_fixture.gd",
+    "tests/fixtures/e08_directional/content_fixture.gd.uid",
+    "tools/verify.ps1",
+    "tests/e08_characters_test.gd",
+    "tests/e06_appearance_integration_test.gd",
+    "tests/e05_elementalist_animation_test.gd",
+    "assets/art/animations/directional/elementalist/body.png",
+    "assets/art/animations/directional/elementalist/body.png.import",
+    "assets/art/animations/directional/elementalist/weaponless.png",
+    "assets/art/animations/directional/elementalist/weaponless.png.import",
+    "assets/art/animations/directional/elementalist/presentation.json",
+    "assets/art/animations/directional/mage/body.png",
+    "assets/art/animations/directional/mage/body.png.import",
+    "assets/art/animations/directional/mage/weaponless.png",
+    "assets/art/animations/directional/mage/weaponless.png.import",
+    "assets/art/animations/directional/mage/presentation.json",
+    "scripts/actors/equipment_attachment_visual.gd",
+    "tests/e08_directional_content_test.gd",
+    "tests/e08_directional_animation_test.gd",
+    "docs/epics/e08_p4_directional_contract.md",
+    "assets/art/animations/directional/swordsman/body.png",
+    "assets/art/animations/directional/swordsman/body.png.import",
+    "assets/art/animations/directional/swordsman/weaponless.png",
+    "assets/art/animations/directional/swordsman/weaponless.png.import",
+    "assets/art/animations/directional/swordsman/presentation.json",
+    "docs/epics/e08_p4_elementalist_files.json",
+    "docs/epics/e08_p4_mage_files.json",
+    "docs/epics/e08_p4_swordsman_files.json",
+    "tests/combat_animation_test.gd"
+  ],
+  "units": {
+    "elementalist": {
+      "ownership_file": "docs/epics/e08_p4_elementalist_files.json",
+      "state": "Technically validated and promoted; handback to Root; Luna integrity review pending"
+    },
+    "mage": {
+      "ownership_file": "docs/epics/e08_p4_mage_files.json",
+      "state": "Technically validated and promoted; handback to Root; Luna integrity review pending"
+    },
+    "swordsman": {
+      "ownership_file": "docs/epics/e08_p4_swordsman_files.json",
+      "state": "Technically validated and promoted; handback to Root; Luna integrity review pending"
+    }
+  },
+  "evidence_root": "docs/epics/e08_evidence/p4_units/",
+  "active_delegate": {
+    "owner": "/root/sol_art_units",
+    "started_2026_11_07": true,
+    "base": "0b8c962c1efde0c37962eb20aeb6df7c00570193",
+    "exclusive_fixture": ".godot/verification/e07_f1/fixture_project",
+    "scope": "three units plus V2 corpse equipment support; handback pending",
+    "resume_base": "276efa9e6313a4d6bbef823adcf83a60f0f2f20f",
+    "state": "complete; explicit handback accompanies this delivery commit",
+    "last_documental_base": "01d7eda9ba39af414e55c278c1c0dbade29f4168"
+  },
+  "ownership_additions": {
+    "tests/combat_animation_test.gd": "Sol exclusive before edit; preserve V1 pixel and clock oracle; new default checked by units/characters tests"
+  },
+  "interrupted_handback": {
+    "owner": "Root temporary continuation",
+    "reason": "Provider usage limit; delegate explicitly interrupted before transfer",
+    "complete": true,
+    "preserve_partial_evidence": true,
+    "temporary_root_revoked": "2026-11-07; same delegate resumed after provider usage limit"
+  },
+  "handback": {
+    "to": "Root",
+    "scope": "index, F1 fixture, listed common files and all three stage ownership lists",
+    "candidate_status": "technically validated; integrity review pending; no product acceptance",
+    "frozen_input_count": 2431,
+    "future_units_excluded": true,
+    "completed": true
+  }
+}

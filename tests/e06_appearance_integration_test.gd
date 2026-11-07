@@ -1,6 +1,6 @@
 extends SceneTree
 ## Actual player/run transactions, death copies and shared artwork; isolated profiles.
-const DIRECTIONAL_KINDS: Array[StringName] = [&"spiritualist"]
+const DIRECTIONAL_KINDS: Array[StringName] = [&"spiritualist", &"elementalist", &"mage", &"swordsman"]
 var checks := 0
 var failures := 0
 const IDENTITIES := {&"swordsman":&"swordsman",&"mage":&"mage",&"archer":&"archer",&"defender":&"swordsman",&"berserker":&"swordsman",&"elementalist":&"mage",&"spiritualist":&"mage",&"sentinel":&"archer",&"hunter":&"archer",&"mg_ar":&"mage"}

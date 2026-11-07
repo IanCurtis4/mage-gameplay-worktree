@@ -1,0 +1,1 @@
+{"actor_kind":"elementalist","target_height":50,"views":{"south":{"source":"south_source_v1.png"},"north":{"source":"north_source_v1.png","overrides":{"4":"north_source_v2.png","6":"north_source_v2.png"}},"east":{"source":"east_source_v1.png","overrides":{"3":"east_source_v2.png"}},"west":{"source":"west_source_v1.png"}}}

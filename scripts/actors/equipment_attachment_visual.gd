@@ -166,6 +166,14 @@ static func resolve_equipment(kind: StringName, state: CombatAnimationState, vis
 			var hand := Vector2(pose.point[0],pose.point[1])
 			var fingers: Array = pose.fingers
 			placed={"point":origin+hand,"angle":pose.get("angle_overrides",{}).get(String(key),float(PROFILES[key].angle)+float(pose.angle)),"depth":pose.get("depth_overrides",{}).get(String(key),int(pose.depth)),"flip":pose.flip,"grip":PROFILES[key].grip,"size":PROFILES[key].size,"finger_rect":Rect2(fingers[0],fingers[1],fingers[2],fingers[3]),"slot":slot,"key":key}
+			if state.dead:
+				# The corpse releases equipment onto the same local ground as V1.
+				# Local mirroring changes the rotated support, never the X anchor.
+				var support := _rotated_bottom(key,-float(placed.angle) if bool(placed.flip) else float(placed.angle))
+				var grounded: Vector2=placed.point
+				if state.pose_index()==15 or grounded.y+support>0.0:
+					grounded.y=-support
+					placed.point=grounded
 		if not placed.is_empty(): result.append(placed)
 	return result
 

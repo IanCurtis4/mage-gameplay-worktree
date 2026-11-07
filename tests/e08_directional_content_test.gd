@@ -1,5 +1,6 @@
 extends SceneTree
 ## Content acceptance exercises real pixels, authored rigs and the unchanged graph.
+const C = preload("res://tests/fixtures/e08_directional/content_fixture.gd")
 const D = preload("res://tests/fixtures/e08_directional/fixture.gd")
 const F = preload("res://tests/fixtures/e07/f2/fixture.gd")
 const MANIFEST := "res://assets/art/e08_characters/directional/spiritualist/presentation.json"
@@ -62,7 +63,13 @@ func run() -> void:
 					check(descriptor.head.view==direction, "helmet shares body direction")
 					for placed: Dictionary in descriptor.equipment:
 						var raw: Dictionary = bundle.frame(descriptor.frame).slots[String(placed.slot)]
-						check(placed.point==descriptor.origin+Vector2(raw.point[0],raw.point[1]), "equipment uses authored anatomical grip")
+						var expected: Vector2 = descriptor.origin+Vector2(raw.point[0],raw.point[1])
+						if not descriptor.dead:
+							check(placed.point==expected,"living equipment uses authored anatomical grip")
+						else:
+							check(is_equal_approx(placed.point.x,expected.x),"dropped equipment preserves authored X")
+							var bottom: float = C.equipment_bottom(placed)
+							check(absf(bottom)<0.05 if pose==15 else bottom<=0.05,"death equipment rests on/above the common ground")
 		actor.state=D.state(3,10)
 		check(actor.death_copy().render_descriptor().direction==3, "death retains real west view")
 	await integrated()

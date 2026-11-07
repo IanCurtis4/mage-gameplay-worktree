@@ -1,11 +1,11 @@
 extends SceneTree
+const V1 = preload("res://tests/fixtures/e08_directional/fixture.gd")
 
 var checks := 0
 var failures := 0
 
 func _initialize() -> void:
-	var elementalist := CharacterAnimation.new()
-	elementalist.configure(&"elementalist")
+	var elementalist := V1.legacy_animation(&"elementalist")
 	_check(elementalist.actor_kind == &"elementalist" and elementalist.atlas != null and elementalist.atlas.get_size() == Vector2(256, 512), "Elementalist resolves its own 32-frame atlas")
 	if elementalist.atlas != null:
 		var bitmap := elementalist.atlas.get_image()

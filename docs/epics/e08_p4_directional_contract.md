@@ -175,3 +175,10 @@ pixel opaco. Fixture geométrica não substitui essa entrega artística.
 O caminho sem anexos reutiliza _frame_for_view e a mesma compensação de pés,
 mas evita alocar descritor/rig sem comandos de equipamento. Não é renderer de
 gameplay paralelo. A regressão medida e sua correção constam do recibo.
+
+Nota de autoria7/11: head.flip é um toggle adicional ao espelhamento natural
+da vista oeste que o renderer já aplica; para capacete padrão usar false também
+no oeste. O flip local dos slots de arma é independente e não recebe esse
+espelhamento de vista. Itens V2 mortos seguem o chão comum: nenhuma penetração
+na queda e apoio no piso na pose assentada, com X/ângulo/localflip autorados.
+Essa correção segue a regra V1 e não muda clock/campos de ator/save.

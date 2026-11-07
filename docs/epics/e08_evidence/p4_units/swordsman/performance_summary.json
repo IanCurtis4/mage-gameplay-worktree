@@ -1,0 +1,51 @@
+{
+  "states": {
+    "moving": {
+      "cost_legacy": {
+        "median_ms": 14.015,
+        "p95_ms": 20.599,
+        "cpu_median_ms": 8.792,
+        "cpu_p95_ms": 13.023
+      },
+      "cost_content": {
+        "median_ms": 13.448,
+        "p95_ms": 16.417,
+        "cpu_median_ms": 8.424,
+        "cpu_p95_ms": 10.555
+      },
+      "delta_percent": {
+        "median_ms": -4.045665358544415,
+        "p95_ms": -20.301956405650756,
+        "cpu_median_ms": -4.185623293903551,
+        "cpu_p95_ms": -18.951086539199878
+      }
+    },
+    "idle": {
+      "cost_legacy": {
+        "median_ms": 13.073,
+        "p95_ms": 16.093,
+        "cpu_median_ms": 8.22,
+        "cpu_p95_ms": 10.14
+      },
+      "cost_content": {
+        "median_ms": 13.223,
+        "p95_ms": 17.245,
+        "cpu_median_ms": 8.282,
+        "cpu_p95_ms": 11.007
+      },
+      "delta_percent": {
+        "median_ms": 1.1474030444427408,
+        "p95_ms": 7.158391847387069,
+        "cpu_median_ms": 0.754257907542577,
+        "cpu_p95_ms": 8.550295857988166
+      }
+    }
+  },
+  "retained_static_bytes": {
+    "cost_legacy": 927356.0,
+    "cost_content": 917908.0
+  },
+  "retained_incremental_bytes": -9448.0,
+  "triage_over_10_percent": false,
+  "triage_over_16_mib": false
+}

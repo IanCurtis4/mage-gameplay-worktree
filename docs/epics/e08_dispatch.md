@@ -594,3 +594,19 @@ fontes/fixture/evidência/piloto/save preservados. [Consolidação](e08_evidence
 A narrativa de espera por Luna acima é histórica. Espiritualista tecnicamente
 consolidada; Elementalista em staging sob inspeção Sol e Mago preparado como
 próximo pacote em arquivos disjuntos. P4 continua aberto, P5 bloqueado.
+
+## Elementalista/Mago/Espadachim — integração delimitada7/11
+
+[Recibo e limites](e08_p4_units_delivery.md), [posse](e08_p4_units_sol_files.json).
+Três conjuntos64poses promovidos para descoberta automática; Mago/Espadachim
+conservam32células S/N nativas byte a byte. Novo teste exige todas as calibrações/
+pixels e cold restore pelo pathdefault real. Rigs/boots/alpha V1 permanecem em
+fixtures explícitas. Corrigido apoio dos itens V2 mortos sem mudar V1/save/clock.
+23etapas únicas/28.694checks PASS por impacto (10head compatíveis+13tail), com
+falhas de harness preservadas e corrigidas sem relaxar expectativas.
+Custos96atores sob limiares>10% e>16MiB; não certificam FPS dos mapas.
+Consolidação de PCK/nativos/movimento no recibo; conferência Luna coordenada por
+Root depois do freeze. Capacete/anexos atuais são provisórios e o redesenho novo
+fica em contrato separado. Outros conjuntos continuam com Root/artistas, fora
+desta fixture congelada. P4 aberto; P5–P7 não concluídos; sem master/push/playtest
+habitual ou save pessoal. As narrativas de staging acima são históricas.

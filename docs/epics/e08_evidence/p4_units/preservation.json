@@ -1,0 +1,20 @@
+{
+  "backups": {
+    "data/map_authoring/sanctuary_woods.map.json.bak": "6b8d52095b0d98ba4a436fd5b192ff732b98a8f5da02855646e7e21b9792bb4f",
+    "data/map_authoring/sanctuary_woods.population.json.bak": "3debc7674a1770702639e8bb33b1e6598c52929e9230395ccfbf505c1ed04889",
+    "data/map_authoring/sanctuary_woods_clearing.source.json.bak": "65a26754c437695d7e7d60e93980c187371fddeec4fb71f78323104dbb55ced5",
+    "data/map_authoring/sanctuary_woods_overpass.source.json.bak": "d0071096addfefcefad1f1df849c3977064a741b4ed1446ffaf50a3f25a95d7e"
+  },
+  "matches_previous_spiritualist_freeze": true,
+  "habitual_not_accessed_or_modified": true,
+  "personal_save_not_accessed_or_modified": true,
+  "excluded_future_units": [
+    "defender",
+    "berserker",
+    "archer",
+    "hunter",
+    "sentinel",
+    "geometer"
+  ],
+  "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424"
+}

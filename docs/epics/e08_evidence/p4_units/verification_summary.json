@@ -1,0 +1,220 @@
+{
+  "selected_unique_steps": 23,
+  "full_plan_steps": 317,
+  "checks": 28694,
+  "failures": 0,
+  "execution_errors": 0,
+  "timeouts": 0,
+  "composition": "10 valid head checks from regression_final1 plus13tail checks from regression_final2; only new unit test typing changed",
+  "earlier_failed_attempts_preserved": true,
+  "test_results": {
+    "e06_inventory_test": {
+      "attempt": "regression_final1",
+      "checks": 68,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "1bd9a4b87f549316d171ddef1a2cacf156ea80ec76a1af3de9d7d091192722a5",
+      "index": 3
+    },
+    "combat_animation_test": {
+      "attempt": "regression_final1",
+      "checks": 39,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "df1d52002e18c5524fa60801186a018cdbc71c91e0248051e38f6565c154fb1e",
+      "index": 10
+    },
+    "e08_presentation_test": {
+      "attempt": "regression_final1",
+      "checks": 2204,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "0e1ddd04a27392311fffec3289687f0d5f098fa9857204e7c0174256f0b8a4fe",
+      "index": 11
+    },
+    "e08_pilot_ui_test": {
+      "attempt": "regression_final1",
+      "checks": 55,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "42ed6a5f7aa350985378234ead5184ba255fb84ef586216efdecb54e7b3a874d",
+      "index": 12
+    },
+    "e08_audio_test": {
+      "attempt": "regression_final1",
+      "checks": 132,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "5f51892dd18d5a1105f325497bd403964385df39ebffa14be516c5a0b9653a3a",
+      "index": 13
+    },
+    "e08_pilot_test": {
+      "attempt": "regression_final1",
+      "checks": 125,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "5dcf56cb08a55986ee1be4c43d5fc8396067f20a1d7b668185bb9ebfeeb03127",
+      "index": 14
+    },
+    "e08_characters_test": {
+      "attempt": "regression_final1",
+      "checks": 966,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "c1dc66450ba408a151695310c6f30c60bceb610b5f08024785e3131d16e7ef8d",
+      "index": 15
+    },
+    "e08_directional_animation_test": {
+      "attempt": "regression_final1",
+      "checks": 814,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "f3b1a95db5367ab902cb07e7685fad6c33a8c10c53aa01b52dd65b81dc6d3fab",
+      "index": 16
+    },
+    "e08_directional_integration_test": {
+      "attempt": "regression_final1",
+      "checks": 84,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "6be2b53c8f07a98bab9161bd3fbd90235aadfa1a628d8629012a504a638f6f2e",
+      "index": 17
+    },
+    "e08_directional_content_test": {
+      "attempt": "regression_final1",
+      "checks": 3461,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "b4f85dded47ea1b48df58a310901cc3c2aebcca706530482c398ba9caa1823f6",
+      "index": 18
+    },
+    "e08_directional_units_test": {
+      "attempt": "regression_final2",
+      "checks": 10887,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "a03c982855758977cda9b2f3245ad46092e3bc3897dd05666e4800268f30b890",
+      "index": 19
+    },
+    "e05_spiritualist_visuals_test": {
+      "attempt": "regression_final2",
+      "checks": 23,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "513e8509315a7ba9bd54a0ab9f038a1aae8cf24b0502132ebdc9607c4b8fa24d",
+      "index": 117
+    },
+    "e05_elementalist_animation_test": {
+      "attempt": "regression_final2",
+      "checks": 7,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "7052d244df3253350a7211de5ae2df14fc43a08c03e0b717635f92bed82e0816",
+      "index": 156
+    },
+    "e06_ui_inventory_test": {
+      "attempt": "regression_final2",
+      "checks": 51,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "d8f2de1bc1717c8010b8aad2a410e1014142cedf00c47c689a250d4bac021c83",
+      "index": 214
+    },
+    "e06_appearance_integration_test": {
+      "attempt": "regression_final2",
+      "checks": 206,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "68ed38f6fc8fd3ccd08b2fbe151189abf23d5266a6b35329cdc52c6f5f1d912f",
+      "index": 229
+    },
+    "equipment_hand_alignment_test": {
+      "attempt": "regression_final2",
+      "checks": 4593,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "38a87bf0439bdb473aba8b25a1455d60554e8f41f99e1e0dc53853009a3c9145",
+      "index": 231
+    },
+    "e06_icon_bar_test": {
+      "attempt": "regression_final2",
+      "checks": 24,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "eb3f9abdaf6f6b129e2fe140e29916fcddecd3e077141bf2fe525a5703a692aa",
+      "index": 238
+    },
+    "e07_f7_presentation_test": {
+      "attempt": "regression_final2",
+      "checks": 27,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "e6dbd869650df8aff1e156d2300fbaaac49a2d4251c4951b5c97e17592da5f38",
+      "index": 263
+    },
+    "e07_f3_snapshot_test": {
+      "attempt": "regression_final2",
+      "checks": 52,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "9fc703c4ab2986ddaab73ed386092f3b8ab71a5ea82c4a7c3c781d2f6f06c0cc",
+      "index": 284
+    },
+    "e07_f3_continuation_test": {
+      "attempt": "regression_final2",
+      "checks": 2743,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "363698e32e808dd44c41c70ccfbf2315d3c8f5107673b2c42a5ea4e718a928f1",
+      "index": 285
+    },
+    "e07_f3_action_matrix_test": {
+      "attempt": "regression_final2",
+      "checks": 2004,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "98a042cb25723ef716898497cd97f16fbb23db6c28a806e9be5ddd79a106d57a",
+      "index": 286
+    },
+    "e07_f3_lifecycle_test": {
+      "attempt": "regression_final2",
+      "checks": 90,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "b5d444e6416a3460f73d27d1600dbf3be01c60cf59a689224fd01264c121d886",
+      "index": 287
+    },
+    "e07_f1_presentation_test": {
+      "attempt": "regression_final2",
+      "checks": 39,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "69f688370370f9985ccb61ac420f739ce3c7cec813d86a5f5c7026eae5639429",
+      "index": 313
+    }
+  },
+  "author": "Sol bounded integration; Luna integrity supervision pending"
+}

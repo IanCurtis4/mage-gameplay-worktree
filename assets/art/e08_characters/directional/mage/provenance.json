@@ -1,0 +1,26 @@
+{
+  "generator": "image_gen integrado",
+  "reference_sha256": {
+    "assets\\art\\animations\\mage_weaponless.png": "259ed65fcdca4f388a3bf96ae4f6e11084c43ab02f58524a51558d4b5b40d4c1",
+    "assets\\art\\animation_sources\\mage.png": "5adbb594dfd28005509b1af271376d7809a1db8b98ea3c4e440248bea2978e64",
+    "assets\\art\\animation_sources\\mage_extra.png": "5f0954a07f7a93c449b66afbbcab36b8f12f18d095a943ce4b9ccaa604fdaac7",
+    "assets\\art\\equipment\\hand_rigs.json": "bb02da7fc360a43930cd5cc155f1bc6c01985db802f78bf583a47ab611ea335c"
+  },
+  "source_sha256": {
+    "east_source_v1.png": "b7763edc9bbb119755545f160d4f47cf6739264dc689282622b0bf3d9b1f1df4",
+    "east_source_v2.png": "c20df4601231913cb82b012b746f7e3cf8efdcf02d7baa7482d8499a14c03b3e",
+    "east_source_v3.png": "74595fb422de4a0cda6daa8c1c20299e8bc96c360bbe18f5092616ccdf0afb21",
+    "west_source_v1.png": "db0f89597917ae89ce5ca871e7a6c88807e99c31e16cdea813dd00519b8d0114",
+    "west_source_v2.png": "cf5a120aeb9ca97dd0ef74e81be541deec29628a41650c89ed428520a654d3d0"
+  },
+  "prompts": {
+    "east_source_v1.png": "Use case: stylized-concept. Production 2D pixel-art game animation sheet. Reference images show the SAME existing mage: brown hair, floppy pointed purple hat with cream band, purple tunic with cream trim, brown belt and boots, chibi proportions. Preserve exact design and existing style. Create 4x4 separate full-body sprites in regular cells with transparent gaps, all facing EAST/right profile. Row1 idle four, row2 walking four, row3 action four, row4 two hurt and two collapsed death poses in that profile. EXACTLY two arms and two empty hands clearly visible and separated in all living poses; near and far hands separated, anatomically connected, including hurt. Do not embed the staff shown in reference: all hands empty for separate equipment. No weapons, effects, text, grid, background or shadows. Genuine transparent background.",
+    "west_source_v1.png": "Use case: stylized-concept. Production 2D pixel-art game animation sheet. Reference images show the SAME existing mage: brown hair, floppy pointed purple hat with cream band, purple tunic with cream trim, brown belt and boots, chibi proportions. Preserve exact design and existing style. Create 4x4 separate full-body sprites in regular cells with transparent gaps, all facing WEST/left profile. Row1 idle four, row2 walking four, row3 action four, row4 two hurt and two collapsed death poses in that profile. EXACTLY two arms and two empty hands clearly visible and separated in all living poses; near and far hands separated, anatomically connected, including hurt. Do not embed the staff shown in reference: all hands empty for separate equipment. No weapons, effects, text, grid, background or shadows. Genuine transparent background.",
+    "east_source_v2.png": "Edit this 4x4 sprite sheet. Retain each of sixteen poses, outfit, colors, empty hands and framing. Turn the head and torso of each living sprite clearly into EAST/right side profile: one visible eye and side-facing torso rather than frontal/three-quarter. Maintain exactly two separate anatomically connected empty hands, one near and one far. Death poses remain facing east. True transparent background, no props or effects. Preserve original purple hat, brown hair and tunic.",
+    "west_source_v2.png": "Edit this 4x4 sprite sheet. Change ONLY row 2 column 2 walking pose: show both empty hands clearly separated, one in front and one behind torso, with exactly two connected arms. Preserve all other fifteen sprites, pose, purple hat and brown hair, uniform scale, style and transparent background. No props or effects.",
+    "east_source_v3.png": "Precise edit: change ONLY first and fourth sprites in the top row. Both are east-facing idle profile and currently hide the far hand. Make TWO empty hands distinctly visible and separated, one slightly behind the torso and one in front of the torso, with exactly two plausible arms. Keep same profile, body scale, purple floppy hat and costume, all fourteen other cells unchanged. Transparent background, no weapons, effects or text."
+  },
+  "rejected": "east_source_v3: third hand in two idle poses; unused",
+  "recipe": "source_recipe.json selects E0/E3 v1, E others v2, W5 v2, W others v1; S/N native",
+  "atlas_rgba_sha256": "2defd07b164fa78c9e61292e2d240fdae89dc2eae6549ca57d765fb82f5f10df"
+}

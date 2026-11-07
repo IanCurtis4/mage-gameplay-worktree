@@ -1,4 +1,5 @@
 extends SceneTree
+const V1 = preload("res://tests/fixtures/e08_directional/fixture.gd")
 
 var checks := 0
 var failures := 0
@@ -33,8 +34,7 @@ func _initialize() -> void:
 			paced.advance(1.0 / fps, Vector2(220.0 / fps, 0))
 		_check(paced.frame_index() == 5, "walk phase follows compact stride consistently at %d Hz" % fps)
 	for id: StringName in [&"swordsman", &"mage", &"warrior", &"archer", &"defender", &"berserker"]:
-		var animation := CharacterAnimation.new()
-		animation.configure(id)
+		var animation := V1.legacy_animation(id)
 		_check(animation.atlas != null and animation.atlas.get_size() == Vector2(256, 512), "%s contains 32 native 64 px animation frames" % id)
 		if animation.atlas == null:
 			continue

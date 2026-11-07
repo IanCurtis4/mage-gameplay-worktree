@@ -1,7 +1,7 @@
 extends SceneTree
 ## P4: real imported body selection and immutable player animation boundaries.
 const KINDS: Array[StringName] = [&"swordsman", &"archer", &"mage", &"berserker", &"defender", &"hunter", &"sentinel", &"elementalist", &"spiritualist", &"geometer"]
-const DIRECTIONAL_KINDS: Array[StringName] = [&"spiritualist"]
+const DIRECTIONAL_KINDS: Array[StringName] = [&"spiritualist", &"elementalist", &"mage", &"swordsman"]
 var checks := 0
 var failures := 0
 func _initialize() -> void:
