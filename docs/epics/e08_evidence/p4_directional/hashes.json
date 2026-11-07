@@ -1,12 +1,12 @@
 {
   "base": "e10bf71d91d0e9271d9792ed04e211ab8ca17112",
   "source_count": 2352,
-  "source_manifest_sha256": "b7ef571bbeebf0d9332bef474384d6f7177f0ac1409312922e24459a5a0984da",
+  "source_manifest_sha256": "832230320dbf502c5fc4ac3baccbfcc0a1de99309954077bbca2e18956d5a1d8",
   "archive": {
     "path": "docs/epics/e08_evidence/p4_directional/evidence.zip",
-    "sha256": "34e87db2b69198297dc8065255b1f7a464d15eb4077af823aaed9ccfe352eda0",
-    "bytes": 3904171,
-    "members": 388
+    "sha256": "34168de68ce6ac43927c93a27892cece30f6b8ef5e6395e1f33734531b2d36c2",
+    "bytes": 3904642,
+    "members": 389
   },
   "members": {
     "bootstrap1/246-e07_f1_import_test.engine.log": "5c66d84c8e0c37f7532b03c09aa106211a47a91eb531c35980082849c2d65a65",
@@ -226,9 +226,9 @@
     "inputs/current/tools/e08_directional_probe.gd": "c068ff854f1b39c7260bf7e4c08d1fbf3f13f3130b772bfaa382ba597d5fd49d",
     "inputs/current/tools/e08_directional_probe.gd.uid": "31b9567c4fb81fde170462894b265572d8b9c7b9fd18b219a54a52c9c9facf6e",
     "inputs/current/tools/prepare_e08_directional_fixture.py": "bcff8d49f81d29d322fd5893a7460ccb11cd274c52e03d176c8cf1d608f3388d",
-    "inputs/current/tools/validate_e08_directional.ps1": "35bf0a2e294d05b289e88a72ad2c9817101d86729edf8c5a350666d6983eb73e",
+    "inputs/current/tools/validate_e08_directional.ps1": "db043dfe00a307f9b1cba18fbc69b95f6b7bcbc28a7488924fc5a279ce318af1",
     "inputs/current/tools/verify.ps1": "528307e536ef5b14b3f680f32c230be75d3cfca4c67a3c2c23729d3018e1543d",
-    "inputs/final_source_hashes.json": "b7ef571bbeebf0d9332bef474384d6f7177f0ac1409312922e24459a5a0984da",
+    "inputs/final_source_hashes.json": "832230320dbf502c5fc4ac3baccbfcc0a1de99309954077bbca2e18956d5a1d8",
     "inputs/tested/validate_e08_directional.ps1": "35bf0a2e294d05b289e88a72ad2c9817101d86729edf8c5a350666d6983eb73e",
     "inputs/tested_source_hashes.json": "b7ef571bbeebf0d9332bef474384d6f7177f0ac1409312922e24459a5a0984da",
     "integration1/017-e08_directional_integration_test.engine.log": "4c8e5c5aa0de49a905dc44b11fa3ba6e4a53b037a949004f153e058141e681a3",
@@ -270,7 +270,8 @@
     "performance_fix/previous/tests/e08_directional_animation_test.gd": "c98c20d9226a217a09404dd531fcc2d949fdd63a6fb2633ee92e8127629ff86c",
     "performance_fix/previous/tools/e08_directional_cost_probe.gd": "203d60f2cd884610fefc8b69ed53e28a6fd3f2091e267ab65c5e0522fbcf149f",
     "performance_fix/previous/tools/validate_e08_directional.ps1": "74e08a55890eef5f8ab2d8f5c01f00fa6255c5a3ed1d183381306d5b90742e73",
-    "post_validation/wrapper_whitespace_delta.json": "32f636879e0803fddc8030c0273fe0d73f4c16723b38ab7a50f61375a8fd8fce",
+    "post_validation/formatting_attempt_no_change.json": "32f636879e0803fddc8030c0273fe0d73f4c16723b38ab7a50f61375a8fd8fce",
+    "post_validation/wrapper_whitespace_delta.json": "bf7564836c2af81f5f700aa329fcc768ecdf9da39c34802e6b7d407d34f231af",
     "regression1/003-e06_inventory_test.engine.log": "4267a1d9b78dd981f096442a85e76f3d9a97593e8f0dc1d66a0db7441cbcd22d",
     "regression1/003-e06_inventory_test.output.log": "1bd9a4b87f549316d171ddef1a2cacf156ea80ec76a1af3de9d7d091192722a5",
     "regression1/010-combat_animation_test.engine.log": "93de56f18131527bef7e074074477b21e409365bd02c190b9d05a2293ae9d42d",
@@ -413,7 +414,7 @@
     }
   },
   "engine": {
-    "path": "C:\\Users\\JoÃ£o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+    "path": "C:\\Users\\JoÃƒÂ£o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
     "sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424"
   },
   "backups": {
@@ -436,9 +437,9 @@
   "status": "producer ready for limited technical consolidation; P4 content not complete",
   "post_validation_whitespace": {
     "before_wrapper_sha256": "35bf0a2e294d05b289e88a72ad2c9817101d86729edf8c5a350666d6983eb73e",
-    "after_wrapper_sha256": "35bf0a2e294d05b289e88a72ad2c9817101d86729edf8c5a350666d6983eb73e",
+    "after_wrapper_sha256": "db043dfe00a307f9b1cba18fbc69b95f6b7bcbc28a7488924fc5a279ce318af1",
     "tested_wrapper_member": "inputs/tested/validate_e08_directional.ps1",
     "tested_manifest_member": "inputs/tested_source_hashes.json",
-    "detail": "Only one trailing space removed from CandidatePack parameter; staged check now clean. No runtime/test/texture changes or rerun."
+    "detail": "One actual trailing space removed preserving CRLF; earlier LF-only edit was a no-op, retained in history. Tested source and manifest retained; no executable change/rerun."
   }
 }

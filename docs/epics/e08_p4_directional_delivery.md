@@ -128,8 +128,8 @@ instrumentada usa o mesmo PCK otimizado e o MESMO script externo nos seis casos.
 [medidas](e08_evidence/p4_directional/performance_summary.json),
 [ZIP portátil](e08_evidence/p4_directional/evidence.zip).
 
-ZIP388membros,3904171B, SHA256
-34e87db2b69198297dc8065255b1f7a464d15eb4077af823aaed9ccfe352eda0. Perfis/saves/cache/builds não entram no ZIP.
+ZIP389membros,3904642B, SHA256
+34168de68ce6ac43927c93a27892cece30f6b8ef5e6395e1f33734531b2d36c2. Perfis/saves/cache/builds não entram no ZIP.
 
 ## Próximo consumidor e preservação
 

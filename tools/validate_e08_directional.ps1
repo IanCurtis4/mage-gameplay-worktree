@@ -1,7 +1,7 @@
 param(
     [ValidateSet('import','native','export','cost')][string]$Stage='native',
     [string]$EvidenceName='final',
-    [string]$CandidatePack='' 
+    [string]$CandidatePack=''
 )
 $ErrorActionPreference='Stop'
 $taskRoot=Split-Path -Parent $PSScriptRoot
