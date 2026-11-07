@@ -51,3 +51,27 @@ Novo pedido cabelo/rosto documentado em e08_p4_head_fit_contract.md. Mago será
 primeiro caso completo de corpo com cabelo exposto SOMENTE quandohead equipado;
 aparência aprovada sem equipamento permanece original. Novo artista tem posse
 só após dispatch do contrato/lista específicos. Corpos inimigos ainda pendentes.
+
+DispatchRootGel: contratoNPC+toolversionadosa23a84c2; RootúnicoescritorstageGel/lista. Solíndice/fixture/exclusivostestados; TerraArcher/Geometeretapaspróprias. SemnovoAI/loot.
+
+## Retomada após limite/primeira cabeça —7/11
+
+Clock retornou22:42UTC(19:42BRT), após reset19:39 informado pelo provedor. Root
+retomou Sol e as duasTerras sem sobrescrever parciais. Índice/fixture seguemSol.
+Todos10jogadores têm4vistas completas: Spirit/Element/Mage/Sword default validados;
+Def/Bers/Hunter/Sentinel/Geometer/Archer completos emstaging, nativo ainda pendente.
+Todos6corposNPC agora completos emstaging: gel,warrior,beast_master,animal_companion,
+forestwolf/boar. Root conferiu32S/N exatas,64grounds,4blocos eRGBA de todos;
+consumidores/overrides/ArcherNPC/renderer/PCK ainda pendentes. Não confundir catálogo
+NPC de teste com ocorrência publicada. Hashes em p4_npc_authoring_checks.json.
+
+Sol primeira prova realMago passou: unidade2589,nativo5568/35capturas,14IDs×64,
+7props×64,4vistas,UI real,olhos/capuzorigem/equipar-remover preservados. Ajustou
+somentehead.pointY +4pxnas64poses apóscomparar; fontebare_headce94intacta. Isso
+libera as4bases de cabelo restantes (contrato+wrappernovos), não aceitehumano/P4.
+Custo apósrepetiçãoquieta: móvelCPU8,138/9,288→6,840/9,333ms, parado8,193/10,409→
+6,874/9,300; retenção -32544B. Tailinicial13,9%nãoreproduzido;ambas medidas ficarão
+no reciboSol. Ele segue verify/export/consolidação, sem incluirRootnovosstages.
+Root tem UMA janela temporária do índice só para commit de arte/contratosdisjuntos,
+e devolverá explicitamente antes de qualquer novoGitSol. Próxima execuçãoartistica
+4bareheadunidades depende do contrato/lista versionados neste lote.

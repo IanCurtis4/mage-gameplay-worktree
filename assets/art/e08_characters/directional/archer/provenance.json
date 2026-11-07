@@ -1,0 +1,23 @@
+{
+  "generator": "image_gen integrado",
+  "reference_sha256": {
+    "assets\\art\\animations\\archer_weaponless.png": "05967819d2c527a5c713881f05b768f3c845b5db4ab6bacc797be9a767d8e582",
+    "assets\\art\\animation_sources\\archer.png": "747bdd4d5fd2943298490606bbb50d6961a99fcefddd87835d242ff51ff6c372",
+    "assets\\art\\animation_sources\\archer_extra.png": "f90f96b575c21e6ec60e6804dbda6e2c7b4a0d6c8a170c262a29906e713e1779",
+    "assets\\art\\equipment\\hand_rigs.json": "bb02da7fc360a43930cd5cc155f1bc6c01985db802f78bf583a47ab611ea335c"
+  },
+  "source_sha256": {
+    "east_source_v1.png": "3d57c8226a94bebcb6331c15d70c886cb34ffa81fbac542cb955ee561018da00",
+    "east_source_v2.png": "9bc79aa6cbfc29d00808c1080a4deafc56b62e686487fa1335744a43892f3742",
+    "west_source_v1.png": "1c65c6775b832043491b14dd1d56350e8853b6d05532a75d71d4adf7d3436a75",
+    "west_source_v2.png": "4fef4342ef940d646d9369a58626a43b565d281acac93ecb9718a763e07ae450"
+  },
+  "prompts": {
+    "east_source_v1.png": "Use case: stylized-concept. Production pixel-art game animation source. Reference SAME existing young archer: brown hair, ochre olive hood, red scarf, yellow ochre tunic, brown leather gloves and boots, quiver on back, chibi proportions and matching crisp pixel style. Create regular 4x4 sheet of separate full-body sprites all facing EAST/right profile, transparent gaps. Row1 idle four, row2 walk four, row3 four distinct archery actions (ready, draw, release, recover), row4 two hurt and two collapsed death poses in that profile. Exactly TWO anatomically connected arms and TWO empty gloved hands distinctly visible in each living pose; near and far hands separated, suitable for a separately attached bow. No bow or arrows in hands, no shield, extra arm, VFX, text, grid, background or shadow. Preserve hood, red scarf, colors, proportions and lighting. Genuine transparent background.",
+    "west_source_v1.png": "Use case: stylized-concept. Production pixel-art game animation source. Reference SAME existing young archer: brown hair, ochre olive hood, red scarf, yellow ochre tunic, brown leather gloves and boots, quiver on back, chibi proportions and matching crisp pixel style. Create regular 4x4 sheet of separate full-body sprites all facing WEST/left profile, transparent gaps. Row1 idle four, row2 walk four, row3 four distinct archery actions (ready, draw, release, recover), row4 two hurt and two collapsed death poses in that profile. Exactly TWO anatomically connected arms and TWO empty gloved hands distinctly visible in each living pose; near and far hands separated, suitable for a separately attached bow. No bow or arrows in hands, no shield, extra arm, VFX, text, grid, background or shadow. Preserve hood, red scarf, colors, proportions and lighting. Genuine transparent background.",
+    "east_source_v2.png": "Edit ONLY row 2 column 4 walking sprite: make both empty gloved hands visible and distinctly separated, one behind torso and one in front, exactly two anatomically connected arms. Preserve east profile, stride, all other 15 sprites, hood, scarf, costume, scale, pixel art and true transparent background. No bow or other equipment in hands.",
+    "west_source_v2.png": "Edit ONLY row 2 columns 3 and 4 walking sprites: make both empty gloved hands visible and distinctly separated, one behind torso and one in front, exactly two anatomically connected arms in each. Preserve west profile, strides, all other 14 sprites, hood, scarf, costume, scale, pixel art and true transparent background. No bow or other equipment in hands."
+  },
+  "recipe": "E v1 com pose7 v2; W v1 com poses6/7 v2; S/N nativos",
+  "atlas_rgba_sha256": "139abb741381e07dc6af6acc5ad03c640af5b6c5f46d513f6449e70f777625d8"
+}

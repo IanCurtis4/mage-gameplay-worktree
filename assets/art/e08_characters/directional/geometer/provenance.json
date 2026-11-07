@@ -1,0 +1,30 @@
+{
+  "generator": "built-in imagegen",
+  "reference": "assets/art/animations/geometer_weaponless.png",
+  "reference_sha256": "32cf522d35ee0eb03aacf532065c48b66bcd989ef5cd0876d44a8be5f7a32489",
+  "sources": {
+    "east_source_v1.png": {
+      "sha256": "a37b27faba286f8090650fe2a490cf878529e631d4a3c6236be3ec0cfd138e70",
+      "prompt": "Use case: stylized-concept. Asset: square transparent 4 columns by 4 rows pixel-art game animation sheet, exactly 16 figures. Reference image: Geometer, pale silver hair, blue-violet and ivory geometric robe and cap, distinctive cloth details. Preserve identity and chibi pixel style; independent RIGHT-facing side profile. Row 1 four idle, row 2 four walk, row 3 four unarmed action, row 4 two hurt then two fallen death. Exactly two arms and two distinct visible empty hands on every standing pose; no staff, weapons, held props, effects, text, extra limbs, shadow or background. Consistent full body size and equal cell spacing."
+    },
+    "west_source_v1.png": {
+      "sha256": "7e637162ab862edbe3311e0a0c758662ab70c0afc51f09ee3b8c11add74e3307",
+      "prompt": "Use case: stylized-concept. Asset: square transparent 4 columns by 4 rows pixel-art game animation sheet, exactly 16 figures. Reference image: Geometer, pale silver hair, blue-violet and ivory geometric robe and cap, distinctive cloth details. Preserve identity and chibi pixel style; independent LEFT-facing side profile. Row 1 four idle, row 2 four walk, row 3 four unarmed action, row 4 two hurt then two fallen death. Exactly two arms and two distinct visible empty hands on every standing pose; no staff, weapons, held props, effects, text, extra limbs, shadow or background. Consistent full body size and equal cell spacing."
+    },
+    "west_source_v2.png": {
+      "sha256": "9844fde9c3d00282b6ea06908c7e0f3ae8c74b0f1d48ae0ae95830fec96fffbf",
+      "prompt": "Use case: precise-object-edit. Transparent 4x4 pixel-art spritesheet. Correct only row 2 column 3: the left-facing walking Geometer must show two distinct empty hands each attached to one of exactly two arms; reveal the hand hidden behind the robe at the side. Preserve silver hair, blue-violet and ivory costume, pose, pixel style, layout and all other cells. No weapons, text, effects or background."
+    },
+    "west_source_v3.png": {
+      "sha256": "0824081c94f78cbfe54e814bdbafad5e363d961801ed74e0814b899f4fb9377c",
+      "prompt": "Use case: stylized-concept. Create a transparent 4x4 pixel art spritesheet, exactly 16 sprites. Geometer in reference: pale silver hair, blue-violet and ivory geometric robe and cap. Every sprite must be a strict LEFT FACING SIDE PROFILE: nose points left, only one eye visible, torso and feet oriented left, not front-facing or three-quarter. Row1 four idle, row2 four walk, row3 four unarmed actions, row4 two hurt then two fallen death. Exactly two distinct empty hands in each live pose; no weapons, staff, effects, text, backdrop, shadow, or extra limbs. Chibi game sprites aligned in equal cells."
+    }
+  },
+  "outputs": {
+    "body.png": "e85b5300fd22d9064ac00c2825001ebd92281ad01f0afd85815bf8d2a69540aa",
+    "weaponless.png": "e85b5300fd22d9064ac00c2825001ebd92281ad01f0afd85815bf8d2a69540aa",
+    "calibration.json": "c087f2dbc37267af400d0e8a71d7b86fc260595e1f7555ce342d12aec70dd9fe",
+    "presentation.json": "75afc54e1960399dba244cd5c51202f8b1572d0e98759f1aa3b15ac80596713e"
+  },
+  "rgba_sha256": "bcc8f63989a91aba39175be065774842b57d41b78080782ab2114acd60e9f731"
+}

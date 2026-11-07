@@ -1,0 +1,24 @@
+{
+  "author": "Root",
+  "generator": "OpenAI built-in image_gen, transparent_background=true",
+  "reference": {
+    "path": "assets/art/animations/gel.png",
+    "sha256": "5d3398228e0fa14563d4f7847bc3effa55ec5e46f8249da0e82acb7dd9505a32"
+  },
+  "source_sha256": {
+    "east_source_v1.png": "10cab7b7d669c24f93932e71cb5d2319dbe69911028d73e9d59143360749d759",
+    "west_source_v1.png": "6f40dd60d05ce425a22953111e63178a5b9630f5b2517f618c227963defbbf9b"
+  },
+  "prompts": {
+    "east_source_v1.png": "Use case: stylized-concept. Production 2D RPG enemy sprite animation source, original artwork. The reference is the EXISTING amber/orange gel enemy with tiny leaf sprout, not a style sheet to copy into this output. Maintain this exact creature identity: small friendly round translucent golden-orange slime with glossy warm highlights, dark brown eyes and small mouth, one green stem bearing two green leaves. Match its soft hand painted chibi game-sprite shading. A regular 4 by 4 grid of 16 isolated full-body poses, generous empty transparent gaps, no grid lines or text. Row1 four breathing idle poses; row2 four squash-and-stretch locomotion poses; row3 four physical gel body lunge/attack poses; row4 two recoil/hurt poses followed by two death poses with wilted leaves and flattened puddle. No weapons, no equipment, no fireball/projectile/magic/VFX, no new features or limbs. Transparent background, no ground shadows. Preserve leaf anatomy, stable body volume/color and readable silhouette across animation. ALL sprites face EAST/right in genuine side profile; eye and mouth located toward right-facing front edge. Use one visible near eye as appropriate for this side view, not a frontal two-eye face. Draw independent side-specific poses, not a horizontally flipped frontal view. Keep feet/puddle within its own cell.",
+    "west_source_v1.png": "Use case: stylized-concept. Production 2D RPG enemy sprite animation source, original artwork. The reference is the EXISTING amber/orange gel enemy with tiny leaf sprout, not a style sheet to copy into this output. Maintain this exact creature identity: small friendly round translucent golden-orange slime with glossy warm highlights, dark brown eyes and small mouth, one green stem bearing two green leaves. Match its soft hand painted chibi game-sprite shading. A regular 4 by 4 grid of 16 isolated full-body poses, generous empty transparent gaps, no grid lines or text. Row1 four breathing idle poses; row2 four squash-and-stretch locomotion poses; row3 four physical gel body lunge/attack poses; row4 two recoil/hurt poses followed by two death poses with wilted leaves and flattened puddle. No weapons, no equipment, no fireball/projectile/magic/VFX, no new features or limbs. Transparent background, no ground shadows. Preserve leaf anatomy, stable body volume/color and readable silhouette across animation. ALL sprites face WEST/left in genuine side profile; eye and mouth located toward left-facing front edge. Use one visible near eye as appropriate for this side view, not a frontal two-eye face. Draw independent side-specific poses, not a horizontally flipped frontal view. Keep feet/puddle within its own cell."
+  },
+  "rgba_sha256": "6596a11ad02aff3563886aa6bd475f97411d71507d161f1d18f075a331f802c6",
+  "scale": 0.2,
+  "native_idle_height": 38.5,
+  "native_cells_unchanged": 32,
+  "grounds_checked": 64,
+  "direction_blocks_distinct": 4,
+  "metadata": "Unused slots/invisible head are format placeholders for an unequipped NPC, not authored equipment anatomy.",
+  "west_source": "Source has low-alpha cream background; existing connected-component/matte pipeline and final alpha128 normalization discard it. Inspected final atlas without visible background."
+}

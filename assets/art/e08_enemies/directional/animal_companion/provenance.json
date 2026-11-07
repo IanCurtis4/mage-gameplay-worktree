@@ -1,0 +1,29 @@
+{
+  "generator": "built-in imagegen",
+  "reference": "assets/art/animations/animal_companion.png",
+  "reference_sha256": "f76ccc2391ccfd2cadedbd702a24aa52e8c63f5cb39410157f56c85b981c9d6b",
+  "sources": {
+    "east_source_v1.png": {
+      "sha256": "7d0708e9b2f2ef40868b2df2fd0577f822c1464d586b795423dcb6e8b2252a88",
+      "prompt": "Use case: stylized-concept. Asset: transparent 4x4 pixel-art game companion animation sheet with exactly 16 figures. Input is reference for the small cream and golden fennec fox familiar: exceptionally large upright ears, pale cream belly, warm tan fur, small quadruped body and large fluffy cream-tipped tail. Preserve reference identity and hand-drawn chibi pixel style; distinct from gray forest wolf. Create independent RIGHT-facing side profile. Row 1 four idle, row 2 four walk, row 3 four physical pounce/attack, row 4 two hurt and two fallen death. Four anatomically coherent legs and one tail per living figure. Full body each equal cell, consistent scale and ground. No equipment, effects, magic, gore, text, background, floor shadow or extra limbs."
+    },
+    "west_source_v1.png": {
+      "sha256": "386f8cc616e7e84785281af466c1b0f907adbb01a6d33fde0c616336bfbd3da1",
+      "prompt": "Use case: stylized-concept. Asset: transparent 4x4 pixel-art game companion animation sheet with exactly 16 figures. Input is reference for the small cream and golden fennec fox familiar: exceptionally large upright ears, pale cream belly, warm tan fur, small quadruped body and large fluffy cream-tipped tail. Preserve reference identity and hand-drawn chibi pixel style; distinct from gray forest wolf. Create independent LEFT-facing side profile. Row 1 four idle, row 2 four walk, row 3 four physical pounce/attack, row 4 two hurt and two fallen death. Four anatomically coherent legs and one tail per living figure. Full body each equal cell, consistent scale and ground. No equipment, effects, magic, gore, text, background, floor shadow or extra limbs."
+    }
+  },
+  "outputs": {
+    "body.png": "77ef59f2a0aa5b902cfcb16ce1396fc4761e2adbfa5fdf9211ac49dcdb6a3350",
+    "calibration.json": "c2dd7784d40970fc32f62ee6013d17b8c8a546798344ce4b8a9aa521066ff3e6",
+    "presentation.json": "ce9eec88c813e7f390d84e809b5bdd903afe43bab9d7a53198e3ab131912bd74"
+  },
+  "rgba_sha256": "3eaec7a3ce33e72841f78c15e3ed3fe369447b8caf47ea615d2df84676083007",
+  "direction_sha256": [
+    "6f6a82b9e1049c62abb3a0dfbbe59ce5e991a7e2e3a3491460d4cf4c379abd0c",
+    "6286a11cd8868f8e71949184f6d834f177e39cfd4150707a32239518e5684c61",
+    "f4dfbd4d3b207ee10cf7f4a8da4c6fbbb8956baaaf3002f593f6a0ac55b4151d",
+    "1bd3fc9c30f81a8f8e151569ca5c551058616bbc8c8203f9caf4534df73e66d5"
+  ],
+  "native_idle_height": 50.0,
+  "scale": 0.20640569395017794
+}

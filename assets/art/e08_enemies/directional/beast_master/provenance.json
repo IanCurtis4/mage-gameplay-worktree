@@ -1,0 +1,17 @@
+{
+  "generator": "image_gen integrado",
+  "reference_sha256": {
+    "assets\\art\\animations\\beast_master.png": "0e00657a31377f8171cce242b2dbaf425df5c97d183f98aa7226c2e98bfc47b5",
+    "assets\\art\\animation_sources\\fixes_mobs\\beast_master.png": "06a4dc747d55c0b61e60e22848139767a7ca65026e1c2a6fb6536c919f8bfc3f",
+    "assets\\art\\animation_sources\\fixes_mobs\\beast_master_extra.png": "cb4ee178624ee3df58ed96b90baa2d3d1b798e5272d1c2c4c92794ce41e0d248"
+  },
+  "source_sha256": {
+    "east_source_v1.png": "5cf9cd84d96c905fb7f65829827b95a332d81c05552551d22a9eebcf851de1be",
+    "west_source_v1.png": "963f763cb25d5785f9d96f267aedcad04b8c6614d0875fca73eab4829dc479f0"
+  },
+  "prompts": {
+    "east_source_v1.png": "Use case: stylized-concept. Production pixel-art game animation source sheet for an EXISTING NPC. Reference SAME green-hooded young humanoid archer with brown hair, forest-green cloak, cream tunic, brown leather gear, quiver and wooden bow. Keep chibi proportions and style. Create 4x4 regular full-body sprites with transparent gaps, all facing EAST/right profile. Row1 idle four, row2 walk four, row3 four distinct bow attack poses (ready, draw, release, recovery), row4 two hurt and two collapsed death poses in same direction. Each living pose has exactly two anatomically connected arms and hands and the SAME wooden bow held naturally; in death the bow rests beside the body. Bow is deliberately part of this NPC sprite. No additional animals, creatures, magical effects, projectiles in flight, text, grid, shadow or background. Genuine transparent background.",
+    "west_source_v1.png": "Use case: stylized-concept. Production pixel-art game animation source sheet for an EXISTING NPC. Reference SAME green-hooded young humanoid archer with brown hair, forest-green cloak, cream tunic, brown leather gear, quiver and wooden bow. Keep chibi proportions and style. Create 4x4 regular full-body sprites with transparent gaps, all facing WEST/left profile. Row1 idle four, row2 walk four, row3 four distinct bow attack poses (ready, draw, release, recovery), row4 two hurt and two collapsed death poses in same direction. Each living pose has exactly two anatomically connected arms and hands and the SAME wooden bow held naturally; in death the bow rests beside the body. Bow is deliberately part of this NPC sprite. No additional animals, creatures, magical effects, projectiles in flight, text, grid, shadow or background. Genuine transparent background."
+  },
+  "atlas_rgba_sha256": "2f8934ca7c2ad66ed91bf93e4ac130dfa52f995cbeb8e5529c28e3c21397cc7a"
+}

@@ -1,0 +1,53 @@
+{
+  "role": "Root independent offline hash/pixel/metadata review; not native or gameplay acceptance",
+  "units": {
+    "warrior": {
+      "actor_kind": "warrior",
+      "rgba_sha256": "33670d3781a49efdfe9fb58d1c288072a1696492c8c236e71bc1ce5cc91bbc28",
+      "native_SN_exact": 32,
+      "grounds": 64,
+      "distinct_blocks": 4,
+      "native_gameplay": "pending"
+    },
+    "gel": {
+      "actor_kind": "gel",
+      "rgba_sha256": "6596a11ad02aff3563886aa6bd475f97411d71507d161f1d18f075a331f802c6",
+      "native_SN_exact": 32,
+      "grounds": 64,
+      "distinct_blocks": 4,
+      "native_gameplay": "pending"
+    },
+    "beast_master": {
+      "actor_kind": "beast_master",
+      "rgba_sha256": "2f8934ca7c2ad66ed91bf93e4ac130dfa52f995cbeb8e5529c28e3c21397cc7a",
+      "native_SN_exact": 32,
+      "grounds": 64,
+      "distinct_blocks": 4,
+      "native_gameplay": "pending"
+    },
+    "animal_companion": {
+      "actor_kind": "animal_companion",
+      "rgba_sha256": "3eaec7a3ce33e72841f78c15e3ed3fe369447b8caf47ea615d2df84676083007",
+      "native_SN_exact": 32,
+      "grounds": 64,
+      "distinct_blocks": 4,
+      "native_gameplay": "pending"
+    },
+    "e08_forest_wolf": {
+      "actor_kind": "animal_companion",
+      "rgba_sha256": "f61f9b7d3dcb58d940a5232c639e35ea34ea41b809feb8c5127e9c3c0cb8de87",
+      "native_SN_exact": 32,
+      "grounds": 64,
+      "distinct_blocks": 4,
+      "native_gameplay": "pending"
+    },
+    "e08_forest_boar": {
+      "actor_kind": "animal_companion",
+      "rgba_sha256": "8cf9d0b0a662774869cd2556c75fb1481bc31dcfc736773bce41f672ac093d59",
+      "native_SN_exact": 32,
+      "grounds": 64,
+      "distinct_blocks": 4,
+      "native_gameplay": "pending"
+    }
+  }
+}

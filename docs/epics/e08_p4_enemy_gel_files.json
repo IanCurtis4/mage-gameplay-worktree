@@ -1,6 +1,6 @@
 {
   "base": "94d68c98cf1d9e93de23e184cfdf0fd62f85d8ab",
-  "owner": "Root reserved until explicit artist dispatch",
+  "owner": "Root after complete artist/author handback; integration pending",
   "visual_id": "gel",
   "actor_kind": "gel",
   "native_read_only": "assets/art/animations/gel.png",
@@ -24,5 +24,6 @@
     "tools/prepare_e08_enemy_directional_art.py",
     "tools/prepare_e08_directional_art.py",
     "tools/prepare_animation_assets.py"
-  ]
+  ],
+  "dispatch_base": "a23a84c2f8fc495303e3091d8f782f68cd19c8c1"
 }

@@ -1,0 +1,28 @@
+{
+  "author": "Root",
+  "generator": "OpenAI built-in image_gen, transparent_background=true",
+  "reference": {
+    "path": "assets/art/animations/warrior.png",
+    "sha256": "f07aaae18ceedda5e237055edbbb14bd60afb454e24cff3e80354ba37bbfea60"
+  },
+  "sources": {
+    "east_source_v1.png": {
+      "sha256": "4b970a8df3751c48c4e82cb4b96c9187ae1eb8eeab02b4d0f25c7241060d2028",
+      "prompt": "Use case: stylized-concept. Original 2D RPG enemy animation sprite source. Reference image is the EXISTING warrior NPC identity and palette. Same red/auburn-haired fighter with tied high ponytail and red headband/scarf, dark brown leather armor and belt, small steel blade held in anatomical RIGHT hand and a small round wooden/steel buckler strapped to anatomical LEFT arm. Match the soft hand painted chibi game-sprite proportions, colors and armor of this NPC, no new costume. Unlike player weaponless sprites, this NPC's existing sword and round shield MUST be included as reference. Regular 4x4 source grid with 16 widely spaced separate full-body poses on true transparent background, no text/grid/ground shadow. Row1 four idle; row2 four walking; row3 four sword attacks (windup, raise blade, strike, recovery); row4 two hurt and two collapsed death poses. In death weapons rest naturally beside the slumped/lying body, no upright sword. Exactly two arms and two hands, one sword and one small round shield, no extra blade or magic/VFX/projectile. Face and anatomy genuinely side-profile, not frontal sprites turned or recolored. Consistent body size and stable gear across all cells.All16 face EAST/right: sword-hand on near arm clearly visible, left-arm round shield partly behind torso, side ponytail and nose facing right."
+    },
+    "west_source_v1.png": {
+      "sha256": "1304adecc489b30841805ee817db5dd2553d462e65855d83a642dfa180d8c65e",
+      "prompt": "Use case: stylized-concept. Original 2D RPG enemy animation sprite source. Reference image is the EXISTING warrior NPC identity and palette. Same red/auburn-haired fighter with tied high ponytail and red headband/scarf, dark brown leather armor and belt, small steel blade held in anatomical RIGHT hand and a small round wooden/steel buckler strapped to anatomical LEFT arm. Match the soft hand painted chibi game-sprite proportions, colors and armor of this NPC, no new costume. Unlike player weaponless sprites, this NPC's existing sword and round shield MUST be included as reference. Regular 4x4 source grid with 16 widely spaced separate full-body poses on true transparent background, no text/grid/ground shadow. Row1 four idle; row2 four walking; row3 four sword attacks (windup, raise blade, strike, recovery); row4 two hurt and two collapsed death poses. In death weapons rest naturally beside the slumped/lying body, no upright sword. Exactly two arms and two hands, one sword and one small round shield, no extra blade or magic/VFX/projectile. Face and anatomy genuinely side-profile, not frontal sprites turned or recolored. Consistent body size and stable gear across all cells.All16 face WEST/left: left-arm round shield is nearer the viewer, right-hand sword is farther but remains attached to the correct arm, side ponytail and nose facing left. Draw this side independently with consistent anatomical handedness; do not simply mirror the east view."
+    }
+  },
+  "rgba_sha256": "33670d3781a49efdfe9fb58d1c288072a1696492c8c236e71bc1ce5cc91bbc28",
+  "scale": 0.20069204152249134,
+  "native_idle_height": 50,
+  "checks": {
+    "native_SN_cells_exact": 32,
+    "grounds": 64,
+    "distinct_direction_blocks": 4
+  },
+  "equipment": "Sword/buckler baked as original NPC; slots are unused format placeholders, not a player-equipment rig.",
+  "native_review": "pending"
+}

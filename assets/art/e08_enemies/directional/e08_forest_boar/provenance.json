@@ -1,0 +1,29 @@
+{
+  "generator": "built-in imagegen",
+  "reference": "assets/art/animations/e08_forest_boar.png",
+  "reference_sha256": "64b7f40190cd22b17a1e99daf94f56d4b2070baeb7584cb25b4855ea1318b373",
+  "sources": {
+    "east_source_v1.png": {
+      "sha256": "83c9c2806cb5952dc0869cbb5798c8de721ee49856ae238a3f1b0e6e3d684d5b",
+      "prompt": "Use case: stylized-concept. Asset: transparent 4x4 pixel-art game enemy animation sheet with exactly 16 figures. Input reference: the original brown forest wild boar, stocky four-legged body, blunt pig snout, short pale tusks, coarse raised brown bristles and short tail. Match reference's proportions, earthy palette and hand-drawn chibi pixel style. Create independently drawn RIGHT-facing lateral profile. Row 1 four idle, row 2 four walking, row 3 four charging physical attack, row 4 two hurt and two fallen death. Every living figure has exactly four anatomically coherent legs and one tail. Full body in each equal cell, consistent scale and ground. No clothes, equipment, effects, magic, gore, text, background, floor shadow or extra limbs. It is a boar, not a wolf."
+    },
+    "west_source_v1.png": {
+      "sha256": "fa1864183da6e91eec162c24e6282e8fd6b428db79d946d9a3fd9917501bbcf2",
+      "prompt": "Use case: stylized-concept. Asset: transparent 4x4 pixel-art game enemy animation sheet with exactly 16 figures. Input reference: the original brown forest wild boar, stocky four-legged body, blunt pig snout, short pale tusks, coarse raised brown bristles and short tail. Match reference's proportions, earthy palette and hand-drawn chibi pixel style. Create independently drawn LEFT-facing lateral profile. Row 1 four idle, row 2 four walking, row 3 four charging physical attack, row 4 two hurt and two fallen death. Every living figure has exactly four anatomically coherent legs and one tail. Full body in each equal cell, consistent scale and ground. No clothes, equipment, effects, magic, gore, text, background, floor shadow or extra limbs. It is a boar, not a wolf."
+    }
+  },
+  "outputs": {
+    "body.png": "1ecf344241d7e21c32131f865dd9212b9a57434e18645065544c1ca4b147803a",
+    "calibration.json": "5c969a7e75f0242104cb93128de7e26c61abf9dfe9c3eff238d8ed5233feb7a4",
+    "presentation.json": "9ee213c686acf3fb342ff021e6e838ab8ad7df42f0fef64383e2f26e526fd9ee"
+  },
+  "rgba_sha256": "8cf9d0b0a662774869cd2556c75fb1481bc31dcfc736773bce41f672ac093d59",
+  "direction_sha256": [
+    "afb9ef30efff447214bf5085d20c23dd6c33dbb6ca41714f21d4148956637021",
+    "336257e3908dc6aa75d82770447a42b61835b600adb0a32b2dfe0cb61d5239f4",
+    "ad8d652c604a88a6e8a3a0818a5c074d60d8fc2de4cb15bc78f023e78faded49",
+    "cf49c482499b3ceb2dd5e905081efc28289b11db8f32a4dbeaa55ba3c53be519"
+  ],
+  "native_idle_height": 50.0,
+  "scale": 0.20069204152249134
+}

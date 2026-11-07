@@ -1,0 +1,65 @@
+{
+  "visual_id": "gel",
+  "actor_kind": "gel",
+  "target_height": 38.5,
+  "views": {
+    "south": {
+      "source": "res://assets/art/animations/gel.png",
+      "native_cells": true,
+      "grid": [
+        4,
+        8
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        24,
+        25,
+        28,
+        29
+      ]
+    },
+    "north": {
+      "source": "res://assets/art/animations/gel.png",
+      "native_cells": true,
+      "grid": [
+        4,
+        8
+      ],
+      "indices": [
+        16,
+        17,
+        18,
+        19,
+        12,
+        13,
+        14,
+        15,
+        20,
+        21,
+        22,
+        23,
+        26,
+        27,
+        30,
+        31
+      ]
+    },
+    "east": {
+      "source": "east_source_v1.png"
+    },
+    "west": {
+      "source": "west_source_v1.png"
+    }
+  }
+}

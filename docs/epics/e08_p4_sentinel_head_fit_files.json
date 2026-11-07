@@ -1,0 +1,33 @@
+{
+  "base": "a23a84c2f8fc495303e3091d8f782f68cd19c8c1",
+  "owner": "Root reserved; NOT dispatched before first Mage native proof",
+  "actor_kind": "sentinel",
+  "files": [
+    "assets/art/e08_head_fit/sentinel/body.png",
+    "assets/art/e08_head_fit/sentinel/body.png.import",
+    "assets/art/e08_head_fit/sentinel/source_recipe.json",
+    "assets/art/e08_head_fit/sentinel/calibration.json",
+    "assets/art/e08_head_fit/sentinel/provenance.json",
+    "assets/art/e08_head_fit/sentinel/recipe.md",
+    "assets/art/e08_head_fit/sentinel/delivery.md",
+    "assets/art/e08_head_fit/sentinel/contact_sheet.png",
+    "assets/art/e08_head_fit/sentinel/south_source_v1.png",
+    "assets/art/e08_head_fit/sentinel/south_source_v2.png",
+    "assets/art/e08_head_fit/sentinel/south_source_v3.png",
+    "assets/art/e08_head_fit/sentinel/north_source_v1.png",
+    "assets/art/e08_head_fit/sentinel/north_source_v2.png",
+    "assets/art/e08_head_fit/sentinel/north_source_v3.png",
+    "assets/art/e08_head_fit/sentinel/east_source_v1.png",
+    "assets/art/e08_head_fit/sentinel/east_source_v2.png",
+    "assets/art/e08_head_fit/sentinel/east_source_v3.png",
+    "assets/art/e08_head_fit/sentinel/west_source_v1.png",
+    "assets/art/e08_head_fit/sentinel/west_source_v2.png",
+    "assets/art/e08_head_fit/sentinel/west_source_v3.png"
+  ],
+  "read_only_original_rgba": "23598d39b8a191a4956f8116c52e7d127bc538c2c0f708278d792cd5f9fc1611",
+  "shared_tools_read_only": [
+    "tools/prepare_e08_bare_head_body.py",
+    "tools/prepare_e08_mage_bare_head.py"
+  ],
+  "condition": "SATISFIED: Sol Mage native_fit1 2589unit/5568native35captures,4views/64poses/14heads/7props; no human product acceptance"
+}

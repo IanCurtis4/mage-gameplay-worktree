@@ -1,0 +1,29 @@
+{
+  "generator": "built-in imagegen",
+  "reference": "assets/art/animations/e08_forest_wolf.png",
+  "reference_sha256": "e36b9195562f812580fead73ad01acbc884dc27d0e2f89450dbb63c53c95770a",
+  "sources": {
+    "east_source_v1.png": {
+      "sha256": "c4d3daaf07203a0bf4cfa5fad00433c78f32e113824d850134d2fdf035a2cb35",
+      "prompt": "Use case: stylized-concept. Asset: transparent 4x4 pixel-art game enemy animation sheet with exactly 16 figures. Input reference: the original gray forest wolf, not a fox: four-legged canine body, gray fur, triangular ears, wolf muzzle and bushy gray tail. Match reference's proportions, palette and hand-drawn chibi pixel style. Create independently drawn RIGHT-facing lateral profile. Row 1 four idle, row 2 four walking, row 3 four lunging bite attack, row 4 two hurt and two fallen death. Every living figure has exactly four anatomically coherent paws and one tail. Full body in each equal cell, consistent scale and ground. No clothes, equipment, effects, magic, gore, text, background, floor shadow or extra limbs."
+    },
+    "west_source_v1.png": {
+      "sha256": "a148ae0f74345761665b58286a021583f472c616e720cdd5305fc51e2ffebbcc",
+      "prompt": "Use case: stylized-concept. Asset: transparent 4x4 pixel-art game enemy animation sheet with exactly 16 figures. Input reference: the original gray forest wolf, not a fox: four-legged canine body, gray fur, triangular ears, wolf muzzle and bushy gray tail. Match reference's proportions, palette and hand-drawn chibi pixel style. Create independently drawn LEFT-facing lateral profile. Row 1 four idle, row 2 four walking, row 3 four lunging bite attack, row 4 two hurt and two fallen death. Every living figure has exactly four anatomically coherent paws and one tail. Full body in each equal cell, consistent scale and ground. No clothes, equipment, effects, magic, gore, text, background, floor shadow or extra limbs."
+    }
+  },
+  "outputs": {
+    "body.png": "491dddafb251eac6af148a3d600e24a772007642404ea2ed8c938673f9d67b8f",
+    "calibration.json": "3c5ec74887316c5ab167a0b01664b5641b474ef2b205b15094c91f0be583700a",
+    "presentation.json": "2291c485c16bd2cd8cf57e4ed144d3ad51e5df3aa5f969346f6051bb3f84e511"
+  },
+  "rgba_sha256": "f61f9b7d3dcb58d940a5232c639e35ea34ea41b809feb8c5127e9c3c0cb8de87",
+  "direction_sha256": [
+    "70fe99ebe3a9256a9ebe4dca96b4e4de3b6975969accb9b52f8ab81f0b1b76a6",
+    "ef307f0ae1cf4ed580c4a6cc50264bb54ca2fb2c8059841f9f0bcfe1242fca72",
+    "462cf78b6f8a003889f00619dcb379798066fd5fd5c889496943bcfa1e7f8328",
+    "c9fc76f5483099d8608fc57d260207d5d3717b2330a87252454304fd20de0153"
+  ],
+  "native_idle_height": 46.5,
+  "scale": 0.2049469964664311
+}
