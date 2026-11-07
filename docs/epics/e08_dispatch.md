@@ -522,3 +522,12 @@ Produtor/API tecnicamente consolidado, sem novo dispatch de implementação.
 Próximo pacote de conteúdo deve começar com UMA identidade completa em staging,
 com propriedade exclusiva antes de editar. Terra P4 segue parado e não arquivado;
 arte V2 e restante do P4 pendentes, P5 bloqueado. Sem merge/master/push.
+
+## Produção artística P4 autorizada — 7/11/2026
+
+Usuário pediu produzir sprites definitivos. [Contrato do primeiro conjunto](e08_p4_art_contract.md)
+e [propriedade exclusiva](e08_p4_art_files.json) delimitam EspiritualistaV2 completa
+em staging, Terra6.1médio como subagente de conteúdo, Sol harness/teste e integração.
+Base48058190d9a7e12dce7319b6d25020e0befacfd1; mesmo checkout codex/e08.
+Produtor pronto e conferido; demais identidades vêm após provar a primeira.
+P4 permanece em execução; P5 bloqueado. Habitual/piloto/save preservados.
