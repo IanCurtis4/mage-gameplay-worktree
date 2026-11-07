@@ -1,0 +1,28 @@
+{
+  "base": "276efa9e6313a4d6bbef823adcf83a60f0f2f20f",
+  "owner": "Terra Caçadora only after dispatch",
+  "files": [
+    "assets/art/e08_characters/directional/hunter/source_recipe.json",
+    "assets/art/e08_characters/directional/hunter/body.png",
+    "assets/art/e08_characters/directional/hunter/body.png.import",
+    "assets/art/e08_characters/directional/hunter/weaponless.png",
+    "assets/art/e08_characters/directional/hunter/weaponless.png.import",
+    "assets/art/e08_characters/directional/hunter/calibration.json",
+    "assets/art/e08_characters/directional/hunter/presentation.json",
+    "assets/art/e08_characters/directional/hunter/provenance.json",
+    "assets/art/e08_characters/directional/hunter/recipe.md",
+    "assets/art/e08_characters/directional/hunter/delivery.md",
+    "assets/art/e08_characters/directional/hunter/east_source_v1.png",
+    "assets/art/e08_characters/directional/hunter/east_source_v2.png",
+    "assets/art/e08_characters/directional/hunter/east_source_v3.png",
+    "assets/art/e08_characters/directional/hunter/west_source_v1.png",
+    "assets/art/e08_characters/directional/hunter/west_source_v2.png",
+    "assets/art/e08_characters/directional/hunter/west_source_v3.png"
+  ],
+  "shared_tools_read_only": [
+    "tools/prepare_e08_directional_art.py",
+    "tools/prepare_animation_assets.py"
+  ],
+  "native_source_read_only": "assets/art/animations/hunter_weaponless.png",
+  "stage_path": "res://assets/art/e08_characters/directional/hunter/presentation.json"
+}

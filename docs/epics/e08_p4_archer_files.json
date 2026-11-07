@@ -1,0 +1,28 @@
+{
+  "base": "276efa9e6313a4d6bbef823adcf83a60f0f2f20f",
+  "owner": "Terra Arqueiro only after dispatch",
+  "files": [
+    "assets/art/e08_characters/directional/archer/source_recipe.json",
+    "assets/art/e08_characters/directional/archer/body.png",
+    "assets/art/e08_characters/directional/archer/body.png.import",
+    "assets/art/e08_characters/directional/archer/weaponless.png",
+    "assets/art/e08_characters/directional/archer/weaponless.png.import",
+    "assets/art/e08_characters/directional/archer/calibration.json",
+    "assets/art/e08_characters/directional/archer/presentation.json",
+    "assets/art/e08_characters/directional/archer/provenance.json",
+    "assets/art/e08_characters/directional/archer/recipe.md",
+    "assets/art/e08_characters/directional/archer/delivery.md",
+    "assets/art/e08_characters/directional/archer/east_source_v1.png",
+    "assets/art/e08_characters/directional/archer/east_source_v2.png",
+    "assets/art/e08_characters/directional/archer/east_source_v3.png",
+    "assets/art/e08_characters/directional/archer/west_source_v1.png",
+    "assets/art/e08_characters/directional/archer/west_source_v2.png",
+    "assets/art/e08_characters/directional/archer/west_source_v3.png"
+  ],
+  "shared_tools_read_only": [
+    "tools/prepare_e08_directional_art.py",
+    "tools/prepare_animation_assets.py"
+  ],
+  "native_source_read_only": "assets/art/animations/archer_weaponless.png",
+  "stage_path": "res://assets/art/e08_characters/directional/archer/presentation.json"
+}

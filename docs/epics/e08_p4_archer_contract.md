@@ -1,0 +1,46 @@
+# E08 P4 — Arqueiro direcional
+
+Continuação dos sprites definitivos autorizados em7/11. Base executável de API
+276efa9e6313a4d6bbef823adcf83a60f0f2f20f, branch codex/e08, checkout fixo .tools/map-editor-m5.
+Terra6.1 médio, lista exclusiva e08_p4_archer_files.json; dispatch passará SHA
+versionado antes da escrita. Root/Sol têm outros arquivos/fixture, só leitura.
+
+Identidade: Cabelo castanho, capuz ocre/verde oliva, lenço vermelho e roupa couro/marrom; identidade juvenil original, sem arco nas mãos do corpo de jogador.
+Aplicar ragrpg-art e imagegen integrado, transparência real, fontes/prompts/hashes
+preservados. Inspecionar atlas e fontes antes de editar; não redesenhar por código.
+Criar E/W independentes em4x4: idle4,walk4,ação4,hurt2,death2, duas mãos vazias
+anatomicamente justificáveis, sem arma/escudo/VFX novos. Corrigir defeito localizado
+com v2/v3 selecionando só célula afetada, sem troca involuntária das15demais.
+Não aceitar o mesmo punho como duas palmas verificadas; oclusão real parcial
+precisa ser declarada e posteriormente demonstrada com anexos no renderer.
+
+Manter S/N byte a byte de archer_weaponless.png:
+S:[0,1,2,3,4,5,6,7,8,9,10,11,24,25,28,29].
+N:[16,17,18,19,12,13,14,15,20,21,22,23,26,27,30,31].
+Antes da cópia, inspecionar especialmente mãos/pose de morte para arma residual
+no raster legado; comunicar defeito concreto a Root antes de preservar defeito.
+Não alterar células nativas por inferência. Fonte original sempre permanece.
+
+Packer estável tools/prepare_e08_directional_art.py somente leitura:
+actor_kind archer, target_height50; native_cells true grid[4,8] S/N;
+E/W source local4x4+overrides por pose. --atlas-only prepara autoria; padrão
+requer calibration64frames+authored_rgba_sha256. Atlas256x1024, pivô32,58;
+body/weaponless iguais sem props. S/N rigs transpostos de hand_rigs.json,
+conservar main/off/crops e orientação legada; E/W56grips vivos no pixel de palma
+real.112grips vivos em ambos corpos,64heads com crânio próprio nas mortes.
+Head.flip é toggle extra: false inclusiveW para capacete normal. Morte8frames:
+slots depth0, ângulos absolutos PI/2 para itens soltos (contas0), sem overrides
+vivos que os deixem verticais; chão é resolvido pelo renderer V2 já corrigido.
+Não mudar X/clock/AI/regras ou campos persistidos para acomodar arte.
+
+Exclusivamente geração e preparação offline, PYTHONDONTWRITEBYTECODE=1;
+sem Godot/importação/commit/fixture/runtime/tests/globals ou ferramentas comuns.
+Entregar arquivos completos+recipe/provenance/delivery, conferência32nativas e
+112grips/64heads, hashRGBA, limitações. Devolver posse explicitamente. Root/Sol
+integra e testa nativo/export, incluindo equipamento/zoom/retrato/mundo. Staging
+não equivale a aceite ou P4 concluído. P5/master/push/save pessoal fora do escopo.
+
+Arqueiro também é consumidor inimigo (canopy_archer/demo_archer). Este autor só
+produz jogador sem arma e registra essa fronteira; Root/Sol preservará o arco
+inimigo pela API de anexos existente, sem nova arma/item/restrição de gameplay.
+Não tocar EnemyActor ou E08PilotVisual nesta fatia artística.
