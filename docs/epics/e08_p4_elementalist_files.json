@@ -1,0 +1,33 @@
+{
+  "base": "28c5ebc777e72b96f4363d1bff2b48e666acd854",
+  "owner": "Terra Elementalist only; Sol holds all other files",
+  "files": [
+    "assets/art/e08_characters/directional/elementalist/source_recipe.json",
+    "assets/art/e08_characters/directional/elementalist/body.png",
+    "assets/art/e08_characters/directional/elementalist/body.png.import",
+    "assets/art/e08_characters/directional/elementalist/weaponless.png",
+    "assets/art/e08_characters/directional/elementalist/weaponless.png.import",
+    "assets/art/e08_characters/directional/elementalist/calibration.json",
+    "assets/art/e08_characters/directional/elementalist/presentation.json",
+    "assets/art/e08_characters/directional/elementalist/provenance.json",
+    "assets/art/e08_characters/directional/elementalist/recipe.md",
+    "assets/art/e08_characters/directional/elementalist/delivery.md",
+    "assets/art/e08_characters/directional/elementalist/south_source_v1.png",
+    "assets/art/e08_characters/directional/elementalist/south_source_v2.png",
+    "assets/art/e08_characters/directional/elementalist/south_source_v3.png",
+    "assets/art/e08_characters/directional/elementalist/north_source_v1.png",
+    "assets/art/e08_characters/directional/elementalist/north_source_v2.png",
+    "assets/art/e08_characters/directional/elementalist/north_source_v3.png",
+    "assets/art/e08_characters/directional/elementalist/east_source_v1.png",
+    "assets/art/e08_characters/directional/elementalist/east_source_v2.png",
+    "assets/art/e08_characters/directional/elementalist/east_source_v3.png",
+    "assets/art/e08_characters/directional/elementalist/west_source_v1.png",
+    "assets/art/e08_characters/directional/elementalist/west_source_v2.png",
+    "assets/art/e08_characters/directional/elementalist/west_source_v3.png"
+  ],
+  "shared_tools_read_only": [
+    "tools/prepare_e08_directional_art.py",
+    "tools/prepare_animation_assets.py"
+  ],
+  "stage_path": "res://assets/art/e08_characters/directional/elementalist/presentation.json"
+}
