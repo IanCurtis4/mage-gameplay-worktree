@@ -1,0 +1,270 @@
+{
+  "heads": [
+    {
+      "id": "class_set_archer_head",
+      "name": "Boina do Mirante",
+      "flavor": "Couro verde e fivelas leves deixam braços e pernas livres para mirar.",
+      "quality": "rare",
+      "origin": "demo_arena",
+      "allowed_origins": [
+        "archer"
+      ],
+      "allowed_identities": [
+        "archer",
+        "sentinel",
+        "hunter"
+      ],
+      "min_item_level": 2,
+      "max_item_level": 5,
+      "source": "resources/e06_inventory_content/equipment/class_set_archer_head.tres",
+      "current_consumer": "equipment_attachment_visual.gd recognises only pilot_head; CharacterAnimation calls EquipmentHeadVisual",
+      "proposed_visual": "class_set_archer_head.png"
+    },
+    {
+      "id": "class_set_berserker_head",
+      "name": "Faixa da Fúria Rubra",
+      "flavor": "Tiras escarlates e rebites largos lembram uma investida sem hesitação.",
+      "quality": "rare",
+      "origin": "demo_arena",
+      "allowed_origins": [
+        "swordsman"
+      ],
+      "allowed_identities": [
+        "berserker"
+      ],
+      "min_item_level": 6,
+      "max_item_level": 10,
+      "source": "resources/e06_inventory_content/equipment/class_set_berserker_head.tres",
+      "current_consumer": "equipment_attachment_visual.gd recognises only pilot_head; CharacterAnimation calls EquipmentHeadVisual",
+      "proposed_visual": "class_set_berserker_head.png"
+    },
+    {
+      "id": "class_set_defender_head",
+      "name": "Elmo da Guarda Serena",
+      "flavor": "Placas polidas trazem o emblema de uma muralha e a disciplina de uma guarda.",
+      "quality": "rare",
+      "origin": "demo_arena",
+      "allowed_origins": [
+        "swordsman"
+      ],
+      "allowed_identities": [
+        "defender"
+      ],
+      "min_item_level": 6,
+      "max_item_level": 10,
+      "source": "resources/e06_inventory_content/equipment/class_set_defender_head.tres",
+      "current_consumer": "equipment_attachment_visual.gd recognises only pilot_head; CharacterAnimation calls EquipmentHeadVisual",
+      "proposed_visual": "class_set_defender_head.png"
+    },
+    {
+      "id": "class_set_elementalist_head",
+      "name": "Grinalda dos Quatro Ventos",
+      "flavor": "Fios coloridos representam vento, água, terra e fogo em equilíbrio.",
+      "quality": "rare",
+      "origin": "demo_arena",
+      "allowed_origins": [
+        "mage"
+      ],
+      "allowed_identities": [
+        "elementalist"
+      ],
+      "min_item_level": 6,
+      "max_item_level": 10,
+      "source": "resources/e06_inventory_content/equipment/class_set_elementalist_head.tres",
+      "current_consumer": "equipment_attachment_visual.gd recognises only pilot_head; CharacterAnimation calls EquipmentHeadVisual",
+      "proposed_visual": "class_set_elementalist_head.png"
+    },
+    {
+      "id": "class_set_hunter_head",
+      "name": "Chapéu da Trilha",
+      "flavor": "Tecido de viagem reforçado para seguir rastros sem perder o passo.",
+      "quality": "rare",
+      "origin": "demo_arena",
+      "allowed_origins": [
+        "archer"
+      ],
+      "allowed_identities": [
+        "hunter"
+      ],
+      "min_item_level": 6,
+      "max_item_level": 10,
+      "source": "resources/e06_inventory_content/equipment/class_set_hunter_head.tres",
+      "current_consumer": "equipment_attachment_visual.gd recognises only pilot_head; CharacterAnimation calls EquipmentHeadVisual",
+      "proposed_visual": "class_set_hunter_head.png"
+    },
+    {
+      "id": "class_set_mage_head",
+      "name": "Capuz de Fagulha",
+      "flavor": "Tecido azul com pequenos bordados de estrelas guia a concentração.",
+      "quality": "rare",
+      "origin": "demo_arena",
+      "allowed_origins": [
+        "mage"
+      ],
+      "allowed_identities": [
+        "mage",
+        "elementalist",
+        "spiritualist",
+        "mg_ar"
+      ],
+      "min_item_level": 2,
+      "max_item_level": 5,
+      "source": "resources/e06_inventory_content/equipment/class_set_mage_head.tres",
+      "current_consumer": "equipment_attachment_visual.gd recognises only pilot_head; CharacterAnimation calls EquipmentHeadVisual",
+      "proposed_visual": "class_set_mage_head.png"
+    },
+    {
+      "id": "class_set_mg_ar_head",
+      "name": "Diadema do Traçado",
+      "flavor": "Linhas geométricas bordadas lembram construções precisas traçadas no chão.",
+      "quality": "rare",
+      "origin": "demo_arena",
+      "allowed_origins": [
+        "mage"
+      ],
+      "allowed_identities": [
+        "mg_ar"
+      ],
+      "min_item_level": 11,
+      "max_item_level": 15,
+      "source": "resources/e06_inventory_content/equipment/class_set_mg_ar_head.tres",
+      "current_consumer": "equipment_attachment_visual.gd recognises only pilot_head; CharacterAnimation calls EquipmentHeadVisual",
+      "proposed_visual": "class_set_mg_ar_head.png"
+    },
+    {
+      "id": "class_set_sentinel_head",
+      "name": "Capuz do Olho Atento",
+      "flavor": "Equipamento discreto de observação, com marcações para manter a distância.",
+      "quality": "rare",
+      "origin": "demo_arena",
+      "allowed_origins": [
+        "archer"
+      ],
+      "allowed_identities": [
+        "sentinel"
+      ],
+      "min_item_level": 6,
+      "max_item_level": 10,
+      "source": "resources/e06_inventory_content/equipment/class_set_sentinel_head.tres",
+      "current_consumer": "equipment_attachment_visual.gd recognises only pilot_head; CharacterAnimation calls EquipmentHeadVisual",
+      "proposed_visual": "class_set_sentinel_head.png"
+    },
+    {
+      "id": "class_set_spiritualist_head",
+      "name": "Véu do Sino Distante",
+      "flavor": "Sinos pequenos e contas de madeira acompanham uma jornada de escuta.",
+      "quality": "rare",
+      "origin": "demo_arena",
+      "allowed_origins": [
+        "mage"
+      ],
+      "allowed_identities": [
+        "spiritualist"
+      ],
+      "min_item_level": 6,
+      "max_item_level": 10,
+      "source": "resources/e06_inventory_content/equipment/class_set_spiritualist_head.tres",
+      "current_consumer": "equipment_attachment_visual.gd recognises only pilot_head; CharacterAnimation calls EquipmentHeadVisual",
+      "proposed_visual": "class_set_spiritualist_head.png"
+    },
+    {
+      "id": "class_set_swordsman_head",
+      "name": "Bandana do Corte Firme",
+      "flavor": "Couro vermelho e costuras resistentes acompanham quem luta de perto.",
+      "quality": "rare",
+      "origin": "demo_arena",
+      "allowed_origins": [
+        "swordsman"
+      ],
+      "allowed_identities": [
+        "swordsman",
+        "defender",
+        "berserker"
+      ],
+      "min_item_level": 2,
+      "max_item_level": 5,
+      "source": "resources/e06_inventory_content/equipment/class_set_swordsman_head.tres",
+      "current_consumer": "equipment_attachment_visual.gd recognises only pilot_head; CharacterAnimation calls EquipmentHeadVisual",
+      "proposed_visual": "class_set_swordsman_head.png"
+    },
+    {
+      "id": "pilot_head",
+      "name": "Elmo da Guarda",
+      "flavor": "A viseira marcada emoldura o olhar atento dos combatentes da Arena.",
+      "quality": "uncommon",
+      "origin": "demo_arena",
+      "allowed_origins": [
+        "swordsman",
+        "mage",
+        "archer"
+      ],
+      "allowed_identities": [],
+      "min_item_level": null,
+      "max_item_level": null,
+      "source": "resources/build_effects/equipment/pilot_head.tres",
+      "current_consumer": "equipment_attachment_visual.gd recognises only pilot_head; CharacterAnimation calls EquipmentHeadVisual",
+      "proposed_visual": "pilot_head.png"
+    },
+    {
+      "id": "shared_set_high_head",
+      "name": "Diadema Estelar",
+      "flavor": "Três peças bordadas com mapas de estrelas vistos sobre a Arena.",
+      "quality": "rare",
+      "origin": "demo_arena",
+      "allowed_origins": [],
+      "allowed_identities": [],
+      "min_item_level": 11,
+      "max_item_level": 15,
+      "source": "resources/e06_inventory_content/equipment/shared_set_high_head.tres",
+      "current_consumer": "equipment_attachment_visual.gd recognises only pilot_head; CharacterAnimation calls EquipmentHeadVisual",
+      "proposed_visual": "shared_set_high_head.png"
+    },
+    {
+      "id": "shared_set_low_head",
+      "name": "Capuz de Folha Macia",
+      "flavor": "Peças leves para quem começa a explorar a Arena, costuradas em tons de bosque.",
+      "quality": "rare",
+      "origin": "demo_arena",
+      "allowed_origins": [],
+      "allowed_identities": [],
+      "min_item_level": 2,
+      "max_item_level": 5,
+      "source": "resources/e06_inventory_content/equipment/shared_set_low_head.tres",
+      "current_consumer": "equipment_attachment_visual.gd recognises only pilot_head; CharacterAnimation calls EquipmentHeadVisual",
+      "proposed_visual": "shared_set_low_head.png"
+    },
+    {
+      "id": "shared_set_mid_head",
+      "name": "Faixa da Lua Serena",
+      "flavor": "Um conjunto de viagem com detalhes prateados, feito para jornadas já conhecidas.",
+      "quality": "rare",
+      "origin": "demo_arena",
+      "allowed_origins": [],
+      "allowed_identities": [],
+      "min_item_level": 6,
+      "max_item_level": 10,
+      "source": "resources/e06_inventory_content/equipment/shared_set_mid_head.tres",
+      "current_consumer": "equipment_attachment_visual.gd recognises only pilot_head; CharacterAnimation calls EquipmentHeadVisual",
+      "proposed_visual": "shared_set_mid_head.png"
+    }
+  ],
+  "loot": {
+    "sources": [
+      "scripts/core/equipment_loot_profiles.gd",
+      "scripts/core/mob_loot_resolver.gd",
+      "scripts/core/equipment_eligibility_rules.gd"
+    ],
+    "model": "Production pools use catalog item, nominal quality and level eligibility; no per-mob equipment binding. Drop origin comes from occurrence, not class name.",
+    "qualification": "Confirm category and level when describing a particular drop; no new loot or gameplay rules."
+  },
+  "studies": [
+    {
+      "id": null,
+      "visual": "apple_arrow_study.png"
+    },
+    {
+      "id": null,
+      "visual": "eggshell_study.png"
+    }
+  ]
+}

@@ -34,3 +34,20 @@ Pedido humano adicional: capacete menor/encaixado, equipamento mais desenhado
 e drops temáticos usando a referência Spriters Resource. Contrato independente
 [e08_p4_gear_art_contract.md](e08_p4_gear_art_contract.md), estágio novo, sem
 conflito com corpos/renderer. Novo agente pedido explicitamente pelo usuário.
+
+## Checkpoint após5756f094
+
+Elementalista/Mago/Espadachim default integrados e correção comum mortos validados:
+23etapas/28.694checks únicos; Luna integridade em andamento separado. Root tem
+índice/fixture após handback Sol; não alterar2431inputs até terminar supervisão.
+Defendente/Berserker/Caçadora estão completos emstaging Root; não promovidos.
+Defendente: somente2mortes nativas corrigidas imagegen,30outras S/N preservadas.
+Caçadora:3mortes com arco residual corrigidas,29outras S/N preservadas.
+Berserker:32S/N preservadas. Os3 têm64heads/112grips; prova nativa pendente.
+Sentinela em produção Terra; Geômetra/Arqueiro têm contrato, sem dispatch.
+Gear:14heads+2estudos+7anexos e fontes entregues emstaging, alfa/encaixe proposta,
+integração ainda pendente. Hoods com cavidade opaca corrigidos nas fontes.
+Novo pedido cabelo/rosto documentado em e08_p4_head_fit_contract.md. Mago será
+primeiro caso completo de corpo com cabelo exposto SOMENTE quandohead equipado;
+aparência aprovada sem equipamento permanece original. Novo artista tem posse
+só após dispatch do contrato/lista específicos. Corpos inimigos ainda pendentes.

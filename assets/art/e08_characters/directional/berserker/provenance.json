@@ -1,0 +1,42 @@
+{
+  "status": "staging; native inspection and integration pending",
+  "generator": "built-in imagegen",
+  "reference": "assets/art/animations/berserker_weaponless.png",
+  "reference_sha256": "13a5d3fafacb25b9eb3e08a17c5110f969182e463dba9db3faaefd2577d6d56f",
+  "sources": {
+    "east_source_v1.png": {
+      "sha256": "445698de927f176a33bd457f31c73324236e9ac889ec00a84cbf4a4f6a1008c2",
+      "prompt": "Use case: stylized-concept. Asset type: production pixel-art game animation spritesheet. Input image is identity and style reference: existing weaponless Berserker. Create a NEW right-facing EAST profile 4 by 4 sprite sheet with 16 distinct frames in precisely aligned equal cells, transparent background. Row 1 idle four subtle poses; row 2 walk cycle four poses; row 3 heavy unarmed strike four poses; row 4 hurt two, death two (fallen on ground, visible head). Match reference brown-red spiky hair, dark crimson and charcoal aggressive diagonal armor, dark leather/iron, chibi pixel proportions and hand-drawn pixel style. Full body entirely inside each cell, consistent scale and bottom alignment; ample transparent separation, no grid lines. Two arms with visible empty gloved hands for separately attached equipment. No weapons, effects, props, text or extra limbs. Distinct side profile facing right throughout."
+    },
+    "east_source_v2.png": {
+      "sha256": "65abd21480e582ea006a3199cc039e4ce15fc58ec77e8c26874345b860754101",
+      "prompt": "Use case: precise-object-edit. Asset type: 4x4 transparent game spritesheet. Edit input spritesheet: in every live pose ensure TWO visibly separate empty gloved fists, each attached to its own arm, including walk and heavy strike frames. Preserve character identity, right-facing direction, each pose and 4x4 layout. No extra arms, props, weapons, text, or effects. Transparent background."
+    },
+    "west_source_v1.png": {
+      "sha256": "0dec2625b7170e66a986a40cbc51224bd19f76b2769f6250f523ef3cc075a643",
+      "prompt": "Use case: stylized-concept. Asset type: production pixel-art game animation spritesheet. Input image is identity and style reference: existing weaponless Berserker. Create a NEW left-facing WEST profile 4 by 4 sprite sheet with 16 distinct frames in precisely aligned equal cells, transparent background. Row 1 idle four subtle poses; row 2 walk cycle four poses; row 3 heavy unarmed strike four poses; row 4 hurt two, death two (fallen on ground, visible head). Match reference brown-red spiky hair, dark crimson and charcoal aggressive diagonal armor, dark leather/iron, chibi pixel proportions and hand-drawn pixel style. Full body entirely inside each cell, consistent scale and bottom alignment; ample transparent separation, no grid lines. Two arms with visible empty gloved hands for separately attached equipment. No weapons, effects, props, text or extra limbs. Distinct side profile facing left throughout."
+    },
+    "east_source_v3.png": {
+      "sha256": "81a4af3c793d12bd5b65b37280836f4ed6f233a5a3370556167f85f2438c6bf7",
+      "prompt": "Use case: precise-object-edit. Edit this 4x4 transparent sprite sheet. Only change row 3 column 3: in the right-facing forward punching pose add a clearly visible second gloved fist and forearm, bent close to the chest, distinct from the extended punching arm. Exactly two arms, two empty fists. Preserve the character, pixel-art style, pose and all other cells. No props, text or effects. Transparent background."
+    },
+    "west_source_v2.png": {
+      "sha256": "dfb994a1422892ff1443ec456f5eb602f7a4bb4c4e7bbc767e6b952924739d3f",
+      "prompt": "Use case: precise-object-edit. Edit this 4x4 transparent sprite sheet. Only change row 3 column 3: in the left-facing forward punching pose reveal the second gloved fist and forearm, bent near the torso, distinct from the extended punching arm. Exactly two arms and two empty fists. Preserve the character, pixel-art style, pose and all other cells. No props, text or effects. Transparent background."
+    }
+  },
+  "outputs": {
+    "body.png": {
+      "sha256": "330b0c7e51a3d8289a7b3449b0428ead8c245ce444439fd5dd445f9627bda779",
+      "rgba_sha256": "974b5af44323adcdbceb7090dbdd00f935c5d8630f51fd71d9b943c728994b62",
+      "native_exact": 32,
+      "grips_alpha_gt_5": 112
+    },
+    "weaponless.png": {
+      "sha256": "330b0c7e51a3d8289a7b3449b0428ead8c245ce444439fd5dd445f9627bda779",
+      "rgba_sha256": "974b5af44323adcdbceb7090dbdd00f935c5d8630f51fd71d9b943c728994b62",
+      "native_exact": 32,
+      "grips_alpha_gt_5": 112
+    }
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "generator": "image_gen integrado",
+  "reference_sha256": {
+    "assets\\art\\animations\\defender_weaponless.png": "ac3b3bade557101ba1e408888b8338a826227ca690e40eaf259e92bba71add9b",
+    "assets\\art\\animation_sources\\defender.png": "a3945bb709811856513e8850099715dec0324018d3122d758b514dd0346b51d5",
+    "assets\\art\\animation_sources\\defender_extra.png": "26418cfe7a3f73226e567f2dbda48e2af918142aad5de49cebc12cfc1fce5ca1",
+    "assets\\art\\equipment\\hand_rigs.json": "bb02da7fc360a43930cd5cc155f1bc6c01985db802f78bf583a47ab611ea335c"
+  },
+  "source_sha256": {
+    "east_source_v1.png": "5d9802cb6b58e2a43b1da097aa3efa5cff00a4f97007bf6f8251e7b1476462fa",
+    "west_source_v1.png": "79e339f19820c59040a637ba542f407edf84f3d720ab4504d26fb405675427dc",
+    "west_source_v2.png": "db376ce1fda4b74e6f76e16444994efeb263c2f3272ab67b5b7138996d30f632"
+  },
+  "prompts": {
+    "east_source_v1.png": "Use case: stylized-concept. Production pixel-art game animation source. Reference SAME existing Defender character: brown hair, heavy light steel/ivory plate armor with worn antique-gold accents and brown leather straps, chibi proportions and matching pixel style. Create a regular 4 by 4 sheet of separate full-body sprites, all facing EAST/right profile, transparent gaps. Row1 idle four, row2 walking four, row3 four guard and sword-swing actions (windup, raise, strike, recovery), row4 two hurt and two collapsed death poses in that profile. Each living pose has exactly TWO separate visible empty armored gauntlet hands connected to TWO arms; a near and far hand placed for separate weapon and shield. Neither shield nor sword appears in sprites; those are separate equipment. No third arm, weapons, shield, VFX, magic, text, grid, ground or shadows. Genuine transparent background.",
+    "west_source_v1.png": "Use case: stylized-concept. Production pixel-art game animation source. Reference SAME existing Defender character: brown hair, heavy light steel/ivory plate armor with worn antique-gold accents and brown leather straps, chibi proportions and matching pixel style. Create a regular 4 by 4 sheet of separate full-body sprites, all facing WEST/left profile, transparent gaps. Row1 idle four, row2 walking four, row3 four guard and sword-swing actions (windup, raise, strike, recovery), row4 two hurt and two collapsed death poses in that profile. Each living pose has exactly TWO separate visible empty armored gauntlet hands connected to TWO arms; a near and far hand placed for separate weapon and shield. Neither shield nor sword appears in sprites; those are separate equipment. No third arm, weapons, shield, VFX, magic, text, grid, ground or shadows. Genuine transparent background.",
+    "west_source_v2.png": "Precise edit this 4x4 armored Defender sprite sheet. Change ONLY the action sprite row 3 column 3: keep the left-facing lunge and forward thrust with one gauntlet, but show the SECOND empty armored gauntlet clearly separated behind the torso, attached to a plausible second arm. Exactly two arms and two hands, no shield or sword. Preserve the other 15 sprites, identity, armor, proportions, placement, pixel style and genuine transparent background. No effects or text."
+  },
+  "recipe": "S/N cleaned native:30cells exact,28/29 authored weapon removal; E v1; W v1 except pose10 v2",
+  "atlas_rgba_sha256": "779efb66cec50805bf2f7845f26f57d05a06e4874560d594f6646e8f15e1c2a5",
+  "native_death_cleanup": {
+    "author": "Root",
+    "generator": "image_gen built-in",
+    "source": "native_death_source_v1.png",
+    "source_sha256": "cca0b38dbdacc9d85c45474bccc8183b7f366199352992d11bc48f0b81f68825",
+    "cleaned_sha256": "3c24e5d269a8cd476f6cab3e63110c025d2690d46e4430f75934831af8030bd0",
+    "unchanged_native_cells": 30,
+    "replaced_native_cells": [
+      28,
+      29
+    ],
+    "records": [
+      {
+        "native_index": 28,
+        "source_quadrant": 0,
+        "source_region": [
+          0,
+          0,
+          627,
+          627
+        ],
+        "crop_bbox": [
+          109,
+          193,
+          492,
+          563
+        ],
+        "old_bbox": [
+          11,
+          20,
+          53,
+          58
+        ],
+        "scale": 0.10270270270270271,
+        "output_bbox": [
+          13,
+          20,
+          52,
+          58
+        ],
+        "anchor": [
+          13,
+          20
+        ]
+      },
+      {
+        "native_index": 29,
+        "source_quadrant": 1,
+        "source_region": [
+          627,
+          0,
+          1254,
+          627
+        ],
+        "crop_bbox": [
+          69,
+          341,
+          561,
+          568
+        ],
+        "old_bbox": [
+          7,
+          35,
+          57,
+          58
+        ],
+        "scale": 0.1013215859030837,
+        "output_bbox": [
+          7,
+          35,
+          57,
+          58
+        ],
+        "anchor": [
+          7,
+          35
+        ]
+      }
+    ],
+    "prompt": "Use case: precise-object-edit. Asset: four game sprite cells in a square 2x2 grid, same two poses repeated on second row. The attached image is the edit target, NOT merely style. Remove only held equipment from these death animation cells. In each LEFT cell the small oval steel shield standing in front of the knight must disappear, leaving an empty armoured glove and leg behind it. In each RIGHT cell remove the narrow horizontal silver sword blade immediately below and to the right of his face, leaving empty ground/transparent pixels there and a natural empty armoured glove. Preserve the reddish brown hair, face, steel and ivory body armour, shoulder armour, brown trousers/boots, slumped and lying poses, exact sprite size, placement, margins and two-by-two cell arrangement. Do NOT remove body armour or draw a new shield. No weapon, no shield, no props anywhere. Keep both empty gloves plausible. This is an equipment-free body texture whose weapons are drawn separately. Preserve the small game sprite painted shading/palette of the target, no outline change, no text or grid lines, transparent background. Each cell remains the same pixel positioning, do not enlarge/recenter the sprites.",
+    "target_recipe": "512x512 RGBA target: native64cells28,29,28,29 from defender_weaponless, each nearest4x in2x2 grid"
+  }
+}

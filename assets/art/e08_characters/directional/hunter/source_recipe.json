@@ -1,0 +1,84 @@
+{
+  "actor_kind": "hunter",
+  "target_height": 50,
+  "views": {
+    "south": {
+      "source": "native_cleaned.png",
+      "native_cells": true,
+      "grid": [
+        4,
+        8
+      ],
+      "indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        24,
+        25,
+        28,
+        29
+      ]
+    },
+    "north": {
+      "source": "native_cleaned.png",
+      "native_cells": true,
+      "grid": [
+        4,
+        8
+      ],
+      "indices": [
+        16,
+        17,
+        18,
+        19,
+        12,
+        13,
+        14,
+        15,
+        20,
+        21,
+        22,
+        23,
+        26,
+        27,
+        30,
+        31
+      ]
+    },
+    "east": {
+      "source": "east_source_v1.png",
+      "overrides": {
+        "6": "east_source_v2.png",
+        "7": "east_source_v2.png"
+      }
+    },
+    "west": {
+      "source": "west_source_v2.png",
+      "overrides": {
+        "0": "west_source_v3.png",
+        "1": "west_source_v3.png",
+        "2": "west_source_v3.png",
+        "3": "west_source_v3.png",
+        "4": "west_source_v3.png",
+        "5": "west_source_v3.png",
+        "6": "west_source_v3.png",
+        "7": "west_source_v3.png",
+        "8": "west_source_v3.png",
+        "9": "west_source_v3.png",
+        "10": "west_source_v3.png",
+        "11": "west_source_v3.png",
+        "12": "west_source_v3.png",
+        "13": "west_source_v3.png"
+      }
+    }
+  }
+}

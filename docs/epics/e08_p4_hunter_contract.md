@@ -39,3 +39,15 @@ Entregar arquivos completos+recipe/provenance/delivery, conferência32nativas e
 112grips/64heads, hashRGBA, limitações. Devolver posse explicitamente. Root/Sol
 integra e testa nativo/export, incluindo equipamento/zoom/retrato/mundo. Staging
 não equivale a aceite ou P4 concluído. P5/master/push/save pessoal fora do escopo.
+
+## Correção delimitada de morte após inspeção —7/11
+
+Terra identificou arco residual nativo28,30,31; Root autoriza correção localizada
+imagegen nessas3células da mesma unidade. Manter29 e28demais byte a byte (29/32
+nativas preservadas), salvo prova concreta adicional comunicada. Fontes nativas
+originais nunca mudam. Criar native_death_source_v1..v3 e native_cleaned.png256x512
+no staging próprio; copiar29células intactas e substituir3por crops normalizados
+da nova arte sem arco via pipeline mecânico atual. Nada de apagar/desenhar por
+código. Recipe S/N usa cleaned com native_cells; calibrar3heads/grounds alterados,
+meta mortos soltos ehashesderived. Não recompensar defeito comafirmação32/32.
+É correção de defeito no contrato atual, semnovo consumidor/kit/loop/arma.

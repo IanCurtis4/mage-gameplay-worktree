@@ -1,0 +1,113 @@
+{
+  "generator": "OpenAI built-in image_gen (transparent_background=true)",
+  "reference": "https://www.spriters-resource.com/pc_computer/ragnarokonline/asset/127576/ (style and proportion only; no extracted asset)",
+  "sources": [
+    {
+      "path": "weapons_source_v1.png",
+      "sha256": "556124a1f27b5c83a8e46bc38af7eb29f9d7e34c50bf7d92b90828ca956ecb3c",
+      "prompt": "Original hand painted fantasy game sprite source sheet: seven separate objects in a horizontal row, sword, axe, staff, bow, shield, small prismatic focus, wooden beads. Fine organic contours, no text, no characters, genuine transparent background."
+    },
+    {
+      "path": "weapons_source_v2.png",
+      "sha256": "7c40563cf810daefa4a16a21e945e83aa34eb7a53ebf4ac3a258c8a2d7b6e9ca",
+      "prompt": "Use case: stylized-concept. Asset type: original game equipment sprite source sheet, transparent background. Seven separate hand-painted fantasy equipment objects, spaced widely in one horizontal row: sword, axe, staff, bow, shield, small prismatic focus, wooden prayer beads. One object of each, no characters, no labels or grid. Fine organic outlines, painted materials and readable volume at small scale; classic Ragnarok-like proportions but entirely original art. Genuine transparent background, no cast shadow, no text, no watermark."
+    },
+    {
+      "path": "heads_basic_source_v1.png",
+      "sha256": "e0bc2f20853924c19c2609a4cbb65747303735ff7ed48dd1a8fdec250a8c373b",
+      "prompt": "Original transparent sprite source sheet for a 2D RPG. Four horizontal rows, each row four isolated views of the same small headgear, columns front, back, right side, left side. Row 1 simple modest steel helmet, row 2 olive archer cap, row 3 plum mage hood, row 4 defender steel cap. 16 separate standalone headgear objects, no faces, no heads, no bodies, no props, no text. Each fits the skull, open face and eyes, small tidy proportions, truly transparent background. Fine hand-painted fantasy sprite art, crisp clean edges, consistent 2D viewpoint and size, ample spacing between each item, original designs."
+    },
+    {
+      "path": "heads_sets_a_source_v1.png",
+      "sha256": "48a0c133f4508e36594d82370d75894f4b6cbabb11e505b075a9e53a75e5c5ca",
+      "prompt": "Four rows x four columns of original RPG headgear sprites, front back right left per row: red cloth headband; airy elemental wreath; pale ritual veil; sage scout hood. Standalone headgear only, no faces or bodies, open eyes and small snug skull proportions. Each distinct row recognizable in all views. Clean hand-painted fantasy sprite art, transparent background, no text, separated widely."
+    },
+    {
+      "path": "heads_sets_b_source_v1.png",
+      "sha256": "3a43b22ab1e06656c06dcc823d2aa1a77f2c6857a665f1fc2449055532f4851a",
+      "prompt": "Four rows x four columns of original RPG headgear sprites, front back right left per row: rugged olive trail hat; delicate gold geometric diadem; soft green leaf hood; moonlit cloth headband. Standalone headgear only, no faces or bodies, open eyes and small snug skull proportions. Each distinct row recognizable in all views. Clean hand-painted fantasy sprite art, transparent background, no text, separated widely."
+    },
+    {
+      "path": "heads_examples_source_v1.png",
+      "sha256": "d91e30a46b2e12d7c5841a971a62a1b344fba4ba31326da20fcb995b9e4b6975",
+      "prompt": "Three rows x four columns of original RPG headgear sprites, front back right left per row: understated star diadem; small red apple pierced by arrow as novelty headwear; small cracked eggshell cap. Standalone headgear only, no faces or bodies, open eyes and small snug skull proportions. Each distinct row recognizable in all views. Clean hand-painted fantasy sprite art, transparent background, no text, separated widely."
+    },
+    {
+      "path": "heads_sets_c_source_v1.png",
+      "sha256": "06c20ab8fb33d6e122015550d71c8695ded6d938b2194fd33990b7aeaa308c1c",
+      "prompt": "Original 2D fantasy RPG accessory sprite source: one modest brown leather and cream cloth swordsman bandana, four isolated views front, back, right side, left side in one horizontal row, identical recognizable tied bandana. Fits compact skull, does not cover eyes, no head, no body, no props, no text. Organic hand-painted sprite with simple thin outlines; each view widely separated on genuinely transparent background."
+    },
+    {
+      "path": "heads_sets_c_source_v2.png",
+      "sha256": "6b3aefe856d9bb242fd70360413100344e3aa020e538d81175af0c905b19b090",
+      "input": "heads_sets_c_source_v1.png",
+      "prompt": "Edit this original RPG bandana sprite sheet. Change the brown leather to dark red leather to match Bandana do Corte Firme. Keep cream cloth, exact shape, transparent background, four separated views and orientation unchanged. No additional objects, no text."
+    },
+    {
+      "path": "heads_basic_source_v2.png",
+      "sha256": "0e5ab4c308636d6284949c8cfd04e308836ff4d7c39da07ae0f05ceebf22ec07",
+      "prompt": "Use case: game sprite source. Draw four isolated views of the same modest steel helmet only, front, back, right side, left side in a horizontal row. Intended as transparent overlay atop a character head: the front face opening MUST be completely transparent empty space, no black or brown lining, no face or head, and open side face region transparent as well. Compact steel dome, slim trim, short ear guards, fine hand painted contour, consistent scale. Real transparent alpha background and transparent opening; no shadows, no text, no extra objects."
+    },
+    {
+      "path": "heads_basic_source_v3.png",
+      "input": "heads_basic_source_v1.png",
+      "sha256": "f376650d555097d7ac7473f52c1adf2ff979ad8f149846b7d81a55668551b50b",
+      "prompt": "Edit this exact sprite source sheet. For all headgear with an opening, make the face opening genuinely transparent empty alpha, so a character face below can show through; remove dark opaque interior lining only. Preserve every helmet, hat, hood, four views, placement, material, shapes and colors, transparent background. No faces, characters, text or new objects."
+    },
+    {
+      "path": "heads_sets_a_source_v2.png",
+      "input": "heads_sets_a_source_v1.png",
+      "sha256": "3e32a84d89262cfcfb1462f99e9723f971a91fa8357d130aec5ee9ef41819170",
+      "prompt": "Edit this exact RPG headgear sprite source sheet. For every hood with a face opening, make the face opening genuinely empty transparent alpha, so a character face can show through. Remove the opaque dark interior and any scarf or garment crossing the face opening, while preserving the rest of each headgear, all four views, materials, positions and transparent background. No faces, bodies, text or new objects."
+    },
+    {
+      "path": "heads_sets_b_source_v2.png",
+      "input": "heads_sets_b_source_v1.png",
+      "sha256": "346805ae8731a077ad776a09daed1d2479e01af75038b54bd650a4e518778d97",
+      "prompt": "Edit this exact RPG headgear sprite source sheet. For every hood with a face opening, make the face opening genuinely empty transparent alpha, so a character face can show through. Remove the opaque dark interior and any scarf or garment crossing the face opening, while preserving the rest of each headgear, all four views, materials, positions and transparent background. No faces, bodies, text or new objects."
+    }
+  ],
+  "outputs_sha256": {
+    "apple_arrow_study.png": "f4cad7996f14a686f4ce1d7efda286153ae728a4bb713e274c6cecf3028f1232",
+    "axe.png": "b96bea9bdfe7ea92702c079e4d36e93c0225b38ca34be15f28d4170fba6ed008",
+    "bow.png": "581402c7a9150a672cb88f17f2337a0f8ab5243083e9d8e0a4bc4a91d6f12e9f",
+    "class_set_archer_head.png": "f1932c4ba4d10d5165bedefbda196d2f0e00a523c30342580658ab7927447e16",
+    "class_set_berserker_head.png": "d28b916a309915a77ce7c4ccd63608a7e928df9dbeb4d5b249b1aafb1488aa1b",
+    "class_set_defender_head.png": "a4033a5e9bab17a95f508096f11cdba25e999f1c9b051cfee47bfb82e9c1851b",
+    "class_set_elementalist_head.png": "08d2dc53d2d25897f7c1caf3f7492ecb1b5897303e522aba5ab96aa2b33dbd4f",
+    "class_set_hunter_head.png": "767c7e9ba254f7779cd695c942816132b5d988bf6578f2df6efe6e50a933979b",
+    "class_set_mage_head.png": "2e2f3b3ac6955031ab3957e014c816eef5e0ec7229f35d248d7bee7387d52b17",
+    "class_set_mg_ar_head.png": "12ea0d319a042655e4e6827c7ec4c364e255210f3ba0fd66a1bcfef14af95afb",
+    "class_set_sentinel_head.png": "889a8dda50175fbb95a4ab29d201463b7d53fe1b4870ee9fe166c8b52c014273",
+    "class_set_spiritualist_head.png": "d95a7603cb285a5be9211d151dac1431416bd5fb39a992ba12eb0993243e4fb6",
+    "class_set_swordsman_head.png": "411ab761b24bee2b61f0e4835f43862ba63faabc535a628d0854fc23177e8cc4",
+    "contact_sheet.png": "b8fb77b9e02997f0599072639a5df6a1cddeedda06079ef80324d740afffae61",
+    "delivery.md": "9f97def2f39956a590cdc5e27ea1f86c557d21b36b0b970fdd9a6b5c8b142019",
+    "eggshell_study.png": "08b005b5bae6a2c38e7bfa7092bdb39c3660c2b9f475110d8d0bb239c1d8e810",
+    "heads_basic_source_v1.png": "e0bc2f20853924c19c2609a4cbb65747303735ff7ed48dd1a8fdec250a8c373b",
+    "heads_basic_source_v2.png": "0e5ab4c308636d6284949c8cfd04e308836ff4d7c39da07ae0f05ceebf22ec07",
+    "heads_basic_source_v3.png": "f376650d555097d7ac7473f52c1adf2ff979ad8f149846b7d81a55668551b50b",
+    "heads_examples_source_v1.png": "d91e30a46b2e12d7c5841a971a62a1b344fba4ba31326da20fcb995b9e4b6975",
+    "heads_sets_a_source_v1.png": "48a0c133f4508e36594d82370d75894f4b6cbabb11e505b075a9e53a75e5c5ca",
+    "heads_sets_a_source_v2.png": "3e32a84d89262cfcfb1462f99e9723f971a91fa8357d130aec5ee9ef41819170",
+    "heads_sets_b_source_v1.png": "3a43b22ab1e06656c06dcc823d2aa1a77f2c6857a665f1fc2449055532f4851a",
+    "heads_sets_b_source_v2.png": "346805ae8731a077ad776a09daed1d2479e01af75038b54bd650a4e518778d97",
+    "heads_sets_c_source_v1.png": "06c20ab8fb33d6e122015550d71c8695ded6d938b2194fd33990b7aeaa308c1c",
+    "heads_sets_c_source_v2.png": "6b3aefe856d9bb242fd70360413100344e3aa020e538d81175af0c905b19b090",
+    "inventory.json": "869830f7ff8de9d7105b737c77d88c94b70850b6979f66ac36ea3780270871e4",
+    "pilot_head.png": "d106c284e42d96f1274f993291b411fc2f3d2c18c92b621589b3e2153e1ed309",
+    "presentation.json": "195a1b288c4b9b9b6581218c8e308bc2b26423084b9ce010aead33948352e8ec",
+    "prismatic_focus.png": "14ee78bf42973210c8b75b63b385a79eea9d07f69cfdd757343d078402e08e16",
+    "recipe.md": "aed6f502f66f3c0ee06bbbf1608df3d8320a248d635298f87683451322405636",
+    "shared_set_high_head.png": "2c7ed12b1b02333d0a76c00f06bb1365db74eae5046560aa90854559033036da",
+    "shared_set_low_head.png": "2fdeeeb6d1a7a09a14b7a67689fca363ef74aacb37e7fc26b0fa5acd7089aea9",
+    "shared_set_mid_head.png": "9c4ea0f716a68e37a023a93bd7d222e3443e9e007ec70413e60c5e1587d94c1f",
+    "shield.png": "45bff7fe9ee3cc9128b0635850509da7c48fd22c589f22620d25e114a4d6e0a4",
+    "staff.png": "82f8ff16dc91390b515661c86a14d739127b0e8dd5b25fe7f2265c0f06258e88",
+    "sword.png": "63026bb78b53cc4d120b6899e89e758053ba1a815f28ba058c89eb8cda9e1478",
+    "weapons_source_v1.png": "556124a1f27b5c83a8e46bc38af7eb29f9d7e34c50bf7d92b90828ca956ecb3c",
+    "weapons_source_v2.png": "7c40563cf810daefa4a16a21e945e83aa34eb7a53ebf4ac3a258c8a2d7b6e9ca",
+    "wooden_beads.png": "281db4deeaef949e6aaca63fa1dfb0920dc02d02fdac171434b3682d636a82ba"
+  },
+  "packer_sha256": "9e3dc432ba287c050f504013200b61a8a91fc0f2c5588a1fd343c0131f25c52d"
+}

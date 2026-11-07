@@ -1,0 +1,38 @@
+{
+  "scope": "Root offline authoring handback review; not native approval",
+  "defender": {
+    "rgba": "779efb66cec50805bf2f7845f26f57d05a06e4874560d594f6646e8f15e1c2a5",
+    "reproduction": true,
+    "poses": 64,
+    "living_grips": 112,
+    "ground_metadata": 64,
+    "unchanged_native_cells": 30,
+    "authored_native_corrections": [
+      28,
+      29
+    ]
+  },
+  "berserker": {
+    "rgba": "974b5af44323adcdbceb7090dbdd00f935c5d8630f51fd71d9b943c728994b62",
+    "reproduction": true,
+    "poses": 64,
+    "living_grips": 112,
+    "ground_metadata": 64,
+    "unchanged_native_cells": 32,
+    "head_death_angles_corrected": true
+  },
+  "hunter": {
+    "rgba": "c1167462f02c866bbb11f6afca2b1eae450399131635285c108a179129906974",
+    "artist_reported_unchanged_native_cells": 29,
+    "artist_reported_grips": 112,
+    "native_pending": true
+  },
+  "gear": {
+    "heads": 14,
+    "studies_unbound": 2,
+    "keys": 7,
+    "review": "Root inspected contact sheet and independent mechanical face/grip comparisons; openings fixed, built-in Mage hat requires bare-head body",
+    "native_pending": true
+  },
+  "gameplay": "Not repeated for this art-only staging/contract commit; previous integrated3unit proof at5756f094 remains frozen"
+}

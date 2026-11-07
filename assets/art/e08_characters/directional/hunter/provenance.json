@@ -1,0 +1,107 @@
+{
+  "generator": "built-in imagegen",
+  "reference": "assets/art/animations/hunter_weaponless.png",
+  "reference_sha256": "595bd4c3f56489144e1fb79fcb01a69b771a28cc84ef325bfa27d82b55803661",
+  "sources": {
+    "east_source_v1.png": {
+      "sha256": "9d492a3e9f2119f7e566f4bb3fc90af4f93ca69e80f4d01c22a62cff039505d2",
+      "prompt": "Use case: stylized-concept. Asset type: production pixel-art game animation spritesheet. Input image is style and identity reference: weaponless Huntress. Create a NEW right-facing EAST profile 4 by 4 sprite sheet with 16 distinct frames in precisely aligned equal cells, transparent background. Row 1 idle four subtle poses; row 2 walk four poses; row 3 four unarmed attack poses; row 4 hurt two, death two (fallen on ground with visible head). Match reference's feminine form, pale blond hair, olive green hood, brown leather travel clothes, leaf details and quiver worn as costume. Chibi proportions, hand-drawn pixel style. Full body inside each cell, consistent scale and bottom alignment, transparent separation. Exactly two arms with two distinct visible empty gloved hands, including strike. No bow, weapons, shields, effects, props held in hands, text or extra limbs. Right-facing profile throughout."
+    },
+    "west_source_v1.png": {
+      "sha256": "56a8ee22374b5a1297d3ad2959e058bd3994087fe9e1d12aff8b79b093a24704",
+      "prompt": "Use case: stylized-concept. Asset type: production pixel-art game animation spritesheet. Input image is style and identity reference: weaponless Huntress. Create a NEW left-facing WEST profile 4 by 4 sprite sheet with 16 distinct frames in precisely aligned equal cells, transparent background. Row 1 idle four subtle poses; row 2 walk four poses; row 3 four unarmed attack poses; row 4 hurt two, death two (fallen on ground with visible head). Match reference's feminine form, pale blond hair, olive green hood, brown leather travel clothes, leaf details and quiver worn as costume. Chibi proportions, hand-drawn pixel style. Full body inside each cell, consistent scale and bottom alignment, transparent separation. Exactly two arms with two distinct visible empty gloved hands, including strike. No bow, weapons, shields, effects, props held in hands, text or extra limbs. Left-facing profile throughout."
+    },
+    "west_source_v2.png": {
+      "sha256": "e4855f8a0ddc1f42ae3748b457db45c9588a9e31e983155c52f4febdcc041576",
+      "prompt": "Use case: stylized-concept. Production game sprite sheet: transparent RGBA 4x4 grid, no shadows or background. Re-create the huntress in the reference with independent left-facing profile: pale blond hair, olive green hood, dark brown and olive traveling leathers, leaf detail and quiver worn on back. Pixel art, chibi proportions. Four idle, four walking, four unarmed action, two hurt, two fallen death. Each full figure centered inside its equal cell, empty transparent separation. Two anatomically plausible arms with distinct visible empty gloved hands. No bow, weapons, held props, effects, text or extra limbs. No floor, no gray or white haze, no checkerboard."
+    },
+    "east_source_v2.png": {
+      "sha256": "c5c3a3e2f96f593609a575957306ccc519ca05b30bae5a0b44510a2196607426",
+      "prompt": "Use case: precise-object-edit. Transparent 4x4 pixel-art spritesheet. Correct only second row columns 3 and 4: the right-facing walking huntress needs two distinct empty gloved hands, each visibly attached to one of exactly two arms, with the far hand visible at her side rather than hidden by the cloak. Preserve her olive hood, pale hair, quiver, pose, style, layout and every other cell. No weapons or effects, no floor, transparent background."
+    },
+    "west_source_v3.png": {
+      "sha256": "b6dd80c10e521245a971bb19a4ff6c3e5192522fcf189d89360208af690f6639",
+      "prompt": "Use case: precise-object-edit. Edit this 4x4 transparent pixel-art spritesheet: in each live standing, walking, attacking and hurt pose, show exactly two separate empty gloved hands clearly connected to two arms; reveal the far glove from behind cloak and belt, maintaining original pose. Keep identity, left-facing view, costume, quiver, grid, positioning and death poses. No weapons, held props, extra limbs, effects, text, floor or background. Transparent RGBA."
+    },
+    "native_death_source_v1.png": {
+      "sha256": "96b70c38178f2bb5d0f828e19b85db5be9a145cebb9974bb676338a15b8f9f63",
+      "prompt": "Use case: precise-object-edit. Asset type: pixel-art game sprite sheet, four death poses arranged 2x2. Edit the provided image: remove the thin curved brown bow lying in front of or under the character, in the top-left and both bottom cells. Restore transparent space and plausible empty hands where the bow was. Keep each fallen character's identity, olive hood, pale hair, leather and quiver, body silhouette, exact pose and placement, 2x2 layout and pixel-art style. Do not add any weapons, items, effects, extra limbs, text or background. Real transparent background."
+    }
+  },
+  "cleanup": {
+    "source": "native_death_source_v1.png",
+    "native_indices": [
+      28,
+      30,
+      31
+    ],
+    "source_quadrants": [
+      0,
+      2,
+      3
+    ],
+    "source_boxes": [
+      [
+        71,
+        262,
+        508,
+        555
+      ],
+      [
+        71,
+        260,
+        508,
+        557
+      ],
+      [
+        54,
+        287,
+        547,
+        553
+      ]
+    ],
+    "legacy_boxes": [
+      [
+        7,
+        26,
+        57,
+        58
+      ],
+      [
+        7,
+        26,
+        57,
+        58
+      ],
+      [
+        5,
+        29,
+        59,
+        58
+      ]
+    ],
+    "output_sizes": [
+      [
+        48,
+        32
+      ],
+      [
+        47,
+        32
+      ],
+      [
+        54,
+        29
+      ]
+    ],
+    "method": "remove_matte, keep_character; LANCZOS; alpha threshold 128; center x32; match legacy ground and height; unchanged 29 native cells",
+    "native_cleaned_sha256": "35c87209fe01e85151065e1d4bdf50424f519b3bf5b0ed897f2788aaa2e84cf0"
+  },
+  "outputs": {
+    "body.png": "df5ddd58e6c7bcd431834a8a5e35d182a14b11bdc8b3432e9e4c43a483cb1f89",
+    "weaponless.png": "df5ddd58e6c7bcd431834a8a5e35d182a14b11bdc8b3432e9e4c43a483cb1f89",
+    "calibration.json": "879209a82cbffca446d312320522ac8455b67d33950fc219379fd53fb193bc34",
+    "presentation.json": "8ca83365267c8bd86ba05111af31c12632719214ceadccd0e07037557f252cf5"
+  },
+  "rgba_sha256": "c1167462f02c866bbb11f6afca2b1eae450399131635285c108a179129906974"
+}
