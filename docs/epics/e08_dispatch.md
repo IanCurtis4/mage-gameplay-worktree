@@ -475,3 +475,19 @@ P1–P3 parados, P5/P6 não despachados. Sem runtime/testes nesta preparação.
 Chat P4: 01a1b369-442b-7f91-82a1-2316a4a0514d, host local, Terra6.1 médio.
 O SHA deste registro será informado no dispatch. Depois da transferência,
 P4 é único escritor dos arquivos listados; P0 somente leitura até handback.
+
+## P4 parcial / posse técnica Sol — 6/11/2026
+
+Terra registrou 6389edcdb7d145e4721b9504ba2876173d4d6a68 e está parado.
+Pedido humano atual transfere a retomada técnica a P0/Sol conforme
+[e08_p4_sol_contract.md](e08_p4_sol_contract.md). Sem escritores concorrentes.
+P4 continua incompleto; P5 não liberado.
+
+### Sol triagem concluída / P4 segue aberto
+
+[Recibo](e08_p4_sol_delivery.md): nova sonda/runner,764checks nativos,
+verify4/4/6433,ZIP74membros; Luna confirmou integridade/execução e devolveu
+posse. Nenhum runtime/asset/teste antigo mudou. Próximo produtor Sol descrito
+em e08_p4_directional_contract.md ainda sem implementação; resolve direções e
+contrato de corpo/mãos/equipamentos/cabeça antes de devolver consumo a Terra.
+P4 parcial não autoriza P5 e chat não deve ser arquivado.

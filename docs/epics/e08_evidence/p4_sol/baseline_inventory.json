@@ -1,0 +1,150 @@
+{
+  "base": "6389edcdb7d145e4721b9504ba2876173d4d6a68",
+  "mob_definitions": [
+    {
+      "resource": "resources/playtest_gameplay/mob/test_animal_companion.tres",
+      "animation_kind": "animal_companion"
+    },
+    {
+      "resource": "resources/playtest_gameplay/mob/test_beast_master.tres",
+      "animation_kind": "beast_master"
+    },
+    {
+      "resource": "resources/playtest_gameplay/mob/test_gel.tres",
+      "animation_kind": "gel"
+    },
+    {
+      "resource": "resources/forest_phase/mob/forest_ancient_warden.tres",
+      "animation_kind": "beast_master"
+    },
+    {
+      "resource": "resources/forest_phase/mob/forest_boar.tres",
+      "animation_kind": "animal_companion"
+    },
+    {
+      "resource": "resources/forest_phase/mob/forest_canopy_archer.tres",
+      "animation_kind": "archer"
+    },
+    {
+      "resource": "resources/forest_phase/mob/forest_stalker.tres",
+      "animation_kind": "warrior"
+    },
+    {
+      "resource": "resources/forest_phase/mob/forest_wolf.tres",
+      "animation_kind": "animal_companion"
+    },
+    {
+      "resource": "resources/build_effects/mob/demo_archer.tres",
+      "animation_kind": "archer"
+    },
+    {
+      "resource": "resources/build_effects/mob/demo_chaser.tres",
+      "animation_kind": "warrior"
+    },
+    {
+      "resource": "resources/build_effects/mob/pilot_bulwark_species.tres",
+      "animation_kind": "warrior (default)"
+    },
+    {
+      "resource": "resources/build_effects/mob/pilot_echo_species.tres",
+      "animation_kind": "warrior (default)"
+    },
+    {
+      "resource": "resources/build_effects/mob/pilot_ember_species.tres",
+      "animation_kind": "warrior (default)"
+    },
+    {
+      "resource": "resources/build_effects/mob/pilot_frost_species.tres",
+      "animation_kind": "warrior (default)"
+    },
+    {
+      "resource": "resources/build_effects/mob/pilot_precision_species.tres",
+      "animation_kind": "warrior (default)"
+    },
+    {
+      "resource": "resources/build_effects/mob/pilot_trail_species.tres",
+      "animation_kind": "warrior (default)"
+    }
+  ],
+  "atlas_hashes": {
+    "animal_companion.png": {
+      "sha256": "f76ccc2391ccfd2cadedbd702a24aa52e8c63f5cb39410157f56c85b981c9d6b"
+    },
+    "archer.png": {
+      "sha256": "673ab251b60e1155e370797e472219825c8d8a6066d436210a1ca8aabf1c3b07"
+    },
+    "archer_weaponless.png": {
+      "sha256": "05967819d2c527a5c713881f05b768f3c845b5db4ab6bacc797be9a767d8e582"
+    },
+    "beast_master.png": {
+      "sha256": "0e00657a31377f8171cce242b2dbaf425df5c97d183f98aa7226c2e98bfc47b5"
+    },
+    "berserker.png": {
+      "sha256": "a9e7e303fea7fe38a36bf1d68335f11780065f7f0f135242ede94dac4da82013"
+    },
+    "berserker_weaponless.png": {
+      "sha256": "13a5d3fafacb25b9eb3e08a17c5110f969182e463dba9db3faaefd2577d6d56f"
+    },
+    "defender.png": {
+      "sha256": "193e25ad03974a020d16cb895caa42953475ffb35528c53cc41dcb641bb4bca7"
+    },
+    "defender_weaponless.png": {
+      "sha256": "ac3b3bade557101ba1e408888b8338a826227ca690e40eaf259e92bba71add9b"
+    },
+    "e08_forest_boar.png": {
+      "sha256": "64b7f40190cd22b17a1e99daf94f56d4b2070baeb7584cb25b4855ea1318b373"
+    },
+    "e08_forest_wolf.png": {
+      "sha256": "e36b9195562f812580fead73ad01acbc884dc27d0e2f89450dbb63c53c95770a"
+    },
+    "elementalist.png": {
+      "sha256": "ae1206b6fad7cb61ab8f80e5e6dbfdd66deb6301aa990b89cf064a034eee013e"
+    },
+    "elementalist_weaponless.png": {
+      "sha256": "fa9398ef27ac527e47a56611919677ef75131c7ac64c7168980bb6236e5a5ed4"
+    },
+    "gel.png": {
+      "sha256": "5d3398228e0fa14563d4f7847bc3effa55ec5e46f8249da0e82acb7dd9505a32"
+    },
+    "geometer.png": {
+      "sha256": "8689034e3433c86e5e59a7f71c71b8d5e62da1ea6875a2efb94305ebe9ff30ad"
+    },
+    "geometer_weaponless.png": {
+      "sha256": "32cf522d35ee0eb03aacf532065c48b66bcd989ef5cd0876d44a8be5f7a32489"
+    },
+    "hunter.png": {
+      "sha256": "b9130a8b3768443124140190eb716a14a6bb271347631fe6a02458e939e42176"
+    },
+    "hunter_weaponless.png": {
+      "sha256": "595bd4c3f56489144e1fb79fcb01a69b771a28cc84ef325bfa27d82b55803661"
+    },
+    "mage.png": {
+      "sha256": "6004ac0445f4154ff6691731f9b9a920aadc57e197b825e7c079575eb8595725"
+    },
+    "mage_weaponless.png": {
+      "sha256": "259ed65fcdca4f388a3bf96ae4f6e11084c43ab02f58524a51558d4b5b40d4c1"
+    },
+    "sentinel.png": {
+      "sha256": "059e7a84bc41b0f800e455b64a8e1666826ed57a1d77a7a1f85cca658d588ba6"
+    },
+    "sentinel_weaponless.png": {
+      "sha256": "61fbea20734f64f35cfcc7e3d40e00c800a0ea47be69f085f2d61e56eaa7d6ea"
+    },
+    "spiritualist.png": {
+      "sha256": "1d0ef4ded032a7f608529a93b94597d52abfc57100e3050a28b22ddfb3e631ed"
+    },
+    "spiritualist_weaponless.png": {
+      "sha256": "cdaf6eafedadac2909550e92295abbd1275f359ea64807a480b1c2e7b7b02a4b"
+    },
+    "swordsman.png": {
+      "sha256": "d8456d89a0a2f7faf34fa2294478a80bbf129e2ed8b1b4aa2ba4e5bed3c281ec"
+    },
+    "swordsman_weaponless.png": {
+      "sha256": "03650b272fa0313b6742886f7e23905811b9b7ae3932a89c1841f2acb8dc346a"
+    },
+    "warrior.png": {
+      "sha256": "f07aaae18ceedda5e237055edbbb14bd60afb454e24cff3e80354ba37bbfea60"
+    }
+  },
+  "note": "Atlas hashes protect baseline. forest_wolf/boar use occurrence overrides from e08_pilot_visual; resources alone do not prove occurrence visibility."
+}

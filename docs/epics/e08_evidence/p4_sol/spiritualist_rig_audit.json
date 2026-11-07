@@ -1,0 +1,205 @@
+{
+  "candidate_sha256": "784e307c6c378bd48938bf0bc705c9e938fbe958a21209ea1b25c6aaf20b6963",
+  "dimensions": [
+    256,
+    512
+  ],
+  "tested_anchors": 56,
+  "opaque_misses": 24,
+  "missing": [
+    {
+      "frame": 0,
+      "hand": "off",
+      "position": [
+        20,
+        37
+      ]
+    },
+    {
+      "frame": 1,
+      "hand": "off",
+      "position": [
+        20,
+        38
+      ]
+    },
+    {
+      "frame": 2,
+      "hand": "off",
+      "position": [
+        20,
+        38
+      ]
+    },
+    {
+      "frame": 3,
+      "hand": "off",
+      "position": [
+        20,
+        37
+      ]
+    },
+    {
+      "frame": 5,
+      "hand": "main",
+      "position": [
+        45,
+        36
+      ]
+    },
+    {
+      "frame": 6,
+      "hand": "main",
+      "position": [
+        44,
+        35
+      ]
+    },
+    {
+      "frame": 7,
+      "hand": "off",
+      "position": [
+        20,
+        35
+      ]
+    },
+    {
+      "frame": 8,
+      "hand": "off",
+      "position": [
+        21,
+        38
+      ]
+    },
+    {
+      "frame": 9,
+      "hand": "off",
+      "position": [
+        20,
+        36
+      ]
+    },
+    {
+      "frame": 11,
+      "hand": "main",
+      "position": [
+        44,
+        40
+      ]
+    },
+    {
+      "frame": 12,
+      "hand": "off",
+      "position": [
+        18,
+        38
+      ]
+    },
+    {
+      "frame": 15,
+      "hand": "off",
+      "position": [
+        19,
+        38
+      ]
+    },
+    {
+      "frame": 16,
+      "hand": "off",
+      "position": [
+        19,
+        38
+      ]
+    },
+    {
+      "frame": 17,
+      "hand": "off",
+      "position": [
+        18,
+        38
+      ]
+    },
+    {
+      "frame": 18,
+      "hand": "off",
+      "position": [
+        18,
+        38
+      ]
+    },
+    {
+      "frame": 19,
+      "hand": "off",
+      "position": [
+        19,
+        39
+      ]
+    },
+    {
+      "frame": 20,
+      "hand": "off",
+      "position": [
+        18,
+        38
+      ]
+    },
+    {
+      "frame": 21,
+      "hand": "main",
+      "position": [
+        51,
+        24
+      ]
+    },
+    {
+      "frame": 21,
+      "hand": "off",
+      "position": [
+        17,
+        33
+      ]
+    },
+    {
+      "frame": 22,
+      "hand": "off",
+      "position": [
+        19,
+        32
+      ]
+    },
+    {
+      "frame": 23,
+      "hand": "off",
+      "position": [
+        18,
+        38
+      ]
+    },
+    {
+      "frame": 24,
+      "hand": "off",
+      "position": [
+        20,
+        40
+      ]
+    },
+    {
+      "frame": 25,
+      "hand": "off",
+      "position": [
+        22,
+        39
+      ]
+    },
+    {
+      "frame": 27,
+      "hand": "off",
+      "position": [
+        20,
+        34
+      ]
+    }
+  ],
+  "decision": "Do not calibrate automatically to nearest opaque cloth. A visible, anatomically consistent hand and matching finger crop is required; this is a source/rig dependency, not gameplay complexity. No runtime asset promoted.",
+  "directional_status": "32 front/back cells; contains no complete east/west animation blocks."
+}

@@ -89,3 +89,21 @@ A preparação documental não repetiu gameplay.
 Chat P4: 01a1b369-442b-7f91-82a1-2316a4a0514d, host local, Terra6.1 médio.
 O SHA deste registro será informado no dispatch. Depois da transferência,
 P4 é único escritor dos arquivos listados; P0 somente leitura até handback.
+
+## P4 parcial retomado por Sol — 6/11/2026
+
+Terra parou no checkpoint6389edcdb7d145e4721b9504ba2876173d4d6a68.
+Pedido humano atual autorizou avaliar/assumir a parte complexa. Sol assumiu
+triagem conforme e08_p4_sol_contract.md e concluiu prova UI atual, sem alterar
+runtime/arte/testes:764checks nativos/10identidades/32capturas; verify4/4,
+6.433checks. Aviso2ObjectDB do teste admin conservado. Luna conferiu74/74membros
+ZIP,2.332fontes,engine/tools/backups e devolveu posse sem divergência.
+[Subentrega e pendências concretas](e08_p4_sol_delivery.md).
+
+P4 continua INCOMPLETO, P5 bloqueado. Próximo pacote técnico possível a Sol é
+produtor V2 direcional e integração comum de cabeça/anexos, com lista exata/SHA
+antes de editar. [Contrato técnico](e08_p4_directional_contract.md).
+Arte candidata Espiritualista24/56grips semalpha não promovida. Preview do
+inventário não desenha capacete: pendência real de integração, não resolvida
+por captura ou mudança do oráculo. Terra permanece parado para essa fronteira.
+Release ad09b99d e habitual/save não mudaram; sem master/push.
