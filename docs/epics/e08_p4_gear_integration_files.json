@@ -1,6 +1,6 @@
 {
   "base": "173c8e4d83e803532f7be0850151fda585373ccf",
-  "owner": "Root reserve; transfer to Sol after dispatch",
+  "owner": "Root after Sol technical delivery commit/handback; inputs frozen for Luna",
   "files": [
     "docs/epics/e08_p4_gear_integration_contract.md",
     "docs/epics/e08_p4_gear_integration_files.json",
@@ -79,7 +79,12 @@
     "assets/art/equipment/painted/prismatic_focus.png",
     "assets/art/equipment/painted/prismatic_focus.png.import",
     "assets/art/equipment/painted/wooden_beads.png",
-    "assets/art/equipment/painted/wooden_beads.png.import"
+    "assets/art/equipment/painted/wooden_beads.png.import",
+    "tests/fixtures/e08_equipment_art/body.png",
+    "tests/fixtures/e08_equipment_art/body.png.import",
+    "tests/fixtures/e08_equipment_art/weaponless.png",
+    "tests/fixtures/e08_equipment_art/weaponless.png.import",
+    "tests/fixtures/e08_equipment_art/presentation.json"
   ],
   "fixture": ".godot/verification/e07_f1/fixture_project",
   "evidence_root": "docs/epics/e08_evidence/p4_equipment/",
@@ -89,7 +94,32 @@
   ],
   "dependencies": {
     "gear": "complete art handback at173c8e4d",
-    "mage_bare_head": "Terra artist active, only producer/negative cases before handback; do not change source body or artist files",
+    "mage_bare_head": "Full handback Root at a23a84c2; artwork read-only; integration may consume64anchors and copy bare texture",
     "other_units": "Defender/Berserker/Hunter stay Root stage, not promoted by this package"
+  },
+  "active_dispatch": {
+    "base": "94d68c98cf1d9e93de23e184cfdf0fd62f85d8ab",
+    "exclusive_index_fixture": false,
+    "mage_art_handback_pending": false,
+    "root_does_not_edit_owned_files": true,
+    "executor_started": true,
+    "baseline": ".godot/verification/p4_equipment/cost_baseline1",
+    "documental_base_after_art_handback": "a23a84c2f8fc495303e3091d8f782f68cd19c8c1",
+    "status": "DELIVERED_TECHNICALLY; pending Luna frozen evidence integrity review"
+  },
+  "read_only_inputs": [
+    "assets/art/e08_head_fit/mage/calibration.json",
+    "assets/art/e08_head_fit/mage/provenance.json",
+    "assets/art/e08_equipment_redesign/presentation.json",
+    "assets/art/e08_equipment_redesign/inventory.json"
+  ],
+  "fixture_additions_reason": "Invalid optional bare_head manifest beside two copied existing tiny producer textures, for actual atomic set_directional_manifest rejection; declared before writing",
+  "handback": {
+    "recipient": "/root",
+    "effective": "commit containing e08_p4_gear_integration_delivery.md; SHA reported in final message",
+    "index_fixture_files_returned": true,
+    "source_count": 2468,
+    "verification": "24 unique steps /31283 checks PASS; native5568/35; motion76/64; packed2589+10887+3461+814",
+    "scope_excludes": "All other player/NPC/head_fit stages, Root finalIntegration contracts, four user backups; habitual/master/push/save"
   }
 }

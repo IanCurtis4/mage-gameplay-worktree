@@ -10,7 +10,11 @@ V2 da Espiritualista integrado no candidato ([recibo](epics/e08_p4_art_delivery.
 Elementalista/Mago/Espadachim promovidos ([recibo](epics/e08_p4_units_delivery.md));
 apoio geométrico de itens V2 na morte conserva X/ângulo/flip autorais, impede
 penetração na queda e apoia no cadáver assentado. Sem campos novos de save ou
-clock. Outros conteúdos e redesenho de equipamentos pendentes. P4 não concluído.
+clock. [Equipamentos pintados e Mago bare_head](epics/e08_p4_gear_integration_delivery.md)
+entregues:14IDs/7peças, filtro localCanvasTexture, ícones correspondentes e
+validação atômica opcional/coldrestore derivado pelo terceiro path, sem campos
+novos. Remover cabeça restaura atlas original; oeste tem desenho próprio.
+Outros conteúdos/bases de cabelo aguardam integração posterior. P4 não concluído.
 
 
 > Estado vigente em 6/11: [piloto aceito com ressalva sonora](epics/e08_p3_product_acceptance.md); P4 autorizado, [contrato](epics/e08_p4_contract.md). Bloqueios por aceite P3 nos registros abaixo são históricos. P5/P6/P7 ainda dependem das entregas anteriores; não despachados.

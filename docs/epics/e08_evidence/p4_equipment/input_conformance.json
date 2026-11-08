@@ -1,0 +1,9 @@
+{
+  "source_count": 2468,
+  "source_manifest_sha256": "30978d236f9383d02f802cb08278785a4ea9270bc5e874d99ab1dd07d17893b5",
+  "all_source_and_fixture_hashes_match": true,
+  "generated_metadata_count": 28,
+  "read_only_art_unchanged": true,
+  "backups_unchanged": true,
+  "project_only_difference": "version_control/autoload_on_startup=false in fixture"
+}

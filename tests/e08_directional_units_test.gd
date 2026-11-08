@@ -115,11 +115,12 @@ func integrated() -> void:
 	var proposed := host.build_service.preview_change(intent)
 	check(proposed.ok and host.build_service.commit_change(proposed.intent).ok,"actual durable helmet equip")
 	var animation := host.player.character_animation
-	var world_binding: bool = animation.render_descriptor().version==2 and animation.atlas.resource_path=="res://assets/art/animations/directional/%s/weaponless.png" % unit_kind if require_default else animation.set_directional_manifest(manifest).ok
+	var expected_body: String = "bare_head" if unit_kind==&"mage" else "weaponless"
+	var world_binding: bool = animation.render_descriptor().version==2 and animation.atlas.resource_path=="res://assets/art/animations/directional/%s/%s.png" % [unit_kind,expected_body] if require_default else animation.set_directional_manifest(manifest).ok
 	check(animation.actor_kind==unit_kind and world_binding,"real actor consumes explicit default/staged content")
 	var dto := BuildPresentation.describe(host)
 	var portrait := InventoryCharacterPreview.new(); host.add_child(portrait); portrait.configure(dto.identity_id,dto.equipment_visual)
-	var portrait_binding: bool = portrait._animation.render_descriptor().version==2 and portrait._animation.atlas.resource_path=="res://assets/art/animations/directional/%s/weaponless.png" % unit_kind if require_default else portrait._animation.set_directional_manifest(manifest).ok
+	var portrait_binding: bool = portrait._animation.render_descriptor().version==2 and portrait._animation.atlas.resource_path=="res://assets/art/animations/directional/%s/%s.png" % [unit_kind,expected_body] if require_default else portrait._animation.set_directional_manifest(manifest).ok
 	check(portrait_binding,"real portrait consumes same explicit default/staged content")
 	for direction: int in 4:
 		for pose: int in 16:

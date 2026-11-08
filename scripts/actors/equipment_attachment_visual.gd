@@ -19,13 +19,16 @@ static func describe(snapshot: BuildSnapshot, catalog: BuildEffectCatalog) -> Di
 		if definition == null:
 			continue
 		if slot == &"head":
-			result[slot] = &"pilot_head" if definition.id == &"pilot_head" else &""
+			result[slot] = definition.id if EquipmentArtCatalog.has_head(definition.id) else &""
 			continue
-		var key := definition.visual_key
-		if key.is_empty():
-			key = _fallback_key(slot, definition, snapshot.base_class_id)
-		result[slot] = key if key in SUPPORTED else &""
+		result[slot] = key_for_definition(definition,slot,snapshot.base_class_id)
 	return result
+
+static func key_for_definition(definition: EquipmentDefinition,slot: StringName,base_class: StringName = &"") -> StringName:
+	if definition==null:return &""
+	var key := definition.visual_key
+	if key.is_empty():key=_fallback_key(slot,definition,base_class)
+	return key if key in SUPPORTED else &""
 
 const RIG = preload("res://scripts/actors/equipment_hand_rig.gd")
 const PROFILES := {
@@ -166,14 +169,19 @@ static func resolve_equipment(kind: StringName, state: CombatAnimationState, vis
 			var hand := Vector2(pose.point[0],pose.point[1])
 			var fingers: Array = pose.fingers
 			placed={"point":origin+hand,"angle":pose.get("angle_overrides",{}).get(String(key),float(PROFILES[key].angle)+float(pose.angle)),"depth":pose.get("depth_overrides",{}).get(String(key),int(pose.depth)),"flip":pose.flip,"grip":PROFILES[key].grip,"size":PROFILES[key].size,"finger_rect":Rect2(fingers[0],fingers[1],fingers[2],fingers[3]),"slot":slot,"key":key}
-			if state.dead:
-				# The corpse releases equipment onto the same local ground as V1.
-				# Local mirroring changes the rotated support, never the X anchor.
-				var support := _rotated_bottom(key,-float(placed.angle) if bool(placed.flip) else float(placed.angle))
-				var grounded: Vector2=placed.point
-				if state.pose_index()==15 or grounded.y+support>0.0:
-					grounded.y=-support
-					placed.point=grounded
+		if state.dead and not placed.is_empty():
+			# Painted source bounds are logical units; keep authored X/angle/local flip.
+			var bounds := EquipmentArtCatalog.prop_bounds(key,Vector2(PROFILES[key].size))
+			var support := -INF
+			if bounds.has_area():
+				for corner: Vector2 in [bounds.position,bounds.end,Vector2(bounds.position.x,bounds.end.y),Vector2(bounds.end.x,bounds.position.y)]:
+					var local: Vector2=corner-Vector2(placed.grip)
+					if placed.flip:local.x=-local.x
+					support=maxf(support,local.rotated(float(placed.angle)).y)
+			else:support=_rotated_bottom(key,-float(placed.angle) if bool(placed.flip) else float(placed.angle))
+			var grounded: Vector2=placed.point
+			if state.pose_index()==15 or grounded.y+support>0.0:
+				grounded.y=-support;placed.point=grounded
 		if not placed.is_empty(): result.append(placed)
 	return result
 
@@ -184,10 +192,11 @@ static func resolved_transform(placed: Dictionary, scale: float, body_flip: bool
 static func draw_resolved(canvas: CanvasItem, descriptor: Dictionary, tint: Color, scale: float, depth: int) -> void:
 	for placed: Dictionary in descriptor.equipment:
 		if placed.depth!=depth: continue
-		var texture := _texture(placed.key)
+		var texture := EquipmentArtCatalog.prop_texture(placed.key,Vector2(placed.size))
+		if texture==null:texture=_texture(placed.key)
 		if texture==null: continue
 		canvas.draw_set_transform_matrix(resolved_transform(placed,scale,descriptor.flip))
-		canvas.draw_texture(texture,-Vector2(placed.grip),tint)
+		canvas.draw_texture_rect(texture,Rect2(-Vector2(placed.grip),Vector2(placed.size)),false,tint)
 		if placed.key==&"bow" and descriptor.arrow_visible:
 			# Same cosmetic arrow as V1, using the resolved hand transform.
 			var from := Vector2(-11,0); var to := Vector2(20,0)

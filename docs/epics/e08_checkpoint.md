@@ -209,3 +209,19 @@ Root depois do freeze. Capacete/anexos atuais são provisórios e o redesenho no
 fica em contrato separado. Outros conjuntos continuam com Root/artistas, fora
 desta fixture congelada. P4 aberto; P5–P7 não concluídos; sem master/push/playtest
 habitual ou save pessoal. As narrativas de staging acima são históricas.
+
+## Equipamentos e cabelo base do Mago — entrega técnica8/11
+
+[Recibo](e08_p4_gear_integration_delivery.md) e
+[evidência](e08_evidence/p4_equipment/README.md):14cabeças reais/7peças pintadas,
+ícones/filtro local e opcional bare_head V2 atômico com coldrestore pelo path.
+Mago primeiro consumidor, original restaurado ao remover equipamento conhecido.
+24/318etapas únicas/31.283checks PASS;2consumidores finais após4ângulos de morte,
+5.568checks nativos/35capturas e76checks/64quadros; PCKfinal2
+2.589+10.887+3.461+814PASS. Custo96atores triado, sem regressão>10% reproduzível
+ou retenção>16MiB; não certifica FPS de mapas.2.468inputs congelados,4backups
+preservados; ZIP/hashes no recibo. Luna confere integridade depois por Root;
+fontes/fixture não mudam até handback. Narrativa de equipamentos provisórios
+acima é histórica para esta fatia. Outras bases/classes/inimigos aguardam seus
+pacotes separados; P4 aberto, sem master/push/playtest/save pessoal nesta rodada.
+Índice/fixture/lista Gear devolvidos a Root com o commit que contém este registro.

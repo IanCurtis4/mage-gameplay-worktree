@@ -13,6 +13,13 @@ static func item_name(item: EquipmentDefinition) -> String:
 	return OLD_NAMES[item.id] + " (antigo)" if OLD_NAMES.has(item.id) else item.display_name
 static func icon(item: EquipmentDefinition) -> Texture2D:
 	if item == null: return null
+	if EquipmentArtCatalog.has_head(item.id):
+		var head := EquipmentArtCatalog.head_icon(item.id)
+		if head!=null:return head
+	var key_id := EquipmentAttachmentVisual.key_for_definition(item,item.slot)
+	if key_id in EquipmentAttachmentVisual.PROFILES:
+		var painted := EquipmentArtCatalog.prop_texture(key_id,Vector2(EquipmentAttachmentVisual.PROFILES[key_id].size))
+		if painted!=null:return painted
 	if item.icon != null: return item.icon
 	var key: String = SURFACES.get(item.id, {&"weapon": "weapon", &"shield": "shield", &"focus": "focus", &"jewelry": "jewelry", &"armor": "plate"}.get(item.item_kind, "plate"))
 	return load("res://assets/art/icons/equipment/%s.svg" % key) as Texture2D

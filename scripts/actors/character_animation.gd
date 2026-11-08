@@ -82,7 +82,7 @@ func _select_atlas_for_visual() -> void:
 	var has_player_contract := equipment_visual.has("main_hand") or equipment_visual.has("off_hand") or equipment_visual.has("arms") or equipment_visual.has("head")
 	var bundle := DirectionalAnimationSet.for_texture(_base_atlas)
 	if bundle!=null and bundle.actor_kind()==actor_kind:
-		atlas=bundle.body(has_player_contract)
+		atlas=bundle.body(has_player_contract,EquipmentArtCatalog.head_texture(StringName(equipment_visual.get("head",&"")))!=null)
 		_ground_offsets=bundle.ground_offsets()
 		return
 	# A missing/invalid V2 unit after cold restore falls back as a whole.
@@ -157,13 +157,15 @@ func render_descriptor() -> Dictionary:
 	var destination := destination_rect(frame)
 	var raw: Dictionary = bundle.frame(frame) if bundle!=null and not equipment_visual.is_empty() else {}
 	var head := {}
-	if equipment_visual.get("head",&"")==&"pilot_head":
+	var head_id := StringName(equipment_visual.get("head",&""))
+	if EquipmentArtCatalog.has_head(head_id):
 		if bundle==null:
 			head=EquipmentHeadVisual.legacy_pose(frame,state.back_view)
 		else:
 			head=raw.head.duplicate(true)
 			head.point=Vector2(head.point[0],head.point[1])
 			head.view=direction
+		head["key"]=head_id
 	return {"version":2 if bundle!=null else 1,"frame":frame,"direction":direction,
 		"atlas":atlas,"region":source_region(frame),"rect":destination,"origin":destination.position,
 		"flip":false if bundle!=null else state.flip_h,"dead":state.dead,"head":head,

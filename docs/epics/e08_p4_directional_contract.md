@@ -182,3 +182,20 @@ no oeste. O flip local dos slots de arma é independente e não recebe esse
 espelhamento de vista. Itens V2 mortos seguem o chão comum: nenhuma penetração
 na queda e apoio no piso na pose assentada, com X/ângulo/localflip autorados.
 Essa correção segue a regra V1 e não muda clock/campos de ator/save.
+
+## Equipamentos pintados e bare_head — integração8/11
+
+[Recibo](e08_p4_gear_integration_delivery.md). Opcional V2 bare_head possui mesmo
+objeto path/rgba_sha256 no mesmo diretório e dimensões256x1024, requer weaponless,
+é distinto dos dois corpos e recebe validação integral dos64frames/grounds/grips.
+Ausência conserva comportamento; presença inválida rejeita atomicamente todoV2.
+body(equipped,head_equipped=false) conserva chamada anterior; terceira textura só
+com head conhecido e textura disponível. Registro reverso dos três paths permite
+coldrestore derivado sem campo novo. Primeiro consumidor Mago; outros aguardam.
+
+EquipmentArtCatalog vincula14IDs confirmados e7chaves às peças pintadas, cache
+estático com fallback observável. CanvasTexture limita filtro linear às peças;
+perfis/grips lógicos e V1 preservados. Suporte morto usa borda opacaPNG/4 emV2,
+com oráculo separado. W das14cabeças agora é autorado: substitui a nota histórica
+acima sobre espelhamento natural deW. head.flip é somente toggle autorado adicional;
+não aplicar espelho implícito deW. Retrato/mundo/morte consomem o mesmo descriptor.

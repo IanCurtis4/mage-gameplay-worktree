@@ -24,12 +24,26 @@ static func make(kind: StringName,label: String) -> Dictionary:
 	return {"ok":true,"facade":facade,"a":id,"store":store,"directory":directory}
 
 static func equipment_bottom(placed: Dictionary) -> float:
-	# Independent geometric oracle from the exported SVG's used rectangle.
-	var texture := load("res://assets/art/equipment/%s.svg" % placed.key) as Texture2D
-	var bounds := texture.get_image().get_used_rect()
+	# Independent painted PNG oracle in logical units; legacy SVG oracle remains in its V1 test.
+	var texture := load("res://assets/art/equipment/painted/%s.png" % placed.key) as Texture2D
+	var pixels := texture.get_image().get_used_rect()
+	var bounds := Rect2(Vector2(pixels.position)/4.0,Vector2(pixels.size)/4.0)
 	var bottom := -INF
-	for corner: Vector2 in [Vector2(bounds.position),Vector2(bounds.end-Vector2i.ONE),Vector2(bounds.position.x,bounds.end.y-1),Vector2(bounds.end.x-1,bounds.position.y)]:
+	for corner: Vector2 in [Vector2(bounds.position),bounds.end,Vector2(bounds.position.x,bounds.end.y),Vector2(bounds.end.x,bounds.position.y)]:
 		var local := corner-Vector2(placed.grip)
 		if placed.flip:local.x=-local.x
 		bottom=maxf(bottom,Vector2(placed.point).y+local.rotated(float(placed.angle)).y)
+	return bottom
+
+static func head_bottom(descriptor: Dictionary) -> float:
+	# Independent source PNG oracle, before any CanvasTexture filtering.
+	var head: Dictionary=descriptor.head
+	var texture := load("res://assets/art/equipment/headgear/%s.png" % head.key) as Texture2D
+	var pixels := texture.get_image().get_region(Rect2i(int(head.view)*96,0,96,96)).get_used_rect()
+	var bounds := Rect2(Vector2(pixels.position)/4.0,Vector2(pixels.size)/4.0)
+	var bottom := -INF
+	for corner: Vector2 in [bounds.position,bounds.end,Vector2(bounds.position.x,bounds.end.y),Vector2(bounds.end.x,bounds.position.y)]:
+		var local: Vector2=corner-Vector2(12,13)
+		if head.flip:local.x=-local.x
+		bottom=maxf(bottom,Vector2(descriptor.origin).y+Vector2(head.point).y+local.rotated(float(head.angle)).y)
 	return bottom

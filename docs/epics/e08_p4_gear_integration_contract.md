@@ -80,3 +80,12 @@ Sol explícito, Luna supervisiona freeze depois, não auditoria visual independe
 Commit EXATOS próprios (sem Root/artistas/4bak) e devolver índice/fixture/arquivos.
 P4 segue aberto: outras cabeças com capuz fixo e demais identidades/inimigos ainda
 aguardam suas entregas; esta fatia não declara aceite humano ou atualizaçãohabitual.
+
+## Estado8/11/2026
+
+Escopo entregue tecnicamente no commit que contém
+[e08_p4_gear_integration_delivery.md](e08_p4_gear_integration_delivery.md).
+24/318etapas únicas/31.283checks, nativo final2/PCK/movimento PASS; limites e
+falhas históricas preservados. Conferência de freeze Luna pendente via Root.
+Posse exclusiva do executor encerrada com commit/handback; Root recebe índice,
+única fixture e arquivos listados. Outros stages/artes não promovidos.

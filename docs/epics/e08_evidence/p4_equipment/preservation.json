@@ -1,0 +1,143 @@
+{
+  "profiles_and_grips_byte_identical_to_baseline": true,
+  "legacy_placement_function_byte_identical_to_baseline": true,
+  "profiles_match_authored_stage_metadata": {
+    "sword": {
+      "logical_size": [
+        16,
+        32
+      ],
+      "grip": [
+        8,
+        25
+      ]
+    },
+    "axe": {
+      "logical_size": [
+        20,
+        32
+      ],
+      "grip": [
+        10,
+        25
+      ]
+    },
+    "staff": {
+      "logical_size": [
+        16,
+        40
+      ],
+      "grip": [
+        7,
+        30
+      ]
+    },
+    "bow": {
+      "logical_size": [
+        20,
+        34
+      ],
+      "grip": [
+        14,
+        17
+      ]
+    },
+    "shield": {
+      "logical_size": [
+        20,
+        26
+      ],
+      "grip": [
+        10,
+        13
+      ]
+    },
+    "prismatic_focus": {
+      "logical_size": [
+        14,
+        20
+      ],
+      "grip": [
+        7,
+        16
+      ]
+    },
+    "wooden_beads": {
+      "logical_size": [
+        12,
+        12
+      ],
+      "grip": [
+        6,
+        5
+      ]
+    }
+  },
+  "original_mage_rgba_sha256": "2defd07b164fa78c9e61292e2d240fdae89dc2eae6549ca57d765fb82f5f10df",
+  "bare_mage_rgba_sha256": "ce94ffabe8c1dcd02538bf5264584a916ef7a54b098fbb90eaffe547685e63f8",
+  "actual_source_finger_crops_byte_identical": 112,
+  "grounds_and_slots_unchanged_frames": 64,
+  "pixels_outside_authored_head_regions_or_in_protections_byte_identical": true,
+  "backups": {
+    "data/map_authoring/sanctuary_woods.map.json.bak": "6b8d52095b0d98ba4a436fd5b192ff732b98a8f5da02855646e7e21b9792bb4f",
+    "data/map_authoring/sanctuary_woods.population.json.bak": "3debc7674a1770702639e8bb33b1e6598c52929e9230395ccfbf505c1ed04889",
+    "data/map_authoring/sanctuary_woods_clearing.source.json.bak": "65a26754c437695d7e7d60e93980c187371fddeec4fb71f78323104dbb55ced5",
+    "data/map_authoring/sanctuary_woods_overpass.source.json.bak": "d0071096addfefcefad1f1df849c3977064a741b4ed1446ffaf50a3f25a95d7e"
+  },
+  "body_world_nearest_not_modified": true,
+  "habitual_and_personal_save_untouched": true,
+  "read_only_art_sha256": {
+    "assets/art/e08_head_fit/mage/body.png": "6b64c0a8731bc6f9491c4b45e6fc6f32ea28589e37d3db6692d2528a2373471b",
+    "assets/art/e08_head_fit/mage/calibration.json": "467f536fa66336510f033e26ab3613f1637905553b9dcb87611fe54a2bcd60fe",
+    "assets/art/e08_head_fit/mage/contact_sheet.png": "5e1a5399770370ac61534907fc1e5a4b38d6d42fff5cf3cd7f1cac01858123eb",
+    "assets/art/e08_head_fit/mage/delivery.md": "31acdef9ff937e9ec83a17e0c99bdee02c1c2d70f4e37025b86ec74d9b91a535",
+    "assets/art/e08_head_fit/mage/east_source_v1.png": "58bde2a85f2674087bf58083f05acdf58d3c0205c9fb4dbd9dca48b7c5dee0a0",
+    "assets/art/e08_head_fit/mage/north_source_v1.png": "8e72aa64f6a8886b8ec421159fd0719c782fb56bd1847e49f3daa351d09a1179",
+    "assets/art/e08_head_fit/mage/provenance.json": "9e0656e407831206e358ec7d3d8381ff2028b693de7c62a0b325739329dfb82c",
+    "assets/art/e08_head_fit/mage/recipe.md": "361f7ba7f9804e92a774911b0e981d314eb84e601a3ff5c574ac74dac365103c",
+    "assets/art/e08_head_fit/mage/source_recipe.json": "0fafc0cdfdc27549726f47ea7f16fd1d1d17babe052cdea80a1719df93995d16",
+    "assets/art/e08_head_fit/mage/south_source_v1.png": "975b5b4f25c297a7862a2c0f23cb4b27735abd0b7d370be6fa89d6f71f9accac",
+    "assets/art/e08_head_fit/mage/west_source_v1.png": "901e11ecf31d54ae481142edc16eed1fcc8f7a6e8b04e705d7d5462d957545e7",
+    "assets/art/e08_equipment_redesign/apple_arrow_study.png": "f4cad7996f14a686f4ce1d7efda286153ae728a4bb713e274c6cecf3028f1232",
+    "assets/art/e08_equipment_redesign/axe.png": "b96bea9bdfe7ea92702c079e4d36e93c0225b38ca34be15f28d4170fba6ed008",
+    "assets/art/e08_equipment_redesign/bow.png": "581402c7a9150a672cb88f17f2337a0f8ab5243083e9d8e0a4bc4a91d6f12e9f",
+    "assets/art/e08_equipment_redesign/class_set_archer_head.png": "f1932c4ba4d10d5165bedefbda196d2f0e00a523c30342580658ab7927447e16",
+    "assets/art/e08_equipment_redesign/class_set_berserker_head.png": "d28b916a309915a77ce7c4ccd63608a7e928df9dbeb4d5b249b1aafb1488aa1b",
+    "assets/art/e08_equipment_redesign/class_set_defender_head.png": "a4033a5e9bab17a95f508096f11cdba25e999f1c9b051cfee47bfb82e9c1851b",
+    "assets/art/e08_equipment_redesign/class_set_elementalist_head.png": "08d2dc53d2d25897f7c1caf3f7492ecb1b5897303e522aba5ab96aa2b33dbd4f",
+    "assets/art/e08_equipment_redesign/class_set_hunter_head.png": "767c7e9ba254f7779cd695c942816132b5d988bf6578f2df6efe6e50a933979b",
+    "assets/art/e08_equipment_redesign/class_set_mage_head.png": "2e2f3b3ac6955031ab3957e014c816eef5e0ec7229f35d248d7bee7387d52b17",
+    "assets/art/e08_equipment_redesign/class_set_mg_ar_head.png": "12ea0d319a042655e4e6827c7ec4c364e255210f3ba0fd66a1bcfef14af95afb",
+    "assets/art/e08_equipment_redesign/class_set_sentinel_head.png": "889a8dda50175fbb95a4ab29d201463b7d53fe1b4870ee9fe166c8b52c014273",
+    "assets/art/e08_equipment_redesign/class_set_spiritualist_head.png": "d95a7603cb285a5be9211d151dac1431416bd5fb39a992ba12eb0993243e4fb6",
+    "assets/art/e08_equipment_redesign/class_set_swordsman_head.png": "411ab761b24bee2b61f0e4835f43862ba63faabc535a628d0854fc23177e8cc4",
+    "assets/art/e08_equipment_redesign/contact_sheet.png": "b8fb77b9e02997f0599072639a5df6a1cddeedda06079ef80324d740afffae61",
+    "assets/art/e08_equipment_redesign/delivery.md": "9f97def2f39956a590cdc5e27ea1f86c557d21b36b0b970fdd9a6b5c8b142019",
+    "assets/art/e08_equipment_redesign/eggshell_study.png": "08b005b5bae6a2c38e7bfa7092bdb39c3660c2b9f475110d8d0bb239c1d8e810",
+    "assets/art/e08_equipment_redesign/heads_basic_source_v1.png": "e0bc2f20853924c19c2609a4cbb65747303735ff7ed48dd1a8fdec250a8c373b",
+    "assets/art/e08_equipment_redesign/heads_basic_source_v2.png": "0e5ab4c308636d6284949c8cfd04e308836ff4d7c39da07ae0f05ceebf22ec07",
+    "assets/art/e08_equipment_redesign/heads_basic_source_v3.png": "f376650d555097d7ac7473f52c1adf2ff979ad8f149846b7d81a55668551b50b",
+    "assets/art/e08_equipment_redesign/heads_examples_source_v1.png": "d91e30a46b2e12d7c5841a971a62a1b344fba4ba31326da20fcb995b9e4b6975",
+    "assets/art/e08_equipment_redesign/heads_sets_a_source_v1.png": "48a0c133f4508e36594d82370d75894f4b6cbabb11e505b075a9e53a75e5c5ca",
+    "assets/art/e08_equipment_redesign/heads_sets_a_source_v2.png": "3e32a84d89262cfcfb1462f99e9723f971a91fa8357d130aec5ee9ef41819170",
+    "assets/art/e08_equipment_redesign/heads_sets_b_source_v1.png": "3a43b22ab1e06656c06dcc823d2aa1a77f2c6857a665f1fc2449055532f4851a",
+    "assets/art/e08_equipment_redesign/heads_sets_b_source_v2.png": "346805ae8731a077ad776a09daed1d2479e01af75038b54bd650a4e518778d97",
+    "assets/art/e08_equipment_redesign/heads_sets_c_source_v1.png": "06c20ab8fb33d6e122015550d71c8695ded6d938b2194fd33990b7aeaa308c1c",
+    "assets/art/e08_equipment_redesign/heads_sets_c_source_v2.png": "6b3aefe856d9bb242fd70360413100344e3aa020e538d81175af0c905b19b090",
+    "assets/art/e08_equipment_redesign/inventory.json": "869830f7ff8de9d7105b737c77d88c94b70850b6979f66ac36ea3780270871e4",
+    "assets/art/e08_equipment_redesign/pilot_head.png": "d106c284e42d96f1274f993291b411fc2f3d2c18c92b621589b3e2153e1ed309",
+    "assets/art/e08_equipment_redesign/presentation.json": "195a1b288c4b9b9b6581218c8e308bc2b26423084b9ce010aead33948352e8ec",
+    "assets/art/e08_equipment_redesign/prismatic_focus.png": "14ee78bf42973210c8b75b63b385a79eea9d07f69cfdd757343d078402e08e16",
+    "assets/art/e08_equipment_redesign/provenance.json": "ca2756c2711da2fa59ce7988143c00bb4534c53195c1bb7f8a02d6bf0fd8d980",
+    "assets/art/e08_equipment_redesign/recipe.md": "aed6f502f66f3c0ee06bbbf1608df3d8320a248d635298f87683451322405636",
+    "assets/art/e08_equipment_redesign/shared_set_high_head.png": "2c7ed12b1b02333d0a76c00f06bb1365db74eae5046560aa90854559033036da",
+    "assets/art/e08_equipment_redesign/shared_set_low_head.png": "2fdeeeb6d1a7a09a14b7a67689fca363ef74aacb37e7fc26b0fa5acd7089aea9",
+    "assets/art/e08_equipment_redesign/shared_set_mid_head.png": "9c4ea0f716a68e37a023a93bd7d222e3443e9e007ec70413e60c5e1587d94c1f",
+    "assets/art/e08_equipment_redesign/shield.png": "45bff7fe9ee3cc9128b0635850509da7c48fd22c589f22620d25e114a4d6e0a4",
+    "assets/art/e08_equipment_redesign/staff.png": "82f8ff16dc91390b515661c86a14d739127b0e8dd5b25fe7f2265c0f06258e88",
+    "assets/art/e08_equipment_redesign/sword.png": "63026bb78b53cc4d120b6899e89e758053ba1a815f28ba058c89eb8cda9e1478",
+    "assets/art/e08_equipment_redesign/weapons_source_v1.png": "556124a1f27b5c83a8e46bc38af7eb29f9d7e34c50bf7d92b90828ca956ecb3c",
+    "assets/art/e08_equipment_redesign/weapons_source_v2.png": "7c40563cf810daefa4a16a21e945e83aa34eb7a53ebf4ac3a258c8a2d7b6e9ca",
+    "assets/art/e08_equipment_redesign/wooden_beads.png": "281db4deeaef949e6aaca63fa1dfb0920dc02d02fdac171434b3682d636a82ba"
+  }
+}

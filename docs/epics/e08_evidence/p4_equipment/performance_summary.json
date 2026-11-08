@@ -1,0 +1,91 @@
+{
+  "scene": "96 MageV2 actors,staff/wooden_beads/pilot_head,forced redraw,3x3s moving then3x3s idle; same unchanged unit cost probe and standard engine",
+  "device": "NVIDIA GeForce GTX1080",
+  "baseline_before_runtime_edits": true,
+  "states": {
+    "moving": {
+      "baseline": {
+        "median_ms": 12.961,
+        "p95_ms": 14.365,
+        "max_ms": 20.617,
+        "cpu_median_ms": 8.138,
+        "cpu_p95_ms": 9.288,
+        "peak_frame_ms": 25.247,
+        "peak_cpu_ms": 16.734
+      },
+      "first": {
+        "median_ms": 9.671,
+        "p95_ms": 12.758,
+        "max_ms": 16.995,
+        "cpu_median_ms": 7.129,
+        "cpu_p95_ms": 10.005,
+        "peak_frame_ms": 20.385,
+        "peak_cpu_ms": 16.559
+      },
+      "quiet_repeat": {
+        "median_ms": 9.256,
+        "p95_ms": 12.541,
+        "max_ms": 18.065,
+        "cpu_median_ms": 6.84,
+        "cpu_p95_ms": 9.333,
+        "peak_frame_ms": 18.506,
+        "peak_cpu_ms": 14.246
+      },
+      "quiet_delta_percent": {
+        "median_ms": -28.58575727181545,
+        "p95_ms": -12.697528715628259,
+        "max_ms": -12.37813454915846,
+        "cpu_median_ms": -15.94986483165397,
+        "cpu_p95_ms": 0.4844961240310086,
+        "peak_frame_ms": -26.700202004198516,
+        "peak_cpu_ms": -14.867933548464208
+      }
+    },
+    "idle": {
+      "baseline": {
+        "median_ms": 13.097,
+        "p95_ms": 17.469,
+        "max_ms": 31.311,
+        "cpu_median_ms": 8.193,
+        "cpu_p95_ms": 10.409,
+        "peak_frame_ms": 34.214,
+        "peak_cpu_ms": 21.623
+      },
+      "first": {
+        "median_ms": 10.253,
+        "p95_ms": 15.388,
+        "max_ms": 20.568,
+        "cpu_median_ms": 7.659,
+        "cpu_p95_ms": 11.858,
+        "peak_frame_ms": 20.991,
+        "peak_cpu_ms": 16.838
+      },
+      "quiet_repeat": {
+        "median_ms": 9.304,
+        "p95_ms": 12.198,
+        "max_ms": 18.044,
+        "cpu_median_ms": 6.874,
+        "cpu_p95_ms": 9.3,
+        "peak_frame_ms": 23.654,
+        "peak_cpu_ms": 18.288
+      },
+      "quiet_delta_percent": {
+        "median_ms": -28.96083072459341,
+        "p95_ms": -30.17345011162631,
+        "max_ms": -42.37169046022164,
+        "cpu_median_ms": -16.099108995483945,
+        "cpu_p95_ms": -10.65424152176001,
+        "peak_frame_ms": -30.86455836791956,
+        "peak_cpu_ms": -15.423391758775384
+      }
+    }
+  },
+  "retained_static_bytes": {
+    "baseline": 1501444.0,
+    "first": 1461316.0,
+    "quiet_repeat": 1468900.0
+  },
+  "limitations": "Performance.MEMORY_STATIC only,not RSS/VRAM/leak or mapFPS; initial idleCPU p95 triaged by quiet repeat",
+  "retained_incremental_quiet_bytes": -32544.0,
+  "compatibility": "Between first and quiet repeat only64head anchorY+4 metadata; later4corpse angles changed outside moving/idle states sampled by cost. Runtime cost/draw code, probe, live poses and all PNGs unchanged."
+}

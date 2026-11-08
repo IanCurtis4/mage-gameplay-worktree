@@ -63,8 +63,8 @@
       },
       "head": {
         "point": [
-          30,
-          17
+          32,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -127,8 +127,8 @@
       },
       "head": {
         "point": [
-          31,
-          17
+          32,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -192,7 +192,7 @@
       "head": {
         "point": [
           32,
-          17
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -256,7 +256,7 @@
       "head": {
         "point": [
           32,
-          17
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -319,8 +319,8 @@
       },
       "head": {
         "point": [
-          29,
-          18
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -383,8 +383,8 @@
       },
       "head": {
         "point": [
-          31,
-          18
+          32,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -447,8 +447,8 @@
       },
       "head": {
         "point": [
-          28,
-          18
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -511,8 +511,8 @@
       },
       "head": {
         "point": [
-          30,
-          17
+          32,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -585,8 +585,8 @@
       },
       "head": {
         "point": [
-          30,
-          18
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -665,8 +665,8 @@
       },
       "head": {
         "point": [
-          28,
-          17
+          31,
+          23
         ],
         "angle": 0.0,
         "depth": 1,
@@ -740,7 +740,7 @@
       "head": {
         "point": [
           31,
-          18
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -813,8 +813,8 @@
       },
       "head": {
         "point": [
-          30,
-          17
+          32,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -885,8 +885,8 @@
       },
       "head": {
         "point": [
-          34,
-          18
+          33,
+          25
         ],
         "angle": 0.0,
         "depth": 1,
@@ -957,8 +957,8 @@
       },
       "head": {
         "point": [
-          29,
-          20
+          32,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -1037,10 +1037,10 @@
       },
       "head": {
         "point": [
-          36,
-          35
+          31,
+          34
         ],
-        "angle": -0.15,
+        "angle": 0.0,
         "depth": 1,
         "flip": false,
         "visible": true
@@ -1181,8 +1181,8 @@
       },
       "head": {
         "point": [
-          30,
-          19
+          31,
+          25
         ],
         "angle": 0.0,
         "depth": 1,
@@ -1245,8 +1245,8 @@
       },
       "head": {
         "point": [
-          31,
-          20
+          32,
+          25
         ],
         "angle": 0.0,
         "depth": 1,
@@ -1309,8 +1309,8 @@
       },
       "head": {
         "point": [
-          29,
-          19
+          32,
+          25
         ],
         "angle": 0.0,
         "depth": 1,
@@ -1373,8 +1373,8 @@
       },
       "head": {
         "point": [
-          31,
-          19
+          32,
+          25
         ],
         "angle": 0.0,
         "depth": 1,
@@ -1437,8 +1437,8 @@
       },
       "head": {
         "point": [
-          33,
-          19
+          32,
+          25
         ],
         "angle": 0.0,
         "depth": 1,
@@ -1502,7 +1502,7 @@
       "head": {
         "point": [
           32,
-          19
+          25
         ],
         "angle": 0.0,
         "depth": 1,
@@ -1566,7 +1566,7 @@
       "head": {
         "point": [
           32,
-          17
+          25
         ],
         "angle": 0.0,
         "depth": 1,
@@ -1629,8 +1629,8 @@
       },
       "head": {
         "point": [
-          33,
-          18
+          32,
+          25
         ],
         "angle": 0.0,
         "depth": 1,
@@ -1703,8 +1703,8 @@
       },
       "head": {
         "point": [
-          29,
-          21
+          31,
+          25
         ],
         "angle": 0.0,
         "depth": 1,
@@ -1783,8 +1783,8 @@
       },
       "head": {
         "point": [
-          28,
-          21
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -1857,8 +1857,8 @@
       },
       "head": {
         "point": [
-          35,
-          22
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -1931,8 +1931,8 @@
       },
       "head": {
         "point": [
-          30,
-          20
+          32,
+          25
         ],
         "angle": 0.0,
         "depth": 1,
@@ -2003,8 +2003,8 @@
       },
       "head": {
         "point": [
-          37,
-          20
+          34,
+          25
         ],
         "angle": 0.0,
         "depth": 1,
@@ -2075,8 +2075,8 @@
       },
       "head": {
         "point": [
-          30,
-          20
+          32,
+          25
         ],
         "angle": 0.0,
         "depth": 1,
@@ -2155,10 +2155,10 @@
       },
       "head": {
         "point": [
-          37,
+          30,
           35
         ],
-        "angle": -0.1,
+        "angle": 0.0,
         "depth": 1,
         "flip": false,
         "visible": true
@@ -2235,8 +2235,8 @@
       },
       "head": {
         "point": [
-          40,
-          43
+          42,
+          44
         ],
         "angle": 0.6,
         "depth": 1,
@@ -2299,8 +2299,8 @@
       },
       "head": {
         "point": [
-          32,
-          17
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -2363,8 +2363,8 @@
       },
       "head": {
         "point": [
-          32,
-          17
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -2427,8 +2427,8 @@
       },
       "head": {
         "point": [
-          32,
-          17
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -2491,8 +2491,8 @@
       },
       "head": {
         "point": [
-          32,
-          18
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -2555,8 +2555,8 @@
       },
       "head": {
         "point": [
-          32,
-          17
+          30,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -2619,8 +2619,8 @@
       },
       "head": {
         "point": [
-          32,
-          17
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -2683,8 +2683,8 @@
       },
       "head": {
         "point": [
-          32,
-          17
+          30,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -2747,8 +2747,8 @@
       },
       "head": {
         "point": [
-          32,
-          17
+          30,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -2821,8 +2821,8 @@
       },
       "head": {
         "point": [
-          32,
-          18
+          30,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -2901,8 +2901,8 @@
       },
       "head": {
         "point": [
-          32,
-          18
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -2975,8 +2975,8 @@
       },
       "head": {
         "point": [
-          32,
-          18
+          30,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -3049,8 +3049,8 @@
       },
       "head": {
         "point": [
-          32,
-          18
+          30,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -3122,7 +3122,7 @@
       "head": {
         "point": [
           32,
-          21
+          25
         ],
         "angle": 0.0,
         "depth": 1,
@@ -3193,8 +3193,8 @@
       },
       "head": {
         "point": [
-          32,
-          23
+          31,
+          25
         ],
         "angle": 0.0,
         "depth": 1,
@@ -3273,10 +3273,10 @@
       },
       "head": {
         "point": [
-          41,
+          35,
           35
         ],
-        "angle": 0.55,
+        "angle": 0.0,
         "depth": 1,
         "flip": false,
         "visible": true
@@ -3353,8 +3353,8 @@
       },
       "head": {
         "point": [
-          42,
-          45
+          43,
+          44
         ],
         "angle": 0.65,
         "depth": 1,
@@ -3417,8 +3417,8 @@
       },
       "head": {
         "point": [
-          32,
-          20
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -3481,8 +3481,8 @@
       },
       "head": {
         "point": [
-          32,
-          19
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -3545,8 +3545,8 @@
       },
       "head": {
         "point": [
-          32,
-          20
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -3609,8 +3609,8 @@
       },
       "head": {
         "point": [
-          32,
-          22
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -3673,8 +3673,8 @@
       },
       "head": {
         "point": [
-          32,
-          21
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -3737,8 +3737,8 @@
       },
       "head": {
         "point": [
-          32,
-          20
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -3801,8 +3801,8 @@
       },
       "head": {
         "point": [
-          32,
-          21
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -3865,8 +3865,8 @@
       },
       "head": {
         "point": [
-          32,
-          20
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -3939,8 +3939,8 @@
       },
       "head": {
         "point": [
-          32,
-          20
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -4019,8 +4019,8 @@
       },
       "head": {
         "point": [
-          32,
-          20
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -4093,8 +4093,8 @@
       },
       "head": {
         "point": [
-          32,
-          20
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -4167,8 +4167,8 @@
       },
       "head": {
         "point": [
-          32,
-          20
+          31,
+          24
         ],
         "angle": 0.0,
         "depth": 1,
@@ -4239,8 +4239,8 @@
       },
       "head": {
         "point": [
-          32,
-          20
+          31,
+          25
         ],
         "angle": 0.0,
         "depth": 1,
@@ -4311,8 +4311,8 @@
       },
       "head": {
         "point": [
-          32,
-          22
+          31,
+          25
         ],
         "angle": 0.0,
         "depth": 1,
@@ -4394,7 +4394,7 @@
           25,
           35
         ],
-        "angle": -0.55,
+        "angle": 0.0,
         "depth": 1,
         "flip": false,
         "visible": true
@@ -4471,8 +4471,8 @@
       },
       "head": {
         "point": [
-          23,
-          45
+          21,
+          44
         ],
         "angle": -0.65,
         "depth": 1,
@@ -4494,5 +4494,22 @@
       63
     ],
     "raster_unchanged": true
+  },
+  "bare_head_rgba_sha256": "ce94ffabe8c1dcd02538bf5264584a916ef7a54b098fbb90eaffe547685e63f8",
+  "head_fit_source": "res://assets/art/e08_head_fit/mage/calibration.json",
+  "sol_native_head_fit": {
+    "offset": [
+      0,
+      4
+    ],
+    "reason": "Native initial3: lower accessory over real cranium rather than perching above upper hair; all64poses, original PNG/grounds/palms/angles unchanged",
+    "source_anchors": "assets/art/e08_head_fit/mage/calibration.json",
+    "corpse_angle_overrides": {
+      "15": 0.1,
+      "31": 0.6,
+      "47": 0.65,
+      "63": -0.65
+    },
+    "corpse_reason": "Native fit1: orient face opening toward preserved face rather than inherited +/-90deg corpse roll"
   }
 }

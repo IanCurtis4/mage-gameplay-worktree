@@ -10,6 +10,7 @@ static var _textures: Dictionary = {}
 var _kind: StringName
 var _body: Texture2D
 var _weaponless: Texture2D
+var _bare_head: Texture2D
 var _frames: Array = []
 var _offsets := PackedFloat32Array()
 
@@ -24,6 +25,7 @@ static func load_manifest(path: String) -> Dictionary:
 		var bundle: DirectionalAnimationSet = result.bundle
 		_textures[bundle._body.resource_path] = bundle
 		if bundle._weaponless != null: _textures[bundle._weaponless.resource_path] = bundle
+		if bundle._bare_head != null: _textures[bundle._bare_head.resource_path] = bundle
 	return result
 
 static func for_texture(texture: Texture2D) -> DirectionalAnimationSet:
@@ -61,9 +63,16 @@ static func _validate_data(data: Dictionary, path: String) -> Dictionary:
 	if bundle._kind in [ &"swordsman", &"archer", &"mage", &"berserker", &"defender", &"hunter", &"sentinel", &"elementalist", &"spiritualist", &"geometer"] and bundle._weaponless == null:
 		return _failure("missing_weaponless_body")
 	if bundle._weaponless != null and bundle._weaponless.resource_path == bundle._body.resource_path: return _failure("shared_body_paths")
+	if data.has("bare_head"):
+		if bundle._weaponless==null:return _failure("bare_head_requires_weaponless")
+		loaded=_load_texture(data.bare_head,path)
+		if not loaded.ok:return loaded
+		bundle._bare_head=loaded.texture
+		if bundle._bare_head.resource_path in [bundle._body.resource_path,bundle._weaponless.resource_path]:return _failure("shared_bare_head_path")
 	if not data.get("frames") is Array or data.frames.size() != 64: return _failure("invalid_frame_count")
 	var images: Array[Image] = [bundle._body.get_image()]
 	if bundle._weaponless != null: images.append(bundle._weaponless.get_image())
+	if bundle._bare_head != null: images.append(bundle._bare_head.get_image())
 	for index: int in 64:
 		var problem := _validate_frame(data.frames[index], index, images, bundle._weaponless!=null)
 		if not problem.is_empty(): return _failure(problem+" frame="+str(index))
@@ -143,8 +152,10 @@ static func _failure(detail: String) -> Dictionary:
 	return {"ok":false,"error_code":&"invalid_directional_presentation","detail":detail}
 
 func actor_kind() -> StringName: return _kind
-func body(equipped: bool) -> Texture2D:
+func body(equipped: bool,head_equipped: bool = false) -> Texture2D:
+	if equipped and head_equipped and _bare_head!=null:return _bare_head
 	return _weaponless if equipped and _weaponless != null else _body
+func has_bare_head() -> bool: return _bare_head!=null
 func frame(index: int) -> Dictionary:
 	return _frames[index].duplicate(true) if index>=0 and index<64 else {}
 

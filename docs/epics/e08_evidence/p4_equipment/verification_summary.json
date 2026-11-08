@@ -1,0 +1,320 @@
+{
+  "base": "dc5ada5f83e3213cc4857a63c065704eaf51a810",
+  "entry_base": "94d68c98cf1d9e93de23e184cfdf0fd62f85d8ab",
+  "selected_unique_steps": 24,
+  "full_plan_steps": 318,
+  "checks": 31283,
+  "failures": 0,
+  "execution_errors": 0,
+  "timeouts": 0,
+  "composition": "22 compatible tests from regression_final1 and2 data consumers from regression_pose_final1; latter supersede only four corpse head angles; no duplicated checks",
+  "test_results": {
+    "e06_inventory_test": {
+      "attempt": "regression_final1",
+      "checks": 68,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "1bd9a4b87f549316d171ddef1a2cacf156ea80ec76a1af3de9d7d091192722a5",
+      "index": 3
+    },
+    "combat_animation_test": {
+      "attempt": "regression_final1",
+      "checks": 39,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "df1d52002e18c5524fa60801186a018cdbc71c91e0248051e38f6565c154fb1e",
+      "index": 10
+    },
+    "e08_presentation_test": {
+      "attempt": "regression_final1",
+      "checks": 2204,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "0e1ddd04a27392311fffec3289687f0d5f098fa9857204e7c0174256f0b8a4fe",
+      "index": 11
+    },
+    "e08_pilot_ui_test": {
+      "attempt": "regression_final1",
+      "checks": 55,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "42ed6a5f7aa350985378234ead5184ba255fb84ef586216efdecb54e7b3a874d",
+      "index": 12
+    },
+    "e08_audio_test": {
+      "attempt": "regression_final1",
+      "checks": 132,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "79b3c6151a57d050c6aafac3952d6e1d315a3ae3c4c61f562f183faf1ca760ef",
+      "index": 13
+    },
+    "e08_pilot_test": {
+      "attempt": "regression_final1",
+      "checks": 125,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "5dcf56cb08a55986ee1be4c43d5fc8396067f20a1d7b668185bb9ebfeeb03127",
+      "index": 14
+    },
+    "e08_characters_test": {
+      "attempt": "regression_final1",
+      "checks": 966,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "c1dc66450ba408a151695310c6f30c60bceb610b5f08024785e3131d16e7ef8d",
+      "index": 15
+    },
+    "e08_directional_animation_test": {
+      "attempt": "regression_final1",
+      "checks": 814,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "f3b1a95db5367ab902cb07e7685fad6c33a8c10c53aa01b52dd65b81dc6d3fab",
+      "index": 16
+    },
+    "e08_directional_integration_test": {
+      "attempt": "regression_final1",
+      "checks": 84,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "6be2b53c8f07a98bab9161bd3fbd90235aadfa1a628d8629012a504a638f6f2e",
+      "index": 17
+    },
+    "e08_directional_content_test": {
+      "attempt": "regression_final1",
+      "checks": 3461,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "b4f85dded47ea1b48df58a310901cc3c2aebcca706530482c398ba9caa1823f6",
+      "index": 18
+    },
+    "e08_directional_units_test": {
+      "attempt": "regression_pose_final1",
+      "checks": 10887,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "a03c982855758977cda9b2f3245ad46092e3bc3897dd05666e4800268f30b890",
+      "index": 19
+    },
+    "e08_equipment_art_test": {
+      "attempt": "regression_pose_final1",
+      "checks": 2589,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "26b20037b43bd8f69d593439024ceb8644cc8af73ca698131cfce857773c9f66",
+      "index": 20
+    },
+    "e05_spiritualist_visuals_test": {
+      "attempt": "regression_final1",
+      "checks": 23,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "513e8509315a7ba9bd54a0ab9f038a1aae8cf24b0502132ebdc9607c4b8fa24d",
+      "index": 118
+    },
+    "e05_elementalist_animation_test": {
+      "attempt": "regression_final1",
+      "checks": 7,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "7052d244df3253350a7211de5ae2df14fc43a08c03e0b717635f92bed82e0816",
+      "index": 157
+    },
+    "e06_ui_inventory_test": {
+      "attempt": "regression_final1",
+      "checks": 51,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "d8f2de1bc1717c8010b8aad2a410e1014142cedf00c47c689a250d4bac021c83",
+      "index": 215
+    },
+    "e06_appearance_integration_test": {
+      "attempt": "regression_final1",
+      "checks": 206,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "68ed38f6fc8fd3ccd08b2fbe151189abf23d5266a6b35329cdc52c6f5f1d912f",
+      "index": 230
+    },
+    "equipment_hand_alignment_test": {
+      "attempt": "regression_final1",
+      "checks": 4593,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "38a87bf0439bdb473aba8b25a1455d60554e8f41f99e1e0dc53853009a3c9145",
+      "index": 232
+    },
+    "e06_icon_bar_test": {
+      "attempt": "regression_final1",
+      "checks": 24,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "eb3f9abdaf6f6b129e2fe140e29916fcddecd3e077141bf2fe525a5703a692aa",
+      "index": 239
+    },
+    "e07_f7_presentation_test": {
+      "attempt": "regression_final1",
+      "checks": 27,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "e6dbd869650df8aff1e156d2300fbaaac49a2d4251c4951b5c97e17592da5f38",
+      "index": 264
+    },
+    "e07_f3_snapshot_test": {
+      "attempt": "regression_final1",
+      "checks": 52,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "9fc703c4ab2986ddaab73ed386092f3b8ab71a5ea82c4a7c3c781d2f6f06c0cc",
+      "index": 285
+    },
+    "e07_f3_continuation_test": {
+      "attempt": "regression_final1",
+      "checks": 2743,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "363698e32e808dd44c41c70ccfbf2315d3c8f5107673b2c42a5ea4e718a928f1",
+      "index": 286
+    },
+    "e07_f3_action_matrix_test": {
+      "attempt": "regression_final1",
+      "checks": 2004,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "98a042cb25723ef716898497cd97f16fbb23db6c28a806e9be5ddd79a106d57a",
+      "index": 287
+    },
+    "e07_f3_lifecycle_test": {
+      "attempt": "regression_final1",
+      "checks": 90,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "b5d444e6416a3460f73d27d1600dbf3be01c60cf59a689224fd01264c121d886",
+      "index": 288
+    },
+    "e07_f1_presentation_test": {
+      "attempt": "regression_final1",
+      "checks": 39,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "69f688370370f9985ccb61ac420f739ce3c7cec813d86a5f5c7026eae5639429",
+      "index": 314
+    }
+  },
+  "native": {
+    "binding": "default Mage bare head when known head equipped; original restored on removal",
+    "captures": [
+      "01_original_64.png",
+      "02_bare_head_64.png",
+      "head_pilot_head_64.png",
+      "head_class_set_swordsman_head_64.png",
+      "head_class_set_archer_head_64.png",
+      "head_class_set_mage_head_64.png",
+      "head_class_set_defender_head_64.png",
+      "head_class_set_berserker_head_64.png",
+      "head_class_set_elementalist_head_64.png",
+      "head_class_set_spiritualist_head_64.png",
+      "head_class_set_sentinel_head_64.png",
+      "head_class_set_hunter_head_64.png",
+      "head_class_set_mg_ar_head_64.png",
+      "head_shared_set_low_head_64.png",
+      "head_shared_set_mid_head_64.png",
+      "head_shared_set_high_head_64.png",
+      "prop_sword_64.png",
+      "prop_axe_64.png",
+      "prop_staff_64.png",
+      "prop_bow_64.png",
+      "prop_shield_64.png",
+      "prop_prismatic_focus_64.png",
+      "prop_wooden_beads_64.png",
+      "calibration_0.png",
+      "calibration_1.png",
+      "calibration_2.png",
+      "calibration_3.png",
+      "spiritualist_control.png",
+      "camera_50.png",
+      "camera_100.png",
+      "camera_160.png",
+      "05_actual_inventory_ui120.png",
+      "06_actual_world_ui120.png",
+      "07_actual_inventory_uncovered_ui120.png",
+      "08_actual_world_uncovered_ui120.png"
+    ],
+    "checks": 5568,
+    "failures": 0,
+    "head_ids": 14,
+    "poses_each": 64,
+    "prop_keys": 7,
+    "scope": "native renderer/body/filter/heads/props/death/real owned profile+inventory; gallery IDs are cosmetic samples, not eligibility grants"
+  },
+  "motion": {
+    "checks": 76,
+    "duration_ms_per_frame": 100,
+    "failures": 0,
+    "frames": 64,
+    "scope": "native frames from same visual clock; equipment transitions; no map FPS claim"
+  },
+  "packs": [
+    {
+      "attempt": "export_final1",
+      "sha256": "7e9b380ebdbdb3ef69ff39c3f54f9dd55ce4237dda6343eae2143e34b8444084",
+      "bytes": 101077652,
+      "checks": {
+        "e08_directional_animation_test": 814,
+        "e08_directional_content_test": 3461,
+        "e08_directional_units_test": 10887,
+        "e08_equipment_art_test": 2589
+      },
+      "path": ".godot/verification/p4_equipment/export_final1/equipment_validation.pck",
+      "retained_for_luna": true
+    },
+    {
+      "attempt": "export_final2",
+      "sha256": "14c9be3e24924c09fe0fa012c1978fb0f906eb216d7c7627f03816776b3e3eb1",
+      "bytes": 101077828,
+      "checks": {
+        "e08_directional_animation_test": 814,
+        "e08_directional_content_test": 3461,
+        "e08_directional_units_test": 10887,
+        "e08_equipment_art_test": 2589
+      },
+      "path": ".godot/verification/p4_equipment/export_final2/equipment_validation.pck",
+      "retained_for_luna": true
+    }
+  ],
+  "earlier_failed_attempts_preserved": true,
+  "supervision": "Sol author consolidation; Luna integrity review pending after freeze, not independent semantic or visual audit",
+  "motion_preview": {
+    "native_frames": 64,
+    "encoded_frames": 26,
+    "duration_ms": 6400,
+    "palette": 256,
+    "dithering": false,
+    "pngs_unchanged": true
+  }
+}
