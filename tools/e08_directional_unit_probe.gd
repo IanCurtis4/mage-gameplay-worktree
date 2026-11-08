@@ -94,6 +94,16 @@ func run() -> void:
 		for pose: int in 16:
 			actor(direction,pose,{"main_hand":&"staff","off_hand":&"shield","head":&"pilot_head"},Vector2(150+(pose%8)*140,300+(pose/8)*290),2.0,true)
 		await shot("03_calibration_"+str(direction))
+	for head: StringName in EquipmentArtCatalog.head_ids():
+		clear_page(display_label+" · cabeça "+String(head)+" ·64poses · quatro vistas")
+		for direction: int in 4:
+			for pose: int in 16:actor(direction,pose,{"main_hand":cost_visual().main_hand,"head":head},Vector2(42+pose*78,145+direction*160))
+		await shot("head_"+String(head)+"_64")
+	for key: StringName in EquipmentAttachmentVisual.SUPPORTED:
+		clear_page(display_label+" · peça "+String(key)+" ·64poses · quatro vistas")
+		for direction: int in 4:
+			for pose: int in 16:actor(direction,pose,{"main_hand":key,"off_hand":&"shield","arms":&"wooden_beads","head":&"pilot_head"},Vector2(42+pose*78,145+direction*160))
+		await shot("prop_"+String(key)+"_64")
 	clear_page(display_label+" · zoom real de câmera · UI120 independente")
 	var ui := Control.new();overlay.add_child(ui);GuiMetrics.set_scale(1.2,ui)
 	var marker := Label.new();marker.text="Interface 120%";marker.position=Vector2(12,42);ui.add_child(marker)
@@ -163,11 +173,13 @@ func cost(mode: String) -> void:
 	var before := Performance.get_monitor(Performance.MEMORY_STATIC)
 	var crowd: Array[Preview]=[]
 	for i: int in 96:
-		var view := Preview.new();view.animation=CharacterAnimation.new();view.animation.configure(unit_kind)
+		var view := Preview.new();view.animation=D.legacy_animation(unit_kind) if mode=="cost_control" else CharacterAnimation.new()
+		if mode!="cost_control":view.animation.configure(unit_kind)
+		configure_cost_override(view.animation,mode)
 		if mode=="cost_content":
 			var applied := view.animation.set_directional_manifest(manifest)
 			if not applied.ok:push_error(str(applied));quit(1);return
-		view.animation.set_equipment_visual({"main_hand":&"staff","off_hand":&"wooden_beads","head":&"pilot_head"})
+		view.animation.set_equipment_visual(cost_visual())
 		view.position=Vector2(45+(i%16)*78,100+(i/16)*100);root.add_child(view);crowd.append(view)
 	await frames(90)
 	var windows: Array[Dictionary]=[]
@@ -188,6 +200,11 @@ func cost(mode: String) -> void:
 	write_json("result.json",{"mode":mode,"actors":96,"windows":windows,"static_before":before,"static_loaded":loaded,"static_after_clear":Performance.get_monitor(Performance.MEMORY_STATIC),"device":RenderingServer.get_video_adapter_name(),"scope":"same runtime/engine/fixture, forced redraw; no map FPS certification"})
 	print("Art cost ",mode," windows=",windows.size());quit()
 
+func cost_visual() -> Dictionary:
+	var key: StringName={&"swordsman":&"sword",&"defender":&"sword",&"berserker":&"axe",&"archer":&"bow",&"hunter":&"bow",&"sentinel":&"bow"}.get(unit_kind,&"staff")
+	return {"main_hand":key,"off_hand":&"wooden_beads","head":&"pilot_head"}
+func configure_cost_override(_animation: CharacterAnimation,_mode: String) -> void:
+	pass
 func author(source_png: String) -> void:
 	# Authoring contact sheet only: exact source raster, no pixel changes or approval.
 	root.content_scale_size=Vector2i(1100,1000);root.size=Vector2i(1100,1000)

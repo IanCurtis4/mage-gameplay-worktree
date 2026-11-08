@@ -1,8 +1,8 @@
 {
-  "state": "READY for Root dispatch after this contract/input commit; all art handbacks complete and Gear Luna integrity PASS",
+  "state": "EXECUTING after explicit Root dispatch; all art and producer prerequisites complete",
   "art_base": "dc5ada5f83e3213cc4857a63c065704eaf51a810",
   "producer_base": "94dfaf7f97e8faa094d9f9ad7612baf7729d801c",
-  "owner": "Root reserved; no transfer yet",
+  "owner": "/root/sol_art_units exclusive final integration after085e1a1a dispatch",
   "files": [
     "docs/epics/e08_p4_final_integration_contract.md",
     "docs/epics/e08_p4_final_integration_files.json",
@@ -321,7 +321,28 @@
     "assets/art/e08_characters/directional/mage/presentation.json",
     "assets/art/e08_characters/directional/mage/provenance.json",
     "assets/art/e08_characters/directional/mage/delivery.md",
-    "assets/art/animations/directional/mage/presentation.json"
+    "assets/art/animations/directional/mage/presentation.json",
+    "tests/e08_pilot_test.gd",
+    "tests/e08_presentation_test.gd",
+    "tests/e05_hunter_atlas_test.gd",
+    "tests/e05_sentinel_atlas_test.gd",
+    "tests/e05_geometer_animation_test.gd",
+    "scripts/actors/character_animation.gd",
+    "tools/prepare_e08_npc_archer_body.gd",
+    "tools/prepare_e08_npc_archer_body.gd.uid",
+    "assets/art/e08_characters/directional/archer/npc_body.png",
+    "assets/art/e08_characters/directional/archer/npc_body.png.import",
+    "assets/art/animations/directional/archer/npc_body.png",
+    "assets/art/animations/directional/archer/npc_body.png.import",
+    "tests/fixtures/e08_directional/npc_archer_unarmed/npc_body.png",
+    "tests/fixtures/e08_directional/npc_archer_unarmed/npc_body.png.import",
+    "tests/fixtures/e08_directional/npc_archer_unarmed/weaponless.png",
+    "tests/fixtures/e08_directional/npc_archer_unarmed/weaponless.png.import",
+    "tests/fixtures/e08_directional/npc_archer_unarmed/presentation.json",
+    "scripts/presentation/directional_animation_set.gd",
+    "tests/e05_geometer_playtest_flow_test.gd",
+    "tests/actor_presentation_test.gd",
+    "tools/fix_e08_lateral_grip_side.py"
   ],
   "players": [
     "defender",
@@ -348,5 +369,105 @@
   ],
   "hair_inputs_read_only": "assets/art/e08_head_fit/<kind>",
   "fixture": "Root/Sol transfer only after previous package handback",
-  "rig_triage": "Root found missing Wflip/actionbow overrides in Hunter/Sentinel/Geometer; legacy S/N API comparison and actual E/W direction required before promotion"
+  "rig_triage": "Root found missing Wflip/actionbow overrides in Hunter/Sentinel/Geometer; legacy S/N API comparison and actual E/W direction required before promotion",
+  "active_dispatch": {
+    "base": "085e1a1aa66bedff11f686eace274444413928ab",
+    "index_and_fixture_exclusive": true,
+    "root_will_not_edit_owned_files": true,
+    "all_art_handoffs_complete": true,
+    "executor_started": true,
+    "current_step": "Extract V1 API reference and close independent rig oracle before defaults"
+  },
+  "read_only_inputs": [
+    "assets/art/e08_head_fit/archer/calibration.json",
+    "assets/art/e08_head_fit/archer/provenance.json",
+    "assets/art/e08_head_fit/hunter/calibration.json",
+    "assets/art/e08_head_fit/hunter/provenance.json",
+    "assets/art/e08_head_fit/sentinel/calibration.json",
+    "assets/art/e08_head_fit/sentinel/provenance.json",
+    "assets/art/e08_head_fit/geometer/calibration.json",
+    "assets/art/e08_head_fit/geometer/provenance.json"
+  ],
+  "fixture_policy": "Existing2468input freeze plus owned runtime/stagebody+manifests+calibration, read-only hair JSON; source sheets remainGit hash-only",
+  "additional_ownership": [
+    {
+      "file": "tests/e08_pilot_test.gd",
+      "reason": "Existing per-occurrence wolf/boar test hard-codes V1 path/32cells; migrate active expectations to specificV2/64cells, keep explicit V1 fallback/negative coverage in newNPCtest; do not relax grounding or restore assertions"
+    },
+    {
+      "file": "tests/e08_presentation_test.gd",
+      "reason": "Preserve all old32cell/boots/orientation/body-override oracles with explicit legacy fixture while new tests cover active64cell defaults"
+    },
+    {
+      "file": "tests/e05_hunter_atlas_test.gd",
+      "reason": "Preserve all old32cell/boots/orientation/body-override oracles with explicit legacy fixture while new tests cover active64cell defaults"
+    },
+    {
+      "file": "tests/e05_sentinel_atlas_test.gd",
+      "reason": "Preserve all old32cell/boots/orientation/body-override oracles with explicit legacy fixture while new tests cover active64cell defaults"
+    },
+    {
+      "file": "tests/e05_geometer_animation_test.gd",
+      "reason": "Preserve all old32cell/boots/orientation/body-override oracles with explicit legacy fixture while new tests cover active64cell defaults"
+    },
+    {
+      "file": "scripts/actors/character_animation.gd",
+      "reason": "Reproducible NPCArcher CPU4.6-4.7ms versus0.43ms control: bounded private static draw-geometry cache reuses existing draw_key and authoritative descriptor without actor/save fields or alternate renderer; keep public descriptor detached and bare1quad branch intact"
+    },
+    {
+      "files": [
+        "tests/fixtures/e08_directional/npc_archer_unarmed/npc_body.png",
+        "tests/fixtures/e08_directional/npc_archer_unarmed/npc_body.png.import",
+        "tests/fixtures/e08_directional/npc_archer_unarmed/weaponless.png",
+        "tests/fixtures/e08_directional/npc_archer_unarmed/weaponless.png.import",
+        "tests/fixtures/e08_directional/npc_archer_unarmed/presentation.json"
+      ],
+      "reason": "Root exact-path boundary: copied unarmed source in a valid ArcherV2 bundle with a homonymous npc_body.png outside approved folders must still get dynamic bow; no pixel editing or new gameplay resources"
+    },
+    {
+      "file": "scripts/presentation/directional_animation_set.gd",
+      "reason": "Residual measured NPCArcher1quad CPU+0.07ms/96actors (+17%): cache validated Texture2D aliases in existing _textures map to avoid repeated resource_path lookup; same cache clear reconstructs cold restore, no actor/save/schema state; unknown/negative textures retain path validation"
+    },
+    {
+      "file": "tests/e05_geometer_playtest_flow_test.gd",
+      "reason": "Persistent real Geometer flow still asserts old /geometer_weaponless.png suffix; activeV2 must assert exact directional path/version/identity while101legacy bitmap oracles remain in e05_geometer_animation_test. No gameplay or threshold change."
+    },
+    {
+      "file": "tests/actor_presentation_test.gd",
+      "reason": "Original12draw-scheduling oracles require V1 horizontal mirror. Explicit legacyGel fixture keeps all12; add activeV2 cardinal-view/no-globalmirror checks instead of expecting V1flip on64view body. No runtime or threshold change."
+    }
+  ],
+  "npc_archer_triage": {
+    "reason": "Repeated1quadV1 versus3quadV2 CPU regression; cache only reduced4.7ms to2.06ms, still5xcontrol",
+    "mechanical_composition_files": [
+      "tools/prepare_e08_npc_archer_body.gd",
+      "tools/prepare_e08_npc_archer_body.gd.uid",
+      "assets/art/e08_characters/directional/archer/npc_body.png",
+      "assets/art/e08_characters/directional/archer/npc_body.png.import",
+      "assets/art/animations/directional/archer/npc_body.png",
+      "assets/art/animations/directional/archer/npc_body.png.import"
+    ],
+    "preservation": "Original body.png/weaponless/bare_head and authored source sheets stay byte-identical; compose only named npc_body.png via real equipment drawer layers + original body/finger pixels; reject overflow and ground change",
+    "nock_arrow": "StaticNPC body keeps bakedV1 behavior without extra cosmetic nock arrow; real gameplay projectile unchanged; players retain current arrow draw",
+    "import": "Generated straight-alpha body must keep exact renderer pixels: process/fix_alpha_border=false only for npc_body.png. Default border correction alters low-alpha RGB and fails strict existing RGBAhash; producer/oracle unchanged."
+  },
+  "fixture_import_overrides": [
+    "assets/art/e08_characters/directional/archer/npc_body.png.import",
+    "assets/art/animations/directional/archer/npc_body.png.import"
+  ],
+  "lookup_attempt_reverted": {
+    "preimages": ".godot/verification/p4_final/sync_lookup1/previous",
+    "files": [
+      "scripts/presentation/directional_animation_set.gd",
+      "tests/e08_directional_rig_compatibility_test.gd"
+    ],
+    "attempt_result": "41815rig+4892Archer+1181NPC PASS but retired by Root scope preference; original producer and41812rig restored byte-exact",
+    "accepted_npc_residual": "static1 framep95+7.34/+4.50%, CPU+0.07ms/96actors, retained+894860B; triaged and technically accepted Root, no mapFPS certification"
+  },
+  "lateral_grip_correction": {
+    "date": "2026-11-08",
+    "owner": "Claude (continuação Sol após parada do Codex, autorização humana)",
+    "scope": "swap main_hand/off_hand in inverted profile view: archer/swordsman/defender W 48-61, sentinel/hunter E 32-45, berserker E 42; casters unchanged",
+    "evidence": ".godot/verification/p4_final/{lateral_grip_before1,sync_lateral_grip1,compose_lateral_grip1}"
+  }
 }

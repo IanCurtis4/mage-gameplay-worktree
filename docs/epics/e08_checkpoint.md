@@ -225,3 +225,18 @@ fontes/fixture não mudam até handback. Narrativa de equipamentos provisórios
 acima é histórica para esta fatia. Outras bases/classes/inimigos aguardam seus
 pacotes separados; P4 aberto, sem master/push/playtest/save pessoal nesta rodada.
 Índice/fixture/lista Gear devolvidos a Root com o commit que contém este registro.
+
+## P4 integração final — candidato técnico 8/11
+
+Codex/Sol integrou10jogadores/6corposNPC em64poses/4vistas, cabelo bare_head de
+Archer/Hunter/Sentinel/Geometer (Mago anterior), equipamentos pintados e ArqueiroNPC
+por corpo composto; parou antes do freeze (última atividade07:37, sem processo
+ativo). Por pedido humano, Claude auditou e continuou no mesmo checkout/fixture.
+Auditoria visual achou mão da arma invertida em uma vista lateral (rig, não pixels):
+Archer/Swordsman/Defender W, Sentinel/Hunter E e impacto E do Berserker; usuário
+autorizou corrigir todas. Troca main/off por quadro, conjuradores mantidos, npc_body
+recomposto, invariante novo no teste de rig. [Recibo](e08_p4_final_delivery.md).
+Regressão43/114.876checks, nativos6×4.714+405, mosaico361, PCKca728669…7testes/
+98.888, tudo0falhas. ZIP1.158membros. P4 técnico completo; aceite visual humano,
+conferência Luna e candidato de playtest com Root em etapa separada. P5–P7 não
+iniciados; sem master/push/habitual/save pessoal. Rascunhos Root fora do commit.

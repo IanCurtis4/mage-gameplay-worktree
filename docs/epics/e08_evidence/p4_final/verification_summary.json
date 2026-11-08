@@ -1,0 +1,956 @@
+{
+  "base": "085e1a1aa66bedff11f686eace274444413928ab",
+  "selected_unique_steps": 43,
+  "full_plan_steps": 320,
+  "checks": 114800,
+  "failures": 0,
+  "execution_errors": 0,
+  "timeouts": 0,
+  "composition": "20compatible passes from regression_final1 +13compatible passes from tail1 +10final passes from tail2; failed legacy assertions replaced only by explicitV1fixture+activeV2expectations. No duplicated checks.",
+  "attempt_history": {
+    "regression_final1": {
+      "executed": 21,
+      "passed": 20,
+      "failed": 1
+    },
+    "regression_tail1": {
+      "executed": 14,
+      "passed": 13,
+      "failed": 1
+    },
+    "regression_tail2": {
+      "executed": 10,
+      "passed": 10,
+      "failed": 0
+    }
+  },
+  "test_results": {
+    "e06_inventory_test": {
+      "attempt": "regression_final1",
+      "checks": 68,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "1bd9a4b87f549316d171ddef1a2cacf156ea80ec76a1af3de9d7d091192722a5",
+      "index": 3
+    },
+    "combat_animation_test": {
+      "attempt": "regression_final1",
+      "checks": 39,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "df1d52002e18c5524fa60801186a018cdbc71c91e0248051e38f6565c154fb1e",
+      "index": 10
+    },
+    "e08_presentation_test": {
+      "attempt": "regression_final1",
+      "checks": 2204,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "0e1ddd04a27392311fffec3289687f0d5f098fa9857204e7c0174256f0b8a4fe",
+      "index": 11
+    },
+    "e08_pilot_ui_test": {
+      "attempt": "regression_final1",
+      "checks": 55,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "42ed6a5f7aa350985378234ead5184ba255fb84ef586216efdecb54e7b3a874d",
+      "index": 12
+    },
+    "e08_audio_test": {
+      "attempt": "regression_final1",
+      "checks": 132,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "ca6847ce110f23ae40e7627a8f5467e4d8caab8dab7cb531b95fc2928a1aeeb8",
+      "index": 13
+    },
+    "e08_pilot_test": {
+      "attempt": "regression_final1",
+      "checks": 189,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "999b55375dd63286b23b35428221d6c708c15383db5293f10d515a7928b6ec6f",
+      "index": 14
+    },
+    "e08_characters_test": {
+      "attempt": "regression_final1",
+      "checks": 1350,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "f75b72b7ccc3036a420f8a7a0ffd1363968fd11eb8a28202b18aadec53ef361c",
+      "index": 15
+    },
+    "e08_directional_animation_test": {
+      "attempt": "regression_final1",
+      "checks": 814,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "f3b1a95db5367ab902cb07e7685fad6c33a8c10c53aa01b52dd65b81dc6d3fab",
+      "index": 16
+    },
+    "e08_directional_integration_test": {
+      "attempt": "regression_final1",
+      "checks": 84,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "6be2b53c8f07a98bab9161bd3fbd90235aadfa1a628d8629012a504a638f6f2e",
+      "index": 17
+    },
+    "e08_directional_content_test": {
+      "attempt": "regression_final1",
+      "checks": 3461,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "b4f85dded47ea1b48df58a310901cc3c2aebcca706530482c398ba9caa1823f6",
+      "index": 18
+    },
+    "e08_directional_units_test": {
+      "attempt": "regression_final1",
+      "checks": 47494,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "41cde8285acd0b73908c8d828ef97e6161120bcc9189da0316a9fe3993473b29",
+      "index": 19
+    },
+    "e08_equipment_art_test": {
+      "attempt": "regression_final1",
+      "checks": 2589,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "26b20037b43bd8f69d593439024ceb8644cc8af73ca698131cfce857773c9f66",
+      "index": 20
+    },
+    "e08_directional_rig_compatibility_test": {
+      "attempt": "regression_final1",
+      "checks": 41812,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "c0c793b4e424612a9b6d18eedcd6c22d955f88ca38744821526207820ee30952",
+      "index": 21
+    },
+    "e08_directional_npcs_test": {
+      "attempt": "regression_final1",
+      "checks": 1292,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "d7ca6d23781d27e91241f0b7c9331852025079d565ba8d151ef90d14b72408ce",
+      "index": 22
+    },
+    "e05_hunter_core_integration_test": {
+      "attempt": "regression_final1",
+      "checks": 41,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "c9f14931487b29134bf588bde93b922ea28f949004b92237780d2fed3dcedbbb",
+      "index": 65
+    },
+    "e05_hunter_atlas_test": {
+      "attempt": "regression_final1",
+      "checks": 158,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "dd9fc5b154bd229d67433eb6a18143321446991403f75fb160d9eafc324e8f9a",
+      "index": 72
+    },
+    "e05_hunter_presentation_test": {
+      "attempt": "regression_final1",
+      "checks": 25,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "abcb0a1ea7c5b0bb69946bf76259579f2fb6ef96f904b9e42b0c5d714012a3b3",
+      "index": 73
+    },
+    "e04_archer_integrated_closure_test": {
+      "attempt": "regression_final1",
+      "checks": 87,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "5485c4af55d626e233aa5182ee8f135ce56d6468b0871d3a4f7f1ce598c26bb0",
+      "index": 82
+    },
+    "e05_spiritualist_visuals_test": {
+      "attempt": "regression_final1",
+      "checks": 23,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "513e8509315a7ba9bd54a0ab9f038a1aae8cf24b0502132ebdc9607c4b8fa24d",
+      "index": 120
+    },
+    "e05_geometer_animation_test": {
+      "attempt": "regression_final1",
+      "checks": 101,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "617a113c564c517ebad51be63fdc6c5ae8f935e32d8e2203f90d110803d18d66",
+      "index": 134
+    },
+    "e05_geometer_playtest_flow_test": {
+      "attempt": "regression_tail1",
+      "checks": 28,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "63268171b8d8251f44ad35fdfb61d37a15b0791f8b500c85a5734ebbbc2baf8e",
+      "index": 137
+    },
+    "e05_sentinel_atlas_test": {
+      "attempt": "regression_tail1",
+      "checks": 137,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "a0fe98089e7da1ac4b77e0672d4e01256b58177ad5b174bd9cca8a5a11392458",
+      "index": 148
+    },
+    "e05_sentinel_solo_integration_test": {
+      "attempt": "regression_tail1",
+      "checks": 73,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "b754ef51a362584252d4b2fee251945c28e54529f0f60b7cb124a16bba984c23",
+      "index": 153
+    },
+    "e05_elementalist_animation_test": {
+      "attempt": "regression_tail1",
+      "checks": 7,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "7052d244df3253350a7211de5ae2df14fc43a08c03e0b717635f92bed82e0816",
+      "index": 159
+    },
+    "e05_berserker_playtest_flow_test": {
+      "attempt": "regression_tail1",
+      "checks": 21,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "321b0915e18775cd33f29fea924044fb97d8d238dc1a1d183f4e17700ac63e37",
+      "index": 180
+    },
+    "e05_defender_playtest_flow_test": {
+      "attempt": "regression_tail1",
+      "checks": 18,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "8853528292fe9119ff47fa8046d3f1b49acd4a8fda1e2f3ed705a4a8fb2b1c03",
+      "index": 187
+    },
+    "e06_tx_mob_test": {
+      "attempt": "regression_tail1",
+      "checks": 27,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "5d56f0cd5ff057474655131ddf94ec101977f7aab24fcb67ef806b1e4f99969a",
+      "index": 201
+    },
+    "e06_rx_mob_ai_test": {
+      "attempt": "regression_tail1",
+      "checks": 4,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "b9569774452019c5a7a2f3c085320fe2cf4b747a45adf3bbbac256ffc674109a",
+      "index": 204
+    },
+    "e06_ui_inventory_test": {
+      "attempt": "regression_tail1",
+      "checks": 51,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "d8f2de1bc1717c8010b8aad2a410e1014142cedf00c47c689a250d4bac021c83",
+      "index": 217
+    },
+    "e06_appearance_integration_test": {
+      "attempt": "regression_tail1",
+      "checks": 302,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "91d1c5c4855f7854e40340e1ef9c599d99cfe2497c39784e767a905ad3b8054c",
+      "index": 232
+    },
+    "equipment_hand_alignment_test": {
+      "attempt": "regression_tail1",
+      "checks": 4593,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "38a87bf0439bdb473aba8b25a1455d60554e8f41f99e1e0dc53853009a3c9145",
+      "index": 234
+    },
+    "e06_icon_bar_test": {
+      "attempt": "regression_tail1",
+      "checks": 24,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "eb3f9abdaf6f6b129e2fe140e29916fcddecd3e077141bf2fe525a5703a692aa",
+      "index": 241
+    },
+    "e07_f7_presentation_test": {
+      "attempt": "regression_tail1",
+      "checks": 27,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "e6dbd869650df8aff1e156d2300fbaaac49a2d4251c4951b5c97e17592da5f38",
+      "index": 266
+    },
+    "actor_presentation_test": {
+      "attempt": "regression_tail2",
+      "checks": 15,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "73e5573636f71073569279485da10f8da1e9c7821d75b3d8aa08eb76adcadd41",
+      "index": 269
+    },
+    "e07_f3_snapshot_test": {
+      "attempt": "regression_tail2",
+      "checks": 52,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "9fc703c4ab2986ddaab73ed386092f3b8ab71a5ea82c4a7c3c781d2f6f06c0cc",
+      "index": 287
+    },
+    "e07_f3_continuation_test": {
+      "attempt": "regression_tail2",
+      "checks": 2743,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "363698e32e808dd44c41c70ccfbf2315d3c8f5107673b2c42a5ea4e718a928f1",
+      "index": 288
+    },
+    "e07_f3_action_matrix_test": {
+      "attempt": "regression_tail2",
+      "checks": 2004,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "98a042cb25723ef716898497cd97f16fbb23db6c28a806e9be5ddd79a106d57a",
+      "index": 289
+    },
+    "e07_f3_lifecycle_test": {
+      "attempt": "regression_tail2",
+      "checks": 90,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "b5d444e6416a3460f73d27d1600dbf3be01c60cf59a689224fd01264c121d886",
+      "index": 290
+    },
+    "e07_f3_mob_state_test": {
+      "attempt": "regression_tail2",
+      "checks": 372,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "a84cacbf8f2342c0644f9985db703a0244fe421411df868c5c53b6d24fdeb815",
+      "index": 291
+    },
+    "e07_f1_sentinel_direct_test": {
+      "attempt": "regression_tail2",
+      "checks": 364,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "a2b38616087e9a86a46895b840e49df6e2ac6e9ee177e31e39a842e3518e172d",
+      "index": 304
+    },
+    "e07_f1_hunter_traps_test": {
+      "attempt": "regression_tail2",
+      "checks": 631,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "105d6b18056fe924f6caf1b7a1c4547e6ef6b1e015479fc40c71dd4242e66bb9",
+      "index": 305
+    },
+    "e07_f1_geometer_full_test": {
+      "attempt": "regression_tail2",
+      "checks": 1160,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "2c31e63a408f7baedd02d0f8b313514e024b98a5586b5cf5e9489b322c9c4f3a",
+      "index": 312
+    },
+    "e07_f1_presentation_test": {
+      "attempt": "regression_tail2",
+      "checks": 39,
+      "exit_code": 0,
+      "failed": false,
+      "timed_out": false,
+      "output_sha256": "69f688370370f9985ccb61ac420f739ce3c7cec813d86a5f5c7026eae5639429",
+      "index": 316
+    }
+  },
+  "native": {
+    "defender": {
+      "attempt": "native_defender_stage1",
+      "checks": 4714,
+      "captures": 36,
+      "failures": 0
+    },
+    "berserker": {
+      "attempt": "native_berserker_stage1",
+      "checks": 4714,
+      "captures": 36,
+      "failures": 0
+    },
+    "swordsman": {
+      "attempt": "native_swordsman_stage1",
+      "checks": 4714,
+      "captures": 36,
+      "failures": 0
+    },
+    "mage": {
+      "attempt": "native_mage_stage1",
+      "checks": 4714,
+      "captures": 36,
+      "failures": 0
+    },
+    "spiritualist": {
+      "attempt": "native_spiritualist_stage1",
+      "checks": 4714,
+      "captures": 36,
+      "failures": 0
+    },
+    "elementalist": {
+      "attempt": "native_elementalist_stage1",
+      "checks": 4714,
+      "captures": 36,
+      "failures": 0
+    },
+    "hunter": {
+      "attempt": "native_hunter_stage3",
+      "checks": 661,
+      "captures": 15,
+      "failures": 0
+    },
+    "sentinel": {
+      "attempt": "native_sentinel_stage2",
+      "checks": 4714,
+      "captures": 36,
+      "failures": 0
+    },
+    "geometer": {
+      "attempt": "native_geometer_stage2",
+      "checks": 4714,
+      "captures": 36,
+      "failures": 0
+    },
+    "archer": {
+      "attempt": "native_archer_default2",
+      "checks": 4714,
+      "captures": 36,
+      "failures": 0
+    },
+    "warrior": {
+      "attempt": "native_warrior_stage1",
+      "checks": 537,
+      "captures": 8,
+      "failures": 0
+    },
+    "gel": {
+      "attempt": "native_gel_stage1",
+      "checks": 537,
+      "captures": 8,
+      "failures": 0
+    },
+    "beast_master": {
+      "attempt": "native_beast_master_stage1",
+      "checks": 537,
+      "captures": 8,
+      "failures": 0
+    },
+    "animal_companion": {
+      "attempt": "native_animal_companion_stage1",
+      "checks": 537,
+      "captures": 8,
+      "failures": 0
+    },
+    "e08_forest_wolf": {
+      "attempt": "native_e08_forest_wolf_stage1",
+      "checks": 537,
+      "captures": 8,
+      "failures": 0
+    },
+    "e08_forest_boar": {
+      "attempt": "native_e08_forest_boar_stage1",
+      "checks": 537,
+      "captures": 8,
+      "failures": 0
+    },
+    "npc_archer": {
+      "attempt": "native_npc_archer_stage1",
+      "checks": 405,
+      "captures": 8,
+      "failures": 0
+    }
+  },
+  "world": {
+    "NPCs": [
+      {
+        "id": "forest_wolf",
+        "path": "res://assets/art/animations/directional/e08_forest_wolf/body.png",
+        "point": "(40.0, 0.0, 180.0)",
+        "tint": "(0.4353, 0.3922, 0.3333, 1.0)"
+      },
+      {
+        "id": "forest_boar",
+        "path": "res://assets/art/animations/directional/e08_forest_boar/body.png",
+        "point": "(100.0, 0.0, 180.0)",
+        "tint": "(0.4196, 0.2902, 0.1804, 1.0)"
+      },
+      {
+        "id": "test_gel",
+        "path": "res://assets/art/animations/directional/gel/body.png",
+        "point": "(160.0, 0.0, 180.0)",
+        "tint": "(0.7765, 0.3529, 0.4078, 1.0)"
+      },
+      {
+        "id": "test_beast_master",
+        "path": "res://assets/art/animations/directional/beast_master/body.png",
+        "point": "(220.0, 0.0, 180.0)",
+        "tint": "(0.7765, 0.3529, 0.4078, 1.0)"
+      },
+      {
+        "id": "test_animal_companion",
+        "path": "res://assets/art/animations/directional/animal_companion/body.png",
+        "point": "(40.0, 0.0, 260.0)",
+        "tint": "(0.7765, 0.3529, 0.4078, 1.0)"
+      },
+      {
+        "id": "forest_stalker",
+        "path": "res://assets/art/animations/directional/warrior/body.png",
+        "point": "(100.0, 0.0, 260.0)",
+        "tint": "(0.2471, 0.4196, 0.2275, 1.0)"
+      },
+      {
+        "id": "forest_canopy_archer",
+        "path": "res://assets/art/animations/directional/archer/npc_body.png",
+        "point": "(160.0, 0.0, 260.0)",
+        "tint": "(0.3686, 0.4784, 0.2275, 1.0)"
+      }
+    ],
+    "captures": [
+      "world_root.png",
+      "world_ramp.png",
+      "world_bridge.png",
+      "world_body_swordsman.png",
+      "world_body_mage.png",
+      "world_body_archer.png",
+      "world_body_defender.png",
+      "world_body_berserker.png",
+      "world_body_elementalist.png",
+      "world_body_spiritualist.png",
+      "world_body_sentinel.png",
+      "world_body_hunter.png",
+      "world_body_geometer.png",
+      "world_zoom_50.png",
+      "world_zoom_100.png",
+      "world_zoom_160.png"
+    ],
+    "checks": 51,
+    "failures": 0,
+    "scope": "actual default bodies/occurrences on canonical F1 root/ramp/bridge+occlusion; UI120 and camera50/100/160; cosmetic body samples, not legal equipment grants or mapFPS"
+  },
+  "initial_mosaic": "integrated2 had cropped virtualviewport; retained as superseded, final integrated3 pending",
+  "lair_attempt": "pilot_integrated2/lair",
+  "supervision": "Sol technical authorship, Root bounded gallery read supplemental; Luna integrity review pending after freeze; no human productacceptance",
+  "final_after_lateral_grip_correction": {
+    "regression": {
+      "attempt": "regression_lateral1",
+      "selected_unique_steps": 43,
+      "checks": 114876,
+      "failures": 0,
+      "same_43_test_selection_as": "regression_final1",
+      "new_invariant_checks": 76,
+      "tests": {
+        "e06_inventory_test": {
+          "checks": 68,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "1BD9A4B87F549316D171DDEF1A2CACF156EA80EC76A1AF3DE9D7D091192722A5"
+        },
+        "combat_animation_test": {
+          "checks": 39,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "DF1D52002E18C5524FA60801186A018CDBC71C91E0248051E38F6565C154FB1E"
+        },
+        "e08_presentation_test": {
+          "checks": 2204,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "0E1DDD04A27392311FFFEC3289687F0D5F098FA9857204E7C0174256F0B8A4FE"
+        },
+        "e08_pilot_ui_test": {
+          "checks": 55,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "42ED6A5F7AA350985378234EAD5184BA255FB84EF586216EFDECB54E7B3A874D"
+        },
+        "e08_audio_test": {
+          "checks": 132,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "CA6847CE110F23AE40E7627A8F5467E4D8CAAB8DAB7CB531B95FC2928A1AEEB8"
+        },
+        "e08_pilot_test": {
+          "checks": 189,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "999B55375DD63286B23B35428221D6C708C15383DB5293F10D515A7928B6EC6F"
+        },
+        "e08_characters_test": {
+          "checks": 1350,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "F75B72B7CCC3036A420F8A7A0FFD1363968FD11EB8A28202B18AADEC53EF361C"
+        },
+        "e08_directional_animation_test": {
+          "checks": 814,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "F3B1A95DB5367AB902CB07E7685FAD6C33A8C10C53AA01B52DD65B81DC6D3FAB"
+        },
+        "e08_directional_integration_test": {
+          "checks": 84,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "6BE2B53C8F07A98BAB9161BD3FBD90235AADFA1A628D8629012A504A638F6F2E"
+        },
+        "e08_directional_content_test": {
+          "checks": 3461,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "B4F85DDED47EA1B48DF58A310901CC3C2AEBCCA706530482C398BA9CAA1823F6"
+        },
+        "e08_directional_units_test": {
+          "checks": 47494,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "41CDE8285ACD0B73908C8D828EF97E6161120BCC9189DA0316A9FE3993473B29"
+        },
+        "e08_equipment_art_test": {
+          "checks": 2589,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "26B20037B43BD8F69D593439024CEB8644CC8AF73CA698131CFCE857773C9F66"
+        },
+        "e08_directional_rig_compatibility_test": {
+          "checks": 41888,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "F88BD4EEC04639424D3EBC9607335FE4F8E3329FB649C27C7E2FE32157F7BD3E"
+        },
+        "e08_directional_npcs_test": {
+          "checks": 1292,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "D7CA6D23781D27E91241F0B7C9331852025079D565BA8D151EF90D14B72408CE"
+        },
+        "e05_hunter_core_integration_test": {
+          "checks": 41,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "C9F14931487B29134BF588BDE93B922EA28F949004B92237780D2FED3DCEDBBB"
+        },
+        "e05_hunter_atlas_test": {
+          "checks": 158,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "DD9FC5B154BD229D67433EB6A18143321446991403F75FB160D9EAFC324E8F9A"
+        },
+        "e05_hunter_presentation_test": {
+          "checks": 25,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "ABCB0A1EA7C5B0BB69946BF76259579F2FB6EF96F904B9E42B0C5D714012A3B3"
+        },
+        "e04_archer_integrated_closure_test": {
+          "checks": 87,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "5485C4AF55D626E233AA5182EE8F135CE56D6468B0871D3A4F7F1CE598C26BB0"
+        },
+        "e05_spiritualist_visuals_test": {
+          "checks": 23,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "513E8509315A7BA9BD54A0AB9F038A1AAE8CF24B0502132EBDC9607C4B8FA24D"
+        },
+        "e05_geometer_animation_test": {
+          "checks": 101,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "617A113C564C517EBAD51BE63FDC6C5AE8F935E32D8E2203F90D110803D18D66"
+        },
+        "e05_geometer_playtest_flow_test": {
+          "checks": 28,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "63268171B8D8251F44AD35FDFB61D37A15B0791F8B500C85A5734EBBBC2BAF8E"
+        },
+        "e05_sentinel_atlas_test": {
+          "checks": 137,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "A0FE98089E7DA1AC4B77E0672D4E01256B58177AD5B174BD9CCA8A5A11392458"
+        },
+        "e05_sentinel_solo_integration_test": {
+          "checks": 73,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "B754EF51A362584252D4B2FEE251945C28E54529F0F60B7CB124A16BBA984C23"
+        },
+        "e05_elementalist_animation_test": {
+          "checks": 7,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "7052D244DF3253350A7211DE5AE2DF14FC43A08C03E0B717635F92BED82E0816"
+        },
+        "e05_berserker_playtest_flow_test": {
+          "checks": 21,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "321B0915E18775CD33F29FEA924044FB97D8D238DC1A1D183F4E17700AC63E37"
+        },
+        "e05_defender_playtest_flow_test": {
+          "checks": 18,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "8853528292FE9119FF47FA8046D3F1B49ACD4A8FDA1E2F3ED705A4A8FB2B1C03"
+        },
+        "e06_tx_mob_test": {
+          "checks": 27,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "5D56F0CD5FF057474655131DDF94EC101977F7AAB24FCB67EF806B1E4F99969A"
+        },
+        "e06_rx_mob_ai_test": {
+          "checks": 4,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "B9569774452019C5A7A2F3C085320FE2CF4B747A45ADF3BBBAC256FFC674109A"
+        },
+        "e06_ui_inventory_test": {
+          "checks": 51,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "D8F2DE1BC1717C8010B8AAD2A410E1014142CEDF00C47C689A250D4BAC021C83"
+        },
+        "e06_appearance_integration_test": {
+          "checks": 302,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "91D1C5C4855F7854E40340E1EF9C599D99CFE2497C39784E767A905AD3B8054C"
+        },
+        "equipment_hand_alignment_test": {
+          "checks": 4593,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "38A87BF0439BDB473ABA8B25A1455D60554E8F41F99E1E0DC53853009A3C9145"
+        },
+        "e06_icon_bar_test": {
+          "checks": 24,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "EB3F9ABDAF6F6B129E2FE140E29916FCDDECD3E077141BF2FE525A5703A692AA"
+        },
+        "e07_f7_presentation_test": {
+          "checks": 27,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "E6DBD869650DF8AFF1E156D2300FBAAAC49A2D4251C4951B5C97E17592DA5F38"
+        },
+        "actor_presentation_test": {
+          "checks": 15,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "73E5573636F71073569279485DA10F8DA1E9C7821D75B3D8AA08EB76ADCADD41"
+        },
+        "e07_f3_snapshot_test": {
+          "checks": 52,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "9FC703C4AB2986DDAAB73ED386092F3B8AB71A5EA82C4A7C3C781D2F6F06C0CC"
+        },
+        "e07_f3_continuation_test": {
+          "checks": 2743,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "363698E32E808DD44C41C70CCFBF2315D3C8F5107673B2C42A5EA4E718A928F1"
+        },
+        "e07_f3_action_matrix_test": {
+          "checks": 2004,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "98A042CB25723EF716898497CD97F16FBB23DB6C28A806E9BE5DDD79A106D57A"
+        },
+        "e07_f3_lifecycle_test": {
+          "checks": 90,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "B5D444E6416A3460F73D27D1600DBF3BE01C60CF59A689224FD01264C121D886"
+        },
+        "e07_f3_mob_state_test": {
+          "checks": 372,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "A84CACBF8F2342C0644F9985DB703A0244FE421411DF868C5C53B6D24FDEB815"
+        },
+        "e07_f1_sentinel_direct_test": {
+          "checks": 364,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "A2B38616087E9A86A46895B840E49DF6E2AC6E9EE177E31E39A842E3518E172D"
+        },
+        "e07_f1_hunter_traps_test": {
+          "checks": 631,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "105D6B18056FE924F6CAF1B7A1C4547E6EF6B1E015479FC40C71DD4242E66BB9"
+        },
+        "e07_f1_geometer_full_test": {
+          "checks": 1160,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "2C31E63A408F7BAEDD02D0F8B313514E024B98A5586B5CF5E9489B322C9C4F3A"
+        },
+        "e07_f1_presentation_test": {
+          "checks": 39,
+          "failures": 0,
+          "exit_code": 0,
+          "output_sha256": "69F688370370F9985CCB61AC420F739CE3C7CEC813D86A5F5C7026EAE5639429"
+        }
+      }
+    },
+    "native": {
+      "archer": {
+        "attempt": "native_lateral_archer",
+        "checks": 4714,
+        "failures": 0,
+        "captures": 36
+      },
+      "swordsman": {
+        "attempt": "native_lateral_swordsman",
+        "checks": 4714,
+        "failures": 0,
+        "captures": 36
+      },
+      "defender": {
+        "attempt": "native_lateral_defender",
+        "checks": 4714,
+        "failures": 0,
+        "captures": 36
+      },
+      "berserker": {
+        "attempt": "native_lateral_berserker",
+        "checks": 4714,
+        "failures": 0,
+        "captures": 36
+      },
+      "sentinel": {
+        "attempt": "native_lateral_sentinel",
+        "checks": 4714,
+        "failures": 0,
+        "captures": 36
+      },
+      "hunter": {
+        "attempt": "native_lateral_hunter",
+        "checks": 4714,
+        "failures": 0,
+        "captures": 36
+      },
+      "npc_archer": {
+        "attempt": "native_lateral_npc_archer",
+        "checks": 405,
+        "failures": 0,
+        "captures": 8
+      }
+    },
+    "native_reused_unchanged": "mage/elementalist/spiritualist/geometer rigs byte-identical; six NPC bodies other than npc_archer unchanged",
+    "compose": {
+      "attempt": "compose_lateral_grip1",
+      "frames": 64,
+      "failures": 0,
+      "max_rendered_rgba_difference": 0.00784316658973694,
+      "npc_body_rgba_sha256": "4527f932c7daccd127173cf4fc2d6df04d9b0b017ad38ac9aa972b12e7c8cd3a"
+    },
+    "mosaic": {
+      "attempt": "mosaic_lateral1",
+      "checks": 361,
+      "failures": 0,
+      "frames": 64
+    },
+    "pck": {
+      "attempt": "export_lateral2",
+      "sha256": "ca728669956d43802122eb41c7381256017e0fe1f47cd8ce0cc271db32a78f40",
+      "bytes": 113778756,
+      "packed_tests": {
+        "e08_characters_test": {
+          "checks": 1350,
+          "failures": 0
+        },
+        "e08_directional_animation_test": {
+          "checks": 814,
+          "failures": 0
+        },
+        "e08_directional_content_test": {
+          "checks": 3461,
+          "failures": 0
+        },
+        "e08_directional_npcs_test": {
+          "checks": 1292,
+          "failures": 0
+        },
+        "e08_directional_rig_compatibility_test": {
+          "checks": 41888,
+          "failures": 0
+        },
+        "e08_directional_units_test": {
+          "checks": 47494,
+          "failures": 0
+        },
+        "e08_equipment_art_test": {
+          "checks": 2589,
+          "failures": 0
+        }
+      }
+    },
+    "harness_failure_preserved": "export_lateral1: packed tests 1292/0 but stderr ERROR loading editor-only godot-git-plugin DLL because process CWD was outside the worktree; export_lateral2 repeated with CWD at worktree root, identical presets",
+    "supersedes": "regression_final1/tail1/tail2 counts, mosaic_integrated3 and export_final1 (PCK b8249397...) certified the pre-correction candidate",
+    "cost": "not repeated: change is per-frame slot metadata and one recomposed same-size npc_body; draw path/quads unchanged"
+  }
+}

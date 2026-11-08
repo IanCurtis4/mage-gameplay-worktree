@@ -14,7 +14,7 @@ func check(ok: bool, label: String) -> void:
 func run() -> void:
 	var args := OS.get_cmdline_user_args()
 	require_default=args.has("--default") or args.is_empty()
-	var targets: Array[StringName] = [&"elementalist",&"mage",&"swordsman"]
+	var targets: Array[StringName] = [&"swordsman",&"mage",&"archer",&"defender",&"berserker",&"elementalist",&"spiritualist",&"sentinel",&"hunter",&"geometer"]
 	if not args.is_empty():
 		targets.clear();targets.append(StringName(args[0]))
 	for target: StringName in targets:
@@ -35,7 +35,7 @@ func validate_unit() -> void:
 	check(bundle.actor_kind()==unit_kind, "content binds the intended identity")
 	var actor := CharacterAnimation.new(); actor.configure(unit_kind)
 	if require_default:
-		check(actor.render_descriptor().version==2 and actor.atlas.resource_path=="res://assets/art/animations/directional/%s/body.png" % unit_kind,"active identity automatically consumes promoted unit")
+		check(actor.render_descriptor().version==2 and actor.atlas.resource_path=="res://assets/art/animations/directional/%s/%s.png" % [unit_kind,"npc_body" if unit_kind==&"archer" else "body"],"active identity automatically consumes promoted unit")
 		var promoted := DirectionalAnimationSet.load_manifest(DirectionalAnimationSet.default_path(unit_kind))
 		var identical: bool = promoted.ok
 		if promoted.ok:
@@ -96,6 +96,18 @@ func validate_unit() -> void:
 							check(absf(bottom)<0.05 if pose==15 else bottom<=0.05,"death equipment rests on/above the common ground")
 		actor.state=D.state(3,10)
 		check(actor.death_copy().render_descriptor().direction==3, "death retains real west view")
+	for id: StringName in EquipmentArtCatalog.head_ids():
+		actor.set_equipment_visual({"head":id,"main_hand":&"staff"})
+		check(actor.atlas==bundle.body(true,bundle.has_bare_head()),"known head selects exact optional/base texture")
+		for direction: int in 4:
+			for pose: int in 16:
+				actor.state=D.state(direction,pose);var descriptor := actor.render_descriptor()
+				check(descriptor.head.key==id and descriptor.head.view==direction,"14 actual heads share authored direction")
+				if pose>=14:check(F.head_bottom(descriptor)<=0.05,"all painted head bounds above corpse ground "+String(unit_kind)+"/"+str(direction*16+pose))
+	actor.set_equipment_visual({"main_hand":&"staff","head":&"unknown"})
+	check(actor.atlas==bundle.body(true) and actor.render_descriptor().head.is_empty(),"unknown head never removes original fixed hat")
+	actor.set_equipment_visual({"main_hand":&"staff"});check(actor.atlas==bundle.body(true),"remove restores exact original atlas")
+	if unit_kind in [&"archer",&"hunter",&"sentinel",&"geometer"]:bare_integrity(bundle)
 	await integrated()
 func integrated() -> void:
 	var f := F.make(unit_kind,"content");check(f.ok,"real unit profile fixture");
@@ -115,7 +127,7 @@ func integrated() -> void:
 	var proposed := host.build_service.preview_change(intent)
 	check(proposed.ok and host.build_service.commit_change(proposed.intent).ok,"actual durable helmet equip")
 	var animation := host.player.character_animation
-	var expected_body: String = "bare_head" if unit_kind==&"mage" else "weaponless"
+	var expected_body: String = "bare_head" if unit_kind in [&"mage",&"archer",&"hunter",&"sentinel",&"geometer"] else "weaponless"
 	var world_binding: bool = animation.render_descriptor().version==2 and animation.atlas.resource_path=="res://assets/art/animations/directional/%s/%s.png" % [unit_kind,expected_body] if require_default else animation.set_directional_manifest(manifest).ok
 	check(animation.actor_kind==unit_kind and world_binding,"real actor consumes explicit default/staged content")
 	var dto := BuildPresentation.describe(host)
@@ -144,3 +156,25 @@ func integrated() -> void:
 			copy.free()
 	barrier.release(); paused=false
 	host.free(); await process_frame
+
+func bare_integrity(bundle: DirectionalAnimationSet) -> void:
+	check(bundle.has_bare_head(),"completed authored bare head present")
+	var fit: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/art/e08_head_fit/%s/calibration.json" % unit_kind))
+	var original := bundle.body(true).get_image();var bare := bundle.body(true,true).get_image()
+	for index: int in 64:
+		var region := Rect2i(index%4*64,index/4*64,64,64);var before := original.get_region(region);var after := bare.get_region(region)
+		var record: Dictionary=fit.frames[index];var area: Array=record.head_region;var confined := true
+		for y: int in 64:
+			for x: int in 64:
+				var authorized: bool=x>=area[0] and x<area[2] and y>=area[1] and y<area[3]
+				for protected: Array in record.protections:
+					if x>=protected[0] and x<protected[2] and y>=protected[1] and y<protected[3]:authorized=false
+				if not authorized:
+					var a := before.get_pixel(x,y);var b := after.get_pixel(x,y)
+					confined=confined and ((a.a==0 and b.a==0) or a==b)
+		check(confined,"all changed pixels confined; protected arms intact")
+		check(before.get_used_rect().end.y==after.get_used_rect().end.y,"bare ground unchanged")
+		if index%16<14:
+			for slot: String in ["main_hand","off_hand"]:
+				var fingers: Array=bundle.frame(index).slots[slot].fingers;var crop := Rect2i(fingers[0],fingers[1],fingers[2],fingers[3])
+				check(before.get_region(crop).get_data()==after.get_region(crop).get_data(),"actual112 finger crops byte-identical")

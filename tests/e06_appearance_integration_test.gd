@@ -1,6 +1,6 @@
 extends SceneTree
 ## Actual player/run transactions, death copies and shared artwork; isolated profiles.
-const DIRECTIONAL_KINDS: Array[StringName] = [&"spiritualist", &"elementalist", &"mage", &"swordsman"]
+const DIRECTIONAL_KINDS: Array[StringName] = [&"swordsman",&"mage",&"archer",&"defender",&"berserker",&"elementalist",&"spiritualist",&"sentinel",&"hunter",&"geometer"]
 var checks := 0
 var failures := 0
 const IDENTITIES := {&"swordsman":&"swordsman",&"mage":&"mage",&"archer":&"archer",&"defender":&"swordsman",&"berserker":&"swordsman",&"elementalist":&"mage",&"spiritualist":&"mage",&"sentinel":&"archer",&"hunter":&"archer",&"mg_ar":&"mage"}
@@ -52,7 +52,7 @@ func _run() -> void:
 		dead.equipment_visual["main_hand"] = &"axe"
 		check(animation.equipment_visual["main_hand"]==&"","death gear mutation cannot alter player "+String(identity))
 		independent.set_equipment_visual({})
-		var base_path := "res://assets/art/animations/directional/%s/body.png" % actor_kind if directional else "res://assets/art/animations/%s.png" % actor_kind
+		var base_path := "res://assets/art/animations/directional/%s/%s.png" % [actor_kind,"npc_body" if actor_kind==&"archer" else "body"] if directional else "res://assets/art/animations/%s.png" % actor_kind
 		check(independent.atlas.resource_path==base_path,"active base atlas remains available "+String(identity))
 		controller.queue_free()
 		await process_frame
@@ -61,7 +61,7 @@ func _run() -> void:
 		var dead := live.death_copy()
 		check(dead.actor_kind == kind and is_same(dead.atlas,live.atlas),"mob death preserves species "+String(kind))
 		var bitmap := live.atlas.get_image()
-		for frame: int in 32:
+		for frame: int in 64:
 			var image := bitmap.get_region(Rect2i(frame%4*64,frame/4*64,64,64))
 			check(image.get_used_rect().has_area() and image.get_pixel(0,0).a==0.0,"species frame has content and real alpha %s/%d" % [kind,frame])
 	print("E06 appearance integration: %d checks, %d failures" % [checks,failures])

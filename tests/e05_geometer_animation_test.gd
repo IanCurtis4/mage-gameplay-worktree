@@ -1,12 +1,12 @@
 extends SceneTree
+const D = preload("res://tests/fixtures/e08_directional/fixture.gd")
 ## Bitmap presentation contracts only; frames never authorize a combat action.
 
 var checks := 0
 var failures := 0
 
 func _initialize() -> void:
-	var animation := CharacterAnimation.new()
-	animation.configure(&"geometer")
+	var animation := D.legacy_animation(&"geometer")
 	_check(animation.actor_kind == &"geometer" and animation.atlas != null and animation.atlas.get_size() == Vector2(256, 512), "Geometer owns a full 32-frame atlas")
 	if animation.atlas == null:
 		quit(1)

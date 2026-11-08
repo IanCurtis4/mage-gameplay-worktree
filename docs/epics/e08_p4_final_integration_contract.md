@@ -60,7 +60,7 @@ cada corpo/override e arco, não genericfox nem replay de ataque/loot.
 
 NPCs restantes usam props incorporados e não equipam anexos: weaponless:null,
 head invisible/slotsunused não alegam rig, nem podem receber equipamento inferido.
-Enumerar os16MobDefinition já inventariados e friendlyanimal_companion consumidor.
+Enumerar os16MobDefinition já inventariados e o companion real EnemyActor invocado por beast_master. Não existe consumidor de pet amigável encontrado; o nome animal_companion não autoriza criá-lo.
 Presença de recurso de teste não significa ocorrência publicada. Tintas de
 espécies/piloto atuais conservadas. Inimigos do catálogo não viram novos habitantes.
 
@@ -130,3 +130,29 @@ pontos/crops/ângulos/depth conforme APIlegada nas28poses vivas. Spirit/Element
 foram redesenhadas integralmente e não devem receber pontos legados de corpos
 diferentes; nelas verificar gesto/orientação/oclusão por evidência real e comparar
 apenas convenções de fase pertinentes. Nativecompat não exige restaurar PNGold.
+
+## Precisões do dispatch8/11
+
+Root confirmou ausência de path de pet amigável: exigência anterior retirada,
+pois era inferência pelo nome. Testar os consumidores reais de catálogo e
+EnemyActor invocado por beast_master. Acrescentado perfilNPCArcher96atores
+matched:V1comarcoembutido/visualvazio vsV2weaponless+arco projetado pela rotina
+derivada real. Custo de jogador Archer equipado não substitui essa transição.
+
+## Triagem medida NPCArcher — composição mecânica8/11
+
+96NPCArcherV2 dinâmicos custavam4,63–4,71msCPU por redraw contra0,43ms do
+controleV1baked; cache privado de geometria reduziu a2,06ms mas não bastou.
+Por opção técnica autorizadaRoot, bodyV2 Archer agora aponta npc_body.png,
+composto pelo renderer de bow+corpo+dedos; body.png, weaponless e bare_head
+originais continuam byte-id e o jogador equipado usa as duas últimas texturas.
+NPCV2 com esse corpo validado não adiciona outro arco: visualvazio/fastpath1quad.
+Outro ArcherV2 válido sem corpo composto conserva projeção dinâmica existente;
+V2inválido conserva corpoV1comarco baked. Trocar kind limpa qualquer derivação.
+Sem campo/estado/formato novo. Snapshot deriva pelo mesmo path já salvo.
+Composição não inclui seta cosmética de nock, preservando comportamento bakedV1;
+projétil de gameplay e arco/setas do jogador permanecem inalterados.
+64poses aprovadas sem overflow/clipping, grounds exatos, corpo byte-id fora do
+suporte pintado e comparação re-renderizada <=3/255RGBA por quantização (medido2/255).
+Falhas1/2 do frame56 preservadas, corrigidas por ânguloWwindup−0,45 no grip
+autorado, sem mover palma/crop ou mudar qualquer pixel do corpo original.

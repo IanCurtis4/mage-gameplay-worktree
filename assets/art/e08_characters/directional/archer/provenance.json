@@ -19,5 +19,23 @@
     "west_source_v2.png": "Edit ONLY row 2 columns 3 and 4 walking sprites: make both empty gloved hands visible and distinctly separated, one behind torso and one in front, exactly two anatomically connected arms in each. Preserve west profile, strides, all other 14 sprites, hood, scarf, costume, scale, pixel art and true transparent background. No bow or other equipment in hands."
   },
   "recipe": "E v1 com pose7 v2; W v1 com poses6/7 v2; S/N nativos",
-  "atlas_rgba_sha256": "139abb741381e07dc6af6acc5ad03c640af5b6c5f46d513f6449e70f777625d8"
+  "atlas_rgba_sha256": "139abb741381e07dc6af6acc5ad03c640af5b6c5f46d513f6449e70f777625d8",
+  "sol_npc_body_composition": {
+    "tool": "tools/prepare_e08_npc_archer_body.gd",
+    "input_manifest": "staged Archer, original body.png/weaponless/bare_head preserved",
+    "original_body": {
+      "path": "res://assets/art/e08_characters/directional/archer/body.png",
+      "rgba_sha256": "139abb741381e07dc6af6acc5ad03c640af5b6c5f46d513f6449e70f777625d8"
+    },
+    "output": {
+      "path": "res://assets/art/e08_characters/directional/archer/npc_body.png",
+      "rgba_sha256": "2a942c05577d8a230ef60f0d2ab6588e2f26022bddabf8f8ff41d0015ac56daf"
+    },
+    "reason": "matched NPC Archer CPU regression; validated static body uses1quad, player contracts keep weaponless/bare_head",
+    "roundtrip_max_rgba_error": 0.00784313725490196,
+    "ground_policy": "exact original64grounds, no crop/overflow; Wwindup56 bow rotation−0.45 at identical palm",
+    "anatomy": "no painted/removal pixels; body outside bow support byte-identical",
+    "resting_bow_gutters": "poses15/31/47 bow1.4rad, X/palms unchanged",
+    "import": "fix_alpha_border=false preserves generated low-alpha RGB; source/player imports unchanged"
+  }
 }

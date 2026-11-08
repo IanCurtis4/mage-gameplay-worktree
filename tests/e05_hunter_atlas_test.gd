@@ -1,4 +1,5 @@
 extends SceneTree
+const D = preload("res://tests/fixtures/e08_directional/fixture.gd")
 ## Presentation-only invariants. Alpha/pivot checks do not approve visual taste.
 
 var checks := 0
@@ -8,8 +9,7 @@ func _initialize() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
-	var hunter := CharacterAnimation.new()
-	hunter.configure(&"hunter")
+	var hunter := D.legacy_animation(&"hunter")
 	_check(hunter.actor_kind == &"hunter" and hunter.atlas != null and hunter.atlas.get_size() == Vector2(256, 512), "Hunter owns a full 32-cell atlas")
 	_check(FileAccess.file_exists("res://assets/art/animation_sources/hunter_source.png"), "generated Hunter source preserved")
 	if hunter.atlas == null or hunter.actor_kind != &"hunter":
@@ -42,8 +42,7 @@ func _run() -> void:
 			_check(bitmap.get_region(Rect2i(hunter.source_region(base + offset))).get_data() != bitmap.get_region(Rect2i(hunter.source_region(base + offset + 1))).get_data(), "distinct walk step %d" % (base + offset))
 	_check(bitmap.get_region(Rect2i(hunter.source_region(0))).get_data() != bitmap.get_region(Rect2i(hunter.source_region(16))).get_data(), "front and back drawings differ")
 	_orientation(hunter)
-	var sibling := CharacterAnimation.new()
-	sibling.configure(&"hunter")
+	var sibling := D.legacy_animation(&"hunter")
 	hunter.play(&"cast", Vector2(-1, -1), 0.4)
 	_check(sibling.atlas == hunter.atlas and sibling.state != hunter.state and sibling.state.action_remaining == 0.0, "immutable atlas shared but clocks independent")
 	var corpse := hunter.death_copy()

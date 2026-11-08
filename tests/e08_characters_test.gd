@@ -1,7 +1,7 @@
 extends SceneTree
 ## P4: real imported body selection and immutable player animation boundaries.
 const KINDS: Array[StringName] = [&"swordsman", &"archer", &"mage", &"berserker", &"defender", &"hunter", &"sentinel", &"elementalist", &"spiritualist", &"geometer"]
-const DIRECTIONAL_KINDS: Array[StringName] = [&"spiritualist", &"elementalist", &"mage", &"swordsman"]
+const DIRECTIONAL_KINDS: Array[StringName] = [&"swordsman",&"mage",&"archer",&"defender",&"berserker",&"elementalist",&"spiritualist",&"sentinel",&"hunter",&"geometer"]
 var checks := 0
 var failures := 0
 func _initialize() -> void:
@@ -17,7 +17,7 @@ func _run() -> void:
 		animation.configure(kind)
 		var directional := kind in DIRECTIONAL_KINDS
 		var base := animation.atlas
-		var base_path := "res://assets/art/animations/directional/%s/body.png" % kind if directional else "res://assets/art/animations/%s.png" % kind
+		var base_path := "res://assets/art/animations/directional/%s/%s.png" % [kind,"npc_body" if kind==&"archer" else "body"] if directional else "res://assets/art/animations/%s.png" % kind
 		check(base != null and base.resource_path==base_path, "%s explicit base selection" % kind)
 		animation.set_equipment_visual({"main_hand": &"", "off_hand": &"", "arms": &""})
 		var body := animation.atlas

@@ -100,11 +100,11 @@ func _forest_variants() -> void:
 		check(configured.get("ok",false), "real forest occurrence configures " + str(species))
 		var clock := actor.character_animation.state
 		controller.add_child(actor); controller.enemies.append(actor); actor.set_process(false)
-		var expected := "res://assets/art/animations/e08_" + str(species) + ".png"
+		var expected := "res://assets/art/animations/directional/e08_" + str(species) + "/body.png"
 		check(actor.character_animation.atlas.resource_path == expected and actor.character_animation.state == clock, "child install selects own atlas without replacing clock " + str(species))
 		var image := actor.character_animation.atlas.get_image()
-		check(image.get_size() == Vector2i(256,512), "atlas dimensions " + str(species))
-		for i: int in 32:
+		check(image.get_size() == Vector2i(256,1024), "atlas dimensions " + str(species))
+		for i: int in 64:
 			var bounds := image.get_region(Rect2i(Vector2i((i%4)*64,(i/4)*64),Vector2i(64,64))).get_used_rect()
 			check(bounds.has_area() and is_equal_approx(actor.character_animation.destination_rect(i).position.y + bounds.end.y - 1, 0.0), "nonempty grounded frame %s/%d" % [species,i])
 		actor.character_animation.play(&"cast",Vector2(-1,-1),0.8)

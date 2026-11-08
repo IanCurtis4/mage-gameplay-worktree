@@ -1,0 +1,160 @@
+{
+  "files": [
+    {
+      "source": "assets/art/e08_characters/directional/defender/weaponless.png",
+      "default": "assets/art/animations/directional/defender/weaponless.png",
+      "sha256": "376cff77afffde2ce602e1fec1f233ef489dec90f3a86fb6ca079fb19e292766",
+      "bytes": 194542
+    },
+    {
+      "source": "assets/art/e08_characters/directional/defender/body.png",
+      "default": "assets/art/animations/directional/defender/body.png",
+      "sha256": "376cff77afffde2ce602e1fec1f233ef489dec90f3a86fb6ca079fb19e292766",
+      "bytes": 194542
+    },
+    {
+      "source": "assets/art/e08_characters/directional/berserker/weaponless.png",
+      "default": "assets/art/animations/directional/berserker/weaponless.png",
+      "sha256": "330b0c7e51a3d8289a7b3449b0428ead8c245ce444439fd5dd445f9627bda779",
+      "bytes": 167018
+    },
+    {
+      "source": "assets/art/e08_characters/directional/berserker/body.png",
+      "default": "assets/art/animations/directional/berserker/body.png",
+      "sha256": "330b0c7e51a3d8289a7b3449b0428ead8c245ce444439fd5dd445f9627bda779",
+      "bytes": 167018
+    },
+    {
+      "source": "assets/art/e08_characters/directional/hunter/bare_head.png",
+      "default": "assets/art/animations/directional/hunter/bare_head.png",
+      "sha256": "57e13cf75ad819e2e36ea28b3a20c7f1d80882738478c96acd8961a09b5c8771",
+      "bytes": 211791
+    },
+    {
+      "source": "assets/art/e08_characters/directional/hunter/weaponless.png",
+      "default": "assets/art/animations/directional/hunter/weaponless.png",
+      "sha256": "9785d676c0c1eaa9aa4ad73db9e4e3645c174ab2c6c05cd9120744feba06dc7a",
+      "bytes": 201168
+    },
+    {
+      "source": "assets/art/e08_characters/directional/hunter/body.png",
+      "default": "assets/art/animations/directional/hunter/body.png",
+      "sha256": "9785d676c0c1eaa9aa4ad73db9e4e3645c174ab2c6c05cd9120744feba06dc7a",
+      "bytes": 201168
+    },
+    {
+      "source": "assets/art/e08_characters/directional/sentinel/bare_head.png",
+      "default": "assets/art/animations/directional/sentinel/bare_head.png",
+      "sha256": "97786fab4d1cb5efa0e5dddb360eed5bc6a25a8ff23f2ebab1e9b5962bc7b09d",
+      "bytes": 204348
+    },
+    {
+      "source": "assets/art/e08_characters/directional/sentinel/weaponless.png",
+      "default": "assets/art/animations/directional/sentinel/weaponless.png",
+      "sha256": "9b6d9855a24efbbf6593d7f43fd6c2aeae5d4b24d93e82e1e5e8122ca0e5180d",
+      "bytes": 191299
+    },
+    {
+      "source": "assets/art/e08_characters/directional/sentinel/body.png",
+      "default": "assets/art/animations/directional/sentinel/body.png",
+      "sha256": "9b6d9855a24efbbf6593d7f43fd6c2aeae5d4b24d93e82e1e5e8122ca0e5180d",
+      "bytes": 191299
+    },
+    {
+      "source": "assets/art/e08_characters/directional/geometer/bare_head.png",
+      "default": "assets/art/animations/directional/geometer/bare_head.png",
+      "sha256": "12a907b56826417ec77382e72940277bdfa783ca0126d48ec3b30f29ba50dff2",
+      "bytes": 211768
+    },
+    {
+      "source": "assets/art/e08_characters/directional/geometer/weaponless.png",
+      "default": "assets/art/animations/directional/geometer/weaponless.png",
+      "sha256": "e85b5300fd22d9064ac00c2825001ebd92281ad01f0afd85815bf8d2a69540aa",
+      "bytes": 201159
+    },
+    {
+      "source": "assets/art/e08_characters/directional/geometer/body.png",
+      "default": "assets/art/animations/directional/geometer/body.png",
+      "sha256": "e85b5300fd22d9064ac00c2825001ebd92281ad01f0afd85815bf8d2a69540aa",
+      "bytes": 201159
+    },
+    {
+      "source": "assets/art/e08_characters/directional/archer/bare_head.png",
+      "default": "assets/art/animations/directional/archer/bare_head.png",
+      "sha256": "cccd05f3706fce692ae07ec83e6afff20d915e77f7fdba673ca026797b470bac",
+      "bytes": 181591
+    },
+    {
+      "source": "assets/art/e08_characters/directional/archer/weaponless.png",
+      "default": "assets/art/animations/directional/archer/weaponless.png",
+      "sha256": "847b41a4a92e4caea38738fd4fa0ed93f5b59ed847c02ef8d7cefa7528b0f9dc",
+      "bytes": 168801
+    },
+    {
+      "source": "assets/art/e08_characters/directional/archer/body.png",
+      "default": "assets/art/animations/directional/archer/body.png",
+      "sha256": "847b41a4a92e4caea38738fd4fa0ed93f5b59ed847c02ef8d7cefa7528b0f9dc",
+      "bytes": 168801
+    },
+    {
+      "source": "assets/art/e08_characters/directional/archer/npc_body.png",
+      "default": "assets/art/animations/directional/archer/npc_body.png",
+      "sha256": "b79a58ae08f8a2c7161edc097f76b8b3fb26d5d0c6b449262c7ab954bf51089f",
+      "bytes": 219804,
+      "note": "recomposed 8/11 after lateral grip-side correction (compose_lateral_grip1); supersedes 2a942c05 RGBA"
+    },
+    {
+      "source": "assets/art/e08_enemies/directional/warrior/body.png",
+      "default": "assets/art/animations/directional/warrior/body.png",
+      "sha256": "34aa5b117b437b349893096d484287377f4b42ddb32baefe3900fbf7079f52fa",
+      "bytes": 176562
+    },
+    {
+      "source": "assets/art/e08_enemies/directional/gel/body.png",
+      "default": "assets/art/animations/directional/gel/body.png",
+      "sha256": "8276ce5beea80345ab4442bdefb7f419bcd3468abdae580026735427ccab7944",
+      "bytes": 143096
+    },
+    {
+      "source": "assets/art/e08_enemies/directional/beast_master/body.png",
+      "default": "assets/art/animations/directional/beast_master/body.png",
+      "sha256": "5c0886402658b52536602604f3ec34cad156dd5ca61d18c5d571238d7f901ffc",
+      "bytes": 171873
+    },
+    {
+      "source": "assets/art/e08_enemies/directional/animal_companion/body.png",
+      "default": "assets/art/animations/directional/animal_companion/body.png",
+      "sha256": "77ef59f2a0aa5b902cfcb16ce1396fc4761e2adbfa5fdf9211ac49dcdb6a3350",
+      "bytes": 187153
+    },
+    {
+      "source": "assets/art/e08_enemies/directional/e08_forest_wolf/body.png",
+      "default": "assets/art/animations/directional/e08_forest_wolf/body.png",
+      "sha256": "491dddafb251eac6af148a3d600e24a772007642404ea2ed8c938673f9d67b8f",
+      "bytes": 179681
+    },
+    {
+      "source": "assets/art/e08_enemies/directional/e08_forest_boar/body.png",
+      "default": "assets/art/animations/directional/e08_forest_boar/body.png",
+      "sha256": "1ecf344241d7e21c32131f865dd9212b9a57434e18645065544c1ca4b147803a",
+      "bytes": 202803
+    }
+  ],
+  "frame_metadata_identical_for": [
+    "defender",
+    "berserker",
+    "hunter",
+    "sentinel",
+    "geometer",
+    "archer",
+    "warrior",
+    "gel",
+    "beast_master",
+    "animal_companion",
+    "e08_forest_wolf",
+    "e08_forest_boar"
+  ],
+  "only_manifest_difference": "res paths relocated to default directory",
+  "old_original_archer_body_retained": true,
+  "lateral_grip_correction": "frame metadata re-verified identical staging/default for all 10 after tools/fix_e08_lateral_grip_side.py"
+}

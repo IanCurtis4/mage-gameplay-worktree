@@ -1,4 +1,5 @@
 extends SceneTree
+const D = preload("res://tests/fixtures/e08_directional/fixture.gd")
 const Bridge = preload("res://scripts/presentation/presentation_event_bridge.gd")
 const Fixture = preload("res://tests/fixtures/e07/f1/fixture_input.gd")
 var checks := 0
@@ -167,8 +168,8 @@ func _native_integration() -> void:
 func _atlas_invariants() -> void:
 	var original := load("res://assets/art/animations/animal_companion.png") as Texture2D
 	var variant := load("res://assets/art/animations/gel.png") as Texture2D
-	var animation := CharacterAnimation.new(); animation.configure(&"animal_companion")
-	var other := CharacterAnimation.new(); other.configure(&"animal_companion")
+	var animation := D.legacy_animation(&"animal_companion")
+	var other := D.legacy_animation(&"animal_companion")
 	var clock := animation.state
 	animation.observe(Vector2.ZERO, 0.1); animation.observe(Vector2(-20,-20), 0.1)
 	animation.play(&"cast", Vector2(-1,-1), 0.9); animation.state.advance(0.2, Vector2.ZERO)
@@ -201,7 +202,7 @@ func _atlas_invariants() -> void:
 	check(not player_animation.set_body_atlas(variant) and player_animation.atlas == player_atlas, "player kind explicitly refuses enemy body API even before equipment")
 	animation.equipment_visual = {"main_hand":{}}
 	check(not animation.set_body_atlas(variant) and animation.atlas == original, "equipped enemy body explicitly refuses override")
-	animation.equipment_visual = {}; animation.configure(&"animal_companion")
+	animation.equipment_visual = {}; animation = D.legacy_animation(&"animal_companion")
 	check(animation.atlas == original and animation.state != clock, "configure remains explicit default reset")
 
 func _atlas_snapshot() -> void:

@@ -25,8 +25,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -42,8 +58,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "arms": {
           "point": [
@@ -51,14 +83,32 @@
             42
           ],
           "fingers": [
-            40,
-            42,
-            1,
-            1
+            41,
+            41,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -89,8 +139,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -106,8 +172,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "arms": {
           "point": [
@@ -115,14 +197,32 @@
             40
           ],
           "fingers": [
-            42,
-            40,
-            1,
-            1
+            43,
+            39,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -153,8 +253,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -170,8 +286,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "arms": {
           "point": [
@@ -179,14 +311,32 @@
             40
           ],
           "fingers": [
-            43,
-            40,
-            1,
-            1
+            44,
+            39,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -217,8 +367,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -234,8 +400,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "arms": {
           "point": [
@@ -243,14 +425,32 @@
             40
           ],
           "fingers": [
-            42,
-            40,
-            1,
-            1
+            43,
+            39,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -281,8 +481,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -298,8 +514,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "arms": {
           "point": [
@@ -307,14 +539,32 @@
             40
           ],
           "fingers": [
-            39,
             40,
-            1,
-            1
+            39,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -345,8 +595,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -362,8 +628,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "arms": {
           "point": [
@@ -371,14 +653,32 @@
             41
           ],
           "fingers": [
-            41,
-            41,
-            1,
-            1
+            42,
+            40,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -409,8 +709,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -426,8 +742,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "arms": {
           "point": [
@@ -435,14 +767,32 @@
             40
           ],
           "fingers": [
-            38,
-            40,
-            1,
-            1
+            39,
+            39,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -473,8 +823,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -490,8 +856,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "arms": {
           "point": [
@@ -499,14 +881,32 @@
             40
           ],
           "fingers": [
-            40,
-            40,
-            1,
-            1
+            41,
+            39,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -538,12 +938,23 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "sword": -0.35,
             "axe": -0.35,
             "bow": 0.08,
-            "staff": 0.1
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.1,
+            "sword": -0.35,
+            "wooden_beads": 0.0
           },
-          "depth_overrides": {}
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -560,12 +971,23 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "sword": -0.35,
             "axe": -0.35,
             "bow": 0.08,
-            "staff": 0.1
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.1,
+            "sword": -0.35,
+            "wooden_beads": 0.0
           },
-          "depth_overrides": {}
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "arms": {
           "point": [
@@ -573,14 +995,32 @@
             44
           ],
           "fingers": [
-            39,
-            44,
-            1,
-            1
+            40,
+            43,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": -0.35,
+            "bow": 0.08,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.1,
+            "sword": -0.35,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -612,14 +1052,22 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "sword": -0.85,
             "axe": -0.85,
             "bow": 0.05,
-            "staff": 0.26
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.26,
+            "sword": -0.85,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {
+            "axe": 0,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
             "sword": 0,
-            "axe": 0
+            "wooden_beads": 1
           }
         },
         "off_hand": {
@@ -637,14 +1085,22 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "sword": -0.85,
             "axe": -0.85,
             "bow": 0.05,
-            "staff": 0.26
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.26,
+            "sword": -0.85,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {
+            "axe": 0,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
             "sword": 0,
-            "axe": 0
+            "wooden_beads": 1
           }
         },
         "arms": {
@@ -653,14 +1109,32 @@
             24
           ],
           "fingers": [
-            44,
-            24,
-            1,
-            1
+            45,
+            23,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": -0.85,
+            "bow": 0.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.26,
+            "sword": -0.85,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 0,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 0,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -692,12 +1166,23 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "sword": 0.75,
             "axe": 0.75,
             "bow": 0.12,
-            "staff": 0.28
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.28,
+            "sword": 0.75,
+            "wooden_beads": 0.0
           },
-          "depth_overrides": {}
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -714,12 +1199,23 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "sword": 0.75,
             "axe": 0.75,
             "bow": 0.12,
-            "staff": 0.28
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.28,
+            "sword": 0.75,
+            "wooden_beads": 0.0
           },
-          "depth_overrides": {}
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "arms": {
           "point": [
@@ -727,14 +1223,32 @@
             30
           ],
           "fingers": [
-            49,
-            30,
-            1,
-            1
+            50,
+            29,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.75,
+            "bow": 0.12,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.28,
+            "sword": 0.75,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -766,12 +1280,23 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "sword": 0.22,
             "axe": 0.22,
             "bow": 0.14,
-            "staff": 0.12
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.12,
+            "sword": 0.22,
+            "wooden_beads": 0.0
           },
-          "depth_overrides": {}
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -788,12 +1313,23 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "sword": 0.22,
             "axe": 0.22,
             "bow": 0.14,
-            "staff": 0.12
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.12,
+            "sword": 0.22,
+            "wooden_beads": 0.0
           },
-          "depth_overrides": {}
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "arms": {
           "point": [
@@ -801,14 +1337,32 @@
             41
           ],
           "fingers": [
-            41,
-            41,
-            1,
-            1
+            42,
+            40,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.14,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.12,
+            "sword": 0.22,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -840,10 +1394,22 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "bow": 1.05
+            "axe": 0.22,
+            "bow": 1.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {
-            "bow": 0
+            "axe": 1,
+            "bow": 0,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
           }
         },
         "off_hand": {
@@ -861,10 +1427,22 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "bow": 1.05
+            "axe": 0.22,
+            "bow": 1.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {
-            "bow": 0
+            "axe": 1,
+            "bow": 0,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
           }
         },
         "arms": {
@@ -873,14 +1451,32 @@
             42
           ],
           "fingers": [
-            44,
-            42,
-            1,
-            1
+            45,
+            41,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 1.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 0,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -912,10 +1508,22 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "bow": 1.05
+            "axe": 0.22,
+            "bow": 1.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {
-            "bow": 0
+            "axe": 1,
+            "bow": 0,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
           }
         },
         "off_hand": {
@@ -933,10 +1541,22 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "bow": 1.05
+            "axe": 0.22,
+            "bow": 1.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {
-            "bow": 0
+            "axe": 1,
+            "bow": 0,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
           }
         },
         "arms": {
@@ -945,14 +1565,32 @@
             44
           ],
           "fingers": [
-            41,
-            44,
-            1,
-            1
+            42,
+            43,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 1.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 0,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -1143,8 +1781,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -1160,8 +1814,24 @@
           "angle": 0.0,
           "depth": 0,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 0,
+            "bow": 0,
+            "prismatic_focus": 0,
+            "shield": 0,
+            "staff": 0,
+            "sword": 0,
+            "wooden_beads": 0
+          }
         },
         "arms": {
           "point": [
@@ -1169,14 +1839,32 @@
             42
           ],
           "fingers": [
-            42,
-            42,
-            1,
-            1
+            43,
+            41,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -1207,8 +1895,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -1224,8 +1928,24 @@
           "angle": 0.0,
           "depth": 0,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 0,
+            "bow": 0,
+            "prismatic_focus": 0,
+            "shield": 0,
+            "staff": 0,
+            "sword": 0,
+            "wooden_beads": 0
+          }
         },
         "arms": {
           "point": [
@@ -1233,14 +1953,32 @@
             42
           ],
           "fingers": [
-            42,
-            42,
-            1,
-            1
+            43,
+            41,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -1271,8 +2009,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -1288,8 +2042,24 @@
           "angle": 0.0,
           "depth": 0,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 0,
+            "bow": 0,
+            "prismatic_focus": 0,
+            "shield": 0,
+            "staff": 0,
+            "sword": 0,
+            "wooden_beads": 0
+          }
         },
         "arms": {
           "point": [
@@ -1297,14 +2067,32 @@
             41
           ],
           "fingers": [
-            42,
-            41,
-            1,
-            1
+            43,
+            40,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -1335,8 +2123,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -1352,8 +2156,24 @@
           "angle": 0.0,
           "depth": 0,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 0,
+            "bow": 0,
+            "prismatic_focus": 0,
+            "shield": 0,
+            "staff": 0,
+            "sword": 0,
+            "wooden_beads": 0
+          }
         },
         "arms": {
           "point": [
@@ -1361,14 +2181,32 @@
             41
           ],
           "fingers": [
-            41,
-            41,
-            1,
-            1
+            42,
+            40,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -1399,8 +2237,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -1416,8 +2270,24 @@
           "angle": 0.0,
           "depth": 0,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 0,
+            "bow": 0,
+            "prismatic_focus": 0,
+            "shield": 0,
+            "staff": 0,
+            "sword": 0,
+            "wooden_beads": 0
+          }
         },
         "arms": {
           "point": [
@@ -1425,14 +2295,32 @@
             40
           ],
           "fingers": [
-            42,
-            40,
-            1,
-            1
+            43,
+            39,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -1463,8 +2351,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -1480,8 +2384,24 @@
           "angle": 0.0,
           "depth": 0,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 0,
+            "bow": 0,
+            "prismatic_focus": 0,
+            "shield": 0,
+            "staff": 0,
+            "sword": 0,
+            "wooden_beads": 0
+          }
         },
         "arms": {
           "point": [
@@ -1489,14 +2409,32 @@
             39
           ],
           "fingers": [
-            42,
-            39,
-            1,
-            1
+            43,
+            38,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -1527,8 +2465,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -1544,8 +2498,24 @@
           "angle": 0.0,
           "depth": 0,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 0,
+            "bow": 0,
+            "prismatic_focus": 0,
+            "shield": 0,
+            "staff": 0,
+            "sword": 0,
+            "wooden_beads": 0
+          }
         },
         "arms": {
           "point": [
@@ -1553,14 +2523,32 @@
             40
           ],
           "fingers": [
-            44,
-            40,
-            1,
-            1
+            45,
+            39,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -1591,8 +2579,24 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -1608,8 +2612,24 @@
           "angle": 0.0,
           "depth": 0,
           "flip": false,
-          "angle_overrides": {},
-          "depth_overrides": {}
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 0,
+            "bow": 0,
+            "prismatic_focus": 0,
+            "shield": 0,
+            "staff": 0,
+            "sword": 0,
+            "wooden_beads": 0
+          }
         },
         "arms": {
           "point": [
@@ -1617,14 +2637,32 @@
             39
           ],
           "fingers": [
-            43,
-            39,
-            1,
-            1
+            44,
+            38,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -1656,12 +2694,23 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "sword": -0.35,
             "axe": -0.35,
             "bow": 0.08,
-            "staff": 0.1
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.1,
+            "sword": -0.35,
+            "wooden_beads": 0.0
           },
-          "depth_overrides": {}
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -1678,12 +2727,23 @@
           "depth": 0,
           "flip": false,
           "angle_overrides": {
-            "sword": -0.35,
             "axe": -0.35,
             "bow": 0.08,
-            "staff": 0.1
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.1,
+            "sword": -0.35,
+            "wooden_beads": 0.0
           },
-          "depth_overrides": {}
+          "depth_overrides": {
+            "axe": 0,
+            "bow": 0,
+            "prismatic_focus": 0,
+            "shield": 0,
+            "staff": 0,
+            "sword": 0,
+            "wooden_beads": 0
+          }
         },
         "arms": {
           "point": [
@@ -1691,14 +2751,32 @@
             30
           ],
           "fingers": [
-            40,
-            30,
-            1,
-            1
+            41,
+            29,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": -0.35,
+            "bow": 0.08,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.1,
+            "sword": -0.35,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -1730,14 +2808,22 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "sword": -0.85,
             "axe": -0.85,
             "bow": 0.05,
-            "staff": 0.26
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.26,
+            "sword": -0.85,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {
+            "axe": 0,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
             "sword": 0,
-            "axe": 0
+            "wooden_beads": 1
           }
         },
         "off_hand": {
@@ -1755,14 +2841,22 @@
           "depth": 0,
           "flip": false,
           "angle_overrides": {
-            "sword": -0.85,
             "axe": -0.85,
             "bow": 0.05,
-            "staff": 0.26
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.26,
+            "sword": -0.85,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {
+            "axe": 0,
+            "bow": 0,
+            "prismatic_focus": 0,
+            "shield": 0,
+            "staff": 0,
             "sword": 0,
-            "axe": 0
+            "wooden_beads": 0
           }
         },
         "arms": {
@@ -1771,14 +2865,32 @@
             25
           ],
           "fingers": [
-            42,
-            25,
-            1,
-            1
+            43,
+            24,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": -0.85,
+            "bow": 0.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.26,
+            "sword": -0.85,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 0,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 0,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -1810,12 +2922,23 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "sword": 0.75,
             "axe": 0.75,
             "bow": 0.12,
-            "staff": 0.28
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.28,
+            "sword": 0.75,
+            "wooden_beads": 0.0
           },
-          "depth_overrides": {}
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -1832,12 +2955,23 @@
           "depth": 0,
           "flip": false,
           "angle_overrides": {
-            "sword": 0.75,
             "axe": 0.75,
             "bow": 0.12,
-            "staff": 0.28
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.28,
+            "sword": 0.75,
+            "wooden_beads": 0.0
           },
-          "depth_overrides": {}
+          "depth_overrides": {
+            "axe": 0,
+            "bow": 0,
+            "prismatic_focus": 0,
+            "shield": 0,
+            "staff": 0,
+            "sword": 0,
+            "wooden_beads": 0
+          }
         },
         "arms": {
           "point": [
@@ -1845,14 +2979,32 @@
             25
           ],
           "fingers": [
-            50,
-            25,
-            1,
-            1
+            51,
+            24,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.75,
+            "bow": 0.12,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.28,
+            "sword": 0.75,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -1884,12 +3036,23 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "sword": 0.22,
             "axe": 0.22,
             "bow": 0.14,
-            "staff": 0.12
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.12,
+            "sword": 0.22,
+            "wooden_beads": 0.0
           },
-          "depth_overrides": {}
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         },
         "off_hand": {
           "point": [
@@ -1906,12 +3069,23 @@
           "depth": 0,
           "flip": false,
           "angle_overrides": {
-            "sword": 0.22,
             "axe": 0.22,
             "bow": 0.14,
-            "staff": 0.12
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.12,
+            "sword": 0.22,
+            "wooden_beads": 0.0
           },
-          "depth_overrides": {}
+          "depth_overrides": {
+            "axe": 0,
+            "bow": 0,
+            "prismatic_focus": 0,
+            "shield": 0,
+            "staff": 0,
+            "sword": 0,
+            "wooden_beads": 0
+          }
         },
         "arms": {
           "point": [
@@ -1919,14 +3093,32 @@
             41
           ],
           "fingers": [
-            40,
             41,
-            1,
-            1
+            40,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.14,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.12,
+            "sword": 0.22,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 1,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -1958,10 +3150,22 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "bow": 1.05
+            "axe": 0.22,
+            "bow": 1.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {
-            "bow": 0
+            "axe": 1,
+            "bow": 0,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
           }
         },
         "off_hand": {
@@ -1979,10 +3183,22 @@
           "depth": 0,
           "flip": false,
           "angle_overrides": {
-            "bow": 1.05
+            "axe": 0.22,
+            "bow": 1.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {
-            "bow": 0
+            "axe": 0,
+            "bow": 0,
+            "prismatic_focus": 0,
+            "shield": 0,
+            "staff": 0,
+            "sword": 0,
+            "wooden_beads": 0
           }
         },
         "arms": {
@@ -1991,14 +3207,32 @@
             42
           ],
           "fingers": [
-            47,
-            42,
-            1,
-            1
+            48,
+            41,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 1.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 0,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -2030,10 +3264,22 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "bow": 1.05
+            "axe": 0.22,
+            "bow": 1.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {
-            "bow": 0
+            "axe": 1,
+            "bow": 0,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
           }
         },
         "off_hand": {
@@ -2051,10 +3297,22 @@
           "depth": 0,
           "flip": false,
           "angle_overrides": {
-            "bow": 1.05
+            "axe": 0.22,
+            "bow": 1.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {
-            "bow": 0
+            "axe": 0,
+            "bow": 0,
+            "prismatic_focus": 0,
+            "shield": 0,
+            "staff": 0,
+            "sword": 0,
+            "wooden_beads": 0
           }
         },
         "arms": {
@@ -2063,14 +3321,32 @@
             43
           ],
           "fingers": [
-            40,
-            43,
-            1,
-            1
+            41,
+            42,
+            3,
+            3
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 1.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "axe": 1,
+            "bow": 0,
+            "prismatic_focus": 1,
+            "shield": 1,
+            "staff": 1,
+            "sword": 1,
+            "wooden_beads": 1
+          }
         }
       },
       "head": {
@@ -2261,7 +3537,15 @@
           "angle": 0.0,
           "depth": 0,
           "flip": false,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
           "depth_overrides": {}
         },
         "off_hand": {
@@ -2278,7 +3562,15 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
           "depth_overrides": {}
         },
         "arms": {
@@ -2294,7 +3586,17 @@
           ],
           "angle": 0.0,
           "depth": 0,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -2325,7 +3627,15 @@
           "angle": 0.0,
           "depth": 0,
           "flip": false,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
           "depth_overrides": {}
         },
         "off_hand": {
@@ -2342,7 +3652,15 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
           "depth_overrides": {}
         },
         "arms": {
@@ -2358,7 +3676,17 @@
           ],
           "angle": 0.0,
           "depth": 0,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -2389,7 +3717,15 @@
           "angle": 0.0,
           "depth": 0,
           "flip": false,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
           "depth_overrides": {}
         },
         "off_hand": {
@@ -2406,7 +3742,15 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
           "depth_overrides": {}
         },
         "arms": {
@@ -2422,7 +3766,17 @@
           ],
           "angle": 0.0,
           "depth": 0,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -2453,7 +3807,15 @@
           "angle": 0.0,
           "depth": 0,
           "flip": false,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
           "depth_overrides": {}
         },
         "off_hand": {
@@ -2470,7 +3832,15 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
           "depth_overrides": {}
         },
         "arms": {
@@ -2486,7 +3856,17 @@
           ],
           "angle": 0.0,
           "depth": 0,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -2517,7 +3897,15 @@
           "angle": 0.0,
           "depth": 0,
           "flip": false,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
           "depth_overrides": {}
         },
         "off_hand": {
@@ -2534,7 +3922,15 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
           "depth_overrides": {}
         },
         "arms": {
@@ -2550,7 +3946,17 @@
           ],
           "angle": 0.0,
           "depth": 0,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -2581,7 +3987,15 @@
           "angle": 0.0,
           "depth": 0,
           "flip": false,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
           "depth_overrides": {}
         },
         "off_hand": {
@@ -2598,7 +4012,15 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
           "depth_overrides": {}
         },
         "arms": {
@@ -2614,7 +4036,17 @@
           ],
           "angle": 0.0,
           "depth": 0,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -2645,7 +4077,15 @@
           "angle": 0.0,
           "depth": 0,
           "flip": false,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
           "depth_overrides": {}
         },
         "off_hand": {
@@ -2662,7 +4102,15 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
           "depth_overrides": {}
         },
         "arms": {
@@ -2678,7 +4126,17 @@
           ],
           "angle": 0.0,
           "depth": 0,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -2709,7 +4167,15 @@
           "angle": 0.0,
           "depth": 0,
           "flip": false,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
           "depth_overrides": {}
         },
         "off_hand": {
@@ -2726,7 +4192,15 @@
           "angle": 0.0,
           "depth": 1,
           "flip": false,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
           "depth_overrides": {}
         },
         "arms": {
@@ -2742,7 +4216,17 @@
           ],
           "angle": 0.0,
           "depth": 0,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.65,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -2774,10 +4258,13 @@
           "depth": 0,
           "flip": false,
           "angle_overrides": {
-            "sword": -0.35,
             "axe": -0.35,
             "bow": 0.08,
-            "staff": 0.1
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.1,
+            "sword": -0.35,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {}
         },
@@ -2796,10 +4283,13 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "sword": -0.35,
             "axe": -0.35,
             "bow": 0.08,
-            "staff": 0.1
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.1,
+            "sword": -0.35,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {}
         },
@@ -2816,7 +4306,17 @@
           ],
           "angle": 0.0,
           "depth": 0,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": -0.35,
+            "bow": 0.08,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.1,
+            "sword": -0.35,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -2848,10 +4348,13 @@
           "depth": 0,
           "flip": false,
           "angle_overrides": {
-            "sword": -0.85,
             "axe": -0.85,
             "bow": 0.05,
-            "staff": 0.26
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.26,
+            "sword": -0.85,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {
             "sword": 0,
@@ -2873,10 +4376,13 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "sword": -0.85,
             "axe": -0.85,
             "bow": 0.05,
-            "staff": 0.26
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.26,
+            "sword": -0.85,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {
             "sword": 0,
@@ -2896,7 +4402,20 @@
           ],
           "angle": 0.0,
           "depth": 0,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": -0.85,
+            "bow": 0.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.26,
+            "sword": -0.85,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "sword": 0,
+            "axe": 0
+          }
         }
       },
       "head": {
@@ -2928,10 +4447,13 @@
           "depth": 0,
           "flip": false,
           "angle_overrides": {
-            "sword": 0.75,
             "axe": 0.75,
             "bow": 0.12,
-            "staff": 0.28
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.28,
+            "sword": 0.75,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {}
         },
@@ -2950,10 +4472,13 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "sword": 0.75,
             "axe": 0.75,
             "bow": 0.12,
-            "staff": 0.28
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.28,
+            "sword": 0.75,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {}
         },
@@ -2970,7 +4495,17 @@
           ],
           "angle": 0.0,
           "depth": 0,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.75,
+            "bow": 0.12,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.28,
+            "sword": 0.75,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -3002,10 +4537,13 @@
           "depth": 0,
           "flip": false,
           "angle_overrides": {
-            "sword": 0.22,
             "axe": 0.22,
             "bow": 0.14,
-            "staff": 0.12
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.12,
+            "sword": 0.22,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {}
         },
@@ -3024,10 +4562,13 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "sword": 0.22,
             "axe": 0.22,
             "bow": 0.14,
-            "staff": 0.12
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.12,
+            "sword": 0.22,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {}
         },
@@ -3044,7 +4585,17 @@
           ],
           "angle": 0.0,
           "depth": 0,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 0.14,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.12,
+            "sword": 0.22,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -3076,7 +4627,13 @@
           "depth": 0,
           "flip": false,
           "angle_overrides": {
-            "bow": 1.05
+            "axe": 0.22,
+            "bow": 1.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {
             "bow": 0
@@ -3097,7 +4654,13 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "bow": 1.05
+            "axe": 0.22,
+            "bow": 1.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {
             "bow": 0
@@ -3116,7 +4679,19 @@
           ],
           "angle": 0.0,
           "depth": 0,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 1.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "bow": 0
+          }
         }
       },
       "head": {
@@ -3148,7 +4723,13 @@
           "depth": 0,
           "flip": false,
           "angle_overrides": {
-            "bow": 1.05
+            "axe": 0.22,
+            "bow": 1.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {
             "bow": 0
@@ -3169,7 +4750,13 @@
           "depth": 1,
           "flip": false,
           "angle_overrides": {
-            "bow": 1.05
+            "axe": 0.22,
+            "bow": 1.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
           },
           "depth_overrides": {
             "bow": 0
@@ -3188,7 +4775,19 @@
           ],
           "angle": 0.0,
           "depth": 0,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "axe": 0.22,
+            "bow": 1.05,
+            "prismatic_focus": -0.1,
+            "shield": 0.0,
+            "staff": 0.3,
+            "sword": 0.2,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {
+            "bow": 0
+          }
         }
       },
       "head": {
@@ -3379,7 +4978,15 @@
           "angle": 0.0,
           "depth": 1,
           "flip": true,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
           "depth_overrides": {}
         },
         "off_hand": {
@@ -3396,7 +5003,15 @@
           "angle": 0.0,
           "depth": 0,
           "flip": true,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
           "depth_overrides": {}
         },
         "arms": {
@@ -3412,7 +5027,17 @@
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": true
+          "flip": true,
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -3443,7 +5068,15 @@
           "angle": 0.0,
           "depth": 1,
           "flip": true,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
           "depth_overrides": {}
         },
         "off_hand": {
@@ -3460,7 +5093,15 @@
           "angle": 0.0,
           "depth": 0,
           "flip": true,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
           "depth_overrides": {}
         },
         "arms": {
@@ -3476,7 +5117,17 @@
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": true
+          "flip": true,
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -3507,7 +5158,15 @@
           "angle": 0.0,
           "depth": 1,
           "flip": true,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
           "depth_overrides": {}
         },
         "off_hand": {
@@ -3524,7 +5183,15 @@
           "angle": 0.0,
           "depth": 0,
           "flip": true,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
           "depth_overrides": {}
         },
         "arms": {
@@ -3540,7 +5207,17 @@
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": true
+          "flip": true,
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -3571,7 +5248,15 @@
           "angle": 0.0,
           "depth": 1,
           "flip": true,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
           "depth_overrides": {}
         },
         "off_hand": {
@@ -3588,7 +5273,15 @@
           "angle": 0.0,
           "depth": 0,
           "flip": true,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
           "depth_overrides": {}
         },
         "arms": {
@@ -3604,7 +5297,17 @@
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": true
+          "flip": true,
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -3635,7 +5338,15 @@
           "angle": 0.0,
           "depth": 1,
           "flip": true,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
           "depth_overrides": {}
         },
         "off_hand": {
@@ -3652,7 +5363,15 @@
           "angle": 0.0,
           "depth": 0,
           "flip": true,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
           "depth_overrides": {}
         },
         "arms": {
@@ -3668,7 +5387,17 @@
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": true
+          "flip": true,
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -3699,7 +5428,15 @@
           "angle": 0.0,
           "depth": 1,
           "flip": true,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
           "depth_overrides": {}
         },
         "off_hand": {
@@ -3716,7 +5453,15 @@
           "angle": 0.0,
           "depth": 0,
           "flip": true,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
           "depth_overrides": {}
         },
         "arms": {
@@ -3732,7 +5477,17 @@
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": true
+          "flip": true,
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -3763,7 +5518,15 @@
           "angle": 0.0,
           "depth": 1,
           "flip": true,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
           "depth_overrides": {}
         },
         "off_hand": {
@@ -3780,7 +5543,15 @@
           "angle": 0.0,
           "depth": 0,
           "flip": true,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
           "depth_overrides": {}
         },
         "arms": {
@@ -3796,7 +5567,17 @@
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": true
+          "flip": true,
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -3827,7 +5608,15 @@
           "angle": 0.0,
           "depth": 1,
           "flip": true,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
           "depth_overrides": {}
         },
         "off_hand": {
@@ -3844,7 +5633,15 @@
           "angle": 0.0,
           "depth": 0,
           "flip": true,
-          "angle_overrides": {},
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
           "depth_overrides": {}
         },
         "arms": {
@@ -3860,7 +5657,17 @@
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": true
+          "flip": true,
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.65,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -3892,10 +5699,13 @@
           "depth": 1,
           "flip": true,
           "angle_overrides": {
-            "sword": -0.35,
-            "axe": -0.35,
-            "bow": 0.08,
-            "staff": 0.1
+            "axe": 0.35,
+            "bow": -0.08,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.1,
+            "sword": 0.35,
+            "wooden_beads": -0.0
           },
           "depth_overrides": {}
         },
@@ -3914,10 +5724,13 @@
           "depth": 0,
           "flip": true,
           "angle_overrides": {
-            "sword": -0.35,
-            "axe": -0.35,
-            "bow": 0.08,
-            "staff": 0.1
+            "axe": 0.35,
+            "bow": -0.08,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.1,
+            "sword": 0.35,
+            "wooden_beads": -0.0
           },
           "depth_overrides": {}
         },
@@ -3934,7 +5747,17 @@
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": true
+          "flip": true,
+          "angle_overrides": {
+            "axe": 0.35,
+            "bow": -0.08,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.1,
+            "sword": 0.35,
+            "wooden_beads": -0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -3966,10 +5789,13 @@
           "depth": 1,
           "flip": true,
           "angle_overrides": {
-            "sword": -0.85,
-            "axe": -0.85,
-            "bow": 0.05,
-            "staff": 0.26
+            "axe": 0.85,
+            "bow": -0.05,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.26,
+            "sword": 0.85,
+            "wooden_beads": -0.0
           },
           "depth_overrides": {
             "sword": 0,
@@ -3991,10 +5817,13 @@
           "depth": 0,
           "flip": true,
           "angle_overrides": {
-            "sword": -0.85,
-            "axe": -0.85,
-            "bow": 0.05,
-            "staff": 0.26
+            "axe": 0.85,
+            "bow": -0.05,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.26,
+            "sword": 0.85,
+            "wooden_beads": -0.0
           },
           "depth_overrides": {
             "sword": 0,
@@ -4014,7 +5843,20 @@
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": true
+          "flip": true,
+          "angle_overrides": {
+            "axe": 0.85,
+            "bow": -0.05,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.26,
+            "sword": 0.85,
+            "wooden_beads": -0.0
+          },
+          "depth_overrides": {
+            "sword": 0,
+            "axe": 0
+          }
         }
       },
       "head": {
@@ -4046,10 +5888,13 @@
           "depth": 1,
           "flip": true,
           "angle_overrides": {
-            "sword": 0.75,
-            "axe": 0.75,
-            "bow": 0.12,
-            "staff": 0.28
+            "axe": -0.75,
+            "bow": -0.12,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.28,
+            "sword": -0.75,
+            "wooden_beads": -0.0
           },
           "depth_overrides": {}
         },
@@ -4068,10 +5913,13 @@
           "depth": 0,
           "flip": true,
           "angle_overrides": {
-            "sword": 0.75,
-            "axe": 0.75,
-            "bow": 0.12,
-            "staff": 0.28
+            "axe": -0.75,
+            "bow": -0.12,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.28,
+            "sword": -0.75,
+            "wooden_beads": -0.0
           },
           "depth_overrides": {}
         },
@@ -4088,7 +5936,17 @@
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": true
+          "flip": true,
+          "angle_overrides": {
+            "axe": -0.75,
+            "bow": -0.12,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.28,
+            "sword": -0.75,
+            "wooden_beads": -0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -4120,10 +5978,13 @@
           "depth": 1,
           "flip": true,
           "angle_overrides": {
-            "sword": 0.22,
-            "axe": 0.22,
-            "bow": 0.14,
-            "staff": 0.12
+            "axe": -0.22,
+            "bow": -0.14,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.12,
+            "sword": -0.22,
+            "wooden_beads": -0.0
           },
           "depth_overrides": {}
         },
@@ -4142,10 +6003,13 @@
           "depth": 0,
           "flip": true,
           "angle_overrides": {
-            "sword": 0.22,
-            "axe": 0.22,
-            "bow": 0.14,
-            "staff": 0.12
+            "axe": -0.22,
+            "bow": -0.14,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.12,
+            "sword": -0.22,
+            "wooden_beads": -0.0
           },
           "depth_overrides": {}
         },
@@ -4162,7 +6026,17 @@
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": true
+          "flip": true,
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -0.14,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.12,
+            "sword": -0.22,
+            "wooden_beads": -0.0
+          },
+          "depth_overrides": {}
         }
       },
       "head": {
@@ -4194,7 +6068,13 @@
           "depth": 1,
           "flip": true,
           "angle_overrides": {
-            "bow": 1.05
+            "axe": -0.22,
+            "bow": -1.05,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
           },
           "depth_overrides": {
             "bow": 0
@@ -4215,7 +6095,13 @@
           "depth": 0,
           "flip": true,
           "angle_overrides": {
-            "bow": 1.05
+            "axe": -0.22,
+            "bow": -1.05,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
           },
           "depth_overrides": {
             "bow": 0
@@ -4234,7 +6120,19 @@
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": true
+          "flip": true,
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -1.05,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
+          "depth_overrides": {
+            "bow": 0
+          }
         }
       },
       "head": {
@@ -4266,7 +6164,13 @@
           "depth": 1,
           "flip": true,
           "angle_overrides": {
-            "bow": 1.05
+            "axe": -0.22,
+            "bow": -1.05,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
           },
           "depth_overrides": {
             "bow": 0
@@ -4287,7 +6191,13 @@
           "depth": 0,
           "flip": true,
           "angle_overrides": {
-            "bow": 1.05
+            "axe": -0.22,
+            "bow": -1.05,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
           },
           "depth_overrides": {
             "bow": 0
@@ -4306,7 +6216,19 @@
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": true
+          "flip": true,
+          "angle_overrides": {
+            "axe": -0.22,
+            "bow": -1.05,
+            "prismatic_focus": 0.1,
+            "shield": -0.0,
+            "staff": -0.3,
+            "sword": -0.2,
+            "wooden_beads": -0.0
+          },
+          "depth_overrides": {
+            "bow": 0
+          }
         }
       },
       "head": {
@@ -4511,5 +6433,12 @@
       "63": -0.65
     },
     "corpse_reason": "Native fit1: orient face opening toward preserved face rather than inherited +/-90deg corpse roll"
+  },
+  "sol_rig_compatibility": {
+    "reference": "existing EquipmentAttachmentVisual.placement API",
+    "native_frames": 28,
+    "palms": "unchanged from legacy native reference",
+    "lateral": "authored palms/crops/depth retained; explicit mirrored W local geometry and negated angles; action/hurt overrides",
+    "pixels_changed": false
   }
 }

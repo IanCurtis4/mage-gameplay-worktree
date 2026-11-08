@@ -14,7 +14,12 @@ clock. [Equipamentos pintados e Mago bare_head](epics/e08_p4_gear_integration_de
 entregues:14IDs/7peças, filtro localCanvasTexture, ícones correspondentes e
 validação atômica opcional/coldrestore derivado pelo terceiro path, sem campos
 novos. Remover cabeça restaura atlas original; oeste tem desenho próprio.
-Outros conteúdos/bases de cabelo aguardam integração posterior. P4 não concluído.
+[Integração final](epics/e08_p4_final_delivery.md): 10 jogadores e 6 corpos NPC V2 por
+paths default; bare_head opcional em Mago/Archer/Hunter/Sentinel/Geometer; ArqueiroNPC
+usa npc_body composto (sem arco dinâmico) e lobo/javali escolhem corpo por mob_base_id
+com fallback V1 completo. Nas vistas laterais main_hand é a mão que lidera para o alvo
+(invariante de teste); conjuradores mantêm cajado autorado. P4 técnico completo, sem
+campos de save/clock; aceite de produto pendente.
 
 
 > Estado vigente em 6/11: [piloto aceito com ressalva sonora](epics/e08_p3_product_acceptance.md); P4 autorizado, [contrato](epics/e08_p4_contract.md). Bloqueios por aceite P3 nos registros abaixo são históricos. P5/P6/P7 ainda dependem das entregas anteriores; não despachados.

@@ -82,7 +82,7 @@ func _run() -> void:
 		controller.player.set_process(false)
 		for enemy: CombatActor in controller.enemies:
 			enemy.set_process(false)
-		_check(controller.player.character_animation.actor_kind == &"geometer" and controller.player.character_animation.atlas != null and controller.player.character_animation.atlas.resource_path.ends_with("/geometer_weaponless.png"), "persistent Geometer selects its own imported atlas, not the Mage fallback")
+		_check(controller.player.character_animation.actor_kind == &"geometer" and controller.player.character_animation.atlas != null and controller.player.character_animation.atlas.resource_path=="res://assets/art/animations/directional/geometer/weaponless.png" and controller.player.character_animation.render_descriptor().version==2, "persistent Geometer selects its own imported atlas, not the Mage fallback")
 		_check(controller.geometer_casting != null and controller.geometer_element_buttons.size() == 3 and controller.geometer_onboarding != null and controller.geometer_onboarding.status_label.text.contains("Vazio"), "actual run builds geometric input and the contextual empty-state guide")
 		var initial_sp := controller.player.current_sp
 		controller.geometer_element_buttons[&"ice"].pressed.emit()

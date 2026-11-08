@@ -6,13 +6,19 @@ const BOAR = preload("res://assets/art/animations/e08_forest_boar.png")
 static func install_forest_atlas(actor: Variant) -> bool:
 	if actor.occurrence == null or actor.character_animation == null: return false
 	var texture: Texture2D
+	var id := ""
 	match actor.occurrence.mob_base_id:
-		&"forest_wolf": texture = WOLF
-		&"forest_boar": texture = BOAR
+		&"forest_wolf": texture = WOLF;id="e08_forest_wolf"
+		&"forest_boar": texture = BOAR;id="e08_forest_boar"
 		_: return true
-	var installed: bool = actor.character_animation.set_body_atlas(texture)
+	var installed := install_directional_or_legacy(actor.character_animation,DirectionalAnimationSet.default_path(StringName(id)),texture)
 	if installed: actor.queue_redraw()
 	return installed
+
+static func install_directional_or_legacy(animation: CharacterAnimation,path: String,legacy: Texture2D) -> bool:
+	# The specific species falls back as a complete V1 body, never generic fox art.
+	if FileAccess.file_exists(path) and animation.set_directional_manifest(path).ok:return true
+	return animation.set_body_atlas(legacy)
 
 static func forest_tint(actor: Node) -> Color:
 	if not actor.has_method("configure_occurrence"): return Color.WHITE

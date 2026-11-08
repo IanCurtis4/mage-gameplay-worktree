@@ -1,4 +1,5 @@
 extends SceneTree
+const D = preload("res://tests/fixtures/e08_directional/fixture.gd")
 var checks := 0; var failures := 0
 func _initialize() -> void: run.call_deferred()
 func check(ok: bool, label: String) -> void:
@@ -8,6 +9,7 @@ func run() -> void:
 	var nav := ArenaNavigation.new(); nav.configure(Rect2(0,0,1000,1000),[],0)
 	var player := PlayerActor.new(); player.configure(nav,RunState.new(&"mage"))
 	var actor := CombatActor.new(); actor.setup("Prova",Color.WHITE,player.stat_breakdown); actor.set_animation_kind(&"gel")
+	actor.character_animation=D.legacy_animation(&"gel")
 	root.add_child(actor); actor.set_process(false)
 	actor._process(0.01); var initial := actor._presentation_key.duplicate(true)
 	actor._process(0.01)
@@ -39,6 +41,16 @@ func run() -> void:
 	var bow_key := animation.draw_key()
 	animation.set_equipment_visual({"main_hand":&"staff"})
 	check(animation.draw_key() != bow_key,"equipment changes invalidate cached commands")
-	actor.free(); player.free()
+	var active := CombatActor.new();active.setup("Prova V2",Color.WHITE,player.stat_breakdown);active.set_animation_kind(&"gel")
+	root.add_child(active);active.set_process(false)
+	check(active.character_animation.render_descriptor().version==2 and active.character_animation.atlas.resource_path=="res://assets/art/animations/directional/gel/body.png","actual defaultGel consumes validatedV2")
+	active.character_animation.state.face(Vector2.RIGHT);active._process(0.01)
+	var right := active._presentation_key.duplicate(true)
+	active.character_animation.state.face(Vector2.LEFT);active._process(0.001)
+	var descriptor := active.character_animation.render_descriptor()
+	check(active._presentation_key!=right and descriptor.direction==3 and not descriptor.flip,"actual cardinal direction invalidates drawing without second mirror")
+	var unchanged := active._presentation_key.duplicate(true);active._process(0.001)
+	check(active._presentation_key==unchanged,"same V2view/phase preserves cached commands while clock advances")
+	active.free();actor.free(); player.free()
 	print("Actor presentation: %d checks, %d failures" % [checks,failures])
 	quit(0 if failures == 0 else 1)

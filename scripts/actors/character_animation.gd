@@ -7,6 +7,10 @@ const PIVOT := Vector2(32, 58)
 const WEAPONLESS_KINDS: Array[StringName] = [&"swordsman", &"archer", &"berserker", &"defender", &"elementalist", &"hunter", &"mage", &"sentinel", &"spiritualist", &"geometer"]
 static var _atlas_cache: Dictionary = {}
 static var _weaponless_atlas_cache: Dictionary = {}
+# Derived logical geometry only, outside the actor/snapshot graph. FIFO is bounded.
+const DRAW_GEOMETRY_LIMIT := 128
+static var _draw_geometry: Dictionary = {}
+static var _draw_geometry_order: Array[Array] = []
 const ATTACHMENT_VISUAL_SCRIPT = preload("res://scripts/actors/equipment_attachment_visual.gd")
 var state := CombatAnimationState.new()
 var atlas: Texture2D
@@ -172,6 +176,19 @@ func render_descriptor() -> Dictionary:
 		"equipment":ATTACHMENT_VISUAL_SCRIPT.resolve_equipment(actor_kind,state,equipment_visual,destination.position,raw),
 		"arrow_visible":not state.dead and state.action_remaining>0.0 and state.action!=&"dash" and state.action_duration>0.0 and 1.0-state.action_remaining/state.action_duration<0.75}
 
+func _descriptor_for_draw() -> Dictionary:
+	# Existing draw_key includes all discrete clock/gear inputs. Kind is required
+	# when sharing geometry across actors whose legacy atlas may be overridden.
+	var key := draw_key()
+	key.push_front(actor_kind)
+	if _draw_geometry.has(key):return _draw_geometry[key]
+	var descriptor := render_descriptor()
+	if _draw_geometry.size()>=DRAW_GEOMETRY_LIMIT:
+		_draw_geometry.erase(_draw_geometry_order.pop_front())
+	_draw_geometry[key]=descriptor
+	_draw_geometry_order.append(key)
+	return descriptor
+
 func draw_on(canvas: CanvasItem, tint: Color = Color.WHITE, visual_scale: float = 1.0) -> void:
 	if atlas==null or canvas==null: return
 	# Unadorned enemies have no attachment/head/finger commands. Do not allocate
@@ -183,7 +200,7 @@ func draw_on(canvas: CanvasItem, tint: Color = Color.WHITE, visual_scale: float 
 		canvas.draw_texture_rect_region(atlas,destination_rect(frame),source_region(frame),tint)
 		canvas.draw_set_transform(Vector2.ZERO,0.0,Vector2.ONE)
 		return
-	var descriptor := render_descriptor()
+	var descriptor := _descriptor_for_draw()
 	ATTACHMENT_VISUAL_SCRIPT.draw_resolved(canvas,descriptor,tint,visual_scale,0)
 	EquipmentHeadVisual.draw_resolved(canvas,descriptor,tint,visual_scale,0)
 	canvas.draw_set_transform(Vector2.ZERO,0.0,Vector2(-visual_scale if descriptor.flip else visual_scale,visual_scale))

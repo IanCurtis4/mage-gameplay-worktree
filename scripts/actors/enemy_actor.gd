@@ -320,10 +320,24 @@ func configure_occurrence(spawn: MobOccurrence, catalog: MobCatalog, nav: ArenaN
 	_mob_sp = derived["breakdown"].value(&"max_sp")
 	setup(definition.display_name, definition.tint, derived["breakdown"], definition.collision_radius)
 	set_animation_kind(definition.animation_kind)
+	# Cosmetic projection is derived anew, never inherited by a reconfigured NPC.
+	sync_npc_equipment_visual()
+	if occurrence.mob_base_id in [&"forest_wolf",&"forest_boar"]:
+		if not preload("res://scripts/presentation/e08_pilot_visual.gd").install_forest_atlas(self):
+			push_warning("Forest presentation fallback could not be installed: "+String(occurrence.mob_base_id))
 	hard_controls.boss = occurrence.category_id == &"boss"
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 	_refresh_player_acquisition()
 	return {"ok": true}
+
+func sync_npc_equipment_visual() -> void:
+	if character_animation==null:return
+	character_animation.set_equipment_visual({})
+	if character_animation.actor_kind==&"archer" and character_animation.render_descriptor().version==2:
+		# The verified static NPC body already contains its bow. Other valid V2
+		# Archer units retain the dynamic projection; invalid V2 stays fully V1.
+		if character_animation.atlas.resource_path in ["res://assets/art/e08_characters/directional/archer/npc_body.png","res://assets/art/animations/directional/archer/npc_body.png"]:return
+		character_animation.set_equipment_visual({"main_hand":&"bow"})
 
 func _process(delta: float) -> void:
 	if world_motion != null and (not is_finite(delta) or delta <= 0.0): return

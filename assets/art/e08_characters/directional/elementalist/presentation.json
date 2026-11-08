@@ -2841,7 +2841,7 @@
           "flip": false,
           "angle_overrides": {
             "staff": -0.25,
-            "bow": 1.3
+            "bow": 0.08
           }
         },
         "off_hand": {
@@ -2860,7 +2860,7 @@
           "flip": false,
           "angle_overrides": {
             "staff": -0.25,
-            "bow": 1.3
+            "bow": 0.08
           }
         },
         "arms": {
@@ -2876,7 +2876,10 @@
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "bow": 0.08
+          }
         }
       },
       "head": {
@@ -2909,7 +2912,7 @@
           "flip": false,
           "angle_overrides": {
             "staff": -0.25,
-            "bow": 1.3
+            "bow": 0.05
           }
         },
         "off_hand": {
@@ -2928,7 +2931,7 @@
           "flip": false,
           "angle_overrides": {
             "staff": -0.25,
-            "bow": 1.3
+            "bow": 0.05
           }
         },
         "arms": {
@@ -2944,7 +2947,10 @@
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "bow": 0.05
+          }
         }
       },
       "head": {
@@ -2977,7 +2983,7 @@
           "flip": false,
           "angle_overrides": {
             "staff": -0.25,
-            "bow": 1.3
+            "bow": 0.12
           }
         },
         "off_hand": {
@@ -2996,7 +3002,7 @@
           "flip": false,
           "angle_overrides": {
             "staff": -0.25,
-            "bow": 1.3
+            "bow": 0.12
           }
         },
         "arms": {
@@ -3012,7 +3018,10 @@
           ],
           "angle": 0.0,
           "depth": 1,
-          "flip": false
+          "flip": false,
+          "angle_overrides": {
+            "bow": 0.12
+          }
         }
       },
       "head": {
@@ -3973,7 +3982,7 @@
           "flip": true,
           "angle_overrides": {
             "staff": -0.25,
-            "bow": 1.3
+            "bow": -0.08
           }
         },
         "off_hand": {
@@ -3992,7 +4001,7 @@
           "flip": true,
           "angle_overrides": {
             "staff": -0.25,
-            "bow": 1.3
+            "bow": -0.08
           }
         },
         "arms": {
@@ -4008,7 +4017,10 @@
           ],
           "angle": 0.0,
           "depth": 0,
-          "flip": true
+          "flip": true,
+          "angle_overrides": {
+            "bow": -0.08
+          }
         }
       },
       "head": {
@@ -4041,7 +4053,7 @@
           "flip": true,
           "angle_overrides": {
             "staff": -0.25,
-            "bow": 1.3
+            "bow": -0.05
           }
         },
         "off_hand": {
@@ -4060,7 +4072,7 @@
           "flip": true,
           "angle_overrides": {
             "staff": -0.25,
-            "bow": 1.3
+            "bow": -0.05
           }
         },
         "arms": {
@@ -4076,7 +4088,10 @@
           ],
           "angle": 0.0,
           "depth": 0,
-          "flip": true
+          "flip": true,
+          "angle_overrides": {
+            "bow": -0.05
+          }
         }
       },
       "head": {
@@ -4109,7 +4124,7 @@
           "flip": true,
           "angle_overrides": {
             "staff": -0.25,
-            "bow": 1.3
+            "bow": -0.12
           }
         },
         "off_hand": {
@@ -4128,7 +4143,7 @@
           "flip": true,
           "angle_overrides": {
             "staff": -0.25,
-            "bow": 1.3
+            "bow": -0.12
           }
         },
         "arms": {
@@ -4144,7 +4159,10 @@
           ],
           "angle": 0.0,
           "depth": 0,
-          "flip": true
+          "flip": true,
+          "angle_overrides": {
+            "bow": -0.12
+          }
         }
       },
       "head": {
