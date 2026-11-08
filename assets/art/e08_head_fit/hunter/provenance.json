@@ -1,0 +1,57 @@
+{
+  "generator": "built-in imagegen",
+  "input": "four direction blocks extracted from original body, nearest-neighbor 4x",
+  "reference_sha256": {
+    "assets/art/e08_characters/directional/hunter/body.png": "9785d676c0c1eaa9aa4ad73db9e4e3645c174ab2c6c05cd9120744feba06dc7a",
+    "assets/art/e08_characters/directional/hunter/calibration.json": "988742e4c0ee485acd571b3445e19a8d6063b4a17b45df4a3aba335154b4ac01"
+  },
+  "original_rgba_sha256": "19f5871b70263bec4ea125be168008e384369f5bf2bd3de9d9b1d6aff8442c5d",
+  "bare_rgba_sha256": "04d7e64c81f1d90f8aa53bb5f467d6772c850673edfe297f7d1610ae7d25c7f2",
+  "sources": {
+    "south_source_v1.png": {
+      "sha256": "1b38c31ea76c60314021bdd2a6195070940338129c8fd4f7220b63d3c03085e8",
+      "prompt": "Use case: precise-object-edit. 4x4 transparent pixel-art sprite sheet, 16 poses of the same huntress. Remove only the olive hood and attached head ornament from every pose, revealing the original pale blond hair naturally over the skull. Preserve facial expression, face position, hair color, anatomy, all 16 exact poses, orientation, frame grid and composition. Preserve body, clothes, leather, hands, arms, quiver, legs and ground unchanged. No hat, headgear, weapons, props, extra limbs, text or background. Pixel-art game sprite, genuine transparent background."
+    },
+    "north_source_v1.png": {
+      "sha256": "e5dc18766bf33ad9624614a726dff16bc357d6f99bb00627b14bf36ad9ce6272",
+      "prompt": "Use case: precise-object-edit. 4x4 transparent pixel-art sprite sheet, 16 BACK VIEW poses of the same huntress. Remove only the olive hood and attached head ornament from every pose, revealing pale blond hair naturally on the back of the skull. Preserve back-facing orientation, hair color, anatomy, all 16 exact poses, frame grid and composition. Preserve body, clothes, leather, hands, arms, quiver, legs and ground unchanged. No hat, headgear, weapons, props, extra limbs, text or background. Pixel-art game sprite, genuine transparent background."
+    },
+    "east_source_v1.png": {
+      "sha256": "0055cb68adf3e5aa62107847df3071f34e5f1a57d0b4d6921892d673af193f48",
+      "prompt": "Use case: precise-object-edit. 4x4 transparent pixel-art sprite sheet, 16 RIGHT-FACING PROFILE poses of the same huntress. Remove only the olive hood and attached head ornament from every pose, revealing original pale blond hair naturally over the skull. Preserve profile direction, facial expression, face position, hair color, anatomy, all 16 exact poses, frame grid and composition. Preserve body, clothes, leather, hands, arms, quiver, legs and ground unchanged. No hat, headgear, weapons, props, extra limbs, text or background. Pixel-art game sprite, genuine transparent background."
+    },
+    "west_source_v1.png": {
+      "sha256": "35aad1d5b9bd8be328ab1c759b2e812eac7c18a6d8ce7b1546f8842699eb5349",
+      "prompt": "Use case: precise-object-edit. 4x4 transparent pixel-art sprite sheet, 16 LEFT-FACING PROFILE poses of the same huntress. Remove only the olive hood and attached head ornament from every pose, revealing original pale blond hair naturally over the skull. Preserve profile direction, facial expression, face position, hair color, anatomy, all 16 exact poses, frame grid and composition. Preserve body, clothes, leather, hands, arms, quiver, legs and ground unchanged. No hat, headgear, weapons, props, extra limbs, text or background. Pixel-art game sprite, genuine transparent background."
+    }
+  },
+  "outputs": {
+    "body.png": "57e13cf75ad819e2e36ea28b3a20c7f1d80882738478c96acd8961a09b5c8771",
+    "calibration.json": "802908ae7e0ff0684a02dcc95ebe9fd9b924e6b0ce40dae719202c2beba4e188",
+    "source_recipe.json": "ffba53de9177eab3339f8f74b9c3d9be4dff53fb5e61958de024394e0f33154c",
+    "contact_sheet.png": "d329b18a15386e68752d6e818d1bbfff4696223d75a6d78c6f38a5409367b453"
+  },
+  "contact_studies_sha256": {
+    "pilot_head.png": "d106c284e42d96f1274f993291b411fc2f3d2c18c92b621589b3e2153e1ed309",
+    "apple_arrow_study.png": "f4cad7996f14a686f4ce1d7efda286153ae728a4bb713e274c6cecf3028f1232",
+    "eggshell_study.png": "08b005b5bae6a2c38e7bfa7092bdb39c3660c2b9f475110d8d0bb239c1d8e810"
+  },
+  "s15_2026_11_08": {
+    "reason": "avoid residual bow from earlier south source",
+    "head_region_before": [
+      27,
+      20,
+      64,
+      57
+    ],
+    "head_region_after": [
+      27,
+      20,
+      64,
+      52
+    ],
+    "other_frames_unchanged": 63,
+    "live_finger_crops": 112,
+    "ground_frames": 64
+  }
+}

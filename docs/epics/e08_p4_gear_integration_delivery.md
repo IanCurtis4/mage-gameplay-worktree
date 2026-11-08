@@ -90,3 +90,16 @@ Documentação final não repetiu gameplay, pois não altera os inputs testados.
 P4 continua aberto: outras bases de cabelo, seis jogadores e inimigos em stages
 Root precisam integração posterior autorizada. Maçã/ovo são estudos sem ID/drop.
 Sem master/push, avanço habitual, save pessoal ou aceite de produto nesta entrega.
+
+### Consolidação Root/Luna —8/11
+
+Luna confirmou ZIP522,2468inputs e97paths/readonly/metadata/engine/backups;
+24etapas únicas31283checks, nativo5568/35 e movimento76/64, ambosPCKshashes/bytes.
+Recibos adicionais luna_supervision.md SHA6eb2c8b7ec2d2e2af5389a8d87295c6160f187a8a65a7408e6f6f6cbdbcf9f1a
+e luna_hashes.json SHAeeef4aa7c541a490c0fefbdb6a6d34f62e1ae8632f5134bd632c3de7b9f22d08.
+Após essa conferência Root removeu SOMENTE os2PCKs temporários exatos, conferindo
+novamente hash/tamanho/path;202.155.480bytes liberados. Operação no recibo separado
+validation_pack_cleanup.json. ZIP/fontes/capturas/logs/fixture/PCKaceitoP3/saves
+preservados. Presença registrada porLuna precede essa remoção, não discrepância.
+Nenhum rerun adicional por essa consolidação documental e nenhuma aprovação
+humana de produto/merge/P5 inferida da supervisão.

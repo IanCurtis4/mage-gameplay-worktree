@@ -1,0 +1,22 @@
+{
+  "generator": "image_gen integrado",
+  "inputs": "four mechanical 4x nearest-neighbor direction sheets extracted from original atlas",
+  "reference_sha256": {
+    "assets\\art\\e08_characters\\directional\\sentinel\\body.png": "9b6d9855a24efbbf6593d7f43fd6c2aeae5d4b24d93e82e1e5e8122ca0e5180d",
+    "assets\\art\\e08_characters\\directional\\sentinel\\calibration.json": "50e5ee30a3ba24452013ad9ab3dbc43d65d0640f311b05bbb5ace1390b490443"
+  },
+  "source_sha256": {
+    "east_source_v1.png": "0331d63087777694c4a85a52e5061ce20a998d6dbfe127a93a90049600f425fb",
+    "north_source_v1.png": "70d8a53b4725cbef6ebdead75244e9ab6e54cf53aba8c2c6fe69398214724724",
+    "south_source_v1.png": "4ce45e0ca736de24184cb447ff51de000e928298bdcfbff737dfd725f223501f",
+    "west_source_v1.png": "24b9abbd763cf4c0326ffd68c7d745082b61dcc52547ce173b58eddda5185054"
+  },
+  "contact_studies_sha256": {
+    "assets\\art\\e08_equipment_redesign\\pilot_head.png": "d106c284e42d96f1274f993291b411fc2f3d2c18c92b621589b3e2153e1ed309",
+    "assets\\art\\e08_equipment_redesign\\apple_arrow_study.png": "f4cad7996f14a686f4ce1d7efda286153ae728a4bb713e274c6cecf3028f1232",
+    "assets\\art\\e08_equipment_redesign\\eggshell_study.png": "08b005b5bae6a2c38e7bfa7092bdb39c3660c2b9f475110d8d0bb239c1d8e810"
+  },
+  "prompt": "Use case: precise-object-edit. Edit this exact 4x4 pixel-art animation sheet of the SAME Sentinel: pale silver-white hair and muted gray-green outfit. In each of 16 cells remove ONLY the dark gray-green cap/hood and its light band, replace the covered head area with natural silver-white hair continuous with the existing visible bangs, same character and view. Preserve visible face, expression, hair color, pose and exact positions of hands, raised arms, clothing, cape and feet. Maintain precise 4x4 alignment and crisp pixel style. No new headwear, props, text, background or shadows. Genuine transparent background.",
+  "original_rgba_sha256": "23598d39b8a191a4956f8116c52e7d127bc538c2c0f708278d792cd5f9fc1611",
+  "bare_rgba_sha256": "2f417e4b2cd1e75d53750543c70b45b74ba8194df0e452fa1fde3112bc0a5cc6"
+}

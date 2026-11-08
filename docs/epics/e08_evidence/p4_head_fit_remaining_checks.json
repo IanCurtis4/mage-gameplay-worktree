@@ -1,0 +1,37 @@
+{
+  "role": "Root independent offline boundary/hash/finger/ground check, not native acceptance",
+  "units": {
+    "hunter": {
+      "original_rgba": "19f5871b70263bec4ea125be168008e384369f5bf2bd3de9d9b1d6aff8442c5d",
+      "bare_rgba": "04d7e64c81f1d90f8aa53bb5f467d6772c850673edfe297f7d1610ae7d25c7f2",
+      "outside_masks_exact_frames": 64,
+      "grounds_unchanged": 64,
+      "finger_crops_exact": 112,
+      "native": "pending"
+    },
+    "sentinel": {
+      "original_rgba": "23598d39b8a191a4956f8116c52e7d127bc538c2c0f708278d792cd5f9fc1611",
+      "bare_rgba": "2f417e4b2cd1e75d53750543c70b45b74ba8194df0e452fa1fde3112bc0a5cc6",
+      "outside_masks_exact_frames": 64,
+      "grounds_unchanged": 64,
+      "finger_crops_exact": 112,
+      "native": "pending"
+    },
+    "geometer": {
+      "original_rgba": "bcc8f63989a91aba39175be065774842b57d41b78080782ab2114acd60e9f731",
+      "bare_rgba": "6f9b3212a701b779d6c8553810965c008c63145b5e4879173fad457985efe8a8",
+      "outside_masks_exact_frames": 64,
+      "grounds_unchanged": 64,
+      "finger_crops_exact": 112,
+      "native": "pending"
+    },
+    "archer": {
+      "original_rgba": "139abb741381e07dc6af6acc5ad03c640af5b6c5f46d513f6449e70f777625d8",
+      "bare_rgba": "77e45f85976e9fc652ed052bb295b2baa8046ed0536eb2ec8e766e8ccd71502c",
+      "outside_masks_exact_frames": 64,
+      "grounds_unchanged": 64,
+      "finger_crops_exact": 112,
+      "native": "pending"
+    }
+  }
+}

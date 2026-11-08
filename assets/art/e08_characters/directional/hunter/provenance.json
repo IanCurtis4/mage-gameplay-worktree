@@ -26,6 +26,11 @@
     "native_death_source_v1.png": {
       "sha256": "96b70c38178f2bb5d0f828e19b85db5be9a145cebb9974bb676338a15b8f9f63",
       "prompt": "Use case: precise-object-edit. Asset type: pixel-art game sprite sheet, four death poses arranged 2x2. Edit the provided image: remove the thin curved brown bow lying in front of or under the character, in the top-left and both bottom cells. Restore transparent space and plausible empty hands where the bow was. Keep each fallen character's identity, olive hood, pale hair, leather and quiver, body silhouette, exact pose and placement, 2x2 layout and pixel-art style. Do not add any weapons, items, effects, extra limbs, text or background. Real transparent background."
+    },
+    "native_death_source_v2.png": {
+      "sha256": "0399e70a37d037141fff84fd0edf2f67a9690cf1500e3e66461cc9bba245158e",
+      "input": "native_death_source_v1.png",
+      "prompt": "Use case: precise-object-edit. Edit this transparent 2x2 pixel-art game sprite sheet. In the TOP-RIGHT cell only, remove the thin curved brown bow underneath and in front of the fallen huntress's face and hand; restore transparent empty space where the bow was and preserve a natural empty hand. Preserve the huntress, her exact fallen pose and position, face, pale hair, olive hood, brown clothes, quiver and all other details. Keep the other three cells unchanged. Preserve pixel-art style and 2x2 layout. No new weapons, props, limbs, effects, shadows, text or background; real transparent background."
     }
   },
   "cleanup": {
@@ -98,10 +103,42 @@
     "native_cleaned_sha256": "35c87209fe01e85151065e1d4bdf50424f519b3bf5b0ed897f2788aaa2e84cf0"
   },
   "outputs": {
-    "body.png": "df5ddd58e6c7bcd431834a8a5e35d182a14b11bdc8b3432e9e4c43a483cb1f89",
-    "weaponless.png": "df5ddd58e6c7bcd431834a8a5e35d182a14b11bdc8b3432e9e4c43a483cb1f89",
-    "calibration.json": "879209a82cbffca446d312320522ac8455b67d33950fc219379fd53fb193bc34",
-    "presentation.json": "8ca83365267c8bd86ba05111af31c12632719214ceadccd0e07037557f252cf5"
+    "body.png": "9785d676c0c1eaa9aa4ad73db9e4e3645c174ab2c6c05cd9120744feba06dc7a",
+    "weaponless.png": "9785d676c0c1eaa9aa4ad73db9e4e3645c174ab2c6c05cd9120744feba06dc7a",
+    "calibration.json": "988742e4c0ee485acd571b3445e19a8d6063b4a17b45df4a3aba335154b4ac01",
+    "presentation.json": "ff4658341dc04e79dc504c62a388571860fc012470e199671acec1a26f888acf"
   },
-  "rgba_sha256": "c1167462f02c866bbb11f6afca2b1eae450399131635285c108a179129906974"
+  "rgba_sha256": "19f5871b70263bec4ea125be168008e384369f5bf2bd3de9d9b1d6aff8442c5d",
+  "cleanup_s15_2026_11_08": {
+    "source": "native_death_source_v2.png",
+    "source_quadrant": 1,
+    "source_bbox": [
+      32,
+      269,
+      579,
+      554
+    ],
+    "legacy_bbox": [
+      3,
+      27,
+      61,
+      58
+    ],
+    "output_size": [
+      58,
+      31
+    ],
+    "placement": [
+      3,
+      27
+    ],
+    "method": "remove_matte; keep_character; LANCZOS; alpha128; center x32 and bottom y58; only native29 replaced",
+    "preserved_native_original": 28,
+    "unchanged_prior_cleaned": [
+      28,
+      30,
+      31
+    ],
+    "native_cleaned_sha256": "f2df779cf5c8d8b32f36548fb2c466768099546db143df77aa4cf9e92b66ab35"
+  }
 }

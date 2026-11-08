@@ -1,0 +1,58 @@
+{
+  "generator": "built-in imagegen",
+  "original_rgba_sha256": "139abb741381e07dc6af6acc5ad03c640af5b6c5f46d513f6449e70f777625d8",
+  "bare_rgba_sha256": "77e45f85976e9fc652ed052bb295b2baa8046ed0536eb2ec8e766e8ccd71502c",
+  "reference_sha256": {
+    "assets/art/e08_characters/directional/archer/body.png": "847b41a4a92e4caea38738fd4fa0ed93f5b59ed847c02ef8d7cefa7528b0f9dc",
+    "assets/art/e08_characters/directional/archer/calibration.json": "f1f8d0eaa06b0f63397f702c1b7e4eb350e3292dc47073e6006df2bb001caeb6"
+  },
+  "sources": {
+    "south_source_v2.png": {
+      "sha256": "25d896fe803e6768a00bdecd371f37ce5bb8e3dcbc5e75b4ea222ab7a868e12e",
+      "role": "reference crop of original directional atlas, nearest 4x"
+    },
+    "south_source_v1.png": {
+      "sha256": "eaef48ccf07f53679232089c9b29d46ed8d8273879fc13c9c333f0ea3731a351",
+      "input": "south_source_v2.png",
+      "prompt": "Use case: precise-object-edit. This is a 4x4 transparent pixel-art game sprite sheet of a brown-haired archer facing south. Remove only the ochre hood from every pose and reveal natural brown hair matching the visible existing hair, preserving the character's original face, location, orientation, silhouette and 16 poses. Preserve the red scarf, clothing, gloves, arms, legs, quiver and all arrows/feathers exactly, especially raised hands and death poses. Keep every figure in its original cell, same scale and placement. No weapons, new props, extra limbs, effects, text, background or floor. Genuine transparent background."
+    },
+    "north_source_v2.png": {
+      "sha256": "a46c7b51fac2f923562a66892db677712ef9abbd7d6f4b18ddaa1b2bbaa03fbd",
+      "role": "reference crop of original directional atlas, nearest 4x"
+    },
+    "north_source_v1.png": {
+      "sha256": "cc4ee789f84e65688cfd6581030230533cb02c3282472540a1e46313f366d8ec",
+      "input": "north_source_v2.png",
+      "prompt": "Use case: precise-object-edit. This is a 4x4 transparent pixel-art game sprite sheet of a brown-haired archer facing north. Remove only the ochre hood from every pose and reveal natural brown hair matching the visible existing hair, preserving the character's original face, location, orientation, silhouette and 16 poses. Preserve the red scarf, clothing, gloves, arms, legs, quiver and all arrows/feathers exactly, especially raised hands and death poses. Keep every figure in its original cell, same scale and placement. No weapons, new props, extra limbs, effects, text, background or floor. Genuine transparent background."
+    },
+    "east_source_v2.png": {
+      "sha256": "96ca6278c8890e05f8bbb9bbd5f6ab12acf3cfc5ccab988c3dcefe3218b70244",
+      "role": "reference crop of original directional atlas, nearest 4x"
+    },
+    "east_source_v1.png": {
+      "sha256": "adc0891f26cc916d593264fa013c92ae9ad790d14ff4eae41d1c1e49eeeccbf9",
+      "input": "east_source_v2.png",
+      "prompt": "Use case: precise-object-edit. This is a 4x4 transparent pixel-art game sprite sheet of a brown-haired archer facing east. Remove only the ochre hood from every pose and reveal natural brown hair matching the visible existing hair, preserving the character's original face, location, orientation, silhouette and 16 poses. Preserve the red scarf, clothing, gloves, arms, legs, quiver and all arrows/feathers exactly, especially raised hands and death poses. Keep every figure in its original cell, same scale and placement. No weapons, new props, extra limbs, effects, text, background or floor. Genuine transparent background."
+    },
+    "west_source_v2.png": {
+      "sha256": "50dc0836888ff944601155d8cfcb1771581446a4d1a124112247f6049a2a32da",
+      "role": "reference crop of original directional atlas, nearest 4x"
+    },
+    "west_source_v1.png": {
+      "sha256": "96e31fd279c7f9389d550c0876b016c509718cfc96d477e5524cc080917c959c",
+      "input": "west_source_v2.png",
+      "prompt": "Use case: precise-object-edit. This is a 4x4 transparent pixel-art game sprite sheet of a brown-haired archer facing west. Remove only the ochre hood from every pose and reveal natural brown hair matching the visible existing hair, preserving the character's original face, location, orientation, silhouette and 16 poses. Preserve the red scarf, clothing, gloves, arms, legs, quiver and all arrows/feathers exactly, especially raised hands and death poses. Keep every figure in its original cell, same scale and placement. No weapons, new props, extra limbs, effects, text, background or floor. Genuine transparent background."
+    }
+  },
+  "outputs": {
+    "body.png": "cccd05f3706fce692ae07ec83e6afff20d915e77f7fdba673ca026797b470bac",
+    "source_recipe.json": "14eaae0092d38169483fd6b29c2ccc996845018a7322a0bb280afdd4862a40e9",
+    "calibration.json": "d5d787103ba6105f579cf6b963890ce75df67469a970b3c02b9106bdb3657a3e",
+    "contact_sheet.png": "bfecc88d6794242fa883f5bcb0607973ef2e66b19b3fa7fed70705612425d8c6"
+  },
+  "contact_studies_sha256": {
+    "pilot_head.png": "d106c284e42d96f1274f993291b411fc2f3d2c18c92b621589b3e2153e1ed309",
+    "apple_arrow_study.png": "f4cad7996f14a686f4ce1d7efda286153ae728a4bb713e274c6cecf3028f1232",
+    "eggshell_study.png": "08b005b5bae6a2c38e7bfa7092bdb39c3660c2b9f475110d8d0bb239c1d8e810"
+  }
+}

@@ -51,3 +51,19 @@ da nova arte sem arco via pipeline mecânico atual. Nada de apagar/desenhar por
 código. Recipe S/N usa cleaned com native_cells; calibrar3heads/grounds alterados,
 meta mortos soltos ehashesderived. Não recompensar defeito comafirmação32/32.
 É correção de defeito no contrato atual, semnovo consumidor/kit/loop/arma.
+
+## Correção S15 confirmada na retomada8/11
+
+A inspeção comparativa de hunter.png/weaponless.png e bodyV2S15 confirmou também
+arco marrom sob o rosto em native29. Root autoriza quarta correção localizada:
+28/29/30/31limpos,28demais células nativas preservadas byte a byte. SóS15 muda
+nesta rodada; não substituir3mortes já corrigidas. Nova fonte native_death_source_v2
+seleciona apenas quadrante1 (topright) do alvo2x2 já existente; outras3células
+selecionadas continuam v1. Imagegen remove apenas arco residual e conserva corpo,
+pose/mãos/roupa/aljava/pivô. Nenhum erase procedural. Reempacotar cleaned/body/
+weaponless, hash/calibração/grounds/metadados eheadfitHunter dependente com novo
+original_rgba_sha256, preservando112crops vivos e63frames anteriores byte a byte.
+Dois stages estão sob o mesmo dono nesta correção: corpoHunter ebareheadHunter;
+sem alterar outros conjuntos, scripts compartilhados/fixture/Godot/import/commit.
+Fonte original hunter_weaponless.png nunca é alterada. Descoberta anterior
+incerta e preservação29ficam históricas, não ocultar recibos da primeira entrega.

@@ -1,7 +1,7 @@
 {
   "actor_kind": "hunter",
   "status": "authored; native renderer inspection pending",
-  "authored_rgba_sha256": "c1167462f02c866bbb11f6afca2b1eae450399131635285c108a179129906974",
+  "authored_rgba_sha256": "19f5871b70263bec4ea125be168008e384369f5bf2bd3de9d9b1d6aff8442c5d",
   "frames": [
     {
       "ground_y": 57,

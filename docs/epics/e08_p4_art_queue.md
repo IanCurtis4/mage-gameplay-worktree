@@ -75,3 +75,28 @@ no reciboSol. Ele segue verify/export/consolidação, sem incluirRootnovosstages
 Root tem UMA janela temporária do índice só para commit de arte/contratosdisjuntos,
 e devolverá explicitamente antes de qualquer novoGitSol. Próxima execuçãoartistica
 4bareheadunidades depende do contrato/lista versionados neste lote.
+
+## Fronteira validada e inputs finais —8/11
+
+Gear/Mago entregue94dfaf7f97e8faa094d9f9ad7612baf7729d801c eLuna integridadePASS:
+ZIP522/37891701B SHA6421f67fd2461ca1771d011a1aba422f776e6fd6803f47933c1c3f3f0b1b5d85;
+2468inputs;24etapas únicas31283checks,5568/35nativo,76/64motion, PCKfinal2PASS.
+Root removeu APENAS2PCKs temporários após novamente conferirhash/path/bytes:
+202155480B; recibo p4_equipment/validation_pack_cleanup.json. Fontes/logs/ZIP/
+fixture/saves/pilotoP3 preservados. Renderer eprodutor retornaram à posseRoot.
+
+Todas4bases de cabelo restantes entregues eRoot conferiu independentemente:
+256grounds,448crops,256frames fora máscaras intactos ehashes. Originais preservados.
+Hunter tinha arco confirmadoS15: quarta correção somenteframe15 no corpo e
+headfitdependente. Corpo19f5871b70263bec4ea125be168008e384369f5bf2bd3de9d9b1d6aff8442c5d;
+bare04d7e64c81f1d90f8aa53bb5f467d6772c850673edfe297f7d1610ae7d25c7f2.
+28nativas originais e3mortes anteriores intactas; antiga divulgação29nativas/c116
+é histórica. Sentinelbare2f417e4b...,Geobare6f9b3212...,Archerbare77e45f85....
+
+Root encontrou risco de rig vivo, registrado no contrato final: Hunter/Sentinel/
+GeometerWflipfalse/semoverrides de arco deação; não promover semextração do
+controleS/Nlegado eorientaçãoE/W/oclusão nativa. Todas16artes de corpo completas
+não significam16conjuntos integrados. Integraçãofinal abrangerá6players+6NPCs,
+4bareheads,6overrides de consumidores/ArcherNPC evalidará oescopoP4 inteiro.
+Contrato/lista final resolvemProducerBase94df; oSHA do próximo commitRoot com
+inputs/contrato será a base executável da delegação. Sem P5/master/push.

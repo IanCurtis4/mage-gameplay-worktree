@@ -1,0 +1,97 @@
+{
+  "review": "Luna definitive integrity supervision",
+  "date": "2026-11-08",
+  "candidate": {
+    "branch": "codex/e08",
+    "commit": "94dfaf7f97e8faa094d9f9ad7612baf7729d801c",
+    "commit_path_count": 97
+  },
+  "archive": {
+    "path": "evidence.zip",
+    "members": 522,
+    "unique_members": 522,
+    "bytes": 37891701,
+    "sha256": "6421f67fd2461ca1771d011a1aba422f776e6fd6803f47933c1c3f3f0b1b5d85",
+    "member_hash_mismatches": 0
+  },
+  "freeze": {
+    "input_count": 2468,
+    "manifest_sha256": "30978d236f9383d02f802cb08278785a4ea9270bc5e874d99ab1dd07d17893b5",
+    "current_input_missing_or_mismatched": 0,
+    "candidate_hashes_checked": 83,
+    "candidate_hash_mismatches": 0,
+    "read_only_gear_mage_hashes_checked": 52,
+    "read_only_hash_mismatches": 0,
+    "generated_metadata_count": 28,
+    "fixture_project_only_difference": "version_control/autoload_on_startup=false",
+    "backups": {
+      "count": 4,
+      "present_and_matching": 4
+    }
+  },
+  "engine": {
+    "version": "Godot 4.7.2 standard",
+    "sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "local_binary_matches": true
+  },
+  "verification": {
+    "selected_unique_steps": 24,
+    "full_plan_steps": 318,
+    "checks": 31283,
+    "failures": 0,
+    "execution_errors": 0,
+    "timeouts": 0,
+    "composition": "22 compatible regression_final1 tests + 2 regression_pose_final1 consumers; latter supersede only four corpse angles; duplicates excluded",
+    "summary_test_results": 24,
+    "summary_exit0_not_failed_not_timed_out": 24
+  },
+  "native_final2": {
+    "checks": 5568,
+    "png_captures": 35,
+    "failures": 0,
+    "exit_code": 0,
+    "timed_out": false
+  },
+  "motion_final2": {
+    "checks": 76,
+    "png_frames": 64,
+    "gif_preview_seconds": 6.4,
+    "failures": 0,
+    "exit_code": 0,
+    "timed_out": false
+  },
+  "export_final2": {
+    "pck_bytes": 101077828,
+    "pck_sha256": "14c9be3e24924c09fe0fa012c1978fb0f906eb216d7c7627f03816776b3e3eb1",
+    "tests": {
+      "e08_equipment_art_test": 2589,
+      "e08_directional_units_test": 10887,
+      "e08_directional_content_test": 3461,
+      "e08_directional_animation_test": 814
+    },
+    "all_pass": true,
+    "all_exit0": true,
+    "timeouts": 0
+  },
+  "retained_packs": [
+    {
+      "attempt": "export_final1",
+      "bytes": 101077652,
+      "sha256": "7e9b380ebdbdb3ef69ff39c3f54f9dd55ce4237dda6343eae2143e34b8444084",
+      "present_and_matching": true
+    },
+    {
+      "attempt": "export_final2",
+      "bytes": 101077828,
+      "sha256": "14c9be3e24924c09fe0fa012c1978fb0f906eb216d7c7627f03816776b3e3eb1",
+      "present_and_matching": true
+    }
+  ],
+  "preserved_failed_attempts": [
+    "import_initial1: scripts omitted from wrapper new-files manifest",
+    "unit_initial2: 42 failures with minimal rather than content catalog",
+    "native_initial3 and native_fit1: fit discovery/correction history"
+  ],
+  "report_sha256": "6eb2c8b7ec2d2e2af5389a8d87295c6160f187a8a65a7408e6f6f6cbdbcf9f1a",
+  "scope_limit": "integrity review only; no Godot rerun, no independent visual audit, no human/product acceptance"
+}

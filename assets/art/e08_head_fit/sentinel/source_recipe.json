@@ -1,0 +1,10 @@
+{
+  "actor_kind": "sentinel",
+  "views": {
+    "south": "south_source_v1.png",
+    "north": "north_source_v1.png",
+    "east": "east_source_v1.png",
+    "west": "west_source_v1.png"
+  },
+  "method": "authored per-pose head regions and protections; normalized source crops"
+}

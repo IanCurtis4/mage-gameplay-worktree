@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-08",
+  "removed": [
+    {
+      "bytes": 101077652,
+      "sha256": "7e9b380ebdbdb3ef69ff39c3f54f9dd55ce4237dda6343eae2143e34b8444084",
+      "action": "verified then removed exact temporary validation PCK",
+      "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\p4_equipment\\export_final1\\equipment_validation.pck"
+    },
+    {
+      "bytes": 101077828,
+      "sha256": "14c9be3e24924c09fe0fa012c1978fb0f906eb216d7c7627f03816776b3e3eb1",
+      "action": "verified then removed exact temporary validation PCK",
+      "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\p4_equipment\\export_final2\\equipment_validation.pck"
+    }
+  ],
+  "total_bytes": 202155480.0,
+  "luna_receipt_sha256": "eeef4aa7c541a490c0fefbdb6a6d34f62e1ae8632f5134bd632c3de7b9f22d08",
+  "preserved": "source assets, ZIP, logs, manifests, fixture, accepted P3 pack and personal saves"
+}
