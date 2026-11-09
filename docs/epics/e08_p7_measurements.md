@@ -251,3 +251,40 @@ mensurável na floresta parada.
 
 Não se repetiram 96 atores, preparação nem carga P6 sintética. Ficam valendo os resultados de
 `ba2a4b18`, porque C5 mudou só o desenho e o som do ataque básico e C6 só o encaixe da cabeça.
+
+## Candidato final P7 `6b42b305` (C7)
+
+Candidato `6b42b305abc24eec774bd20acb73cee15174b71d` (PCK `6529da02…191c`). O coordenador pediu
+só uma rodada curta de floresta natural, F10 contra candidato. A primeira rodada saiu fora do
+esperado, então acrescentei duas verificações na mesma sessão, usando `261801de` como
+referência (`-ReferencePack`).
+
+| Evidência | Pacotes | F10 | `261801de` | `6b42b305` | Final vs F10 | Final vs 261801de |
+|---|---|---|---|---|---|---|
+| `measure_c7_01`, floresta, 6 janelas | F10, final | 12,39 / 16,79 | — | 14,45 / 19,95 | +17% / +19% | — |
+| `measure_c7_02`, floresta, 6 janelas | F10, ref., final | 11,66 / 14,59 | 12,19 / 15,46 | 12,56 / 16,20 | +8% / +11% | +3% / +5% |
+| `measure_c7_03`, ablação normal | F10, ref., final | 10,99 / 14,31 | 11,97 / 14,87 | 12,31 / 15,28 | +12% / +7% | +3% / +3% |
+| ablação sem feedback | | 11,13 / 13,93 | 11,91 / 15,18 | 12,14 / 15,19 | +9% / +9% | +2% / 0% |
+| ablação sem ambiente | | 11,00 / 14,66 | 12,06 / 15,13 | 12,01 / 15,01 | +9% / +2% | 0% / −1% |
+| ablação sem áudio de mundo | | 10,95 / 14,22 | 11,88 / 15,00 | 12,23 / 15,10 | +12% / +6% | +3% / +1% |
+| ablação sem os três | | 11,04 / 14,46 | 11,93 / 14,73 | 11,97 / 15,07 | +8% / +4% | 0% / +2% |
+
+Valores em mediana / p95, em ms.
+
+- **`c7_01` não entra na conclusão.** Rodou com o computador em uso: navegador e outro aplicativo
+  somando cerca de 2 núcleos, e a entrada na floresta chegou a 62,6 s. Fica só registrada.
+- **`c7_02` e `c7_03`:** 12/12 com saída 0, sem erro. Draw calls 616 nos dois candidatos e 614 na
+  F10. Memória: retido 88,45 MiB e RSS cerca de 784 MiB nos dois candidatos.
+- **Final contra `261801de`:** a diferença varia entre 0% e +3%, sem padrão entre as ablações. Com o
+  ambiente desligado ou com tudo desligado, empata. O código C7 só age ao receber impacto ou mira:
+  a ponte e a camada não recebem eventos na floresta parada, e a única mudança na vista é zerar um
+  campo dentro de `indicate()`. **Não há custo atribuível a C7;** a diferença está dentro do ruído
+  entre processos.
+- **Contra a F10, nesta sessão:** os dois candidatos ficaram de +8% a +12% na mediana e de +4% a +11%
+  no p95. Mesmo sem as três camadas E08 ficaram em +8% / +2–4%, acima dos +4–5% medidos para
+  `ba2a4b18` numa sessão calma. A distância para a F10 oscila com a sessão, entre +5% e +12%. O
+  resíduo vem do conteúdo P4/P5, com corpos direcionais e mapas republicados (ver `ba2a4b18`).
+- **Conclusão:** limítrofe ao limiar de 10%, sem regressão nova desde as correções C4.
+
+Não se repetiram 96 atores, preparação nem carga P6; valem os resultados de `ba2a4b18`/`261801de`.
+Nada aqui promete FPS para a campanha inteira, outras GPUs ou sessões longas.

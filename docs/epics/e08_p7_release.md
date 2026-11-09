@@ -6,10 +6,10 @@ merge por este pacote. O checkout habitual `codex/playtest`, o piloto P3
 `pilot_ad09b99d` e os saves pessoais não foram tocados. Aprovação técnica não é aceite de
 produto.
 
-> **Candidato atual para o playtest: `261801de`** (pasta `e08_261801de`), com as correções do
-> primeiro playtest (C5/C6) sobre `ba2a4b18` (C4). Detalhes na
-> [seção final](#candidato-atual-261801de-c5c6). As seções abaixo descrevem, em ordem, o
-> primeiro candidato `79656308` e o `ba2a4b18`, preservados como histórico.
+> **Candidato final P7: `6b42b305`** (pasta `e08_6b42b305`), com as correções do segundo
+> playtest (C7) sobre `261801de` (C5/C6) e `ba2a4b18` (C4). Detalhes na
+> [seção final](#candidato-final-p7-6b42b305). As seções abaixo descrevem, em ordem, os
+> candidatos `79656308`, `ba2a4b18` e `261801de`, preservados como histórico.
 
 ## Candidato
 
@@ -262,7 +262,7 @@ documentos.
 - as falhas pré-existentes da [triagem](e08_p7_triage.md) continuam;
 - a suíte de gameplay não foi repetida por este pacote (C4 registra seus próprios testes).
 
-## Candidato atual `261801de` (C5/C6)
+## Candidato `261801de` (C5/C6)
 
 Commit `261801def65bb9022d7d5ffdd8c3b5bc82fd1246`, do coordenador após o primeiro playtest do
 usuário. É `ba2a4b18` mais duas entregas:
@@ -346,3 +346,79 @@ do editor. O resultado anterior PASS (6/8/14) continua válido.
 - Limites visuais de C6 a julgar em jogo: cabelo do Berserker nas laterais; chapéu da Caçadora;
   fitas da grinalda e do véu no rosto de lado; tiaras por design.
 - Sem promessa de FPS para a campanha inteira.
+
+## Candidato final P7 `6b42b305`
+
+Commit `6b42b305abc24eec774bd20acb73cee15174b71d` (coordenador). É `261801de` mais C7, a
+[rodada 2](e08_p7_playtest_fixes_delivery.md) do playtest:
+- a linha de mira de habilidade não é mais desenhada nem fica presa no chão;
+- acerto branco no ataque automático de todas as classes e evoluções, na garra e na flecha
+  inimigas e nas habilidades físicas comuns.
+
+Só apresentação; nenhum som ou WAV mudou. O usuário aceitou os efeitos provisoriamente (falta
+o teste de um amigo) e pretende fechar a P7 com este candidato.
+
+- Pasta: `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/playtest_e08/e08_6b42b305`.
+- Pastas intactas, com PCKs conferidos e nenhum arquivo alterado: `e08_79656308` (`a4f3d54a…`),
+  `e08_ba2a4b18` (`d3844a26…`), `e08_261801de` (`843d1ab7…`) e o piloto P3 (`d91bc713…`).
+
+| Arquivo | Bytes | SHA256 |
+|---|---:|---|
+| RagRPG-E08-Candidato.exe | 109127680 | 4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668 |
+| RagRPG-E08-Candidato.pck | 236961436 | 6529da02b48ca1a02866f048b11c90bbce5728f8e7056c7f37f21e5caf73191c |
+
+**Exportação.**
+- Engine `ab1824f8…b22424` e template `d34d36f3…0562` conferidos.
+- Sincronização `c3_sync_07`: 0 entradas.
+- 2911 entradas do manifesto e 2262 arquivos rastreados de runtime iguais na fixture; os mesmos
+  172 não-runtime ausentes. Saída 0 em 42,1 s; fixture restaurada.
+- A execução foi interrompida por limite de API depois da inspeção. Na retomada, EXE e PCK foram
+  conferidos contra `build_manifest.json` (bytes e SHA256) e HEAD `6b42b305`; não houve
+  reexportação.
+
+**Sondas no PCK exato.**
+- `inspect_pack` **22/22**, nenhum ausente: 79 sons P6, 92/92 cues, tabela de encaixe
+  `ragrpg_head_fit_v1` (10 classes, 640 quadros), 9/9 folhas, 19/19 manifestos, 5/5 espécies,
+  4/4 pacotes de mapa; 3362 entradas.
+- `normal_boot`: saída 0.
+- `forest_map_pack` **19/19**: 62 inimigos. Entrada 50,5 s, suspensão 8,7 s, retomada 23,5 s.
+- `export_content`: 2 falhas esperadas (mob 16/11).
+
+**Perfis.**
+
+| Grupo | Revisão | SHA256 `profile.json` |
+|---|---:|---|
+| melee (3) | 46 | 374d3ff8f5082a60ab5e3f41e55e1cbdae571316906d2777a82621d8d08163c9 |
+| magic (4) | 60 | 71787412ed589b101207fde0663b87d437a7ba52747d8775e86beb681bb1d7f2 |
+| ranged (3) | 43 | b29b04265919605792fad6ea6b5b773b7a93ea04413e7c6e9dc5f47110ca7c19 |
+
+**Atalhos e smoke.**
+- Três atalhos e `launch_<grupo>.cmd`.
+- Smoke do EXE com perfil melee: janela viva após 25 s, saída 0, sem erros, `profile.json`
+  inalterado.
+- `Jogar E08 - Arco.lnk` abriu o EXE desta pasta com o perfil `ranged` (log criado ali,
+  `profile.json` inalterado) e foi fechado.
+- `%APPDATA%/Godot/app_userdata/RagRPG E08 Candidato` não existe.
+
+**Pasta.** `LEIA-ME.md` (pt-BR) a apresenta como candidato final P7 e indica que substitui
+`e08_261801de`. `review/` traz:
+- `ROTEIRO.md` com a nova seção "Correções do segundo playtest";
+- `c7_rodada2_antes_depois/`: linha de mira inválida 1,5 s depois e acertos físicos;
+- o clipe C5, o antes/depois C6, a prévia A3, as folhas C1 e as capturas P5.
+
+**Medições.** Detalhes na seção `6b42b305` de [e08_p7_measurements.md](e08_p7_measurements.md):
+- Floresta natural contra a F10: +5% a +12% na mediana e +4% a +11% no p95, conforme a sessão.
+- Contra `261801de` na mesma sessão: +0% a +3%, sem padrão entre as ablações. É ruído; o código
+  C7 não roda sem impactos.
+- Nenhuma regressão atribuível a C7.
+
+**Ferramenta.** `tools/e08_p7_package.ps1` ganhou `-ReferencePack`/pacote `reference`, para medir
+um candidato anterior na mesma sessão. A mudança é só de ferramenta, ainda não commitada.
+
+**Editor de mapas.** O release não foi repetido: C7 não muda mapas, editor nem exportação do
+editor. Continua valendo o PASS (6/8/14).
+
+**Limitações.** As da seção `261801de`. Além delas:
+- a linha de mira deixou de aparecer também quando válida (decisão C7);
+- não houve audição nova, porque nenhum áudio mudou;
+- a suíte completa não foi repetida; C7 registra seus próprios 14 testes.

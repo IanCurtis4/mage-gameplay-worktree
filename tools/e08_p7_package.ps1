@@ -6,7 +6,9 @@ param(
     [Parameter(Mandatory)][ValidateSet('Export','Inspect','Measure','Profiles','Launchers','Smoke')][string]$Stage,
     [Parameter(Mandatory)][ValidatePattern('^[0-9a-f]{40}$')][string]$CandidateCommit,
     [ValidatePattern('^[a-z0-9_]+$')][string]$EvidenceName='',
-    [ValidateSet('baseline','pilot','candidate')][string[]]$Packs=@('baseline','pilot','candidate'),
+    [ValidateSet('baseline','pilot','reference','candidate')][string[]]$Packs=@('baseline','pilot','candidate'),
+    # Optional earlier candidate PCK (exact path) measured in the same session as 'reference'.
+    [string]$ReferencePack='',
     [ValidateSet('crowd','forest','preparation','ablation','p6_cost')][string[]]$Probes=@('crowd','forest','preparation','ablation'),
     [ValidateRange(1,5)][int]$Rounds=2,
     [int]$LockWaitMinutes=60
@@ -211,11 +213,12 @@ if ($Stage -eq 'Measure') {
     if (Test-Path -LiteralPath $root) { throw "Evidence name already used: $root" }
     [void](New-Item -ItemType Directory -Force -Path $root)
     $packMap = @{ baseline = $pkBaseline; pilot = $pkPilot; candidate = $pkPck }
+    if ($Packs -contains 'reference') { if (-not $ReferencePack -or -not (Test-Path -LiteralPath $ReferencePack)) { throw 'reference requires -ReferencePack' }; $packMap.reference = $ReferencePack }
     $scripts = @{ crowd = 'tools/e08_crowd_compare.gd'; forest = 'tools/e08_terrain_compare.gd'; preparation = 'tools/e08_p7_measure_probe.gd'; ablation = 'tools/e08_p7_measure_probe.gd'; p6_cost = 'tools/e08_p6_vfx_probe.gd' }
     $markers = @{ crowd = 'WORLD_CROWD_RESULT'; forest = 'TERRAIN_PERF_RESULT'; preparation = 'PREPARATION_FINAL_RESULT'; ablation = 'TERRAIN_PERF_RESULT'; p6_cost = '' }
     $gpu = @(Get-CimInstance Win32_VideoController | ForEach-Object { "$($_.Name) $($_.DriverVersion)" })
     $cpu = @(Get-CimInstance Win32_Processor | ForEach-Object { $_.Name })
-    [IO.File]::WriteAllText((Join-Path $root 'protocol.json'), (ConvertTo-Json -Depth 5 -InputObject ([ordered]@{ candidate_commit = $CandidateCommit; packs = [ordered]@{ baseline = @{ path = $pkBaseline; sha256 = $pkBaselineSha }; pilot = @{ path = $pkPilot; sha256 = $pkPilotSha }; candidate = @{ path = $pkPck; sha256 = (Get-Sha $pkPck) } }; engine_sha256 = $pkEngineSha; renderer = 'gl_compatibility windowed 1280x720 vsync off'; seed = 42; rounds = $Rounds; order = 'round-robin by probe, pack order alternates each round'; gpu = $gpu; cpu = $cpu; probes = $scripts })))
+    [IO.File]::WriteAllText((Join-Path $root 'protocol.json'), (ConvertTo-Json -Depth 5 -InputObject ([ordered]@{ candidate_commit = $CandidateCommit; packs = [ordered]@{ baseline = @{ path = $pkBaseline; sha256 = $pkBaselineSha }; pilot = @{ path = $pkPilot; sha256 = $pkPilotSha }; candidate = @{ path = $pkPck; sha256 = (Get-Sha $pkPck) }; reference = $(if ($ReferencePack) { @{ path = $ReferencePack; sha256 = (Get-Sha $ReferencePack) } } else { $null }) }; engine_sha256 = $pkEngineSha; renderer = 'gl_compatibility windowed 1280x720 vsync off'; seed = 42; rounds = $Rounds; order = 'round-robin by probe, pack order alternates each round'; gpu = $gpu; cpu = $cpu; probes = $scripts })))
     Enter-Lock ('measure ' + $EvidenceName)
     try {
         for ($round = 1; $round -le $Rounds; $round++) {

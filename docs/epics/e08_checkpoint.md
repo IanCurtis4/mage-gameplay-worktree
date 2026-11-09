@@ -294,3 +294,9 @@ Candidato `ba2a4b18` em `.tools/playtest_e08/e08_ba2a4b18` (PCK d3844a26…4f6b)
 Correções C4: floresta parada +7% mediana / +1% p95 contra F10 (antes +14/+17%).
 Suíte: 312/322 + 10 falhas pré-existentes ([triagem](e08_p7_triage.md)). [Release](e08_p7_release.md),
 [medições](e08_p7_measurements.md). Aguarda playtest humano; sem master/push; habitual intocado.
+
+## P7 fechada 9/11
+
+Candidato final `6b42b305` (`.tools/playtest_e08/e08_6b42b305`); efeitos aceitos
+provisoriamente após dois playtests, sujeitos ao teste de um amigo. [Fechamento](e08_p7_contract.md).
+Merge em master e atualização do habitual aguardam aceite; sem push.

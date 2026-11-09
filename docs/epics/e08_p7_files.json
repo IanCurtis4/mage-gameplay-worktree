@@ -1,5 +1,5 @@
 {
-  "state": "p7_playtest_round2",
+  "state": "p7_closed_candidate_6b42b305_pending_human_merge_decision",
   "base": "45b930ba",
   "checkout": ".tools/map-editor-m5",
   "branch": "codex/e08",
@@ -76,14 +76,15 @@
       "constraint": "no gameplay/rule/save changes; regressions found are reported with cause, fixes only inside E08 presentation files after registering them here; habitual checkout codex/playtest, personal saves and the P3 pilot delivery untouched",
       "delivery": "docs/epics/e08_p7_release.md",
       "candidate": {
-        "commit": "261801def65bb9022d7d5ffdd8c3b5bc82fd1246",
-        "folder": ".tools/playtest_e08/e08_261801de",
+        "commit": "6b42b305abc24eec774bd20acb73cee15174b71d",
+        "folder": ".tools/playtest_e08/e08_6b42b305",
+        "final_p7": true,
         "exe_sha256": "4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668",
-        "pck_sha256": "843d1ab723c9db22a72fe49ec5420b4c14d18f135c58127051f54ae1e95fbfc2",
-        "pck_bytes": 236957084
+        "pck_sha256": "6529da02b48ca1a02866f048b11c90bbce5728f8e7056c7f37f21e5caf73191c",
+        "pck_bytes": 236961436
       },
-      "evidence": "C3_sol_release_sync_c3_sync_04/_05; C3_sol_release_measure_c5c6_01; e08_261801de/validation/runs.json",
-      "result": "export ok; inspect 22/22 (79 P6 WAVs incl. 4 aa_*, 92 cues, head-fit table in PCK: ragrpg_head_fit_v1, 10 classes, 640 frames); normal boot ok; forest 19/19; export_content 2 expected (mob 16/11); profiles 3/3; launchers 3; smoke ok; short measure: forest +5%/+6%, ablation normal +9%/+7% vs F10, no new regression",
+      "evidence": "C3_sol_release_sync_c3_sync_07; C3_sol_release_measure_c7_01 (noisy, excluded), _c7_02, _c7_03; e08_6b42b305/validation/runs.json",
+      "result": "export ok (verified vs build_manifest/HEAD after API interruption, no re-export); inspect 22/22; normal boot ok; forest 19/19; export_content 2 expected (mob 16/11); profiles 3/3; launchers 3; smoke ok; idle forest vs F10 +5..12% median / +4..11% p95 by session (borderline, residual P4/P5 content); vs 261801de 0..+3%, no C7-attributable cost",
       "history": {
         "79656308": {
           "candidate": {
@@ -106,9 +107,20 @@
           },
           "result": "export ok; inspect 20/20; normal boot ok; forest 19/19; export_content 2 expected (mob 16/11); profiles 3/3; launchers 3; smoke ok; idle forest vs F10 +7%/+1-6% (was +14-16%/+17-18%); 96 idle actors +12% median (+0.4 ms) recorded; first flipbook spike 63->38 ms",
           "evidence": "C3_sol_release_sync_c3_sync_03; C3_sol_release_measure_c4_01; e08_ba2a4b18/validation/runs.json"
+        },
+        "261801de": {
+          "candidate": {
+            "commit": "261801def65bb9022d7d5ffdd8c3b5bc82fd1246",
+            "folder": ".tools/playtest_e08/e08_261801de",
+            "exe_sha256": "4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668",
+            "pck_sha256": "843d1ab723c9db22a72fe49ec5420b4c14d18f135c58127051f54ae1e95fbfc2",
+            "pck_bytes": 236957084
+          },
+          "result": "export ok; inspect 22/22 (79 P6 WAVs incl. 4 aa_*, 92 cues, head-fit table in PCK: ragrpg_head_fit_v1, 10 classes, 640 frames); normal boot ok; forest 19/19; export_content 2 expected (mob 16/11); profiles 3/3; launchers 3; smoke ok; short measure: forest +5%/+6%, ablation normal +9%/+7% vs F10, no new regression",
+          "evidence": "C3_sol_release_sync_c3_sync_04/_05; C3_sol_release_measure_c5c6_01; e08_261801de/validation/runs.json"
         }
       },
-      "post_commit_tool_changes": "tools/e08_p7_release_probe.gd (head-fit check, .gd via resource loader), tools/e08_p7_package.ps1 (export tolerates uncommitted docs/ and tools/e08_p7_* only); uncommitted, synced c3_sync_04/05"
+      "post_commit_tool_changes": "tools/e08_p7_package.ps1: -ReferencePack / reference pack for same-session comparison; uncommitted"
     },
     "C4_terra_perf": {
       "role": "Terra",
@@ -234,5 +246,11 @@
     "white_hit_other_classes": "other classes still show the ray burst expanding from a point on hit; use the white hit for them too",
     "effects": "P6/P7 effects provisionally accepted by the user pending a friend's playtest",
     "p7": "user intends to close P7 after these two fixes"
+  },
+  "closure_2026_11_09": {
+    "final_candidate": "6b42b305abc24eec774bd20acb73cee15174b71d",
+    "pck_sha256": "6529da02b48ca1a02866f048b11c90bbce5728f8e7056c7f37f21e5caf73191c",
+    "effects": "provisionally accepted pending a friend's playtest",
+    "merge": "not authorized yet; no push"
   }
 }

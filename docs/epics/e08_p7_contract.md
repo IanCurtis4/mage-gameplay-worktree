@@ -45,3 +45,24 @@ golpe e a dica de commit por quadro (A1) ficam como limitações documentadas.
 
 Aprovação técnica (Sol + Luna) não é aceite de produto. O usuário testa o candidato
 e decide merge em `master`. Sem push automático.
+
+## Fechamento P7 — 9/11
+
+Duas rodadas de playtest do usuário corrigidas: C5 (rota de movimento removida; ataque
+básico sem rajada de disparo, hit branco no alvo, sons originais de hit seco/corda do
+arco com perfil medido de referência), C6 (encaixe de peças de cabeça por classe e
+quadro), C7 (linha de mira que ficava no chão removida; hit branco para o ataque básico
+das 10 classes, inimigos e golpes físicos comuns). Efeitos P6/P7 **aceitos
+provisoriamente** pelo usuário, sujeitos ao teste de um amigo.
+
+**Candidato final P7:** `6b42b305` em `.tools/playtest_e08/e08_6b42b305`
+(PCK 6529da02…191c). Inspeção 22/22, floresta 19/19, perfis/atalhos por grupo, smoke ok.
+Floresta parada contra F10: +5% a +12% na mediana conforme a sessão (resíduo de conteúdo
+P4/P5, não das camadas C4/C7). [Release](e08_p7_release.md),
+[medições](e08_p7_measurements.md), [triagem da suíte](e08_p7_triage.md).
+
+Pendências que ficam registradas: grinalda do Elementalista e chapéu do Caçador pedem
+arte nova (briefing Codex em [head fit](e08_p7_head_fit_delivery.md)); prévia de mira
+válida deixou de existir junto com a linha; cena de 96 atores parados +12%; pico de
+~38 ms no primeiro flipbook. Atualização do checkout habitual e merge em `master`
+dependem de aceite explícito do usuário; sem push.

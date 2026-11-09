@@ -92,6 +92,17 @@ Conferir de novo o que foi pedido no primeiro playtest:
   costas; fitas da grinalda (Elementalista) e do véu cruzam o rosto de lado; tiaras deixam o
   cabelo acima visível por design.
 
+## Correções do segundo playtest (candidato final `6b42b305`)
+
+- **Linha de mira:** ao usar uma habilidade num alvo inválido, não fica mais uma linha
+  vermelha no chão depois que o personagem se move; resta só o marcador (anel com cruz,
+  vermelho quando inválido). A linha de mira também deixou de aparecer quando válida.
+- **Acerto branco em todas as classes:** ataque automático de todas as classes e evoluções,
+  garra e flecha inimigas e habilidades físicas comuns (sem assinatura própria) mostram a
+  mesma estrela branca curta. Impactos de elemento (fogo, gelo, raio, arcano, espírito,
+  natureza, geometria, sangue) e assinaturas mantêm a arte própria. Sons não mudaram.
+  Antes/depois em `review/c7_rodada2_antes_depois/`.
+
 ## Limites preservados
 
 As medições técnicas não certificam FPS de toda a campanha; carregamento inicial, portais e
