@@ -1,5 +1,5 @@
 {
-  "state": "p7_c3_release_running",
+  "state": "p7_c4_perf_fixes",
   "base": "45b930ba",
   "checkout": ".tools/map-editor-m5",
   "branch": "codex/e08",
@@ -7,7 +7,8 @@
   "evidence_root": ".godot/verification/p7",
   "human_decisions_2026_11_09": {
     "p6_audio": "accepted after listening to the preview",
-    "p7": "authorized"
+    "p7": "authorized",
+    "perf_fixes": "apply the three idle-forest presentation fixes before playtest (new candidate SHA)"
   },
   "coordinator_files": [
     "docs/epics/e08_p7_contract.md",
@@ -57,7 +58,7 @@
     "C3_sol_release": {
       "role": "Sol",
       "model": "opus",
-      "state": "partial_awaiting_candidate_commit",
+      "state": "delivered_pending_review",
       "files": [
         "docs/epics/e08_p7_release.md",
         "docs/epics/e08_p7_measurements.md",
@@ -73,21 +74,35 @@
         ".tools/playtest_e08/e08_<hash>/"
       ],
       "constraint": "no gameplay/rule/save changes; regressions found are reported with cause, fixes only inside E08 presentation files after registering them here; habitual checkout codex/playtest, personal saves and the P3 pilot delivery untouched",
-      "progress": {
-        "map_editor_release": "PASS .godot/verification/p7/C3_sol_release_m8_release_01 (import, export_release, release 6/6, release_bosque 8/8, release_forest 14/14; isolated fixture copy C3_sol_release_m8_fixture_01; shared fixture untouched; inputs = 45b930ba + uncommitted P7 work)",
-        "tools_ready": [
-          "tools/e08_p7_package.ps1",
-          "tools/e08_p7_release_probe.gd",
-          "tools/e08_p7_measure_probe.gd",
-          "tools/prepare_e08_p4_review_profile.gd (guard accepts e08_)"
-        ],
-        "docs_written": [
-          "docs/epics/e08_p7_playtest_guide.md",
-          "docs/epics/e08_p4_candidate_preparation.md (P7 note)",
-          "docs/epics/e08_p4_playtest_guide.md (pointer)"
-        ],
-        "pending": "commit SHA from coordinator -> Export, Inspect, Measure, Profiles, Launchers, Smoke, e08_p7_measurements.md, e08_p7_release.md"
-      }
+      "delivery": "docs/epics/e08_p7_release.md",
+      "candidate": {
+        "commit": "79656308a7e32cf6ee344d9b3eb179180fc3ab32",
+        "folder": ".tools/playtest_e08/e08_79656308",
+        "exe_sha256": "4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668",
+        "pck_sha256": "a4f3d54ac3e550a15155d83d75800c131849cafbfd86670b2583ddbc2bf4f878",
+        "pck_bytes": 236839412
+      },
+      "evidence": "C3_sol_release_sync_c3_sync_01; C3_sol_release_m8_release_01 (+m8_fixture_01); C3_sol_release_measure_p7_01, _p7_02; candidate validation/runs.json",
+      "result": "export ok; inspect 20/20; normal boot ok; forest 19/19; export_content 2 expected (mob 16/11); profiles 3/3; launchers 3; smoke ok; map-editor release PASS (6/8/14); forest idle regression +14-16% median / +17-18% p95 vs F10 attributed to always-on E08 presentation layers (ambience draw calls, idle feedback redraw, audio); fixes recommended, not applied (SHA kept)",
+      "post_commit_tool_change": "tools/e08_p7_measure_probe.gd: audio bus resolved by name at use (ablation fix), uncommitted"
+    },
+    "C4_terra_perf": {
+      "role": "Terra",
+      "model": "sonnet",
+      "state": "delivered_pending_review",
+      "files": [
+        "scripts/presentation/feedback_vfx_layer.gd",
+        "scripts/presentation/e08_pilot_feedback.gd",
+        "scripts/presentation/forest_ambience_layer.gd",
+        "scripts/presentation/vfx_flipbook_catalog.gd",
+        "tests/e08_feedback_vfx_test.gd",
+        "tests/e08_forest_ambience_test.gd",
+        "tests/e08_pilot_test.gd",
+        "docs/epics/e08_p7_perf_delivery.md"
+      ],
+      "constraint": "presentation only; identical visual output; no rule/timing/audio-catalog/save change",
+      "delivery": "docs/epics/e08_p7_perf_delivery.md",
+      "evidence": "C4_terra_perf_verify_c4_verify_full_01 (13/13) + probes c4_amb_before/c4_amb_after/c4_vfx_cost_after"
     }
   },
   "coordinator_notes_c1": "C1 reviewed: shockwave readable on sand/earth (outline heavy at 160%, user judges in game); wrapper gained -AllTests/-FromStep/-CheckTimeoutSeconds for full-suite runs",

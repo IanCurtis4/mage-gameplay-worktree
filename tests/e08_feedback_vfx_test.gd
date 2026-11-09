@@ -38,6 +38,7 @@ func _run() -> void:
 	await _selection()
 	await _signatures()
 	await _flood_and_lifecycle()
+	await _idle_redraw_and_preload()
 	await _determinism_and_orientation()
 	_projectile_art()
 	await _spatial()
@@ -221,6 +222,53 @@ func _polish_checks(layer) -> void:
 	layer._canvas.notification(CanvasItem.NOTIFICATION_DRAW)
 	layer.zoom_override = 0.0
 	layer.pulses.clear(); layer._on_stage_cleared()
+
+## P7-C4: no redraw while idle, one clearing redraw when the last pulse expires, flipbooks preloaded on configure.
+func _idle_redraw_and_preload() -> void:
+	VfxFlipbookCatalog._preloaded.clear()
+	check(VfxFlipbookCatalog.preloaded_ids().is_empty(), "flipbooks start unloaded in this process state")
+	var r := rig()
+	var bridge: PresentationEventBridge = r.bridge
+	var host: Host = r.host
+	var layer = r.layer
+	var ready_ids := VfxFlipbookCatalog.preloaded_ids()
+	check(ready_ids.size() == VfxFlipbookCatalog.ids().size(), "configure preloads all %d P6 flipbooks (%d ready)" % [VfxFlipbookCatalog.ids().size(), ready_ids.size()])
+	for id: StringName in VfxFlipbookCatalog.ids():
+		check(VfxFlipbookCatalog.texture(id) != null and id in ready_ids, "flipbook %s preloaded with a valid texture" % id)
+	check(VfxFlipbookCatalog.preload_all().size() == ready_ids.size(), "preload is idempotent")
+	check(VfxFlipbookCatalog.texture(&"no_such_book") == null and not &"no_such_book" in VfxFlipbookCatalog.preloaded_ids(), "unknown flipbook stays fail-closed after preload")
+	layer.flipbook_provider = func(_id: StringName) -> Dictionary: return {}
+	check(layer.flipbook(&"fire_burst").is_empty(), "missing flipbook still fails closed (provider hook)")
+	layer.flipbook_provider = Callable()
+	# Idle: zero pulses, many advances, no redraw request.
+	var base_requests: int = layer.redraw_requests
+	for i: int in 120: bridge.world_advanced.emit(1.0 / 60.0)
+	check(layer.pulses.is_empty() and layer.redraw_requests == base_requests, "idle layer with zero pulses requests no redraw (%d)" % (layer.redraw_requests - base_requests))
+	# A pulse: redraws while alive, then exactly one clearing redraw at expiry, then silence.
+	bridge.emit_confirmed(event(bridge, &"melee_swing", &"slash", {"direction_2d":Vector2.RIGHT}))
+	check(layer.pulses.size() == 1 and layer.redraw_requests == base_requests + 1, "a new pulse requests a redraw")
+	var life: float = layer.pulses[0].life
+	bridge.world_advanced.emit(life * 0.5)
+	check(layer.redraw_requests == base_requests + 2 and layer.pulses.size() == 1, "a live pulse redraws on advance")
+	bridge.world_advanced.emit(life)
+	check(layer.pulses.is_empty() and layer.redraw_requests == base_requests + 3, "expiry of the last pulse requests exactly one clearing redraw")
+	for i: int in 60: bridge.world_advanced.emit(1.0 / 60.0)
+	check(layer.redraw_requests == base_requests + 3, "no redraw after the clear")
+	# Stage change and passive clear still redraw once.
+	bridge.emit_confirmed(event(bridge, &"melee_swing", &"slash", {"direction_2d":Vector2.RIGHT}))
+	var before_stage: int = layer.redraw_requests
+	bridge.begin_stage("idle_next", true)
+	check(layer.pulses.is_empty() and layer.redraw_requests > before_stage, "stage change still clears with a redraw")
+	bridge.emit_confirmed(event(bridge, &"melee_swing", &"slash", {"direction_2d":Vector2.RIGHT}))
+	host.snapshot_passive = true
+	var before_passive: int = layer.redraw_requests
+	layer._process(0.0)
+	check(layer.pulses.is_empty() and layer.redraw_requests == before_passive + 1, "passive staging clears with one redraw")
+	layer._process(0.0)
+	check(layer.redraw_requests == before_passive + 1, "passive staging does not redraw while already empty")
+	host.snapshot_passive = false
+	layer.dispose()
+	bridge.queue_free(); host.queue_free(); await process_frame
 
 func _flood_and_lifecycle() -> void:
 	var r := rig()

@@ -85,6 +85,11 @@ func _init() -> void:
 
 func _accepts(kind: StringName) -> bool: return kind in DRAWN_KINDS
 
+## P7-C4: warm the P6 flipbook sheets once when the layer is wired, so the first signature effect does not hitch.
+func configure(source: PresentationEventBridge, controller: Node) -> void:
+	super.configure(source, controller)
+	VfxFlipbookCatalog.preload_all()
+
 func _on_stage_cleared() -> void:
 	_windows.clear(); _last_hit.clear(); _clock = 0.0
 

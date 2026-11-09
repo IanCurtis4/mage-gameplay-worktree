@@ -16,6 +16,20 @@ const MANIFESTS := {
 }
 
 static var _cache: Dictionary = {}
+## P7-C4: textures kept alive after `preload_all` so the first signature effect does not load or upload one.
+static var _preloaded: Dictionary = {}
+
+## Loads and validates every flipbook once per process. Missing or invalid sheets are skipped (they stay
+## fail-closed: `texture` still returns null for them). Returns the ids that are ready.
+static func preload_all() -> Array:
+	for id: StringName in MANIFESTS.keys():
+		if _preloaded.has(id): continue
+		var loaded := texture(id)
+		if loaded != null: _preloaded[id] = loaded
+	return preloaded_ids()
+
+static func preloaded_ids() -> Array:
+	return _preloaded.keys()
 
 static func ids() -> Array:
 	return MANIFESTS.keys()

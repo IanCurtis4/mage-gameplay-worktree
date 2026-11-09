@@ -22,7 +22,14 @@ func _init() -> void:
 	add_child(_canvas)
 	_canvas.draw.connect(_paint)
 
+## P7-C4: true while the canvas still shows pulses, so one clearing redraw is owed when the last one expires.
+var _clear_pending := false
+## Number of redraws requested so far (test and cost evidence; no gameplay use).
+var redraw_requests := 0
+
 func _redraw() -> void:
+	_clear_pending = not pulses.is_empty()
+	redraw_requests += 1
 	queue_redraw()
 	if is_instance_valid(_canvas): _canvas.queue_redraw()
 
@@ -71,7 +78,8 @@ func _advance(delta: float) -> void:
 	for i: int in range(pulses.size()-1, -1, -1):
 		pulses[i].age += delta
 		if pulses[i].age >= float(pulses[i].get("life", LIFETIME)): pulses.remove_at(i)
-	_redraw()
+	# Idle (no pulses and nothing left to clear): no redraw. The last expiry redraws once to clear the canvas.
+	if not pulses.is_empty() or _clear_pending: _redraw()
 
 func _process(_delta: float) -> void:
 	var controller: Node = host.get_ref() if host != null else null

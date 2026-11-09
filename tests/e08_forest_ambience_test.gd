@@ -19,6 +19,7 @@ func _run() -> void:
 	_test_install_rules()
 	_test_bounds_and_determinism()
 	await _test_pause()
+	_test_batching()
 	_test_catalog()
 	_test_wav()
 	await _test_view_integration()
@@ -84,6 +85,58 @@ func _test_pause() -> void:
 	var rebuilt: Variant = Layer.install(Node2D.new(), "forest", 5)
 	check(rebuilt.elapsed == 0.0, "rebuilt layer starts fresh, nothing is restored")
 	rebuilt.get_parent().free()
+
+## P7-C4: the layer is three batched commands (was ~40 primitives) and the particles are unchanged.
+func _test_batching() -> void:
+	var layer: Variant = Layer.new()
+	layer.layer_seed = 99
+	root.add_child(layer)
+	layer.elapsed = 23.0
+	layer._draw()
+	check(layer.last_batch_count == Layer.DRAW_BATCHES and Layer.DRAW_BATCHES <= 3, "ambience draws in %d batched commands (was ~40 primitives)" % layer.last_batch_count)
+	# Independent copy of the pre-batching formulas: centres must match for every leaf, mote and mist blob.
+	var size: Vector2 = layer.get_viewport_rect().size
+	var half: Vector2 = size * 0.5
+	var t := 23.0
+	var s: PackedFloat32Array = layer._state
+	var centers: PackedVector2Array = layer.particle_centers()
+	check(centers.size() == Layer.LEAVES + Layer.MOTES + Layer.MIST, "centre list covers every leaf, mote and mist blob (%d)" % centers.size())
+	var worst := 0.0
+	for k: int in Layer.LEAVES:
+		var base := k * Layer.FIELDS
+		var speed := s[base + 3]
+		var sway := sin(t * 0.7 * speed + s[base + 2])
+		var x: float = layer._wrap01(s[base] + t * 0.012 * speed + 0.03 * sway) * size.x - half.x
+		var y: float = layer._wrap01(s[base + 1] + t * 0.022 * speed) * size.y - half.y
+		worst = maxf(worst, centers[k].distance_to(Vector2(x, y)))
+	for k: int in Layer.MOTES:
+		var base := (Layer.LEAVES + k) * Layer.FIELDS
+		var speed := s[base + 3]
+		var x: float = layer._wrap01(s[base] + t * 0.004 * speed + 0.015 * sin(t * 0.5 * speed + s[base + 2])) * size.x - half.x
+		var y: float = layer._wrap01(s[base + 1] - t * 0.006 * speed) * size.y - half.y
+		worst = maxf(worst, centers[Layer.LEAVES + k].distance_to(Vector2(x, y)))
+	for k: int in Layer.MIST:
+		var base := (Layer.LEAVES + Layer.MOTES + k) * Layer.FIELDS
+		var drift: float = layer._wrap01(s[base] + t * 0.006 * s[base + 3])
+		var x: float = (drift * 1.6 - 0.3) * size.x - half.x
+		var y: float = (0.55 + 0.4 * s[base + 1]) * size.y - half.y
+		worst = maxf(worst, centers[Layer.LEAVES + Layer.MOTES + k].distance_to(Vector2(x, y)))
+	check(worst < 0.001, "particle positions equal the pre-batching formulas (max error %.6f px)" % worst)
+	check(Layer.particle_count() == 39 and Layer.LEAVES == 10 and Layer.MOTES == 20 and Layer.MIST == 5 and Layer.SHAFTS == 4, "particle counts unchanged")
+	var other: Variant = Layer.new()
+	other.layer_seed = 99
+	root.add_child(other)
+	other.elapsed = 23.0
+	other._draw()
+	check(other.particle_centers() == centers, "same seed and time give identical positions")
+	var different: Variant = Layer.new()
+	different.layer_seed = 100
+	root.add_child(different)
+	different.elapsed = 23.0
+	different._draw()
+	check(different.particle_centers() != centers, "different seed gives different positions")
+	check(Layer.REDRAW_INTERVAL == 1.0 / 30.0, "30 Hz redraw throttle kept")
+	layer.free(); other.free(); different.free()
 
 func _test_catalog() -> void:
 	var forest := Catalog.definition(&"ambience.forest")

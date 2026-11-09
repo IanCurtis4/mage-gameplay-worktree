@@ -91,8 +91,10 @@ func ablation() -> void:
 	var audio: Node = host.call("presentation_audio") if host.has_method("presentation_audio") else null
 	var view: Node = host.get("expedition_view")
 	var ambience: CanvasItem = view.get_node_or_null("ForestAmbience") as CanvasItem if view != null else null
-	var audio_bus := -1
-	if audio != null and audio.get("_buses") is Dictionary: audio_bus = AudioServer.get_bus_index(audio.get("_buses")[&"general"])
+	# The bus is resolved by NAME at each use (P0 ablation lesson): the staging buses are
+	# recreated after entry, so an index cached here can point past the bus list.
+	var audio_bus: StringName = &""
+	if audio != null and audio.get("_buses") is Dictionary: audio_bus = audio.get("_buses")[&"general"]
 	report["available"] = {"bridge": bridge != null, "feedback_layer": feedback != null, "feedback_script": str(feedback.get_script().resource_path) if feedback != null and feedback.get_script() != null else "", "forest_ambience": ambience != null, "audio": audio != null}
 	for window: int in 3:
 		await sample("normal_%d" % window)
@@ -128,7 +130,9 @@ func _ambience(ambience: CanvasItem, on: bool) -> void:
 	if ambience != null:
 		ambience.set_process(on); ambience.visible = on
 
-func _audio(audio: Node, bus: int, on: bool) -> void:
+func _audio(audio: Node, bus_name: StringName, on: bool) -> void:
 	if audio == null or not audio.has_method("_pause_world"): return
 	audio.call("_pause_world", not on)
+	var bus := AudioServer.get_bus_index(bus_name) if not bus_name.is_empty() else -1
+	report["audio_bus_resolved"] = bus
 	if bus > 0 and AudioServer.get_bus_effect_count(bus) > 0: AudioServer.set_bus_effect_enabled(bus, 0, on)
