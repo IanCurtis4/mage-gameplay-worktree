@@ -1,6 +1,6 @@
 from PIL import Image, ImageDraw
 from pathlib import Path
-import json, hashlib
+import json, hashlib, sys
 P=Path('assets/art/e08_equipment_redesign')
 rows={
 'heads_basic_source_v1.png':[None,'class_set_archer_head',None,'class_set_defender_head'],
@@ -26,6 +26,51 @@ def fit(im, size):
     l,t,r,b=box; box=(max(0,l-3),max(0,t-3),min(im.width,r+3),min(im.height,b+3))
     im=im.crop(box); im.thumbnail(size,Image.Resampling.LANCZOS)
     return im
+# --- P7-C8: Codex redraws of two head pieces (post-closure revision, same ids/paths) -------------------
+# python tools/prepare_e08_equipment_redesign.py p7_head_art
+# Sources: 2172x724 transparent RGBA, four views side by side in the same order as the 384x96 sheets
+# (S,N,E,W; the E/W mapping was checked against the previous sheets' gem/buckle side). Each view is cropped by its
+# alpha bbox (alpha>=32 +3 px margin), ALL views of one piece share one scale (so the 4 views keep their relative
+# size; the widest view fills 76 px = 19 logical px), the result is placed like the old pipeline (x centred,
+# bottom at y=68 of the 96x96 cell), and RGB under alpha 0 is alpha-bleeded (nearest opaque colour, 4 px).
+P7_STAGING = P/'p7_head_fit_staging'
+P7_PIECES = {'class_set_elementalist_head': 'class_set_elementalist_head_source_v1.png',
+             'class_set_hunter_head': 'class_set_hunter_head_source_v1.png'}
+P7_OUT = Path('assets/art/equipment/headgear')
+P7_MAX_W = 76
+def alpha_bleed(im, radius=4):
+    import numpy as np
+    a = np.array(im); rgb = a[:, :, :3].copy(); alpha = a[:, :, 3]
+    known = alpha > 0
+    for _ in range(radius):
+        newrgb = rgb.copy(); newknown = known.copy()
+        for dy, dx in ((-1,0),(1,0),(0,-1),(0,1),(-1,-1),(-1,1),(1,-1),(1,1)):
+            sh_known = np.roll(known, (dy, dx), (0, 1)); sh_rgb = np.roll(rgb, (dy, dx), (0, 1))
+            take = ~newknown & sh_known
+            newrgb[take] = sh_rgb[take]; newknown |= take
+        rgb, known = newrgb, newknown
+    out = np.zeros_like(a); out[:, :, :3] = np.where(known[:, :, None], rgb, 0); out[:, :, 3] = alpha
+    return Image.fromarray(out, 'RGBA')
+def p7_pack(piece):
+    src = Image.open(P7_STAGING/P7_PIECES[piece]).convert('RGBA')
+    vw = src.width // 4
+    crops = []
+    for v in range(4):
+        view = alpha_bleed(src.crop((v*vw, 0, (v+1)*vw, src.height)))
+        box = visible_bbox(view)
+        l, t, r, b = box; box = (max(0, l-3), max(0, t-3), min(view.width, r+3), min(view.height, b+3))
+        crops.append(view.crop(box))
+    scale = P7_MAX_W / max(c.width for c in crops)
+    atlas = Image.new('RGBA', (384, 96)); boxes = []
+    for v, c in enumerate(crops):
+        o = c.resize((max(1, round(c.width*scale)), max(1, round(c.height*scale))), Image.Resampling.LANCZOS)
+        x = v*96 + (96-o.width)//2; y = 68 - o.height
+        atlas.alpha_composite(o, (x, y)); boxes.append([x-v*96, y, x-v*96+o.width, y+o.height])
+    atlas = alpha_bleed(atlas); atlas.save(P7_OUT/(piece+'.png'))
+    print(piece, 'scale %.4f' % scale, boxes)
+if len(sys.argv) > 1 and sys.argv[1] == 'p7_head_art':
+    for piece in P7_PIECES: p7_pack(piece)
+    sys.exit(0)
 ranges={
 'heads_basic_source_v1.png':([0,254,500,765,1024],[0,400,760,1110,1536]),
 'heads_sets_a_source_v1.png':([0,244,449,709,1024],[0,390,770,1150,1536]),

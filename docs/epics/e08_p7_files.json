@@ -1,5 +1,5 @@
 {
-  "state": "p7_closed_candidate_6b42b305_pending_human_merge_decision",
+  "state": "p7_post_closure_head_art",
   "base": "45b930ba",
   "checkout": ".tools/map-editor-m5",
   "branch": "codex/e08",
@@ -206,6 +206,31 @@
         "docs/epics/e08_p7_playtest_fixes_delivery.md"
       ],
       "constraint": "presentation only; audio_event_catalog.gd registered for the weapon-variant AA cue lists (no cue/asset change)"
+    },
+    "C8_terra_head_art": {
+      "role": "Terra",
+      "model": "sonnet",
+      "state": "delivered_pending_review",
+      "inputs_read_only": [
+        "assets/art/e08_equipment_redesign/p7_head_fit_staging/class_set_elementalist_head_source_v1.png",
+        "assets/art/e08_equipment_redesign/p7_head_fit_staging/class_set_hunter_head_source_v1.png"
+      ],
+      "files": [
+        "assets/art/e08_equipment_redesign/p7_head_fit_staging/provenance.json",
+        "tools/prepare_e08_equipment_redesign.py",
+        "tools/prepare_e08_head_fit.py",
+        "scripts/actors/equipment_head_fit_data.gd",
+        "tests/e08_equipment_art_test.gd",
+        "tools/e08_p7_head_fit_probe.gd",
+        "docs/epics/e08_p7_head_fit_delivery.md",
+        "assets/art/equipment/headgear/class_set_elementalist_head.png",
+        "assets/art/equipment/headgear/class_set_hunter_head.png",
+        "assets/art/equipment/headgear/class_set_elementalist_head.png.import",
+        "assets/art/equipment/headgear/class_set_hunter_head.png.import"
+      ],
+      "constraint": "package the two Codex redraws as new revisions of the Elementalist and Hunter head pieces; list exact generated asset files here before writing them; no item/stat/loot change",
+      "delivery": "docs/epics/e08_p7_head_fit_delivery.md (secao Arte nova do Codex (C8))",
+      "evidence": "C8_terra_head_art_probe_c8_old160 (antes), _c8_fin160/_c8_fin260 (depois), C8_terra_head_art_verify_c8_verify1"
     }
   },
   "coordinator_notes_c1": "C1 reviewed: shockwave readable on sand/earth (outline heavy at 160%, user judges in game); wrapper gained -AllTests/-FromStep/-CheckTimeoutSeconds for full-suite runs",

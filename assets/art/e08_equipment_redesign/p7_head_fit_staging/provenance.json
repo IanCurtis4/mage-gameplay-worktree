@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "generator": "Codex built-in imagegen",
+  "request": "docs/epics/e08_p7_head_fit_delivery.md section 'Pecas que nao encaixam so com reposicao mecanica (brief WIP para Codex)' (Elementalist wreath: short side ribbons behind the ears, thinner/lower ring about 18 logical px; Hunter hat: lower crown, narrower brim on south/north, shallow transparent face opening)",
+  "date": "2026-11-09",
+  "rights_basis": "project_generated_output",
+  "external_reference_images": [],
+  "status": "generated_project_art_prompt_unrecorded",
+  "prompt_note": "exact prompt not recorded: Codex delivered without provenance; nothing is invented here",
+  "processing": "Delivered bytes kept unchanged in staging; packing is mechanical (tools/prepare_e08_equipment_redesign.py p7_head_art) into assets/art/equipment/headgear/<id>.png, recorded in docs/epics/e08_p7_head_fit_delivery.md (C8).",
+  "assets": [
+    {
+      "file": "class_set_elementalist_head_source_v1.png",
+      "sha256": "72ff3a4f71f657535afc85f79ca045a0ab846e7ba93c9a8f0b887749f272b033",
+      "bytes": 333511,
+      "width": 2172,
+      "height": 724,
+      "mode": "RGBA",
+      "prompt": null,
+      "views": [
+        "S",
+        "N",
+        "E",
+        "W"
+      ]
+    },
+    {
+      "file": "class_set_hunter_head_source_v1.png",
+      "sha256": "1dca30d6b5ea4bfb62a4553ac8b7b25ed0945e933456007e891b0910499f3010",
+      "bytes": 560787,
+      "width": 2172,
+      "height": 724,
+      "mode": "RGBA",
+      "prompt": null,
+      "views": [
+        "S",
+        "N",
+        "E",
+        "W"
+      ]
+    }
+  ]
+}

@@ -128,3 +128,67 @@ e08_pilot_test 350; e07_f7_presentation_test 27. Capturas finais:
 `tools/e08_p7_head_fit_probe.gd` (args `<pasta> <before|after> [160|260]`).
 Não repeti a suíte inteira (322 passos): somente os testes pedidos. Falta aceite
 humano; a verificação visual acima é minha, não auditoria independente.
+
+## Arte nova do Codex (C8)
+
+Pacote `C8_terra_head_art` (Terra). Codex redesenhou as duas peças do brief acima; esta
+seção registra a integração mecânica. Nenhum item, atributo, loot, save, caminho ou ID
+mudou: as duas peças são novas revisões dos mesmos arquivos. O catálogo de arte
+(`equipment_art_catalog.gd`) não fixa hashes de PNG; nenhum pino de teste precisou mudar.
+
+**Fontes** (somente leitura, RGBA transparente 2172×724, quatro vistas lado a lado) em
+`assets/art/e08_equipment_redesign/p7_head_fit_staging/`, com `provenance.json`
+(prompt `null`, status `generated_project_art_prompt_unrecorded`, sha256/tamanho):
+`class_set_elementalist_head_source_v1.png` (72ff3a4f…b033, 333511 B) e
+`class_set_hunter_head_source_v1.png` (1dca30d6…3010, 560787 B).
+
+**Mapeamento de vistas**: colunas S, N, E, W, a mesma ordem das folhas 384×96 anteriores.
+Conferido, não presumido: nas folhas antigas e nas fontes novas a vista 3 (E) tem a gema
+(grinalda) e a fivela (chapéu) no lado esquerdo da imagem, e a vista 4 (W) tem a gema no
+lado direito/argola central. Mesma convenção do pipeline existente (`views: S,N,E,W`).
+
+**Pipeline** (`python tools/prepare_e08_equipment_redesign.py p7_head_art`, estendido; as
+demais peças não são regeneradas): recorte por bbox alfa (alfa ≥ 32, margem 3 px) por
+vista; escala única por peça (vista mais larga = 76 px = 19 px lógicos; elementalista
+0,1954, caçadora 0,2021); LANCZOS; colocado como no pipeline antigo (centrado em x, base
+em y=68 da célula 96×96); alpha-bleed (RGB de pixels alfa 0 = cor opaca vizinha, 4 px)
+antes e depois da redução. Caixas por vista (x0,y0,x1,y1 em px 4×): elementalista
+[10,44,86,68] [10,46,85,68] [13,44,82,68] [12,44,83,68]; caçadora [10,14,85,68]
+[10,29,86,68] [10,12,85,68] [10,22,85,68]. Anel da grinalda ≈ 17–19 px lógicos de
+largura, 5–5,5 de altura (antes 15 de altura com fitas).
+
+**Hashes** (384×96): `class_set_elementalist_head.png` 08d2dc53…bd4f → a045332f173a6f29…e72c
+(16306 B); `class_set_hunter_head.png` 767c7e9b…933979b → a3b334d6ce0a4863…eafd (30556 B).
+`.import` não mudaram. Tabela de encaixe regenerada (`prepare_e08_head_fit.py write`;
+só as linhas das duas peças mudam).
+
+**Parâmetros de encaixe** (decididos olhando as capturas): elementalista
+`band, width_k 1,06, drop 0,08, vk 1,0` (antes 1,05/−0,02/0,75: a arte nova é uma linha
+fina, vk 0,75 a deixava quase invisível; drop leve a assenta na linha do cabelo);
+caçadora `cover, width_k 1,14, drop −0,12, vk 0,9` (antes 1,08/−0,09/0,85; chapéu menor
+pede mais largura relativa; testei drop −0,05, que deixava um arco de cabelo claro
+aparecendo acima da copa).
+
+**Capturas nativas** (janela 1280×720, grama, 10 classes × 4 direções × repouso/caminhada/
+ação/dano/cadáver, mais a página de cada peça em todas as 10 classes), em
+`.godot/verification/p7/`: antes (arte antiga, encaixe C6) `C8_terra_head_art_probe_c8_old160`;
+depois `..._c8_fin160` (zoom 160) e `..._c8_fin260` (leitura ampliada); iterações
+`..._c8_new160`, `..._c8_new260`, `..._c8_t1_160`. Arquivos `after_z160_elementalist.png`,
+`after_z160_hunter.png`, `after_z160_piece_class_set_{elementalist,hunter}_head.png`.
+
+**Avaliação visual (minha, não auditoria independente)**:
+* Elementalista: as fitas sumiram, nada cruza bochecha ou olho em nenhuma das quatro
+  direções nem no dano; o anel fino assenta na linha do cabelo, a gema aparece no lado
+  correto em E/W. Limitação: em escala 160 o anel é discreto (é o pedido: fino).
+* Caçadora: a copa é baixa, a aba mais estreita e levanta da testa; rosto e olhos ficam
+  visíveis em S/E/W, chapéu não engole a cabeça; acompanha o dano e o cadáver. Limitações:
+  a franja/cabelo claro do corpo continua à mostra sob a aba (é o corpo, não a peça);
+  na vista W o chapéu fica ligeiramente recuado sobre a nuca.
+* Página “todas as classes”: ambas as peças assentam nas 10 classes sem afundar no chão.
+
+**Testes** (wrapper `-Package C8_terra_head_art`, sync, import das PNGs, verify
+`c8_verify1`, 0 falhas): e08_equipment_art_test 60273; e08_directional_rig_compatibility_test
+41888; e08_directional_units_test 47494; e08_characters_test 1350;
+e06_appearance_integration_test 302; equipment_hand_alignment_test 4593; e08_pilot_test
+350; e07_f7_presentation_test 27. Nenhuma verificação alterada ou relaxada. Não repeti
+a suíte inteira. Falta aceite humano da aparência.
