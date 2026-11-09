@@ -519,7 +519,7 @@
 					"instances": [
 						{
 							"instance_id": "field",
-							"piece_hash": "60968f04d5607205c1be2fd19dce405059b9418d557839dc6aa3e37eafbc04ad",
+							"piece_hash": "0f39d8715a032d47924063c19bbaeac2430f38ad153895b223cfeee7bd9ef17b",
 							"position_xyz": [
 								0,
 								0,
@@ -533,7 +533,7 @@
 					"name": "Prado dos Terraços",
 					"pieces": [
 						{
-							"piece_hash": "60968f04d5607205c1be2fd19dce405059b9418d557839dc6aa3e37eafbc04ad",
+							"piece_hash": "0f39d8715a032d47924063c19bbaeac2430f38ad153895b223cfeee7bd9ef17b",
 							"source": {
 								"composition": null,
 								"connectors": [],
@@ -564,6 +564,36 @@
 										"kind": "prop",
 										"revision": 1,
 										"sha256": "33fb787d661d8c1378e69776b346e32f49f0be9fa15b6330d4039676587f947d"
+									},
+									{
+										"definition_id": "birch_tree",
+										"kind": "prop",
+										"revision": 1,
+										"sha256": "ab211974e6d4ada7214d6643ab7135b890647aeff097736bbe7a49a83917dc6c"
+									},
+									{
+										"definition_id": "fern_cluster",
+										"kind": "prop",
+										"revision": 1,
+										"sha256": "777436ba49db63a761462a46a7f34373e5f1a165704bf64e157a9ba84a9187b9"
+									},
+									{
+										"definition_id": "wildflower_patch",
+										"kind": "prop",
+										"revision": 1,
+										"sha256": "8791612749be07be70fff078aad47a4ea6e4f3b23c293077533109a4f710a884"
+									},
+									{
+										"definition_id": "mushroom_ring",
+										"kind": "prop",
+										"revision": 1,
+										"sha256": "b7d883a911fa7b3622baae63a9b52c12b6a2a5018edaee805e40321fdab11b4c"
+									},
+									{
+										"definition_id": "fallen_log",
+										"kind": "prop",
+										"revision": 1,
+										"sha256": "263a3ac3c0a51c5312bde468ec3b9d0238e2e330bd139bec74fa4af6baf20d9a"
 									}
 								],
 								"document_id": "forest_terraces",
@@ -104316,7 +104346,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_ac3b7ca78ab955bbf2c16206",
 										"position_xyz": [
 											-2977.18505859375,
@@ -104424,7 +104454,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_841545167e720c2a65097845",
 										"position_xyz": [
 											-3254.651123046875,
@@ -104496,7 +104526,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_3cb75bdaffcf4ec155b6c956",
 										"position_xyz": [
 											-2546.753662109375,
@@ -104520,7 +104550,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_aab3c80ec7824ad4a460d197",
 										"position_xyz": [
 											-3069.020263671875,
@@ -104604,7 +104634,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_317d9c4f97c41bd9eefd447d",
 										"position_xyz": [
 											1602.431640625,
@@ -104676,7 +104706,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_abbd6f507e9abafe11b296de",
 										"position_xyz": [
 											1788.7952880859375,
@@ -104688,7 +104718,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_7167b4a2261f4269ca9e0afe",
 										"position_xyz": [
 											944.670654296875,
@@ -104748,7 +104778,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_fcd69f0cbf96dd0399a7ce36",
 										"position_xyz": [
 											2214.838134765625,
@@ -104796,7 +104826,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_465d289d5e40ca6fa69e7ba6",
 										"position_xyz": [
 											822.8850708007813,
@@ -104808,7 +104838,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_270c4bd0e856cabedd044ab1",
 										"position_xyz": [
 											-1813.3924560546875,
@@ -104844,7 +104874,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_07eb8ad7202a7f7ba3186f61",
 										"position_xyz": [
 											-1887.095947265625,
@@ -104868,7 +104898,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_6ee34e9d344239c04a717c4c",
 										"position_xyz": [
 											-1814.3790283203125,
@@ -104904,7 +104934,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_8895b161dfdfe028ea7514af",
 										"position_xyz": [
 											-1559.822998046875,
@@ -104952,7 +104982,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_0bc644956bfbb885b48bc324",
 										"position_xyz": [
 											-2188.93798828125,
@@ -105036,7 +105066,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_161f2e1fc27e781f8f6e102c",
 										"position_xyz": [
 											-823.9459838867188,
@@ -105072,7 +105102,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_83e17898d8f6d54314042991",
 										"position_xyz": [
 											3176.322265625,
@@ -105084,7 +105114,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_e6b319ebebb0e405db6f767b",
 										"position_xyz": [
 											3427.085205078125,
@@ -105108,7 +105138,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_dea4fb5075dd4fae4a8e50fe",
 										"position_xyz": [
 											2940.563232421875,
@@ -105144,7 +105174,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_df72a1eadc6546ce6d81e483",
 										"position_xyz": [
 											2004.44384765625,
@@ -105168,7 +105198,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_27c7b078f7e0e1d1b867f39d",
 										"position_xyz": [
 											3173.072265625,
@@ -105180,7 +105210,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_9024612fd1fb0c500daa35a2",
 										"position_xyz": [
 											1990.0947265625,
@@ -105288,7 +105318,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_3cb031e1e69607f6a7032972",
 										"position_xyz": [
 											2618.7841796875,
@@ -105360,7 +105390,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_f023dbbf93c1430f20c7d1b6",
 										"position_xyz": [
 											-1788.4361572265625,
@@ -105396,7 +105426,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_a8d7abc6e0831889ea27f7ca",
 										"position_xyz": [
 											-1873.76513671875,
@@ -105432,7 +105462,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_98812301135c76140b724d3c",
 										"position_xyz": [
 											-2710.787353515625,
@@ -105456,7 +105486,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_a0befc3093d2a95a41df09ee",
 										"position_xyz": [
 											-1638.5250244140625,
@@ -105468,7 +105498,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_50805eada520f7e5264e739f",
 										"position_xyz": [
 											-2309.3251953125,
@@ -105516,7 +105546,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_da5683e85f61bcc6308d08a5",
 										"position_xyz": [
 											-1900.2923583984375,
@@ -105564,7 +105594,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_9c243379ec243b062d55da4a",
 										"position_xyz": [
 											-2584.67041015625,
@@ -105576,7 +105606,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_7c8f97ff070cada60628b33a",
 										"position_xyz": [
 											-2657.932373046875,
@@ -105588,7 +105618,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_9f56728809d1f25ac480b619",
 										"position_xyz": [
 											-3071.4501953125,
@@ -105624,7 +105654,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_862e6b11e1f43fb9c6a950a3",
 										"position_xyz": [
 											1657.3470458984375,
@@ -105828,7 +105858,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "oak_tree",
+										"definition_id": "birch_tree",
 										"placement_id": "object_c668dc387b4d4aa2f151885e",
 										"position_xyz": [
 											1948.96630859375,
@@ -105864,7 +105894,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "wildflower_patch",
 										"placement_id": "object_c0f428f0b31728dfb998ab5b",
 										"position_xyz": [
 											-1904.4163818359375,
@@ -105876,7 +105906,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "wildflower_patch",
 										"placement_id": "object_1f3359794e63d5fcd7639cee",
 										"position_xyz": [
 											-2110.0068359375,
@@ -105924,7 +105954,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "mushroom_ring",
 										"placement_id": "object_d2ba6825bca26bd19d9030be",
 										"position_xyz": [
 											-2533.83642578125,
@@ -105936,7 +105966,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "wildflower_patch",
 										"placement_id": "object_cc1a5255e8de86456df5a6c1",
 										"position_xyz": [
 											-2669.8818359375,
@@ -105948,7 +105978,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "mushroom_ring",
 										"placement_id": "object_c7fee7f238242b62f41e3ae9",
 										"position_xyz": [
 											-1602.092529296875,
@@ -105972,7 +106002,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "mushroom_ring",
 										"placement_id": "object_759327664589e2c202371f50",
 										"position_xyz": [
 											130.75164794921875,
@@ -106008,7 +106038,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "fern_cluster",
 										"placement_id": "object_293c896e452a5adaf8f42efe",
 										"position_xyz": [
 											-1491.722900390625,
@@ -106092,7 +106122,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "fern_cluster",
 										"placement_id": "object_503877cb5f07a6b11d163506",
 										"position_xyz": [
 											-626.8076171875,
@@ -106116,7 +106146,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "fern_cluster",
 										"placement_id": "object_d08e3da40346c327784b7de0",
 										"position_xyz": [
 											-2598.5361328125,
@@ -106164,7 +106194,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "wildflower_patch",
 										"placement_id": "object_74f75a670d4ac3f001ebddd0",
 										"position_xyz": [
 											-2631.23095703125,
@@ -106176,7 +106206,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "fern_cluster",
 										"placement_id": "object_5cd07878c4c458494877285e",
 										"position_xyz": [
 											-1275.87548828125,
@@ -106308,7 +106338,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "fallen_log",
 										"placement_id": "object_a017db90da5f49b9686558c7",
 										"position_xyz": [
 											-810.1930541992188,
@@ -106320,7 +106350,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "fallen_log",
 										"placement_id": "object_60b5535df4d9859d12d0f0de",
 										"position_xyz": [
 											-642.3485717773438,
@@ -106332,7 +106362,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "fern_cluster",
 										"placement_id": "object_3c52b0b901e2808b7ad8c9c0",
 										"position_xyz": [
 											-315.0376892089844,
@@ -106344,7 +106374,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "fern_cluster",
 										"placement_id": "object_72a70c6851adad5b4bfd9eed",
 										"position_xyz": [
 											100.36094665527344,
@@ -106356,7 +106386,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "fallen_log",
 										"placement_id": "object_a4f3291fc0683dd15b9d790e",
 										"position_xyz": [
 											-227.82669067382813,
@@ -106368,7 +106398,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "wildflower_patch",
 										"placement_id": "object_75a11276c79780396e693448",
 										"position_xyz": [
 											-2811.017333984375,
@@ -106428,7 +106458,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "fallen_log",
 										"placement_id": "object_561a83c8e0f80a3c9fe9e098",
 										"position_xyz": [
 											2585.475830078125,
@@ -106476,7 +106506,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "wildflower_patch",
 										"placement_id": "object_62d2909e33a43e33b1c1bac1",
 										"position_xyz": [
 											860.668701171875,
@@ -106488,7 +106518,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "wildflower_patch",
 										"placement_id": "object_735f83c4fb08e54023d7054d",
 										"position_xyz": [
 											1548.6575927734375,
@@ -106548,7 +106578,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "fern_cluster",
 										"placement_id": "object_dcb955c5784a2577a4f232f3",
 										"position_xyz": [
 											773.1898193359375,
@@ -106572,7 +106602,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "mushroom_ring",
 										"placement_id": "object_5fa0013abd80f1547bb6b7eb",
 										"position_xyz": [
 											3357.105712890625,
@@ -106608,7 +106638,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "fallen_log",
 										"placement_id": "object_71310676b1ac0fe76dfb0ef4",
 										"position_xyz": [
 											-93.21729278564453,
@@ -106620,7 +106650,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "fern_cluster",
 										"placement_id": "object_e8b9de537917327e4b905c04",
 										"position_xyz": [
 											1276.695068359375,
@@ -106644,7 +106674,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "wildflower_patch",
 										"placement_id": "object_fab30a7d4dddc0ad14f33c9f",
 										"position_xyz": [
 											1559.2076416015625,
@@ -106668,7 +106698,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "wildflower_patch",
 										"placement_id": "object_a62acac59994a400fa7fb660",
 										"position_xyz": [
 											1321.241455078125,
@@ -106680,7 +106710,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "fern_cluster",
 										"placement_id": "object_b71891331daad98097cb8586",
 										"position_xyz": [
 											2001.8531494140625,
@@ -106740,7 +106770,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "fern_cluster",
 										"placement_id": "object_1b76d3b44a815db05af5d931",
 										"position_xyz": [
 											2797.73388671875,
@@ -106776,7 +106806,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "fern_cluster",
 										"placement_id": "object_b9a1ae7a58ce4449720f4ee9",
 										"position_xyz": [
 											1646.2110595703125,
@@ -106788,7 +106818,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "fern_cluster",
 										"placement_id": "object_84d00ee5d624eef6511d71bd",
 										"position_xyz": [
 											3255.6669921875,
@@ -106800,7 +106830,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "wildflower_patch",
 										"placement_id": "object_582ae95491e4d7c299bf1757",
 										"position_xyz": [
 											-1007.3421020507813,
@@ -106848,7 +106878,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "mushroom_ring",
 										"placement_id": "object_9ab404cf85cf0b2d51ddb730",
 										"position_xyz": [
 											1588.01123046875,
@@ -106872,7 +106902,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "fern_cluster",
 										"placement_id": "object_dbfc80591046edd612325d4b",
 										"position_xyz": [
 											1667.503173828125,
@@ -106908,7 +106938,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "fern_cluster",
 										"placement_id": "object_26aef58f0a451c1814c1619b",
 										"position_xyz": [
 											2256.330078125,
@@ -106920,7 +106950,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "wildflower_patch",
 										"placement_id": "object_8ce6c58da01d19cdc37ddb59",
 										"position_xyz": [
 											3164.17431640625,
@@ -106932,7 +106962,7 @@
 										"surface_id": "ground"
 									},
 									{
-										"definition_id": "woodland_shrub",
+										"definition_id": "mushroom_ring",
 										"placement_id": "object_f7fbbc33f28dccde2daf00af",
 										"position_xyz": [
 											-902.6627197265625,
@@ -107150,7 +107180,7 @@
 				}
 			],
 			"name": "Prado dos Terraços",
-			"plan_hash": "59f6cbe479493e3da6dc8ca2f89d4f0d0a8b9b96d4d547f5ca211346a8bd3eae",
+			"plan_hash": "4b0d8824a6a5b9eddb823af0415d039a8d7b193b1b84effda8870f3594a98023",
 			"revision": 1,
 			"schema_version": 1,
 			"slots": [

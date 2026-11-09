@@ -30,6 +30,20 @@
       "record": "res://assets/art/map_authoring/materials.md"
     },
     {
+      "path": "res://assets/art/map_authoring/earth_tile_v2.png",
+      "sha256": "f8326969baca99efb9d3659b29aafc84c624024617bbb4e29c0b5f2ca1053c62",
+      "kind": "texture",
+      "rights_basis": "project_generated_output",
+      "record": "res://assets/art/map_authoring/materials_provenance.json"
+    },
+    {
+      "path": "res://assets/art/map_authoring/earth_tile_v2.png.import",
+      "sha256": "fcd03c3e080c7216963e1769240c4afa19d8240f236835d5ff9048fabc7fcc97",
+      "kind": "import",
+      "rights_basis": "project_generated_output",
+      "record": "res://assets/art/map_authoring/materials_provenance.json"
+    },
+    {
       "path": "res://assets/art/map_authoring/grass_tile.png",
       "sha256": "795bec1749232e2f6c79a90a1c02aea4b44016066e29728699f6bb6729c34171",
       "kind": "texture",
@@ -42,6 +56,34 @@
       "kind": "import",
       "rights_basis": "project_generated_output",
       "record": "res://assets/art/map_authoring/materials.md"
+    },
+    {
+      "path": "res://assets/art/map_authoring/grass_tile_v2.png",
+      "sha256": "6706e19205f2ecde3c173d290e293b53c18f2700ba5e2bc437fcacea629bda3b",
+      "kind": "texture",
+      "rights_basis": "project_generated_output",
+      "record": "res://assets/art/map_authoring/materials_provenance.json"
+    },
+    {
+      "path": "res://assets/art/map_authoring/grass_tile_v2.png.import",
+      "sha256": "bde684d0068131c1f777d1f7353afc8a7ccc533cf7093d6124192a73e65d97d6",
+      "kind": "import",
+      "rights_basis": "project_generated_output",
+      "record": "res://assets/art/map_authoring/materials_provenance.json"
+    },
+    {
+      "path": "res://assets/art/map_authoring/props/birch_tree.png",
+      "sha256": "d8269f65069cf700da5ce2d7704c77a95678c886381b5f7ac3b8e505ff32b6d5",
+      "kind": "texture",
+      "rights_basis": "project_generated_output",
+      "record": "res://assets/art/map_authoring/props/provenance.json"
+    },
+    {
+      "path": "res://assets/art/map_authoring/props/birch_tree.png.import",
+      "sha256": "321be95eab5a65228713454ef0c5197b142b045c07125ac192af3313d0e55ebb",
+      "kind": "import",
+      "rights_basis": "project_generated_output",
+      "record": "res://assets/art/map_authoring/props/provenance.json"
     },
     {
       "path": "res://assets/art/map_authoring/props/broken_pillar.png",
@@ -72,6 +114,34 @@
       "record": "res://assets/art/map_authoring/props/provenance.json"
     },
     {
+      "path": "res://assets/art/map_authoring/props/fallen_log.png",
+      "sha256": "277ca6d6dfabbaca95e915931c320da988b2acd99b5d629e7e1924a1ac78764e",
+      "kind": "texture",
+      "rights_basis": "project_generated_output",
+      "record": "res://assets/art/map_authoring/props/provenance.json"
+    },
+    {
+      "path": "res://assets/art/map_authoring/props/fallen_log.png.import",
+      "sha256": "4eb8e313167c2f38fa6fbde61534b39865715a00fb7370351b44f77561da2e13",
+      "kind": "import",
+      "rights_basis": "project_generated_output",
+      "record": "res://assets/art/map_authoring/props/provenance.json"
+    },
+    {
+      "path": "res://assets/art/map_authoring/props/fern_cluster.png",
+      "sha256": "c65deb9661899791e087f576a0b6fbaa06bd801d3e1680b1209a7804a6b9c186",
+      "kind": "texture",
+      "rights_basis": "project_generated_output",
+      "record": "res://assets/art/map_authoring/props/provenance.json"
+    },
+    {
+      "path": "res://assets/art/map_authoring/props/fern_cluster.png.import",
+      "sha256": "42a119f10472318d9c306b61080435ac96d369cd3324ea4c7c656de9b1a22209",
+      "kind": "import",
+      "rights_basis": "project_generated_output",
+      "record": "res://assets/art/map_authoring/props/provenance.json"
+    },
+    {
       "path": "res://assets/art/map_authoring/props/moss_boulder.png",
       "sha256": "db95217541dda096f763c823efc302bd634e63f9340939e862b2955ed2c05077",
       "kind": "texture",
@@ -81,6 +151,20 @@
     {
       "path": "res://assets/art/map_authoring/props/moss_boulder.png.import",
       "sha256": "194218352993faa2203dae2fec0f4b8b1556ab09373aa1b0b2bb8bddfdb29bae",
+      "kind": "import",
+      "rights_basis": "project_generated_output",
+      "record": "res://assets/art/map_authoring/props/provenance.json"
+    },
+    {
+      "path": "res://assets/art/map_authoring/props/mushroom_ring.png",
+      "sha256": "7469f50a4a230c73d649838bad6caa2fc1f638133740ef49180d6cf13fdc1db7",
+      "kind": "texture",
+      "rights_basis": "project_generated_output",
+      "record": "res://assets/art/map_authoring/props/provenance.json"
+    },
+    {
+      "path": "res://assets/art/map_authoring/props/mushroom_ring.png.import",
+      "sha256": "3cb98ec806c2aa3ea36887efede02152c6859e80870176da0e98f833c90a9a3d",
       "kind": "import",
       "rights_basis": "project_generated_output",
       "record": "res://assets/art/map_authoring/props/provenance.json"
@@ -114,6 +198,20 @@
       "record": "res://assets/art/map_authoring/props/provenance.json"
     },
     {
+      "path": "res://assets/art/map_authoring/props/wildflower_patch.png",
+      "sha256": "acd1dabc40bfc0f7a34f54bef3fd12e621d2da808ac5de91642d1df31ca33612",
+      "kind": "texture",
+      "rights_basis": "project_generated_output",
+      "record": "res://assets/art/map_authoring/props/provenance.json"
+    },
+    {
+      "path": "res://assets/art/map_authoring/props/wildflower_patch.png.import",
+      "sha256": "cad5585f57ea6dd7a93e3dc3c2ac480730216b55a5850ad11b909e9f3d92526e",
+      "kind": "import",
+      "rights_basis": "project_generated_output",
+      "record": "res://assets/art/map_authoring/props/provenance.json"
+    },
+    {
       "path": "res://assets/art/map_authoring/props/woodland_shrub.png",
       "sha256": "e3d1798b0eb14ccdbb5e33e930533e1f1e0a82e812379e25593932ffea56aae7",
       "kind": "texture",
@@ -142,6 +240,20 @@
       "record": "res://assets/art/map_authoring/materials_provenance.json"
     },
     {
+      "path": "res://assets/art/map_authoring/sand_tile_v2.png",
+      "sha256": "9a4cdef9b439be98ec10ac3e9f69da8892a812f2c64a1d2b2f40f5c879bc422e",
+      "kind": "texture",
+      "rights_basis": "project_generated_output",
+      "record": "res://assets/art/map_authoring/materials_provenance.json"
+    },
+    {
+      "path": "res://assets/art/map_authoring/sand_tile_v2.png.import",
+      "sha256": "b3f66bf33abf71033e7559d0198dd8f00e866583c6872384a4171c35c73b14e2",
+      "kind": "import",
+      "rights_basis": "project_generated_output",
+      "record": "res://assets/art/map_authoring/materials_provenance.json"
+    },
+    {
       "path": "res://assets/art/map_authoring/water_tile.png",
       "sha256": "d49a573faabd934e941f976e42fb71bc154010e21c73dbb77269d6603ef13108",
       "kind": "texture",
@@ -164,7 +276,7 @@
     },
     {
       "path": "res://data/map_authoring/prop_catalog.json",
-      "sha256": "70dbf10d01771fac14706782306f34480ffab4ad1a2e16f586588ee4ca8cf878",
+      "sha256": "7c1f3af93868430d7722ff5c9b35a16673b9cf6ff1b63031ff5a794f00ebdd58",
       "kind": "catalog",
       "rights_basis": "project_source",
       "record": ""

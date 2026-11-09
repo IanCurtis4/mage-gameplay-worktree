@@ -240,3 +240,43 @@ Regressão43/114.876checks, nativos6×4.714+405, mosaico361, PCKca728669…7test
 98.888, tudo0falhas. ZIP1.158membros. P4 técnico completo; aceite visual humano,
 conferência Luna e candidato de playtest com Root em etapa separada. P5–P7 não
 iniciados; sem master/push/habitual/save pessoal. Rascunhos Root fora do commit.
+
+
+## P5 Mundo — fase A validada 8/11
+
+Usuário autorizou P5 após P4 técnico fd32d346 (aceite visual P4 pendente) e escolheu
+espécies próprias, ambiente visual+som, materiais e props. [Contrato](e08_p5_contract.md),
+[posse](e08_p5_files.json), [briefing Codex](e08_p5_imagegen_briefs.md). Subagentes por
+papel: Sol/Opus catálogo por espécie, Terra/Sonnet ambiente/som, Luna/Haiku conferência.
+Fixture única via tools/e08_p5_fixture.ps1 (trava). Luna: 45/115.096 checks PASS.
+Fase B (espécies, materiais, props, republicação) aguarda imagegen do Codex. Sem commit
+desta fase ainda; sem master/push/habitual/save.
+
+## P5 Mundo — fase B tecnicamente validada 8/11
+
+Codex gerou espécies, materiais e props (proveniência registrada pela coordenação com
+prompt não registrado, por decisão do usuário). B1 Terra empacotou Espreitador, Arqueiro da
+Copa e Guardião (64 poses/4 vistas). B2a Terra fez a prévia; o usuário adotou grama, areia
+e terra novas, rejeitou a pedra (cliff_tile mantido) e escolheu bétula em ~25% dos
+carvalhos. B2b Sol republicou Terraços/Vales/Covil com materiais v2, bétula e decorações,
+sem mudança física/rotas/população/navproof; Bosque e representative recompilados
+(prova 63/63). Coordenação: limpeza de 12 pacotes intermediários, pinos de UI do editor
+6→11 e 17→22, fundo da expedição em texturas v2. Luna (luna_p5_verify1 + 12 sondas):
+47 testes do verify e 12 testes de mapa (incluindo forest_play 20/20 e forest_profile 3/3
+em janela) PASS, sem erros, fixture inalterada. Limites: testes nativos de UI do editor
+e exportação de release não repetidos (ver contrato). Aceite visual P4 e P5 pendente;
+sem commit, master, push, habitual ou save.
+
+## Aceite provisório P4/P5 e abertura P6 8/11
+
+O usuário deu aceite provisório de produto a P4 e P5 (arte do Codex considerada boa o
+suficiente para seguir; ajustes podem voltar depois) e autorizou P6.
+[Registro](e08_p4_p5_provisional_acceptance.md). P5 ainda não commitada; sem master/push.
+
+## P6 Feedback — tecnicamente validada 9/11
+
+Escolhas do usuário: família×elemento + assinaturas, VFX em código + flipbooks do Codex,
+síntese sonora refeita. A1 Sol (ponte/catálogos), B1/A2/A3 Terra (flipbooks, VFX no mundo
+espacial, 86 sons). Luna: 72/72 testes e 3 sondas de mapa PASS. Corrigida falha
+pré-existente do Sentinela. [Contrato e resultado](e08_p6_contract.md). Aguarda audição
+e avaliação em jogo do usuário; P5/P6 sem commit; sem master/push/habitual/save.

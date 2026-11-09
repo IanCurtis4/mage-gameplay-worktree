@@ -36,6 +36,9 @@ signal attack_requested(request: DamageRequest, target: CombatActor, ranged: boo
 signal ground_walked(from: Vector2, to: Vector2)
 signal mob_skill_requested(request: DamageRequest, target: CombatActor, projectile_speed: float, maximum_range: float)
 signal companion_requested(master: EnemyActor)
+## E08 P6 presentation-only facts (skill_committed | charge_start), emitted after the
+## canonical change; observed only by PresentationEvents. Gameplay never connects to it.
+signal presentation_fact(kind: StringName, skill_id: StringName, direction: Vector2, duration: float)
 var is_summoned := false
 var summoner_id := 0
 var summon_used := false
@@ -202,6 +205,7 @@ var _charge_cooldown := 0.0
 func _try_charge(distance: float) -> void:
 	if _charge_remaining > 0.0 or _charge_cooldown > 0.0 or distance < CHARGE_MIN or distance > CHARGE_MAX or is_rooted() or is_stunned(): return
 	_charge_remaining = CHARGE_SECONDS; _charge_cooldown = CHARGE_COOLDOWN
+	presentation_fact.emit(&"charge_start", &"enemy_charge", Vector2.ZERO, CHARGE_SECONDS)
 
 func _charge_factor() -> float:
 	return CHARGE_SPEED if _charge_remaining > 0.0 else 1.0
@@ -322,8 +326,10 @@ func configure_occurrence(spawn: MobOccurrence, catalog: MobCatalog, nav: ArenaN
 	set_animation_kind(definition.animation_kind)
 	# Cosmetic projection is derived anew, never inherited by a reconfigured NPC.
 	sync_npc_equipment_visual()
-	if occurrence.mob_base_id in [&"forest_wolf",&"forest_boar"]:
-		if not preload("res://scripts/presentation/e08_pilot_visual.gd").install_forest_atlas(self):
+	# Species presentation comes from the immutable catalog by mob_base_id; the
+	# fresh CharacterAnimation above already discarded the previous species.
+	if PilotVisual.has_species_presentation(occurrence.mob_base_id):
+		if not PilotVisual.install_forest_atlas(self):
 			push_warning("Forest presentation fallback could not be installed: "+String(occurrence.mob_base_id))
 	hard_controls.boss = occurrence.category_id == &"boss"
 	process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -333,6 +339,8 @@ func configure_occurrence(spawn: MobOccurrence, catalog: MobCatalog, nav: ArenaN
 func sync_npc_equipment_visual() -> void:
 	if character_animation==null:return
 	character_animation.set_equipment_visual({})
+	# A catalog species body that already contains its weapon gets no projection.
+	if PilotVisual.has_embedded_weapon_body(self):return
 	if character_animation.actor_kind==&"archer" and character_animation.render_descriptor().version==2:
 		# The verified static NPC body already contains its bow. Other valid V2
 		# Archer units retain the dynamic projection; invalid V2 stays fully V1.
@@ -460,6 +468,7 @@ func _try_attack(ranged: bool) -> void:
 	request.hit_rating = stat_breakdown.value(&"hit_rating")
 	request.crit_chance = 0.0
 	request.can_crit = false
+	presentation_fact.emit(&"skill_committed", request.skill_id, Vector2.ZERO, 0.0) # Identifies the basic below.
 	presentation_action.emit(&"basic_attack", global_position.direction_to(player.global_position), 0.18)
 	attack_requested.emit(request, player, ranged)
 

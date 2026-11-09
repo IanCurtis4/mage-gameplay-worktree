@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "generator": "Codex built-in imagegen",
+  "request": "docs/epics/e08_p5_imagegen_briefs.md §1 (species)",
+  "date": "2026-11-08",
+  "rights_basis": "project_generated_output",
+  "external_reference_images": [],
+  "status": "generated_project_art_prompt_unrecorded",
+  "prompt_note": "exact prompt not recorded: user asked Codex to minimize tokens (2026-11-08)",
+  "processing": "Delivered bytes kept unchanged in staging; packing/promotion is mechanical and recorded by the consuming package.",
+  "assets": [
+    {
+      "file": "east_source_v1.png",
+      "sha256": "d464a4782050b0a6461a49a44400d1b23183afd73b1376fba2b6111ff0d35958",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "prompt": null
+    },
+    {
+      "file": "north_source_v1.png",
+      "sha256": "b1abfefb6967f5319d60d5542e534ccb0af572958b9fb3bc875cc75f0ecdd299",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "prompt": null
+    },
+    {
+      "file": "south_source_v1.png",
+      "sha256": "a70c7b98a110b72d7b92412500aa84f137245627f8909a3b9001d524b4597348",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "prompt": null
+    },
+    {
+      "file": "west_source_v1.png",
+      "sha256": "4093361b730cb5cf0817a88aec9d6d2b6f6fe44f0aa9f38087c284bd4f56c04e",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "prompt": null
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "visual_id": "e08_forest_canopy_archer",
+  "actor_kind": "archer",
+  "generated_views": true,
+  "target_height": 50,
+  "views": {
+    "south": {
+      "source": "res://assets/art/e08_world/staging/species/e08_forest_canopy_archer/south_source_v1.png"
+    },
+    "north": {
+      "source": "res://assets/art/e08_world/staging/species/e08_forest_canopy_archer/north_source_v1.png"
+    },
+    "east": {
+      "source": "res://assets/art/e08_world/staging/species/e08_forest_canopy_archer/east_source_v1.png"
+    },
+    "west": {
+      "source": "res://assets/art/e08_world/staging/species/e08_forest_canopy_archer/west_source_v1.png"
+    }
+  },
+  "per_view_scale": true
+}

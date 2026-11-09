@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "generator": "Codex built-in imagegen",
+  "request": "docs/epics/e08_p5_imagegen_briefs.md §3 (props)",
+  "date": "2026-11-08",
+  "rights_basis": "project_generated_output",
+  "external_reference_images": [],
+  "status": "generated_project_art_prompt_unrecorded",
+  "prompt_note": "exact prompt not recorded: user asked Codex to minimize tokens (2026-11-08)",
+  "processing": "Delivered bytes kept unchanged in staging; packing/promotion is mechanical and recorded by the consuming package.",
+  "assets": [
+    {
+      "file": "birch_tree.png",
+      "sha256": "d8269f65069cf700da5ce2d7704c77a95678c886381b5f7ac3b8e505ff32b6d5",
+      "width": 1215,
+      "height": 1295,
+      "mode": "RGBA",
+      "prompt": null
+    },
+    {
+      "file": "fallen_log.png",
+      "sha256": "277ca6d6dfabbaca95e915931c320da988b2acd99b5d629e7e1924a1ac78764e",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGBA",
+      "prompt": null
+    },
+    {
+      "file": "fern_cluster.png",
+      "sha256": "c65deb9661899791e087f576a0b6fbaa06bd801d3e1680b1209a7804a6b9c186",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "prompt": null
+    },
+    {
+      "file": "mushroom_ring.png",
+      "sha256": "7469f50a4a230c73d649838bad6caa2fc1f638133740ef49180d6cf13fdc1db7",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "prompt": null
+    },
+    {
+      "file": "wildflower_patch.png",
+      "sha256": "acd1dabc40bfc0f7a34f54bef3fd12e621d2da808ac5de91642d1df31ca33612",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "prompt": null
+    }
+  ]
+}

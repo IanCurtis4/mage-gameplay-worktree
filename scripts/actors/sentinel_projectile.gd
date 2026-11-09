@@ -3,6 +3,7 @@ extends PlayerProjectile
 ## Kit silhouette only. Continuous collision and damage remain canonical.
 
 func _draw() -> void:
+	if world_flight != null: return # P6-A2: the spatial view renders the logical flight (WorldProjectileArt).
 	var id := request.skill_id if request != null else &""
 	if id == &"sentinel_headshot":
 		draw_line(Vector2(-24, 0), Vector2(14, 0), Color("d7f0de"), 2.0)

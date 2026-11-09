@@ -4,6 +4,7 @@ const Catalog = preload("res://scripts/presentation/audio_event_catalog.gd")
 const Preferences = preload("res://scripts/presentation/audio_preferences.gd")
 const Bridge = preload("res://scripts/presentation/presentation_event_bridge.gd")
 const Fixture = preload("res://tests/fixtures/e07/f1/fixture_input.gd")
+const Recipes = preload("res://scripts/presentation/feedback_recipe_catalog.gd")
 var checks := 0
 var failures := 0
 var notices: Array[Dictionary] = []
@@ -145,6 +146,8 @@ func _run() -> void:
 	host.free()
 	await _test_staging()
 	await _test_controller()
+	await _test_forest_cue()
+	_test_p6_selection()
 	await _test_mix_protection()
 	print("E08 audio: %s (%d checks)" % ["PASS" if failures == 0 else "FAIL",checks])
 	quit(0 if failures == 0 else 1)
@@ -200,6 +203,54 @@ func _test_controller() -> void:
 	controller.battle_controls.assign_skill(&"not_learned",2)
 	check(ui_events.size() == before+2, "refused UI assignment never confirms")
 	controller.free(); current_scene = null; paused = false
+
+func _ambience_ids(service: PresentationAudioService) -> Array[StringName]:
+	var ids: Array[StringName] = []
+	for voice: Dictionary in service._voices:
+		if voice.active and voice.channel == &"ambience": ids.append(voice.id)
+	return ids
+
+# P5 A2: the forest bed is selected by biome on stage activation; the other biomes
+# keep ambience.stage. Pause, resume, stage change and channel limits are unchanged.
+func _test_forest_cue() -> void:
+	var bus_baseline := AudioServer.bus_count
+	var host := Node2D.new(); root.add_child(host)
+	var bridge := Bridge.new(); host.add_child(bridge); bridge.bind_controller(host)
+	var service := Service.new(); bridge.add_child(service)
+	service.configure(bridge,"user://e08_audio_fixture/forest.cfg")
+	check(service.stage_biome() == "", "no biome hint by default")
+	service.set_stage_biome("forest")
+	bridge.begin_stage("forest_one")
+	check(_ambience_ids(service) == [&"ambience.forest"], "forest biome starts exactly the forest ambience")
+	check(service.diagnostics().missing_samples.is_empty() and service.diagnostics().active.ambience == 1, "real forest sample is present and uses one ambience voice")
+	var voice_stream: AudioStreamWAV = null
+	for voice: Dictionary in service._voices:
+		if voice.active and voice.channel == &"ambience": voice_stream = voice.player.stream
+	var source := load("res://assets/audio/e08/ambience_forest.wav") as AudioStreamWAV
+	check(voice_stream != null and source.loop_mode == AudioStreamWAV.LOOP_DISABLED and voice_stream != source and voice_stream.loop_mode == AudioStreamWAV.LOOP_FORWARD and voice_stream.loop_begin == 0 and voice_stream.loop_end == roundi(source.get_length()*source.mix_rate), "forest sample loops through a private whole-sample copy, source untouched")
+	paused = true; bridge._process(0.01)
+	for voice: Dictionary in service._voices:
+		if voice.active and voice.channel == &"ambience": check(voice.player.stream_paused, "forest ambience freezes with the world")
+	var played: int = service.diagnostics().played
+	paused = false; bridge._process(0.01)
+	check(service.diagnostics().played == played and _ambience_ids(service) == [&"ambience.forest"], "unpause continues the same bed without restarting or replaying")
+	played = service.diagnostics().played
+	bridge.begin_stage("forest_one",true)
+	check(service.diagnostics().played == played+1 and _ambience_ids(service) == [&"ambience.forest"] and service.diagnostics().active.effects == 0, "resume restarts only the current forest ambience")
+	check(bridge.emit_confirmed(_event(bridge,"forest_hit")) and service.diagnostics().active.effects == 1 and service.diagnostics().active.ambience == 1, "effects share the stage with the forest bed")
+	service.set_stage_biome("ruin")
+	bridge.begin_stage("ruin_one")
+	check(_ambience_ids(service) == [&"ambience.stage"] and service.diagnostics().active.effects == 0, "stage change stops the forest bed and effects; non-forest keeps ambience.stage")
+	service.set_stage_biome("forest")
+	bridge.begin_stage("forest_two")
+	check(_ambience_ids(service) == [&"ambience.forest"], "returning to the forest selects the forest bed again")
+	service.set_stage_biome("")
+	bridge.begin_stage("legacy/1")
+	check(_ambience_ids(service) == [&"ambience.stage"], "empty biome (legacy arena) keeps ambience.stage")
+	for unused: int in 7: service._play(&"ambience.forest")
+	check(service.diagnostics().active.ambience == 4 and service.get_child_count() == 32, "ambience channel limit of four still holds")
+	service.dispose(); host.free()
+	check(AudioServer.bus_count == bus_baseline, "forest cue test restores buses")
 
 func _test_staging() -> void:
 	var bus_baseline := AudioServer.bus_count
@@ -360,3 +411,128 @@ func _test_mix_protection() -> void:
 		var file := FileAccess.open(folder.path_join("mix_metrics.json"),FileAccess.WRITE)
 		check(file != null,"mix metrics file opens")
 		if file != null: file.store_string(JSON.stringify({"engine":Engine.get_version_info(),"cases":cases,"failures":failures},"  ",true)); file.close()
+
+# E08 P6 A1: cue selection by recipe with fallback, deterministic per-event variation,
+# impact rate limit before the voice pool; channels, 32 voices and priorities unchanged.
+func _p6_event(bridge: PresentationEventBridge, id: String, kind: StringName, skill: StringName, payload: Dictionary = {}) -> Dictionary:
+	var event := _event(bridge, id, kind)
+	event.skill_id = skill
+	event.payload.merge(payload, true)
+	return event
+func _p6_voice(service: PresentationAudioService, id: StringName) -> Dictionary:
+	for voice: Dictionary in service._voices:
+		if voice.active and voice.id == id: return voice
+	return {}
+func _p6_effect_ids(service: PresentationAudioService) -> Array[StringName]:
+	var ids: Array[StringName] = []
+	for voice: Dictionary in service._voices:
+		if voice.active and voice.channel == &"effects": ids.append(voice.id)
+	return ids
+## Next value of the global RNG after restoring its state: unchanged if nobody consumed it.
+var _global_state := 0
+func seed_probe() -> int:
+	if _global_state == 0: seed(12345); _global_state = 1
+	var value := randi()
+	seed(12345)
+	return value
+func _test_p6_selection() -> void:
+	var bus_baseline := AudioServer.bus_count
+	var host := Node2D.new(); root.add_child(host)
+	var bridge := Bridge.new(); host.add_child(bridge); bridge.bind_controller(host); bridge.set_process(false)
+	var service := Service.new(); bridge.add_child(service)
+	# P6-A3 shipped every planned WAV. This scenario keeps the fallback coverage by
+	# installing legacy cues + four fixture cues and marking the other planned cues
+	# absent; selection with the real assets is checked separately below.
+	var streams := {}
+	for id: StringName in Catalog.ids():
+		if not Catalog.planned_cue_ids().has(id): streams[id] = _stream(true)
+	for id: StringName in [&"p6.sig.mage_fireball", &"p6.impact.fire", &"p6.melee.physical", &"p6.trap.fire"]: streams[id] = _stream()
+	check(service.install_streams(streams), "planned cues accept fixture streams without catalog mutation")
+	for id: StringName in Catalog.planned_cue_ids():
+		if not streams.has(id): service._exists[id] = false
+	service.configure(bridge, "user://e08_audio_fixture/p6.cfg")
+	bridge.begin_stage("p6_audio")
+	check(service.diagnostics().capacity == 32 and AudioServer.bus_count == bus_baseline+4 and Catalog.LIMITS == {&"effects":24, &"interface":4, &"ambience":4}, "P6 keeps four buses and 32 voices (24/4/4)")
+	var played: int = service.diagnostics().played
+	# Selection: signature > family x element > family x physical > current kind cue.
+	bridge.emit_confirmed(_p6_event(bridge, "sig", &"impact", &"fireball"))
+	check(not _p6_voice(service, &"p6.sig.mage_fireball").is_empty() and _p6_voice(service, &"p6.sig.mage_fireball").priority == Catalog.definition(&"p6.sig.mage_fireball").priority, "fireball impact selects its signature cue with its own priority")
+	bridge.emit_confirmed(_p6_event(bridge, "element", &"impact", &"fire_spear"))
+	check(not _p6_voice(service, &"p6.impact.fire").is_empty(), "fire impact selects the family x element cue")
+	bridge.emit_confirmed(_p6_event(bridge, "fallback", &"impact", &"ice_spear"))
+	check(_p6_effect_ids(service).count(&"world.impact") == 1 and service.diagnostics().missing_samples.is_empty(), "missing planned WAV falls back to the current impact cue, without reporting planned cues missing")
+	bridge.emit_confirmed(_p6_event(bridge, "unknown", &"impact", &"not_a_skill"))
+	check(_p6_effect_ids(service).count(&"world.impact") == 2, "unknown skill keeps the kind cue")
+	bridge.emit_confirmed(_p6_event(bridge, "swing", &"melee_swing", &"brutal_strike"))
+	check(not _p6_voice(service, &"p6.melee.physical").is_empty(), "melee swing selects family x physical when its element cue is absent")
+	var before: int = service.diagnostics().played
+	bridge.emit_confirmed(_p6_event(bridge, "move", &"movement", &"dash"))
+	bridge.emit_confirmed(_p6_event(bridge, "effect", &"effect_start", &"fury"))
+	check(service.diagnostics().played == before, "new kinds without any available cue stay silent (status quo before Terra's WAVs)")
+	bridge.emit_confirmed(_p6_event(bridge, "trap", &"trap_trigger", &"explosive_trap", {"reason":"trigger"}))
+	check(not _p6_voice(service, &"p6.trap.fire").is_empty(), "explosive trap trigger selects the trap fire cue (signature WAV absent)")
+	before = service.diagnostics().played
+	bridge.emit_confirmed(_p6_event(bridge, "trap_end", &"area_end", &"explosive_trap", {"reason":"trigger"}))
+	check(service.diagnostics().played == before, "area_end of a triggered trap stays silent: the trigger carried the sound")
+	bridge.emit_confirmed(_p6_event(bridge, "trap_expire", &"area_end", &"explosive_trap", {"reason":"expire"}))
+	check(service.diagnostics().played == before+1 and _p6_effect_ids(service).has(&"world.area_end"), "expired trap keeps the area_end cue")
+	streams.erase(&"p6.trap.fire"); service.install_streams(streams)
+	bridge.emit_confirmed(_p6_event(bridge, "trap_fallback", &"trap_trigger", &"snare_trap", {"reason":"trigger"}))
+	check(_p6_effect_ids(service).count(&"world.area_end") == 2, "trap trigger falls back to today's area_end cue when no trap WAV exists")
+	check(service.select_cue(&"impact", Recipes.recipe(&"fireball")) == &"p6.sig.mage_fireball" and service.select_cue(&"impact", Recipes.recipe(&"elementalist_tri_nova")) == &"world.impact", "select_cue picks the most specific available cue")
+	# Real assets (P6-A3): with the WAVs on disk the planned cues win over the fallbacks.
+	var real := Service.new() # outside the tree: no buses, selection only
+	check(real.select_cue(&"impact", Recipes.recipe(&"ice_spear")) == &"p6.impact.ice" and real.select_cue(&"effect_start", Recipes.recipe(&"elementalist_tri_nova")) == &"p6.sig.elementalist_tri_nova" and real.select_cue(&"impact", Recipes.recipe(&"elementalist_tri_nova")) == &"p6.impact.arcane", "real WAVs: impact selects element and signature cues")
+	check(String(real.select_cue(&"movement", Recipes.recipe(&"dash"))).begins_with("p6.") and String(real.select_cue(&"effect_start", Recipes.recipe(&"fury"))).begins_with("p6.") and String(real.select_cue(&"trap_trigger", Recipes.recipe(&"snare_trap"))).begins_with("p6.trap."), "real WAVs: new kinds get their own cues")
+	check(Catalog.planned_cue_ids().all(func(id: StringName) -> bool: return Catalog.ids().has(id) and ResourceLoader.exists(Catalog.definition(id).path)), "every planned cue has its WAV and is listed in ids()")
+	real.free()
+	# Variation: deterministic from event_id, bounded, effects only.
+	var pitches := []; var volumes := []
+	var global_seed := seed_probe()
+	for index: int in 2000:
+		var variation := Service.variation_for("p6/var/%d" % index)
+		if index < 4: check(variation == Service.variation_for("p6/var/%d" % index), "variation deterministic")
+		pitches.append(variation.x); volumes.append(variation.y)
+	# Vector2 stores float32: bounds allow its rounding (1e-6), not a wider range.
+	check(pitches.min() >= 0.96-1e-6 and pitches.max() <= 1.04+1e-6 and volumes.min() >= -1.5-1e-6 and volumes.max() <= 1.5+1e-6, "variation within pitch +-4%% and volume +-1.5 dB: pitch [%s, %s] volume [%s, %s]" % [pitches.min(), pitches.max(), volumes.min(), volumes.max()])
+	check(pitches.max()-pitches.min() > 0.06 and volumes.max()-volumes.min() > 2.0, "variation actually spreads across events")
+	check(seed_probe() == global_seed, "variation never advances the global RNG")
+	var sig_voice := _p6_voice(service, &"p6.sig.mage_fireball")
+	var expected := Service.variation_for("sig")
+	check(is_equal_approx(sig_voice.player.pitch_scale, expected.x) and is_equal_approx(sig_voice.player.volume_db, expected.y), "effect voice uses the variation of its own event id")
+	service.confirm_ui()
+	for voice: Dictionary in service._voices:
+		if voice.active and voice.channel in [&"interface", &"ambience"]: check(voice.player.pitch_scale == 1.0 and voice.player.volume_db == 0.0, "interface/ambience voices never vary: " + String(voice.channel))
+	# Rate limit: same skill+target bursts and DOT ticks, before the voice pool.
+	service.clear_stage(); bridge.begin_stage("p6_rate")
+	var limited: int = service.diagnostics().rate_limited
+	var dropped: int = service.diagnostics().dropped
+	played = service.diagnostics().played
+	for index: int in 5: bridge.emit_confirmed(_p6_event(bridge, "same/%d" % index, &"impact", &"double_shot", {"target_id":"t1"}))
+	check(service.diagnostics().played == played+1 and service.diagnostics().rate_limited == limited+4, "same skill on the same target in one instant plays once")
+	for index: int in 6: bridge.emit_confirmed(_p6_event(bridge, "burst/%d" % index, &"impact", &"elementalist_tri_nova", {"target_id":"m%d" % index}))
+	check(service.diagnostics().played == played+1+Service.IMPACT_BURST_LIMIT and service.diagnostics().rate_limited == limited+4+6-Service.IMPACT_BURST_LIMIT, "one skill hitting many targets starts at most the burst limit")
+	bridge._process(Service.IMPACT_TARGET_INTERVAL+0.01)
+	check(bridge.emit_confirmed(_p6_event(bridge, "same/late", &"impact", &"double_shot", {"target_id":"t1"})) and service.diagnostics().played == played+2+Service.IMPACT_BURST_LIMIT, "same target plays again after the interval")
+	played = service.diagnostics().played
+	bridge.emit_confirmed(_p6_event(bridge, "dot/0", &"impact", &"burn_tick", {"target_id":"t2"}))
+	bridge._process(0.2)
+	bridge.emit_confirmed(_p6_event(bridge, "dot/1", &"impact", &"burn_tick", {"target_id":"t2"}))
+	bridge._process(Service.DOT_TARGET_INTERVAL)
+	bridge.emit_confirmed(_p6_event(bridge, "dot/2", &"impact", &"burn_tick", {"target_id":"t2"}))
+	check(service.diagnostics().played == played+2, "DOT ticks on one target are spaced by the periodic interval")
+	paused = true; bridge._process(0.01)
+	var frozen := bridge.world_time
+	bridge._process(5.0)
+	check(bridge.world_time == frozen, "rate-limit clock is the visual clock, frozen while paused")
+	paused = false; bridge._process(0.0)
+	played = service.diagnostics().played
+	for index: int in 10: bridge.emit_confirmed(_p6_event(bridge, "untargeted/%d" % index, &"impact", &"double_shot"))
+	check(service.diagnostics().played == played+10, "impacts without target identity are never grouped")
+	check(service.diagnostics().dropped == dropped, "rate limit acts before the voice pool (no extra priority drops)")
+	bridge.begin_stage("p6_rate_resume", true)
+	played = service.diagnostics().played
+	bridge.emit_confirmed(_p6_event(bridge, "after_stage", &"impact", &"double_shot", {"target_id":"t1"}))
+	check(service.diagnostics().played == played+1, "stage change resets rate-limit memory")
+	service.dispose(); host.free()
+	check(AudioServer.bus_count == bus_baseline, "P6 audio test restores buses")

@@ -50,6 +50,7 @@ func configure(world: WorldGeometry) -> Dictionary:
 		var line := Line2D.new(); line.points = polygon; line.add_point(polygon[0]); line.width = 2; line.default_color = Color("b3c8d2"); deck.add_child(line)
 		var label := Label.new(); label.text = "RAMPA" if ramp else (("PONTE / ANDAR SUPERIOR" if "/bridge/" in cell["surface_id"] else "PATAMAR SUPERIOR") if y > 0 else "CHÃO / PASSAGEM INFERIOR")
 		label.position = polygon[0]+Vector2(12,8); label.add_theme_font_size_override("font_size",14); deck.add_child(label)
+	clear_world_pulses()
 	if _effects == null:
 		_effects = Node2D.new(); _effects.z_index = 4090; add_child(_effects); _effects.draw.connect(_draw_effects)
 	return result
@@ -200,9 +201,45 @@ func _draw_flights(node: Node) -> void:
 		if child is PlayerProjectile or child is ArrowProjectile or child is GeometerTraceProjectile:
 			var flight: WorldProjectileMotion = child.world_flight
 			if flight != null and flight.geometry == geometry and point_visible(flight.position):
-				var head := project(flight.position); var tail := project(flight.position-flight.direction*18)
-				_effects.draw_line(tail,head,Color("ffd58d"),3,true)
+				# P6-A2: silhouette by recipe (family/element/skill); same position, collider and flight data.
+				var head := project(flight.position)
+				var heading := project(flight.position+flight.direction*20.0)-head
+				var angle := heading.angle() if heading.length_squared() > 0.0001 else 0.0
+				WorldProjectileArt.draw(_effects,WorldProjectileArt.spec(child),head,angle,flight.travelled)
 		elif child is GeometerCasting: _draw_flights(child)
+
+## P6-A2: Elementalist pulses/arc in the spatial world. A BattleIndicators instance is reused as
+## the painter (same fire/ice/lightning identity as the flat arena), parented to the effects layer,
+## fed projected coordinates and aged by its own pausable process. Presentation only.
+const GROUND_SCREEN_SCALE := 1.2 # Ground radius -> projected half-width (AXIS: 0.85*sqrt(2)).
+var _world_pulses: BattleIndicators
+
+func _ensure_world_pulses() -> BattleIndicators:
+	if _effects == null: return null
+	if not is_instance_valid(_world_pulses):
+		_world_pulses = BattleIndicators.new()
+		_world_pulses.name = "WorldElementalistPulses"
+		_world_pulses.process_mode = Node.PROCESS_MODE_PAUSABLE
+		_effects.add_child(_world_pulses)
+	return _world_pulses
+
+func _can_present(point: Vector3) -> bool:
+	if not current() or (controller != null and bool(controller.get("snapshot_passive"))): return false
+	return point.is_finite() and point_visible(point)
+
+func show_elementalist_pulse(skill_id: StringName, center: Vector3, radius: float, element: StringName) -> void:
+	if not _can_present(center): return
+	var painter := _ensure_world_pulses()
+	if painter != null: painter.show_elementalist_pulse(skill_id,project(center),radius*GROUND_SCREEN_SCALE,element)
+
+func show_elementalist_arc_link(from: Vector3, to: Vector3) -> void:
+	if not _can_present(from) and not _can_present(to): return
+	var painter := _ensure_world_pulses()
+	if painter != null: painter.show_elementalist_arc_link(project(from),project(to))
+
+func clear_world_pulses() -> void:
+	if is_instance_valid(_world_pulses):
+		_world_pulses.elementalist_pulses.clear(); _world_pulses.elementalist_arc_links.clear(); _world_pulses.queue_redraw()
 
 func _exit_tree() -> void:
 	field_views.clear()

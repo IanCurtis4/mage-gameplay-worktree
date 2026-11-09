@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "catalog_id": "ragrpg_editor_props",
-  "revision": 2,
+  "revision": 3,
   "definitions": [
     {
       "definition_id": "oak_tree",
@@ -277,6 +277,241 @@
       "origin": {
         "kind": "generated",
         "tool": "image_gen built-in",
+        "license": "project_generated_output",
+        "record": "res://assets/art/map_authoring/props/provenance.json"
+      }
+    },
+    {
+      "definition_id": "birch_tree",
+      "revision": 1,
+      "name": "Bétula",
+      "category": "trees",
+      "biome_ids": [
+        "forest",
+        "meadow",
+        "ruin"
+      ],
+      "sprite_path": "res://assets/art/map_authoring/props/birch_tree.png",
+      "sprite_sha256": "d8269f65069cf700da5ce2d7704c77a95678c886381b5f7ac3b8e505ff32b6d5",
+      "pivot_uv": [
+        0.52,
+        0.94
+      ],
+      "world_height": 226,
+      "footprint_radius": 26,
+      "body_box_xyz": [
+        -18,
+        0,
+        -18,
+        36,
+        96,
+        36
+      ],
+      "max_slope_degrees": 20,
+      "allowed_rotations": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "rotation_mode": "symmetric",
+      "capabilities": {
+        "decoration": false,
+        "body": true,
+        "attack_los": true,
+        "camera_occlusion": true
+      },
+      "origin": {
+        "kind": "generated",
+        "tool": "Codex built-in imagegen",
+        "license": "project_generated_output",
+        "record": "res://assets/art/map_authoring/props/provenance.json"
+      }
+    },
+    {
+      "definition_id": "fern_cluster",
+      "revision": 1,
+      "name": "Samambaia",
+      "category": "vegetation",
+      "biome_ids": [
+        "forest",
+        "meadow",
+        "ruin"
+      ],
+      "sprite_path": "res://assets/art/map_authoring/props/fern_cluster.png",
+      "sprite_sha256": "c65deb9661899791e087f576a0b6fbaa06bd801d3e1680b1209a7804a6b9c186",
+      "pivot_uv": [
+        0.49,
+        0.8
+      ],
+      "world_height": 46,
+      "footprint_radius": 4,
+      "body_box_xyz": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "max_slope_degrees": 45,
+      "allowed_rotations": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "rotation_mode": "symmetric",
+      "capabilities": {
+        "decoration": true,
+        "body": false,
+        "attack_los": false,
+        "camera_occlusion": false
+      },
+      "origin": {
+        "kind": "generated",
+        "tool": "Codex built-in imagegen",
+        "license": "project_generated_output",
+        "record": "res://assets/art/map_authoring/props/provenance.json"
+      }
+    },
+    {
+      "definition_id": "wildflower_patch",
+      "revision": 1,
+      "name": "Flores silvestres",
+      "category": "vegetation",
+      "biome_ids": [
+        "forest",
+        "meadow",
+        "ruin"
+      ],
+      "sprite_path": "res://assets/art/map_authoring/props/wildflower_patch.png",
+      "sprite_sha256": "acd1dabc40bfc0f7a34f54bef3fd12e621d2da808ac5de91642d1df31ca33612",
+      "pivot_uv": [
+        0.5,
+        0.7
+      ],
+      "world_height": 46,
+      "footprint_radius": 4,
+      "body_box_xyz": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "max_slope_degrees": 45,
+      "allowed_rotations": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "rotation_mode": "symmetric",
+      "capabilities": {
+        "decoration": true,
+        "body": false,
+        "attack_los": false,
+        "camera_occlusion": false
+      },
+      "origin": {
+        "kind": "generated",
+        "tool": "Codex built-in imagegen",
+        "license": "project_generated_output",
+        "record": "res://assets/art/map_authoring/props/provenance.json"
+      }
+    },
+    {
+      "definition_id": "mushroom_ring",
+      "revision": 1,
+      "name": "Anel de cogumelos",
+      "category": "vegetation",
+      "biome_ids": [
+        "forest",
+        "meadow",
+        "ruin"
+      ],
+      "sprite_path": "res://assets/art/map_authoring/props/mushroom_ring.png",
+      "sprite_sha256": "7469f50a4a230c73d649838bad6caa2fc1f638133740ef49180d6cf13fdc1db7",
+      "pivot_uv": [
+        0.49,
+        0.73
+      ],
+      "world_height": 46,
+      "footprint_radius": 4,
+      "body_box_xyz": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "max_slope_degrees": 45,
+      "allowed_rotations": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "rotation_mode": "symmetric",
+      "capabilities": {
+        "decoration": true,
+        "body": false,
+        "attack_los": false,
+        "camera_occlusion": false
+      },
+      "origin": {
+        "kind": "generated",
+        "tool": "Codex built-in imagegen",
+        "license": "project_generated_output",
+        "record": "res://assets/art/map_authoring/props/provenance.json"
+      }
+    },
+    {
+      "definition_id": "fallen_log",
+      "revision": 1,
+      "name": "Tronco caído",
+      "category": "vegetation",
+      "biome_ids": [
+        "forest",
+        "meadow",
+        "ruin"
+      ],
+      "sprite_path": "res://assets/art/map_authoring/props/fallen_log.png",
+      "sprite_sha256": "277ca6d6dfabbaca95e915931c320da988b2acd99b5d629e7e1924a1ac78764e",
+      "pivot_uv": [
+        0.49,
+        0.76
+      ],
+      "world_height": 32.5,
+      "footprint_radius": 4,
+      "body_box_xyz": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "max_slope_degrees": 45,
+      "allowed_rotations": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "rotation_mode": "symmetric",
+      "capabilities": {
+        "decoration": true,
+        "body": false,
+        "attack_los": false,
+        "camera_occlusion": false
+      },
+      "origin": {
+        "kind": "generated",
+        "tool": "Codex built-in imagegen",
         "license": "project_generated_output",
         "record": "res://assets/art/map_authoring/props/provenance.json"
       }

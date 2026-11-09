@@ -5,7 +5,18 @@ signal preferences_changed
 signal configuration_error(operation: StringName, error: int)
 const Catalog = preload("res://scripts/presentation/audio_event_catalog.gd")
 const Preferences = preload("res://scripts/presentation/audio_preferences.gd")
+const Recipes = preload("res://scripts/presentation/feedback_recipe_catalog.gd")
 const DEDUP_LIMIT := 2048
+## E08 P6 per-event variation (effects only), derived from event_id: never a global RNG.
+const PITCH_VARIATION := 0.04
+const VOLUME_VARIATION_DB := 1.5
+## E08 P6 impact rate limit, applied before the voice pool on the bridge's visual clock
+## (frozen while paused). Only impacts with a target identity are grouped.
+const IMPACT_TARGET_INTERVAL := 0.10 # Same skill on the same target (multi-projectile bursts).
+const DOT_TARGET_INTERVAL := 0.40 # Periodic recipes (DOT/maintenance ticks) on the same target.
+const IMPACT_BURST_WINDOW := 0.06 # One skill hitting many targets at once...
+const IMPACT_BURST_LIMIT := 3 # ...starts at most this many impact voices per window.
+const RATE_MEMORY_LIMIT := 256
 const OUTPUT_CEILING_DB := -1.0
 const OUTPUT_RELEASE_SECONDS := 0.1
 const OUTPUT_LIMITER_MARGIN_DB := 0.01 # Native gain interpolation can slightly overshoot its nominal ceiling.
@@ -18,6 +29,7 @@ var _seen: Dictionary = {}
 var _order: Array[String] = []
 var _epoch := -1
 var _stage := ""
+var _biome := ""
 var _sequence := 0
 var _ui_sequence := 0
 var _configured := false
@@ -27,6 +39,10 @@ var _has_passive_flag := false
 var _missing: Dictionary = {}
 var _played := 0
 var _dropped := 0
+var _rate_limited := 0
+var _impact_last: Dictionary = {}
+var _impact_bursts: Dictionary = {}
+var _exists: Dictionary = {}
 
 func _init() -> void:
 	name = "PresentationAudio"
@@ -101,6 +117,7 @@ func _bridge_exiting() -> void:
 
 func _enter_stage(id: String, epoch: int) -> void:
 	clear_stage()
+	_impact_last.clear(); _impact_bursts.clear()
 	_seen.clear(); _order.clear()
 	_epoch = epoch; _stage = id
 	_context_pending = not id.is_empty()
@@ -113,10 +130,17 @@ func _host_active() -> bool:
 	if _has_passive_flag and bool(host.get(&"snapshot_passive")): return false
 	return true
 
+## Host-provided presentation hint (set before the stage begins); never saved.
+func set_stage_biome(biome: String) -> void:
+	_biome = biome
+
+func stage_biome() -> String:
+	return _biome
+
 func _activate_context() -> void:
 	if not _context_pending or not _host_active(): return
 	_context_pending = false
-	_play(&"ambience.stage") # Activated current context only, never replay transient state.
+	_play(Catalog.ambience_for_biome(_biome)) # Activated current context only, never replay transient state.
 
 func _process(_delta: float) -> void:
 	if _configured and _context_pending: _activate_context()
@@ -137,8 +161,52 @@ func _on_event(event: Dictionary) -> void:
 		return
 	if not _host_active(): return # Staging drops transients rather than queueing them.
 	if _bridge.world_paused() and event.kind not in [&"ui_confirm", &"ui_cancel"]: return
-	var id := Catalog.for_kind(event.kind)
-	if id != &"": _play(id)
+	# P6: a triggered trap already sounded on trap_trigger; its area_end stays silent.
+	if event.kind == &"area_end" and str(event.payload.get("reason", "")) == "trigger": return
+	var recipe := Recipes.for_event(event)
+	if event.kind == &"impact" and _impact_rate_limited(event, recipe): return
+	var id := select_cue(event.kind, recipe)
+	if id != &"": _play(id, variation_for(String(event.event_id)))
+
+## Most specific cue whose sample is available, else the current cue of the kind.
+## EVENTS cues are always eligible (a missing EVENTS WAV stays reported as missing).
+func select_cue(kind: StringName, recipe: Dictionary) -> StringName:
+	for id: StringName in Catalog.candidates(kind, recipe):
+		if Catalog.EVENTS.has(id) or _streams.has(id): return id
+		if not _exists.has(id): _exists[id] = ResourceLoader.exists(Catalog.definition(id).path)
+		if _exists[id]: return id
+	return &""
+
+## Deterministic variation from the event identity: x = pitch scale, y = volume dB.
+## A private generator seeded by event_id mixes the bits; the global RNG is never touched.
+static func variation_for(event_id: String) -> Vector2:
+	var local := RandomNumberGenerator.new()
+	local.seed = event_id.hash()
+	var pitch_unit := local.randf_range(-1.0, 1.0)
+	var volume_unit := local.randf_range(-1.0, 1.0)
+	return Vector2(1.0 + PITCH_VARIATION * pitch_unit, VOLUME_VARIATION_DB * volume_unit)
+
+func _impact_rate_limited(event: Dictionary, recipe: Dictionary) -> bool:
+	var target := str(event.payload.get("target_id", ""))
+	if target.is_empty(): return false # Manual/fixture DTOs without target identity are not grouped.
+	var now := _bridge.world_time
+	var skill := String(event.skill_id)
+	var key := skill + "|" + target
+	var interval := DOT_TARGET_INTERVAL if bool(recipe.get("periodic", false)) else IMPACT_TARGET_INTERVAL
+	if _impact_last.has(key) and now - float(_impact_last[key]) < interval:
+		_rate_limited += 1; return true
+	var burst: Dictionary = _impact_bursts.get(skill, {})
+	if burst.is_empty() or now - float(burst.start) >= IMPACT_BURST_WINDOW: burst = {"start":now, "count":0}
+	if int(burst.count) >= IMPACT_BURST_LIMIT:
+		_rate_limited += 1; return true
+	burst.count = int(burst.count) + 1
+	_impact_bursts[skill] = burst
+	if _impact_last.size() >= RATE_MEMORY_LIMIT:
+		for old: Variant in _impact_last.keys():
+			if now - float(_impact_last[old]) >= DOT_TARGET_INTERVAL: _impact_last.erase(old)
+		if _impact_last.size() >= RATE_MEMORY_LIMIT: _impact_last.clear()
+	_impact_last[key] = now
+	return false
 
 func _sample(id: StringName) -> AudioStream:
 	if _streams.has(id): return _streams[id] as AudioStream
@@ -157,12 +225,12 @@ func install_streams(streams: Dictionary) -> bool:
 	_streams = streams.duplicate()
 	return true
 
-func _play(id: StringName) -> bool:
+func _play(id: StringName, variation: Vector2 = Vector2(1.0, 0.0)) -> bool:
 	if not _host_active(): return false
 	var definition := Catalog.definition(id)
 	var stream := _sample(id)
 	if stream == null: return false
-	if id == &"ambience.stage" and stream is AudioStreamWAV and stream.loop_mode == AudioStreamWAV.LOOP_DISABLED:
+	if definition.channel == &"ambience" and stream is AudioStreamWAV and stream.loop_mode == AudioStreamWAV.LOOP_DISABLED:
 		# WAV resources are shared immutable definitions: loop a private copy only.
 		var looping := stream.duplicate() as AudioStreamWAV
 		looping.loop_begin = 0
@@ -184,6 +252,10 @@ func _play(id: StringName) -> bool:
 	voice.active = true; voice.priority = definition.priority; voice.sequence = _sequence; voice.id = id
 	var player: AudioStreamPlayer = voice.player
 	player.stream = stream
+	# Only world effects vary; interface and ambience keep unity pitch and gain.
+	var varied: bool = definition.channel == &"effects"
+	player.pitch_scale = clampf(variation.x, 1.0 - PITCH_VARIATION, 1.0 + PITCH_VARIATION) if varied else 1.0
+	player.volume_db = clampf(variation.y, -VOLUME_VARIATION_DB, VOLUME_VARIATION_DB) if varied else 0.0
 	player.play()
 	player.stream_paused = definition.channel != &"interface" and is_instance_valid(_bridge) and _bridge.world_paused()
 	_played += 1
@@ -238,13 +310,14 @@ func diagnostics() -> Dictionary:
 	var counts := {&"effects":0, &"interface":0, &"ambience":0}
 	for voice: Dictionary in _voices:
 		if voice.active: counts[voice.channel] += 1
-	return {"active":counts, "capacity":_voices.size(), "played":_played, "dropped":_dropped, "missing_samples":_missing.keys(), "seen":_seen.size(), "epoch":_epoch, "stage_id":_stage}
+	return {"active":counts, "capacity":_voices.size(), "played":_played, "dropped":_dropped, "rate_limited":_rate_limited, "missing_samples":_missing.keys(), "seen":_seen.size(), "epoch":_epoch, "stage_id":_stage}
 
 func dispose() -> void:
 	_disconnect_bridge(); _bridge = null; _activation_host = null
 	for index: int in _voices.size(): _release(index)
 	for voice: Dictionary in _voices: voice.player.free()
 	_voices.clear(); _streams.clear(); _seen.clear(); _order.clear(); _missing.clear()
+	_impact_last.clear(); _impact_bursts.clear(); _exists.clear()
 	for channel: StringName in [&"effects", &"interface", &"ambience", &"general"]:
 		if _buses.has(channel):
 			var index := AudioServer.get_bus_index(_buses[channel])

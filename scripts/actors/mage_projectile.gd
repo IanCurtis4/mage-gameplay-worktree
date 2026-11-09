@@ -17,6 +17,7 @@ func _prepare_impact(victim: CombatActor) -> void:
 		request.magic_damage += electrified_bonus_magic_damage
 
 func _draw() -> void:
+	if world_flight != null: return # P6-A2: the spatial view renders the logical flight (WorldProjectileArt).
 	if request != null and request.skill_id in [&"lightning", &"electric_discharge"]:
 		var bolt := PackedVector2Array([Vector2(-18, -5), Vector2(-8, 2), Vector2(-2, -5), Vector2(5, 3), Vector2(16, 0)])
 		draw_polyline(bolt, Color(color, 0.25), 7.0, true)

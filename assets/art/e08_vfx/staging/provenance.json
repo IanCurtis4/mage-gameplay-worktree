@@ -1,0 +1,112 @@
+{
+  "assets": {
+    "arcane_warp": {
+      "path": "assets/art/e08_vfx/staging/arcane_warp.png",
+      "sha256": "5ee7f2b1d389e7dbf076840c5c50d0837f0abe03a6e836818a142b4539455fe5",
+      "width": 1254,
+      "height": 1254,
+      "generator": "Codex built-in imagegen",
+      "request": "docs/epics/e08_p6_imagegen_briefs.md §arcane_warp",
+      "prompt": null,
+      "prompt_note": "prompt exato não registrado (usuário dispensou provenance do Codex)",
+      "rights_basis": "project_generated_output",
+      "status": "generated_project_art_prompt_unrecorded"
+    },
+    "blood_rift": {
+      "path": "assets/art/e08_vfx/staging/blood_rift.png",
+      "sha256": "0590789364b8132873f42231556880cf637ffd52db0e024f9a89caa8ad438ef0",
+      "width": 1254,
+      "height": 1254,
+      "generator": "Codex built-in imagegen",
+      "request": "docs/epics/e08_p6_imagegen_briefs.md §blood_rift",
+      "prompt": null,
+      "prompt_note": "prompt exato não registrado (usuário dispensou provenance do Codex)",
+      "rights_basis": "project_generated_output",
+      "status": "generated_project_art_prompt_unrecorded"
+    },
+    "fire_burst": {
+      "path": "assets/art/e08_vfx/staging/fire_burst.png",
+      "sha256": "ce4a961234d9aafedb5d6a2afedd9debc2113ddb83a3b69cf1b6f7a9c8cd8d45",
+      "width": 1254,
+      "height": 1254,
+      "generator": "Codex built-in imagegen",
+      "request": "docs/epics/e08_p6_imagegen_briefs.md §fire_burst",
+      "prompt": null,
+      "prompt_note": "prompt exato não registrado (usuário dispensou provenance do Codex)",
+      "rights_basis": "project_generated_output",
+      "status": "generated_project_art_prompt_unrecorded"
+    },
+    "ground_shockwave": {
+      "path": "assets/art/e08_vfx/staging/ground_shockwave.png",
+      "sha256": "d8ee56f584aa82163177a985e85f00c83690a9dc4925fa8ee6295d67b1fde307",
+      "width": 1254,
+      "height": 1254,
+      "generator": "Codex built-in imagegen",
+      "request": "docs/epics/e08_p6_imagegen_briefs.md §ground_shockwave",
+      "prompt": null,
+      "prompt_note": "prompt exato não registrado (usuário dispensou provenance do Codex)",
+      "rights_basis": "project_generated_output",
+      "status": "generated_project_art_prompt_unrecorded"
+    },
+    "ice_shatter": {
+      "path": "assets/art/e08_vfx/staging/ice_shatter.png",
+      "sha256": "28623e9025043470acc29d652d589e6f2e99f96e9114e07b24073305ea94f226",
+      "width": 1254,
+      "height": 1254,
+      "generator": "Codex built-in imagegen",
+      "request": "docs/epics/e08_p6_imagegen_briefs.md §ice_shatter",
+      "prompt": null,
+      "prompt_note": "prompt exato não registrado (usuário dispensou provenance do Codex)",
+      "rights_basis": "project_generated_output",
+      "status": "generated_project_art_prompt_unrecorded"
+    },
+    "lightning_burst": {
+      "path": "assets/art/e08_vfx/staging/lightning_burst.png",
+      "sha256": "955dde854caedad2734a1b336fdf91fd09c05b36c856ef77e17efc34ed093d37",
+      "width": 1254,
+      "height": 1254,
+      "generator": "Codex built-in imagegen",
+      "request": "docs/epics/e08_p6_imagegen_briefs.md §lightning_burst",
+      "prompt": null,
+      "prompt_note": "prompt exato não registrado (usuário dispensou provenance do Codex)",
+      "rights_basis": "project_generated_output",
+      "status": "generated_project_art_prompt_unrecorded"
+    },
+    "nature_thorns": {
+      "path": "assets/art/e08_vfx/staging/nature_thorns.png",
+      "sha256": "419bc40da47c158f26fe06967a95f06830eff02e84280cd2bc75e1794e33e12f",
+      "width": 1254,
+      "height": 1254,
+      "generator": "Codex built-in imagegen",
+      "request": "docs/epics/e08_p6_imagegen_briefs.md §nature_thorns",
+      "prompt": null,
+      "prompt_note": "prompt exato não registrado (usuário dispensou provenance do Codex)",
+      "rights_basis": "project_generated_output",
+      "status": "generated_project_art_prompt_unrecorded"
+    },
+    "slash_arc": {
+      "path": "assets/art/e08_vfx/staging/slash_arc.png",
+      "sha256": "ca37be2786eb6dfbf1d53f818c67e0accb95e6b55c87ea6679de2a42056c58ea",
+      "width": 1254,
+      "height": 1254,
+      "generator": "Codex built-in imagegen",
+      "request": "docs/epics/e08_p6_imagegen_briefs.md §slash_arc",
+      "prompt": null,
+      "prompt_note": "prompt exato não registrado (usuário dispensou provenance do Codex)",
+      "rights_basis": "project_generated_output",
+      "status": "generated_project_art_prompt_unrecorded"
+    },
+    "summon_portal": {
+      "path": "assets/art/e08_vfx/staging/summon_portal.png",
+      "sha256": "e5a49e73df170351f7c2e61d2d7bbabeb80bf323f649b381556484e4dead0b16",
+      "width": 1254,
+      "height": 1254,
+      "generator": "Codex built-in imagegen",
+      "request": "docs/epics/e08_p6_imagegen_briefs.md §summon_portal",
+      "prompt": null,
+      "prompt_note": "prompt exato não registrado (usuário dispensou provenance do Codex)",
+      "rights_basis": "project_generated_output",
+      "status": "generated_project_art_prompt_unrecorded"
+    }
+  }
+}

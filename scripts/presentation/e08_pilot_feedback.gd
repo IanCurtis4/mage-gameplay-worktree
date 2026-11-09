@@ -8,10 +8,23 @@ var bridge: PresentationEventBridge
 var host: WeakRef
 var pulses: Array[Dictionary] = []
 
+## Real-renderer finding (P6-A2): a Control nested in the world canvas never paints its own draw
+## commands there, while a Node2D does. The Control stays the contract/snapshot-excluded node and owns
+## a Node2D painter child; `_paint` draws on it. `draw` on the Control still fires for observers.
+var _canvas: Node2D
+
 func _init() -> void:
 	name = "E08PilotFeedback"
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_canvas = Node2D.new()
+	_canvas.name = "Canvas"
+	add_child(_canvas)
+	_canvas.draw.connect(_paint)
+
+func _redraw() -> void:
+	queue_redraw()
+	if is_instance_valid(_canvas): _canvas.queue_redraw()
 
 func configure(source: PresentationEventBridge, controller: Node) -> void:
 	if bridge == source: return
@@ -25,14 +38,21 @@ func _active() -> bool:
 	var controller: Node = host.get_ref() if host != null else null
 	return is_instance_valid(controller) and controller.is_inside_tree() and controller.process_mode != Node.PROCESS_MODE_DISABLED and not controller.get("snapshot_passive") and not get_tree().paused
 
+## Hooks for FeedbackVfxLayer (P6-A2): which kinds are drawn, how a pulse is built, its lifetime.
+func _accepts(kind: StringName) -> bool: return kind in KINDS
+func _make_pulse(event: Dictionary, local: Vector2, _legacy: bool) -> Dictionary:
+	return {"position":local, "kind":event.kind, "age":0.0}
+func _on_stage_cleared() -> void: pass
+
 func _event(event: Dictionary) -> void:
 	if event.kind in [&"stage_enter", &"stage_exit"]:
-		pulses.clear(); queue_redraw(); return
-	if event.kind not in KINDS or not _active(): return
+		pulses.clear(); _on_stage_cleared(); _redraw(); return
+	if not _accepts(event.kind) or not _active(): return
 	var controller: Node2D = host.get_ref() as Node2D
 	var payload: Dictionary = event.payload
 	var local: Vector2
-	if payload.get("position_unavailable", false):
+	var legacy: bool = payload.get("position_unavailable", false)
+	if legacy:
 		if not payload.has("legacy_position_2d"): return
 		local = controller.to_local(payload.legacy_position_2d)
 	else:
@@ -40,23 +60,25 @@ func _event(event: Dictionary) -> void:
 		if not is_instance_valid(view): return
 		if not view.point_visible(event.position): return
 		local = controller.to_local(view.to_global(ProjectionMath.project(event.position)))
+	var pulse := _make_pulse(event, local, legacy)
+	if pulse.is_empty(): return
 	if pulses.size() >= CAP: pulses.pop_front()
-	pulses.append({"position":local, "kind":event.kind, "age":0.0})
-	queue_redraw()
+	pulses.append(pulse)
+	_redraw()
 
 func _advance(delta: float) -> void:
 	if not _active(): return
 	for i: int in range(pulses.size()-1, -1, -1):
 		pulses[i].age += delta
-		if pulses[i].age >= LIFETIME: pulses.remove_at(i)
-	queue_redraw()
+		if pulses[i].age >= float(pulses[i].get("life", LIFETIME)): pulses.remove_at(i)
+	_redraw()
 
 func _process(_delta: float) -> void:
 	var controller: Node = host.get_ref() if host != null else null
 	if not is_instance_valid(controller) or controller.process_mode == Node.PROCESS_MODE_DISABLED or bool(controller.get("snapshot_passive")):
-		if not pulses.is_empty(): pulses.clear(); queue_redraw()
+		if not pulses.is_empty(): pulses.clear(); _on_stage_cleared(); _redraw()
 
-func _draw() -> void:
+func _paint() -> void:
 	for pulse: Dictionary in pulses:
 		var t: float = clampf(pulse.age / LIFETIME, 0.0, 1.0)
 		var tint := Color("ffbb6b")
@@ -64,15 +86,15 @@ func _draw() -> void:
 		elif pulse.kind in [&"cast_cancel", &"death", &"area_end"]: tint = Color("b8a9cf")
 		var p: Vector2 = pulse.position + Vector2(0, -16)
 		var radius := 5.0 + 10.0*t
-		draw_arc(p, radius, 0, TAU, 24, Color(tint, (1.0-t)*0.65), 1.5, true)
+		_canvas.draw_arc(p, radius, 0, TAU, 24, Color(tint, (1.0-t)*0.65), 1.5, true)
 		for side: float in [-1.0, 1.0]:
-			draw_line(p + Vector2(side*(radius+3), 0), p + Vector2(side*(radius+7), 0), Color(tint, (1.0-t)*0.8), 1.5, true)
+			_canvas.draw_line(p + Vector2(side*(radius+3), 0), p + Vector2(side*(radius+7), 0), Color(tint, (1.0-t)*0.8), 1.5, true)
 
 func dispose() -> void:
 	if is_instance_valid(bridge):
 		if bridge.event_confirmed.is_connected(_event): bridge.event_confirmed.disconnect(_event)
 		if bridge.world_advanced.is_connected(_advance): bridge.world_advanced.disconnect(_advance)
-	bridge = null; host = null; pulses.clear()
-	queue_redraw()
+	bridge = null; host = null; pulses.clear(); _on_stage_cleared()
+	_redraw()
 
 func _exit_tree() -> void: dispose()

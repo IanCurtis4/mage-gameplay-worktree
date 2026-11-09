@@ -72,6 +72,81 @@
       "prompts": [
         "Use case: stylized-concept. Asset type: a single production environment sprite on genuine transparent alpha for a polished 2D isometric fantasy RPG. Subject: one broad low sun-weathered desert sandstone boulder, asymmetrical rounded wind-worn mass with a few restrained shallow strata, tan ochre and muted reddish-brown stone, a clearly defined stable ground contact base. Orthographic isometric view from above about30degrees. Polished hand-painted naturalistic fantasy strategy/RPG environment art, softly sculpted volume, fine readable stone texture, warm diffuse upper-left highlights and soft cool shadows, no black outline, no pixel art, no low-poly facets. Exactly one boulder, whole object fully visible with at least12percent transparent empty margin on every side. No grass, moss, flowers, cactus, sand patch, ground tile, platform, scene, other rocks, horizon, detached cast shadow, glow, haze, frame, text or watermark. A solid obstacle clear at small game scale. Transparent background with real alpha, no opaque matte."
       ]
+    },
+    {
+      "id": "birch_tree",
+      "path": "birch_tree.png",
+      "sha256": "d8269f65069cf700da5ce2d7704c77a95678c886381b5f7ac3b8e505ff32b6d5",
+      "width": 1215,
+      "height": 1295,
+      "source": "assets/art/e08_world/staging/props/birch_tree.png",
+      "generator": "Codex built-in imagegen",
+      "request": "docs/epics/e08_p5_imagegen_briefs.md §3 (props)",
+      "prompt": null,
+      "prompt_note": "exact prompt not recorded: user asked Codex to minimize tokens (2026-11-08)",
+      "rights_basis": "project_generated_output",
+      "status": "generated_project_art_prompt_unrecorded",
+      "promotion": "E08 P5 B2b, 2026-11-08: delivered bytes copied unchanged"
+    },
+    {
+      "id": "fern_cluster",
+      "path": "fern_cluster.png",
+      "sha256": "c65deb9661899791e087f576a0b6fbaa06bd801d3e1680b1209a7804a6b9c186",
+      "width": 1536,
+      "height": 1024,
+      "source": "assets/art/e08_world/staging/props/fern_cluster.png",
+      "generator": "Codex built-in imagegen",
+      "request": "docs/epics/e08_p5_imagegen_briefs.md §3 (props)",
+      "prompt": null,
+      "prompt_note": "exact prompt not recorded: user asked Codex to minimize tokens (2026-11-08)",
+      "rights_basis": "project_generated_output",
+      "status": "generated_project_art_prompt_unrecorded",
+      "promotion": "E08 P5 B2b, 2026-11-08: delivered bytes copied unchanged"
+    },
+    {
+      "id": "wildflower_patch",
+      "path": "wildflower_patch.png",
+      "sha256": "acd1dabc40bfc0f7a34f54bef3fd12e621d2da808ac5de91642d1df31ca33612",
+      "width": 1536,
+      "height": 1024,
+      "source": "assets/art/e08_world/staging/props/wildflower_patch.png",
+      "generator": "Codex built-in imagegen",
+      "request": "docs/epics/e08_p5_imagegen_briefs.md §3 (props)",
+      "prompt": null,
+      "prompt_note": "exact prompt not recorded: user asked Codex to minimize tokens (2026-11-08)",
+      "rights_basis": "project_generated_output",
+      "status": "generated_project_art_prompt_unrecorded",
+      "promotion": "E08 P5 B2b, 2026-11-08: delivered bytes copied unchanged"
+    },
+    {
+      "id": "mushroom_ring",
+      "path": "mushroom_ring.png",
+      "sha256": "7469f50a4a230c73d649838bad6caa2fc1f638133740ef49180d6cf13fdc1db7",
+      "width": 1536,
+      "height": 1024,
+      "source": "assets/art/e08_world/staging/props/mushroom_ring.png",
+      "generator": "Codex built-in imagegen",
+      "request": "docs/epics/e08_p5_imagegen_briefs.md §3 (props)",
+      "prompt": null,
+      "prompt_note": "exact prompt not recorded: user asked Codex to minimize tokens (2026-11-08)",
+      "rights_basis": "project_generated_output",
+      "status": "generated_project_art_prompt_unrecorded",
+      "promotion": "E08 P5 B2b, 2026-11-08: delivered bytes copied unchanged"
+    },
+    {
+      "id": "fallen_log",
+      "path": "fallen_log.png",
+      "sha256": "277ca6d6dfabbaca95e915931c320da988b2acd99b5d629e7e1924a1ac78764e",
+      "width": 2172,
+      "height": 724,
+      "source": "assets/art/e08_world/staging/props/fallen_log.png",
+      "generator": "Codex built-in imagegen",
+      "request": "docs/epics/e08_p5_imagegen_briefs.md §3 (props)",
+      "prompt": null,
+      "prompt_note": "exact prompt not recorded: user asked Codex to minimize tokens (2026-11-08)",
+      "rights_basis": "project_generated_output",
+      "status": "generated_project_art_prompt_unrecorded",
+      "promotion": "E08 P5 B2b, 2026-11-08: delivered bytes copied unchanged"
     }
   ]
 }

@@ -1,0 +1,38 @@
+{
+  "id": "lightning_burst",
+  "revision": 1,
+  "source": "assets/art/e08_vfx/staging/lightning_burst.png",
+  "source_sha256": "955dde854caedad2734a1b336fdf91fd09c05b36c856ef77e17efc34ed093d37",
+  "texture": "res://assets/art/e08_vfx/lightning_burst/flipbook.png",
+  "grid": [
+    4,
+    4
+  ],
+  "cell": [
+    160,
+    160
+  ],
+  "frames": 16,
+  "empty_frames": [],
+  "anchor_uv": [
+    0.5,
+    0.5
+  ],
+  "suggested_fps": 16,
+  "loop": false,
+  "world_diameter_hint": 156.0,
+  "source_common_bbox": [
+    16,
+    83,
+    300,
+    269
+  ],
+  "source_window": [
+    16,
+    34,
+    284
+  ],
+  "peak_frame": 6,
+  "rgba_sha256": "ada71d88b649d0ee5e50b1eb1bf713750b22e273a1c840f68a0b58b7fad1c482",
+  "png_sha256": "a4edb8a8574e508e69e4af1434b36ee8bac33d6b2f7ff37601474a9554ebb84b"
+}

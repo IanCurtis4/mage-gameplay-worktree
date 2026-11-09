@@ -60,8 +60,10 @@ func _run() -> void:
 		check(wav != null and wav.mix_rate == 44100 and wav.stereo == false and wav.format == AudioStreamWAV.FORMAT_16_BITS and wav.loop_mode == AudioStreamWAV.LOOP_DISABLED, "production WAV valid: " + path)
 		if wav != null:
 			var peak := 0
-			for n: int in range(0,wav.data.size()-1,2):
-				var value := wav.data.decode_s16(n)
+			# Read the PCM buffer once: each `wav.data` access copies the whole sample.
+			var pcm := wav.data
+			for n: int in range(0,pcm.size()-1,2):
+				var value := pcm.decode_s16(n)
 				peak = maxi(peak, absi(value))
 			check(peak > 0 and peak < 32767,"audible non-clipped PCM: " + path)
 	feedback.dispose(); host.queue_free(); await process_frame
@@ -70,6 +72,9 @@ func _run() -> void:
 	var controller: RunController = sample.controller
 	var spatial_bridge := controller.presentation_events()
 	var spatial_feedback: Control = spatial_bridge.get_node("E08PilotFeedback")
+	# P6-A2: the controller installs FeedbackVfxLayer (recipe visuals) under the same pilot name and contract:
+	# a Control (snapshot-excluded) deriving from this pilot class, painting on a Node2D child because a Control does not paint in the world canvas.
+	check(spatial_feedback is Feedback and spatial_feedback.get_script() != Feedback and spatial_feedback.get_node("Canvas") is Node2D, "controller installs the recipe layer derived from the pilot feedback contract")
 	var lower: Vector3 = sample.lower.world_point().position
 	var upper: Vector3 = sample.upper.world_point().position
 	check(not sample.view.point_visible(lower) and sample.view.point_visible(upper), "fixture has occluded lower anchor and visible upper anchor")

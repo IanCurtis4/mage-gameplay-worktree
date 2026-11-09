@@ -2,6 +2,7 @@ extends SceneTree
 ## Actual consumers, immutable catalog, specific fallback and cold graph restore.
 const D = preload("res://tests/fixtures/e08_directional/fixture.gd")
 const VISUAL = preload("res://scripts/presentation/e08_pilot_visual.gd")
+const SPECIES = preload("res://scripts/presentation/species_presentation_catalog.gd")
 const NPCS: Array[String] = ["warrior","gel","beast_master","animal_companion","e08_forest_wolf","e08_forest_boar"]
 const IDS: Array[StringName] = [&"demo_archer",&"demo_chaser",&"pilot_bulwark_species",&"pilot_echo_species",&"pilot_ember_species",&"pilot_frost_species",&"pilot_precision_species",&"pilot_trail_species",&"test_gel",&"test_beast_master",&"test_animal_companion",&"forest_wolf",&"forest_boar",&"forest_stalker",&"forest_canopy_archer",&"forest_ancient_warden"]
 var checks := 0
@@ -69,8 +70,10 @@ func actual_consumers() -> void:
 		check(actor.configure_occurrence(occurrence,catalog,host.navigation,host.player).ok,"actual occurrence "+String(id))
 		host.add_child(actor);host.enemies.append(actor);actor.set_process(false);samples.append(actor)
 		var definition := catalog.get_definition(id)
-		var visual_id := "e08_"+String(id) if id in [&"forest_wolf",&"forest_boar"] else String(definition.animation_kind)
-		var expected := "res://assets/art/animations/directional/%s/%s.png" % [visual_id,"npc_body" if definition.animation_kind==&"archer" else "body"]
+		# Forest species own a default unit (P5 B1): the catalog's visual_id and plain body.png.
+		var own := VISUAL.has_species_presentation(id)
+		var visual_id := String(SPECIES.visual_id(id)) if own else String(definition.animation_kind)
+		var expected := "res://assets/art/animations/directional/%s/%s.png" % [visual_id,"npc_body" if definition.animation_kind==&"archer" and not own else "body"]
 		check(actor.character_animation.atlas.resource_path==expected,"actual precise default/override "+String(id))
 		var visual := actor.character_animation.equipment_visual
 		check(visual.is_empty(),"one static bow in verified NPCArcher body; otherNPCs unadorned "+String(id))

@@ -17,22 +17,22 @@ const PROPS := {
 # ground: tile texture, tile size on screen, tint. layers: cell spacing, row
 # squash, fill chance, prop weights and scales, tint, parallax factor.
 const THEMES := {
-	"forest": {"ground":{"path":ART+"grass_tile.png","tile":300.0,"tint":Color(0.36,0.48,0.36)},"factor":0.38,
+	"forest": {"ground":{"path":ART+"grass_tile_v2.png","tile":300.0,"tint":Color(0.36,0.48,0.36)},"factor":0.38,
 		"layers":[
 			{"name":"far","factor":0.38,"cell":110.0,"rows":0.55,"fill":0.92,"tint":Color(0.42,0.54,0.46),"props":[["oak",5,0.13],["shrub",2,0.09],["boulder",1,0.06]]},
 			{"name":"near","factor":0.58,"cell":210.0,"rows":0.6,"fill":0.45,"tint":Color(0.62,0.72,0.62),"props":[["oak",4,0.18],["shrub",2,0.12]]}],
 		"haze":Color(0.42,0.6,0.52,0.20),"shade":Color(0.02,0.06,0.05,0.55)},
-	"ruin": {"ground":{"path":ART+"earth_tile.png","tile":300.0,"tint":Color(0.42,0.38,0.42)},"factor":0.38,
+	"ruin": {"ground":{"path":ART+"earth_tile_v2.png","tile":300.0,"tint":Color(0.42,0.38,0.42)},"factor":0.38,
 		"layers":[
 			{"name":"far","factor":0.38,"cell":120.0,"rows":0.5,"fill":0.7,"tint":Color(0.5,0.46,0.54),"props":[["pillar",3,0.09],["boulder",3,0.07],["shrub",2,0.07],["oak",1,0.11]]},
 			{"name":"near","factor":0.58,"cell":240.0,"rows":0.6,"fill":0.4,"tint":Color(0.66,0.62,0.68),"props":[["pillar",3,0.13],["boulder",2,0.09]]}],
 		"haze":Color(0.55,0.42,0.55,0.20),"shade":Color(0.05,0.03,0.06,0.55)},
-	"desert": {"ground":{"path":ART+"sand_tile.png","tile":320.0,"tint":Color(0.78,0.66,0.52)},"factor":0.38,
+	"desert": {"ground":{"path":ART+"sand_tile_v2.png","tile":320.0,"tint":Color(0.78,0.66,0.52)},"factor":0.38,
 		"layers":[
 			{"name":"far","factor":0.38,"cell":140.0,"rows":0.5,"fill":0.45,"tint":Color(0.78,0.68,0.58),"props":[["sandstone",3,0.07],["cactus",2,0.08]]},
 			{"name":"near","factor":0.58,"cell":260.0,"rows":0.6,"fill":0.3,"tint":Color(0.86,0.78,0.68),"props":[["cactus",2,0.12],["sandstone",3,0.1]]}],
 		"haze":Color(0.95,0.78,0.55,0.16),"shade":Color(0.12,0.07,0.03,0.45)},
-	"meadow": {"ground":{"path":ART+"grass_tile.png","tile":300.0,"tint":Color(0.6,0.74,0.56)},"factor":0.38,
+	"meadow": {"ground":{"path":ART+"grass_tile_v2.png","tile":300.0,"tint":Color(0.6,0.74,0.56)},"factor":0.38,
 		"layers":[
 			{"name":"far","factor":0.38,"cell":120.0,"rows":0.5,"fill":0.55,"tint":Color(0.66,0.78,0.66),"props":[["shrub",4,0.09],["oak",2,0.12],["boulder",1,0.06]]},
 			{"name":"near","factor":0.58,"cell":260.0,"rows":0.6,"fill":0.3,"tint":Color(0.8,0.88,0.78),"props":[["shrub",3,0.13],["oak",1,0.17]]}],

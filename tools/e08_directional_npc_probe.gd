@@ -1,5 +1,6 @@
 extends "res://tools/e08_directional_unit_probe.gd"
 ## Same renderer/cost scene; non-player samples never infer attachments.
+const SPECIES_KINDS := {"e08_forest_stalker":&"warrior","e08_forest_canopy_archer":&"archer","e08_forest_warden":&"beast_master"}
 var visual_id := ""
 var cost_mode := ""
 func run() -> void:
@@ -9,6 +10,8 @@ func run() -> void:
 		await super.run();return
 	folder=args[0];DirAccess.make_dir_recursive_absolute(folder);root.size=Vector2i(1280,720)
 	unit_kind=&"animal_companion" if visual_id in ["e08_forest_wolf","e08_forest_boar"] else (&"archer" if visual_id=="npc_archer" else StringName(visual_id))
+	# P5 B1 species units: own visual_id, generic actor_kind of the body.
+	if SPECIES_KINDS.has(visual_id):unit_kind=SPECIES_KINDS[visual_id]
 	require_default=args.has("--default")
 	manifest="res://assets/art/%s/directional/%s/presentation.json" % ["animations" if require_default else ("e08_characters" if visual_id=="npc_archer" else "e08_enemies"),"archer" if visual_id=="npc_archer" else visual_id]
 	display_label=visual_id
@@ -46,14 +49,16 @@ func cost_visual() -> Dictionary:
 		var visual := sample.character_animation.equipment_visual.duplicate(true)
 		check(visual.is_empty() and (cost_mode=="cost_control" or sample.character_animation.atlas.resource_path.get_file()=="npc_body.png"),"actual static NPC bow, complete legacy control")
 		sample.free();return visual
-	return super.cost_visual() if F.ORIGINS.has(unit_kind) else {}
+	return super.cost_visual() if F.ORIGINS.has(unit_kind) and not SPECIES_KINDS.has(visual_id) else {}
 func configure_cost_override(animation: CharacterAnimation,mode: String) -> void:
 	if mode=="cost_control" and visual_id in ["e08_forest_wolf","e08_forest_boar"]:
 		check(animation.set_body_atlas(load("res://assets/art/animations/%s.png" % visual_id) as Texture2D),"specific NPC V1 control")
 func bind_animation(animation: CharacterAnimation,label: String) -> void:
-	if F.ORIGINS.has(unit_kind):super.bind_animation(animation,label);return
+	# Species ids always take the NPC path, even when their kind (archer) is a player kind.
+	if F.ORIGINS.has(unit_kind) and not SPECIES_KINDS.has(visual_id):super.bind_animation(animation,label);return
 	check(animation.actor_kind==unit_kind,label+" body kind")
 	check(animation.set_directional_manifest(manifest).ok,label+" specific NPC complete binding")
+	if SPECIES_KINDS.has(visual_id):check(animation.atlas.resource_path.begins_with(manifest.get_base_dir()+"/") and manifest.contains("/"+visual_id+"/"),label+" species atlas bound from its own folder")
 	check(animation.equipment_visual.is_empty(),"unadorned NPC")
 
 func world_native() -> void:

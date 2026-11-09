@@ -109,6 +109,11 @@ Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e08_equipment_art_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e08_directional_rig_compatibility_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e08_directional_npcs_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e08_species_presentation_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e08_forest_ambience_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e08_vfx_art_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e08_feedback_recipe_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e08_feedback_vfx_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/milestone_one_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/pursuit_momentum_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/battle_ui_test.gd')
@@ -430,6 +435,7 @@ Add-GodotCheck @('--headless', '--path', $projectPath, 'res://tools/e07_f8_candi
 
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/map_editor_journal_capacity_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/map_editor_asset_manifest_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e08_p5_world_republish_test.gd')
 
 if (-not $PSBoundParameters.ContainsKey('ToStep')) { $ToStep = $checkPlan.Count }
 if ($FromStep -gt $ToStep -or $ToStep -gt $checkPlan.Count) {

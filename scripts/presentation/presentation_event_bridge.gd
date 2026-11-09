@@ -7,9 +7,14 @@ signal world_pause_changed(paused: bool)
 signal world_advanced(delta: float)
 
 const DEDUP_LIMIT := 2048
-const KINDS: Array[StringName] = [&"cast_start", &"cast_cancel", &"projectile_launch", &"impact", &"area_start", &"area_end", &"teleport", &"death", &"revive", &"stage_enter", &"stage_exit", &"ui_confirm", &"ui_cancel"]
+const KINDS: Array[StringName] = [&"cast_start", &"cast_cancel", &"projectile_launch", &"impact", &"area_start", &"area_end", &"teleport", &"death", &"revive", &"stage_enter", &"stage_exit", &"ui_confirm", &"ui_cancel",
+	# E08 P6 (docs/epics/e08_p6_a1_delivery.md): published only after the canonical fact.
+	&"melee_swing", &"movement", &"effect_start", &"heal", &"summon", &"charge_start", &"trap_trigger"]
 const CLEANUP_KINDS: Array[StringName] = [&"cast_cancel", &"area_end", &"death", &"revive", &"stage_enter", &"stage_exit"]
+## New P6 kinds that carry danger/telegraph information consumers must not cull.
+const ESSENTIAL_P6_KINDS: Array[StringName] = [&"summon", &"charge_start", &"trap_trigger"]
 const FieldView = preload("res://scripts/world/world_field_view.gd")
+const Recipes = preload("res://scripts/presentation/feedback_recipe_catalog.gd")
 var stage_id := ""
 var world_time := 0.0
 var _epoch := 0
@@ -21,11 +26,16 @@ var _actors: Dictionary = {}
 var _areas: Dictionary = {}
 var _area_nodes: Dictionary = {}
 var _flights: Dictionary = {}
+var _trap_targets: Dictionary = {}
 var _seen: Dictionary = {}
 var _order: Array[String] = []
 var _paused := false
 var _disposed := false
 var _clearing := false
+## P6-A2: element known at the emission site (Elementalist pulses). Presentation hint only:
+## consumed by the damage event of the same frame and target, never read by simulation.
+var _element_hints: Dictionary = {}
+const ELEMENT_HINT_LIMIT := 32
 
 func _init() -> void:
 	name = "PresentationEvents"
@@ -70,8 +80,8 @@ func clear_stage() -> void:
 		if is_instance_valid(source) and source.is_connected(entry.signal_name, entry.callback):
 			source.disconnect(entry.signal_name, entry.callback)
 	_connections.clear()
-	_watched.clear(); _actors.clear(); _areas.clear(); _area_nodes.clear(); _flights.clear()
-	_seen.clear(); _order.clear()
+	_watched.clear(); _actors.clear(); _areas.clear(); _area_nodes.clear(); _flights.clear(); _trap_targets.clear()
+	_seen.clear(); _order.clear(); _element_hints.clear()
 	stage_id = ""
 	world_time = 0.0
 	_clearing = false
@@ -103,11 +113,15 @@ func _watch(node: Node, restoring: bool, epoch: int) -> void:
 	_listen(node, &"tree_exiting", _node_exiting.bind(id, epoch))
 	if node is CombatActor:
 		var actor := node as CombatActor
-		_actors[id] = {"owner":weakref(actor), "alive":actor.is_alive(), "damage_callback":_damage.bind(weakref(actor), epoch), "cast_skill":actor.active_cast_skill if actor is PlayerActor else &""}
+		_actors[id] = {"owner":weakref(actor), "alive":actor.is_alive(), "damage_callback":_damage.bind(weakref(actor), epoch), "heal_callback":_heal.bind(weakref(actor), epoch), "cast_skill":actor.active_cast_skill if actor is PlayerActor else &"",
+			"pending_skill":&"", "pending_frame":-1, "heal_skill":&"", "heal_frame":-1}
 		_listen(actor, &"presentation_action", _action.bind(weakref(actor), epoch))
+		if actor.has_signal(&"presentation_fact"): _listen(actor, &"presentation_fact", _fact.bind(weakref(actor), epoch))
 		_listen(actor, &"actor_died", _death.bind(epoch))
 		_listen(actor, &"presentation_health_ready", _health_ready.bind(weakref(actor), epoch))
 		if actor.health != null: _health_ready(actor.health, weakref(actor), epoch)
+		# A companion entering after its master's canonical spawn; resume never replays it.
+		if not restoring and actor is EnemyActor and actor.is_summoned: _summon(actor as EnemyActor, id)
 	else:
 		var flight := _projectile(node)
 		if not flight.is_empty():
@@ -118,6 +132,9 @@ func _watch(node: Node, restoring: bool, epoch: int) -> void:
 			_areas[id] = area
 			_area_nodes[id] = weakref(node)
 			if not restoring: _from_description(&"area_start", id, area, true)
+			if node is PlayerTrap:
+				_listen(node, &"triggered", _trap_triggered.bind(id, epoch))
+				_listen(node, &"removed", _trap_removed.bind(id, epoch))
 	for child: Node in node.get_children(): _watch(child, restoring, epoch)
 
 func _child_added(node: Node, epoch: int) -> void:
@@ -131,12 +148,14 @@ func _node_exiting(id: String, epoch: int) -> void:
 		return
 	if _areas.has(id):
 		var ended: Dictionary = _areas[id].duplicate(true); ended.duration = 0.0
+		var reason := _end_reason(_area_nodes[id].get_ref() if _area_nodes.has(id) else null)
+		if not reason.is_empty(): ended.payload["reason"] = reason
 		_from_description(&"area_end", id, ended, true)
 	var health_id := ""
 	if _actors.has(id):
 		var actor := _actors[id].owner.get_ref() as CombatActor
 		if is_instance_valid(actor) and actor.health != null: health_id = str(actor.health.get_instance_id())
-	_areas.erase(id); _area_nodes.erase(id); _flights.erase(id); _actors.erase(id); _watched.erase(id)
+	_areas.erase(id); _area_nodes.erase(id); _flights.erase(id); _actors.erase(id); _watched.erase(id); _trap_targets.erase(id)
 	# Release records for dead sources as well as live subscriptions. This list
 	# must not grow with every projectile over a long stage.
 	for index: int in range(_connections.size()-1, -1, -1):
@@ -164,7 +183,9 @@ func _health_ready(state: HealthState, owner: WeakRef, epoch: int) -> void:
 	_actors[id].health = weakref(state)
 	_actors[id].alive = actor.is_alive()
 	_actors[id].last_damage_sequence = state.damage_sequence
+	_actors[id].last_heal_sequence = state.heal_sequence
 	_listen(state, &"damage_applied", _actors[id].damage_callback)
+	_listen(state, &"healed", _actors[id].heal_callback)
 
 func _actor_description(actor: CombatActor) -> Dictionary:
 	var point := actor.world_point()
@@ -174,17 +195,39 @@ func _actor_description(actor: CombatActor) -> Dictionary:
 	return {"position":Vector3.ZERO, "surface_id":"", "skill_id":&"", "duration":0.0,
 		"payload":{"legacy_position_2d":actor.global_position, "position_unavailable":true}}
 
+## Declares the element of the hit about to be applied to `target` in this frame
+## (Elementalist pulses/arc: the element is only known at the call site). The next
+## `impact` for that target in the same frame carries it as `payload.element`.
+func note_element(target: Object, element: StringName) -> void:
+	if _disposed or stage_id.is_empty() or not is_instance_valid(target) or element not in Recipes.ELEMENTS: return
+	var frame := Engine.get_process_frames()
+	if _element_hints.size() >= ELEMENT_HINT_LIMIT:
+		for key: String in _element_hints.keys():
+			if int(_element_hints[key].frame) != frame: _element_hints.erase(key)
+		if _element_hints.size() >= ELEMENT_HINT_LIMIT: _element_hints.clear()
+	_element_hints[str(target.get_instance_id())] = {"element":element, "frame":frame}
+
+func _take_element_hint(id: String) -> StringName:
+	if not _element_hints.has(id): return &""
+	var hint: Dictionary = _element_hints[id]
+	_element_hints.erase(id)
+	return hint.element if int(hint.frame) == Engine.get_process_frames() else &""
+
 func _action(action: StringName, direction: Vector2, duration: float, owner: WeakRef, epoch: int) -> void:
 	if not _valid(epoch): return
 	var actor := owner.get_ref() as CombatActor
 	if not is_instance_valid(actor): return
 	var id := str(actor.get_instance_id())
 	if not _actors.has(id): return
+	var hint := _take_hint(id) # Skill committed in this frame, consumed by the first following action.
 	if action == &"cast_release":
 		_actors[id].cast_skill = &""
 		return
+	if action in [&"slash", &"basic_attack", &"dash"]:
+		_swing_or_move(action, actor, hint, direction, duration)
+		return
 	var kind: StringName = {&"cast":&"cast_start", &"cast_cancel":&"cast_cancel", &"teleport":&"teleport"}.get(action, &"")
-	if kind == &"": return # Swing/release/request is never an impact.
+	if kind == &"": return # Requests are never an impact.
 	var data := _actor_description(actor)
 	if data.is_empty(): return
 	data.duration = duration
@@ -192,6 +235,10 @@ func _action(action: StringName, direction: Vector2, duration: float, owner: Wea
 	if actor is PlayerActor:
 		var player := actor as PlayerActor
 		data.skill_id = player.active_cast_skill
+		if kind == &"cast_start":
+			# P6: instant casts (no timed cast) carry the committed skill identity.
+			data.payload["instant"] = player.active_cast_skill.is_empty()
+			if data.skill_id.is_empty(): data.skill_id = hint
 		if kind == &"cast_cancel": data.skill_id = _actors[id].cast_skill
 		if kind == &"teleport": data.skill_id = &"teleport"
 		if kind == &"cast_start": _actors[id].cast_skill = data.skill_id
@@ -202,7 +249,137 @@ func _action(action: StringName, direction: Vector2, duration: float, owner: Wea
 		if request != null: data.skill_id = request.skill_id
 	if kind == &"cast_start": _actors[id].cast_skill = data.skill_id
 	if kind == &"cast_cancel": _actors[id].cast_skill = &""
+	var variant := _variant(actor)
+	if not variant.is_empty(): data.payload["actor_variant"] = variant
 	_from_description(kind, id, data, kind != &"teleport")
+
+func _take_hint(id: String) -> StringName:
+	var record: Dictionary = _actors[id]
+	var skill: StringName = record.pending_skill if int(record.pending_frame) == Engine.get_process_frames() else &""
+	record.pending_skill = &""; record.pending_frame = -1
+	return skill
+
+## Player class or enemy species: selects recipe variants (basic attacks, warden).
+func _variant(actor: CombatActor) -> StringName:
+	if actor is PlayerActor: return (actor as PlayerActor).class_id
+	if actor is EnemyActor and (actor as EnemyActor).occurrence != null: return (actor as EnemyActor).occurrence.mob_base_id
+	return &""
+
+func _variant_by_id(id: String) -> StringName:
+	if not _actors.has(id): return &""
+	var actor := _actors[id].owner.get_ref() as CombatActor
+	return _variant(actor) if is_instance_valid(actor) else &""
+
+## Swing = requested strike with direction (never a hit); dash = committed displacement.
+func _swing_or_move(action: StringName, actor: CombatActor, hint: StringName, direction: Vector2, duration: float) -> void:
+	var variant := _variant(actor)
+	var kind := &"movement" if action == &"dash" else &"melee_swing"
+	var skill := hint
+	if action == &"dash" and skill.is_empty(): skill = &"dash"
+	if action == &"basic_attack":
+		# Identity-free actors cannot be classified; ranged basics are covered by projectile_launch.
+		if variant.is_empty(): return
+		if skill.is_empty(): skill = &"basic_attack"
+		if not Recipes.is_melee(skill, variant): return
+	var data := _actor_description(actor)
+	if data.is_empty(): return
+	data.skill_id = skill; data.duration = duration
+	data.payload["direction_2d"] = direction
+	if kind == &"movement": data.payload["phase"] = "start"
+	if not variant.is_empty(): data.payload["actor_variant"] = variant
+	_from_description(kind, str(actor.get_instance_id()), data, false)
+
+## Presentation-only facts declared by PlayerActor/EnemyActor after the canonical change.
+func _fact(kind: StringName, skill: StringName, direction: Vector2, duration: float, owner: WeakRef, epoch: int) -> void:
+	if not _valid(epoch): return
+	var actor := owner.get_ref() as CombatActor
+	if not is_instance_valid(actor): return
+	var id := str(actor.get_instance_id())
+	if not _actors.has(id): return
+	var variant := _variant(actor)
+	match kind:
+		&"skill_committed":
+			_actors[id].pending_skill = skill; _actors[id].pending_frame = Engine.get_process_frames()
+			if not Recipes.is_commit_effect(skill, variant): return
+			var data := _actor_description(actor)
+			if data.is_empty(): return
+			data.skill_id = skill
+			if actor is PlayerActor: data.payload.merge((actor as PlayerActor).presentation_cast_context())
+			if not variant.is_empty(): data.payload["actor_variant"] = variant
+			_from_description(&"effect_start", id, data, false)
+		&"heal_source":
+			_actors[id].heal_skill = skill; _actors[id].heal_frame = Engine.get_process_frames()
+		&"movement", &"charge_start":
+			var data := _actor_description(actor)
+			if data.is_empty(): return
+			data.skill_id = skill; data.duration = maxf(0.0, duration) if is_finite(duration) else 0.0
+			data.payload["direction_2d"] = direction if direction.is_finite() else Vector2.ZERO
+			data.payload["phase"] = "start"
+			if not variant.is_empty(): data.payload["actor_variant"] = variant
+			if kind == &"charge_start" and actor is EnemyActor: _charge_target(actor as EnemyActor, data)
+			_from_description(kind, id, data, kind in ESSENTIAL_P6_KINDS)
+
+func _charge_target(enemy: EnemyActor, data: Dictionary) -> void:
+	var target: CombatActor = enemy.player
+	if not is_instance_valid(target): return
+	data.payload["target_id"] = str(target.get_instance_id())
+	var from := enemy.world_point()
+	var to := target.world_point()
+	if from != null and to != null:
+		var flat := Vector3(to.position.x-from.position.x, 0.0, to.position.z-from.position.z)
+		if not flat.is_zero_approx(): data.payload["direction"] = flat.normalized()
+	elif from == null and to == null and not enemy.global_position.is_equal_approx(target.global_position):
+		data.payload["direction_2d"] = enemy.global_position.direction_to(target.global_position)
+
+func _summon(companion: EnemyActor, id: String) -> void:
+	var data := _actor_description(companion)
+	if data.is_empty(): return
+	var master := str(companion.summoner_id)
+	data.payload["companion_id"] = id
+	var variant := _variant_by_id(master)
+	if not variant.is_empty(): data.payload["actor_variant"] = variant
+	_publish(&"summon", master, &"enemy_summon", data.position, data.surface_id, 0.0, true, data.payload, "summon/" + id)
+
+func _heal(amount: float, sequence: int, owner: WeakRef, epoch: int) -> void:
+	if not _valid(epoch): return
+	var actor := owner.get_ref() as CombatActor
+	if not is_instance_valid(actor) or actor.health == null: return
+	var id := str(actor.get_instance_id())
+	if not _actors.has(id) or sequence <= int(_actors[id].get("last_heal_sequence", 0)): return
+	_actors[id].last_heal_sequence = sequence
+	var skill: StringName = _actors[id].heal_skill if int(_actors[id].heal_frame) == Engine.get_process_frames() else &""
+	_actors[id].heal_skill = &""; _actors[id].heal_frame = -1
+	# Continuous regeneration/leash recovery has no discrete source and is not feedback.
+	if skill.is_empty() or not is_finite(amount) or amount <= 0.0: return
+	var data := _actor_description(actor)
+	if data.is_empty(): return
+	data.skill_id = skill
+	data.payload["amount"] = amount; data.payload["application_sequence"] = sequence; data.payload["target_id"] = id
+	var variant := _variant(actor)
+	if not variant.is_empty(): data.payload["actor_variant"] = variant
+	_from_description(&"heal", id, data, false, "heal/%d/%d" % [actor.health.get_instance_id(), sequence])
+
+func _trap_triggered(_trap: PlayerTrap, target: CombatActor, id: String, epoch: int) -> void:
+	if _valid(epoch) and is_instance_valid(target): _trap_targets[id] = str(target.get_instance_id())
+
+## `removed` follows every `triggered` handler: the trap effect is already applied.
+func _trap_removed(_trap: PlayerTrap, reason: StringName, id: String, epoch: int) -> void:
+	if not _valid(epoch) or reason != PlayerTrap.REASON_TRIGGERED or not _areas.has(id): return
+	var data: Dictionary = _areas[id].duplicate(true); data.duration = 0.0
+	data.payload["reason"] = "trigger"
+	if _trap_targets.has(id): data.payload["target_id"] = _trap_targets[id]
+	_from_description(&"trap_trigger", id, data, true, "trap/" + id)
+
+## Why an area ended, when the node says so: trigger | expire | cleanup.
+func _end_reason(node: Object) -> String:
+	if not is_instance_valid(node): return ""
+	if node is PlayerTrap:
+		return {PlayerTrap.REASON_TRIGGERED:"trigger", PlayerTrap.REASON_DURATION:"expire"}.get(node.removal_reason, "cleanup")
+	if node is FoliageShelter: return "expire" if node.removal_reason == FoliageShelter.REASON_EXPIRED else "cleanup"
+	if node is ArrowRain: return "expire" if node.volleys_emitted >= ArrowRain.VOLLEY_COUNT else "cleanup"
+	var remaining: Variant = _property(node, &"remaining")
+	if typeof(remaining) in [TYPE_FLOAT, TYPE_INT]: return "expire" if float(remaining) <= 0.0 else "cleanup"
+	return ""
 
 func _damage(result: Dictionary, owner: WeakRef, epoch: int) -> void:
 	if not _valid(epoch) or not result.get("landed", false): return
@@ -219,7 +396,11 @@ func _damage(result: Dictionary, owner: WeakRef, epoch: int) -> void:
 	for key: Variant in result:
 		if _data_only(result[key]): data.payload[key] = result[key]
 	data.payload["target_id"] = str(actor.get_instance_id())
+	var hinted := _take_element_hint(id)
+	if not hinted.is_empty(): data.payload["element"] = String(hinted)
 	data.payload["contact_position_unavailable"] = true # Actor anchor != collision point.
+	var source_variant := _variant_by_id(str(result.get("source_id", "")))
+	if not source_variant.is_empty(): data.payload["source_variant"] = source_variant
 	var identity := "damage/%d/%d" % [actor.health.get_instance_id(), int(result.get("application_sequence", 0))]
 	_from_description(&"impact", str(actor.get_instance_id()), data, false, identity)
 
@@ -263,10 +444,17 @@ func _projectile(node: Node) -> Dictionary:
 	if flight != null:
 		if flight.stage_id != stage_id or flight._configuration_revision != flight.geometry.configuration_revision: return {}
 		payload["collider"] = flight.collider.duplicate(true); payload["direction"] = flight.direction
+		_projectile_element(node, payload)
 		return {"position":flight.position, "surface_id":"", "skill_id":projectile.request.skill_id, "duration":0.0, "payload":payload}
+	_projectile_element(node, payload)
 	payload["legacy_position_2d"] = projectile.global_position; payload["position_unavailable"] = true
 	payload["radius"] = projectile.projectile_radius; payload["direction_2d"] = projectile.direction
 	return {"position":Vector3.ZERO, "surface_id":"", "skill_id":projectile.request.skill_id, "duration":0.0, "payload":payload}
+
+## Geometer traces know their element (fire/ice/lightning) at the emission site.
+func _projectile_element(node: Node, payload: Dictionary) -> void:
+	if node is GeometerTraceProjectile and (node as GeometerTraceProjectile).element in Recipes.ELEMENTS:
+		payload["element"] = String((node as GeometerTraceProjectile).element)
 
 func _area(node: Node) -> Dictionary:
 	var description := {}
@@ -354,9 +542,11 @@ func current_state() -> Dictionary:
 func _from_description(kind: StringName, actor: String, data: Dictionary, essential: bool, identity: String = "") -> void:
 	if data.is_empty(): return
 	var payload: Dictionary = data.payload.duplicate(true)
-	if kind in [&"projectile_launch", &"area_start", &"area_end"]:
+	if kind in [&"projectile_launch", &"area_start", &"area_end", &"trap_trigger"]:
 		payload["entity_id"] = actor
 		actor = str(payload.get("source_id", ""))
+		var source_variant := _variant_by_id(actor)
+		if not source_variant.is_empty(): payload["source_variant"] = source_variant
 	_publish(kind, actor, data.skill_id, data.position, data.surface_id, data.duration, essential, payload, identity)
 
 func _publish(kind: StringName, actor: String, skill: StringName, position: Vector3, surface: String, duration: float, essential: bool, payload: Dictionary, identity: String = "") -> bool:

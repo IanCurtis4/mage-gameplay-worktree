@@ -27,7 +27,7 @@ func run() -> void:
 	var presentation: Control = shell.get_node("AuthoringPresentation")
 	presentation.actions["piece/open_objects"].control.pressed.emit(); await frames()
 	var panel: Control = shell.objects_window.get_child(0)
-	check("six_named_palette_entries",panel.palette.item_count == 6 and panel.palette.get_item_icon(0) != null)
+	check("eleven_named_palette_entries",panel.palette.item_count == 11 and panel.palette.get_item_icon(0) != null)
 	panel.search.text = "Estruturas"; panel.search.text_changed.emit(panel.search.text)
 	check("structure_category_uses_portuguese_search",panel.palette.item_count == 1 and panel.palette.get_item_metadata(0) == "broken_pillar")
 	panel.search.text = ""; panel.search.text_changed.emit("")

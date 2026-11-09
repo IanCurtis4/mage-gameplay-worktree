@@ -44,6 +44,10 @@ signal terrifying_shout_requested(origin: Vector2, radius: float, fear_duration:
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal geometer_cast_ready(command: GeometerCastCommand)
 signal resources_changed
+## E08 P6 presentation-only facts, emitted after the canonical change and observed only
+## by PresentationEvents (a snapshot-excluded Control). Gameplay never connects to it.
+## kind: skill_committed | heal_source | movement.
+signal presentation_fact(kind: StringName, skill_id: StringName, direction: Vector2, duration: float)
 
 const SLASH_SP_COST := 15.0
 const DASH_DURATION := 0.18
@@ -756,6 +760,7 @@ func heal_from_berserker_breath_steal(result: Dictionary, heal_fraction: float) 
 	var amount := minf(float(result.get("actual_damage", 0.0)) * heal_fraction, health.max_hp * BERSERKER_BREATH_HEAL_CAP_FRACTION)
 	var healed := minf(maxf(0.0, amount), health.max_hp - health.current_hp)
 	if healed > 0.0:
+		presentation_fact.emit(&"heal_source", &"berserker_breath_steal", Vector2.ZERO, 0.0)
 		health.heal(healed)
 		resources_changed.emit()
 		queue_redraw()
@@ -1313,6 +1318,7 @@ func heal_from_spiritualist_drain(result: Dictionary, already_healed: float) -> 
 	var remaining_channel_cap := maxf(0.0, health.max_hp * 0.05 - already_healed)
 	var healed := minf(minf(actual_damage * 0.15, remaining_channel_cap), health.max_hp - health.current_hp)
 	if healed > 0.0:
+		presentation_fact.emit(&"heal_source", &"spiritualist_soul_drain", Vector2.ZERO, 0.0)
 		health.heal(healed)
 		resources_changed.emit()
 		queue_redraw()
@@ -2629,6 +2635,8 @@ func _use_world_travel_skill(id: StringName, actors: Array[CombatActor]) -> bool
 			defender_advance_guard_facing = Vector2(facing.x,facing.z).normalized()
 			_world_advance_guard_facing = facing
 	_path.clear(); _has_path_goal = false; velocity = Vector2.ZERO; target = null; _attack_engaged = false; _attack_recovery = 0.0
+	# Presentation only: the canonical line was planned and applied (retreat) or adopted (dash).
+	presentation_fact.emit(&"movement", id, Vector2(heading.x, heading.z).normalized(), 0.18 if id == &"defender_retreat_guard" else DASH_DURATION)
 	resources_changed.emit()
 	return true
 
@@ -3036,6 +3044,8 @@ func use_world_dash(destination: ExpeditionWorldPoint, revision: int) -> bool:
 	_path.clear()
 	_has_path_goal = false
 	velocity = Vector2.ZERO
+	var heading := destination.position - world_point().position
+	presentation_fact.emit(&"movement", &"dash", Vector2(heading.x, heading.z).normalized(), DASH_DURATION) # Route adopted.
 	resources_changed.emit()
 	return true
 func teleport_destination(point: Vector2) -> Vector2:
@@ -3483,6 +3493,7 @@ func heal_from_kill() -> float:
 	if fraction <= 0.0:
 		return 0.0
 	var previous_hp := health.current_hp
+	if health.hp_deficit() > 0.0: presentation_fact.emit(&"heal_source", &"blood_thirst", Vector2.ZERO, 0.0)
 	health.heal(health.max_hp * fraction)
 	var healed := health.current_hp - previous_hp
 	if healed > 0.0:
@@ -3616,6 +3627,7 @@ func _spend(skill_id: StringName) -> bool:
 		mage_cooldowns[&"foliage_shelter"] = shared_cooldown
 		mage_cooldowns[&"hunter_total_cover"] = shared_cooldown
 	if _world_executing_cast != null and _world_executing_cast.action_kind == SkillDefinition.ActionKind.OFFENSIVE: clear_shield_stance()
+	presentation_fact.emit(&"skill_committed", skill_id, Vector2.ZERO, 0.0) # After SP/cooldown commit.
 	return true
 
 func _resolved_facing(direction: Vector2) -> Vector2:

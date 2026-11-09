@@ -128,7 +128,7 @@ func _combat(label: String, facade: ProfileFacade, dense: bool) -> void:
 			actor.set_process(false)
 	_check(arena.training_mode and arena.encounter_active and arena.training_boss.hard_controls.boss and arena.enemies.size() == (20 if dense else 1), "%s %s uses real boss and <=20 total enemies" % [label, "dense" if dense else "solo"])
 	var player := arena.player
-	_check(player.character_animation.actor_kind == &"sentinel" and player.character_animation.atlas != null and player.character_animation.atlas.resource_path.ends_with("/sentinel_weaponless.png"), "actual identity selects own Sentinel atlas, not base Archer")
+	_check(player.character_animation.actor_kind == &"sentinel" and player.character_animation.atlas != null and player.character_animation.atlas.resource_path.ends_with("/directional/sentinel/weaponless.png"), "actual identity selects own Sentinel atlas, not base Archer") # P4 (fd32d346) made the Sentinel directional: its own identity body is the directional sentinel weaponless sheet, never the archer's.
 	var guide: Variant = arena.get("sentinel_onboarding")
 	_check(guide != null and guide.visible and not arena.help_panel.visible, "real Sentinel guide replaces generic help without extra panel")
 	if guide != null:

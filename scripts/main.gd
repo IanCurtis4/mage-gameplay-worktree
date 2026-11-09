@@ -63,6 +63,7 @@ func release_memory_snapshot() -> void:
 
 const IceWallScript = preload("res://scripts/world/ice_wall.gd")
 const ExpeditionBackdropScript = preload("res://scripts/world/expedition_backdrop.gd")
+const ForestAmbienceScript = preload("res://scripts/presentation/forest_ambience_layer.gd")
 const ElementalistSequenceScript = preload("res://scripts/world/elementalist_sequence.gd")
 
 const ARENA_BOUNDS := Rect2(80, 80, 1640, 920)
@@ -233,7 +234,7 @@ func _present_ui(cancelled: bool = false) -> void:
 	var audio := presentation_audio()
 	if audio != null: audio.confirm_ui(cancelled)
 
-func _begin_presentation_stage(id: String, resumed: bool = false) -> void:
+func _begin_presentation_stage(id: String, resumed: bool = false, biome: String = "") -> void:
 	var bridge := presentation_events()
 	if bridge == null:
 		bridge = PresentationEventBridge.new()
@@ -245,14 +246,15 @@ func _begin_presentation_stage(id: String, resumed: bool = false) -> void:
 		bridge.add_child(audio)
 		audio.configure(bridge)
 	if bridge.get_node_or_null("E08PilotFeedback") == null:
-		var feedback := preload("res://scripts/presentation/e08_pilot_feedback.gd").new()
+		var feedback := preload("res://scripts/presentation/feedback_vfx_layer.gd").new()
 		bridge.add_child(feedback)
 		feedback.configure(bridge, self)
+	audio.set_stage_biome(biome) # Chooses the biome ambience bed when the stage activates.
 	if bridge.stage_id != id: bridge.begin_stage(id, resumed)
 	if is_instance_valid(battle_controls): battle_controls.audio_panel.bind_service(audio)
 
 func _pilot_actor_entered(node: Node) -> void:
-	if node is EnemyActor and node.occurrence != null and node.occurrence.mob_base_id in [&"forest_wolf", &"forest_boar"]:
+	if node is EnemyActor and node.occurrence != null and preload("res://scripts/presentation/e08_pilot_visual.gd").has_species_presentation(node.occurrence.mob_base_id):
 		if not preload("res://scripts/presentation/e08_pilot_visual.gd").install_forest_atlas(node):
 			push_error("Não foi possível aplicar o atlas visual da espécie " + str(node.occurrence.mob_base_id))
 
@@ -1167,7 +1169,8 @@ func _layout_stage_minimap() -> void:
 		# leave its last layout outside the root. Existing contextual visibility stays.
 		help_panel.offset_top = minf(desired_top, ui_root.size.y - 158.0)
 		help_panel.offset_bottom = help_panel.offset_top + 146.0
-		help_panel.visible = geometer_casting == null and desired_top + 146.0 < bar_top - 12.0
+		# Contextual guides (Geometer / Sentinel onboarding) keep replacing the generic help.
+		help_panel.visible = geometer_casting == null and not is_instance_valid(sentinel_onboarding) and desired_top + 146.0 < bar_top - 12.0
 
 func _configure_stage_minimap(force: bool = false) -> void:
 	if not is_instance_valid(stage_minimap) or not is_instance_valid(player): return
@@ -1836,6 +1839,7 @@ func _on_elementalist_area_requested(skill_id: StringName, center: Vector2, radi
 		world_area = _cast_ground_area()
 		if world_area == null: return
 	if world_area == null and battle_indicators != null: battle_indicators.show_elementalist_pulse(skill_id, center, radius, element)
+	elif world_area != null and expedition_view != null: expedition_view.show_elementalist_pulse(skill_id, world_area.anchor().position, radius, element)
 	for target_actor: CombatActor in enemies.duplicate():
 		if not is_instance_valid(player): return
 		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
@@ -1890,6 +1894,8 @@ func _on_elementalist_tri_nova_requested(center: Vector2, requests: Array[Damage
 func _apply_elementalist_hit(request: DamageRequest, target_actor: CombatActor, element: StringName, marked_bonus: float = 0.0) -> Dictionary:
 	if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
 		return {}
+	var bridge := presentation_events()
+	if bridge != null: bridge.note_element(target_actor, element) # Presentation hint: the element is only known here.
 	var marked := element == &"lightning" and target_actor.is_electrified()
 	var resolved_request := _elementalist_resonance_request(request, target_actor)
 	resolved_request.target_id = target_actor.get_instance_id()
@@ -1924,6 +1930,7 @@ func _on_world_elementalist_lightning_arc_requested(request: DamageRequest, targ
 	var reach := player.skill_range(&"elementalist_lightning_arc")
 	var visited: Array[int] = []
 	var current := target_actor
+	var visual_from := player.world_point().position + Vector3.UP * source_height # Presentation only.
 	for index: int in range(3):
 		if not is_instance_valid(current) or not current.is_alive() or current.world_motion == null: break
 		var shape := {"source_offset":Vector3.UP*source_height,"target_offset":Vector3.UP*float(current.world_motion.profile()["height"])*0.5}
@@ -1934,6 +1941,11 @@ func _on_world_elementalist_lightning_arc_requested(request: DamageRequest, targ
 		if not next_origin.configure(origin.geometry,current.world_point(),current.world_motion.profile(),&"direct_volume",origin.geometry.geometry_revision)["ok"]: break
 		source_height = float(current.world_motion.profile()["height"])*0.5
 		visited.append(current.get_instance_id())
+		if expedition_view != null:
+			var visual_to := current.world_point().position + Vector3.UP * source_height
+			expedition_view.show_elementalist_arc_link(visual_from, visual_to)
+			expedition_view.show_elementalist_pulse(&"elementalist_lightning_arc", current.world_point().position, 30.0, &"lightning")
+			visual_from = visual_to
 		var hit_request := request.copy()
 		if index > 0:
 			hit_request.magic_damage = jump_damage
@@ -4449,7 +4461,8 @@ func attach_expedition_view(view: ExpeditionGeometryView, field_height: float) -
 		var bound := geometer_casting.bind_world_construction(field_height)
 		if not bound["ok"]: return bound
 	expedition_view = view; expedition_field_height = field_height; view.controller = self
-	_begin_presentation_stage(player.world_point().stage_id, snapshot_passive)
+	var stage_biome := String(view.geometry._stage.get("biome",""))
+	_begin_presentation_stage(player.world_point().stage_id, snapshot_passive, stage_biome)
 	_configure_stage_minimap()
 	# Interactive play searches long routes on a worker thread; headless runs,
 	# tests and RAGRPG_SYNC_NAVIGATION=1 stay synchronous.
@@ -4458,7 +4471,10 @@ func attach_expedition_view(view: ExpeditionGeometryView, field_height: float) -
 	var backdrop: Variant = get_node_or_null("ExpeditionBackdrop")
 	if backdrop == null:
 		backdrop = ExpeditionBackdropScript.new(); add_child(backdrop)
-	backdrop.configure(String(view.geometry._stage.get("biome","")))
+	backdrop.configure(stage_biome)
+	# P5 A2: forest-only ambience, a disposable child of the view (snapshot-excluded).
+	var campaign_input: Dictionary = campaign_runtime.state.manifest_data.get("input",{}) if campaign_runtime != null else {}
+	ForestAmbienceScript.install(view,stage_biome,ForestAmbienceScript.stage_seed(String(campaign_input.get("seed_text","")),player.world_point().stage_id))
 	view.observe(player)
 	view.present_campaign(self)
 	for actor: CombatActor in enemies:

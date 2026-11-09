@@ -113,6 +113,9 @@ func _run() -> void:
 	_atlas_invariants()
 	await _atlas_snapshot()
 	await _native_integration()
+	await _p6_player_kinds()
+	await _p6_traps()
+	await _p6_enemy_kinds()
 	print("E08 presentation %s: %d checks, failures=%d" % ["PASS" if failures == 0 else "FAIL", checks, failures])
 	quit(1 if failures else 0)
 func _native_integration() -> void:
@@ -154,6 +157,7 @@ func _native_integration() -> void:
 	check(bridge.current_epoch() != previous_epoch, "same stage resume uses fresh epoch")
 	rain.free(); projectile.free()
 	check(_count(&"area_end") == 1, "confirmed area removal ends its presentation")
+	check(events.filter(func(event: Dictionary) -> bool: return event.kind == &"area_end").back().payload.reason == "cleanup", "P6: area freed before its last volley ends with reason cleanup")
 	var destination := Fixture.point("root",Vector3(110,0,150))
 	check(controller.player.use_world_teleport(destination,sample.world.geometry_revision) and _count(&"teleport") == 1 and events.back().position == destination.position, "world teleport emitted only after canonical movement succeeds")
 	var teleports := _count(&"teleport")
@@ -231,4 +235,198 @@ func _atlas_snapshot() -> void:
 			check(animation.death_copy().atlas.resource_path == variant.resource_path, "restored base atlas survives death copy and visual reselection")
 			copy.free()
 	barrier.release(); paused = false; controller.free()
+	await process_frame
+
+# ---------------------------------------------------------------------------
+# E08 P6 A1: new confirmed kinds. Every event is published only after the canonical
+# fact (checked by reading gameplay state inside the listener) and observation never
+# changes HP/SP/cooldowns/position/time: an identical unobserved twin must match.
+var _p6_probe: Callable
+func _p6_record(event: Dictionary) -> void:
+	events.append(event)
+	if _p6_probe.is_valid(): _p6_probe.call(event)
+func _p6_of(kind: StringName) -> Array[Dictionary]:
+	var found: Array[Dictionary] = []
+	for event: Dictionary in events:
+		if event.kind == kind: found.append(event)
+	return found
+func _p6_swordsman(id: String) -> PlayerActor:
+	var navigation := ArenaNavigation.new()
+	navigation.configure(Rect2(0, 0, 900, 600), [], 22.0)
+	var snapshot := BuildSnapshot.new()
+	snapshot.character_id = id
+	snapshot.base_class_id = &"swordsman"
+	snapshot.job_level = 20 # Rank requirements of the learned passive (as in the E04 blood thirst test).
+	snapshot.skill_ranks = {&"fury": 2, &"slash": 1, &"dash": 1, &"blood_thirst": 1} # Blood thirst depends on Fury R2.
+	snapshot.active_slots = [&"fury", &"slash", &"dash", null, null]
+	snapshot.base_level = 5
+	snapshot.passive_slots = [null, null] # Learned passive operates automatically.
+	var player := PlayerActor.new()
+	player.configure(navigation, RunState.from_build(snapshot.character_id, snapshot))
+	player.position = Vector2(300, 300)
+	return player
+func _p6_state(player: PlayerActor) -> Array:
+	return [player.current_sp, player.health.current_hp, player.health.heal_sequence, player.health.damage_sequence, player.position, player.fury_remaining, player.slash_cooldown, player.dash_cooldown, player.mage_cooldowns.duplicate(), player._dash_active, player._dash_endpoint, player.velocity, player.attack_cooldown]
+func _p6_wound(player: PlayerActor) -> void:
+	var request := DamageRequest.new(); request.source_id = 99; request.target_id = player.get_instance_id(); request.skill_id = &"fixture_wound"; request.physical_damage = 40.0; request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
+	player.health.apply(request, 0.5, 1.0)
+func _p6_player_kinds() -> void:
+	events.clear()
+	var host := Host.new(); root.add_child(host)
+	var bridge := Bridge.new(); host.add_child(bridge); bridge.set_process(false)
+	bridge.event_confirmed.connect(_p6_record)
+	bridge.bind_controller(host); bridge.begin_stage("p6_player")
+	var player := _p6_swordsman("p6-observed"); host.add_child(player); player.set_process(false)
+	var twin_parent := Node2D.new(); root.add_child(twin_parent)
+	var twin := _p6_swordsman("p6-observed"); twin_parent.add_child(twin); twin.set_process(false)
+	check(_p6_state(player) == _p6_state(twin), "P6 twins start identical")
+	var sp_before := player.current_sp
+	var seen := {}
+	_p6_probe = func(event: Dictionary) -> void:
+		seen[event.kind] = {"sp":player.current_sp, "fury":player.fury_remaining, "fury_cooldown":player.skill_cooldown(&"fury"), "slash_cooldown":player.slash_cooldown, "dash_active":player._dash_active, "hp":player.health.current_hp}
+	# Instant buff: effect_start at commit, then cast_start now carries the skill id.
+	check(player.use_fury() and twin.use_fury(), "fury used by both twins")
+	var effect := _p6_of(&"effect_start")
+	var cast := _p6_of(&"cast_start")
+	check(effect.size() == 1 and effect[0].skill_id == &"fury" and effect[0].actor_id == str(player.get_instance_id()) and not effect[0].essential and effect[0].payload.actor_variant == &"swordsman" and effect[0].payload.position_unavailable, "instant buff publishes one effect_start with identity")
+	check(cast.size() == 1 and cast[0].skill_id == &"fury" and cast[0].payload.instant, "instant cast_start now carries skill_id (was empty before P6)")
+	check(events.find(effect[0]) < events.find(cast[0]), "effect_start (commit) precedes the instant cast animation event")
+	check(seen.has(&"effect_start") and seen[&"effect_start"].sp < sp_before and seen[&"effect_start"].fury_cooldown > 0.0, "effect_start only after SP and cooldown were committed")
+	var baseline := events.size()
+	check(not player.use_fury() and events.size() == baseline, "refused skill (cooldown) publishes nothing")
+	# Melee swing: requested strike with direction, never a hit.
+	var no_enemies: Array[CombatActor] = []
+	check(player.use_slash(Vector2.RIGHT, no_enemies) and twin.use_slash(Vector2.RIGHT, no_enemies), "slash used by both twins")
+	var swing := _p6_of(&"melee_swing")
+	check(swing.size() == 1 and swing[0].skill_id == &"slash" and swing[0].payload.direction_2d == Vector2.RIGHT and is_equal_approx(swing[0].duration, 0.2) and _count(&"impact") == 0, "slash publishes one melee_swing and fabricates no impact")
+	check(seen[&"melee_swing"].slash_cooldown > 0.0, "melee_swing after the canonical commit")
+	# Movement: dash after its endpoint was committed (both twins refilled identically).
+	player.recover_sp(1000.0); twin.recover_sp(1000.0)
+	check(player.use_dash(Vector2.DOWN) and twin.use_dash(Vector2.DOWN), "dash used by both twins")
+	var moves := _p6_of(&"movement")
+	check(moves.size() == 1 and moves[0].skill_id == &"dash" and moves[0].payload.phase == "start" and moves[0].payload.direction_2d == Vector2.DOWN and not moves[0].essential, "dash publishes one movement")
+	check(seen.has(&"movement") and seen[&"movement"].dash_active, "movement only after the canonical displacement started")
+	# Heal: discrete heal with a source; continuous regeneration is not feedback.
+	_p6_wound(player); _p6_wound(twin)
+	var healed := player.heal_from_kill(); twin.heal_from_kill()
+	var heals := _p6_of(&"heal")
+	check(healed > 0.0 and heals.size() == 1 and heals[0].skill_id == &"blood_thirst" and is_equal_approx(heals[0].payload.amount, healed) and heals[0].payload.application_sequence == player.health.heal_sequence, "kill heal publishes one heal with amount and sequence: healed=%s passive=%s hp=%s/%s heals=%s" % [healed, player.run_state.build_snapshot.has_passive(&"blood_thirst"), player.health.current_hp, player.health.max_hp, heals])
+	check(seen.has(&"heal") and seen[&"heal"].hp == player.health.current_hp, "heal only after HealthState applied it")
+	player.regenerate_hp(1.0, false, false); twin.regenerate_hp(1.0, false, false)
+	check(_p6_of(&"heal").size() == 1, "per-frame regeneration never publishes heal")
+	baseline = events.size()
+	bridge._heal(healed, player.health.heal_sequence, weakref(player), bridge.current_epoch())
+	check(events.size() == baseline, "heal sequence identity cannot replay")
+	_p6_probe = Callable()
+	check(_p6_state(player) == _p6_state(twin), "observation never changes HP/SP/cooldowns/position/dash state: " + str(_p6_state(player)) + " vs " + str(_p6_state(twin)))
+	# Frame-scoped commit hint: a stale commit never labels a later action.
+	player.presentation_fact.emit(&"skill_committed", &"provoke", Vector2.ZERO, 0.0)
+	await process_frame
+	player.presentation_action.emit(&"cast", Vector2.RIGHT, 0.15)
+	check(_p6_of(&"cast_start").back().skill_id == &"", "a commit from an earlier frame is not attached to a later cast")
+	# Pause and epoch rules apply to every new kind.
+	paused = true
+	baseline = events.size()
+	player.presentation_fact.emit(&"movement", &"dash", Vector2.RIGHT, 0.2)
+	player.presentation_fact.emit(&"skill_committed", &"fury", Vector2.ZERO, 0.0)
+	player.presentation_action.emit(&"slash", Vector2.RIGHT, 0.2)
+	check(events.size() == baseline, "paused world rejects movement/effect_start/melee_swing")
+	paused = false
+	var old_epoch := bridge.current_epoch()
+	bridge.begin_stage("p6_player", true)
+	baseline = events.size()
+	bridge._fact(&"movement", &"dash", Vector2.RIGHT, 0.2, weakref(player), old_epoch)
+	bridge._fact(&"skill_committed", &"fury", Vector2.ZERO, 0.0, weakref(player), old_epoch)
+	bridge._action(&"slash", Vector2.RIGHT, 0.2, weakref(player), old_epoch)
+	check(events.size() == baseline, "old-epoch callbacks of new kinds are rejected")
+	check(_p6_of(&"heal").size() == 1 and _p6_of(&"movement").size() == 1, "resume replays no heal or movement")
+	var fact_connections := player.presentation_fact.get_connections().size()
+	check(fact_connections == 1, "exactly one presentation_fact observer (the bridge)")
+	host.free(); twin_parent.free()
+	events.clear()
+	await process_frame
+
+func _p6_trap(owner_id: int, position: Vector2) -> PlayerTrap:
+	var trap := PlayerTrap.new()
+	trap.configure(owner_id, &"explosive_trap", position, 30.0, 0.0, 5.0)
+	trap.set_process(false)
+	return trap
+func _p6_traps() -> void:
+	events.clear()
+	var host := Host.new(); root.add_child(host)
+	var bridge := Bridge.new(); host.add_child(bridge); bridge.set_process(false)
+	bridge.event_confirmed.connect(_p6_record)
+	bridge.bind_controller(host); bridge.begin_stage("p6_traps")
+	var victim := _actor(); victim.position = Vector2(100, 100); host.add_child(victim)
+	var triggered := _p6_trap(7, Vector2(100, 100)); host.add_child(triggered)
+	var expiring := _p6_trap(7, Vector2(400, 100)); host.add_child(expiring)
+	var cleaned := _p6_trap(7, Vector2(400, 400)); host.add_child(cleaned)
+	check(_p6_of(&"area_start").size() == 3, "three traps start their areas")
+	var at_trigger := {}
+	_p6_probe = func(event: Dictionary) -> void:
+		if event.kind == &"trap_trigger": at_trigger["state"] = triggered.state
+	check(triggered.try_trigger(victim), "trap triggers on the victim")
+	_p6_probe = Callable()
+	var trigger := _p6_of(&"trap_trigger")
+	check(trigger.size() == 1 and trigger[0].essential and trigger[0].skill_id == &"explosive_trap" and trigger[0].payload.target_id == str(victim.get_instance_id()) and trigger[0].payload.reason == "trigger" and trigger[0].actor_id == "7", "trap_trigger published once with victim and owner")
+	check(at_trigger.get("state") == PlayerTrap.State.TRIGGERED, "trap_trigger only after the canonical trigger state")
+	check(expiring.expire(), "second trap expires by duration")
+	check(_p6_of(&"trap_trigger").size() == 1, "expiry never publishes trap_trigger")
+	await process_frame
+	var ends := _p6_of(&"area_end")
+	check(ends.size() == 2 and ends.any(func(event: Dictionary) -> bool: return event.payload.reason == "trigger") and ends.any(func(event: Dictionary) -> bool: return event.payload.reason == "expire"), "area_end says trigger vs expire: " + str(ends.map(func(event: Dictionary) -> Variant: return event.payload.get("reason"))))
+	cleaned.free()
+	check(_p6_of(&"area_end").size() == 3 and _p6_of(&"area_end").back().payload.reason == "cleanup", "direct removal ends with reason cleanup")
+	check(victim.health.current_hp == victim.health.max_hp, "trap presentation applies no damage")
+	host.free()
+	events.clear()
+	await process_frame
+
+func _p6_enemy_kinds() -> void:
+	events.clear()
+	RunController.selected_class_id = &"mage"
+	var controller := RunController.new(); root.add_child(controller)
+	controller.set_process(false); controller.player.set_process(false)
+	for unused: int in 3: await process_frame
+	var bridge := controller.presentation_events()
+	check(bridge != null and not bridge.stage_id.is_empty(), "legacy controller owns a presentation stage")
+	if bridge == null: controller.free(); return
+	bridge.set_process(false)
+	bridge.event_confirmed.connect(_p6_record)
+	var occurrence := MobOccurrence.new()
+	occurrence.occurrence_id = "p6_warden"; occurrence.mob_base_id = &"forest_ancient_warden"; occurrence.category_id = &"boss"; occurrence.origin_id = &"trial_stage_1"
+	var warden := EnemyActor.new()
+	var configured := warden.configure_occurrence(occurrence, controller.run_state.effect_catalog().mob_catalog(), controller.navigation, controller.player)
+	check(configured.get("ok", false), "warden occurrence configures: " + str(configured))
+	if not configured.get("ok", false): warden.free(); controller.free(); return
+	warden.global_position = controller.player.global_position + Vector2(160, 0)
+	controller.add_child(warden); controller.enemies.append(warden); warden.set_process(false)
+	var rng_state := controller.rng.state
+	var hp := controller.player.health.current_hp
+	var at_charge := {}
+	_p6_probe = func(event: Dictionary) -> void:
+		if event.kind == &"charge_start": at_charge["remaining"] = warden._charge_remaining
+	warden._try_charge(300.0)
+	_p6_probe = Callable()
+	var charges := _p6_of(&"charge_start")
+	check(charges.size() == 1 and charges[0].essential and charges[0].skill_id == &"enemy_charge" and charges[0].payload.actor_variant == &"forest_ancient_warden" and charges[0].payload.target_id == str(controller.player.get_instance_id()) and is_equal_approx(charges[0].duration, EnemyActor.CHARGE_SECONDS), "warden charge publishes one essential charge_start")
+	check(at_charge.get("remaining") == EnemyActor.CHARGE_SECONDS and warden._charge_cooldown == EnemyActor.CHARGE_COOLDOWN, "charge_start only after the canonical charge state")
+	warden._try_charge(300.0)
+	check(_p6_of(&"charge_start").size() == 1, "charge on cooldown publishes nothing")
+	# Enemy basic: claw is a swing, arrow is left to projectile_launch.
+	warden.presentation_fact.emit(&"skill_committed", &"enemy_claw", Vector2.ZERO, 0.0)
+	warden.presentation_action.emit(&"basic_attack", Vector2.LEFT, 0.18)
+	warden.presentation_fact.emit(&"skill_committed", &"enemy_arrow", Vector2.ZERO, 0.0)
+	warden.presentation_action.emit(&"basic_attack", Vector2.LEFT, 0.18)
+	var swings := _p6_of(&"melee_swing")
+	check(swings.size() == 1 and swings[0].skill_id == &"enemy_claw" and swings[0].payload.actor_variant == &"forest_ancient_warden", "claw basic is one melee_swing; arrow basic publishes none")
+	check(controller.rng.state == rng_state and controller.player.health.current_hp == hp, "enemy presentation never consumes RNG or changes HP")
+	# Summon: companion entering after the master's canonical spawn.
+	var companion := controller._spawn_route_enemy({"species":&"test_animal_companion", "category":MobTierRules.lower_category(&"boss"), "position":warden.global_position + Vector2(0, 60)}, 1, true, warden.get_instance_id())
+	var summons := _p6_of(&"summon")
+	check(companion != null and summons.size() == 1 and summons[0].essential and summons[0].actor_id == str(warden.get_instance_id()) and summons[0].payload.companion_id == str(companion.get_instance_id()) and summons[0].payload.actor_variant == &"forest_ancient_warden" and summons[0].skill_id == &"enemy_summon", "summoned companion publishes one essential summon: " + str(summons))
+	bridge.begin_stage(bridge.stage_id, true)
+	check(_p6_of(&"summon").size() == 1 and _p6_of(&"charge_start").size() == 1, "resume replays no summon or charge")
+	controller.free()
+	events.clear()
 	await process_frame

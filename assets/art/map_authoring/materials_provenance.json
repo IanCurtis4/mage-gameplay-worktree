@@ -38,6 +38,51 @@
       "prompts": [
         "Use case: stylized-concept. Asset type: one seamless tileable opaque square water albedo texture for a polished hand-painted isometric fantasy RPG. Full-bleed exact top-down orthographic view of quiet shallow creek water, muted deep teal and cool blue-green tones with restrained soft ripples and small gently broken pale turquoise highlights. A few very subtle submerged muted stone shapes, no visible shoreline, no grass or plants, no islands, no objects, no sky reflection, no horizon, no perspective, no foam swirls, no large waves. Polished softly painted classic fantasy strategy/RPG ground material, not photographic, not pixel art. Even diffuse illumination with moderate quiet variation; all opposite edges match seamlessly. Entire image is continuous water material, not a scene, map or swatch board. No text, border, frame or watermark. Square format."
       ]
+    },
+    {
+      "id": "grass_tile_v2",
+      "path": "grass_tile_v2.png",
+      "sha256": "6706e19205f2ecde3c173d290e293b53c18f2700ba5e2bc437fcacea629bda3b",
+      "width": 1254,
+      "height": 1254,
+      "source": "assets/art/e08_world/staging/materials/grass_tile.png",
+      "generator": "Codex built-in imagegen",
+      "request": "docs/epics/e08_p5_imagegen_briefs.md §2 (materials)",
+      "prompt": null,
+      "prompt_note": "exact prompt not recorded: user asked Codex to minimize tokens (2026-11-08)",
+      "rights_basis": "project_generated_output",
+      "status": "generated_project_art_prompt_unrecorded",
+      "promotion": "E08 P5 B2b, 2026-11-08: delivered bytes copied unchanged"
+    },
+    {
+      "id": "earth_tile_v2",
+      "path": "earth_tile_v2.png",
+      "sha256": "f8326969baca99efb9d3659b29aafc84c624024617bbb4e29c0b5f2ca1053c62",
+      "width": 1254,
+      "height": 1254,
+      "source": "assets/art/e08_world/staging/materials/earth_tile.png",
+      "generator": "Codex built-in imagegen",
+      "request": "docs/epics/e08_p5_imagegen_briefs.md §2 (materials)",
+      "prompt": null,
+      "prompt_note": "exact prompt not recorded: user asked Codex to minimize tokens (2026-11-08)",
+      "rights_basis": "project_generated_output",
+      "status": "generated_project_art_prompt_unrecorded",
+      "promotion": "E08 P5 B2b, 2026-11-08: delivered bytes copied unchanged"
+    },
+    {
+      "id": "sand_tile_v2",
+      "path": "sand_tile_v2.png",
+      "sha256": "9a4cdef9b439be98ec10ac3e9f69da8892a812f2c64a1d2b2f40f5c879bc422e",
+      "width": 1254,
+      "height": 1254,
+      "source": "assets/art/e08_world/staging/materials/sand_tile.png",
+      "generator": "Codex built-in imagegen",
+      "request": "docs/epics/e08_p5_imagegen_briefs.md §2 (materials)",
+      "prompt": null,
+      "prompt_note": "exact prompt not recorded: user asked Codex to minimize tokens (2026-11-08)",
+      "rights_basis": "project_generated_output",
+      "status": "generated_project_art_prompt_unrecorded",
+      "promotion": "E08 P5 B2b, 2026-11-08: delivered bytes copied unchanged"
     }
   ]
 }

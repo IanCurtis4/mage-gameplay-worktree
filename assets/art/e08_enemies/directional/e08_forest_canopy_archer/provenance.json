@@ -1,0 +1,40 @@
+{
+  "author": "Codex (imagegen)",
+  "generator": "Codex built-in imagegen",
+  "provenance": "generated_project_art_prompt_unrecorded",
+  "request": "docs/epics/e08_p5_imagegen_briefs.md §1 (species)",
+  "prompt_note": "exact prompt not recorded: user asked Codex to minimize tokens (2026-11-08)",
+  "rights_basis": "project_generated_output",
+  "sources": {
+    "south": {
+      "path": "assets/art/e08_world/staging/species/e08_forest_canopy_archer/south_source_v1.png",
+      "sha256": "c40311a6d1054c7d056b2f3df8652320ec7ee022a9907b77f7f81c594d3f8b6c",
+      "prompt": null
+    },
+    "north": {
+      "path": "assets/art/e08_world/staging/species/e08_forest_canopy_archer/north_source_v1.png",
+      "sha256": "ea3607a9bcfce5c705c1ced93ff1b6403def0d6d3a53717a781b9857d58dc7c1",
+      "prompt": null
+    },
+    "east": {
+      "path": "assets/art/e08_world/staging/species/e08_forest_canopy_archer/east_source_v1.png",
+      "sha256": "9a7fb301e16a4dc66f1da14936036dd7eebecc4afaba275f202654040de4b294",
+      "prompt": null
+    },
+    "west": {
+      "path": "assets/art/e08_world/staging/species/e08_forest_canopy_archer/west_source_v1.png",
+      "sha256": "b85cb24b473e24042cd4f7e1d6201adf6b39ccf063462eb1400d11bc9dd12ee5",
+      "prompt": null
+    }
+  },
+  "packer": "tools/prepare_e08_enemy_directional_art.py",
+  "rgba_sha256": "a0714a54953eda78d6a0117da8f2b69d0a944dd71c7982546219dd50bec834bb",
+  "scale": [
+    0.18796992481203006,
+    0.1841620626151013,
+    0.18050541516245489,
+    0.17857142857142858
+  ],
+  "target_height": 50,
+  "native_review": "pending"
+}

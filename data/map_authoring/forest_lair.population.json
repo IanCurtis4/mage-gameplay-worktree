@@ -91,7 +91,7 @@
 			"instances": [
 				{
 					"instance_id": "field",
-					"piece_hash": "0f5b4ed49d54b7b29370f3d23fd40966f93e8605c9d20be5543b0094568869d6",
+					"piece_hash": "c3021f78d7e9d7dcba6ab2ce04aae89fec75b41b3b5bca2a77b23b81ba71098c",
 					"position_xyz": [
 						0,
 						0,
@@ -105,7 +105,7 @@
 			"name": "Covil do Guardião",
 			"pieces": [
 				{
-					"piece_hash": "0f5b4ed49d54b7b29370f3d23fd40966f93e8605c9d20be5543b0094568869d6",
+					"piece_hash": "c3021f78d7e9d7dcba6ab2ce04aae89fec75b41b3b5bca2a77b23b81ba71098c",
 					"source": {
 						"composition": null,
 						"connectors": [],
@@ -137,6 +137,36 @@
 								"kind": "prop",
 								"revision": 1,
 								"sha256": "e2e6fc9af59b1ab2820e21239d87c28b48ebc94b7489d12eb1fd9106187ed7bb"
+							},
+							{
+								"definition_id": "birch_tree",
+								"kind": "prop",
+								"revision": 1,
+								"sha256": "ab211974e6d4ada7214d6643ab7135b890647aeff097736bbe7a49a83917dc6c"
+							},
+							{
+								"definition_id": "fern_cluster",
+								"kind": "prop",
+								"revision": 1,
+								"sha256": "777436ba49db63a761462a46a7f34373e5f1a165704bf64e157a9ba84a9187b9"
+							},
+							{
+								"definition_id": "wildflower_patch",
+								"kind": "prop",
+								"revision": 1,
+								"sha256": "8791612749be07be70fff078aad47a4ea6e4f3b23c293077533109a4f710a884"
+							},
+							{
+								"definition_id": "mushroom_ring",
+								"kind": "prop",
+								"revision": 1,
+								"sha256": "b7d883a911fa7b3622baae63a9b52c12b6a2a5018edaee805e40321fdab11b4c"
+							},
+							{
+								"definition_id": "fallen_log",
+								"kind": "prop",
+								"revision": 1,
+								"sha256": "263a3ac3c0a51c5312bde468ec3b9d0238e2e330bd139bec74fa4af6baf20d9a"
 							}
 						],
 						"document_id": "forest_lair",
@@ -9809,7 +9839,7 @@
 								"surface_id": "ground"
 							},
 							{
-								"definition_id": "oak_tree",
+								"definition_id": "birch_tree",
 								"placement_id": "object_d5804f76aacef4e1f762e51d",
 								"position_xyz": [
 									-413.28106689453125,
@@ -9821,7 +9851,7 @@
 								"surface_id": "ground"
 							},
 							{
-								"definition_id": "oak_tree",
+								"definition_id": "birch_tree",
 								"placement_id": "object_ca862f6237e06b13b245692b",
 								"position_xyz": [
 									1019.083251953125,
@@ -9881,7 +9911,7 @@
 								"surface_id": "ground"
 							},
 							{
-								"definition_id": "oak_tree",
+								"definition_id": "birch_tree",
 								"placement_id": "object_bc72a674a5c9d127b07ea9bf",
 								"position_xyz": [
 									506.7191162109375,
@@ -9929,7 +9959,7 @@
 								"surface_id": "ground"
 							},
 							{
-								"definition_id": "woodland_shrub",
+								"definition_id": "mushroom_ring",
 								"placement_id": "object_421fcfde479d9760bceea85c",
 								"position_xyz": [
 									255.8697967529297,
@@ -9953,7 +9983,7 @@
 								"surface_id": "ground"
 							},
 							{
-								"definition_id": "woodland_shrub",
+								"definition_id": "fallen_log",
 								"placement_id": "object_8a32640da702ed4ce3c9a3e9",
 								"position_xyz": [
 									909.1992797851563,
@@ -9965,7 +9995,7 @@
 								"surface_id": "ground"
 							},
 							{
-								"definition_id": "woodland_shrub",
+								"definition_id": "fern_cluster",
 								"placement_id": "object_ef1d9b0e5186464c71cd78f9",
 								"position_xyz": [
 									184.27658081054688,
@@ -10001,7 +10031,7 @@
 								"surface_id": "ground"
 							},
 							{
-								"definition_id": "woodland_shrub",
+								"definition_id": "wildflower_patch",
 								"placement_id": "object_827746c8f395ebbd8dcbaf14",
 								"position_xyz": [
 									-748.3594970703125,
@@ -10025,7 +10055,7 @@
 								"surface_id": "ground"
 							},
 							{
-								"definition_id": "woodland_shrub",
+								"definition_id": "wildflower_patch",
 								"placement_id": "object_8ce975e9081a4eb9e24e388a",
 								"position_xyz": [
 									982.9978637695313,
@@ -10037,7 +10067,7 @@
 								"surface_id": "ground"
 							},
 							{
-								"definition_id": "woodland_shrub",
+								"definition_id": "fern_cluster",
 								"placement_id": "object_f67159c0f9fc6f434a78670f",
 								"position_xyz": [
 									501.5628967285156,
@@ -10099,7 +10129,7 @@
 		}
 	],
 	"name": "Covil do Guardião",
-	"plan_hash": "ee97d631ba01ea8b6dbc1ab27d4a6bcc8d621bd413e5a6d63aa8bc7d7aa3cddf",
+	"plan_hash": "2e57243a1e7bd229f2ae6a64af400ec7e9364ca729b14220a0a1b90cfd7c2549",
 	"revision": 1,
 	"schema_version": 1,
 	"slots": [

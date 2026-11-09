@@ -1,0 +1,40 @@
+{
+  "author": "Codex (imagegen)",
+  "generator": "Codex built-in imagegen",
+  "provenance": "generated_project_art_prompt_unrecorded",
+  "request": "docs/epics/e08_p5_imagegen_briefs.md §1 (species)",
+  "prompt_note": "exact prompt not recorded: user asked Codex to minimize tokens (2026-11-08)",
+  "rights_basis": "project_generated_output",
+  "sources": {
+    "south": {
+      "path": "assets/art/e08_world/staging/species/e08_forest_warden/south_source_v1.png",
+      "sha256": "dd1eb3c3e29785a17f915603ee4c01ca6da30235bc5ae663df216d70de49785b",
+      "prompt": null
+    },
+    "north": {
+      "path": "assets/art/e08_world/staging/species/e08_forest_warden/north_source_v1.png",
+      "sha256": "40d3b002c02f61ba980c83c769e31642051ffefd749fb93920958be5dea0d9a3",
+      "prompt": null
+    },
+    "east": {
+      "path": "assets/art/e08_world/staging/species/e08_forest_warden/east_source_v1.png",
+      "sha256": "4066791e196cb8423587b95b911f3b3f763c9bc2a3ccd8e2d54189a962985d37",
+      "prompt": null
+    },
+    "west": {
+      "path": "assets/art/e08_world/staging/species/e08_forest_warden/west_source_v1.png",
+      "sha256": "756d0b8a352c9d525981cc06dcc9cdb5d4995da386edb921566777c3373750c6",
+      "prompt": null
+    }
+  },
+  "packer": "tools/prepare_e08_enemy_directional_art.py",
+  "rgba_sha256": "09d72c9613e6e7c9a1adedd56571c3128838675a68904fe83aa1e5777bf07424",
+  "scale": [
+    0.19528619528619529,
+    0.19858156028368795,
+    0.1950354609929078,
+    0.1895424836601307
+  ],
+  "target_height": 55,
+  "native_review": "pending"
+}

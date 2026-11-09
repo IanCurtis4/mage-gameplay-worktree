@@ -1,0 +1,404 @@
+extends SceneTree
+## E08 P6-A2: feedback by recipe (FeedbackVfxLayer), world projectile silhouettes, Elementalist
+## world pulses and the bridge element hint. Presentation only: no gameplay value may change.
+const Fixture = preload("res://tests/fixtures/e07/f1/fixture_input.gd")
+const Layer = preload("res://scripts/presentation/feedback_vfx_layer.gd")
+const Base = preload("res://scripts/presentation/e08_pilot_feedback.gd")
+const Recipes = preload("res://scripts/presentation/feedback_recipe_catalog.gd")
+const Art = preload("res://scripts/presentation/world_projectile_art.gd")
+class Host extends Node2D:
+	var snapshot_passive := false
+var checks := 0
+var failures := 0
+var serial := 0
+func check(ok: bool, label: String) -> void:
+	checks += 1
+	if not ok: failures += 1; push_error(label)
+func _initialize() -> void: _run.call_deferred()
+
+func event(bridge: PresentationEventBridge, kind: StringName, skill: StringName, payload_extra: Dictionary = {}, at: Vector2 = Vector2(50, 50)) -> Dictionary:
+	serial += 1
+	var payload := {"presentation_epoch":bridge.current_epoch(), "position_unavailable":true, "legacy_position_2d":at, "target_id":str(serial)}
+	payload.merge(payload_extra, true)
+	return {"event_id":"vfx_%d" % serial, "kind":kind, "stage_id":bridge.stage_id, "actor_id":"fixture", "skill_id":skill, "position":Vector3.ZERO, "surface_id":"", "duration":0.4, "essential":false, "payload":payload}
+
+func rig() -> Dictionary:
+	var host := Host.new(); root.add_child(host)
+	var bridge := PresentationEventBridge.new(); host.add_child(bridge); bridge.bind_controller(host); bridge.set_process(false)
+	var layer: Control = Layer.new(); bridge.add_child(layer); layer.configure(bridge, host)
+	bridge.begin_stage("vfx")
+	return {"host":host, "bridge":bridge, "layer":layer}
+
+## Kind that carries each family in the bridge (a signature only applies on its own kind).
+const FAMILY_KIND := {&"cast":&"cast_start", &"projectile":&"projectile_launch", &"melee":&"melee_swing", &"impact":&"impact", &"area":&"area_start", &"trap":&"trap_trigger",
+	&"buff":&"effect_start", &"heal":&"heal", &"movement":&"movement", &"summon":&"summon", &"charge":&"charge_start", &"teleport":&"teleport", &"death":&"death", &"revive":&"revive"}
+
+func _run() -> void:
+	check(Fixture.sources_current(), "fixture sources match frozen inputs")
+	await _selection()
+	await _signatures()
+	await _flood_and_lifecycle()
+	await _determinism_and_orientation()
+	_projectile_art()
+	await _spatial()
+	print("E08 FEEDBACK VFX: %d checks, %d failures" % [checks, failures])
+	quit(1 if failures else 0)
+
+func _selection() -> void:
+	var r := rig()
+	var bridge: PresentationEventBridge = r.bridge
+	var layer = r.layer
+	var recipes := Recipes.known_ids()
+	check(recipes.size() >= 80, "recipe catalog covers the active kit (%d ids)" % recipes.size())
+	var drawn_families := {}
+	var drawn_elements := {}
+	for skill: StringName in recipes:
+		var recipe := Recipes.recipe(skill)
+		var kind: StringName = FAMILY_KIND[recipe.family]
+		layer.pulses.clear(); layer._on_stage_cleared()
+		var extra := {"radius":60.0, "direction_2d":Vector2.RIGHT, "instant":false}
+		check(bridge.emit_confirmed(event(bridge, kind, skill, extra)), "event accepted for " + str(skill))
+		var pulse: Dictionary = layer.pulses.back() if not layer.pulses.is_empty() else {}
+		check(not pulse.is_empty() and pulse.family == recipe.family and pulse.element == recipe.element and pulse.kind == kind, "recipe selects family/element for %s (%s/%s)" % [skill, recipe.family, recipe.element])
+		drawn_families[recipe.family] = true
+		drawn_elements[recipe.element] = true
+	for family: StringName in Recipes.FAMILIES:
+		if family in [&"death", &"revive"]: continue # No active skill maps to them; covered below.
+		check(drawn_families.has(family), "family has a visual: " + str(family))
+	for element: StringName in Recipes.ELEMENTS: check(drawn_elements.has(element), "element has a visual: " + str(element))
+	for kind: StringName in [&"death", &"revive", &"area_end", &"cast_cancel", &"teleport"]:
+		layer.pulses.clear()
+		bridge.emit_confirmed(event(bridge, kind, &"fireball", {"reason":"expire"}))
+		check(layer.pulses.size() == 1 and layer.pulses[0].kind == kind, "kind drawn: " + str(kind))
+	# Elements: the payload override (Elementalist / Geometer) wins over the skill default.
+	for element: StringName in Recipes.ELEMENTS:
+		layer.pulses.clear(); layer._on_stage_cleared()
+		bridge.emit_confirmed(event(bridge, &"impact", &"elementalist_tri_nova", {"element":String(element)}))
+		check(layer.pulses.size() == 1 and layer.pulses[0].element == element, "payload.element selects " + str(element))
+	layer.pulses.clear()
+	bridge.emit_confirmed(event(bridge, &"impact", &"elementalist_tri_nova", {"element":"bogus"}))
+	check(layer.pulses[0].element == &"arcane", "unknown payload.element falls back to the recipe element")
+	layer.pulses.clear()
+	bridge.emit_confirmed(event(bridge, &"impact", &"totally_unknown_skill"))
+	check(layer.pulses.size() == 1 and layer.pulses[0].family == &"impact" and layer.pulses[0].element == &"physical", "unknown skill uses the generic recipe")
+	# Kinds that are not feedback.
+	layer.pulses.clear()
+	bridge.emit_confirmed(event(bridge, &"ui_confirm", &""))
+	bridge.emit_confirmed(event(bridge, &"area_end", &"snare_trap", {"reason":"trigger"}))
+	bridge.emit_confirmed(event(bridge, &"area_end", &"snare_trap", {"reason":"cleanup"}))
+	check(layer.pulses.is_empty(), "ui events and trigger/cleanup area_end draw nothing")
+	# Every pulse form draws without error at several ages (draw notification outside a renderer when possible).
+	layer.pulses.clear(); layer._on_stage_cleared()
+	var kinds: Array = Layer.DRAWN_KINDS.duplicate()
+	var smoke := 0
+	for skill: StringName in [&"fireball", &"ice_spear", &"lightning", &"slash", &"berserker_blood_rift", &"arrow_rain", &"explosive_trap", &"hunter_freezing_trap", &"elementalist_tri_nova", &"enemy_summon", &"defender_reprisal_wave", &"blood_thirst", &"sentinel_observe", &"warden_charge"]:
+		for kind: StringName in kinds:
+			layer._advance(0.013)
+			if bridge.emit_confirmed(event(bridge, kind, skill, {"radius":50.0, "direction_2d":Vector2(1, 1), "reason":"expire", "effect_radius":70.0})): smoke += 1
+			if layer.pulses.size() >= 40:
+				layer._canvas.notification(CanvasItem.NOTIFICATION_DRAW)
+				layer._advance(0.2)
+	layer._canvas.notification(CanvasItem.NOTIFICATION_DRAW)
+	check(smoke > 100, "draw smoke exercised %d events" % smoke)
+	bridge.queue_free(); (r.host as Node).queue_free(); await process_frame
+
+func _signatures() -> void:
+	var r := rig()
+	var bridge: PresentationEventBridge = r.bridge
+	var layer = r.layer
+	var signatures := Recipes.signature_ids()
+	check(signatures.size() == 21, "21 signatures listed")
+	var with_art := 0
+	for sig: StringName in signatures:
+		var info := Recipes.signature(sig)
+		var skill: StringName = info.skill_id
+		var variant: StringName = &"forest_ancient_warden" if str(info.owner).begins_with("forest") else &""
+		var extra := {"radius":60.0, "direction_2d":Vector2.RIGHT, "actor_variant":String(variant)} if not variant.is_empty() else {"radius":60.0, "direction_2d":Vector2.RIGHT}
+		layer.pulses.clear(); layer._on_stage_cleared(); layer.flipbook_provider = Callable()
+		bridge.emit_confirmed(event(bridge, info.kind, skill, extra))
+		var pulse: Dictionary = layer.pulses.back() if not layer.pulses.is_empty() else {}
+		check(not pulse.is_empty() and pulse.signature == sig, "signature recognised on its own kind: " + str(sig))
+		if Layer.SIGNATURE_ART.has(sig):
+			with_art += 1
+			var expected: StringName = Layer.SIGNATURE_ART[sig][0]
+			check(pulse.flipbook == expected and expected in VfxFlipbookCatalog.ids() and float(pulse.life) >= 0.5, "%s uses flipbook %s" % [sig, expected])
+			# Fallback: catalog returns nothing -> still a pulse, drawn by code.
+			layer.pulses.clear(); layer._on_stage_cleared()
+			layer.flipbook_provider = func(_id: StringName) -> Dictionary: return {}
+			bridge.emit_confirmed(event(bridge, info.kind, skill, extra))
+			var fallback: Dictionary = layer.pulses.back() if not layer.pulses.is_empty() else {}
+			check(not fallback.is_empty() and fallback.flipbook == &"" and fallback.signature == sig, "%s falls back to code when the flipbook is missing" % sig)
+			layer._canvas.notification(CanvasItem.NOTIFICATION_DRAW)
+			layer.flipbook_provider = Callable()
+		else:
+			check(pulse.flipbook == &"", "%s is drawn by code (no flipbook mapped)" % sig)
+		# The same skill on another kind is not the signature.
+		var other: StringName = &"impact" if info.kind != &"impact" else &"melee_swing"
+		layer.pulses.clear(); layer._on_stage_cleared()
+		bridge.emit_confirmed(event(bridge, other, skill, extra))
+		check(layer.pulses.is_empty() or layer.pulses.back().signature == &"", "%s signature does not leak to %s" % [sig, other])
+	check(with_art == 13, "13 signatures map to flipbooks (%d)" % with_art)
+	# Drawing a flipbook pulse at several frames, including the end of the sheet.
+	layer.pulses.clear(); layer._on_stage_cleared()
+	bridge.emit_confirmed(event(bridge, &"melee_swing", &"slash", {"direction_2d":Vector2.RIGHT}))
+	check(layer.pulses.size() == 1 and layer.pulses[0].flipbook == &"slash_arc", "slash uses slash_arc")
+	for i: int in 30:
+		layer._advance(0.03); layer._canvas.notification(CanvasItem.NOTIFICATION_DRAW)
+	check(layer.pulses.is_empty(), "flipbook pulse expires with the sheet")
+	# Nature trap accent.
+	bridge.emit_confirmed(event(bridge, &"trap_trigger", &"hunter_thorn_trap", {"radius":50.0}))
+	check(layer.pulses.size() == 1 and layer.pulses[0].flipbook == &"nature_thorns", "nature trap trigger uses the thorns accent")
+	bridge.queue_free(); (r.host as Node).queue_free(); await process_frame
+
+func _flood_and_lifecycle() -> void:
+	var r := rig()
+	var bridge: PresentationEventBridge = r.bridge
+	var host: Host = r.host
+	var layer = r.layer
+	# Flood: many targets at the same instant.
+	for i: int in 12: bridge.emit_confirmed(event(bridge, &"impact", &"fire_wall"))
+	check(layer.pulses.size() == Layer.IMPACT_PER_WINDOW, "impact flood: %d per skill per window" % Layer.IMPACT_PER_WINDOW)
+	bridge.emit_confirmed(event(bridge, &"impact", &"ice_wall"))
+	check(layer.pulses.size() == Layer.IMPACT_PER_WINDOW + 1, "another skill has its own window")
+	bridge.world_advanced.emit(Layer.IMPACT_WINDOW + 0.01)
+	var before: int = layer.pulses.size()
+	for i: int in 5: bridge.emit_confirmed(event(bridge, &"impact", &"fire_wall"))
+	check(layer.pulses.size() == before + Layer.IMPACT_PER_WINDOW, "window reopens after %.2f s" % Layer.IMPACT_WINDOW)
+	# Same target gap, periodic gap.
+	layer.pulses.clear(); layer._on_stage_cleared()
+	var first := event(bridge, &"impact", &"fireball", {"target_id":"7"})
+	bridge.emit_confirmed(first)
+	bridge.world_advanced.emit(Layer.IMPACT_WINDOW + 0.001)
+	bridge.emit_confirmed(event(bridge, &"impact", &"fireball", {"target_id":"7"}))
+	check(layer.pulses.size() == 1, "same skill + target inside %.2f s is merged" % Layer.TARGET_GAP)
+	bridge.world_advanced.emit(Layer.TARGET_GAP)
+	bridge.emit_confirmed(event(bridge, &"impact", &"fireball", {"target_id":"7"}))
+	check(layer.pulses.size() == 2, "same target draws again after the gap")
+	layer.pulses.clear(); layer._on_stage_cleared()
+	bridge.emit_confirmed(event(bridge, &"impact", &"burn_tick", {"target_id":"9"}))
+	bridge.world_advanced.emit(Layer.TARGET_GAP + 0.05)
+	bridge.emit_confirmed(event(bridge, &"impact", &"burn_tick", {"target_id":"9"}))
+	check(layer.pulses.size() == 1, "periodic (DOT) ticks use the longer %.2f s gap" % Layer.PERIODIC_GAP)
+	bridge.world_advanced.emit(Layer.PERIODIC_GAP)
+	bridge.emit_confirmed(event(bridge, &"impact", &"burn_tick", {"target_id":"9"}))
+	check(not layer.pulses.is_empty() and is_zero_approx(float(layer.pulses.back().age)), "DOT draws again after the long gap")
+	# CAP and memory bound.
+	layer.pulses.clear(); layer._on_stage_cleared()
+	for i: int in 400:
+		bridge.world_advanced.emit(0.001)
+		bridge.emit_confirmed(event(bridge, &"melee_swing", &"slash", {"direction_2d":Vector2.RIGHT}))
+		bridge.emit_confirmed(event(bridge, &"impact", StringName("flood_%d" % (i % 90)), {"target_id":str(i)}))
+	check(layer.pulses.size() <= Layer.CAP and Layer.CAP == 48, "pulses bounded by CAP (%d)" % layer.pulses.size())
+	check(layer._last_hit.size() <= Layer.FLOOD_MEMORY and layer._windows.size() <= 100, "flood memory bounded")
+	# Clock: impacts after enough virtual time are accepted again; pause freezes the visual clock and ages.
+	layer.pulses.clear(); layer._on_stage_cleared()
+	bridge.emit_confirmed(event(bridge, &"melee_swing", &"slash", {"direction_2d":Vector2.RIGHT}))
+	bridge.world_advanced.emit(0.1)
+	var age: float = layer.pulses[0].age
+	var clock: float = layer._clock
+	paused = true
+	bridge.world_advanced.emit(0.1)
+	check(is_equal_approx(layer.pulses[0].age, age) and is_equal_approx(layer._clock, clock), "paused world freezes pulse age and flood clock")
+	check(not bridge.emit_confirmed(event(bridge, &"impact", &"fireball")), "paused bridge publishes no impact")
+	var added: int = layer.pulses.size()
+	layer._event(event(bridge, &"impact", &"fireball"))
+	check(layer.pulses.size() == added, "layer ignores events while the tree is paused")
+	paused = false
+	# Passive staging.
+	host.snapshot_passive = true
+	layer._event(event(bridge, &"impact", &"fireball"))
+	layer._process(0.0)
+	check(layer.pulses.is_empty(), "passive staging rejects and clears transients")
+	host.snapshot_passive = false
+	# Stage change.
+	bridge.emit_confirmed(event(bridge, &"melee_swing", &"slash", {"direction_2d":Vector2.RIGHT}))
+	bridge.begin_stage("next", true)
+	check(layer.pulses.is_empty() and layer._last_hit.is_empty() and layer._windows.is_empty(), "stage change clears pulses and flood memory; resume replays nothing")
+	# Lifetimes bounded.
+	var longest := 0.0
+	for kind: StringName in Layer.DRAWN_KINDS:
+		layer.pulses.clear()
+		bridge.emit_confirmed(event(bridge, kind, &"enemy_summon", {"reason":"expire"}))
+		for pulse: Dictionary in layer.pulses: longest = maxf(longest, float(pulse.life))
+	check(longest > 0.0 and longest <= 1.6, "pulse lifetimes bounded (max %.2f s)" % longest)
+	# Dispose idempotent; the old bridge cannot draw after rebinding.
+	layer.dispose(); layer.dispose()
+	check(layer.pulses.is_empty() and bridge.event_confirmed.get_connections().is_empty() and bridge.world_advanced.get_connections().is_empty(), "dispose is idempotent and disconnects both listeners")
+	bridge.queue_free(); host.queue_free(); await process_frame
+
+func _determinism_and_orientation() -> void:
+	var a := rig()
+	var b := rig()
+	var same := event(a.bridge, &"impact", &"ice_spear", {"target_id":"1"})
+	var twin: Dictionary = same.duplicate(true); twin.payload.presentation_epoch = (b.bridge as PresentationEventBridge).current_epoch(); twin.stage_id = (b.bridge as PresentationEventBridge).stage_id
+	a.bridge.emit_confirmed(same); b.bridge.emit_confirmed(twin)
+	check(a.layer.pulses.size() == 1 and b.layer.pulses.size() == 1 and a.layer.pulses[0] == b.layer.pulses[0], "same event -> identical pulse (deterministic)")
+	var different := event(a.bridge, &"impact", &"ice_spear", {"target_id":"2"})
+	a.bridge.emit_confirmed(different)
+	check(a.layer.pulses.back().seed != a.layer.pulses[0].seed, "different event_id -> different jitter seed")
+	# RNG and clocks untouched.
+	seed(4242); var expected := randi()
+	seed(4242)
+	for i: int in 30:
+		a.bridge.emit_confirmed(event(a.bridge, &"melee_swing", &"slash", {"direction_2d":Vector2.from_angle(float(i))}))
+		a.layer._advance(0.01); a.layer._canvas.notification(CanvasItem.NOTIFICATION_DRAW)
+	check(randi() == expected, "layer never consumes the global RNG")
+	# Orientation: slash direction.
+	a.layer.pulses.clear(); a.layer._on_stage_cleared()
+	a.bridge.emit_confirmed(event(a.bridge, &"melee_swing", &"slash", {"direction_2d":Vector2.RIGHT}))
+	a.bridge.emit_confirmed(event(a.bridge, &"melee_swing", &"slash", {"direction_2d":Vector2.UP}))
+	check(a.layer.pulses[0].dir.is_equal_approx(Vector2.RIGHT) and a.layer.pulses[1].dir.is_equal_approx(Vector2.UP), "flat arena swing follows the payload direction")
+	for pair: Array in [[a], [b]]:
+		(pair[0].bridge as Node).queue_free(); (pair[0].host as Node).queue_free()
+	await process_frame
+
+func _projectile_art() -> void:
+	var seen := {}
+	var cases := [[MageProjectile, &"fireball", &"orb"], [MageProjectile, &"fire_spear", &"spear"], [MageProjectile, &"ice_spear", &"spear"], [MageProjectile, &"lightning", &"bolt"],
+		[MageProjectile, &"electric_discharge", &"bolt"], [MageProjectile, &"basic_attack", &"orb"], [PlayerProjectile, &"basic_attack", &"arrow"], [PlayerProjectile, &"double_shot", &"arrow"],
+		[PlayerProjectile, &"slowing_arrow", &"arrow"], [SentinelProjectile, &"sentinel_headshot", &"sentinel_headshot"], [SentinelProjectile, &"sentinel_piercing_shot", &"sentinel_piercing_shot"],
+		[SentinelProjectile, &"sentinel_net_shot", &"sentinel_net_shot"], [SentinelProjectile, &"sentinel_explosive_shot", &"sentinel_explosive_shot"], [SentinelProjectile, &"sentinel_concussion_shot", &"sentinel_concussion_shot"],
+		[ArrowProjectile, &"enemy_arrow", &"arrow"], [ArrowProjectile, &"basic_attack", &"arrow"]]
+	for entry: Array in cases:
+		var projectile: Node = entry[0].new()
+		var request := DamageRequest.new(); request.skill_id = entry[1]
+		projectile.request = request
+		var spec := Art.spec(projectile)
+		check(spec.shape == entry[2], "%s %s -> %s (%s)" % [projectile.get_class(), entry[1], spec.shape, entry[2]])
+		check(spec.element in Recipes.ELEMENTS and spec.core is Color and spec.glow is Color, "projectile spec has a palette: " + str(entry[1]))
+		seen[str(spec.shape) + "/" + str(spec.element)] = true
+		if entry[1] == &"enemy_arrow": check(spec.hostile, "enemy arrow is marked hostile")
+		projectile.free()
+	for element: StringName in [&"fire", &"ice", &"lightning"]:
+		var trace := GeometerTraceProjectile.new(); trace.request = DamageRequest.new(); trace.request.skill_id = &"geometer_trace"; trace.element = element
+		var spec := Art.spec(trace)
+		check(spec.shape == &"trace" and spec.element == element and spec.core == Art.PALETTE[element][0], "geometer trace keeps its element look: " + str(element))
+		trace.free()
+	check(seen.size() >= 10, "projectile silhouettes are distinct (%d)" % seen.size())
+	var fire_node := _projectile_for(&"fireball"); var ice_node := _projectile_for(&"ice_spear")
+	var fire := Art.spec(fire_node); var ice := Art.spec(ice_node)
+	check(fire.core != ice.core, "fire and ice projectiles differ in colour")
+	fire_node.free(); ice_node.free()
+	# Mage nodes keep the 2D identity colour.
+	var mage := MageProjectile.new(); mage.request = DamageRequest.new(); mage.request.skill_id = &"fireball"; mage.color = Color("123456")
+	check(Art.spec(mage).core == Color("123456"), "mage projectile uses its own tint")
+	mage.free()
+	# 2D legacy drawers stay quiet in the spatial world (no stray draw at the node origin).
+	for script_path: String in ["res://scripts/actors/mage_projectile.gd", "res://scripts/actors/sentinel_projectile.gd"]:
+		check(FileAccess.get_file_as_string(script_path).contains("if world_flight != null: return"), "legacy drawer guards spatial flights: " + script_path)
+	# Element on the geometer launch payload (bridge side).
+	var bridge := PresentationEventBridge.new()
+	for element: StringName in [&"fire", &"ice", &"lightning"]:
+		var trace := GeometerTraceProjectile.new(); trace.element = element
+		var payload := {}
+		bridge._projectile_element(trace, payload)
+		check(payload.get("element") == String(element), "geometer launch payload carries element " + str(element))
+		trace.free()
+	var plain := PlayerProjectile.new(); var payload := {}
+	bridge._projectile_element(plain, payload)
+	check(not payload.has("element"), "non-geometer projectile adds no element")
+	plain.free(); bridge.free()
+
+func _projectile_for(skill: StringName) -> Node:
+	var projectile := MageProjectile.new(); projectile.request = DamageRequest.new(); projectile.request.skill_id = skill
+	projectile.color = Color.RED if skill == &"fireball" else Color.BLUE
+	return projectile
+
+func _spatial() -> void:
+	var sample: Node2D = load("res://tests/fixtures/e07/f1/presentation_sample.tscn").instantiate()
+	root.add_child(sample); sample.set_process(false)
+	var controller: RunController = sample.controller
+	var bridge := controller.presentation_events()
+	var layer: Control = bridge.get_node("E08PilotFeedback")
+	check(layer.get_script() == Layer and layer is Base and layer._canvas is Node2D and layer._canvas.get_parent() == layer, "the spatial controller installs the recipe layer under the pilot name, painting on a Node2D child (a Control does not paint in the world canvas)")
+	var view: ExpeditionGeometryView = sample.view
+	var lower: Vector3 = sample.lower.world_point().position
+	var upper: Vector3 = sample.upper.world_point().position
+	check(not view.point_visible(lower) and view.point_visible(upper), "fixture has occluded lower anchor and visible upper anchor")
+	var snapshot := _gameplay_state(controller, sample)
+	seed(77); var expected := randi(); seed(77)
+	# Occlusion and anchoring.
+	var hidden := event(bridge, &"impact", &"fireball"); hidden.position = lower; hidden.payload.erase("position_unavailable"); hidden.payload.erase("legacy_position_2d")
+	bridge.emit_confirmed(hidden)
+	check(layer.pulses.is_empty(), "occluded anchor draws nothing")
+	for kind: StringName in [&"melee_swing", &"area_start", &"effect_start", &"trap_trigger", &"summon", &"charge_start", &"heal", &"movement"]:
+		var ev := event(bridge, kind, &"slash", {"direction":Vector3(1, 0, 0), "radius":60.0}); ev.position = lower; ev.payload.erase("position_unavailable"); ev.payload.erase("legacy_position_2d")
+		bridge.emit_confirmed(ev)
+	check(layer.pulses.is_empty(), "every new kind respects occlusion")
+	var visible := event(bridge, &"melee_swing", &"slash", {"direction":Vector3(1, 0, 0)}); visible.position = upper; visible.payload.erase("position_unavailable"); visible.payload.erase("legacy_position_2d")
+	bridge.emit_confirmed(visible)
+	check(layer.pulses.size() == 1 and layer._canvas.z_index == Layer.Z_SPATIAL and not layer._canvas.z_as_relative, "visible anchor draws above actors in the spatial world (z %d)" % layer._canvas.z_index)
+	var expected_dir := ExpeditionGeometryView.project(Vector3(1, 0, 0)).normalized()
+	check(layer.pulses[0].dir.is_equal_approx(expected_dir) and layer.pulses[0].flipbook == &"slash_arc", "spatial swing rotates by the projected ground direction")
+	check(layer._canvas.z_index < 4090 and layer._canvas.z_index > 4000, "layer sits below the view marker/route layer (4090)")
+	layer._canvas.notification(CanvasItem.NOTIFICATION_DRAW)
+	# Legacy 2D path in the same layer.
+	var flat := event(bridge, &"impact", &"fireball")
+	bridge.emit_confirmed(flat)
+	check(layer._canvas.z_index == Layer.Z_FLAT, "flat arena events use the low z (%d)" % layer._canvas.z_index)
+	# Element hint: Elementalist call site -> impact payload.
+	var events: Array[Dictionary] = []
+	bridge.event_confirmed.connect(func(e: Dictionary) -> void: events.append(e))
+	var request := DamageRequest.new(); request.source_id = 7; request.target_id = sample.upper.get_instance_id(); request.skill_id = &"elementalist_tri_nova"; request.magic_damage = 5.0; request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
+	bridge.note_element(sample.upper, &"ice")
+	sample.upper.health.apply(request, 0.5, 1.0)
+	var hit: Dictionary = events.back() if not events.is_empty() else {}
+	check(hit.get("kind") == &"impact" and hit.payload.get("element") == "ice", "same-frame element hint reaches the impact payload")
+	check(Recipes.for_event(hit).element == &"ice", "recipe uses the hinted element")
+	events.clear()
+	sample.upper.health.apply(request.copy(), 0.5, 1.0)
+	check(not events.is_empty() and not events.back().payload.has("element"), "no hint -> no element")
+	bridge.note_element(sample.upper, &"bogus")
+	check(bridge._element_hints.is_empty(), "invalid element hint rejected")
+	for i: int in 100: bridge.note_element(sample.upper, &"fire")
+	check(bridge._element_hints.size() <= PresentationEventBridge.ELEMENT_HINT_LIMIT, "element hints bounded")
+	# World pulses (Elementalist) and arc link in the spatial world.
+	var painter: BattleIndicators
+	view.show_elementalist_pulse(&"elementalist_flame_burst", lower, 60.0, &"fire")
+	check(not is_instance_valid(view._world_pulses) or view._world_pulses.elementalist_pulses.is_empty(), "occluded Elementalist pulse is not drawn")
+	view.show_elementalist_pulse(&"elementalist_flame_burst", upper, 60.0, &"fire")
+	view.show_elementalist_pulse(&"elementalist_glacial_ring", upper, 60.0, &"ice")
+	view.show_elementalist_pulse(&"elementalist_lightning_arc", upper, 30.0, &"lightning")
+	painter = view._world_pulses
+	check(painter != null and painter.elementalist_pulses.size() == 3 and painter.get_parent() == view._effects, "Elementalist pulses are drawn in the world effects layer")
+	check(is_equal_approx(float(painter.elementalist_pulses[0].radius), 60.0 * ExpeditionGeometryView.GROUND_SCREEN_SCALE) and painter.elementalist_pulses[0].center == ExpeditionGeometryView.project(upper), "pulse is projected onto the ground anchor")
+	view.show_elementalist_arc_link(upper + Vector3.UP * 20.0, upper + Vector3(60, 20, 0))
+	check(painter.elementalist_arc_links.size() == 1, "lightning arc link is drawn in the world")
+	check(view._effects.z_index == 4090 and painter.z_index == 0, "pulse painter inherits the effects layer order")
+	check(controller.battle_indicators.elementalist_pulses.is_empty(), "flat-arena indicators are untouched by world pulses")
+	painter.process_mode = Node.PROCESS_MODE_PAUSABLE
+	for i: int in 70: view.show_elementalist_pulse(&"elementalist_flame_burst", upper, 60.0, &"fire")
+	check(painter.elementalist_pulses.size() <= BattleIndicators.ELEMENTALIST_MAX_PULSES, "world pulses are bounded")
+	controller.snapshot_passive = true
+	var queued := painter.elementalist_pulses.size()
+	view.show_elementalist_pulse(&"elementalist_flame_burst", upper, 60.0, &"fire")
+	check(painter.elementalist_pulses.size() == queued, "passive staging draws no world pulse")
+	controller.snapshot_passive = false
+	view.clear_world_pulses()
+	check(painter.elementalist_pulses.is_empty() and painter.elementalist_arc_links.is_empty(), "clear_world_pulses empties the painter")
+	# Pulse ageing follows the pausable process (frozen while paused).
+	view.show_elementalist_pulse(&"elementalist_flame_burst", upper, 60.0, &"fire")
+	var remaining: float = painter.elementalist_pulses[0].remaining
+	paused = true
+	painter._process(0.2)
+	check(is_equal_approx(float(painter.elementalist_pulses[0].remaining), remaining), "paused tree freezes world pulses")
+	paused = false
+	painter._process(0.2)
+	check(float(painter.elementalist_pulses[0].remaining) < remaining, "world pulses age with the world clock")
+	# Nothing above changed the simulation.
+	var after := _gameplay_state(controller, sample)
+	after[0] = snapshot[0] # The deliberate hint damage above changed HP; compared separately.
+	if after != snapshot: print("STATE_DIFF ", snapshot, " -> ", after)
+	check(after == snapshot, "gameplay state (SP, positions, cooldowns, RNG state) unchanged by the layer, pulses and hints")
+	check(randi() == expected, "global RNG untouched")
+	# Last: awaiting a frame lets the boss AI run, so the stale-hint probe goes after the state comparison.
+	events.clear()
+	bridge.note_element(sample.upper, &"fire")
+	await process_frame
+	sample.upper.health.apply(request.copy(), 0.5, 1.0)
+	check(not events.is_empty() and not events.back().payload.has("element"), "a stale hint is ignored on later frames")
+	sample.queue_free(); await process_frame
+
+func _gameplay_state(controller: RunController, sample: Node2D) -> Array:
+	var player := controller.player
+	return [sample.upper.health.current_hp, player.health.current_hp, player.current_sp, player.world_point().position, sample.lower.world_point().position, sample.upper.world_point().position, controller.rng.state, player.attack_cooldown]

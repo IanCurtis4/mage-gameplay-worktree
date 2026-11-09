@@ -5,41 +5,41 @@
 			"package_id": "sanctuary_woods",
 			"name": "Bosque do Santuário",
 			"kind": "patrol",
-			"path": "res://data/map_authoring/sanctuary_woods.41a8e11a6c70.rpp",
+			"path": "res://data/map_authoring/sanctuary_woods.f7853673673b.rpp",
 			"source_path": "res://data/map_authoring/sanctuary_woods.patrol.json",
 			"compiler_revision": "map_patrol_v1",
 			"source_hash": "58df5d6386a6222e838763d92a96072ff71ebf2daed168b475ab003d95e29dc1",
-			"package_hash": "41a8e11a6c70fdc9c87cec67a2c9f8fc8fb7af5ecfdc1690ba532472c0e52587"
+			"package_hash": "f7853673673b66ec7a46be75ef0d7a38f9215831feb9c9877eba044456042164"
 		},
 		{
 			"package_id": "forest_terraces",
 			"name": "Prado dos Terraços",
 			"kind": "patrol",
-			"path": "res://data/map_authoring/forest_terraces.d9d52701a7a4.rpp",
+			"path": "res://data/map_authoring/forest_terraces.f369e42baa7b.rpp",
 			"source_path": "res://data/map_authoring/forest_terraces.patrol.json",
 			"compiler_revision": "map_patrol_v1",
-			"source_hash": "832634d0abe73cc2b4ffdbc89d2f943c375fd8d853cf37f90beb90e6cf209df5",
-			"package_hash": "d9d52701a7a40124969d94f1770ef9f3cc3d0f609691afc02ebae48ccdf665ce"
+			"source_hash": "4f3610a57d3e9c58d78a85567724c690dd0d483eaa4f6483f35ee444ffc97b4d",
+			"package_hash": "f369e42baa7b422e3ea66012f1cd96ad212b32fb3589fb511e38043bb754d90f"
 		},
 		{
 			"package_id": "forest_valleys",
 			"name": "Vales da Mata",
 			"kind": "patrol",
-			"path": "res://data/map_authoring/forest_valleys.2faa15085074.rpp",
+			"path": "res://data/map_authoring/forest_valleys.71c5d0f5c124.rpp",
 			"source_path": "res://data/map_authoring/forest_valleys.patrol.json",
 			"compiler_revision": "map_patrol_v1",
-			"source_hash": "cff1191858bf2e6e86128ebfd0ba86e97aa6297b76347008a605619c30708e54",
-			"package_hash": "2faa15085074a74ddec8ba0fa48bc27213e18076a0f37ea7706dc64f30db3dbb"
+			"source_hash": "19626e1af900018033818cbf5bd66e5256056be92d93a334319291dfd4694593",
+			"package_hash": "71c5d0f5c1240a9ead4b53750c25aabe75f2844b993d4cb4b710957d5adcbf29"
 		},
 		{
 			"package_id": "forest_lair",
 			"name": "Covil do Guardião",
 			"kind": "patrol",
-			"path": "res://data/map_authoring/forest_lair.c19cad53def8.rpp",
+			"path": "res://data/map_authoring/forest_lair.3d9af1202829.rpp",
 			"source_path": "res://data/map_authoring/forest_lair.patrol.json",
 			"compiler_revision": "map_patrol_v1",
-			"source_hash": "b484d5e4122df46a0f7ed52393f2a613f43118f8a45c82d5db29c078c34c19c8",
-			"package_hash": "c19cad53def80a9191ad8782a0d7d7ce2b80d531a6fba4a34c44f169ca28d39b"
+			"source_hash": "73eaa5c61b2a0f795db06d3f97db3f374491a59bbeddcd331389f07f153d64b6",
+			"package_hash": "3d9af120282981e205195770c2db8210642249a56792ec96c3ae5dccf4c27bd7"
 		}
 	]
 }

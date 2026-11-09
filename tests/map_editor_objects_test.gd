@@ -140,7 +140,8 @@ static func expected_asset_set(dependencies: Array) -> bool:
 	# Independent inventory: four material images/imports, one shader, one prop
 	# catalog and the three placed sprite images/imports. Reject duplicates/extras.
 	var expected: Array[String] = ["res://scripts/map_authoring/terrain/terrain_material.gdshader","res://data/map_authoring/prop_catalog.json"]
-	for name: String in ["grass_tile","earth_tile","sand_tile","cliff_tile"]:
+	# E08 P5 B2b: terrain_material_v3 uses the versioned grass/earth/sand files; stone stays cliff_tile.
+	for name: String in ["grass_tile_v2","earth_tile_v2","sand_tile_v2","cliff_tile"]:
 		var path := "res://assets/art/map_authoring/"+name+".png"
 		expected.append(path); expected.append(path+".import")
 	for name: String in ["oak_tree","moss_boulder","woodland_shrub"]:

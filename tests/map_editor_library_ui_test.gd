@@ -32,7 +32,7 @@ func run() -> void:
 	check("native_project_metadata_storage_bound",Preferences._reader.is_valid() and Preferences._writer.is_valid())
 	check("editor_settings_use_discardable_profile",EditorInterface.get_editor_paths().get_config_dir().replace("\\","/").begins_with(ProjectSettings.globalize_path("res://.godot/discardable_profile").replace("\\","/")))
 	shell.open_objects(); await frames(); var panel: Control = shell.objects_window.get_child(0)
-	check("six_catalog_thumbnails",panel.palette.item_count == 6 and panel.palette.get_item_icon(0) != null)
+	check("eleven_catalog_thumbnails",panel.palette.item_count == 11 and panel.palette.get_item_icon(0) != null)
 	for i: int in panel.palette.item_count:
 		if panel.palette.get_item_metadata(i) == "desert_cactus": panel.palette.select(i); panel.palette.item_selected.emit(i); break
 	panel.favorite_button.pressed.emit()
@@ -58,7 +58,7 @@ func run() -> void:
 	check("library_controls_leave_source_and_history",shell.session.document().semantic_hash() == hash and shell.session.can_undo() == undo)
 	await capture(panel,"library_favorite_palette")
 	panel.favorites_only.button_pressed = false; panel.search.text = "Árvores"; panel.search.text_changed.emit(panel.search.text)
-	check("portuguese_accent_search_in_native_palette",panel.palette.item_count == 1 and panel.palette.get_item_metadata(0) == "oak_tree")
+	check("portuguese_accent_search_in_native_palette",panel.palette.item_count == 2 and [panel.palette.get_item_metadata(0),panel.palette.get_item_metadata(1)].has("oak_tree") and [panel.palette.get_item_metadata(0),panel.palette.get_item_metadata(1)].has("birch_tree"))
 	panel.search.text = ""; panel.search.text_changed.emit("")
 	var category: int = panel.CATEGORIES.keys().find("structures")+1; panel.category_filter.select(category); panel.category_filter.item_selected.emit(category)
 	check("category_control_filters_structure",panel.palette.item_count == 1 and panel.palette.get_item_metadata(0) == "broken_pillar")
@@ -140,7 +140,7 @@ func browser_checks(shell: Control) -> void:
 	check("browser_sources_registered_passively",a.ok and b.ok and Preferences.read().data.sources.size() == 2)
 	var hash: String = shell.session.document().semantic_hash()
 	shell.open_library(); await frames(); var browser: Control = shell.library_window.get_child(0)
-	check("native_library_window_and_categories",shell.library_window.visible and browser.palette.item_count == 17 and browser.category.item_count == 9)
+	check("native_library_window_and_categories",shell.library_window.visible and browser.palette.item_count == 22 and browser.category.item_count == 9)
 	var library_presentation: Control = browser.get_node("AuthoringPresentation"); library_presentation.set_mode("ax")
 	check("browser_commands_bound_to_ax_presentation",library_presentation.ax_snapshot().commands.size() == 8 and library_presentation.ax_invoke("library/query",{"category":"pieces"}).entries.size() == 1)
 	library_presentation.set_mode("ux")

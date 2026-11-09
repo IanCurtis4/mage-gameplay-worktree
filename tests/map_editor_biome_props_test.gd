@@ -20,7 +20,8 @@ static func source(material: String = "sand") -> Dictionary:
 	return result
 func run() -> void:
 	var catalog := Catalog.load_catalog()
-	check("six_catalog_definitions",catalog.ok and catalog.definitions.size() == 6)
+	# E08 P5 B2b: catalog revision 3 adds birch_tree and four forest decorations (6 -> 11).
+	check("eleven_catalog_definitions",catalog.ok and catalog.definitions.size() == 11)
 	if not catalog.ok: print(catalog); finish(); return
 	# Decode the independent original bytes without Godot JSON's integer loss.
 	# Canonical deliberately distinguishes i226 from f226; keep that invariant.
@@ -56,7 +57,7 @@ func run() -> void:
 		var path: String = catalog.definitions[id].sprite_path
 		all_assets = all_assets and paths.has(path) and paths.has(path+".import") and paths[path] == FileAccess.get_sha256(path)
 	check("complete_selected_asset_transport",all_assets)
-	check("catalog_dependency_tracks_revision",catalog.revision == 2 and compiled.package.dependencies.any(func(item: Dictionary) -> bool: return item.path == Catalog.PATH and item.revision == 2))
+	check("catalog_dependency_tracks_revision",catalog.revision == 3 and compiled.package.dependencies.any(func(item: Dictionary) -> bool: return item.path == Catalog.PATH and item.revision == 3))
 	var decoded := Schema.read(JSON.stringify(data,"",true,true).to_utf8_buffer())
 	check("source_roundtrip_keeps_new_definitions",decoded.ok and Terrain.compile(decoded.data).output_hash == compiled.output_hash)
 	var world := WorldGeometry.new(); var manifest := Terrain.preview_manifest(compiled.package)

@@ -1,15 +1,18 @@
 @tool
 extends RefCounted
 ## Four paint weights and canonical world geometry for the shared canvas renderer.
-const REVISION := "terrain_material_v2"
+## E08 P5 B2b (8/11/2026): v3 adopts the new grass, earth and sand albedos as new
+## versioned files (the previous grass/earth/sand_tile.png stay on disk, unreferenced); `stone` keeps
+## cliff_tile.png because it also dresses every cliff face and border.
+const REVISION := "terrain_material_v3"
 const Partition = preload("res://scripts/map_authoring/compiler/terrain_partition.gd")
 const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
 const ProjectionView = preload("res://scripts/world/expedition_geometry_view.gd")
 const Assets = preload("res://scripts/map_authoring/assets/asset_manifest.gd")
 const SHADER_PATH := "res://scripts/map_authoring/terrain/terrain_material.gdshader"
-const GRASS_PATH := "res://assets/art/map_authoring/grass_tile.png"
-const EARTH_PATH := "res://assets/art/map_authoring/earth_tile.png"
-const SAND_PATH := "res://assets/art/map_authoring/sand_tile.png"
+const GRASS_PATH := "res://assets/art/map_authoring/grass_tile_v2.png"
+const EARTH_PATH := "res://assets/art/map_authoring/earth_tile_v2.png"
+const SAND_PATH := "res://assets/art/map_authoring/sand_tile_v2.png"
 const STONE_PATH := "res://assets/art/map_authoring/cliff_tile.png"
 const IDS := ["grass","earth","sand","stone"]
 const PATHS := [GRASS_PATH,EARTH_PATH,SAND_PATH,STONE_PATH]
