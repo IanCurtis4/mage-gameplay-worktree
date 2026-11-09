@@ -485,6 +485,30 @@ func _test_p6_selection() -> void:
 	check(real.select_cue(&"impact", Recipes.recipe(&"ice_spear")) == &"p6.impact.ice" and real.select_cue(&"effect_start", Recipes.recipe(&"elementalist_tri_nova")) == &"p6.sig.elementalist_tri_nova" and real.select_cue(&"impact", Recipes.recipe(&"elementalist_tri_nova")) == &"p6.impact.arcane", "real WAVs: impact selects element and signature cues")
 	check(String(real.select_cue(&"movement", Recipes.recipe(&"dash"))).begins_with("p6.") and String(real.select_cue(&"effect_start", Recipes.recipe(&"fury"))).begins_with("p6.") and String(real.select_cue(&"trap_trigger", Recipes.recipe(&"snare_trap"))).begins_with("p6.trap."), "real WAVs: new kinds get their own cues")
 	check(Catalog.planned_cue_ids().all(func(id: StringName) -> bool: return Catalog.ids().has(id) and ResourceLoader.exists(Catalog.definition(id).path)), "every planned cue has its WAV and is listed in ids()")
+	# P7-C5: basic attacks use dedicated crisp hit / bow-release cues; skills keep their family cues.
+	var archer_basic := Recipes.recipe(&"basic_attack", &"archer")
+	var sword_basic := Recipes.recipe(&"basic_attack", &"swordsman")
+	var mage_basic := Recipes.recipe(&"basic_attack", &"mage")
+	check(real.select_cue(&"impact", archer_basic) == &"p6.aa.hit_body" and real.select_cue(&"impact", mage_basic) == &"p6.aa.hit_body" and real.select_cue(&"impact", sword_basic) == &"p6.aa.hit_blunt" and real.select_cue(&"impact", Recipes.recipe(&"enemy_claw", &"forest_wolf")) == &"p6.aa.hit_body", "basic attack hits (three classes, enemy claw) select the AA hit cues")
+	check(real.select_cue(&"impact", Recipes.for_event({"skill_id":&"basic_attack", "payload":{"source_variant":"archer", "critical":true}})) == &"p6.aa.hit_sharp" and real.select_cue(&"impact", Recipes.for_event({"skill_id":&"basic_attack", "payload":{"source_variant":"archer", "critical":false}})) == &"p6.aa.hit_body", "a critical basic hit selects the sharp cue")
+	check(real.select_cue(&"projectile_launch", archer_basic) == &"p6.aa.bow_release" and real.select_cue(&"projectile_launch", mage_basic) == &"p6.projectile.arcane", "Archer basic launch is a bow release; Mage keeps its arcane launch")
+	check(real.select_cue(&"impact", Recipes.recipe(&"double_shot")) == &"p6.impact.physical" and real.select_cue(&"projectile_launch", Recipes.recipe(&"double_shot")) == &"p6.projectile.physical", "skills never use the AA cues")
+	var aa_limits := {&"p6.aa.hit_body":0.22, &"p6.aa.hit_blunt":0.22, &"p6.aa.hit_sharp":0.45, &"p6.aa.bow_release":0.12}
+	for id: StringName in aa_limits:
+		var wav := load(String(Catalog.definition(id).path)) as AudioStreamWAV
+		var samples: PackedByteArray = wav.data
+		var count := samples.size() / 2
+		var crossings := 0
+		var previous := 0
+		var peak := 0
+		for i: int in count:
+			var v := samples.decode_s16(i * 2)
+			peak = maxi(peak, absi(v))
+			if i > 0 and (v >= 0) != (previous >= 0): crossings += 1
+			previous = v
+		var seconds := float(count) / 44100.0
+		check(wav.format == AudioStreamWAV.FORMAT_16_BITS and not wav.stereo and wav.mix_rate == 44100 and seconds <= float(aa_limits[id]) and seconds >= 0.1, "AA cue format/duration: %s (%.3f s)" % [id, seconds])
+		check(float(crossings) / seconds > 3000.0 and peak > 3000 and peak < 20000, "AA cue is noisy (zero-crossing rate %d/s), not a low tonal body, at a moderate peak: %s" % [int(float(crossings) / seconds), id])
 	real.free()
 	# Variation: deterministic from event_id, bounded, effects only.
 	var pitches := []; var volumes := []

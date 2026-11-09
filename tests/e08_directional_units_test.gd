@@ -103,7 +103,8 @@ func validate_unit() -> void:
 			for pose: int in 16:
 				actor.state=D.state(direction,pose);var descriptor := actor.render_descriptor()
 				check(descriptor.head.key==id and descriptor.head.view==direction,"14 actual heads share authored direction")
-				if pose>=14:check(F.head_bottom(descriptor)<=0.05,"all painted head bounds above corpse ground "+String(unit_kind)+"/"+str(direction*16+pose))
+				# P7-C6: fitted placement oracle (F.head_bottom models the legacy anchor and is untouched)
+				if pose>=14:check(preload("res://tests/e08_equipment_art_test.gd").head_bottom_fitted(descriptor)<=0.05,"all painted head bounds above corpse ground "+String(unit_kind)+"/"+str(direction*16+pose))
 	actor.set_equipment_visual({"main_hand":&"staff","head":&"unknown"})
 	check(actor.atlas==bundle.body(true) and actor.render_descriptor().head.is_empty(),"unknown head never removes original fixed hat")
 	actor.set_equipment_visual({"main_hand":&"staff"});check(actor.atlas==bundle.body(true),"remove restores exact original atlas")

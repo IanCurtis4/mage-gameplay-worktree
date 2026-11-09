@@ -145,3 +145,75 @@ regras `369eaa4b…` é idêntico ao da F10. A sonda de release do candidato med
   alterar este candidato.
 
 Nada aqui promete FPS para a campanha inteira, outras placas ou sessões longas.
+
+## Candidato `ba2a4b18` — depois das correções C4 (9/11/2026)
+
+Candidato `ba2a4b18ef1005ac46446c1006a65ba14492fafe` (PCK `d3844a26…4f6b`), com as três
+correções de [C4](e08_p7_perf_delivery.md):
+- a camada de feedback não redesenha sem pulsos;
+- o ambiente é desenhado em 3 comandos;
+- as folhas animadas são pré-carregadas.
+
+Mesmo protocolo, máquina, sondas e rodadas: F10, P3 e `ba2a4b18` alternados, 2 rodadas.
+Evidência `.godot/verification/p7/C3_sol_release_measure_c4_01`: 26/26 execuções com saída 0,
+sem nenhuma linha de erro. Esta sessão foi mais calma que a `p7_01`/`p7_02`, com F10 em
+11,06 ms na floresta. Por isso a comparação válida é dentro da sessão; não se comparam
+milissegundos absolutos com as tabelas acima. Os resultados de `79656308` acima ficam como
+histórico.
+
+| Controle | Janelas | Mediana F10 → P3 → E08 (ms) | p95 F10 → P3 → E08 (ms) | E08 vs F10 |
+|---|---:|---|---|---|
+| 96 atores, móveis | 6 | 7,63 → 7,43 → **7,02** | 9,16 → 9,08 → **8,39** | −8% / −8% |
+| 96 atores, parados | 6 | 3,59 → 3,54 → **4,03** | 5,29 → 4,43 → **5,44** | +12% / +3% |
+| Floresta natural r1 | 3 | 11,02 → 11,29 → 11,82 | 14,17 → 13,96 → 14,60 | +7% / +3% |
+| Floresta natural r2 | 3 | 11,11 → 11,34 → 11,79 | 13,90 → 14,24 → 14,13 | +6% / +2% |
+| **Floresta natural, 6 janelas** | 6 | 11,06 → 11,32 → **11,81** | 14,09 → 14,03 → **14,24** | **+7% / +1%** |
+| **Ablação, controle normal** | 6 | 11,08 → 11,34 → **11,82** | 13,63 → 14,04 → **14,45** | **+7% / +6%** |
+| Ablação, sem camada de feedback | 6 | 11,10 / 13,63 → 11,65 / 14,33 (E08) | | +5% / +5% |
+| Ablação, sem ambiente | 6 | 11,07 / 13,70 → 11,70 / 14,27 (E08) | | +6% / +4% |
+| Ablação, sem áudio de mundo | 6 | 11,10 / 13,68 → 11,83 / 14,54 (E08) | | +7% / +6% |
+| Ablação, sem os três | 6 | 11,08 / 13,85 → 11,49 / 13,90 (E08) | | +4% / 0% |
+
+**Floresta parada.**
+- A diferença contra a F10 caiu de +14–16% / +17–18% (`79656308`) para **+7% / +1–6%**, abaixo
+  do limiar de triagem de 10%. Contra o P3 ficou em +4% / +2–3%.
+- Draw calls por quadro: 616 contra 614 da F10 (antes eram 648). Com o ambiente oculto, 613.
+- Desligar cada camada agora devolve só 0,0–0,2 ms. O resíduo de cerca de +0,4 ms sem as três
+  camadas é conteúdo P4/P5 (corpos, mapas republicados), como antes.
+
+**96 atores parados.** +12% na mediana (+0,44 ms sobre 3,6 ms), com p95 de +3%. Na `p7_01`
+foram +9,7% / +2,7%; o resultado se repete perto do limiar. A cena usa 96 atores `gel` com o
+corpo direcional P4, e a mesma cena em movimento é 8% mais rápida que a F10. A causa provável é
+o custo ocioso do corpo direcional P4, de ordem 0,4 ms em quadros de ~4 ms (~250 FPS).
+
+Ficou registrado sem correção. Não há ganho de jogo claro e a cena é sintética. Uma correção
+mexeria no runtime de animação P4, fora das camadas de apresentação C4.
+
+**Carga P6 sintética** (`forest_terraces`, atores congelados):
+
+| Carga | Com camada (mediana / p95 / máx.) | Sem camada | Diferença na mediana |
+|---|---|---|---|
+| Típica r1 | 7,89 / 10,51 / 39,4 | 7,45 / 9,63 / 16,0 | +6% |
+| Típica r2 | 7,83 / 10,58 / 37,7 | 7,36 / 9,61 / 13,4 | +6% |
+| Enxurrada r1 | 9,40 / 15,08 / 28,8 | 7,52 / 10,91 / 17,1 | +25% |
+| Enxurrada r2 | 9,43 / 15,20 / 23,5 | 7,47 / 10,76 / 21,9 | +26% |
+
+O pico da primeira janela típica caiu de cerca de 63 para cerca de 38 ms. A pré-carga elimina a
+leitura do disco, mas um pico de primeiro uso continua, provavelmente o envio da textura à GPU no
+primeiro desenho. A enxurrada (~40 eventos/s) custa o mesmo que antes: o custo dos pulsos ativos
+não era alvo de C4.
+
+**Memória e carregamento.**
+- Estática Godot: pico 378,2 MiB (+0,2 contra `79656308`); retido após limpar 88,43 MiB
+  (+0,09, ainda +7,7 contra a F10 e abaixo de 16).
+- RSS pico 789,8–793,7 MiB (sem mudança). Memória privada pico 992–1009 MiB (+30–40 contra
+  `79656308`), coerente com as 9 folhas mantidas carregadas pela pré-carga.
+- Entrada na floresta 42,8 / 42,5 s contra F10 41,4 / 42,2 s (≤ +1,4 s).
+- Preparação fria 14,6 / 14,6 s e quente 10,2 / 10,1 s, iguais à F10 (14,4–14,5 / 10,1–10,5).
+  Digests iguais aos acima.
+
+**Conclusão `ba2a4b18`.**
+- Nenhuma regressão acima de 10% na floresta.
+- 96 atores parados ficaram em +12% na mediana (~0,4 ms), registrados com causa provável.
+- Memória dentro da triagem; preparação e entrada inalteradas.
+- Continua sem promessa de FPS para campanha inteira, outras GPUs ou sessões longas.

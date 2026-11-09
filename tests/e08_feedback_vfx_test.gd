@@ -41,6 +41,7 @@ func _run() -> void:
 	await _idle_redraw_and_preload()
 	await _determinism_and_orientation()
 	_projectile_art()
+	await _basic_attack_and_trace()
 	await _spatial()
 	print("E08 FEEDBACK VFX: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -423,6 +424,44 @@ func _projectile_for(skill: StringName) -> Node:
 	var projectile := MageProjectile.new(); projectile.request = DamageRequest.new(); projectile.request.skill_id = skill
 	projectile.color = Color.RED if skill == &"fireball" else Color.BLUE
 	return projectile
+
+## P7-C5: basic attacks have no launch burst and a brief white hit burst for every class; the movement path trace is gone.
+func _basic_attack_and_trace() -> void:
+	var r := rig()
+	var bridge: PresentationEventBridge = r.bridge
+	var layer = r.layer
+	for variant: String in ["archer", "mage"]:
+		layer.pulses.clear(); layer._on_stage_cleared()
+		bridge.emit_confirmed(event(bridge, &"projectile_launch", &"basic_attack", {"source_variant":variant, "direction_2d":Vector2.RIGHT}))
+		check(layer.pulses.is_empty(), "basic attack has no launch burst: " + variant)
+	layer.pulses.clear(); layer._on_stage_cleared()
+	bridge.emit_confirmed(event(bridge, &"projectile_launch", &"double_shot", {"source_variant":"archer", "direction_2d":Vector2.RIGHT}))
+	check(layer.pulses.size() == 1, "a skill (double_shot) keeps its launch burst")
+	for entry: Array in [[&"basic_attack", "archer"], [&"basic_attack", "mage"], [&"basic_attack", "swordsman"], [&"enemy_claw", ""]]:
+		layer.pulses.clear(); layer._on_stage_cleared()
+		var payload := {"direction_2d":Vector2.RIGHT}
+		if entry[1] != "": payload["source_variant"] = entry[1]
+		bridge.emit_confirmed(event(bridge, &"impact", entry[0], payload))
+		var pulse: Dictionary = layer.pulses.back() if not layer.pulses.is_empty() else {}
+		check(not pulse.is_empty() and bool(pulse.basic_hit) and float(pulse.life) >= 0.15 and float(pulse.life) <= 0.2, "basic hit has the short white burst: %s/%s" % [entry[0], entry[1]])
+		layer._canvas.notification(CanvasItem.NOTIFICATION_DRAW)
+		layer._advance(0.09); layer._canvas.notification(CanvasItem.NOTIFICATION_DRAW)
+		layer._advance(0.2)
+		check(layer.pulses.is_empty(), "basic hit burst expires within 0.2 s: " + String(entry[0]))
+	layer.pulses.clear(); layer._on_stage_cleared()
+	bridge.emit_confirmed(event(bridge, &"impact", &"fireball", {"source_variant":"mage"}))
+	check(not bool(layer.pulses.back().basic_hit) and float(layer.pulses.back().life) > 0.3, "signature/skill hits keep their own art")
+	# Deterministic: the burst is a pure function of the event (same id -> same seed).
+	check(Layer.BASIC_HIT_LIFE <= 0.2 and Layer.BASIC_RAYS <= 8, "burst stays small and within the pulse caps")
+	bridge.queue_free(); (r.host as Node).queue_free(); await process_frame
+	# Movement trace: the view keeps only the target marker; passing a path draws and stores nothing.
+	var view := ExpeditionGeometryView.new()
+	var point := ExpeditionWorldPoint.create(&"s", &"surface", Vector3(10, 0, 10))
+	view.indicate(point, true, [{"position":Vector3.ZERO}, {"position":Vector3(10, 0, 10)}])
+	check(view.marker != null and view.marker_valid and view.get("route") == null, "target marker kept; no movement path state remains")
+	view.indicate(null, false)
+	check(view.marker == null and not view.marker_valid, "marker lifecycle unchanged (cleared by indicate(null))")
+	view.free()
 
 func _spatial() -> void:
 	var sample: Node2D = load("res://tests/fixtures/e07/f1/presentation_sample.tscn").instantiate()

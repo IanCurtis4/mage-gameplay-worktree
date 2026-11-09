@@ -4516,7 +4516,7 @@ func _apply_world_click(route: Dictionary, destination: ExpeditionWorldPoint, re
 			if not route["ok"]: return route
 		player.cancel_active_cast(); player.target = null
 		route = player.world_motion.adopt_route(route,destination,revision)
-		expedition_view.indicate(destination,route["ok"],route["data"].get("points",[]))
+		expedition_view.indicate(destination,route["ok"])
 	else: expedition_view.indicate(destination,false)
 	status_label.text = "Movendo pela superfície" if route["ok"] else "Destino sem caminho transitável."
 	return route

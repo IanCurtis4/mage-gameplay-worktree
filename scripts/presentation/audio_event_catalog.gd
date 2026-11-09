@@ -78,6 +78,11 @@ const PLANNED := {
 	&"p6.charge.nature":{"kind":&"charge_start", "family":&"charge", "element":&"nature", "channel":&"effects", "priority":55, "path":"res://assets/audio/e08/p6/charge_nature.wav"},
 	&"p6.charge.physical":{"kind":&"charge_start", "family":&"charge", "element":&"physical", "channel":&"effects", "priority":55, "path":"res://assets/audio/e08/p6/charge_physical.wav"},
 	&"p6.teleport.arcane":{"kind":&"teleport", "family":&"teleport", "element":&"arcane", "channel":&"effects", "priority":50, "path":"res://assets/audio/e08/p6/teleport_arcane.wav"},
+	## P7-C5: dedicated basic-attack cues (selected only for recipes flagged `basic_hit`).
+	&"p6.aa.hit_body":{"kind":&"impact", "family":&"aa", "element":&"physical", "channel":&"effects", "priority":40, "path":"res://assets/audio/e08/p6/aa_hit_body.wav"},
+	&"p6.aa.hit_blunt":{"kind":&"impact", "family":&"aa", "element":&"physical", "channel":&"effects", "priority":40, "path":"res://assets/audio/e08/p6/aa_hit_blunt.wav"},
+	&"p6.aa.hit_sharp":{"kind":&"impact", "family":&"aa", "element":&"physical", "channel":&"effects", "priority":40, "path":"res://assets/audio/e08/p6/aa_hit_sharp.wav"},
+	&"p6.aa.bow_release":{"kind":&"projectile_launch", "family":&"aa", "element":&"physical", "channel":&"effects", "priority":10, "path":"res://assets/audio/e08/p6/aa_bow_release.wav"},
 	&"p6.sig.mage_fireball":{"kind":&"impact", "family":&"signature", "element":&"fire", "signature":&"mage_fireball", "channel":&"effects", "priority":45, "path":"res://assets/audio/e08/p6/sig_mage_fireball.wav"},
 	&"p6.sig.mage_teleport":{"kind":&"teleport", "family":&"signature", "element":&"arcane", "signature":&"mage_teleport", "channel":&"effects", "priority":55, "path":"res://assets/audio/e08/p6/sig_mage_teleport.wav"},
 	&"p6.sig.swordsman_slash":{"kind":&"melee_swing", "family":&"signature", "element":&"physical", "signature":&"swordsman_slash", "channel":&"effects", "priority":40, "path":"res://assets/audio/e08/p6/sig_swordsman_slash.wav"},
@@ -141,6 +146,12 @@ static func cue_family(kind: StringName, recipe: Dictionary) -> StringName:
 static func candidates(kind: StringName, recipe: Dictionary) -> Array[StringName]:
 	var result: Array[StringName] = []
 	if not recipe.is_empty() and not bool(recipe.get("generic", true)):
+		# P7-C5: basic attacks (class basics, enemy claw) use a crisp noisy hit (see below); the Archer's launch is a light bow release.
+		if bool(recipe.get("basic_hit", false)):
+			if kind == &"impact":
+				# Critical hits are sharp and airy; the Swordsman basic has a little more low-mid; the rest use the standard crisp hit.
+				result.append(&"p6.aa.hit_sharp" if bool(recipe.get("critical", false)) else (&"p6.aa.hit_blunt" if recipe.get("variant") == &"swordsman" else &"p6.aa.hit_body"))
+			elif kind == &"projectile_launch" and recipe.get("variant") == &"archer": result.append(&"p6.aa.bow_release")
 		var signature: StringName = recipe.get("signature", &"")
 		if not signature.is_empty() and recipe.get("signature_kind") == kind:
 			var signature_id := StringName("p6.sig." + String(signature))

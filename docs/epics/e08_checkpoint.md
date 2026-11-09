@@ -286,3 +286,11 @@ e avaliação em jogo do usuário; P5/P6 sem commit; sem master/push/habitual/sa
 O usuário ouviu a prévia P6 e aprovou os sons; P7 autorizado. [Contrato P7](e08_p7_contract.md):
 C1 Terra acabamento visual P6, C2 Luna suíte completa, C3 Sol medições/release/candidato
 isolado. Sem master/push; habitual intocado.
+
+## P7 candidato tecnicamente validado 9/11
+
+Candidato `ba2a4b18` em `.tools/playtest_e08/e08_ba2a4b18` (PCK d3844a26…4f6b), substitui
+`e08_79656308`. Inspeção 20/20, floresta 19/19, perfis e atalhos por grupo, smoke ok.
+Correções C4: floresta parada +7% mediana / +1% p95 contra F10 (antes +14/+17%).
+Suíte: 312/322 + 10 falhas pré-existentes ([triagem](e08_p7_triage.md)). [Release](e08_p7_release.md),
+[medições](e08_p7_measurements.md). Aguarda playtest humano; sem master/push; habitual intocado.

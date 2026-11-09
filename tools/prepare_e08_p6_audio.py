@@ -19,6 +19,8 @@ Seeds derive from the cue id (SHA-256), so output is byte-reproducible with the 
 Usage:
   python tools/prepare_e08_p6_audio.py            # regenerate all WAVs + provenance.json entries
   python tools/prepare_e08_p6_audio.py preview DIR OLD_DIR   # listening preview + stress clip
+  python tools/prepare_e08_p6_audio.py aa                    # P7-C5: only the two basic-attack cues (does not touch other WAVs)
+  python tools/prepare_e08_p6_audio.py aa_preview DIR        # P7-C5 old-vs-new listening clip
 """
 from pathlib import Path
 import hashlib, json, math, sys, wave
@@ -714,6 +716,77 @@ def w_ui_cancel(r):
     return mix(int(0.16 * RATE), [(s, 0, 1.0), (_burst(r, 'bp', 1200, 2.0, 0.004), 0, 0.3)])
 
 
+# --------------------------------------------------------------------------- P7-C5 basic-attack cues
+def _aa_layers(r, dur, tau, att, low_f):
+    """component signals of an AA hit (unit gain, shared envelope): [low 150-400, lowmid 400-1k, mid 1-2.5k, high 2.5-6k, air >6k, crackle, body]."""
+    n = int(dur * RATE)
+    j = r.uniform(0.96, 1.04)  # small per-seed variation of every band
+    env = adr(n, att, tau)
+    nz = [r.standard_normal(n) for _ in range(6)]
+    bands = [(260, 0.8), (650, 0.8), (1700, 0.8), (4000, 0.7)]
+    out = [pk(filt(nz[i], 'bp', f * j, q)) * env for i, (f, q) in enumerate(bands)]
+    out.append(pk(filt(nz[4], 'hp', 6500 * j, 0.7)) * env)
+    sparse = (r.random_sample(n) < 0.03) * r.uniform(0.4, 1.0, n) * np.exp(-tvec(n) / 0.03)
+    out.append(np.tanh(2.0 * pk(filt(sparse * nz[5], 'hp', 1800, 0.8))))
+    out.append(pk(filt(nz[0], 'lp', low_f * 1.4 * j, 0.707)) * adr(n, 0.003, 0.022))  # short low noise thud, not a pitched tone
+    return out
+
+
+def _aa_hit(r, dur, gains, tau, low_f=95, att=0.012):
+    layers = _aa_layers(r, dur, tau, att, low_f)
+    return mix(int(dur * RATE), [(sig, 0, g) for sig, g in zip(layers, gains)])
+
+
+def aa_hit_body(r):
+    """standard AA hit (archer/mage basics, enemy claw): bright crisp noise, 0.2 s, centroid ~3 kHz."""
+    return _aa_hit(r, 0.2, (0.26, 0.0, 0.5, 0.5, 0.0, 0.038, 0.78), 0.056)
+
+
+def aa_hit_blunt(r):
+    """swordsman basic: same crisp profile with a little more low-mid and a short low body (<= 15 % below 150 Hz)."""
+    return _aa_hit(r, 0.2, (0.52, 0.021, 0.65, 0.5, 0.39, 0.0, 1.521), 0.056, 100)
+
+
+def aa_hit_sharp(r):
+    """critical basic hit: very bright, airy, longer tail (0.42 s), centroid ~4.7 kHz."""
+    return _aa_hit(r, 0.42, (0.0, 0.0, 0.45, 0.65, 0.195, 0.1, 0.15), 0.15, 100, att=0.008)
+
+
+def aa_bow_release(r):
+    """light bow release (<= 0.12 s): 1.5-5 kHz string snap + a little air, tiny damped string tone; no thump."""
+    n = int(0.12 * RATE)
+    j = r.uniform(0.96, 1.04)
+    snap = pk(filt(r.standard_normal(n), 'bp', 3000 * j, 0.8)) * adr(n, 0.001, 0.02)
+    air = pk(filt(r.standard_normal(n), 'bp', sweep(n, 4200, 2200), 1.0)) * hump(n, 0.25, 1.2, 1.4)
+    tw = filt(pk(twang(r, 480 * j, 0.02, n)), 'bp', 1800, 0.7) * adr(n, 0.001, 0.03)
+    return mix(n, [(snap, 0, 0.8), (air, 0, 0.45), (tw, 0, 0.12)])
+
+
+AA_CUES = {  # id suffix -> (renderer, peak dBFS, wet, lp, recipe)
+    'hit_body': (aa_hit_body, -8.0, 0.02, 8800, 'standard crisp hit: band-passed noise 0.3-8 kHz (most energy 1-6 kHz), sparse crackle, short low noise thud, 0.2 s, no tonal ring'),
+    'hit_blunt': (aa_hit_blunt, -8.0, 0.02, 8800, 'swordsman basic hit: standard crisp profile with more low-mid and a short low noise thud, 0.2 s'),
+    'hit_sharp': (aa_hit_sharp, -8.0, 0.03, 15000, 'critical basic hit: very bright airy noise, longer 0.42 s tail'),
+    'bow_release': (aa_bow_release, -13.0, 0.03, 9000, 'light bow release: 1.5-5 kHz string snap + air, tiny damped string tone, 0.12 s, no thump'),
+}
+
+
+def aa_metrics(x):
+    """duration, peak time, time from peak to -20 dB (smoothed envelope), spectral band fractions and centroid."""
+    x = np.asarray(x, float)
+    X = np.abs(np.fft.rfft(x * np.hanning(len(x)))) ** 2
+    f = np.fft.rfftfreq(len(x), 1 / RATE)
+    tot = X.sum()
+    frac = lambda a, b: round(float(X[(f >= a) & (f < b)].sum() / tot), 3)
+    w = int(0.004 * RATE)
+    env = np.sqrt(np.convolve(x * x, np.ones(w) / w, 'same'))
+    pi = int(np.argmax(env))
+    below = np.where(env[pi:] < env[pi] * 0.1)[0]
+    return {'duration_s': round(len(x) / RATE, 3), 'peak_ms': round(pi / RATE * 1000, 1),
+            'decay_20db_ms': round(float(below[0]) / RATE * 1000, 1) if len(below) else None,
+            'lt150': frac(0, 150), '150_400': frac(150, 400), '400_1k': frac(400, 1000), '1k_2k5': frac(1000, 2500),
+            '2k5_6k': frac(2500, 6000), 'gt6k': frac(6000, 22050), 'centroid_hz': round(float((f * X).sum() / tot))}
+
+
 # --------------------------------------------------------------------------- cue catalogue
 # family -> (renderer(el, rng), peak dBFS, room wet, low-pass Hz)
 FAMILIES = {
@@ -835,10 +908,16 @@ def build_cues():
         cid = f'p6.sig.{suf}'
         cues.append(dict(name=f'p6/sig_{suf}', id=cid, family='signature', element=SIG_ELEMENT[suf], peak_db=peak, wet=wet, lp=lp,
                          raw=render(rng_for(cid)), recipe=recipe))
+    cues.extend(build_aa_cues())
     for name, (render, peak, wet, lp, recipe) in ONESHOTS.items():
         cues.append(dict(name=name, id=name, family='oneshot', element='neutral', peak_db=peak, wet=wet, lp=lp,
                          raw=render(rng_for(name)), recipe=recipe))
     return cues
+
+
+def build_aa_cues():
+    return [dict(name=f'p6/aa_{suf}', id=f'p6.aa.{suf}', family='aa', element='physical', peak_db=peak, wet=wet, lp=lp,
+                 raw=render(rng_for(f'p6.aa.{suf}')), recipe=recipe) for suf, (render, peak, wet, lp, recipe) in AA_CUES.items()]
 
 
 def write_wav(path, x):
@@ -860,11 +939,11 @@ def db(v):
     return 20 * math.log10(max(v, 1e-9))
 
 
-def generate():
+def generate(only_aa=False):
     prov_path = AUDIO / 'provenance.json'
     prov = json.loads(prov_path.read_text(encoding='utf-8'))
     out = []
-    for cue in build_cues():
+    for cue in (build_aa_cues() if only_aa else build_cues()):
         x = finish(cue['raw'], cue['peak_db'], cue['wet'], cue['lp'])
         pcm = write_wav(AUDIO / (cue['name'] + '.wav'), x)
         f = pcm.astype(float) / 32768.0
@@ -883,6 +962,7 @@ def generate():
         }
         prov['samples'][cue['name']] = entry
         out.append((cue['name'], entry))
+    prov['p7_c5'] = {'generator': GENERATOR, 'note': 'P7-C5: dedicated basic-attack cues p6/aa_hit_body and p6/aa_bow_release (python tools/prepare_e08_p6_audio.py aa)'}
     prov['p6_a3'] = {'generator': GENERATOR, 'note': 'P6 A3 layered synthesis: 75 cues in p6/ plus re-rendered world_*/ui_* one-shots; ambience beds remain owned by prepare_e08_pilot_audio.py'}
     prov_path.write_text(json.dumps(prov, indent=2) + '\n', encoding='utf-8')
     for name, e in out:
@@ -988,8 +1068,51 @@ def preview(outdir, olddir):
     print('preview seconds', round(len(buf) / RATE, 1), 'peak dBFS', round(db(float(np.max(np.abs(buf)))), 2))
 
 
+def aa_preview(outdir):
+    """P7-C5 listening clip: old AA hit/launch vs new AA hit/bow release, three takes each with small variation."""
+    outdir = Path(outdir)
+    outdir.mkdir(parents=True, exist_ok=True)
+    old_hit = read_wav(P6 / 'impact_physical.wav')
+    old_launch = read_wav(P6 / 'projectile_physical.wav')
+
+    def vary(x, k):  # old cue: same file, +-2 dB and +-3 % speed so the three takes are not identical copies
+        g = (1.0, 0.8, 1.15)[k]
+        sp = (1.0, 0.97, 1.03)[k]
+        idx = np.arange(0, len(x) - 1, sp)
+        return np.interp(idx, np.arange(len(x)), x) * g
+
+    def new(suf, k):
+        render, peak, wet, lp, _ = AA_CUES[suf]
+        return finish(render(rng_for(f'p6.aa.{suf}#take{k}')), peak, wet, lp)
+    groups = [('OLD attack hit (p6.impact.physical)', lambda k: vary(old_hit, k)), ('NEW attack hit (p6.aa.hit_body)', lambda k: new('hit_body', k)),
+              ('NEW swordsman hit (p6.aa.hit_blunt)', lambda k: new('hit_blunt', k)), ('NEW critical hit (p6.aa.hit_sharp)', lambda k: new('hit_sharp', k)),
+              ('OLD attack launch (p6.projectile.physical)', lambda k: vary(old_launch, k)), ('NEW bow release (p6.aa.bow_release)', lambda k: new('bow_release', k))]
+    items = []
+    t = 0.3
+    chunks = []
+    for gi, (label, make) in enumerate(groups):
+        t += 1.1 if gi else 0.0
+        for k in range(3):
+            x = make(k)
+            chunks.append((t, x))
+            items.append({'label': f'{label} take {k + 1}', 'start_s': round(t, 3), 'duration_s': round(len(x) / RATE, 3)})
+            t += len(x) / RATE + 0.45
+    buf = np.zeros(int((t + 0.5) * RATE))
+    for at, x in chunks:
+        i = int(at * RATE)
+        buf[i:i + len(x)] += x
+    assert np.max(np.abs(buf)) < 1.0
+    write_wav(outdir / 'e08_p7_c5_aa_old_vs_new.wav', buf)
+    (outdir / 'e08_p7_c5_aa_old_vs_new_labels.json').write_text(json.dumps({'file': 'e08_p7_c5_aa_old_vs_new.wav', 'rate_hz': RATE, 'items': items}, indent=2) + '\n', encoding='utf-8')
+    print('aa preview', round(len(buf) / RATE, 2), 's', len(items), 'items')
+
+
 if __name__ == '__main__':
     if sys.argv[1:2] == ['preview']:
         preview(sys.argv[2], sys.argv[3])
+    elif sys.argv[1:2] == ['aa']:
+        generate(only_aa=True)
+    elif sys.argv[1:2] == ['aa_preview']:
+        aa_preview(sys.argv[2])
     else:
         generate()

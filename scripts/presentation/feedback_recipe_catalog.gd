@@ -152,12 +152,15 @@ const SIGNATURES := {
 	&"warden_summon": {"skill_id":&"enemy_summon", "owner":&"forest_ancient_warden", "kind":&"summon"},
 }
 
+## P7-C5: skills that are basic attacks. Their hits get the dry body-hit sound and the white hit burst.
+const BASIC_HIT_SKILLS: Array[StringName] = [&"basic_attack", &"enemy_claw"]
+
 static func _build(skill_id: StringName, row: Array, variant: StringName, generic: bool) -> Dictionary:
 	var signature: StringName = row[2]
 	var recipe := {"skill_id":skill_id, "variant":variant, "family":row[0], "element":row[1],
 		"signature":signature, "is_signature":not signature.is_empty(),
 		"signature_kind":SIGNATURES[signature].kind if not signature.is_empty() else &"",
-		"commit_effect":(int(row[3]) & COMMIT) != 0, "periodic":(int(row[3]) & PERIODIC) != 0, "generic":generic}
+		"basic_hit":skill_id in BASIC_HIT_SKILLS, "commit_effect":(int(row[3]) & COMMIT) != 0, "periodic":(int(row[3]) & PERIODIC) != 0, "generic":generic}
 	recipe["audio"] = Audio.recipe_cues(recipe)
 	return recipe
 
@@ -183,8 +186,10 @@ static func for_event(event: Dictionary) -> Dictionary:
 	var skill: StringName = event.get("skill_id", &"") if event.get("skill_id") is StringName else &""
 	var result := recipe(skill, variant)
 	var element := element_override(result, payload)
-	if element != result.element:
+	var critical: bool = bool(result.basic_hit) and payload.get("critical") is bool and payload.critical
+	if element != result.element or critical:
 		result.element = element
+		result.critical = critical # P7-C5: a critical basic hit uses the sharp hit cue.
 		result.audio = Audio.recipe_cues(result)
 	return result
 

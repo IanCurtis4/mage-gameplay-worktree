@@ -13,6 +13,7 @@ func check(ok: bool,label: String) -> void:
 func run() -> void:
 	catalog_checks()
 	body_checks()
+	head_fit_checks()
 	await transactions()
 	print("E08 equipment art: %d checks, %d failures" % [checks,failures])
 	quit(1 if failures else 0)
@@ -127,8 +128,13 @@ func body_checks() -> void:
 				var descriptor := actor.render_descriptor()
 				check(descriptor==portrait._animation.render_descriptor() and descriptor.head.key==id,"14IDs/64poses shared actual descriptor")
 				var transform := EquipmentHeadVisual.resolved_transform(descriptor,1.6)
-				check(transform.x.is_equal_approx(Vector2.RIGHT.rotated(float(descriptor.head.angle))*1.6),"authored west view has no second mirror")
-				if pose>=14:check(F.head_bottom(descriptor)<=0.05,"all14 painted heads remain above corpse ground")
+				# P7-C6: the crown-seat fit scales the piece to the measured head (Terra C6), so the x basis is
+				# the rotated unit vector times 1.6 times the fitted horizontal scale. The pin still proves the
+				# authored west view has no second mirror (positive x scale, no flip).
+				var fitted_x := float(EquipmentHeadVisual.fit(descriptor).scale.x)
+				check(fitted_x>0.0 and transform.x.is_equal_approx(Vector2.RIGHT.rotated(float(descriptor.head.angle))*1.6*fitted_x),"authored west view has no second mirror")
+				# The old oracle F.head_bottom models the legacy anchor; the fitted equivalent uses the same source-PNG bounds.
+				if pose>=14:check(head_bottom_fitted(descriptor)<=0.05,"all14 painted heads remain above corpse ground")
 				for placed: Dictionary in descriptor.equipment:
 					if pose>=14:check(absf(F.equipment_bottom(placed))<0.05 if pose==15 else F.equipment_bottom(placed)<=0.05,"painted PNG logical death support")
 	check(actor.death_copy().atlas==bare,"death copy keeps selected optional texture")
@@ -180,3 +186,77 @@ func transactions() -> void:
 	check(host.player.character_animation.atlas==original and host.player.character_animation.render_descriptor().head.is_empty(),"real removal restores original appearance")
 	check(before==[host.player.health.current_hp,host.player.current_sp,host.rng.state,host.player.position],"cosmetic transactions preserve simulation state")
 	host.free();await process_frame
+
+## Source-PNG oracle of the lowest painted head pixel under the fitted placement (relative to the ground pivot).
+static func head_bottom_fitted(descriptor: Dictionary) -> float:
+	var head: Dictionary=descriptor.head
+	var texture := load("res://assets/art/equipment/headgear/%s.png" % head.key) as Texture2D
+	var pixels := texture.get_image().get_region(Rect2i(int(head.view)*96,0,96,96)).get_used_rect()
+	var bounds := Rect2(Vector2(pixels.position)/4.0,Vector2(pixels.size)/4.0)
+	var seat: Vector2=EquipmentHeadVisual.fit(descriptor).seat
+	var matrix := EquipmentHeadVisual.resolved_transform(descriptor,1.0)
+	var bottom := -INF
+	for corner: Vector2 in [bounds.position,bounds.end,Vector2(bounds.position.x,bounds.end.y),Vector2(bounds.end.x,bounds.position.y)]:
+		bottom=maxf(bottom,(matrix*(corner-seat)).y)
+	return bottom
+static var _atlas_images: Dictionary = {}
+## Independent head-top oracle: first body row with a >=4 px opaque run near the fitted head centre.
+static func atlas_head_top(descriptor: Dictionary,centre: float) -> int:
+	var path: String=descriptor.atlas.resource_path
+	if not _atlas_images.has(path):_atlas_images[path]=(descriptor.atlas as Texture2D).get_image()
+	var image: Image=_atlas_images[path]
+	var cell := Vector2i(descriptor.region.position)
+	for row: int in 50:
+		var run := 0
+		for column: int in range(maxi(0,int(centre)-12),mini(64,int(centre)+13)):
+			if image.get_pixel(cell.x+column,cell.y+row).a>0.25:
+				run+=1
+				if run>=4:return row
+			else:run=0
+	return -1
+func head_fit_checks() -> void:
+	## P7-C6 invariants (every class x every head piece x 64 frames): the piece is seated on the crown,
+	## scaled to the measured head, follows the head per frame and is drawn in front of the body.
+	var kinds: Array[StringName]=[&"swordsman",&"mage",&"archer",&"defender",&"berserker",&"elementalist",&"spiritualist",&"sentinel",&"hunter",&"geometer"]
+	var data: Dictionary=EquipmentHeadVisual.fit_data()
+	check(data.classes.size()==10 and data.pieces.size()==14,"head-fit table covers 10 classes and the 14 real head IDs only")
+	check(not data.pieces.has("apple_arrow_study") and not data.pieces.has("eggshell_study"),"study pieces stay outside the fit table")
+	var legacy_checked := false
+	for kind: StringName in kinds:
+		var actor := CharacterAnimation.new();actor.configure(kind)
+		for id: StringName in EquipmentArtCatalog.head_ids():
+			actor.set_equipment_visual({"head":id})
+			var piece: Dictionary=data.pieces[String(id)]
+			var drops: Dictionary={}
+			for direction: int in 4:
+				for pose: int in 16:
+					actor.state=D.state(direction,pose)
+					var descriptor := actor.render_descriptor()
+					var placed := EquipmentHeadVisual.fit(descriptor)
+					var label := "%s/%s/%d" % [kind,id,direction*16+pose]
+					if placed.is_empty():check(false,"fit available for V2 body "+label);continue
+					check(descriptor.head.depth==1 and descriptor.head.visible,"head piece drawn in front of the body "+label)
+					var view: Dictionary=piece.views[direction]
+					var ratio: float=placed.scale.x*float(view.w)/float(placed.head_width)
+					check(ratio>=1.0 and ratio<=1.3,"piece width is 1.0-1.3 of the measured head width "+label)
+					check(placed.scale.y/placed.scale.x>=0.65 and placed.scale.y/placed.scale.x<=1.3,"piece aspect only mildly adjusted "+label)
+					if pose<14:
+						var row: Array=data.classes[String(kind)].frames[direction*16+pose]
+						var top := atlas_head_top(descriptor,float(row[0]))
+						check(absf(float(top)-float(row[1]))<=1.0,"measured head top matches the drawn body pixels "+label)
+						# the seat follows the head: the offset from the real head top is the piece's constant, never the old fixed anchor
+						var expected: float=top+float(piece.drop)*float(row[2])
+						check(absf(placed.origin.y-expected)<=1.01,"anchor follows the head bob/recoil "+label)
+						if piece.mode=="cover":check(placed.origin.y<=float(top)+1.0,"cover piece reaches the crown rows "+label)
+						check(absf(float(placed.origin.x)-float(row[0]))<=0.01,"piece centred on the head "+label)
+					else:
+						check(head_bottom_fitted(descriptor)<=0.05,"fitted head stays above corpse ground "+label)
+					if not drops.has(direction):drops[direction]=[]
+			EquipmentHeadVisual.fit_enabled=false
+			if not legacy_checked:
+				actor.state=D.state(0,0)
+				var original := actor.render_descriptor()
+				check(EquipmentHeadVisual.fit(original).is_empty(),"switch off restores the legacy anchor path")
+				check(EquipmentHeadVisual.resolved_transform(original,1.0).x.is_equal_approx(Vector2.RIGHT),"legacy transform keeps unit scale")
+				legacy_checked=true
+			EquipmentHeadVisual.fit_enabled=true

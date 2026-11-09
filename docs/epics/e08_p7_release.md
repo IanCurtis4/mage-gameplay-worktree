@@ -6,6 +6,10 @@ merge por este pacote. O checkout habitual `codex/playtest`, o piloto P3
 `pilot_ad09b99d` e os saves pessoais não foram tocados. Aprovação técnica não é aceite de
 produto.
 
+> **Candidato atual para o playtest: `ba2a4b18`** (pasta `e08_ba2a4b18`), com as correções de
+> custo C4. Detalhes na [seção final](#candidato-atual-ba2a4b18-c4). As seções abaixo descrevem o
+> primeiro candidato `79656308` (`e08_79656308`), preservado como histórico.
+
 ## Candidato
 
 - Commit `79656308a7e32cf6ee344d9b3eb179180fc3ab32` (coordenador, após aprovação do
@@ -180,3 +184,79 @@ esperados desde a F10 Q4, oráculo inalterado.
 - O checkout habitual `codex/playtest` não foi atualizado. Aplicá-lo é passo separado, com
   confirmação do usuário.
 - Entrega documental desta etapa; a suíte de gameplay não foi repetida (C2/C3a regem).
+
+## Candidato atual `ba2a4b18` (C4)
+
+Commit `ba2a4b18ef1005ac46446c1006a65ba14492fafe`, do coordenador após decisão do usuário. É
+`79656308` mais:
+- as três correções de custo da floresta parada de [C4](e08_p7_perf_delivery.md);
+- os documentos C3 e a correção da sonda de ablação.
+
+Mudanças de runtime em quatro arquivos, todos de apresentação: `e08_pilot_feedback.gd`,
+`feedback_vfx_layer.gd`, `forest_ambience_layer.gd` e `vfx_flipbook_catalog.gd`. Árvore rastreada
+limpa; só os 4 `.bak` continuam não rastreados. Pasta nova e isolada:
+`C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/playtest_e08/e08_ba2a4b18`. A pasta
+`e08_79656308` ficou intacta: PCK `a4f3d54a…` conferido, nenhum arquivo alterado.
+
+| Arquivo | Bytes | SHA256 |
+|---|---:|---|
+| RagRPG-E08-Candidato.exe | 109127680 | 4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668 |
+| RagRPG-E08-Candidato.pck | 236846292 | d3844a2611d51f43184ee90ed3d814e8c61ceee700955f04888a125c54264f6b |
+
+Engine `ab1824f8…b22424` e template `d34d36f3…0562` conferidos. O EXE é o mesmo template
+release. As diferenças de empacotamento e o nome de aplicativo são os mesmos.
+
+**Exportação.**
+- Sincronização `C3_sol_release_sync_c3_sync_03`: 0 entradas, porque C4 já havia sincronizado.
+- Na exportação: 2900 entradas do manifesto e 2253 arquivos rastreados de runtime iguais na
+  fixture; os mesmos 172 não-runtime ausentes.
+- Saída 0 em 34 s; fixture restaurada.
+
+**Sondas no PCK exato.**
+- `inspect_pack` **20/20**, nenhum ausente: 13 + 75 sons, 18 arquivos de folha (9/9 válidas),
+  55 arquivos de corpos (19/19 manifestos, 5/5 espécies), 3 tiles v2, 11 props, 21 artes de
+  equipamento, 19 arquivos de mapas (4/4 pacotes); 3350 entradas no PCK.
+- `normal_boot`: saída 0.
+- `forest_map_pack` **19/19**: 62 inimigos e corpos V2. Entrada 42,5 s, suspensão 7,5 s,
+  retomada 19,9 s.
+- `export_content`: as mesmas 2 falhas esperadas (mob 16/11).
+
+**Perfis.** O mesmo helper, contra este PCK:
+
+| Grupo | Revisão | SHA256 `profile.json` |
+|---|---:|---|
+| melee (3) | 46 | fffc19cddb1bd71a18c350b6366b7e3b90fe45327e66852b54f4ffdaf0116195 |
+| magic (4) | 60 | 0d9a41e0863fc2c57a499ebd4eed54fbc0614f3fff447727eb195338e67d6005 |
+| ranged (3) | 43 | 36949ee02ea7cefd454badfcb9bb1605e8b98fc148759a482156c45185f605e5 |
+
+**Atalhos e smoke.**
+- Três atalhos e `launch_<grupo>.cmd` iguais aos anteriores.
+- Smoke do EXE com perfil melee: janela viva após 25 s, saída 0, sem erros, `profile.json`
+  inalterado.
+- `Jogar E08 - Magia.lnk` abriu o EXE desta pasta com o perfil `magic` (log criado ali,
+  `profile.json` inalterado) e foi fechado.
+- `%APPDATA%/Godot/app_userdata/RagRPG E08 Candidato` não existe.
+
+**Pasta.**
+- `LEIA-ME.md` (pt-BR) indica que esta pasta substitui `e08_79656308`.
+- `review/` igual à anterior, com `ROTEIRO.md` atual e a captura deste candidato.
+
+**Medições.** Detalhes na [seção `ba2a4b18`](e08_p7_measurements.md#candidato-ba2a4b18--depois-das-correções-c4-9112026),
+evidência `C3_sol_release_measure_c4_01`, 26/26 sem erro.
+- Floresta parada contra a F10: de **+14–16% / +17–18%** para **+7% / +1–6%**. Contra o P3,
+  +4% / +2–3%. Draw calls 616 contra 614 (antes 648).
+- 96 atores: −8% em movimento. Parados, +12% na mediana (+0,4 ms), com p95 de +3%; registrado
+  com causa provável no corpo direcional P4 ocioso, sem correção.
+- Pico da primeira folha P6: cerca de 63 → 38 ms.
+- Memória dentro da triagem (retido +7,7 MiB contra a F10). Memória privada +30–40 MiB pela
+  pré-carga.
+- Entrada e preparação iguais à F10.
+
+**Editor de mapas.** O release de `79656308`/45b930ba+P7 (acima) não foi repetido. C4 não mudou
+mapas, editor nem exportação do editor: só quatro scripts de apresentação do jogo, mais testes e
+documentos.
+
+**Limitações.** As mesmas da seção anterior. Além delas:
+- correção de sonda feita depois do commit: nenhuma nesta rodada;
+- as falhas pré-existentes da [triagem](e08_p7_triage.md) continuam;
+- a suíte de gameplay não foi repetida por este pacote (C4 registra seus próprios testes).

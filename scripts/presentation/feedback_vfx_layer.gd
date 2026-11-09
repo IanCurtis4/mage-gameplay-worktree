@@ -24,6 +24,10 @@ const FLOOD_MEMORY := 256
 const Z_SPATIAL := 4080
 const Z_FLAT := 10
 const HALO := Color(0.04, 0.05, 0.09, 0.4)
+## P7-C5: white hit burst of basic attacks (every class): life in seconds, dark hairline edge, rays and slash.
+const BASIC_HIT_LIFE := 0.18
+const BASIC_EDGE := Color(0.04, 0.05, 0.09, 0.9)
+const BASIC_RAYS := 6
 const DRAWN_KINDS: Array[StringName] = [&"cast_start", &"cast_cancel", &"projectile_launch", &"impact", &"area_start", &"area_end", &"teleport", &"death", &"revive",
 	&"melee_swing", &"movement", &"effect_start", &"heal", &"summon", &"charge_start", &"trap_trigger"]
 ## Ground circle -> screen ellipse (world projection / flat arena).
@@ -99,7 +103,7 @@ func _advance(delta: float) -> void:
 
 func recipe_for(event: Dictionary) -> Dictionary:
 	var payload: Dictionary = event.get("payload", {})
-	var key := "%s|%s|%s|%s" % [event.get("skill_id", &""), payload.get("actor_variant", payload.get("source_variant", "")), payload.get("element", ""), event.get("kind", &"")]
+	var key := "%s|%s|%s|%s|%s" % [event.get("skill_id", &""), payload.get("actor_variant", payload.get("source_variant", "")), payload.get("element", ""), event.get("kind", &""), payload.get("critical", false)]
 	if _recipe_cache.has(key): return _recipe_cache[key]
 	var recipe := Recipes.for_event(event)
 	if _recipe_cache.size() > 512: _recipe_cache.clear()
@@ -125,16 +129,18 @@ func _make_pulse(event: Dictionary, local: Vector2, legacy: bool) -> Dictionary:
 	var payload: Dictionary = event.payload
 	if kind == &"area_end" and String(payload.get("reason", "expire")) != "expire": return {} # Trigger/cleanup: nothing to fade.
 	var recipe := recipe_for(event)
+	# P7-C5: a basic attack has no launch-side burst (the single projectile in flight is its only launch art).
+	if kind == &"projectile_launch" and bool(recipe.basic_hit): return {}
 	if kind == &"impact" and not _impact_allowed(event, recipe): return {}
 	var seed_value: int = String(event.event_id).hash() & 0x7fffffff
 	var pulse := {"position":local, "kind":kind, "age":0.0, "family":recipe.family, "element":recipe.element, "skill":event.skill_id,
-		"seed":seed_value, "legacy":legacy, "dir":_screen_dir(payload, legacy), "scale":1.0, "signature":&"", "flipbook":&"", "radius":_radius_px(payload, legacy)}
+		"seed":seed_value, "legacy":legacy, "dir":_screen_dir(payload, legacy), "scale":1.0, "signature":&"", "flipbook":&"", "radius":_radius_px(payload, legacy), "basic_hit":bool(recipe.basic_hit)}
 	var life := 0.4
 	var signed: bool = recipe.is_signature and recipe.signature_kind == kind
 	if signed: pulse.signature = recipe.signature; pulse.scale = 1.35
 	if recipe.periodic: pulse.scale = 0.6
 	match kind:
-		&"impact": life = 0.38
+		&"impact": life = BASIC_HIT_LIFE if bool(recipe.basic_hit) else 0.38
 		&"melee_swing": life = 0.26
 		&"area_start": life = 0.55
 		&"area_end": life = 0.35
@@ -322,6 +328,9 @@ func _thorn_ground_ring(half: Vector2, frame: int, fade: float) -> void:
 
 # --- impact -----------------------------------------------------------------
 func _impact(p: Dictionary, c: Vector2, t: float) -> void:
+	if bool(p.get("basic_hit", false)):
+		_basic_hit_burst(p, c, t)
+		return
 	var pal := _palette(p)
 	var core: Color = pal[0]
 	var glow: Color = pal[1]
@@ -384,6 +393,26 @@ func _impact(p: Dictionary, c: Vector2, t: float) -> void:
 			_canvas.draw_arc(c, reach * 0.5, -PI * 0.9, -PI * 0.1, 10, Color(core, fade * 0.8), 2.0, true)
 		_:
 			_physical_sparks(p, c, n, reach * 1.15, s, fade)
+
+## P7-C5: brief sharp white starburst + one slash line at the victim; dark hairline edge so it reads on pale ground.
+## Deterministic (seeded by the event); size follows the zoom floor so it stays visible when zoomed out.
+func _basic_hit_burst(p: Dictionary, c: Vector2, t: float) -> void:
+	var boost := zoom_boost()
+	var fade := 1.0 - t * t
+	var grow := _ease_out(minf(1.0, t * 2.2))
+	var base := _r(p, 0) * TAU
+	for i: int in BASIC_RAYS:
+		var a := base + TAU * float(i) / float(BASIC_RAYS) + (_r(p, 1 + i) - 0.5) * 0.35
+		var long_ray := i % 2 == 0
+		var inner := (3.0 + 2.0 * grow) * boost
+		var outer := ((10.0 if long_ray else 7.0) + (13.0 if long_ray else 8.0) * grow) * boost
+		var dir := Vector2.from_angle(a)
+		_canvas.draw_line(c + dir * inner, c + dir * outer, Color(BASIC_EDGE, BASIC_EDGE.a * fade), (3.4 if long_ray else 2.8) * boost, true)
+		_canvas.draw_line(c + dir * inner, c + dir * outer, Color(1.0, 1.0, 1.0, fade), (1.8 if long_ray else 1.4) * boost, true)
+	var slash := Vector2.from_angle(base + 0.6 + (_r(p, 9) - 0.5) * 0.5) * (7.0 + 11.0 * grow) * boost
+	_canvas.draw_line(c - slash, c + slash, Color(BASIC_EDGE, BASIC_EDGE.a * fade), 3.6 * boost, true)
+	_canvas.draw_line(c - slash, c + slash, Color(1.0, 1.0, 1.0, fade), 2.0 * boost, true)
+	_canvas.draw_circle(c, (3.2 * fade + 1.0) * boost, Color(1.0, 1.0, 1.0, fade))
 
 ## Strokes of a physical spark, outermost first: dark edge, orange glow, hot core.
 static func spark_layers(fade: float) -> Array:

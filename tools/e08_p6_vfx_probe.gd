@@ -175,6 +175,7 @@ func _run() -> void:
 	if mode in ["captures", "all"]: await captures()
 	if mode in ["cost", "all"]: await cost()
 	if mode == "polish": await polish()
+	if mode in ["aa", "aa_before"]: await aa_scenes(mode == "aa_before")
 	var file := FileAccess.open(folder.path_join("p6_vfx_report.json"), FileAccess.WRITE)
 	file.store_string(JSON.stringify(report, "  ", true)); file.close()
 	print("P6VFX_DONE")
@@ -323,6 +324,40 @@ func polish() -> void:
 		emit(&"impact", &"fireball", spot(Vector2(100, 0)), {"direction_2d": Vector2.RIGHT})
 		emit(&"effect_start", &"terrifying_shout", spot(Vector2(240, 0)), {"actor_variant": "swordsman"}),
 		[0.15, 0.4, 0.7, 1.0, 1.3], ["real"], [1.0])
+
+## P7-C5: basic-attack scenes (launch + flight + hit for the Archer, Mage and Swordsman) on grass and on the map ground, plus the move marker.
+## "aa_before" re-creates the pre-C5 behaviour by seeding the layer's recipe cache with `basic_hit` cleared (the only recipe field C5 added).
+func aa_scenes(before: bool) -> void:
+	if before:
+		for variant: String in ["archer", "mage", "swordsman"]:
+			for kind: StringName in [&"projectile_launch", &"impact", &"melee_swing"]:
+				var key := "basic_attack|%s||%s|false" % [variant, kind]
+				var recipe: Dictionary = FeedbackRecipeCatalog.recipe(&"basic_attack", StringName(variant)).duplicate(true)
+				recipe.basic_hit = false
+				layer._recipe_cache[key] = recipe
+	for ground: String in ["grass", "real"]:
+		set_backdrop(ground if ground != "real" else "")
+		await scene("aa_archer_" + ground, func() -> void:
+			emit(&"projectile_launch", &"basic_attack", spot(Vector2(10, -10)), {"direction": Vector3(1, 0, 0), "source_variant": "archer"})
+			fly(PlayerProjectile, &"basic_attack", spot(Vector2(40, -10)), Vector3(1, 0, 0), Color("f6dfad"), 0.01)
+			emit(&"impact", &"basic_attack", spot(Vector2(220, -10)), {"source_variant": "archer", "direction_2d": Vector2.RIGHT}),
+			[0.04, 0.09, 0.15], [1.0, 1.6])
+		await scene("aa_melee_" + ground, func() -> void:
+			emit(&"melee_swing", &"basic_attack", spot(Vector2(10, -10)), {"direction": Vector3(1, 0, 0), "actor_variant": "swordsman"})
+			emit(&"impact", &"basic_attack", spot(Vector2(70, -10)), {"source_variant": "swordsman", "direction_2d": Vector2.RIGHT})
+			emit(&"projectile_launch", &"basic_attack", spot(Vector2(10, 60)), {"direction": Vector3(1, 0, 0), "source_variant": "mage"})
+			emit(&"impact", &"basic_attack", spot(Vector2(220, 60)), {"source_variant": "mage", "direction_2d": Vector2.RIGHT})
+			emit(&"impact", &"enemy_claw", spot(Vector2(220, -60)), {"direction_2d": Vector2.RIGHT}),
+			[0.04, 0.09, 0.15], [1.0, 1.6])
+	set_backdrop("")
+	# Movement marker: only the target marker (ring + crosshair) remains; the planned path is no longer drawn.
+	await scene("move_marker", func() -> void:
+		var player_point := host.player.world_point()
+		var target := ExpeditionWorldPoint.create(player_point.stage_id, player_point.surface_id, spot(Vector2(180, 40)))
+		var mid := ExpeditionWorldPoint.create(player_point.stage_id, player_point.surface_id, spot(Vector2(90, 10)))
+		view.indicate(target, true, [{"position": player_point.position}, {"position": mid.position}, {"position": target.position}]),
+		[0.05], [1.0])
+	view.indicate(null, false)
 
 func cost() -> void:
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)

@@ -74,6 +74,13 @@ func _run() -> void:
 	var claw := Recipes.recipe(&"enemy_claw", &"forest_wolf")
 	var arrow := Recipes.recipe(&"enemy_arrow", &"forest_canopy_archer")
 	check(not claw.generic and claw.family == &"melee" and not arrow.generic and arrow.family == &"projectile", "forest enemy basic attacks mapped")
+	# P7-C5: only basic attacks (class basics, enemy claw) are flagged for the AA hit cue and the white hit burst.
+	for entry: Array in [[&"basic_attack", &"archer"], [&"basic_attack", &"mage"], [&"basic_attack", &"swordsman"], [&"basic_attack", &""], [&"enemy_claw", &"forest_wolf"]]:
+		check(bool(Recipes.recipe(entry[0], entry[1]).basic_hit), "recipe flagged as a basic hit: %s/%s" % [entry[0], entry[1]])
+	for skill: StringName in [&"double_shot", &"fireball", &"slash", &"brutal_strike", &"enemy_arrow", &"enemy_charge", &"totally_unknown"]:
+		check(not bool(Recipes.recipe(skill).basic_hit), "skill is not a basic hit: " + String(skill))
+	check(Catalog.candidates(&"impact", Recipes.recipe(&"basic_attack", &"archer")) == [&"p6.aa.hit_body", &"p6.impact.physical", &"world.impact"], "basic hit chain: AA cue, family cue, kind cue")
+	check(Catalog.candidates(&"projectile_launch", Recipes.recipe(&"basic_attack", &"archer"))[0] == &"p6.aa.bow_release" and Catalog.candidates(&"melee_swing", Recipes.recipe(&"basic_attack", &"swordsman"))[0] == &"p6.melee.physical", "bow release only on the Archer launch; the melee swing keeps its whoosh")
 	var charge := Recipes.recipe(&"enemy_charge", &"forest_ancient_warden")
 	var summon := Recipes.recipe(&"enemy_summon", &"forest_ancient_warden")
 	check(charge.family == &"charge" and charge.signature == &"warden_charge" and charge.signature_kind == &"charge_start", "warden charge signature")
@@ -140,6 +147,7 @@ func _run() -> void:
 		check(Catalog.PLANNED.has(cast[0]) and cast.back() == &"world.cast_start", "cast chain per element: " + String(recipe.skill_id))
 		for id: StringName in cast: used[id] = true
 		for id: StringName in Catalog.candidates(&"heal", recipe): used[id] = true
+	for id: StringName in Catalog.candidates(&"impact", Recipes.for_event({"skill_id":&"basic_attack", "payload":{"source_variant":"archer", "critical":true}})): used[id] = true # P7-C5: critical basic hit
 	for id: StringName in Catalog.planned_cue_ids():
 		check(used.has(id), "planned cue reachable by a recipe: " + String(id))
 	# Planned definitions: own ids/paths, effects channel, bounded priorities; EVENTS intact.

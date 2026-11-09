@@ -17,7 +17,6 @@ var _solids: Array[Polygon2D] = []
 var _actors: Array[WeakRef] = []
 var marker: ExpeditionWorldPoint
 var marker_valid := false
-var route: Array = []
 var attack_preview: Dictionary = {}
 var controller: RunController
 var _effects: Node2D
@@ -149,9 +148,10 @@ func _actor_visible(actor: CombatActor, foot: Vector2) -> bool:
 	var seen := pick(to_local(foot),geometry.geometry_revision)
 	if seen["ok"] and seen["data"]["point"]["surface_id"] == actor.world_point().surface_id: return true
 	return point_visible(actor.world_point().position+Vector3.UP*float(actor.world_motion.profile().get("height",0.0))*0.5)
-func indicate(point: ExpeditionWorldPoint, valid: bool, points: Array = []) -> void:
+## P7-C5: only the destination marker is kept; the planned path is no longer drawn nor stored (`_path_points` is accepted for old callers and ignored).
+func indicate(point: ExpeditionWorldPoint, valid: bool, _path_points: Array = []) -> void:
 	marker = ExpeditionWorldPoint.create(point.stage_id,point.surface_id,point.position) if point != null else null
-	marker_valid = valid; route = points.duplicate(true)
+	marker_valid = valid
 	if _effects != null: _effects.queue_redraw()
 func _process(_delta: float) -> void: sync()
 func _draw_effects() -> void:
@@ -165,7 +165,6 @@ func _draw_effects() -> void:
 		_effects.draw_arc(center,14,0,TAU,40,tint,2,true)
 		_effects.draw_line(center-Vector2(20,0),center+Vector2(20,0),tint,1,true)
 		_effects.draw_line(center-Vector2(0,10),center+Vector2(0,10),tint,1,true)
-	for index: int in range(1,route.size()): _effects.draw_line(project(route[index-1]["position"]),project(route[index]["position"]),tint,2,true)
 	if controller == null: return
 	_draw_objective_rings(controller)
 	_draw_flights(controller)

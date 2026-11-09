@@ -1,5 +1,5 @@
 {
-  "state": "p7_c4_perf_fixes",
+  "state": "p7_playtest_fixes",
   "base": "45b930ba",
   "checkout": ".tools/map-editor-m5",
   "branch": "codex/e08",
@@ -76,15 +76,25 @@
       "constraint": "no gameplay/rule/save changes; regressions found are reported with cause, fixes only inside E08 presentation files after registering them here; habitual checkout codex/playtest, personal saves and the P3 pilot delivery untouched",
       "delivery": "docs/epics/e08_p7_release.md",
       "candidate": {
-        "commit": "79656308a7e32cf6ee344d9b3eb179180fc3ab32",
-        "folder": ".tools/playtest_e08/e08_79656308",
+        "commit": "ba2a4b18ef1005ac46446c1006a65ba14492fafe",
+        "folder": ".tools/playtest_e08/e08_ba2a4b18",
         "exe_sha256": "4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668",
-        "pck_sha256": "a4f3d54ac3e550a15155d83d75800c131849cafbfd86670b2583ddbc2bf4f878",
-        "pck_bytes": 236839412
+        "pck_sha256": "d3844a2611d51f43184ee90ed3d814e8c61ceee700955f04888a125c54264f6b",
+        "pck_bytes": 236846292
       },
-      "evidence": "C3_sol_release_sync_c3_sync_01; C3_sol_release_m8_release_01 (+m8_fixture_01); C3_sol_release_measure_p7_01, _p7_02; candidate validation/runs.json",
-      "result": "export ok; inspect 20/20; normal boot ok; forest 19/19; export_content 2 expected (mob 16/11); profiles 3/3; launchers 3; smoke ok; map-editor release PASS (6/8/14); forest idle regression +14-16% median / +17-18% p95 vs F10 attributed to always-on E08 presentation layers (ambience draw calls, idle feedback redraw, audio); fixes recommended, not applied (SHA kept)",
-      "post_commit_tool_change": "tools/e08_p7_measure_probe.gd: audio bus resolved by name at use (ablation fix), uncommitted"
+      "evidence": "C3_sol_release_sync_c3_sync_03; C3_sol_release_measure_c4_01; e08_ba2a4b18/validation/runs.json",
+      "result": "export ok; inspect 20/20; normal boot ok; forest 19/19; export_content 2 expected (mob 16/11); profiles 3/3; launchers 3; smoke ok; idle forest vs F10 +7%/+1-6% (was +14-16%/+17-18%); 96 idle actors +12% median (+0.4 ms) recorded; first flipbook spike 63->38 ms",
+      "history_79656308": {
+        "candidate": {
+          "commit": "79656308a7e32cf6ee344d9b3eb179180fc3ab32",
+          "folder": ".tools/playtest_e08/e08_79656308",
+          "exe_sha256": "4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668",
+          "pck_sha256": "a4f3d54ac3e550a15155d83d75800c131849cafbfd86670b2583ddbc2bf4f878",
+          "pck_bytes": 236839412
+        },
+        "result": "export ok; inspect 20/20; normal boot ok; forest 19/19; export_content 2 expected (mob 16/11); profiles 3/3; launchers 3; smoke ok; map-editor release PASS (6/8/14); forest idle regression +14-16% median / +17-18% p95 vs F10 attributed to always-on E08 presentation layers (ambience draw calls, idle feedback redraw, audio); fixes recommended, not applied (SHA kept)",
+        "evidence": "C3_sol_release_sync_c3_sync_01; C3_sol_release_m8_release_01 (+m8_fixture_01); C3_sol_release_measure_p7_01, _p7_02; candidate validation/runs.json"
+      }
     },
     "C4_terra_perf": {
       "role": "Terra",
@@ -103,6 +113,57 @@
       "constraint": "presentation only; identical visual output; no rule/timing/audio-catalog/save change",
       "delivery": "docs/epics/e08_p7_perf_delivery.md",
       "evidence": "C4_terra_perf_verify_c4_verify_full_01 (13/13) + probes c4_amb_before/c4_amb_after/c4_vfx_cost_after"
+    },
+    "C5_terra_aa_path": {
+      "role": "Terra",
+      "model": "sonnet",
+      "state": "delivered_pending_review",
+      "files": [
+        "scripts/world/expedition_geometry_view.gd",
+        "scripts/main.gd",
+        "scripts/world/battle_indicators.gd",
+        "scripts/presentation/feedback_vfx_layer.gd",
+        "scripts/presentation/world_projectile_art.gd",
+        "scripts/presentation/feedback_recipe_catalog.gd",
+        "scripts/presentation/audio_event_catalog.gd",
+        "tools/prepare_e08_p6_audio.py",
+        "assets/audio/e08/p6/",
+        "assets/audio/e08/p6/aa_hit_body.wav",
+        "assets/audio/e08/p6/aa_hit_blunt.wav",
+        "assets/audio/e08/p6/aa_hit_sharp.wav",
+        "assets/audio/e08/p6/aa_bow_release.wav",
+        "assets/audio/e08/p6/aa_hit_body.wav.import",
+        "assets/audio/e08/p6/aa_hit_blunt.wav.import",
+        "assets/audio/e08/p6/aa_hit_sharp.wav.import",
+        "assets/audio/e08/p6/aa_bow_release.wav.import",
+        "assets/audio/e08/world_impact.wav",
+        "assets/audio/e08/world_projectile_launch.wav",
+        "assets/audio/e08/provenance.json",
+        "assets/audio/e08/recipes.md",
+        "tests/e08_feedback_vfx_test.gd",
+        "tests/e08_feedback_recipe_test.gd",
+        "tests/e08_audio_test.gd",
+        "tools/e08_p6_vfx_probe.gd",
+        "docs/epics/e08_p7_playtest_fixes_delivery.md"
+      ],
+      "constraint": "presentation/audio only; path planning, movement, targeting rules untouched; register any extra file here before editing"
+    },
+    "C6_terra_head_fit": {
+      "role": "Terra",
+      "model": "sonnet",
+      "state": "delivered",
+      "files": [
+        "scripts/actors/equipment_head_visual.gd",
+        "scripts/actors/equipment_head_fit_data.gd",
+        "tools/prepare_e08_head_fit.py",
+        "tools/e08_p7_head_fit_probe.gd",
+        "tests/e08_equipment_art_test.gd",
+        "tests/e08_directional_rig_compatibility_test.gd",
+        "tests/e08_directional_units_test.gd",
+        "docs/epics/e08_p7_head_fit_delivery.md"
+      ],
+      "constraint": "head attachment presentation only; exact files to be listed in this entry before editing (directories above are the allowed area); no item/stat/loot change; C5 owns main.gd and the feedback/audio files",
+      "note": "exact files; head art and body atlases are NOT modified (mechanical placement only); data generated by tools/prepare_e08_head_fit.py into a GDScript const because *.json outside the export include filter would be dropped from the PCK"
     }
   },
   "coordinator_notes_c1": "C1 reviewed: shockwave readable on sand/earth (outline heavy at 160%, user judges in game); wrapper gained -AllTests/-FromStep/-CheckTimeoutSeconds for full-suite runs",
@@ -131,5 +192,11 @@
     ],
     "map_probes": "12/12 at expected counts"
   },
-  "coordinator_decision_c3a": "C2 accepted as 312/322 + 10 pre-existing failures (E07 F2 schema 8/ownership, E06 content before F10, F10 Q4 mobs, 31/10 death journal); no E08 regression; updating those legacy tests is a separate authorized package outside E08"
+  "coordinator_decision_c3a": "C2 accepted as 312/322 + 10 pre-existing failures (E07 F2 schema 8/ownership, E06 content before F10, F10 Q4 mobs, 31/10 death journal); no E08 regression; updating those legacy tests is a separate authorized package outside E08",
+  "playtest_feedback_2026_11_09": {
+    "path_trace": "movement path polyline stays imprinted after the move; user wants it removed entirely, keeping only the target marker",
+    "head_fit": "class head piece (archer leaf cap) sits too high/narrow on the head, hair sticking out; reinterpret fitting so headgear wraps the head per direction/pose (user reference: a classic 2D MMO egg-shell hat seated over the crown)",
+    "basic_attack_audio": "AA sound reads as a drum; user wants a dry body-hit sound",
+    "basic_attack_visual": "dislikes 'several arrows coming out of' the character on AA; wants a brief white hit burst at the target like the reference"
+  }
 }
