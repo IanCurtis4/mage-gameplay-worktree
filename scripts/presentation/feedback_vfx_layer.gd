@@ -9,7 +9,9 @@ extends "res://scripts/presentation/e08_pilot_feedback.gd"
 ##
 ## Caps: CAP = 48 live pulses (inherited); impact flood = at most IMPACT_PER_WINDOW impacts per skill
 ## per IMPACT_WINDOW seconds, one per skill+target per TARGET_GAP (PERIODIC_GAP for DOT recipes);
-## flood memory <= FLOOD_MEMORY keys, cleared on stage change. Lifetimes are 0.2 to 1.0 s.
+## flood memory <= FLOOD_MEMORY keys, cleared on stage change. Lifetimes are 0.2 to 1.0 s, except flipbook
+## signatures, which play at the manifest suggested_fps (P7-C1: speed factor 1.0 unless SIGNATURE_ART says otherwise,
+## never above 1.15), so their life is frames / (fps x speed): 1.0 s (16 fps sheets) to 1.6 s (10 fps sheets).
 ## Ordering: absolute z_index 4080 in the spatial world (below the view's marker/route/objective/geometer
 ## layer at 4090 and below every CanvasLayer UI), 10 in the flat arena (below damage numbers, z 20).
 const Recipes = preload("res://scripts/presentation/feedback_recipe_catalog.gd")
@@ -27,30 +29,48 @@ const DRAWN_KINDS: Array[StringName] = [&"cast_start", &"cast_cancel", &"project
 ## Ground circle -> screen ellipse (world projection / flat arena).
 const GROUND_WORLD := Vector2(1.202, 0.601)
 const GROUND_FLAT := Vector2(1.0, 0.55)
-## signature -> [flipbook id, desired world diameter (px), playback speed, tint, forward offset (px)].
+## signature -> [flipbook id, desired world diameter (px), speed factor on the manifest suggested_fps (1.0 = as authored; max 1.15), tint, forward offset (px)].
 ## Signatures not listed (or whose flipbook is missing) use the code-drawn version.
 const SIGNATURE_ART := {
-	&"mage_fireball": [&"fire_burst", 74.0, 1.5, Color.WHITE, 0.0],
-	&"mage_teleport": [&"arcane_warp", 84.0, 1.5, Color.WHITE, 0.0],
-	&"swordsman_slash": [&"slash_arc", 82.0, 1.7, Color.WHITE, 26.0],
-	&"swordsman_terrifying_shout": [&"ground_shockwave", 120.0, 1.4, Color.WHITE, 0.0],
-	&"archer_explosive_trap": [&"fire_burst", 96.0, 1.4, Color.WHITE, 0.0],
-	&"defender_reprisal_wave": [&"ground_shockwave", 132.0, 1.4, Color(0.85, 0.92, 1.0), 0.0],
-	&"defender_counterstroke": [&"slash_arc", 82.0, 1.7, Color(0.85, 0.92, 1.0), 26.0],
-	&"berserker_blood_rift": [&"blood_rift", 104.0, 1.4, Color.WHITE, 22.0],
-	&"elementalist_lightning_arc": [&"lightning_burst", 60.0, 1.5, Color.WHITE, 0.0],
-	&"geometer_collapse": [&"ground_shockwave", 116.0, 1.4, Color(0.95, 0.9, 0.6), 0.0],
-	&"sentinel_explosive_shot": [&"fire_burst", 72.0, 1.5, Color.WHITE, 0.0],
-	&"hunter_freezing_trap": [&"ice_shatter", 92.0, 1.4, Color.WHITE, 0.0],
-	&"warden_summon": [&"summon_portal", 96.0, 1.7, Color.WHITE, 0.0],
+	&"mage_fireball": [&"fire_burst", 74.0, 1.0, Color.WHITE, 0.0],
+	&"mage_teleport": [&"arcane_warp", 84.0, 1.0, Color.WHITE, 0.0],
+	&"swordsman_slash": [&"slash_arc", 82.0, 1.0, Color.WHITE, 26.0],
+	&"swordsman_terrifying_shout": [&"ground_shockwave", 120.0, 1.0, Color.WHITE, 0.0],
+	&"archer_explosive_trap": [&"fire_burst", 96.0, 1.0, Color.WHITE, 0.0],
+	&"defender_reprisal_wave": [&"ground_shockwave", 132.0, 1.0, Color(0.85, 0.92, 1.0), 0.0],
+	&"defender_counterstroke": [&"slash_arc", 82.0, 1.0, Color(0.85, 0.92, 1.0), 26.0],
+	&"berserker_blood_rift": [&"blood_rift", 104.0, 1.0, Color.WHITE, 22.0],
+	&"elementalist_lightning_arc": [&"lightning_burst", 60.0, 1.0, Color.WHITE, 0.0],
+	&"geometer_collapse": [&"ground_shockwave", 116.0, 1.0, Color(0.95, 0.9, 0.6), 0.0],
+	&"sentinel_explosive_shot": [&"fire_burst", 72.0, 1.0, Color.WHITE, 0.0],
+	&"hunter_freezing_trap": [&"ice_shatter", 92.0, 1.0, Color.WHITE, 0.0],
+	&"warden_summon": [&"summon_portal", 96.0, 1.0, Color.WHITE, 0.0],
 }
 ## Non-signature accent: nature trap bursts use the thorns flipbook.
-const NATURE_TRAP_ART := [&"nature_thorns", 86.0, 1.4, Color.WHITE, 0.0]
+const NATURE_TRAP_ART := [&"nature_thorns", 104.0, 1.0, Color.WHITE, 0.0]
 ## Dark outline copy (scale) behind the flipbook so pale effects read on light ground.
-const OUTLINED := [&"slash_arc", &"lightning_burst", &"ground_shockwave", &"arcane_warp"]
+const OUTLINED := [&"slash_arc", &"lightning_burst", &"ground_shockwave", &"arcane_warp", &"nature_thorns"]
+## P7-C1: the palest/most discreet sheets get a stamped outline (8 offset copies) instead of the single 7% copy:
+## flipbook id -> [offset in world px at zoom >= 1, outline colour (alpha is scaled by the frame fade)].
+const OUTLINE_STAMP := {
+	&"ground_shockwave": [2.2, Color(0.10, 0.06, 0.03, 0.6)],
+	&"nature_thorns": [1.5, Color(0.02, 0.07, 0.03, 0.72)],
+}
+const STAMP_DIRECTIONS := 8
+## Ground underlay of the shockwave (dark, translucent) so the pale ring reads on sand/earth and on grass.
+const SHOCK_UNDERLAY := Color(0.12, 0.07, 0.03)
+## Charge chevrons keep at least this on-screen scale (1.0 = their size at 100% zoom) when the camera zooms out.
+const CHEVRON_ZOOM_FLOOR := 0.9
+const CHEVRON_SCALE_MAX := 2.0
+## Warm physical spark palette: dark edge, orange glow, hot core.
+const SPARK_EDGE := Color(0.10, 0.05, 0.02)
+const SPARK_GLOW := Color(1.0, 0.62, 0.16)
+const SPARK_HOT := Color(1.0, 0.95, 0.72)
 
 ## Test hook: Callable(id: StringName) -> Dictionary (empty = flipbook unavailable). Default: VfxFlipbookCatalog.
 var flipbook_provider := Callable()
+## Test hook: when > 0 replaces the on-screen zoom read from the canvas transform.
+var zoom_override := 0.0
 var _clock := 0.0
 var _windows: Dictionary = {}
 var _last_hit: Dictionary = {}
@@ -242,12 +262,58 @@ func _draw_flipbook(p: Dictionary, pos: Vector2, _t: float) -> bool:
 	elif p.kind in [&"effect_start", &"area_start", &"summon", &"charge_start", &"trap_trigger", &"teleport"]:
 		center = pos + Vector2(0, -float(p.flip_size) * 0.12) # Ground-seated: centre sits just above the anchor.
 	_canvas.draw_set_transform(center, angle, Vector2.ONE)
-	if p.flipbook in OUTLINED:
+	if p.flipbook == &"ground_shockwave": _shock_underlay(half, frame, fade)
+	elif p.flipbook == &"nature_thorns": _thorn_ground_ring(half, frame, fade)
+	if OUTLINE_STAMP.has(p.flipbook):
+		var stamp: Array = OUTLINE_STAMP[p.flipbook]
+		var edge: Color = stamp[1]
+		for offset: Vector2 in stamp_offsets(float(stamp[0]), zoom_boost()):
+			_canvas.draw_texture_rect_region(book.texture, Rect2(-half + offset, half * 2.0), region, Color(edge, edge.a * fade))
+	elif p.flipbook in OUTLINED:
 		_canvas.draw_texture_rect_region(book.texture, Rect2(-half * 1.07, half * 2.14), region, Color(0.03, 0.04, 0.08, 0.55 * fade))
 	var tint: Color = p.flip_tint
 	_canvas.draw_texture_rect_region(book.texture, Rect2(-half, half * 2.0), region, Color(tint, tint.a * fade))
 	_canvas.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	return true
+
+## On-screen zoom of the world canvas (1.0 when unknown, e.g. outside the tree or headless).
+func current_zoom() -> float:
+	if zoom_override > 0.0: return zoom_override
+	if _canvas == null or not _canvas.is_inside_tree(): return 1.0
+	var value := absf(_canvas.get_global_transform_with_canvas().get_scale().x)
+	return value if is_finite(value) and value > 0.01 else 1.0
+
+## Scale that keeps a world-sized mark at >= `floor_zoom` of its 100% on-screen size; 1.0 from `floor_zoom` up.
+static func zoom_floor_scale(zoom: float, floor_zoom: float, maximum: float) -> float:
+	if not is_finite(zoom) or zoom <= 0.0: return 1.0
+	return clampf(floor_zoom / zoom, 1.0, maximum)
+
+func zoom_boost() -> float: return zoom_floor_scale(current_zoom(), 0.8, 2.0)
+func chevron_scale() -> float: return zoom_floor_scale(current_zoom(), CHEVRON_ZOOM_FLOOR, CHEVRON_SCALE_MAX)
+
+## Offsets (world px) of the stamped outline copies: STAMP_DIRECTIONS around a circle of radius `radius * boost`.
+static func stamp_offsets(radius: float, boost: float) -> Array[Vector2]:
+	var result: Array[Vector2] = []
+	for i: int in STAMP_DIRECTIONS: result.append(Vector2.from_angle(TAU * float(i) / float(STAMP_DIRECTIONS)) * radius * boost)
+	return result
+
+## Dark ground disc + ring under the pale shockwave sheet (drawn in the sheet's centred transform).
+func _shock_underlay(half: Vector2, frame: int, fade: float) -> void:
+	var u := _ease_out(clampf(float(frame) / 7.0, 0.0, 1.0))
+	var rx := half.x * 0.78 * lerpf(0.25, 1.0, u)
+	var ry := rx * 0.52
+	var points := PackedVector2Array()
+	for i: int in 25:
+		var a := TAU * float(i) / 24.0
+		points.append(Vector2(cos(a) * rx, sin(a) * ry + half.y * 0.04))
+	_canvas.draw_colored_polygon(points, Color(SHOCK_UNDERLAY, 0.16 * fade))
+	_canvas.draw_polyline(points, Color(SHOCK_UNDERLAY, 0.34 * fade), 3.2, true)
+
+## Bright ground ring under the thorns (dark halo from _ring) so the accent reads on grass and on light ground.
+func _thorn_ground_ring(half: Vector2, frame: int, fade: float) -> void:
+	var u := _ease_out(clampf(float(frame) / 6.0, 0.0, 1.0))
+	var rx := half.x * 0.95 * lerpf(0.3, 1.0, u) # Wider than the plant so the ring is not hidden behind it.
+	_ring(Vector2(0, half.y * 0.5), rx, rx * 0.42, Color("c8f07a", 0.85 * fade), 2.6)
 
 # --- impact -----------------------------------------------------------------
 func _impact(p: Dictionary, c: Vector2, t: float) -> void:
@@ -312,9 +378,24 @@ func _impact(p: Dictionary, c: Vector2, t: float) -> void:
 				_canvas.draw_circle(q, (2.6 - 1.2 * t) * s, Color(glow, fade))
 			_canvas.draw_arc(c, reach * 0.5, -PI * 0.9, -PI * 0.1, 10, Color(core, fade * 0.8), 2.0, true)
 		_:
-			for i: int in n:
-				var a := TAU * float(i) / float(n) + _r(p, i) * 0.6
-				_stroke(c + Vector2.from_angle(a) * reach * 0.3, c + Vector2.from_angle(a) * reach, Color(core, fade * 0.95), 1.8)
+			_physical_sparks(p, c, n, reach * 1.15, s, fade)
+
+## Strokes of a physical spark, outermost first: dark edge, orange glow, hot core.
+static func spark_layers(fade: float) -> Array:
+	return [[4.4, Color(SPARK_EDGE, 0.85 * fade)], [3.0, Color(SPARK_GLOW, fade)], [1.5, Color(SPARK_HOT, fade)]]
+
+func _physical_sparks(p: Dictionary, c: Vector2, n: int, reach: float, s: float, fade: float) -> void:
+	var flash := (8.0 * fade + 2.0) * s
+	_canvas.draw_circle(c, flash + 1.8, Color(SPARK_EDGE, 0.5 * fade))
+	_canvas.draw_circle(c, flash, Color(SPARK_GLOW, 0.9 * fade))
+	_canvas.draw_circle(c, flash * 0.55, Color(SPARK_HOT, fade))
+	var layers := spark_layers(fade)
+	for i: int in n:
+		var a := TAU * float(i) / float(n) + _r(p, i) * 0.6
+		var from := c + Vector2.from_angle(a) * reach * 0.3
+		var to := c + Vector2.from_angle(a) * reach
+		for style: Array in layers: _canvas.draw_line(from, to, style[1], float(style[0]), true)
+		_canvas.draw_circle(to, 2.2, Color(SPARK_HOT, fade))
 
 # --- melee swing -------------------------------------------------------------
 func _swing(p: Dictionary, c: Vector2, t: float) -> void:
@@ -516,16 +597,24 @@ func _dust(p: Dictionary, pos: Vector2, t: float) -> void:
 	if p.element == &"blood":
 		_stroke(pos - dir * 26.0, pos, Color(pal[1], fade * 0.8), 2.0)
 
-func _charge(p: Dictionary, pos: Vector2, t: float) -> void:
-	var dir: Vector2 = p.dir
+## Chevron segments [from, to, index] for the charge telegraph; `k` scales sizes/spacing (zoom floor).
+func chevron_segments(pos: Vector2, dir: Vector2, k: float) -> Array:
 	var perp := dir.orthogonal()
+	var result: Array = []
+	for i: int in 3:
+		var at := pos + dir * (26.0 + 24.0 * float(i)) * k + Vector2(0, -6.0 * k)
+		result.append([at - dir * 9.0 * k + perp * 10.0 * k, at + dir * 3.0 * k, i])
+		result.append([at - dir * 9.0 * k - perp * 10.0 * k, at + dir * 3.0 * k, i])
+	return result
+
+func _charge(p: Dictionary, pos: Vector2, t: float) -> void:
+	var k := chevron_scale()
 	var tone := Color("ff8a5c") if p.element != &"nature" else Color("ffb36a")
 	var pulse := 0.55 + 0.45 * sin(t * TAU * 3.0)
-	for k: int in 3:
-		var at := pos + dir * (26.0 + 24.0 * float(k)) + Vector2(0, -6)
-		var a := Color(tone, pulse * (1.0 - 0.2 * float(k)) * (1.0 - t * 0.5))
-		_stroke(at - dir * 9.0 + perp * 10.0, at + dir * 3.0, a, 3.0)
-		_stroke(at - dir * 9.0 - perp * 10.0, at + dir * 3.0, a, 3.0)
+	for segment: Array in chevron_segments(pos, p.dir, k):
+		var a := Color(tone, pulse * (1.0 - 0.2 * float(segment[2])) * (1.0 - t * 0.5))
+		_canvas.draw_line(segment[0], segment[1], Color(SPARK_EDGE, 0.5 * a.a), 3.0 * k + 3.0, true) # Dark edge: reads on sand and grass.
+		_stroke(segment[0], segment[1], a, 3.0 * k)
 
 func _summon(p: Dictionary, pos: Vector2, t: float) -> void:
 	var g := _ground(p)

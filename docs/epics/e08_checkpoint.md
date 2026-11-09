@@ -280,3 +280,9 @@ síntese sonora refeita. A1 Sol (ponte/catálogos), B1/A2/A3 Terra (flipbooks, V
 espacial, 86 sons). Luna: 72/72 testes e 3 sondas de mapa PASS. Corrigida falha
 pré-existente do Sentinela. [Contrato e resultado](e08_p6_contract.md). Aguarda audição
 e avaliação em jogo do usuário; P5/P6 sem commit; sem master/push/habitual/save.
+
+## Sons P6 aceitos e P7 aberto 9/11
+
+O usuário ouviu a prévia P6 e aprovou os sons; P7 autorizado. [Contrato P7](e08_p7_contract.md):
+C1 Terra acabamento visual P6, C2 Luna suíte completa, C3 Sol medições/release/candidato
+isolado. Sem master/push; habitual intocado.

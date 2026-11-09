@@ -4,7 +4,8 @@ extends SceneTree
 ## drives ONLY presentation: confirmed bridge events, projectile flights stepped by hand, Elementalist
 ## world pulses. Captures at zoom 50/100/160 with UI scale 1.2, then measures frame cost with and
 ## without the feedback layer.
-## Usage: --script res://tools/e08_p6_vfx_probe.gd -- {output} [package_id] [captures|cost|all]
+## P7-C1 adds the `polish` mode (item scenes on flat ground swatches: sand, earth, grass) used for before/after captures.
+## Usage: --script res://tools/e08_p6_vfx_probe.gd -- {output} [package_id] [captures|cost|all|polish|legacy] [scene_prefix]
 const MapRelease = preload("res://scripts/map_authoring/release/map_release.gd")
 const PreviewApp = preload("res://scripts/map_authoring/preview/gameplay_app.gd")
 const Candidate = preload("res://scripts/map_authoring/preview/gameplay_candidate.gd")
@@ -24,6 +25,9 @@ var cleanup_nodes: Array[Node] = []
 var report := {"captures": [], "notes": []}
 var origin := Vector3.ZERO
 var scene_filter := ""
+var backdrop: Node2D
+## Flat ground swatches (P7-C1): stand-ins for light earth/sand and grass so the polish scenes compare on a known colour.
+const GROUNDS := {"sand": Color(0.86, 0.76, 0.52), "earth": Color(0.74, 0.60, 0.42), "grass": Color(0.36, 0.52, 0.22)}
 
 func _initialize() -> void: _run.call_deferred()
 
@@ -137,6 +141,7 @@ func scene(label: String, setup: Callable, times: Array, zooms: Array[float] = Z
 		camera(zoom)
 		clear_scene()
 		await process_frame
+		if label.begins_with("pol_"): note("%s zoom=%s canvas_scale=%s" % [label, zoom, layer._canvas.get_global_transform_with_canvas().get_scale()])
 		setup.call()
 		var elapsed := 0.0
 		for at: float in times:
@@ -169,6 +174,7 @@ func _run() -> void:
 	report["enemies"] = host.enemies.size()
 	if mode in ["captures", "all"]: await captures()
 	if mode in ["cost", "all"]: await cost()
+	if mode == "polish": await polish()
 	var file := FileAccess.open(folder.path_join("p6_vfx_report.json"), FileAccess.WRITE)
 	file.store_string(JSON.stringify(report, "  ", true)); file.close()
 	print("P6VFX_DONE")
@@ -270,6 +276,53 @@ func captures() -> void:
 			emit(&"impact", skill, spot(offset), {"target_id": "t%d" % i}),
 		[0.1, 0.25])
 	report["flood_pulses_after_wave"] = layer.pulses.size()
+
+func set_backdrop(ground: String) -> void:
+	if is_instance_valid(backdrop): backdrop.queue_free(); backdrop = null
+	if not GROUNDS.has(ground): return
+	var color: Color = GROUNDS[ground]
+	var node := Node2D.new()
+	node.z_as_relative = false; node.z_index = 4060 # Above actors and the ambient layer, below the feedback layer (4080).
+	node.draw.connect(func() -> void:
+		var center: Vector2 = host.to_local(host.route_camera.get_screen_center_position())
+		node.draw_rect(Rect2(center - Vector2(2000, 2000), Vector2(4000, 4000)), color))
+	host.add_child(node)
+	backdrop = node
+
+## One polish scene on each ground swatch ("real" keeps the map ground).
+func pscene(label: String, setup: Callable, times: Array, grounds: Array = ["sand", "earth", "grass"], zooms: Array[float] = ZOOMS) -> void:
+	for ground: String in grounds:
+		set_backdrop(ground)
+		await scene("%s_%s" % [label, ground], setup, times, zooms)
+	set_backdrop("")
+
+## P7-C1: the five P6 weak points (shockwave, thorns, physical sparks, charge chevrons, flipbook speed).
+func polish() -> void:
+	await pscene("pol_shockwave", func() -> void:
+		emit(&"effect_start", &"terrifying_shout", spot(Vector2(-60, 0)), {"actor_variant": "swordsman"})
+		emit(&"effect_start", &"defender_reprisal_wave", spot(Vector2(90, 0)), {"actor_variant": "defender"})
+		emit(&"effect_start", &"geometer_collapse", spot(Vector2(240, 0)), {"actor_variant": "geometer"}),
+		[0.3, 0.6, 0.9])
+	await pscene("pol_thorns", func() -> void:
+		emit(&"trap_trigger", &"hunter_thorn_trap", spot(Vector2(10, 0)), {"radius": 40.0, "effect_radius": 55.0, "reason": "trigger"})
+		emit(&"trap_trigger", &"hunter_thorn_trap", spot(Vector2(190, 0)), {"radius": 40.0, "effect_radius": 55.0, "reason": "trigger"}),
+		[0.2, 0.5, 0.9])
+	await pscene("pol_sparks", func() -> void:
+		emit(&"impact", &"double_shot", spot(Vector2(-60, 0)))
+		emit(&"impact", &"slash", spot(Vector2(40, 0)))
+		emit(&"impact", &"enemy_claw", spot(Vector2(140, 0)))
+		emit(&"impact", &"hunter_exploit", spot(Vector2(240, 0))),
+		[0.06, 0.15, 0.28])
+	await pscene("pol_charge", func() -> void:
+		emit(&"charge_start", &"enemy_charge", spot(Vector2(-90, -20)), {"direction": Vector3(1, 0, 0), "actor_variant": "forest_ancient_warden", "duration": 0.9})
+		emit(&"charge_start", &"enemy_charge", spot(Vector2(60, 20)), {"direction": Vector3(0, 0, 1), "duration": 0.9})
+		emit(&"charge_start", &"enemy_charge", spot(Vector2(210, -20)), {"direction": Vector3(1, 0, 1).normalized(), "actor_variant": "forest_ancient_warden", "duration": 0.9}),
+		[0.15, 0.4, 0.7])
+	await pscene("pol_fps", func() -> void:
+		emit(&"melee_swing", &"slash", spot(Vector2(-40, 0)), {"direction": Vector3(1, 0, 0), "actor_variant": "swordsman"})
+		emit(&"impact", &"fireball", spot(Vector2(100, 0)), {"direction_2d": Vector2.RIGHT})
+		emit(&"effect_start", &"terrifying_shout", spot(Vector2(240, 0)), {"actor_variant": "swordsman"}),
+		[0.15, 0.4, 0.7, 1.0, 1.3], ["real"], [1.0])
 
 func cost() -> void:
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)

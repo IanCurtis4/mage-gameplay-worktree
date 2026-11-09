@@ -142,13 +142,85 @@ func _signatures() -> void:
 	layer.pulses.clear(); layer._on_stage_cleared()
 	bridge.emit_confirmed(event(bridge, &"melee_swing", &"slash", {"direction_2d":Vector2.RIGHT}))
 	check(layer.pulses.size() == 1 and layer.pulses[0].flipbook == &"slash_arc", "slash uses slash_arc")
-	for i: int in 30:
+	for i: int in 40: # P7-C1: the sheet now plays at the manifest 16 fps (1.0 s); 30 x 0.03 s no longer reaches its end.
 		layer._advance(0.03); layer._canvas.notification(CanvasItem.NOTIFICATION_DRAW)
 	check(layer.pulses.is_empty(), "flipbook pulse expires with the sheet")
 	# Nature trap accent.
 	bridge.emit_confirmed(event(bridge, &"trap_trigger", &"hunter_thorn_trap", {"radius":50.0}))
 	check(layer.pulses.size() == 1 and layer.pulses[0].flipbook == &"nature_thorns", "nature trap trigger uses the thorns accent")
+	layer._canvas.notification(CanvasItem.NOTIFICATION_DRAW)
+	_polish_checks(layer)
 	bridge.queue_free(); (r.host as Node).queue_free(); await process_frame
+
+## P7-C1 polish: flipbook speed from the manifest, outlines, chevron zoom floor, warm physical sparks.
+func _polish_checks(layer) -> void:
+	# 1) Every flipbook plays at its manifest suggested_fps (factor 1.0; never above the documented 1.15 ceiling).
+	var arts: Array = []
+	for sig: StringName in Layer.SIGNATURE_ART: arts.append([String(sig), Layer.SIGNATURE_ART[sig]])
+	arts.append(["nature_trap", Layer.NATURE_TRAP_ART])
+	for entry: Array in arts:
+		var art: Array = entry[1]
+		var book := VfxFlipbookCatalog.definition(art[0])
+		check(not book.is_empty() and float(art[2]) >= 1.0 and float(art[2]) <= 1.15, "%s speed factor %.2f within [1.0, 1.15]" % [entry[0], float(art[2])])
+		check(is_equal_approx(float(art[2]), 1.0), "%s plays at the manifest suggested_fps (factor %.2f)" % [entry[0], float(art[2])])
+	var sigs := [[&"melee_swing", &"slash", &"slash_arc"], [&"effect_start", &"terrifying_shout", &"ground_shockwave"], [&"trap_trigger", &"hunter_thorn_trap", &"nature_thorns"], [&"summon", &"enemy_summon", &"summon_portal"],
+		[&"impact", &"fireball", &"fire_burst"]]
+	for entry: Array in sigs:
+		var bridge: PresentationEventBridge = layer.bridge
+		layer.pulses.clear(); layer._on_stage_cleared()
+		var extra := {"radius":50.0, "direction_2d":Vector2.RIGHT}
+		if entry[1] == &"enemy_summon": extra["actor_variant"] = "forest_ancient_warden"
+		bridge.emit_confirmed(event(bridge, entry[0], entry[1], extra))
+		var pulse: Dictionary = layer.pulses.back() if not layer.pulses.is_empty() else {}
+		if pulse.is_empty() or pulse.flipbook == &"": continue # Unmapped skill variants are covered by the signature checks above.
+		var def := VfxFlipbookCatalog.definition(pulse.flipbook)
+		var expected_life := float(def.frames) / (float(def.suggested_fps) * float(pulse.flip_speed))
+		check(is_equal_approx(float(pulse.flip_speed), 1.0) and is_equal_approx(float(pulse.life), expected_life), "%s life %.3f s = frames / suggested_fps (%.3f)" % [pulse.flipbook, float(pulse.life), expected_life])
+		check(int(floorf(float(pulse.life) * 0.999 * float(def.suggested_fps))) < int(def.frames), "%s never reads past its last frame before expiring" % pulse.flipbook)
+	# 2) Outlines: the stamped outline exists for the palest sheets and is dark; thorns are outlined too.
+	for id: StringName in [&"ground_shockwave", &"nature_thorns"]:
+		check(Layer.OUTLINE_STAMP.has(id) and id in Layer.OUTLINED, "%s has a stamped outline" % id)
+		var edge: Color = Layer.OUTLINE_STAMP[id][1]
+		check(edge.get_luminance() < 0.12 and edge.a >= 0.5, "%s outline is dark and visible" % id)
+	var offsets := Layer.stamp_offsets(2.2, 1.0)
+	check(offsets.size() == Layer.STAMP_DIRECTIONS and is_equal_approx(offsets[0].length(), 2.2), "stamp offsets: %d copies on a circle" % offsets.size())
+	check(Layer.stamp_offsets(2.2, 2.0)[0].length() > offsets[0].length(), "stamp grows with the zoom boost")
+	check(Layer.NATURE_TRAP_ART[1] >= 100.0, "thorns accent is larger than the old 86 px")
+	# 3) Physical sparks: dark edge outermost, hot warm core innermost, edge never lighter than the core.
+	var layers := Layer.spark_layers(1.0)
+	var outer: Color = layers[0][1]
+	var inner: Color = layers[layers.size() - 1][1]
+	check(layers.size() >= 3 and float(layers[0][0]) > float(layers[layers.size() - 1][0]), "spark strokes narrow from edge to core")
+	check(outer.get_luminance() < 0.2 and inner.get_luminance() > 0.8 and inner.r >= inner.b, "physical sparks: dark edge, hot warm core")
+	check(Layer.spark_layers(0.0)[2][1].a == 0.0, "spark layers fade out with the pulse")
+	# 4) Chevrons keep a minimum on-screen size when zoomed out, and are not enlarged at high zoom.
+	var by_zoom := {}
+	for zoom: float in [0.5, 0.75, 1.0, 1.6, 2.0]:
+		layer.zoom_override = zoom
+		by_zoom[zoom] = layer.chevron_scale()
+		var segments: Array = layer.chevron_segments(Vector2.ZERO, Vector2.RIGHT, layer.chevron_scale())
+		var arm: float = (segments[0][1] - segments[0][0]).length()
+		var base_arm: float = ((layer.chevron_segments(Vector2.ZERO, Vector2.RIGHT, 1.0) as Array)[0][1] - (layer.chevron_segments(Vector2.ZERO, Vector2.RIGHT, 1.0) as Array)[0][0]).length()
+		check(arm * zoom >= base_arm * minf(zoom, Layer.CHEVRON_ZOOM_FLOOR) - 0.001, "chevron arm on screen at zoom %.2f keeps >= min(zoom, floor) of its size" % zoom)
+	check(by_zoom[0.5] >= 1.7 and by_zoom[0.5] <= Layer.CHEVRON_SCALE_MAX, "chevrons are enlarged at 50%% zoom (x%.2f)" % by_zoom[0.5])
+	check(is_equal_approx(by_zoom[1.0], 1.0) and is_equal_approx(by_zoom[1.6], 1.0) and is_equal_approx(by_zoom[2.0], 1.0), "chevrons keep their size from 100%% up")
+	check(by_zoom[0.5] * 0.5 >= Layer.CHEVRON_ZOOM_FLOOR - 0.001, "on-screen chevron size at 50%% reaches the floor")
+	layer.zoom_override = 0.05
+	check(layer.chevron_scale() == Layer.CHEVRON_SCALE_MAX, "chevron scale is capped at extreme zoom-out")
+	layer.zoom_override = 0.0
+	var narrow: Array = layer.chevron_segments(Vector2.ZERO, Vector2.RIGHT, 1.0)
+	var wide: Array = layer.chevron_segments(Vector2.ZERO, Vector2.RIGHT, 1.7)
+	check(narrow.size() == 6 and wide.size() == 6 and (wide[0][0] - wide[0][1]).length() > (narrow[0][0] - narrow[0][1]).length() * 1.6, "chevron segments scale with k")
+	var bridge: PresentationEventBridge = layer.bridge
+	layer.zoom_override = 0.5
+	layer.pulses.clear(); layer._on_stage_cleared()
+	bridge.emit_confirmed(event(bridge, &"charge_start", &"enemy_charge", {"direction_2d":Vector2.RIGHT, "duration":0.9}))
+	layer._canvas.notification(CanvasItem.NOTIFICATION_DRAW)
+	for kind: StringName in [&"impact", &"effect_start", &"trap_trigger"]:
+		bridge.emit_confirmed(event(bridge, kind, &"enemy_claw" if kind == &"impact" else &"terrifying_shout", {"radius":50.0}))
+	layer._canvas.notification(CanvasItem.NOTIFICATION_DRAW)
+	layer.zoom_override = 0.0
+	layer.pulses.clear(); layer._on_stage_cleared()
 
 func _flood_and_lifecycle() -> void:
 	var r := rig()

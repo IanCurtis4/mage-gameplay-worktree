@@ -150,3 +150,6 @@ Pendências de produto: audição da prévia e avaliação em jogo pelo usuário
 espinhos, faíscas físicas e setas de investida fracos em chão claro/zoom 50; flipbooks
 1,4–1,7× mais rápidos que o sugerido. Limites: capturas e custo com eventos sintéticos;
 testes nativos de UI do editor e exportação de release não repetidos.
+
+Aceite humano 9/11: o usuário ouviu a prévia e aprovou os sons P6. Avaliação visual dos
+efeitos em jogo segue no candidato P7 ([contrato P7](e08_p7_contract.md)).
