@@ -137,10 +137,13 @@ func _make_pulse(event: Dictionary, local: Vector2, legacy: bool) -> Dictionary:
 		"seed":seed_value, "legacy":legacy, "dir":_screen_dir(payload, legacy), "scale":1.0, "signature":&"", "flipbook":&"", "radius":_radius_px(payload, legacy), "basic_hit":bool(recipe.basic_hit)}
 	var life := 0.4
 	var signed: bool = recipe.is_signature and recipe.signature_kind == kind
+	# P7-C7: every physical impact without its own signature art (basic attacks and ordinary physical skills such as brutal_strike or
+	# double_shot) draws the white hit burst; the old orange ray burst is gone. Elements and signatures keep their own art.
+	pulse["white_hit"] = kind == &"impact" and (bool(recipe.basic_hit) or (recipe.element == &"physical" and not signed))
 	if signed: pulse.signature = recipe.signature; pulse.scale = 1.35
 	if recipe.periodic: pulse.scale = 0.6
 	match kind:
-		&"impact": life = BASIC_HIT_LIFE if bool(recipe.basic_hit) else 0.38
+		&"impact": life = BASIC_HIT_LIFE if bool(pulse.white_hit) else 0.38
 		&"melee_swing": life = 0.26
 		&"area_start": life = 0.55
 		&"area_end": life = 0.35
@@ -328,7 +331,7 @@ func _thorn_ground_ring(half: Vector2, frame: int, fade: float) -> void:
 
 # --- impact -----------------------------------------------------------------
 func _impact(p: Dictionary, c: Vector2, t: float) -> void:
-	if bool(p.get("basic_hit", false)):
+	if bool(p.get("white_hit", p.get("basic_hit", false))):
 		_basic_hit_burst(p, c, t)
 		return
 	var pal := _palette(p)
@@ -392,6 +395,7 @@ func _impact(p: Dictionary, c: Vector2, t: float) -> void:
 				_canvas.draw_circle(q, (2.6 - 1.2 * t) * s, Color(glow, fade))
 			_canvas.draw_arc(c, reach * 0.5, -PI * 0.9, -PI * 0.1, 10, Color(core, fade * 0.8), 2.0, true)
 		_:
+			# Only reachable by a physical impact that is not a white hit (none today: physical impacts are white hits since P7-C7).
 			_physical_sparks(p, c, n, reach * 1.15, s, fade)
 
 ## P7-C5: brief sharp white starburst + one slash line at the victim; dark hairline edge so it reads on pale ground.

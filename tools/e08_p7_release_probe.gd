@@ -69,6 +69,10 @@ func inspect(expected_path: String, app_name: String) -> void:
 					ok = stream != null and stream.get_length() > 0.0
 				"json":
 					ok = FileAccess.file_exists(path) and JSON.parse_string(FileAccess.get_file_as_string(path)) != null
+				"gd":
+					# Exported scripts are remapped (binary tokens): check through the resource loader.
+					var script := load(path) as GDScript
+					ok = script != null and script.can_instantiate()
 				_:
 					ok = FileAccess.file_exists(path) and FileAccess.get_file_as_bytes(path).size() > 0
 			if ok: present += 1
@@ -98,6 +102,15 @@ func inspect(expected_path: String, app_name: String) -> void:
 	for id: StringName in FOREST_SPECIES:
 		if DirectionalAnimationSet.load_manifest(PilotVisual.manifest_path(Species.visual_id(id))).get("ok", false): species += 1
 	check("forest_species_bodies_load", species == FOREST_SPECIES.size(), "%d/%d" % [species, FOREST_SPECIES.size()])
+	# P7-C6: per-class/per-frame head fit table (generated const). Loaded dynamically so this probe
+	# still parses on packs without it; the check only runs when the table is expected.
+	if expected.has("head_fit_data"):
+		var fit_script := load("res://scripts/actors/equipment_head_fit_data.gd") as GDScript
+		var fit: Dictionary = fit_script.get_script_constant_map().get("DATA", {}) if fit_script != null else {}
+		var classes: Dictionary = fit.get("classes", {})
+		var frames := 0
+		for id: String in classes: frames += (classes[id].get("frames", []) as Array).size()
+		check("head_fit_table_loads", fit.get("format", "") == "ragrpg_head_fit_v1" and classes.size() >= 10 and frames > 0, "%s classes=%d frames=%d" % [fit.get("format", ""), classes.size(), frames])
 	var registry: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/map_authoring/release_packages.json"))
 	var packages: Array = []
 	for entry: Dictionary in registry.get("packages", []):

@@ -57,6 +57,8 @@ func _selection() -> void:
 	for skill: StringName in recipes:
 		var recipe := Recipes.recipe(skill)
 		var kind: StringName = FAMILY_KIND[recipe.family]
+		# P7-C7: a projectile basic attack (enemy_arrow) has no launch burst by design (C5); its visual is the impact, so select through that kind.
+		if bool(recipe.basic_hit) and kind == &"projectile_launch": kind = &"impact"
 		layer.pulses.clear(); layer._on_stage_cleared()
 		var extra := {"radius":60.0, "direction_2d":Vector2.RIGHT, "instant":false}
 		check(bridge.emit_confirmed(event(bridge, kind, skill, extra)), "event accepted for " + str(skill))
@@ -451,6 +453,28 @@ func _basic_attack_and_trace() -> void:
 	layer.pulses.clear(); layer._on_stage_cleared()
 	bridge.emit_confirmed(event(bridge, &"impact", &"fireball", {"source_variant":"mage"}))
 	check(not bool(layer.pulses.back().basic_hit) and float(layer.pulses.back().life) > 0.3, "signature/skill hits keep their own art")
+	# P7-C7: every class auto-attack id (basic_attack for all ten classes/evolutions, plus the enemy claw and arrow) draws the white hit.
+	for owner: StringName in FeedbackRecipeCatalog.BASIC_ATTACK_OWNERS:
+		for skill: StringName in [&"basic_attack", &""]:
+			layer.pulses.clear(); layer._on_stage_cleared()
+			bridge.emit_confirmed(event(bridge, &"impact", skill, {"source_variant":String(owner), "direction_2d":Vector2.RIGHT}))
+			var own: Dictionary = layer.pulses.back() if not layer.pulses.is_empty() else {}
+			check(not own.is_empty() and bool(own.white_hit) and bool(own.basic_hit) and float(own.life) <= 0.2, "class auto-attack draws the white hit: %s/%s" % [owner, skill])
+	layer.pulses.clear(); layer._on_stage_cleared()
+	bridge.emit_confirmed(event(bridge, &"impact", &"enemy_arrow", {"source_variant":"forest_canopy_archer", "direction_2d":Vector2.RIGHT}))
+	check(layer.pulses.size() == 1 and bool(layer.pulses.back().white_hit), "enemy arrow hit draws the white hit")
+	bridge.emit_confirmed(event(bridge, &"projectile_launch", &"enemy_arrow", {"source_variant":"forest_canopy_archer", "direction_2d":Vector2.RIGHT}))
+	check(layer.pulses.size() == 1, "enemy arrow has no launch burst")
+	# Ordinary physical skill hits use the white burst too (no ray burst); elements keep their own art; no physical impact reaches the ray drawer.
+	for skill: StringName in [&"brutal_strike", &"double_shot", &"slash", &"piercing_arrow", &"defender_riposte", &"sentinel_piercing_shot", &"hunter_exploit", &"totally_unknown"]:
+		layer.pulses.clear(); layer._on_stage_cleared()
+		bridge.emit_confirmed(event(bridge, &"impact", skill, {"direction_2d":Vector2.RIGHT}))
+		var skill_pulse: Dictionary = layer.pulses.back() if not layer.pulses.is_empty() else {}
+		check(not skill_pulse.is_empty() and bool(skill_pulse.white_hit) and float(skill_pulse.life) <= 0.2, "physical skill hit draws the white burst, no rays: " + String(skill))
+	for skill: StringName in [&"fire_spear", &"ice_spear", &"lightning", &"berserker_rupture_detonation", &"slowing_arrow"]:
+		layer.pulses.clear(); layer._on_stage_cleared()
+		bridge.emit_confirmed(event(bridge, &"impact", skill, {"direction_2d":Vector2.RIGHT}))
+		check(not layer.pulses.is_empty() and not bool(layer.pulses.back().white_hit) and float(layer.pulses.back().life) > 0.3, "element hit keeps its own art: " + String(skill))
 	# Deterministic: the burst is a pure function of the event (same id -> same seed).
 	check(Layer.BASIC_HIT_LIFE <= 0.2 and Layer.BASIC_RAYS <= 8, "burst stays small and within the pulse caps")
 	bridge.queue_free(); (r.host as Node).queue_free(); await process_frame
@@ -461,6 +485,13 @@ func _basic_attack_and_trace() -> void:
 	check(view.marker != null and view.marker_valid and view.get("route") == null, "target marker kept; no movement path state remains")
 	view.indicate(null, false)
 	check(view.marker == null and not view.marker_valid, "marker lifecycle unchanged (cleared by indicate(null))")
+	# P7-C7: an impossible destination / rejected skill aim leaves only the (red) marker, never a line; a stale aim preview is dropped.
+	view.attack_preview = {"from":Vector3.ZERO, "to":Vector3(40, 0, 40), "valid":false}
+	view.indicate(point, false)
+	check(view.marker != null and not view.marker_valid and view.attack_preview.is_empty(), "invalid destination keeps only the invalid marker; no aim preview survives")
+	check(not FileAccess.get_file_as_string("res://scripts/world/expedition_geometry_view.gd").contains("attack_preview[\"from\"]"), "the view no longer draws the aim line segment")
+	view.indicate(null, false)
+	check(view.marker == null and view.attack_preview.is_empty(), "invalid marker lifecycle: cleared with indicate(null)")
 	view.free()
 
 func _spatial() -> void:

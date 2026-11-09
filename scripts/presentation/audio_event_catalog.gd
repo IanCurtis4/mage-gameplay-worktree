@@ -141,6 +141,9 @@ static func cue_family(kind: StringName, recipe: Dictionary) -> StringName:
 		&"charge_start": return &"charge"
 		&"teleport": return &"teleport"
 	return &""
+## P7-C7: basic-attack variants by weapon (base classes and their evolutions): melee classes use the blunt hit, bow classes the bow release.
+const MELEE_BASIC_VARIANTS: Array[StringName] = [&"swordsman", &"defender", &"berserker"]
+const BOW_BASIC_VARIANTS: Array[StringName] = [&"archer", &"sentinel", &"hunter"]
 ## Ordered candidates, most specific first: signature -> family x element ->
 ## family x physical -> current kind cue. Generic (unknown) recipes keep only the kind cue.
 static func candidates(kind: StringName, recipe: Dictionary) -> Array[StringName]:
@@ -150,8 +153,8 @@ static func candidates(kind: StringName, recipe: Dictionary) -> Array[StringName
 		if bool(recipe.get("basic_hit", false)):
 			if kind == &"impact":
 				# Critical hits are sharp and airy; the Swordsman basic has a little more low-mid; the rest use the standard crisp hit.
-				result.append(&"p6.aa.hit_sharp" if bool(recipe.get("critical", false)) else (&"p6.aa.hit_blunt" if recipe.get("variant") == &"swordsman" else &"p6.aa.hit_body"))
-			elif kind == &"projectile_launch" and recipe.get("variant") == &"archer": result.append(&"p6.aa.bow_release")
+				result.append(&"p6.aa.hit_sharp" if bool(recipe.get("critical", false)) else (&"p6.aa.hit_blunt" if recipe.get("variant") in MELEE_BASIC_VARIANTS else &"p6.aa.hit_body"))
+			elif kind == &"projectile_launch" and recipe.get("variant") in BOW_BASIC_VARIANTS: result.append(&"p6.aa.bow_release")
 		var signature: StringName = recipe.get("signature", &"")
 		if not signature.is_empty() and recipe.get("signature_kind") == kind:
 			var signature_id := StringName("p6.sig." + String(signature))

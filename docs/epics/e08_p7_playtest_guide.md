@@ -74,6 +74,24 @@ Use as habilidades de cada classe perto de inimigos, em chão claro (areia/terra
   recompensas ou save. Golpe corpo a corpo e impacto do mesmo golpe podem soar em ordem
   invertida por um quadro (limitação documentada).
 
+## Correções do primeiro playtest (candidato `261801de`)
+
+Conferir de novo o que foi pedido no primeiro playtest:
+
+- **Rastro de caminho:** ao clicar para andar, só o marcador de destino (anel com cruz)
+  aparece; nenhuma linha da rota fica desenhada depois do movimento.
+- **Ataque básico** (todas as classes): sem rajada na saída do disparo; o Arqueiro mostra
+  uma única flecha em voo. No acerto, uma estrela branca curta com contorno escuro, legível
+  em 50% e 160%. Habilidades com assinatura continuam com a arte própria.
+- **Som do ataque básico:** acerto mais seco (corpo; Espadachim mais grave; crítico mais
+  agudo) e soltura de arco própria do Arqueiro. Clipe antigo × novo em
+  `review/audio_c5_ataque_basico/`.
+- **Peças de cabeça:** encaixe ajustado por classe e por quadro nas quatro vistas, também em
+  dano e cadáver. Antes/depois em `review/c6_cabeca_antes_depois/`. Limites conhecidos:
+  Berserker ainda mostra cabelo nas laterais; chapéu da Caçadora sobre cabelo volumoso nas
+  costas; fitas da grinalda (Elementalista) e do véu cruzam o rosto de lado; tiaras deixam o
+  cabelo acima visível por design.
+
 ## Limites preservados
 
 As medições técnicas não certificam FPS de toda a campanha; carregamento inicial, portais e

@@ -176,6 +176,7 @@ func _run() -> void:
 	if mode in ["cost", "all"]: await cost()
 	if mode == "polish": await polish()
 	if mode in ["aa", "aa_before"]: await aa_scenes(mode == "aa_before")
+	if mode == "round2": await round2_scenes()
 	var file := FileAccess.open(folder.path_join("p6_vfx_report.json"), FileAccess.WRITE)
 	file.store_string(JSON.stringify(report, "  ", true)); file.close()
 	print("P6VFX_DONE")
@@ -358,6 +359,46 @@ func aa_scenes(before: bool) -> void:
 		view.indicate(target, true, [{"position": player_point.position}, {"position": mid.position}, {"position": target.position}]),
 		[0.05], [1.0])
 	view.indicate(null, false)
+
+## P7-C7: white hit for every class auto-attack, an enemy claw/arrow, ordinary physical skill hits (no ray burst) and element hits for
+## contrast; plus the rejected-aim case (a red segment used to stay on the ground). Run once on the pre-C7 fixture ("before") and once after.
+const R2_OWNERS: Array[String] = ["swordsman", "defender", "berserker", "mage", "elementalist", "spiritualist", "mg_ar", "archer", "sentinel", "hunter"]
+func r2_aa_setup(half: int) -> void:
+	for i: int in 3:
+		if half * 3 + i < R2_OWNERS.size():
+			emit(&"impact", &"basic_attack", spot(Vector2(20 + i * 95, -60)), {"source_variant": R2_OWNERS[half * 3 + i], "direction_2d": Vector2.RIGHT})
+	if half == 0:
+		emit(&"impact", &"enemy_claw", spot(Vector2(20, 50)), {"direction_2d": Vector2.RIGHT, "source_variant": "forest_wolf"})
+		emit(&"impact", &"enemy_arrow", spot(Vector2(115, 50)), {"direction_2d": Vector2.RIGHT, "source_variant": "forest_canopy_archer"})
+		emit(&"impact", &"", spot(Vector2(210, 50)), {"source_variant": "hunter", "direction_2d": Vector2.RIGHT})
+
+func round2_scenes() -> void:
+	for ground: String in ["grass", "real"]:
+		set_backdrop(ground if ground != "real" else "")
+		# The layer caps impacts per skill id per window (flood control), so the ten classes are split in four scenes of three (+ enemy hits in the first).
+		for half: int in 4:
+			await scene("r2_aa%d_%s" % [half, ground], r2_aa_setup.bind(half), [0.04, 0.09, 0.15], [1.0, 1.6])
+		await scene("r2_skills_" + ground, func() -> void:
+			var physical: Array[StringName] = [&"brutal_strike", &"double_shot", &"slash", &"piercing_arrow", &"defender_riposte", &"sentinel_piercing_shot", &"hunter_exploit"]
+			for i: int in physical.size():
+				emit(&"impact", physical[i], spot(Vector2(20 + i * 60, -60)), {"direction_2d": Vector2.RIGHT, "source_variant": "swordsman"})
+			var elements: Array[StringName] = [&"fire_spear", &"ice_spear", &"lightning", &"berserker_rupture_detonation", &"slowing_arrow"]
+			for i: int in elements.size():
+				emit(&"impact", elements[i], spot(Vector2(20 + i * 60, 20)), {"direction_2d": Vector2.RIGHT}),
+			[0.04, 0.09, 0.15, 0.3], [1.0, 1.6])
+	set_backdrop("")
+	# Rejected aim / unreachable destination: the real order of the game (preview stored, then the marker). Before C7 a red segment
+	# from where the player stood to the target stayed on the ground; now only the invalid marker remains.
+	await scene("r2_invalid", func() -> void:
+		var player_point := host.player.world_point()
+		var from := spot(Vector2(-60, 20))
+		var to := spot(Vector2(200, 80))
+		var target := ExpeditionWorldPoint.create(player_point.stage_id, player_point.surface_id, to)
+		view.attack_preview = {"from": from, "to": to, "valid": false}
+		view.indicate(target, false),
+		[0.05, 1.5], [1.0])
+	view.indicate(null, false)
+	view.attack_preview = {}
 
 func cost() -> void:
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)

@@ -6,9 +6,10 @@ merge por este pacote. O checkout habitual `codex/playtest`, o piloto P3
 `pilot_ad09b99d` e os saves pessoais não foram tocados. Aprovação técnica não é aceite de
 produto.
 
-> **Candidato atual para o playtest: `ba2a4b18`** (pasta `e08_ba2a4b18`), com as correções de
-> custo C4. Detalhes na [seção final](#candidato-atual-ba2a4b18-c4). As seções abaixo descrevem o
-> primeiro candidato `79656308` (`e08_79656308`), preservado como histórico.
+> **Candidato atual para o playtest: `261801de`** (pasta `e08_261801de`), com as correções do
+> primeiro playtest (C5/C6) sobre `ba2a4b18` (C4). Detalhes na
+> [seção final](#candidato-atual-261801de-c5c6). As seções abaixo descrevem, em ordem, o
+> primeiro candidato `79656308` e o `ba2a4b18`, preservados como histórico.
 
 ## Candidato
 
@@ -185,7 +186,7 @@ esperados desde a F10 Q4, oráculo inalterado.
   confirmação do usuário.
 - Entrega documental desta etapa; a suíte de gameplay não foi repetida (C2/C3a regem).
 
-## Candidato atual `ba2a4b18` (C4)
+## Candidato `ba2a4b18` (C4)
 
 Commit `ba2a4b18ef1005ac46446c1006a65ba14492fafe`, do coordenador após decisão do usuário. É
 `79656308` mais:
@@ -260,3 +261,88 @@ documentos.
 - correção de sonda feita depois do commit: nenhuma nesta rodada;
 - as falhas pré-existentes da [triagem](e08_p7_triage.md) continuam;
 - a suíte de gameplay não foi repetida por este pacote (C4 registra seus próprios testes).
+
+## Candidato atual `261801de` (C5/C6)
+
+Commit `261801def65bb9022d7d5ffdd8c3b5bc82fd1246`, do coordenador após o primeiro playtest do
+usuário. É `ba2a4b18` mais duas entregas:
+- [C5](e08_p7_playtest_fixes_delivery.md): sem rastro do caminho; ataque básico sem rajada de
+  lançamento e com acerto branco; cues `p6.aa.hit_body/hit_blunt/hit_sharp/bow_release`;
+- [C6](e08_p7_head_fit_delivery.md): peças de cabeça encaixadas por classe e quadro via
+  `scripts/actors/equipment_head_fit_data.gd`.
+
+Árvore rastreada limpa no commit; só os 4 `.bak` continuam não rastreados. Pasta nova:
+`C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/playtest_e08/e08_261801de`. As pastas
+`e08_79656308` e `e08_ba2a4b18` ficaram intactas (PCKs `a4f3d54a…` e `d3844a26…` conferidos,
+nenhum arquivo alterado), assim como o piloto P3.
+
+| Arquivo | Bytes | SHA256 |
+|---|---:|---|
+| RagRPG-E08-Candidato.exe | 109127680 | 4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668 |
+| RagRPG-E08-Candidato.pck | 236957084 | 843d1ab723c9db22a72fe49ec5420b4c14d18f135c58127051f54ae1e95fbfc2 |
+
+Engine `ab1824f8…b22424` e template `d34d36f3…0562` conferidos; empacotamento igual.
+
+**Ferramentas.** Duas mudanças em ferramentas de empacotamento, feitas depois do commit e não
+commitadas; nenhuma toca o runtime:
+- `tools/e08_p7_release_probe.gd` verifica a tabela de encaixe e carrega o `.gd` pelo carregador
+  de recursos, porque o PCK guarda scripts remapeados.
+- `tools/e08_p7_package.ps1` passou a aceitar, na exportação, edições não commitadas apenas em
+  `docs/` e `tools/e08_p7_*`. Qualquer outra mudança rastreada continua bloqueando.
+
+Sincronizações `c3_sync_04`/`c3_sync_05`: 2 e 1 entradas, só essas ferramentas; 2911 fontes.
+
+**Exportação.** 2911 entradas do manifesto e 2262 arquivos rastreados de runtime iguais na
+fixture; os mesmos 172 não-runtime ausentes. Saída 0 em 37,5 s; fixture restaurada.
+
+**Sondas no PCK exato.**
+- `inspect_pack` **22/22**, nenhum ausente:
+  - 13 sons E08 e **79** P6, incluindo os 4 `aa_*`; **92/92** cues registrados e carregáveis;
+  - **tabela de encaixe no PCK e carregável:** formato `ragrpg_head_fit_v1`, 10 classes,
+    640 quadros;
+  - 9/9 folhas, 19/19 manifestos direcionais, 5/5 espécies, 4/4 pacotes de mapa;
+  - 3362 entradas no PCK.
+- `normal_boot`: saída 0.
+- `forest_map_pack` **19/19**: 62 inimigos e corpos V2. Entrada 48,2 s, suspensão 8,2 s,
+  retomada 23,7 s.
+- `export_content`: as mesmas 2 falhas esperadas (mob 16/11).
+
+**Perfis.** O mesmo helper, contra este PCK:
+
+| Grupo | Revisão | SHA256 `profile.json` |
+|---|---:|---|
+| melee (3) | 46 | 60973e40aa6a73336a31591a126a683738f4f46ce5f5a62b0351f42b22be085a |
+| magic (4) | 60 | 1791fd352089aadee6cd38973ef970b06662547eea2fd8ce139bf1ee98825afb |
+| ranged (3) | 43 | 008ba148993ee29ff6f92e1fa0e084f4eb3ec3dd1093f60619e6a7e7eca6a9fd |
+
+**Atalhos e smoke.**
+- Três atalhos e `launch_<grupo>.cmd`, como antes.
+- Smoke do EXE com perfil melee: janela viva após 25 s, saída 0, sem erros, `profile.json`
+  inalterado.
+- `Jogar E08 - Corpo a corpo.lnk` abriu o EXE desta pasta e foi fechado.
+- `%APPDATA%/Godot/app_userdata/RagRPG E08 Candidato` não existe.
+
+**Pasta.** `LEIA-ME.md` (pt-BR) indica que esta pasta substitui `e08_ba2a4b18`. `review/` contém:
+- `ROTEIRO.md` atualizado, com a seção "Correções do primeiro playtest";
+- `audio_c5_ataque_basico/`: clipe C5 antigo × novo e rótulos;
+- `c6_cabeca_antes_depois/`: antes/depois de Arqueiro, Berserker, Defendente, Caçadora, Mago e
+  Elementalista, a partir das capturas nativas `C6_..._fin2_b260`/`a260`;
+- além da prévia A3, das folhas C1, das capturas P5 e da captura deste candidato.
+
+**Medições.** Rodada curta (floresta + ablação, F10 contra candidato, 2 rodadas), detalhes em
+[e08_p7_measurements.md](e08_p7_measurements.md). Evidência `C3_sol_release_measure_c5c6_01`:
+8/8 execuções sem erro.
+- Floresta natural: +5% / +6% contra a F10.
+- Ablação, controle normal: +9% / +7%.
+- Sem regressão nova, dentro da faixa de `ba2a4b18` numa sessão mais ruidosa (F10 em 12,0 ms).
+- Draw calls 616 contra 614. Memória igual a `ba2a4b18`.
+
+**Editor de mapas.** O release não foi repetido: C5/C6 não mudaram mapas, editor nem exportação
+do editor. O resultado anterior PASS (6/8/14) continua válido.
+
+**Limitações.**
+- As falhas pré-existentes da [triagem](e08_p7_triage.md) continuam.
+- A suíte de gameplay não foi repetida por este pacote; C5/C6 registram seus próprios testes.
+- Limites visuais de C6 a julgar em jogo: cabelo do Berserker nas laterais; chapéu da Caçadora;
+  fitas da grinalda e do véu no rosto de lado; tiaras por design.
+- Sem promessa de FPS para a campanha inteira.

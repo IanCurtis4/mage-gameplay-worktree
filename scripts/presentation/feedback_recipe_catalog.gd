@@ -122,6 +122,15 @@ const VARIANTS := {
 		&"swordsman": [&"melee", &"physical", &"", 0],
 		&"mage": [&"projectile", &"arcane", &"", 0],
 		&"archer": [&"projectile", &"physical", &"", 0],
+		# P7-C7: evolutions share the basic attack of their base class (the actor reports the base class_id today; these rows make an
+		# evolution id resolve the same way if it is ever reported as the variant).
+		&"defender": [&"melee", &"physical", &"", 0],
+		&"berserker": [&"melee", &"physical", &"", 0],
+		&"elementalist": [&"projectile", &"arcane", &"", 0],
+		&"spiritualist": [&"projectile", &"arcane", &"", 0],
+		&"mg_ar": [&"projectile", &"arcane", &"", 0],
+		&"sentinel": [&"projectile", &"physical", &"", 0],
+		&"hunter": [&"projectile", &"physical", &"", 0],
 	},
 	&"enemy_charge": {&"forest_ancient_warden": [&"charge", &"nature", &"warden_charge", 0]},
 	&"enemy_summon": {&"forest_ancient_warden": [&"summon", &"nature", &"warden_summon", 0]},
@@ -153,7 +162,10 @@ const SIGNATURES := {
 }
 
 ## P7-C5: skills that are basic attacks. Their hits get the dry body-hit sound and the white hit burst.
-const BASIC_HIT_SKILLS: Array[StringName] = [&"basic_attack", &"enemy_claw"]
+## P7-C7: the enemy arrow (ranged enemy basic) joins them; every player class and evolution uses `basic_attack` (PlayerActor._try_basic_attack).
+const BASIC_HIT_SKILLS: Array[StringName] = [&"basic_attack", &"enemy_claw", &"enemy_arrow"]
+## P7-C7: player class ids / evolution ids whose auto-attack is `basic_attack`; an impact or launch with an empty skill id from one of them is a basic attack.
+const BASIC_ATTACK_OWNERS: Array[StringName] = [&"swordsman", &"mage", &"archer", &"defender", &"berserker", &"elementalist", &"spiritualist", &"mg_ar", &"sentinel", &"hunter"]
 
 static func _build(skill_id: StringName, row: Array, variant: StringName, generic: bool) -> Dictionary:
 	var signature: StringName = row[2]
@@ -184,6 +196,8 @@ static func for_event(event: Dictionary) -> Dictionary:
 	var raw_variant: Variant = payload.get("actor_variant", payload.get("source_variant", ""))
 	var variant := StringName(str(raw_variant)) if raw_variant is String or raw_variant is StringName else &""
 	var skill: StringName = event.get("skill_id", &"") if event.get("skill_id") is StringName else &""
+	# P7-C7: a hit/launch of a player class with no skill id is its auto-attack (presentation derivation only).
+	if skill.is_empty() and variant in BASIC_ATTACK_OWNERS and event.get("kind") in [&"impact", &"projectile_launch"]: skill = &"basic_attack"
 	var result := recipe(skill, variant)
 	var element := element_override(result, payload)
 	var critical: bool = bool(result.basic_hit) and payload.get("critical") is bool and payload.critical

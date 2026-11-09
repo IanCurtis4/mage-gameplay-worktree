@@ -1,5 +1,5 @@
 {
-  "state": "p7_playtest_fixes",
+  "state": "p7_playtest_round2",
   "base": "45b930ba",
   "checkout": ".tools/map-editor-m5",
   "branch": "codex/e08",
@@ -76,25 +76,39 @@
       "constraint": "no gameplay/rule/save changes; regressions found are reported with cause, fixes only inside E08 presentation files after registering them here; habitual checkout codex/playtest, personal saves and the P3 pilot delivery untouched",
       "delivery": "docs/epics/e08_p7_release.md",
       "candidate": {
-        "commit": "ba2a4b18ef1005ac46446c1006a65ba14492fafe",
-        "folder": ".tools/playtest_e08/e08_ba2a4b18",
+        "commit": "261801def65bb9022d7d5ffdd8c3b5bc82fd1246",
+        "folder": ".tools/playtest_e08/e08_261801de",
         "exe_sha256": "4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668",
-        "pck_sha256": "d3844a2611d51f43184ee90ed3d814e8c61ceee700955f04888a125c54264f6b",
-        "pck_bytes": 236846292
+        "pck_sha256": "843d1ab723c9db22a72fe49ec5420b4c14d18f135c58127051f54ae1e95fbfc2",
+        "pck_bytes": 236957084
       },
-      "evidence": "C3_sol_release_sync_c3_sync_03; C3_sol_release_measure_c4_01; e08_ba2a4b18/validation/runs.json",
-      "result": "export ok; inspect 20/20; normal boot ok; forest 19/19; export_content 2 expected (mob 16/11); profiles 3/3; launchers 3; smoke ok; idle forest vs F10 +7%/+1-6% (was +14-16%/+17-18%); 96 idle actors +12% median (+0.4 ms) recorded; first flipbook spike 63->38 ms",
-      "history_79656308": {
-        "candidate": {
-          "commit": "79656308a7e32cf6ee344d9b3eb179180fc3ab32",
-          "folder": ".tools/playtest_e08/e08_79656308",
-          "exe_sha256": "4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668",
-          "pck_sha256": "a4f3d54ac3e550a15155d83d75800c131849cafbfd86670b2583ddbc2bf4f878",
-          "pck_bytes": 236839412
+      "evidence": "C3_sol_release_sync_c3_sync_04/_05; C3_sol_release_measure_c5c6_01; e08_261801de/validation/runs.json",
+      "result": "export ok; inspect 22/22 (79 P6 WAVs incl. 4 aa_*, 92 cues, head-fit table in PCK: ragrpg_head_fit_v1, 10 classes, 640 frames); normal boot ok; forest 19/19; export_content 2 expected (mob 16/11); profiles 3/3; launchers 3; smoke ok; short measure: forest +5%/+6%, ablation normal +9%/+7% vs F10, no new regression",
+      "history": {
+        "79656308": {
+          "candidate": {
+            "commit": "79656308a7e32cf6ee344d9b3eb179180fc3ab32",
+            "folder": ".tools/playtest_e08/e08_79656308",
+            "exe_sha256": "4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668",
+            "pck_sha256": "a4f3d54ac3e550a15155d83d75800c131849cafbfd86670b2583ddbc2bf4f878",
+            "pck_bytes": 236839412
+          },
+          "result": "export ok; inspect 20/20; normal boot ok; forest 19/19; export_content 2 expected (mob 16/11); profiles 3/3; launchers 3; smoke ok; map-editor release PASS (6/8/14); forest idle regression +14-16% median / +17-18% p95 vs F10 attributed to always-on E08 presentation layers (ambience draw calls, idle feedback redraw, audio); fixes recommended, not applied (SHA kept)",
+          "evidence": "C3_sol_release_sync_c3_sync_01; C3_sol_release_m8_release_01 (+m8_fixture_01); C3_sol_release_measure_p7_01, _p7_02; candidate validation/runs.json"
         },
-        "result": "export ok; inspect 20/20; normal boot ok; forest 19/19; export_content 2 expected (mob 16/11); profiles 3/3; launchers 3; smoke ok; map-editor release PASS (6/8/14); forest idle regression +14-16% median / +17-18% p95 vs F10 attributed to always-on E08 presentation layers (ambience draw calls, idle feedback redraw, audio); fixes recommended, not applied (SHA kept)",
-        "evidence": "C3_sol_release_sync_c3_sync_01; C3_sol_release_m8_release_01 (+m8_fixture_01); C3_sol_release_measure_p7_01, _p7_02; candidate validation/runs.json"
-      }
+        "ba2a4b18": {
+          "candidate": {
+            "commit": "ba2a4b18ef1005ac46446c1006a65ba14492fafe",
+            "folder": ".tools/playtest_e08/e08_ba2a4b18",
+            "exe_sha256": "4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668",
+            "pck_sha256": "d3844a2611d51f43184ee90ed3d814e8c61ceee700955f04888a125c54264f6b",
+            "pck_bytes": 236846292
+          },
+          "result": "export ok; inspect 20/20; normal boot ok; forest 19/19; export_content 2 expected (mob 16/11); profiles 3/3; launchers 3; smoke ok; idle forest vs F10 +7%/+1-6% (was +14-16%/+17-18%); 96 idle actors +12% median (+0.4 ms) recorded; first flipbook spike 63->38 ms",
+          "evidence": "C3_sol_release_sync_c3_sync_03; C3_sol_release_measure_c4_01; e08_ba2a4b18/validation/runs.json"
+        }
+      },
+      "post_commit_tool_changes": "tools/e08_p7_release_probe.gd (head-fit check, .gd via resource loader), tools/e08_p7_package.ps1 (export tolerates uncommitted docs/ and tools/e08_p7_* only); uncommitted, synced c3_sync_04/05"
     },
     "C4_terra_perf": {
       "role": "Terra",
@@ -164,6 +178,22 @@
       ],
       "constraint": "head attachment presentation only; exact files to be listed in this entry before editing (directories above are the allowed area); no item/stat/loot change; C5 owns main.gd and the feedback/audio files",
       "note": "exact files; head art and body atlases are NOT modified (mechanical placement only); data generated by tools/prepare_e08_head_fit.py into a GDScript const because *.json outside the export include filter would be dropped from the PCK"
+    },
+    "C7_terra_round2": {
+      "role": "Terra",
+      "model": "sonnet",
+      "state": "dispatched",
+      "files": [
+        "scripts/world/expedition_geometry_view.gd",
+        "scripts/presentation/feedback_vfx_layer.gd",
+        "scripts/presentation/feedback_recipe_catalog.gd",
+        "scripts/presentation/audio_event_catalog.gd",
+        "tests/e08_feedback_vfx_test.gd",
+        "tests/e08_feedback_recipe_test.gd",
+        "tools/e08_p6_vfx_probe.gd",
+        "docs/epics/e08_p7_playtest_fixes_delivery.md"
+      ],
+      "constraint": "presentation only; audio_event_catalog.gd registered for the weapon-variant AA cue lists (no cue/asset change)"
     }
   },
   "coordinator_notes_c1": "C1 reviewed: shockwave readable on sand/earth (outline heavy at 160%, user judges in game); wrapper gained -AllTests/-FromStep/-CheckTimeoutSeconds for full-suite runs",
@@ -198,5 +228,11 @@
     "head_fit": "class head piece (archer leaf cap) sits too high/narrow on the head, hair sticking out; reinterpret fitting so headgear wraps the head per direction/pose (user reference: a classic 2D MMO egg-shell hat seated over the crown)",
     "basic_attack_audio": "AA sound reads as a drum; user wants a dry body-hit sound",
     "basic_attack_visual": "dislikes 'several arrows coming out of' the character on AA; wants a brief white hit burst at the target like the reference"
+  },
+  "playtest_feedback_2026_11_09_round2": {
+    "invalid_path_trace": "red trace for an impossible path still appears and stays on the ground; remove it too (keep only the target marker)",
+    "white_hit_other_classes": "other classes still show the ray burst expanding from a point on hit; use the white hit for them too",
+    "effects": "P6/P7 effects provisionally accepted by the user pending a friend's playtest",
+    "p7": "user intends to close P7 after these two fixes"
   }
 }

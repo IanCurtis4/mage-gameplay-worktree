@@ -75,9 +75,25 @@ func _run() -> void:
 	var arrow := Recipes.recipe(&"enemy_arrow", &"forest_canopy_archer")
 	check(not claw.generic and claw.family == &"melee" and not arrow.generic and arrow.family == &"projectile", "forest enemy basic attacks mapped")
 	# P7-C5: only basic attacks (class basics, enemy claw) are flagged for the AA hit cue and the white hit burst.
-	for entry: Array in [[&"basic_attack", &"archer"], [&"basic_attack", &"mage"], [&"basic_attack", &"swordsman"], [&"basic_attack", &""], [&"enemy_claw", &"forest_wolf"]]:
+	# P7-C7: enemy_arrow (ranged enemy basic) moved from the "not a basic hit" list to this one; all ten classes/evolutions are listed.
+	for entry: Array in [[&"basic_attack", &"archer"], [&"basic_attack", &"mage"], [&"basic_attack", &"swordsman"], [&"basic_attack", &""], [&"enemy_claw", &"forest_wolf"], [&"enemy_arrow", &"forest_canopy_archer"]]:
 		check(bool(Recipes.recipe(entry[0], entry[1]).basic_hit), "recipe flagged as a basic hit: %s/%s" % [entry[0], entry[1]])
-	for skill: StringName in [&"double_shot", &"fireball", &"slash", &"brutal_strike", &"enemy_arrow", &"enemy_charge", &"totally_unknown"]:
+	# P7-C7: the auto-attack of every one of the ten classes/evolutions is `basic_attack` and maps to the white hit; AA cues follow the weapon.
+	check(Recipes.BASIC_ATTACK_OWNERS.size() == 10, "ten classes/evolutions own a basic attack")
+	for owner: StringName in Recipes.BASIC_ATTACK_OWNERS:
+		var basic := Recipes.recipe(&"basic_attack", owner)
+		check(bool(basic.basic_hit) and not basic.generic and basic.variant == owner, "class auto-attack maps to basic_hit: " + String(owner))
+		var impact_cue: StringName = Catalog.candidates(&"impact", basic)[0]
+		check(impact_cue == (&"p6.aa.hit_blunt" if owner in [&"swordsman", &"defender", &"berserker"] else &"p6.aa.hit_body"), "auto-attack hit cue by weapon: " + String(owner))
+		var launch: Array = Catalog.candidates(&"projectile_launch", basic)
+		check((launch[0] == &"p6.aa.bow_release") == (owner in [&"archer", &"sentinel", &"hunter"]), "bow release only for bow classes: " + String(owner))
+		# An impact/launch of a player class with an empty skill id is derived to the auto-attack (presentation layer only).
+		for kind: StringName in [&"impact", &"projectile_launch"]:
+			var derived := Recipes.for_event({"kind":kind, "skill_id":&"", "payload":{"actor_variant":String(owner)}})
+			check(derived.skill_id == &"basic_attack" and bool(derived.basic_hit), "empty skill id derives basic_attack: %s/%s" % [owner, kind])
+	check(Recipes.for_event({"kind":&"cast_cancel", "skill_id":&"", "payload":{"actor_variant":"archer"}}).skill_id == &"", "empty skill ids of other kinds are not derived")
+	check(not bool(Recipes.for_event({"kind":&"impact", "skill_id":&"", "payload":{"actor_variant":"forest_wolf"}}).basic_hit), "an empty skill id of an enemy is not derived")
+	for skill: StringName in [&"double_shot", &"fireball", &"slash", &"brutal_strike", &"enemy_charge", &"totally_unknown"]:
 		check(not bool(Recipes.recipe(skill).basic_hit), "skill is not a basic hit: " + String(skill))
 	check(Catalog.candidates(&"impact", Recipes.recipe(&"basic_attack", &"archer")) == [&"p6.aa.hit_body", &"p6.impact.physical", &"world.impact"], "basic hit chain: AA cue, family cue, kind cue")
 	check(Catalog.candidates(&"projectile_launch", Recipes.recipe(&"basic_attack", &"archer"))[0] == &"p6.aa.bow_release" and Catalog.candidates(&"melee_swing", Recipes.recipe(&"basic_attack", &"swordsman"))[0] == &"p6.melee.physical", "bow release only on the Archer launch; the melee swing keeps its whoosh")

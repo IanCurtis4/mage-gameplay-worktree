@@ -95,7 +95,9 @@ function Invoke-Pk([string]$Name, [string]$Executable, [string[]]$Arguments, [st
 if ($Stage -eq 'Export') {
     $head = (git -C $pkSource rev-parse HEAD).Trim()
     if ($head -ne $CandidateCommit) { throw "HEAD $head is not the candidate $CandidateCommit." }
-    if (@(git -C $pkSource status --porcelain --untracked-files=no).Count) { throw 'Tracked changes present: commit the candidate before export.' }
+    # Uncommitted edits are allowed only in packaging tools/docs (never exported runtime).
+    $dirty = @(git -C $pkSource status --porcelain --untracked-files=no | ForEach-Object { $_.Substring(3) })
+    if ($dirty | Where-Object { $_ -notmatch '^(docs/|tools/(e08_p7_|prepare_e08_p4_review_profile))' }) { throw 'Tracked runtime changes present: commit the candidate before export.' }
     if ((Get-Sha $pkTemplate) -ne $pkTemplateSha) { throw 'Unexpected Windows release template.' }
     if ((Get-PSDrive C).Free -lt 1GB) { throw 'Insufficient free space.' }
     if (Test-Path -LiteralPath $pkOutput) { throw "Destination exists; preserve it: $pkOutput" }
@@ -167,7 +169,7 @@ $pkRuns = Join-Path $pkEvidence 'runs.json'
 
 if ($Stage -eq 'Inspect') {
     # Expected E08 runtime assets, from the candidate commit itself.
-    $files = @(git -C $pkSource ls-tree -r --name-only $CandidateCommit -- assets data)
+    $files = @(git -C $pkSource ls-tree -r --name-only $CandidateCommit -- assets data scripts/actors/equipment_head_fit_data.gd)
     $set = [Collections.Generic.HashSet[string]]::new([string[]]$files)
     $res = { param($p) 'res://' + $p }
     $expected = [ordered]@{
@@ -179,6 +181,7 @@ if ($Stage -eq 'Inspect') {
         terrain_v2_tiles = @($files | Where-Object { $_ -match '^assets/art/map_authoring/[a-z_]+_v2\.png$' } | ForEach-Object { & $res $_ })
         props = @($files | Where-Object { $_ -match '^assets/art/map_authoring/props/[^/]+\.png$' -and $set.Contains($_ + '.import') } | ForEach-Object { & $res $_ })
         equipment_art = @($files | Where-Object { $_ -match '^assets/art/equipment/(painted|headgear)/[^/]+\.png$' -and $set.Contains($_ + '.import') } | ForEach-Object { & $res $_ })
+        head_fit_data = @($files | Where-Object { $_ -eq 'scripts/actors/equipment_head_fit_data.gd' } | ForEach-Object { & $res $_ })
         map_packages = @($files | Where-Object { $_ -match '^data/map_authoring/[^/]+\.(rpp|navproof)$' -or $_ -in @('data/map_authoring/release_packages.json', 'data/map_authoring/prop_catalog.json', 'data/expedition/phases/forest_sanctuary.json') } | ForEach-Object { & $res $_ })
     }
     [void](New-Item -ItemType Directory -Force -Path $pkEvidence)

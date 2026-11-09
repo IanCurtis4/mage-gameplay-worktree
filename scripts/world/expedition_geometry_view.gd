@@ -150,15 +150,15 @@ func _actor_visible(actor: CombatActor, foot: Vector2) -> bool:
 	return point_visible(actor.world_point().position+Vector3.UP*float(actor.world_motion.profile().get("height",0.0))*0.5)
 ## P7-C5: only the destination marker is kept; the planned path is no longer drawn nor stored (`_path_points` is accepted for old callers and ignored).
 func indicate(point: ExpeditionWorldPoint, valid: bool, _path_points: Array = []) -> void:
+	attack_preview = {} # P7-C7: kept only as an inert field for old callers/probes; nothing reads it for drawing.
 	marker = ExpeditionWorldPoint.create(point.stage_id,point.surface_id,point.position) if point != null else null
 	marker_valid = valid
 	if _effects != null: _effects.queue_redraw()
 func _process(_delta: float) -> void: sync()
 func _draw_effects() -> void:
 	if not current(): return
-	if not attack_preview.is_empty():
-		var tint := Color("79e5ba") if attack_preview["valid"] else Color("ff807d")
-		_effects.draw_line(project(attack_preview["from"]),project(attack_preview["to"]),tint,3,true)
+	# P7-C7: the skill-aim line (attack_preview) is no longer drawn: it was never cleared, so a rejected aim left a red segment on the ground
+	# away from the character. Only the destination marker below is drawn (it keeps its normal valid/invalid tint and lifecycle).
 	var tint := Color("79e5ba") if marker_valid else Color("ff807d")
 	if marker != null:
 		var center := project(marker.position)

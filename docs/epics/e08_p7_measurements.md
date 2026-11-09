@@ -217,3 +217,37 @@ não era alvo de C4.
 - 96 atores parados ficaram em +12% na mediana (~0,4 ms), registrados com causa provável.
 - Memória dentro da triagem; preparação e entrada inalteradas.
 - Continua sem promessa de FPS para campanha inteira, outras GPUs ou sessões longas.
+
+## Candidato `261801de` — correções do primeiro playtest (C5/C6), rodada curta
+
+Candidato `261801def65bb9022d7d5ffdd8c3b5bc82fd1246` (PCK `843d1ab7…fbc2`). Rodada curta pedida pelo
+coordenador:
+- só floresta natural e ablação, F10 contra candidato, 2 rodadas alternadas;
+- mesma máquina e mesmas sondas;
+- evidência `.godot/verification/p7/C3_sol_release_measure_c5c6_01`: 8/8 com saída 0, sem erro.
+
+Sessão mais ruidosa que a `c4_01`: F10 em 12,0 ms, e uma janela da F10 com máximo de 88 ms.
+
+| Controle | Janelas | F10 mediana / p95 | E08 mediana / p95 | E08 vs F10 |
+|---|---:|---|---|---|
+| Floresta natural r1 | 3 | 12,26 / 18,10 | 12,53 / 16,27 | +2% / −10% |
+| Floresta natural r2 | 3 | 11,89 / 15,91 | 12,74 / 17,16 | +7% / +8% |
+| **Floresta natural, 6 janelas** | 6 | 12,04 / 15,97 | **12,64 / 16,98** | **+5% / +6%** |
+| **Ablação, normal** | 6 | 12,06 / 16,54 | **13,17 / 17,74** | **+9% / +7%** |
+| Ablação, sem feedback | 6 | 12,49 / 17,56 | 13,08 / 17,80 | +5% / +1% |
+| Ablação, sem ambiente | 6 | 12,05 / 16,97 | 12,86 / 17,90 | +7% / +6% |
+| Ablação, sem áudio de mundo | 6 | 12,12 / 16,48 | 12,83 / 17,14 | +6% / +4% |
+| Ablação, sem os três | 6 | 11,97 / 16,50 | 12,39 / 16,84 | +4% / +2% |
+
+- Draw calls 616 contra 614, iguais a `ba2a4b18`.
+- Estática Godot: pico 378,7 MiB, retido 88,42 MiB (igual a `ba2a4b18`).
+- RSS pico 785–788 MiB; memória privada 978–999 MiB.
+- Entrada 45,7–51,6 s contra F10 45,3–52,1 s.
+
+**Conclusão `261801de`.** Nenhuma regressão nova. A floresta parada continua abaixo do limiar de
+10% contra a F10. O controle normal da ablação ficou em +9% numa sessão ruidosa, dentro da faixa
+de `ba2a4b18`. As correções C5/C6 só agem em combate e no desenho da cabeça, e não têm custo
+mensurável na floresta parada.
+
+Não se repetiram 96 atores, preparação nem carga P6 sintética. Ficam valendo os resultados de
+`ba2a4b18`, porque C5 mudou só o desenho e o som do ataque básico e C6 só o encaixe da cabeça.
