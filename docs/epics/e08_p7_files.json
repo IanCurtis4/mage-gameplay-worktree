@@ -76,15 +76,15 @@
       "constraint": "no gameplay/rule/save changes; regressions found are reported with cause, fixes only inside E08 presentation files after registering them here; habitual checkout codex/playtest, personal saves and the P3 pilot delivery untouched",
       "delivery": "docs/epics/e08_p7_release.md",
       "candidate": {
-        "commit": "6b42b305abc24eec774bd20acb73cee15174b71d",
-        "folder": ".tools/playtest_e08/e08_6b42b305",
-        "final_p7": true,
+        "commit": "d60041425d4d1822f252816c6574877deea1308b",
+        "folder": ".tools/playtest_e08/e08_d6004142",
+        "current_p7": true,
         "exe_sha256": "4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668",
-        "pck_sha256": "6529da02b48ca1a02866f048b11c90bbce5728f8e7056c7f37f21e5caf73191c",
-        "pck_bytes": 236961436
+        "pck_sha256": "98636294a012a87b61c3ea3dee3b9f221d3bec8e9ea09d44669ddc7105a5b0e3",
+        "pck_bytes": 236941180
       },
-      "evidence": "C3_sol_release_sync_c3_sync_07; C3_sol_release_measure_c7_01 (noisy, excluded), _c7_02, _c7_03; e08_6b42b305/validation/runs.json",
-      "result": "export ok (verified vs build_manifest/HEAD after API interruption, no re-export); inspect 22/22; normal boot ok; forest 19/19; export_content 2 expected (mob 16/11); profiles 3/3; launchers 3; smoke ok; idle forest vs F10 +5..12% median / +4..11% p95 by session (borderline, residual P4/P5 content); vs 261801de 0..+3%, no C7-attributable cost",
+      "evidence": "C3_sol_release_sync_c3_sync_09; e08_d6004142/validation/runs.json (final inspect round: 23/23, boot, forest 19/19)",
+      "result": "export ok; inspect 23/23 incl. headgear import chain 14/14 (elementalist a045332f.. -> ctex c930a7c0.., hunter a3b334d6.. -> ctex 64ba89fa..) and head-fit table (10 classes, 640 frames); normal boot ok; forest 19/19; export_content 2 expected (mob 16/11); profiles 3/3; launchers 3; smoke ok; no measurement (art-only)",
       "history": {
         "79656308": {
           "candidate": {
@@ -118,9 +118,21 @@
           },
           "result": "export ok; inspect 22/22 (79 P6 WAVs incl. 4 aa_*, 92 cues, head-fit table in PCK: ragrpg_head_fit_v1, 10 classes, 640 frames); normal boot ok; forest 19/19; export_content 2 expected (mob 16/11); profiles 3/3; launchers 3; smoke ok; short measure: forest +5%/+6%, ablation normal +9%/+7% vs F10, no new regression",
           "evidence": "C3_sol_release_sync_c3_sync_04/_05; C3_sol_release_measure_c5c6_01; e08_261801de/validation/runs.json"
+        },
+        "6b42b305": {
+          "candidate": {
+            "commit": "6b42b305abc24eec774bd20acb73cee15174b71d",
+            "folder": ".tools/playtest_e08/e08_6b42b305",
+            "final_p7": true,
+            "exe_sha256": "4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668",
+            "pck_sha256": "6529da02b48ca1a02866f048b11c90bbce5728f8e7056c7f37f21e5caf73191c",
+            "pck_bytes": 236961436
+          },
+          "result": "export ok (verified vs build_manifest/HEAD after API interruption, no re-export); inspect 22/22; normal boot ok; forest 19/19; export_content 2 expected (mob 16/11); profiles 3/3; launchers 3; smoke ok; idle forest vs F10 +5..12% median / +4..11% p95 by session (borderline, residual P4/P5 content); vs 261801de 0..+3%, no C7-attributable cost",
+          "evidence": "C3_sol_release_sync_c3_sync_07; C3_sol_release_measure_c7_01 (noisy, excluded), _c7_02, _c7_03; e08_6b42b305/validation/runs.json"
         }
       },
-      "post_commit_tool_changes": "tools/e08_p7_package.ps1: -ReferencePack / reference pack for same-session comparison; uncommitted"
+      "post_commit_tool_changes": "tools/e08_p7_release_probe.gd (headgear import-chain check), tools/e08_p7_package.ps1 (image_identity entries, fresh profile per Inspect run); uncommitted"
     },
     "C4_terra_perf": {
       "role": "Terra",

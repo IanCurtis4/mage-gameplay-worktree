@@ -186,20 +186,31 @@ if ($Stage -eq 'Inspect') {
         head_fit_data = @($files | Where-Object { $_ -eq 'scripts/actors/equipment_head_fit_data.gd' } | ForEach-Object { & $res $_ })
         map_packages = @($files | Where-Object { $_ -match '^data/map_authoring/[^/]+\.(rpp|navproof)$' -or $_ -in @('data/map_authoring/release_packages.json', 'data/map_authoring/prop_catalog.json', 'data/expedition/phases/forest_sanctuary.json') } | ForEach-Object { & $res $_ })
     }
+    # Import chain of every headgear PNG: commit blob == worktree file, md5 == fixture import source_md5, fixture .ctex sha256.
+    $expected.image_identity = @($files | Where-Object { $_ -match '^assets/art/equipment/headgear/[^/]+\.png$' -and $set.Contains($_ + '.import') } | ForEach-Object {
+        if ((git -C $pkSource hash-object -- $_).Trim() -ne (git -C $pkSource rev-parse "$($CandidateCommit):$_").Trim()) { throw "Worktree PNG differs from candidate: $_" }
+        $ctexRes = ([regex]::Match((Get-Content -LiteralPath (Join-Path $pkFixture ($_ + '.import')) -Raw), '(?m)^path="(res://[^"]+\.ctex)"')).Groups[1].Value
+        $ctexDisk = Join-Path $pkFixture $ctexRes.Substring(6)
+        $md5File = [IO.Path]::ChangeExtension($ctexDisk, '.md5')
+        $sourceMd5 = ([regex]::Match((Get-Content -LiteralPath $md5File -Raw), 'source_md5="([0-9a-f]+)"')).Groups[1].Value
+        [ordered]@{ res = 'res://' + $_; png_sha256 = (Get-Sha (Join-Path $pkSource $_)); ctex = $ctexRes; ctex_sha256 = (Get-Sha $ctexDisk); source_md5_ok = ((Get-FileHash -LiteralPath (Join-Path $pkFixture $_) -Algorithm MD5).Hash.ToLowerInvariant() -eq $sourceMd5 -and (Get-Sha (Join-Path $pkFixture $_)) -eq (Get-Sha (Join-Path $pkSource $_))) }
+    })
     [void](New-Item -ItemType Directory -Force -Path $pkEvidence)
     $expectedPath = Join-Path $pkEvidence 'expected_assets.json'
     [IO.File]::WriteAllText($expectedPath, (ConvertTo-Json -InputObject $expected -Depth 4))
     $probe = Join-Path $pkSource 'tools/e08_p7_release_probe.gd'
     Copy-Item -LiteralPath $probe -Destination (Join-Path $pkEvidence 'e08_p7_release_probe.gd') -Force
+    # Fresh profile per Inspect run, so a rerun never reuses a profile with a character in it.
+    $pkStamp = [DateTime]::UtcNow.ToString('yyyyMMddTHHmmss')
     $summary = [ordered]@{}
-    $r = Invoke-Pk 'inspect_pack' $pkEngine @('--headless', '--main-pack', $pkPck, '--script', $probe, '--', 'inspect', $pkEvidence, $expectedPath, $pkAppName) $pkEvidence (Join-Path $pkEvidence 'profile_inspect') 240 'E08_P7_INSPECT_RESULT'
+    $r = Invoke-Pk 'inspect_pack' $pkEngine @('--headless', '--main-pack', $pkPck, '--script', $probe, '--', 'inspect', $pkEvidence, $expectedPath, $pkAppName) $pkEvidence (Join-Path $pkEvidence ('profile_inspect_' + $pkStamp)) 240 'E08_P7_INSPECT_RESULT'
     Add-Run $pkRuns $r; $summary.inspect = $r.ok
-    $r = Invoke-Pk 'normal_boot' $pkExe @('--rendering-method', 'gl_compatibility', '--quit-after', '120', '--verbose') $pkEvidence (Join-Path $pkEvidence 'profile_boot') 120
+    $r = Invoke-Pk 'normal_boot' $pkExe @('--rendering-method', 'gl_compatibility', '--quit-after', '120', '--verbose') $pkEvidence (Join-Path $pkEvidence ('profile_boot_' + $pkStamp)) 120
     Add-Run $pkRuns $r; $summary.normal_boot = $r.ok
-    $r = Invoke-Pk 'forest_map_pack' $pkEngine @('--main-pack', $pkPck, '--rendering-method', 'gl_compatibility', '--script', $probe, '--', 'forest', $pkEvidence) $pkEvidence (Join-Path $pkEvidence 'profile_forest') 480 'E08_P7_FOREST_RESULT'
+    $r = Invoke-Pk 'forest_map_pack' $pkEngine @('--main-pack', $pkPck, '--rendering-method', 'gl_compatibility', '--script', $probe, '--', 'forest', $pkEvidence) $pkEvidence (Join-Path $pkEvidence ('profile_forest_' + $pkStamp)) 480 'E08_P7_FOREST_RESULT'
     Add-Run $pkRuns $r; $summary.forest_map_pack = $r.ok
     # Pre-existing oracle (E06, 11 mobs) vs 16 since F10 Q4: expected 2 failures; recorded, not changed.
-    $r = Invoke-Pk 'export_content' $pkEngine @('--headless', '--main-pack', $pkPck, '--script', (Join-Path $pkSource 'tools/export_content_probe.gd'), '--', $pkPck) $pkEvidence (Join-Path $pkEvidence 'profile_content') 240 '' @{} -AllowErrors
+    $r = Invoke-Pk 'export_content' $pkEngine @('--headless', '--main-pack', $pkPck, '--script', (Join-Path $pkSource 'tools/export_content_probe.gd'), '--', $pkPck) $pkEvidence (Join-Path $pkEvidence ('profile_content_' + $pkStamp)) 240 '' @{} -AllowErrors
     Add-Run $pkRuns $r; $summary.export_content_exit = $r.exit_code
     $summary | ConvertTo-Json | Write-Output
     return

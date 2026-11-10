@@ -55,6 +55,7 @@ func inspect(expected_path: String, app_name: String) -> void:
 	var groups := {}
 	var missing: Array[String] = []
 	for group: String in expected:
+		if group == "image_identity": continue
 		var total := 0
 		var present := 0
 		for path: String in expected[group]:
@@ -102,6 +103,21 @@ func inspect(expected_path: String, app_name: String) -> void:
 	for id: StringName in FOREST_SPECIES:
 		if DirectionalAnimationSet.load_manifest(PilotVisual.manifest_path(Species.visual_id(id))).get("ok", false): species += 1
 	check("forest_species_bodies_load", species == FOREST_SPECIES.size(), "%d/%d" % [species, FOREST_SPECIES.size()])
+	# P7-C8: the PCK stores the imported .ctex, not the PNG. Chain checked by the packaging script:
+	# commit PNG sha256 -> fixture PNG (md5 == source_md5 of the import) -> fixture .ctex sha256;
+	# here: the .ctex bytes inside the pack equal that fixture .ctex, and the texture loads.
+	if expected.has("image_identity"):
+		var same := 0
+		var rows: Array = []
+		for entry: Dictionary in expected["image_identity"]:
+			var bytes := FileAccess.get_file_as_bytes(String(entry.ctex))
+			var hashing := HashingContext.new()
+			hashing.start(HashingContext.HASH_SHA256); hashing.update(bytes)
+			var packed_sha := hashing.finish().hex_encode()
+			var ok: bool = bool(entry.source_md5_ok) and not bytes.is_empty() and packed_sha == String(entry.ctex_sha256) and load(String(entry.res)) is Texture2D
+			if ok: same += 1
+			rows.append({"res": entry.res, "png_sha256": entry.png_sha256, "pack_ctex_sha256": packed_sha, "identical": ok})
+		check("headgear_imports_match_commit_png", same == rows.size() and same > 0, rows)
 	# P7-C6: per-class/per-frame head fit table (generated const). Loaded dynamically so this probe
 	# still parses on packs without it; the check only runs when the table is expected.
 	if expected.has("head_fit_data"):

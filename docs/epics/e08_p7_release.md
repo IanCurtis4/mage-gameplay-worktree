@@ -6,10 +6,10 @@ merge por este pacote. O checkout habitual `codex/playtest`, o piloto P3
 `pilot_ad09b99d` e os saves pessoais não foram tocados. Aprovação técnica não é aceite de
 produto.
 
-> **Candidato final P7: `6b42b305`** (pasta `e08_6b42b305`), com as correções do segundo
-> playtest (C7) sobre `261801de` (C5/C6) e `ba2a4b18` (C4). Detalhes na
-> [seção final](#candidato-final-p7-6b42b305). As seções abaixo descrevem, em ordem, os
-> candidatos `79656308`, `ba2a4b18` e `261801de`, preservados como histórico.
+> **Candidato atual P7: `d6004142`** (pasta `e08_d6004142`), que é o `6b42b305` com a arte nova
+> da grinalda do Elementalista e do chapéu da Caçadora (C8). Detalhes na
+> [seção final](#candidato-atual-p7-d6004142-c8). As seções abaixo descrevem, em ordem, os
+> candidatos `79656308`, `ba2a4b18`, `261801de` e `6b42b305`, preservados como histórico.
 
 ## Candidato
 
@@ -422,3 +422,87 @@ editor. Continua valendo o PASS (6/8/14).
 - a linha de mira deixou de aparecer também quando válida (decisão C7);
 - não houve audição nova, porque nenhum áudio mudou;
 - a suíte completa não foi repetida; C7 registra seus próprios 14 testes.
+
+## Candidato atual P7 `d6004142` (C8)
+
+Commit `d60041425d4d1822f252816c6574877deea1308b`, do coordenador após o fechamento da P7. O
+usuário aprovou gerar um novo candidato. É `6b42b305` mais
+[C8](e08_p7_head_fit_delivery.md#arte-nova-do-codex-c8): redesenhos do Codex da grinalda do
+Elementalista e do chapéu da Caçadora. Os IDs são os mesmos; mudaram as revisões dos PNGs, a
+tabela `scripts/actors/equipment_head_fit_data.gd` regenerada e as fontes em staging com
+proveniência. Só arte e dados de encaixe.
+
+Pasta: `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/playtest_e08/e08_d6004142`. As pastas
+`e08_79656308`, `e08_ba2a4b18`, `e08_261801de`, `e08_6b42b305` e o piloto P3 ficaram intactas
+(PCKs conferidos, nenhum arquivo alterado).
+
+| Arquivo | Bytes | SHA256 |
+|---|---:|---|
+| RagRPG-E08-Candidato.exe | 109127680 | 4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668 |
+| RagRPG-E08-Candidato.pck | 236941180 | 98636294a012a87b61c3ea3dee3b9f221d3bec8e9ea09d44669ddc7105a5b0e3 |
+
+**Exportação.**
+- Engine e template conferidos.
+- Sincronização `c3_sync_09`: 3 entradas — as duas ferramentas abaixo e o `provenance.json` de
+  staging C8. As duas peças PNG e a tabela de encaixe já estavam sincronizadas pela C8.
+- 2915 entradas do manifesto; arquivos rastreados de runtime iguais na fixture.
+- Saída 0 em 34,5 s; fixture restaurada.
+
+**Sondas no PCK exato.**
+- `inspect_pack` **23/23**, nenhum ausente: 79 sons P6, 92/92 cues, 9/9 folhas, 19/19 manifestos,
+  5/5 espécies, 4/4 pacotes de mapa, 21/21 artes de equipamento; 3363 entradas.
+- **Nova verificação `headgear_imports_match_commit_png`: 14/14.** O PCK guarda o `.ctex`
+  importado, não o PNG. Para cada peça de cabeça, a cadeia conferida é:
+  1. blob do commit = arquivo na árvore;
+  2. MD5 do PNG da fixture = `source_md5` do import;
+  3. SHA256 do `.ctex` da fixture = SHA256 do `.ctex` dentro do PCK;
+  4. a textura carrega.
+- As duas peças novas:
+  - `class_set_elementalist_head.png`: PNG `a045332f173a6f29…e72c` → `.ctex` no PCK `c930a7c0dc4554f9…`;
+  - `class_set_hunter_head.png`: PNG `a3b334d6ce0a4863…eafd` → `.ctex` no PCK `64ba89fad14be17a…`.
+- **Tabela de encaixe** no PCK e carregável: `ragrpg_head_fit_v1`, 10 classes, 640 quadros.
+- `normal_boot`: saída 0.
+- `forest_map_pack` **19/19**: 62 inimigos. Entrada 50,6 s, suspensão 9,1 s, retomada 24,7 s.
+- `export_content`: 2 falhas esperadas (mob 16/11).
+- Registro honesto de `validation/runs.json`:
+  - a primeira inspeção falhou na versão anterior desta verificação, que comparava pixels do PNG
+    com a textura e falhou nas 14 peças, inclusive nas inalteradas. Não é válida, porque o
+    import altera pixels (provavelmente a correção de borda alfa). Foi substituída pela
+    cadeia acima;
+  - uma repetição da sonda da floresta reutilizou o perfil já com personagem e falhou em
+    `packaged_menu_creates_character`. A ferramenta passou a usar perfil novo por execução.
+  - Valem a primeira floresta 19/19 e a rodada final completa: 23/23, saída 0, 19/19.
+
+**Ferramentas.** Só ferramentas, ainda não commitadas:
+- `tools/e08_p7_release_probe.gd`: verificação da cadeia de import das peças;
+- `tools/e08_p7_package.ps1`: entradas `image_identity` e perfil novo por execução da inspeção.
+
+**Perfis.**
+
+| Grupo | Revisão | SHA256 `profile.json` |
+|---|---:|---|
+| melee (3) | 46 | 08bbad6418da245cb232116bcf4820617589374799cfe8d018d195b35a29123c |
+| magic (4) | 60 | bbdfb735706eac2da463a325bab6455572bde52e05f68f8cfb09dce7628cd85b |
+| ranged (3) | 43 | 49886911f0bcc1e83d4a3c89ca694f072883cb4e59494c9b3e4096a7b20c16d8 |
+
+**Atalhos e smoke.**
+- Três atalhos e `launch_<grupo>.cmd`.
+- Smoke do EXE com perfil melee: janela viva após 25 s, saída 0, sem erros, `profile.json`
+  inalterado.
+- `Jogar E08 - Magia.lnk` abriu o EXE desta pasta com o perfil `magic` (log criado ali,
+  `profile.json` inalterado) e foi fechado.
+- `%APPDATA%/Godot/app_userdata/RagRPG E08 Candidato` não existe.
+
+**Pasta.** `LEIA-ME.md` (pt-BR) indica que esta pasta substitui `e08_6b42b305` como candidato
+atual da P7. `review/` contém:
+- `ROTEIRO.md` com a seção "Arte nova de cabeça";
+- `c8_arte_cabeca_antes_depois/`: Elementalista e Caçadora, personagem e página da peça, zoom
+  160%, de `C8_terra_head_art_probe_c8_old160`/`_c8_fin160`;
+- os conteúdos anteriores (C7, C6, C5, A3, C1, P5).
+
+**Medições.** Não foram feitas, por decisão do coordenador: a mudança é só de arte, com o mesmo
+tamanho de folha (384×96) e o mesmo caminho de desenho. Valem as de `6b42b305`.
+
+**Editor de mapas.** O release não foi repetido.
+
+**Limitações.** As de `6b42b305`. A avaliação visual das peças novas em jogo é humana.

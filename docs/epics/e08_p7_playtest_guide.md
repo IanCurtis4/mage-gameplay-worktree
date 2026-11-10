@@ -103,6 +103,14 @@ Conferir de novo o que foi pedido no primeiro playtest:
   natureza, geometria, sangue) e assinaturas mantêm a arte própria. Sons não mudaram.
   Antes/depois em `review/c7_rodada2_antes_depois/`.
 
+## Arte nova de cabeça (candidato `d6004142`)
+
+- **Grinalda do Elementalista** e **chapéu da Caçadora** foram redesenhados (mesmas peças,
+  mesmos IDs, nada de atributo ou drop mudou). A grinalda ficou um anel fino na linha do
+  cabelo, sem fitas sobre o rosto; o chapéu foi refeito nas quatro vistas. Conferir as quatro
+  vistas, dano e cadáver com a peça equipada. Antes/depois em
+  `review/c8_arte_cabeca_antes_depois/`.
+
 ## Limites preservados
 
 As medições técnicas não certificam FPS de toda a campanha; carregamento inicial, portais e
