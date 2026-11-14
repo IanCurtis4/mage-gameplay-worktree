@@ -506,3 +506,78 @@ tamanho de folha (384×96) e o mesmo caminho de desenho. Valem as de `6b42b305`.
 **Editor de mapas.** O release não foi repetido.
 
 **Limitações.** As de `6b42b305`. A avaliação visual das peças novas em jogo é humana.
+
+## Candidato integrado E08 `db7f9252`
+
+Commit `db7f9252f5d3f814e22dbb1ecf294ce62c605c83`, gerado em 14/11/2026 a pedido do usuário
+("Preparar o release"). É `2d191956` mais `db7f9252`:
+- `2d191956` traz a integração E08 pós-C8:
+  - save compacto (formato 3) com a cobertura;
+  - cache de sessão da fase publicada;
+  - nomes simples das híbridas e os rótulos Bastião, Possesso e Rastreador;
+  - ícones pintados, corpos direcionais, efeitos e a arte do Codex 1114–1118, com os briefings
+    1114–1119.
+- `db7f9252` tira do rastreamento os 145 `.import` que o editor gerou para arte-fonte e estudos.
+  Os arquivos ficam no disco, e os PNGs continuam versionados sem import, como manda a regra do
+  pacote.
+
+Ficaram fora do commit as evidências antigas não versionadas de `docs/**/evidence` e quatro `.bak`
+do editor em `data/map_authoring/`.
+
+Pasta: `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/playtest_e08/e08_db7f9252`. As pastas
+anteriores, inclusive `e08_d6004142`, ficaram intactas; o PCK C8 continua `98636294…`.
+
+| Arquivo | Bytes | SHA256 |
+|---|---:|---|
+| RagRPG-E08-Candidato.exe | 109127680 | 4a9eaded8955ef789ab02651ed9d2dde80328fbb342bd2a6db4db33e86305668 |
+| RagRPG-E08-Candidato.pck | 244913684 | 3d7456fb4734d294a18940a232fcb2af1799ee3ec9aebfc18bab00f384687330 |
+
+**Suíte.** `release_full02`, completa e sincronizada: 324/328 passos selecionados passaram. As
+quatro importações no editor ficam de fora por definição do modo `-Full`. `checks.jsonl` SHA256
+`18e74e825b8c51523dbb0bdb9f3b2fa94a71d9d3ddd68343aa2622e7fcfaf20f`.
+
+A primeira tentativa (`release_full01`) parou na sonda F8 `prepare`, porque a saída de 13/11 ainda
+guardava o perfil sintético e a sonda exige um perfil novo. Essa saída foi arquivada como
+`probe_headless_stale_1113`, sem nenhuma mudança de código.
+
+**Exportação.**
+- Engine e template conferidos.
+- Paridade da fixture: 3054 entradas do manifesto, com cinco `.uid` de scripts novos alinhados à
+  fonte. Nenhuma cena ou recurso os referencia.
+- Saída 0 em 34,2 s; fixture restaurada.
+
+A primeira tentativa sobre `2d191956` foi recusada pela paridade: faltavam na fixture os `.import`
+da arte-fonte. Daí veio `db7f9252`.
+
+**Sondas no PCK exato.**
+- `inspect_pack` **23/23**, nenhum ausente, 3509 entradas:
+  - 13/13 sons E08 e 79/79 sons P6;
+  - 38/38 manifestos de efeito e 55/55 corpos direcionais;
+  - 21/21 artes de equipamento, 19/19 pacotes de mapa, 11/11 props e 3/3 terrenos v2;
+  - cadeia de import das cabeças e tabela `ragrpg_head_fit_v1` (10 classes, 640 quadros).
+- `normal_boot`: saída 0.
+- `forest_map_pack` **19/19**, 62 inimigos. Entrada 44,8 s, suspensão 6,8 s, retomada 18,6 s; no
+  C8 eram 50,6 s, 9,1 s e 24,7 s. É uma execução só, sem pareamento. A comparação pareada é
+  `save_pair_02`.
+- `export_content`: 0 falhas, 16 definições de mob.
+
+**Perfis, atalhos e smoke.**
+- Perfis `melee`, `magic` e `ranged`: saída 0.
+- Atalhos "Jogar E08 - Corpo a corpo", "Magia" e "Arco".
+- Smoke: janela viva após 25 s, fechada pedindo, sem linhas de erro, perfil `melee` inalterado.
+
+`runs.json` SHA256 `a6cf64ae3b7c4f9e0a30eb7ffa685b796bcefe69276a5432e4bb382645926963`;
+`build_manifest.json` SHA256 `54b5b026b78f789cf5a5518470f5a6014b8ba3e737f7fc4b92782a7b055de973`.
+
+**Medições.** A etapa `Measure` (F10, piloto e candidato) não foi repetida. Valem a medição pareada
+do save `save_pair_02` e a decomposição da retomada registradas em [E08](e08.md).
+
+**Editor de mapas.** O release não foi repetido.
+
+**Limitações.**
+- Com o jogo reaberto, a retomada compacta ainda paga ~11 s de preparação da fase. O cache só vale
+  dentro da mesma sessão.
+- A arte do Codex 1116–1118 está versionada, mas ainda não foi empacotada no jogo. As adagas
+  separadas (briefing 1119) não foram geradas.
+- A avaliação visual e de produto é humana. Aprovação técnica não é aceite do usuário; o playtest
+  habitual e `master` não foram tocados.
