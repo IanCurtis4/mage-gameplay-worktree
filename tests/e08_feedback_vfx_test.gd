@@ -43,6 +43,7 @@ func _run() -> void:
 	_projectile_art()
 	await _basic_attack_and_trace()
 	await _spatial()
+	await _playtest_1115()
 	print("E08 FEEDBACK VFX: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -122,7 +123,16 @@ func _signatures() -> void:
 		bridge.emit_confirmed(event(bridge, info.kind, skill, extra))
 		var pulse: Dictionary = layer.pulses.back() if not layer.pulses.is_empty() else {}
 		check(not pulse.is_empty() and pulse.signature == sig, "signature recognised on its own kind: " + str(sig))
-		if Layer.SIGNATURE_ART.has(sig):
+		if Layer.SIGNATURE_ART.has(sig) and sig in Layer.SIGNATURE_ART_ON_IMPACT:
+			# 15/11 playtest: the sheet plays on the skill's hit; the signature event itself stays code-drawn.
+			with_art += 1
+			check(pulse.flipbook == &"", "%s signature event is drawn by code (sheet moved to the hit)" % sig)
+			layer.pulses.clear(); layer._on_stage_cleared()
+			bridge.emit_confirmed(event(bridge, &"impact", skill, extra))
+			var hit: Dictionary = layer.pulses.back() if not layer.pulses.is_empty() else {}
+			check(not hit.is_empty() and hit.flipbook == Layer.SIGNATURE_ART[sig][0] and hit.signature == &"", "%s plays %s on its impact" % [sig, Layer.SIGNATURE_ART[sig][0]])
+			layer._canvas.notification(CanvasItem.NOTIFICATION_DRAW)
+		elif Layer.SIGNATURE_ART.has(sig):
 			with_art += 1
 			var expected: StringName = Layer.SIGNATURE_ART[sig][0]
 			check(pulse.flipbook == expected and expected in VfxFlipbookCatalog.ids() and float(pulse.life) >= 0.5, "%s uses flipbook %s" % [sig, expected])
@@ -141,7 +151,7 @@ func _signatures() -> void:
 		layer.pulses.clear(); layer._on_stage_cleared()
 		bridge.emit_confirmed(event(bridge, other, skill, extra))
 		check(layer.pulses.is_empty() or layer.pulses.back().signature == &"", "%s signature does not leak to %s" % [sig, other])
-	check(with_art == 13, "13 signatures map to flipbooks (%d)" % with_art)
+	check(with_art == 21, "all 21 signatures map to flipbooks (%d)" % with_art)
 	# Drawing a flipbook pulse at several frames, including the end of the sheet.
 	layer.pulses.clear(); layer._on_stage_cleared()
 	bridge.emit_confirmed(event(bridge, &"melee_swing", &"slash", {"direction_2d":Vector2.RIGHT}))
@@ -238,7 +248,10 @@ func _idle_redraw_and_preload() -> void:
 	check(ready_ids.size() == VfxFlipbookCatalog.ids().size(), "configure preloads all %d P6 flipbooks (%d ready)" % [VfxFlipbookCatalog.ids().size(), ready_ids.size()])
 	for id: StringName in VfxFlipbookCatalog.ids():
 		check(VfxFlipbookCatalog.texture(id) != null and id in ready_ids, "flipbook %s preloaded with a valid texture" % id)
+		check(VfxFlipbookCatalog.texture(id) == VfxFlipbookCatalog._preloaded.get(id), "flipbook %s reuses its validated resident texture" % id)
 	check(VfxFlipbookCatalog.preload_all().size() == ready_ids.size(), "preload is idempotent")
+	if DisplayServer.get_name() == "headless":
+		check(not Layer._canvas_warmup_scheduled, "headless configuration skips the offscreen draw")
 	check(VfxFlipbookCatalog.texture(&"no_such_book") == null and not &"no_such_book" in VfxFlipbookCatalog.preloaded_ids(), "unknown flipbook stays fail-closed after preload")
 	layer.flipbook_provider = func(_id: StringName) -> Dictionary: return {}
 	check(layer.flipbook(&"fire_burst").is_empty(), "missing flipbook still fails closed (provider hook)")
@@ -485,11 +498,12 @@ func _basic_attack_and_trace() -> void:
 	check(view.marker != null and view.marker_valid and view.get("route") == null, "target marker kept; no movement path state remains")
 	view.indicate(null, false)
 	check(view.marker == null and not view.marker_valid, "marker lifecycle unchanged (cleared by indicate(null))")
-	# P7-C7: an impossible destination / rejected skill aim leaves only the (red) marker, never a line; a stale aim preview is dropped.
-	view.attack_preview = {"from":Vector3.ZERO, "to":Vector3(40, 0, 40), "valid":false}
+	# A rejected destination clears an earlier aim preview and leaves the invalid marker.
+	var target := ExpeditionWorldPoint.create(point.stage_id, point.surface_id, Vector3(40, 0, 40))
+	view.set_attack_preview(point, target, &"fire_spear")
+	check(not view.attack_preview.is_empty(), "the view stores the aim preview before the rejected destination")
 	view.indicate(point, false)
 	check(view.marker != null and not view.marker_valid and view.attack_preview.is_empty(), "invalid destination keeps only the invalid marker; no aim preview survives")
-	check(not FileAccess.get_file_as_string("res://scripts/world/expedition_geometry_view.gd").contains("attack_preview[\"from\"]"), "the view no longer draws the aim line segment")
 	view.indicate(null, false)
 	check(view.marker == null and view.attack_preview.is_empty(), "invalid marker lifecycle: cleared with indicate(null)")
 	view.free()
@@ -592,3 +606,61 @@ func _spatial() -> void:
 func _gameplay_state(controller: RunController, sample: Node2D) -> Array:
 	var player := controller.player
 	return [sample.upper.health.current_hp, player.health.current_hp, player.current_sp, player.world_point().position, sample.lower.world_point().position, sample.upper.world_point().position, controller.rng.state, player.attack_cooldown]
+
+## 15/11 playtest: Dissipation on its placed point, Tri-Nova element hit sheets, Covering Shot sheet on the hit
+## facing the shot, leap/recoil trails along the confirmed travel, and the leap sheet on the landing.
+func _playtest_1115() -> void:
+	var r := rig()
+	var bridge: PresentationEventBridge = r.bridge
+	var layer = r.layer
+	# Dissipation: legacy target point wins over the caster; without one it stays on the caster.
+	bridge.emit_confirmed(event(bridge, &"effect_start", &"spiritualist_dissipation", {"legacy_target_2d":Vector2(210, 90)}))
+	check(layer.pulses.size() == 1 and layer.pulses[0].position == Vector2(210, 90) and layer.pulses[0].flipbook == &"spirit_dissipation", "dissipation sheet drawn on the placed point")
+	layer.pulses.clear()
+	bridge.emit_confirmed(event(bridge, &"effect_start", &"spiritualist_dissipation"))
+	check(layer.pulses.size() == 1 and layer.pulses[0].position == Vector2(50, 50), "dissipation without a target point stays on the caster")
+	layer.pulses.clear()
+	bridge.emit_confirmed(event(bridge, &"effect_start", &"terrifying_shout", {"legacy_target_2d":Vector2(210, 90)}))
+	check(layer.pulses.size() == 1 and layer.pulses[0].position == Vector2(50, 50), "other commit effects ignore the cast point")
+	var anchored := {"kind":&"effect_start", "skill_id":&"spiritualist_dissipation", "stage_id":bridge.stage_id, "position":Vector3(1, 0, 1),
+		"payload":{"target_anchor":{"stage_id":bridge.stage_id, "surface_id":"s", "position":Vector3(40, 0, 20)}}}
+	check(layer._world_anchor(anchored) == Vector3(40, 0, 20), "world dissipation uses the confirmed target anchor")
+	anchored.payload.target_anchor.stage_id = "elsewhere"
+	check(layer._world_anchor(anchored) == Vector3(1, 0, 1), "an anchor from another stage is ignored")
+	# Tri-Nova hits reuse the painted element sheets; other elements stay code-drawn.
+	var books := {&"fire":&"fire_burst", &"ice":&"ice_shatter", &"lightning":&"lightning_burst"}
+	for element: StringName in books:
+		layer.pulses.clear(); layer._on_stage_cleared()
+		bridge.emit_confirmed(event(bridge, &"impact", &"elementalist_tri_nova", {"element":String(element)}))
+		check(layer.pulses.size() == 1 and layer.pulses[0].flipbook == books[element], "tri-nova %s hit uses %s" % [element, books[element]])
+	layer.pulses.clear(); layer._on_stage_cleared()
+	bridge.emit_confirmed(event(bridge, &"impact", &"elementalist_tri_nova", {"element":"arcane"}))
+	check(layer.pulses.size() == 1 and layer.pulses[0].flipbook == &"", "tri-nova arcane hit stays code-drawn")
+	layer._canvas.notification(CanvasItem.NOTIFICATION_DRAW)
+	# Covering Shot: launch is code-drawn; the hit plays the sheet facing launch -> target.
+	layer.pulses.clear(); layer._on_stage_cleared()
+	bridge.emit_confirmed(event(bridge, &"projectile_launch", &"hunter_covering_shot", {"direction_2d":Vector2.RIGHT}, Vector2(50, 50)))
+	check(layer.pulses.size() == 1 and layer.pulses[0].flipbook == &"", "covering shot launch has no sheet")
+	bridge.emit_confirmed(event(bridge, &"impact", &"hunter_covering_shot", {}, Vector2(50, 150)))
+	var hit: Dictionary = layer.pulses.back()
+	check(hit.flipbook == &"covering_shot" and hit.position == Vector2(50, 150) and (hit.dir as Vector2).is_equal_approx(Vector2.DOWN), "covering shot sheet on the target, facing the shot")
+	layer._canvas.notification(CanvasItem.NOTIFICATION_DRAW)
+	# Recoil trail: emitted after arriving, drawn back to where the shot was taken.
+	layer.pulses.clear(); layer._on_stage_cleared()
+	bridge.emit_confirmed(event(bridge, &"movement", &"hunter_covering_shot", {"direction_2d":Vector2.LEFT, "travel_distance":60.0, "phase":"end"}, Vector2(100, 50)))
+	var recoil: Dictionary = layer.pulses.back()
+	check(recoil.get("trail") == &"recoil" and (recoil.travel as Vector2).is_equal_approx(Vector2(-60, 0)) and (recoil.trail_start as Vector2).is_equal_approx(Vector2(160, 50)), "recoil trail spans the confirmed travel back to the shot")
+	# Leap: trail from take-off, sheet waits for the landing and plays there, mirrored when leaping left.
+	layer.pulses.clear(); layer._on_stage_cleared()
+	bridge.emit_confirmed(event(bridge, &"movement", &"berserker_wound_leap", {"direction_2d":Vector2.LEFT, "travel_distance":120.0}, Vector2(200, 80)))
+	var leap: Dictionary = layer.pulses.back()
+	check(leap.get("trail") == &"leap" and leap.flipbook == &"wound_leap" and (leap.trail_start as Vector2) == Vector2(200, 80) and float(leap.flip_delay) > 0.0, "leap: trail from take-off and delayed landing sheet")
+	check(layer.leap_point(leap, 0.5).y < layer.leap_point(leap, 0.0).y - 10.0 and layer.leap_point(leap, 1.0).is_equal_approx(Vector2(80, 64)), "leap arc rises mid-way and ends on the landing")
+	for i: int in 60: # 0.2 s landing wait + 16 frames at 12 fps = 1.53 s.
+		layer._advance(0.03); layer._canvas.notification(CanvasItem.NOTIFICATION_DRAW)
+	check(layer.pulses.is_empty(), "leap pulse expires after its landing sheet")
+	# Without a confirmed distance (legacy action path) nothing extra is drawn: the old forward placement remains.
+	bridge.emit_confirmed(event(bridge, &"movement", &"berserker_wound_leap", {"direction_2d":Vector2.RIGHT}))
+	check(not layer.pulses.back().has("trail") and float(layer.pulses.back().flip_delay) == 0.0, "leap without travel keeps the forward sheet")
+	layer._canvas.notification(CanvasItem.NOTIFICATION_DRAW)
+	bridge.queue_free(); (r.host as Node).queue_free(); await process_frame

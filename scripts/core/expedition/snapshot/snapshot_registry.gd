@@ -31,6 +31,17 @@ var _class_kinds: Dictionary = {}
 ## Reflection is invariant within one graph operation, never across captures.
 var _field_cache: Dictionary = {}
 var _base_property_cache: Dictionary = {}
+var _projection: Dictionary = {}
+var _identity_patterns: Dictionary[String, RegEx] = {}
+
+func _field(value: Object, name: String) -> Variant:
+	if not _projection.is_empty():
+		var overrides: Dictionary = _projection["fields"].get(value, {})
+		if overrides.has(name): return overrides[name]
+	return value.get(name)
+
+func _excluded(value: Object) -> bool:
+	return not _projection.is_empty() and is_instance_valid(value) and _projection["excluded"].has(value.get_instance_id())
 
 func _init() -> void:
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(MANIFEST))
@@ -106,6 +117,7 @@ func _visit(value: Variant, depth: int = 0) -> void:
 	elif value is WeakRef:
 		_visit(value.get_ref(), depth + 1)
 	elif value is Object and is_instance_valid(value):
+		if _excluded(value): _fail(&"dangling_entity_reference", "compact cut reaches an enemy"); return
 		if _presentation_target(value): return
 		if _is_asset(value): return
 		if value is Script: _fail(&"unknown_runtime_kind", "script value"); return
@@ -115,7 +127,7 @@ func _visit(value: Variant, depth: int = 0) -> void:
 		if value is Node and value.is_queued_for_deletion(): _fail(&"checkpoint_incomplete", "deferred deletion pending"); return
 		_seen[local] = true
 		_objects.append(value)
-		for field: String in _fields(value): _visit(value.get(field), depth + 1)
+		for field: String in _fields(value): _visit(_field(value,field), depth + 1)
 		# Scripted signal bindings are runtime links, rebuilt without emission.
 		for signal_info: Dictionary in value.get_signal_list():
 			if _signal_omitted(value,signal_info["name"]): continue
@@ -127,8 +139,9 @@ func _visit(value: Variant, depth: int = 0) -> void:
 func _presentation_target(value: Object) -> bool:
 	return value is Control or value is CanvasLayer or value is Camera2D or value is Window or value is ArenaView or value is ActorDeathVisual or value is ExpeditionGeometryView or value is EquipmentHeadVisual or value is EquipmentAttachmentVisual
 
-func capture(root: Node, barrier: SnapshotTickBarrier, measure_logical_bytes: bool = false) -> Dictionary:
+func capture(root: Node, barrier: SnapshotTickBarrier, measure_logical_bytes: bool = false, projection: Dictionary = {}) -> Dictionary:
 	var started := Time.get_ticks_usec()
+	_projection = projection
 	if barrier == null or not barrier.owns(root): return StableEntityRegistry.failure(&"tick_barrier_required")
 	_field_cache.clear(); _base_property_cache.clear()
 	_objects.clear(); _seen.clear(); _records = {}; _error.clear(); _assets = {}
@@ -147,7 +160,7 @@ func capture(root: Node, barrier: SnapshotTickBarrier, measure_logical_bytes: bo
 	_visit(root)
 	_scan_children(root)
 	if not _error.is_empty(): return _error
-	var source_semantic := _validate_runtime_graph()
+	var source_semantic := _validate_runtime_graph(not _projection.is_empty())
 	if not source_semantic["ok"]: return source_semantic
 	# Allocation in the original identity order preserves existing deterministic
 	# tie breaks after reconstruction, without storing that original identity.
@@ -156,12 +169,12 @@ func capture(root: Node, barrier: SnapshotTickBarrier, measure_logical_bytes: bo
 		var registered := entities.register(value)
 		if not registered["ok"]: return registered
 	for value: Object in _objects:
-		for field: String in _fields(value): _register_identities(value.get(field),field)
+		for field: String in _fields(value): _register_identities(_field(value,field),field)
 	for value: Object in _objects:
 		var id := entities.stable_for(value.get_instance_id())
 		var fields: Dictionary = {}
 		for field: String in _fields(value):
-			var raw: Variant = value.get(field)
+			var raw: Variant = _field(value,field)
 			if value is RandomNumberGenerator: raw = str(raw)
 			if value is PlayerActor and field == "_sentinel_last_launch_frame": raw = int(raw) - Engine.get_process_frames()
 			var declared_kind := _field_dead_kind(value,field) if typeof(raw) == TYPE_OBJECT and not is_instance_valid(raw) else ""
@@ -303,7 +316,7 @@ func _collect_sources(directory: String, paths: Array[String]) -> void:
 
 func _scan_children(node: Node) -> void:
 	for child: Node in node.get_children():
-		if _presentation_target(child): continue
+		if _presentation_target(child) or _excluded(child): continue
 		if child.get_script() != null:
 			_visit(child)
 			_scan_children(child)
@@ -370,7 +383,11 @@ func _identity_spans(text: String, field: String) -> Array[Dictionary]:
 	elif field in ["occurrence_id","enemy_id","event_id","_events","_occurrence_actors"]: pattern = "^(?:mob:)?(?:trial_[0-9]+_|demo_)([0-9]+)$"
 	elif field == "events": pattern = "^(?:outgoing|taunt)_(?:trial_[0-9]+_|demo_)([0-9]+)_[0-9]+$"
 	elif text.begins_with("hunter_tar_") or text.begins_with("phantom_barrier_"): pattern = "^(?:hunter_tar_|phantom_barrier_)([0-9]+)$"
-	var regex := RegEx.new(); regex.compile(pattern)
+	var regex: RegEx = _identity_patterns.get(pattern)
+	if regex == null:
+		regex = RegEx.new()
+		regex.compile(pattern)
+		_identity_patterns[pattern] = regex
 	var found := regex.search(text)
 	var spans: Array[Dictionary] = []
 	if found == null: return spans
@@ -529,7 +546,7 @@ func _signals(value: Object) -> Array:
 func _signal_omitted(value: Object, name: String) -> bool:
 	return schemas.get(_kind(value),{}).get("omitted_signals",{}).has(name)
 
-func validate(snapshot: Dictionary) -> Dictionary:
+func validate(snapshot: Dictionary, encode_result: bool = true) -> Dictionary:
 	if snapshot.get("format") != FORMAT: return StableEntityRegistry.failure(&"content_revision_unavailable")
 	var pure := _validate_pure_value(snapshot,0)
 	if not pure["ok"]: return pure
@@ -632,7 +649,7 @@ func validate(snapshot: Dictionary) -> Dictionary:
 		if id != snapshot["root"] and objects[id].has("node") and String(objects[id]["node"]["parent"]).is_empty(): return StableEntityRegistry.failure(&"dangling_entity_reference","node outside scope")
 	var authority_check := _validate_value(snapshot["authority"],objects,references,snapshot["assets"],0)
 	if not authority_check["ok"]: return authority_check
-	return Encoding.encode_snapshot(snapshot)
+	return Encoding.encode_snapshot(snapshot) if encode_result else {"ok":true}
 
 func _validate_pure_value(value: Variant, depth: int) -> Dictionary:
 	if depth > MAX_DEPTH: return StableEntityRegistry.failure(&"snapshot_too_large")
@@ -713,11 +730,11 @@ func _factory(kind: String) -> Object:
 		"res://scripts/core/expedition/spatial/flat_world_geometry.gd": return FlatWorldGeometry.new(null)
 	return (load(kind) as Script).new()
 
-func restore(snapshot: Dictionary, facade: ProfileFacade = null, validated_encoding: PackedByteArray = PackedByteArray()) -> Dictionary:
+func restore(snapshot: Dictionary, facade: ProfileFacade = null, validated_encoding: PackedByteArray = PackedByteArray(), rebuild: Callable = Callable()) -> Dictionary:
 	var started := Time.get_ticks_usec()
 	_field_cache.clear(); _base_property_cache.clear()
 	# Only the encoding returned by capture() for this same envelope skips it.
-	var checked := {"ok":true} if not validated_encoding.is_empty() else validate(snapshot)
+	var checked := {"ok":true} if not validated_encoding.is_empty() else validate(snapshot,false)
 	if not checked["ok"]: return checked
 	if not snapshot["authority"].is_empty():
 		if facade == null: return StableEntityRegistry.failure(&"restore_binding_required")
@@ -820,7 +837,7 @@ func restore(snapshot: Dictionary, facade: ProfileFacade = null, validated_encod
 			for name: StringName in _decode(node["meta"]): value.set_meta(name,_decode(node["meta"])[name])
 			for group: StringName in node["groups"]: value.add_to_group(group)
 	if not _error.is_empty(): return _discard(_error)
-	var semantic := _validate_runtime_graph()
+	var semantic := _validate_runtime_graph(rebuild.is_valid())
 	if not semantic["ok"]: return _discard(semantic)
 	for id: String in ids:
 		var value := entities.resolve(id)
@@ -857,13 +874,21 @@ func restore(snapshot: Dictionary, facade: ProfileFacade = null, validated_encod
 	# Ownership keeps weak ledger roots and tombstones valid until the caller
 	# transfers graph ownership. The host explicitly activates only after QA.
 	var root := entities.resolve(snapshot["root"])
+	if root is RunController: root.persistent_facade = facade
+	var compact_modes: Array[Dictionary] = []
+	if rebuild.is_valid():
+		var rebuilt: Dictionary = rebuild.call(root)
+		if not rebuilt["ok"]: return _discard(rebuilt)
+		for child: Node in root.get_children():
+			if not entities.stable_for(child.get_instance_id()).is_empty(): continue
+			compact_modes.append({"node":weakref(child),"mode":child.process_mode})
+			child.process_mode = Node.PROCESS_MODE_DISABLED
 	# Preserve a destroyed direct reference as destroyed, including its aliases.
 	# Keep the Variant type/liveness as well as aliases; the next tick uses
 	# the same cached state as uninterrupted play. Proxies never enter a tree.
 	_release_dead_proxies()
 	root.set_meta(StableEntityRegistry.SCOPE_META,entities)
-	if root is RunController: root.persistent_facade = facade
-	var result := {"ok":true,"root":root,"entities":entities,"owners":_objects.duplicate(),"snapshot":snapshot,"restore_usec":Time.get_ticks_usec()-started}
+	var result := {"ok":true,"root":root,"entities":entities,"owners":_objects.duplicate(),"snapshot":snapshot,"restore_usec":Time.get_ticks_usec()-started,"compact_modes":compact_modes}
 	# The result owns hydration temporaries until activation, not this helper.
 	_objects.clear(); _decoded_containers.clear()
 	return result
@@ -904,6 +929,7 @@ func install(restored: Dictionary, parent: Node) -> Dictionary:
 			if not attached["ok"]: return _abort_install(root,attached)
 	var modes: Array[Dictionary] = []
 	_freeze_installed(root,restored["entities"],modes)
+	modes.append_array(restored.get("compact_modes",[]))
 	restored["presentation_modes"] = modes
 	restored["installed"] = true
 	return {"ok":true}
@@ -945,10 +971,10 @@ func _assignable(owner: Object, field: String, value: Variant, properties: Dicti
 		return initial.get_typed_key_builtin() == value.get_typed_key_builtin() and initial.get_typed_key_class_name() == value.get_typed_key_class_name() and initial.get_typed_key_script() == value.get_typed_key_script() and initial.get_typed_value_builtin() == value.get_typed_value_builtin() and initial.get_typed_value_class_name() == value.get_typed_value_class_name() and initial.get_typed_value_script() == value.get_typed_value_script()
 	return true
 
-func _validate_runtime_graph() -> Dictionary:
+func _validate_runtime_graph(projected: bool = false) -> Dictionary:
 	for value: Object in _objects:
-		if value is WorldGeometry and not WorldGeometry._stage_prisms_valid(value._stage): return StableEntityRegistry.failure(&"invalid_payload", "terrain mass")
-		if value is ExpeditionCampaignRuntime and not value.valid(): return StableEntityRegistry.failure(&"invalid_payload", "campaign state")
+		if not projected and value is WorldGeometry and not WorldGeometry._stage_prisms_valid(value._stage): return StableEntityRegistry.failure(&"invalid_payload", "terrain mass")
+		if not projected and value is ExpeditionCampaignRuntime and not value.valid(): return StableEntityRegistry.failure(&"invalid_payload", "campaign state")
 		if value is ThreatService and not value.valid(): return StableEntityRegistry.failure(&"invalid_payload", "threat state")
 		if value is HealthState and (value.damage_sequence < 0 or value.heal_sequence < 0): return StableEntityRegistry.failure(&"invalid_payload", "health sequence")
 		if value is EnemyActor:
@@ -1005,6 +1031,7 @@ func activate(restored: Dictionary) -> Dictionary:
 	if root is RunController: root.snapshot_passive = false
 	restored["activated"] = true
 	restored.erase("presentation_modes")
+	restored.erase("compact_modes")
 	# Release temporary graph ownership: a weak root must retire when its last
 	# real envelope retires, just as in uninterrupted execution.
 	restored["owners"].clear()

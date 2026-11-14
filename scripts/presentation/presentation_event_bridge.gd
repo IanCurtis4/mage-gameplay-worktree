@@ -117,6 +117,7 @@ func _watch(node: Node, restoring: bool, epoch: int) -> void:
 			"pending_skill":&"", "pending_frame":-1, "heal_skill":&"", "heal_frame":-1}
 		_listen(actor, &"presentation_action", _action.bind(weakref(actor), epoch))
 		if actor.has_signal(&"presentation_fact"): _listen(actor, &"presentation_fact", _fact.bind(weakref(actor), epoch))
+		if actor.has_signal(&"presentation_travel"): _listen(actor, &"presentation_travel", _travel.bind(weakref(actor), epoch))
 		_listen(actor, &"actor_died", _death.bind(epoch))
 		_listen(actor, &"presentation_health_ready", _health_ready.bind(weakref(actor), epoch))
 		if actor.health != null: _health_ready(actor.health, weakref(actor), epoch)
@@ -318,6 +319,23 @@ func _fact(kind: StringName, skill: StringName, direction: Vector2, duration: fl
 			if not variant.is_empty(): data.payload["actor_variant"] = variant
 			if kind == &"charge_start" and actor is EnemyActor: _charge_target(actor as EnemyActor, data)
 			_from_description(kind, id, data, kind in ESSENTIAL_P6_KINDS)
+
+## A `movement` fact with its confirmed ground distance (travel trails). Same anchor/variant rules as _fact movement.
+func _travel(skill: StringName, direction: Vector2, duration: float, distance: float, arrived: bool, owner: WeakRef, epoch: int) -> void:
+	if not _valid(epoch): return
+	var actor := owner.get_ref() as CombatActor
+	if not is_instance_valid(actor): return
+	var id := str(actor.get_instance_id())
+	if not _actors.has(id): return
+	var data := _actor_description(actor)
+	if data.is_empty(): return
+	var variant := _variant(actor)
+	data.skill_id = skill; data.duration = maxf(0.0, duration) if is_finite(duration) else 0.0
+	data.payload["direction_2d"] = direction if direction.is_finite() else Vector2.ZERO
+	data.payload["phase"] = "end" if arrived else "start"
+	if is_finite(distance) and distance > 0.0: data.payload["travel_distance"] = distance
+	if not variant.is_empty(): data.payload["actor_variant"] = variant
+	_from_description(&"movement", id, data, false)
 
 func _charge_target(enemy: EnemyActor, data: Dictionary) -> void:
 	var target: CombatActor = enemy.player

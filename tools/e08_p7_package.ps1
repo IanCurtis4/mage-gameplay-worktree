@@ -55,7 +55,7 @@ function Add-Run([string]$RunsFile, [hashtable]$Record) {
     [IO.File]::WriteAllText($RunsFile, (ConvertTo-Json -InputObject @($all.ToArray()) -Depth 20))
 }
 # One process, sampled working set (RSS) while alive, raw output kept, strict error scan.
-function Invoke-Pk([string]$Name, [string]$Executable, [string[]]$Arguments, [string]$Folder, [string]$ProfileDir, [int]$TimeoutSeconds = 300, [string]$Marker = '', [hashtable]$Environment = @{}, [switch]$AllowErrors) {
+function Invoke-Pk([string]$Name, [string]$Executable, [string[]]$Arguments, [string]$Folder, [string]$ProfileDir, [int]$TimeoutSeconds = 300, [string]$Marker = '', [hashtable]$Environment = @{}) {
     [void](New-Item -ItemType Directory -Force -Path $Folder)
     [void](New-Item -ItemType Directory -Force -Path $ProfileDir)
     $info = [Diagnostics.ProcessStartInfo]::new()
@@ -87,7 +87,7 @@ function Invoke-Pk([string]$Name, [string]$Executable, [string[]]$Arguments, [st
         $match = [regex]::Matches($text, '(?m)^' + $Marker + ' (.+)$')
         if ($match.Count) { $result = $match[$match.Count - 1].Groups[1].Value | ConvertFrom-Json -AsHashtable }
     }
-    $ok = -not $timedOut -and $process.ExitCode -eq 0 -and ($AllowErrors -or $errors.Count -eq 0) -and (-not $Marker -or ($null -ne $result -and $result.ok))
+    $ok = -not $timedOut -and $process.ExitCode -eq 0 -and $errors.Count -eq 0 -and (-not $Marker -or ($null -ne $result -and $result.ok))
     $record = [ordered]@{ name = $Name; ok = $ok; exit_code = $process.ExitCode; timed_out = $timedOut; started_utc = $started.ToString('o'); elapsed_seconds = [Math]::Round(([DateTime]::UtcNow - $started).TotalSeconds, 3); executable = $Executable; executable_sha256 = (Get-Sha $Executable); arguments = $Arguments; profile = $ProfileDir; sampled_peak_working_set_bytes = $(if ($peakWs -gt 0) { $peakWs } else { $null }); sampled_peak_private_bytes = $(if ($peakPrivate -gt 0) { $peakPrivate } else { $null }); error_lines = $errors; output_sha256 = (Get-Sha (Join-Path $Folder ($Name + '.output.log'))); result = $result }
     $process.Dispose()
     Write-Host ("{0}: ok={1} exit={2} timeout={3} {4:n1}s" -f $Name, $ok, $record.exit_code, $timedOut, $record.elapsed_seconds)
@@ -209,9 +209,9 @@ if ($Stage -eq 'Inspect') {
     Add-Run $pkRuns $r; $summary.normal_boot = $r.ok
     $r = Invoke-Pk 'forest_map_pack' $pkEngine @('--main-pack', $pkPck, '--rendering-method', 'gl_compatibility', '--script', $probe, '--', 'forest', $pkEvidence) $pkEvidence (Join-Path $pkEvidence ('profile_forest_' + $pkStamp)) 480 'E08_P7_FOREST_RESULT'
     Add-Run $pkRuns $r; $summary.forest_map_pack = $r.ok
-    # Pre-existing oracle (E06, 11 mobs) vs 16 since F10 Q4: expected 2 failures; recorded, not changed.
-    $r = Invoke-Pk 'export_content' $pkEngine @('--headless', '--main-pack', $pkPck, '--script', (Join-Path $pkSource 'tools/export_content_probe.gd'), '--', $pkPck) $pkEvidence (Join-Path $pkEvidence ('profile_content_' + $pkStamp)) 240 '' @{} -AllowErrors
+    $r = Invoke-Pk 'export_content' $pkEngine @('--headless', '--main-pack', $pkPck, '--script', (Join-Path $pkSource 'tools/export_content_probe.gd'), '--', $pkPck) $pkEvidence (Join-Path $pkEvidence ('profile_content_' + $pkStamp)) 240
     Add-Run $pkRuns $r; $summary.export_content_exit = $r.exit_code
+    $summary.export_content = $r.ok
     $summary | ConvertTo-Json | Write-Output
     return
 }

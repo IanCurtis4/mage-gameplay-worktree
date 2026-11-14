@@ -1,5 +1,9 @@
 # E00 — Elenco e identidade do primeiro MVP
 
+> **Nomes visíveis atualizados (decisão do usuário em 14/11/2026).** `sp_ar` passa a se chamar
+> **Bastião**, `mg_sp` **Possesso** e `ar_mg` **Rastreador**. Os IDs, as regras e a fixture
+> histórica deste contrato não mudam. Registro completo: [HYBRIDS_56_V3.md](HYBRIDS_56_V3.md).
+
 Contrato candidato v1, 13/09/2026. Incorpora as dez páginas de
 `E0_Handoff_Classes_Hibridas_MVP.pdf` recebido do usuário; a
 [transcrição com hash](references/e00_hybrid_handoff_2026_09_13.md) preserva o

@@ -50,6 +50,9 @@ func _accepts(kind: StringName) -> bool: return kind in KINDS
 func _make_pulse(event: Dictionary, local: Vector2, _legacy: bool) -> Dictionary:
 	return {"position":local, "kind":event.kind, "age":0.0}
 func _on_stage_cleared() -> void: pass
+## Where a pulse is drawn: the event anchor by default (subclasses may use a confirmed target point).
+func _world_anchor(event: Dictionary) -> Vector3: return event.position
+func _legacy_anchor(event: Dictionary) -> Variant: return event.payload.get("legacy_position_2d")
 
 func _event(event: Dictionary) -> void:
 	if event.kind in [&"stage_enter", &"stage_exit"]:
@@ -60,13 +63,15 @@ func _event(event: Dictionary) -> void:
 	var local: Vector2
 	var legacy: bool = payload.get("position_unavailable", false)
 	if legacy:
-		if not payload.has("legacy_position_2d"): return
-		local = controller.to_local(payload.legacy_position_2d)
+		var flat: Variant = _legacy_anchor(event)
+		if not flat is Vector2: return
+		local = controller.to_local(flat)
 	else:
 		var view: ExpeditionGeometryView = controller.get("expedition_view")
 		if not is_instance_valid(view): return
-		if not view.point_visible(event.position): return
-		local = controller.to_local(view.to_global(ProjectionMath.project(event.position)))
+		var anchor: Vector3 = _world_anchor(event)
+		if not view.point_visible(anchor): return
+		local = controller.to_local(view.to_global(ProjectionMath.project(anchor)))
 	var pulse := _make_pulse(event, local, legacy)
 	if pulse.is_empty(): return
 	if pulses.size() >= CAP: pulses.pop_front()

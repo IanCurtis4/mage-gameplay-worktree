@@ -1,5 +1,9 @@
 # 56 híbridas direcionais — exploração v2
 
+> **14/11/2026:** a proposta de trabalho passou a ser a
+> [releitura v3](HYBRIDS_56_V3.md), feita a partir das fichas das 16 classes
+> estendidas. Este documento fica como histórico.
+
 Atualização E00: [E00_MVP_CLASS_CONTRACT.md](E00_MVP_CLASS_CONTRACT.md) incorpora
 o handoff recebido e prevalece para as seis híbridas do primeiro MVP. `mg_ar`
 passa a se chamar **Geômetra**; a matriz ampla permanece exploração para E11.

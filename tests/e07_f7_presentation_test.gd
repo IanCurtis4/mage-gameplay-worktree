@@ -72,5 +72,46 @@ func _run() -> void:
 	check(named_node.get_node("Caption").text.begins_with("Clareira das Corujas"), "world caption uses published name")
 	named_node.free()
 	check(manifest == intact, "presentation preserves immutable references")
+	# Exercise the canonical pointer adapter with the native spatial fixture.
+	var sample: Node2D = load("res://tests/fixtures/e07/f1/presentation_sample.tscn").instantiate()
+	root.add_child(sample); sample.set_process(false)
+	var c: RunController = sample.controller
+	var view: ExpeditionGeometryView = sample.view
+	c.set_process(false); c.player.set_process(false); sample.lower.set_process(false)
+	var blocked_pixel := view.project(sample.upper.world_point().position)+Vector2(0,-24)
+	c.cast_intent.active_skill = &"fire_spear"
+	var blocked := c.spatial_pointer_skill(&"fire_spear",blocked_pixel,true)
+	check(not blocked.ok and view.attack_preview.is_empty() and view.marker != null, "invalid canonical aim has marker but no line")
+	var destination := preload("res://tests/fixtures/e07/f1/fixture_input.gd").point("bridge",Vector3(120,120,520))
+	var route := c.spatial_pointer_move(view.project(destination.position))
+	check(route.ok and view.attack_preview.is_empty(), "movement clears preview")
+	if route.ok: c.player.advance_world(10000)
+	view.sync()
+	var legal := c.spatial_pointer_skill(&"fire_spear",blocked_pixel,true)
+	check(legal.ok and view._preview_visible(), "valid canonical aim with active intent displays line")
+	c.cast_intent.active_skill = &"fire_wall"
+	check(not view._preview_visible(), "different active skill cannot display the previous line")
+	c.cast_intent.active_skill = &"fire_spear"
+	c.spatial_pointer_skill(&"fire_spear",Vector2(50000,50000),true)
+	check(view.attack_preview.is_empty(), "invalid pick clears previous valid line")
+	c.spatial_pointer_skill(&"fire_spear",blocked_pixel,true)
+	paused = true
+	check(not view._preview_visible(), "pause hides the preview immediately")
+	await process_frame
+	await process_frame
+	check(view.attack_preview.is_empty(), "the presentation frame discards the paused preview")
+	paused = false
+	c.spatial_pointer_skill(&"fire_spear",blocked_pixel,true)
+	view.hide_surfaces([c.player.world_point().surface_id])
+	check(view.attack_preview.is_empty(), "surface visibility change clears line")
+	view.hide_surfaces([])
+	c.spatial_pointer_skill(&"fire_spear",blocked_pixel,true)
+	c._cancel_aim()
+	check(view.attack_preview.is_empty(), "cancel clears line")
+	c.cast_intent.active_skill = &"fire_spear"
+	c.spatial_pointer_skill(&"fire_spear",blocked_pixel,true)
+	c.spatial_pointer_skill(&"fire_spear",blocked_pixel,false)
+	check(view.attack_preview.is_empty(), "commit clears line")
+	sample.queue_free(); await process_frame
 	print("E07 F7 presentation: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)

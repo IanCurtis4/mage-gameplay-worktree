@@ -1,0 +1,42 @@
+[
+  {
+    "path": "assets/art/e08_codex_1118/equipment/weapons_b1.png",
+    "sha256": "a4a088a4601b5c245aea177a6aaa37da058514f727cf734d8c6aae33d445fdfa",
+    "width": 2172,
+    "height": 724,
+    "generator": "Codex built-in imagegen",
+    "request": "B1",
+    "references": [
+      {
+        "path": "assets/art/e08_equipment_redesign/weapons_source_v2.png",
+        "sha256": "7c40563cf810daefa4a16a21e945e83aa34eb7a53ebf4ac3a258c8a2d7b6e9ca"
+      },
+      {
+        "path": "assets/art/e08_equipment_redesign/contact_sheet.png",
+        "sha256": "b8fb77b9e02997f0599072639a5df6a1cddeedda06079ef80324d740afffae61"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Asset type: original in-game equipment sprite source sheet, hand-painted fantasy material study, transparent background. The first reference provides the existing RagRPG weapons' elongated SINGLE ROW canvas proportions and rendering style; the second confirms cast painting, texture and palette for gear. Copy the style and arrangement, not the reference items. Produce an ultrawide landscape native PNG around 2172 × 724 or wider, real RGBA with exactly ONE horizontal row of independently isolated objects. One object or intentionally grouped pair per column, each on its own distinct horizontal centre with very wide, completely clean transparent gap around it. All objects upright as gripped, handle to bottom and tip to top where they have a handle. All read well at 80×130 in game: classic fantasy proportions, finely painted organic outline, substantial volume, clearly rendered leather, metal and wood. Painted art, not pixel art. Neutral upper-left highlights, strong clear silhouettes. The whole area behind and between objects must be genuinely clear alpha without haze, glare, scenery or background. No hands, people, captions, letters, imitation text, frame, grid, floor, cast shadow, drop shadow or effects.\n\nThis sheet has exactly 7 equally spaced positions on the single horizontal row. From left to right, one per column in exactly this order: (1) a SMALL upright closed prayer book, warm ivory or pale tan leather with a clearly divided two-color round pale gold and plum/black medallion in the center; (2) pale metal halo scepter, slim upright handle pointing down, open circular gold ring on the top; (3) oxidized dark bronze eye reliquary, one single eye inset in an upright caged metal pendant with a short coiled chain above the body, read clearly at thumbnail scale; (4) black leather contract tome with a heat-branded emblem on its closed cover, one short real iron chain wound around the book and a padlock, no actual flame; (5) tall upright bone staff assembled of coarse pale tied bones with one small skull and one ochre mushroom at top, its handle pointing down; (6) tall upright living wooden staff with a few leaves and a single pale flower at the crown, slim gnarled shaft and handle pointing down; (7) a rosary made from individual wooden beads arrayed in one evenly readable open vertical floating ring, a few bead gaps, nothing supporting it, no magic graphics. Tight silhouettes and generous spacing on BOTH sides of each of the seven objects. The books are upright closed front covers at slight three-quarter, not lying flat."
+  },
+  {
+    "path": "assets/art/e08_codex_1118/equipment/weapons_b2.png",
+    "sha256": "bd26c9d138506907140a6200f2aa519e2e3104f095fd4c819d3d475e1a5bb534",
+    "width": 2172,
+    "height": 724,
+    "generator": "Codex built-in imagegen",
+    "request": "B2",
+    "references": [
+      {
+        "path": "assets/art/e08_equipment_redesign/weapons_source_v2.png",
+        "sha256": "7c40563cf810daefa4a16a21e945e83aa34eb7a53ebf4ac3a258c8a2d7b6e9ca"
+      },
+      {
+        "path": "assets/art/e08_equipment_redesign/contact_sheet.png",
+        "sha256": "b8fb77b9e02997f0599072639a5df6a1cddeedda06079ef80324d740afffae61"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Asset type: original in-game equipment sprite source sheet, hand-painted fantasy material study, transparent background. The first reference provides the existing RagRPG weapons' elongated SINGLE ROW canvas proportions and rendering style; the second confirms cast painting, texture and palette for gear. Copy the style and arrangement, not the reference items. Produce an ultrawide landscape native PNG around 2172 × 724 or wider, real RGBA with exactly ONE horizontal row of independently isolated objects. One object or intentionally grouped pair per column, each on its own distinct horizontal centre with very wide, completely clean transparent gap around it. All objects upright as gripped, handle to bottom and tip to top where they have a handle. All read well at 80×130 in game: classic fantasy proportions, finely painted organic outline, substantial volume, clearly rendered leather, metal and wood. Painted art, not pixel art. Neutral upper-left highlights, strong clear silhouettes. The whole area behind and between objects must be genuinely clear alpha without haze, glare, scenery or background. No hands, people, captions, letters, imitation text, frame, grid, floor, cast shadow, drop shadow or effects.\n\nThis sheet has exactly 5 equally spaced positions on the single horizontal row. From left to right, exactly this order: (1) a pair of two simple straight dagger blades crossed upright near their guards, plain silver blades and understated brown handles at bottom; (2) a distinct pair of two dark curved assassin daggers crossed, darker blades pointing up, black-wrapped handles down, modest muted burgundy accent; (3) a pair of two longer bright curved scimitars upright side by side or subtly crossed with clear light-silver crescent blades above and cloth ribbon endings at their bottom hilts, turquoise, red and sand accent; (4) one closely grouped PAIR of monk cloth hand wraps with narrow thin leather reinforcing plates, wrap formed as two hollow folded or rolled wearable objects with open finger ends, neutral ivory and leather, no hands at all; (5) one closely grouped PAIR of fingerless champion gauntlets made of hide and articulated iron, open short leather finger holes and knuckle plates, brown and steel with dark red accents, no hands at all. Keep each actual pair together in ONE column as a single equipment object composed of its two elements, exactly 5 groups, with wider space between groups than within pairs. The ends of hilts always point down."
+  }
+]

@@ -71,11 +71,18 @@ func find_script(node: Node, suffix: String) -> Node:
 		if found != null: return found
 	return null
 
-func boot(id: String) -> bool:
+func boot(id: String, prepare_aim_skill: bool = false) -> bool:
 	var loaded: Dictionary = MapRelease.load_package(id)
 	if not loaded.get("ok", false): print("E08P5_FAIL load ", loaded); return false
 	var candidate: Dictionary = Candidate.create("patrol", loaded.package, loaded.package.source_hash)
 	var created: Dictionary = Launcher.create_session(candidate.candidate, "mage")
+	if prepare_aim_skill:
+		var facade := ProfileFacade.new(ProfileStore.new(String(created.directory).path_join("profile")))
+		var made := facade.create_character("aim_mage",0,"Mago de teste",&"mage")
+		if not made.ok: print("E08_AIM_FAIL character ",made); return false
+		var profile := facade.current_profile()
+		var unlocked := facade.grant_playtest_admin("aim_skills",profile.revision,profile.selected_character_id,&"unlock_skills",&"",{})
+		if not unlocked.ok: print("E08_AIM_FAIL skills ",unlocked); return false
 	var window: Dictionary = Launcher.create_window(created.path)
 	var preview := PreviewApp.new()
 	preview.quit_on_close = false
@@ -499,6 +506,50 @@ func mosaic(spec_path: String) -> void:
 	await shot(out)
 	quit()
 
+# Captures a real, canonically validated spatial aim and its invalid/cancelled states.
+func aim_section() -> bool:
+	paused = false
+	var skill := &"fireball"
+	if not host.player.available_skill_ids().has(skill): return false
+	host.cast_intent.active_skill = skill
+	var origin: Vector3 = host.player.world_point().position
+	var valid_pixel := Vector2.ZERO
+	var found_valid := false
+	var failures := {}
+	for radius: float in [80.0, 120.0, 200.0, 400.0, 800.0, 1200.0]:
+		for index: int in 16:
+			var angle := TAU * float(index) / 16.0
+			var ground := origin + Vector3(cos(angle)*radius, 0, sin(angle)*radius)
+			var pixel := view.to_global(view.project(ground))
+			var screen := view.get_global_transform_with_canvas() * view.project(ground)
+			if not Rect2(Vector2(40,40),Vector2(root.size)-Vector2(80,80)).has_point(screen): continue
+			var result := host.spatial_pointer_skill(skill,pixel,true)
+			if not result.get("ok",false):
+				var code: StringName = result.get("error_code",&"unknown")
+				failures[code] = int(failures.get(code,0)) + 1
+			if result.get("ok",false) and view._preview_visible() and not found_valid:
+				valid_pixel = pixel; found_valid = true
+				break
+		if found_valid: break
+	if not found_valid:
+		print("E08_AIM_FAIL no valid point: ",failures); return false
+	host.spatial_pointer_skill(skill,valid_pixel,true)
+	if not view._preview_visible(): return false
+	await frame("aim_valid",1.0,base_offset)
+	# Reject the same visible point without changing the camera or geometry.
+	var previous_sp := host.player.current_sp
+	host.player.current_sp = 0.0
+	var rejected := host.spatial_pointer_skill(skill,valid_pixel,true)
+	host.player.current_sp = previous_sp
+	if rejected.get("ok",false): return false
+	if not view.attack_preview.is_empty() or view.marker == null or view.marker_valid: return false
+	await frame("aim_invalid",1.0,base_offset)
+	host.spatial_pointer_skill(skill,valid_pixel,true)
+	host._cancel_aim()
+	if not view.attack_preview.is_empty(): return false
+	await frame("aim_cancelled",1.0,base_offset)
+	return true
+
 # ---------------------------------------------------------------- main
 func _run() -> void:
 	root.size = Vector2i(1280, 720)
@@ -507,6 +558,10 @@ func _run() -> void:
 	var mode: String = args[1] if args.size() > 1 else "forest_terraces"
 	if mode == "mosaic":
 		await mosaic(args[2]); return
+	if mode == "aim":
+		if not boot("forest_terraces",true) or not await aim_section():
+			print("E08_AIM_FAIL"); quit(1); return
+		print("E08_AIM_DONE"); quit(); return
 	package_id = mode
 	full = (args[2] if args.size() > 2 else "full") == "full"
 	if not boot(package_id) or not load_textures():

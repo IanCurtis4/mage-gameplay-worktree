@@ -13,6 +13,16 @@ const REVISION := "authored_phase_v2"
 const MAX_MAPS := 8
 const BoundedPreparation = preload("res://scripts/core/bounded_preparation.gd")
 const STAGE_KEYS := ["stage_id","from_stage","to_stage"]
+## Session cache (E08, 14/11): a prepared phase is a pure function of its definition
+## and of the immutable packages its listing pins. Suspension → resume of a compact
+## checkpoint and re-entry in the same process reuse the last successful
+## preparations of the same inputs instead of proving every map again.
+const CACHE_LIMIT := 2
+static var _cache: Dictionary = {}
+static var _cache_order: Array[String] = []
+static var _cache_mutex := Mutex.new()
+## Diagnostic: preparations answered by the cache in this process.
+static var cache_hits := 0
 
 static func fail(code: String, id: String = "") -> Dictionary:
 	var messages := {"phase_missing":"A fase não está registrada.","phase_invalid":"O registro da fase está inválido.","phase_exit_missing":"Um mapa da fase não tem a saída indicada para o próximo.","phase_completion_missing":"O último mapa da fase precisa de uma saída de conclusão.","phase_completion_misplaced":"Só o último mapa da fase pode concluir a fase."}
@@ -53,6 +63,16 @@ static func phases(folder: String = FOLDER) -> Array:
 static func prepare(phase_id: String, listing: Dictionary = {}, folder: String = FOLDER, lanes: int = 2) -> Dictionary:
 	var read := definition(phase_id,folder)
 	if not read.ok: return read
+	var key := _cache_key(read.definition,listing,folder)
+	if not key.is_empty():
+		_cache_mutex.lock()
+		var hit: Dictionary = _cache.get(key,{})
+		if not hit.is_empty(): cache_hits += 1
+		_cache_mutex.unlock()
+		if not hit.is_empty():
+			var reused := _cache_copy(hit)
+			reused["preparation_cache"] = "hit"
+			return reused
 	var prepared: Array = []; var metrics: Array = []
 	var jobs := BoundedPreparation.run(read.definition.maps,_prepare_map.bind(listing),lanes)
 	for row: Dictionary in jobs.rows:
@@ -63,7 +83,38 @@ static func prepare(phase_id: String, listing: Dictionary = {}, folder: String =
 		metrics.append({"package_id":item.package_id,"prepare_ms":row.prepare_ms,"details":map.get("prepare_timings",{}).duplicate(true)})
 	var composed := compose(read.definition,prepared)
 	if composed.ok: composed["metrics"] = metrics; composed["preparation_lanes"] = jobs.lanes
+	if composed.ok and not key.is_empty():
+		_cache_mutex.lock()
+		if not _cache.has(key): _cache_order.append(key)
+		_cache[key] = _cache_copy(composed)
+		while _cache_order.size() > CACHE_LIMIT: _cache.erase(_cache_order.pop_front())
+		_cache_mutex.unlock()
 	return composed
+
+## Identity of a preparation: the phase definition and the pinned entry (package
+## and source hashes, compiler revision, path) of every map, as prepare reads them.
+## Empty (no cache) inside the editor or when an entry does not resolve.
+static func _cache_key(phase: Dictionary, listing: Dictionary, folder: String) -> String:
+	if Engine.is_editor_hint(): return ""
+	var entries: Array = []
+	for item: Dictionary in phase.maps:
+		var found := MapRelease.entry(item.package_id,listing)
+		if not found.ok: return ""
+		entries.append(found.entry)
+	return Canonical.digest([REVISION,folder,phase,entries])
+
+## The manifest is shared (read only through to_data(), which copies); everything a
+## consumer may keep or edit, such as the population rules, is a deep copy.
+static func _cache_copy(result: Dictionary) -> Dictionary:
+	var copy := {}
+	for field: String in result:
+		copy[field] = result[field] if field == "manifest" or not (result[field] is Dictionary or result[field] is Array) else result[field].duplicate(true)
+	return copy
+
+static func clear_cache() -> void:
+	_cache_mutex.lock()
+	_cache.clear(); _cache_order.clear()
+	_cache_mutex.unlock()
 
 static func _prepare_map(item: Dictionary, listing: Dictionary) -> Dictionary:
 	return MapRelease.prepare(item.package_id,listing)

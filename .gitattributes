@@ -49,3 +49,10 @@ docs/map_editor/delivery/evidence/f10/luna/minimap_zoom_2026_11_05/** -text -whi
 docs/map_editor/delivery/evidence/f10/reviewer/terrain_performance_2026_11_05/** -text -whitespace
 
 docs/map_editor/delivery/evidence/f10/luna/terrain_performance_2026_11_05/** -text -whitespace
+
+# Godot text resources: checkout bytes equal the committed LF bytes, so multi-line strings
+# (descriptions) carry no stray CR on Windows and match the compiled publication.
+*.tres text eol=lf
+# The asset manifest and the forest map packages pin the LF bytes of this shader. Border and water
+# shaders stay on the default: the manifest and the published sanctuary_woods packages pin their CRLF bytes.
+scripts/map_authoring/terrain/terrain_material.gdshader text eol=lf

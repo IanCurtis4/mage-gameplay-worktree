@@ -1,0 +1,98 @@
+[
+  {
+    "path": "assets/art/e08_codex_1117/creatures/demon_brute/east_v2.png",
+    "sha256": "47e8b05d0357053e861c50133f67c9b0d43d18a985078afb91cadd8f103c9202",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "demon_brute / east",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/demon_brute/south_v2.png",
+        "sha256": "ffaf6dc79be170e6c8e1858b673e9798865aaf8a00a3cdc3ae7e2556427bf3a8"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Produce a clean separated EAST RagRPG Demon Brute sprite sheet with the black iron and carmine hulk design in the FIRST input, matching its ample cell padding and SCALE. The SECOND reference confirms pixel game style. Same creature as attached south sheet; redraw as a true east view, do not mirror or recolor it. Creature: an original hulking demon brute about 1.5 times the warlock's height, extraordinarily wide shoulders, heavy low small head, two thick horns curving forward, black iron plates visibly fused into its charcoal skin and split by carmine ember cracks, bile-yellow eyes, one chest iron brand with short chain dangling from it, one large marked black iron hammer chained to its right wrist; ink-black, carmine, ember orange, bile-yellow, no green; heavy cast-iron body. This is true side-profile, exactly one eye visible, muzzle and toes strictly towards right, torso and broad shoulders in profile. Two arms, two legs. The short-handled branded hammer remains held in the original anatomical RIGHT hand, use a bent elbow and diagonal foreshortening on lift. The body including the tip of hammer or armour must be SMALL relative to each exact cell, with a MAXIMUM total sprite size of 205x215 px and min visibly empty padding >35 px to every border on all 16 sprites. Same spacing as first reference. The two final fallen poses are both compact, close to the center of their cells and lying along the view's direction. True 1254x1254 RGBA square sheet, 4x4 uniform invisible grid, all full sprites, idle frames, alternating walking frames then lift hammer BELOW 220px height, hammer downstroke, short sweeping motion, and forearm raised guard in row 3; final row two flinches, kneeling collapse and fully collapsed with hammer very close. Stable scale, no FX, background, shadows, floor, labels, grid marks, ghost or external glow. Painted chibi pixel sprite with carefully shaped navy-black iron contours, 2–3 tones, real alpha cutouts."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/demon_brute/north_v2.png",
+    "sha256": "57d3c100d6e55ade874147d05947fb4ebe0f4f1e1a24d60f583350634d02f093",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "demon_brute / north",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/demon_brute/south_v2.png",
+        "sha256": "ffaf6dc79be170e6c8e1858b673e9798865aaf8a00a3cdc3ae7e2556427bf3a8"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Produce a clean separated NORTH RagRPG Demon Brute sprite sheet with the black iron and carmine hulk design in the FIRST input, matching its ample cell padding and SCALE. The SECOND reference confirms pixel game style. Same creature as attached south sheet; redraw as a true north view, do not mirror or recolor it. Creature: an original hulking demon brute about 1.5 times the warlock's height, extraordinarily wide shoulders, heavy low small head, two thick horns curving forward, black iron plates visibly fused into its charcoal skin and split by carmine ember cracks, bile-yellow eyes, one chest iron brand with short chain dangling from it, one large marked black iron hammer chained to its right wrist; ink-black, carmine, ember orange, bile-yellow, no green; heavy cast-iron body. This is true back view in every frame. Exactly back-facing torso, shoulders, head and shoulder plate details, boots show heels. If moving, move AWAY toward top of screen. See all horns and chest chain only where visible from behind, and no face or chest. Two arms, two legs. The short-handled branded hammer remains held in the original anatomical RIGHT hand, use a bent elbow and diagonal foreshortening on lift. The body including the tip of hammer or armour must be SMALL relative to each exact cell, with a MAXIMUM total sprite size of 205x215 px and min visibly empty padding >35 px to every border on all 16 sprites. Same spacing as first reference. The two final fallen poses are both compact, close to the center of their cells and lying along the view's direction. True 1254x1254 RGBA square sheet, 4x4 uniform invisible grid, all full sprites, idle frames, alternating walking frames then lift hammer BELOW 220px height, hammer downstroke, short sweeping motion, and forearm raised guard in row 3; final row two flinches, kneeling collapse and fully collapsed with hammer very close. Stable scale, no FX, background, shadows, floor, labels, grid marks, ghost or external glow. Painted chibi pixel sprite with carefully shaped navy-black iron contours, 2–3 tones, real alpha cutouts."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/demon_brute/south_v2.png",
+    "sha256": "ffaf6dc79be170e6c8e1858b673e9798865aaf8a00a3cdc3ae7e2556427bf3a8",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "demon_brute / south",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/demon_brute/south.png",
+        "sha256": "dc704322cdb4929edd50cd02dc82b7f06f2e33c41a2141e7939b1cda600f02b0"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: precise-object-edit. Repaint this exact original RagRPG Demon Brute SOUTH animation sprite sheet without changing the design. It needs well-separated silhouettes, especially the hammer at top of row 3 column 2. Reproduce the cannonball-wide hulking shoulders, fused black plates with carmine seams, forward-curved horns, small low face, bile-yellow eyes, one tethered black hammer physically gripped in his anatomical right hand, separate chest brand and chain. Draw body and hammer about 86 percent of the current size within each cell. Retain all 16 poses in same order and facing, and bend the elbow and shorten the raised hammer pose to keep its whole head within its own slot, at least 22 completely clear pixels from its upper edge. Same for every other cell: generous fully transparent padding, even at the top and bottom of entire canvas. Keep exact four by four equal cells, no touching, no graphic grid. All bodies full and centered, comparable scale, front facing three-quarter camera. Row 1 idle, row 2 alternating walk. Row 3 lift, slam downward, sideways sweep, free forearm up as guard. Row 4 two distinct injuries, kneeling collapse and small fully fallen. Two arms, two legs, the hammer (no loose pieces) exactly one in the same right hand in every living pose. Dark clean outlines, 2–3 tones. Real transparent RGBA 1254x1254, no effects, text, shadows, floor or matte."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/demon_brute/south.png",
+    "sha256": "dc704322cdb4929edd50cd02dc82b7f06f2e33c41a2141e7939b1cda600f02b0",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "demon_brute / south",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      },
+      {
+        "path": "assets/art/e08_enemies/directional/animal_companion/east_source_v1.png",
+        "sha256": "7d0708e9b2f2ef40868b2df2fd0577f822c1464d586b795423dcb6e8b2252a88"
+      }
+    ],
+    "selected": false,
+    "prompt": "Use case: stylized-concept. Production 2D pixel-art animation source sheet for RagRPG, Bruto demoníaco (demon_brute), SOUTH/front. Input 1 is the Warlock, for the original cast art style and visual scale only, not a design to copy. Input 2 is the small canine companion for established creature anatomy and rendering in the game, not the design to copy. Creature: an original hulking demon brute about 1.5 times the warlock's height, extraordinarily wide shoulders, heavy low small head, two thick horns curving forward, black iron plates visibly fused into its charcoal skin and split by carmine ember cracks, bile-yellow eyes, one chest iron brand with short chain dangling from it, one large marked black iron hammer chained to its right wrist; ink-black, carmine, ember orange, bile-yellow, no green; heavy cast-iron body. Anatomy: two arms and two legs, one hammer gripped in the creature's own right hand in each living frame, with one short wrist tether, separate from the chest chain; hammer and chain always stay inside the cell even overhead; final pose fallen with its own hammer tucked close.\nThe creature is facing SOUTH/front in every single sprite, both halves of the torso toward the audience, face and feet pointing down-screen at 3/4 overhead. Row 3 attack in chronological order: lift the heavy hammer, chop it downward, perform a broad sideways sweep while maintaining facing then guard with armored free forearm up and hammer still in his right hand.\nOne original near-square (1254 × 1254 preferred; approx. 1200 × 1300) RGBA sprite SOURCE PNG with sixteen complete isolated figures, no contact or overlap. Four EXACT evenly spaced columns and rows, each in its own invisible cell, centered anchor shared across every pose, same standing scale and physical proportions throughout. Put everything including horns, tail and any carried weapon into a small centered silhouette with at least 28 clear pixels in all directions from cell divisions. Aim for sprite height and width at most 235 px. Keep weapons and elongated limbs tucked or foreshortened to allow no sprite to cross a cell edge. Keep the last two separate, compact, and centered. Row 1: exactly four idle phases. Row 2: four separate walking phases, alternate foot contact; realistic gait per species. Row 3: four listed attack poses in order. Row 4: first two hit reactions, third begins collapse, fourth fully fallen and short across the cell. Fully drawn chest, feet and tail in each frame, anatomy always consistent. Dark clean hand-painted pixel contour, readable chibi mass with 2–3 shade steps, target game sprite at small scale. Original design for this project. Fully cut out true transparent alpha in all gutters. No loose magic, projectile, gore, blood, floor, shadows, captions, game UI, actual grid, extra objects or matte."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/demon_brute/west_v2.png",
+    "sha256": "11ba68a606b6ecd7571a43e12551ad34654b5a3fc6ee15bbb987aaa5fd8b6b55",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "demon_brute / west",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/demon_brute/south_v2.png",
+        "sha256": "ffaf6dc79be170e6c8e1858b673e9798865aaf8a00a3cdc3ae7e2556427bf3a8"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Produce a clean separated WEST RagRPG Demon Brute sprite sheet with the black iron and carmine hulk design in the FIRST input, matching its ample cell padding and SCALE. The SECOND reference confirms pixel game style. Same creature as attached south sheet; redraw as a true west view, do not mirror or recolor it. Creature: an original hulking demon brute about 1.5 times the warlock's height, extraordinarily wide shoulders, heavy low small head, two thick horns curving forward, black iron plates visibly fused into its charcoal skin and split by carmine ember cracks, bile-yellow eyes, one chest iron brand with short chain dangling from it, one large marked black iron hammer chained to its right wrist; ink-black, carmine, ember orange, bile-yellow, no green; heavy cast-iron body. This is true side-profile, exactly one eye visible, muzzle and toes strictly towards left, torso and broad shoulders in profile. Two arms, two legs. The short-handled branded hammer remains held in the original anatomical RIGHT hand, use a bent elbow and diagonal foreshortening on lift. The body including the tip of hammer or armour must be SMALL relative to each exact cell, with a MAXIMUM total sprite size of 205x215 px and min visibly empty padding >35 px to every border on all 16 sprites. Same spacing as first reference. The two final fallen poses are both compact, close to the center of their cells and lying along the view's direction. True 1254x1254 RGBA square sheet, 4x4 uniform invisible grid, all full sprites, idle frames, alternating walking frames then lift hammer BELOW 220px height, hammer downstroke, short sweeping motion, and forearm raised guard in row 3; final row two flinches, kneeling collapse and fully collapsed with hammer very close. Stable scale, no FX, background, shadows, floor, labels, grid marks, ghost or external glow. Painted chibi pixel sprite with carefully shaped navy-black iron contours, 2–3 tones, real alpha cutouts."
+  }
+]

@@ -1,0 +1,116 @@
+[
+  {
+    "path": "assets/art/e08_codex_1116/characters/acolyte/east_v3.png",
+    "sha256": "ee48158b8546e44fa822b510e49bbbb412483935fd3abb09a13262c2ebb8630b",
+    "width": 1312,
+    "height": 1199,
+    "generator": "Codex built-in imagegen",
+    "request": "acolyte / east",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/acolyte/south.png",
+        "sha256": "d30a4a965b8124d46f7011f3a5d1cc1063796011c30c1dbec589974441699eaa"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      }
+    ],
+    "prompt": "Paint a clearly separated 16-frame chibi sprite sheet for RagRPG. The FIRST reference dictates character identity. The SECOND reference dictates only its spacious 4-by-4 LANDSCAPE 1312x1199 cell registration and stable foot height. Make all sprites notably smaller than in either reference, at most 215 pixels by 215 pixels tall including hair and arms in each roughly 330 by 300 px cell. Do not use a line grid. Use an actually transparent RGBA blank canvas. Every sprite's center sits at mathematical center of its own independent uniform cell exactly, so the sprites in the image look evenly spaced with at least 30px of clear pixels at each edge and a full clear border. Character is an ivory-robed young female acolyte with full loose pale ash brown waves and bun, faded-blue right stole and plum left stole, small split gold-plum chest medallion, cord waist and sandals, calm attitude. Painted clean dark pixel outlines, 2–3 tone shading and game view slightly from above. FACE strictly screen right, true lateral profile, nose and toes point right, just one eye visible. Both EMPTY hands show at distinct depths throughout, even idle, with exactly two arms. Row 1 four idle variations; row 2 four walk images with feet and opposite arms alternating; row 3 four actions palms in prayer, both up, blessing with one hand, then lowering; row 4 two hurt, then kneel collapse and fully prone compact foetal fall facing right. Prone figure must be tiny and compact, only 170 px wide like a tightly tucked nap, totally independent from neighbor, not stretched in a long sideways sprawl. Keep hair, clothing, palette and anatomical sides. No effects, props, weapons, ground, shadow, lettering, lines, glow or mattes."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/acolyte/north.png",
+    "sha256": "6d06e243759ceee8fb11540c05b80b52e08a4882b03fc95a04ed30a58cdbf7a4",
+    "width": 1108,
+    "height": 1420,
+    "generator": "Codex built-in imagegen",
+    "request": "acolyte / north",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/acolyte/south.png",
+        "sha256": "d30a4a965b8124d46f7011f3a5d1cc1063796011c30c1dbec589974441699eaa"
+      },
+      {
+        "path": "assets/art/e08_characters/directional/spiritualist/south_source_v3.png",
+        "sha256": "0881d0223d0416cc1a72750da5c14399306490c1c5ef6efa09468997adb92dc5"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "prompt": "Use case: stylized-concept. RagRPG Acólito production 2D pixel-art sprite animation source, NORTH/back only. First input defines the approved character identity from the front. Second input is only for painted pixel-art style and 4x4 layout. Third is Swordsman reference for in-game size and view; see its second group of four rows for how a north-facing back view reads. Same character as the attached south sheet; redraw as a true north/back view, do not mirror or recolor it. In every one of sixteen sprites the back of the head, back of torso, and backs of legs face the viewer while the character aims and walks away toward the top of the canvas. No face or eyes visible, no turning toward camera. Slight overhead fantasy RPG viewpoint, consistent with the cast. Preserve physical left-right garment assignments and let the arms and empty hands be seen at the sides from the back. The original long voluminous pale-brown hair with bun, loose ends and understated hair ornament; simple ivory linen robe to shins, cord belt with knot at front, narrow two-toned faded sky-blue and plum stole as one garment around the back of the neck, sandals. Prayer in front of chest with elbows bent clearly apart, lift both empty arms with palms up, extend right arm north in blessing and left still bent, lower both hands.\n\nCreate one true RGBA source PNG about 1200×1312, exactly four by four equal invisible cells, one full sprite centered in each. Sprites occupy about 75% of cell height, with generous fully transparent margin on every side. Row 1 four subtle idle frames. Row 2 four walking frames with alternate leading feet. Row 3 four actions listed above. Row 4 two flinch frames, compact falling to knees and fully collapsed facing away. Maintain shared foot anchor within each cell and generous empty padding, compact silhouettes near the end. Exact two visible empty hands and paired anatomically joined arms, fingers visible in all living frames; show hands off the body rather than obscuring them. Chibi proportions, clean dark outlines, painted 2–3 tone crisp pixel art. No weapons, props, sheathed blades, particles, spell effects, ground, shadows, checkerboard, text or grid."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/acolyte/south_v3.png",
+    "sha256": "24dfbcea205505283e0cd96e65a2eb9fb33f664d13d87748720b50efd37c3a8d",
+    "width": 1108,
+    "height": 1420,
+    "generator": "Codex built-in imagegen",
+    "request": "acolyte / south",
+    "references": [
+      {
+        "path": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a1d2cf-b455-7d30-846f-a10387fcb4c9\\exec-c1f7b0c7-760d-4dee-af28-29bad9066d0f.png",
+        "sha256": "ffb601ab97c1c5f02bcfc2e3cac774c753d95e385ac70fa61faa92c46e0c4261"
+      }
+    ],
+    "prompt": "Use case: precise-object-edit. Make a minimal visual correction to the attached RagRPG acolyte animation sprite sheet. SAME portrait dimensions, same exact 4 columns by 4 rows, same character throughout and the same art in the first fifteen cells: young brown-skinned woman, close dark brown bob, plain ivory linen tunic, sky blue and plum stole, plain half-light half-dark medallion, cord belt and sandals. In the lower right cell only (row 4, column 4) keep the motionless fallen south-facing pose but make it slightly more compact and keep the entire dead figure completely within that cell. Move and compact it toward cell center, leaving an unmistakable 25 px clear alpha gutter to all edges including the right edge of the canvas. Her body must be complete and fit comfortably. Preserve the positions of the other sprites, their two visible empty hands, gesture and dark two-tone pixel-art styling. Same clean transparent RGBA background with no drop shadows, matte, checkerboard, text or visible grid. The native output must be portrait, near 1200 x 1312, all 16 sprites preserved and isolated. Do not introduce any additional figures or effects."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/acolyte/south_v5.png",
+    "sha256": "8bdf9dea7213e80b2d6e78b003f1f1bb2e80be4810b6c12005012010cd7771b6",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "acolyte / south",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/acolyte/south.png",
+        "sha256": "d30a4a965b8124d46f7011f3a5d1cc1063796011c30c1dbec589974441699eaa"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/acolyte/south_v3.png",
+        "sha256": "24dfbcea205505283e0cd96e65a2eb9fb33f664d13d87748720b50efd37c3a8d"
+      }
+    ],
+    "prompt": "Use case: precise-object-edit. Redraw the FIRST image, keeping the original design exactly, for a clean RagRPG SOUTH animation source. Character features to preserve: original tall hairstyle with ample swept hair and bun with ribbons, blue/plum stole, plain white robe and sandals. Second image supplies ONLY a technical canvas guide, absolutely do not copy its character. Copy the 4×4 grid positioning and large transparent gaps from the second image. SQUARE canvas 1254×1254 true RGBA transparent. Draw all sprites visibly SMALL inside each equally spaced invisible 313 px cell, no sprite larger than 215×235 px; centered horizontally and same scale for all standing poses, sitting on a foot baseline 35 px above each cell's bottom. Keep at least 25 blank transparent px on ALL sides within every cell. Row 1 four original idle, row 2 four walk with lead foot alternating, row 3 four original character actions unchanged, row 4 two hurt, then small knees-down pose and very compact fully fallen pose, folded under themselves and facing down-screen exactly like a face-first flop, no horizontal sprawl. Every cell has one complete separated front-facing figure at chibi overhead 3/4, no cell overlap, keep exactly two visible empty hands in all living sprites. Reproduce the FIRST character face, hair volume, lay of materials, proportions, color and asymmetry, including no raised hoods and no shorter new haircut. Clean cutout alpha, dark line and two to three gradients of pixel-art paint. No held objects, floor, shadow, props, text, dividers, grids or external effects."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/acolyte/south.png",
+    "sha256": "d30a4a965b8124d46f7011f3a5d1cc1063796011c30c1dbec589974441699eaa",
+    "width": 1199,
+    "height": 1312,
+    "generator": "Codex built-in imagegen",
+    "request": "acolyte / south",
+    "references": [
+      {
+        "path": "assets/art/e08_characters/directional/spiritualist/south_source_v3.png",
+        "sha256": "0881d0223d0416cc1a72750da5c14399306490c1c5ef6efa09468997adb92dc5"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "prompt": "Use case: stylized-concept. Production 2D pixel-art game animation sprite sheet for RagRPG, Acólito (acolyte), SOUTH/front. Reference 1: Spiritualist 4 × 4 source sheet for style and layout. Reference 2: Swordsman body atlas for chibi style, in-game size and proportions. Character: a young female serene acolyte with an upright ritual posture and an intense look, plain undyed linen robe to the shins tied with a cord, a narrow stole faded sky-blue on her right side and dark plum on her left side, a small round medallion half light half dark on the chest, sandals; ivory, raw linen, faded sky blue, plum, a hint of pale gold.\n\nRow 3 action, from left to right: c1 both open hands come together in prayer, wrists separate and both hands traceable; c2 lift both empty hands at staggered heights with palms up; c3 extend her right open hand forward in blessing while the other stays open near her sternum; c4 hold the blessing and begin to lower the hands, both still visible.\n\nTransparent PNG sprite source sheet, approximately 1200 × 1312 px, portrait or near square. Match the Spiritualist reference sheet's 4 × 4 layout and the Swordsman's in-game proportions. Use the inputs only for style, scale and staging, never copy their character designs. Crisp authored chibi pixel art, large head, short adult body, narrow dark outline, discrete 2–3 tone shading and strong readable costume blocks. Four exact equal-width columns and four exact equal-height rows with invisible grid; each cell contains ONE complete figure, feet included, ample empty space all around, no contact across cells. Same camera at a slightly elevated 3/4 angle, character upright and front-facing towards bottom of screen, both eyes visible when open. Align the foot pivot horizontally to the middle of every cell with a common floor baseline near its bottom. Each standing figure has the same head size and approximately the same height and scale. Row 1 four subtle idle phases; row 2 four distinct walk frames alternating the leading foot, paired counter-swinging arms, and including passing poses; row 3 follows the four requested action beats; row 4 first two cells distinctly flinch or stagger, third and fourth cells collapse and lie on the ground, compact and fully within their own cells, retaining front facing orientation. No blank cells. The front view keeps the vertical camera orientation through every action including sideways movement. Exactly two anatomically connected arms, two empty visible hands, and two legs; on all living frames let both hands read apart from the torso, with coherent wrist joints, thumb shapes and distinct visible fingers. Prayer palms may touch while clearly reading as two separate empty hands. Any accessories are small and attached to clothing, never carried. Keep costume asymmetry on the character's same anatomical side across the sheet. No weapons, sheathed blades, handheld props, extra figures, pets, spell graphics, aura, colored particles, scenery, floor plane, cast shadow, borders, captions, or grid lines. Genuine RGBA cutout alpha outside the figures, no checkerboard."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/acolyte/west_v3.png",
+    "sha256": "8d7e3f0724f1ec57bc3f1397818a7aed62d0a859bd5d94165893e6c5c067fdfb",
+    "width": 1312,
+    "height": 1199,
+    "generator": "Codex built-in imagegen",
+    "request": "acolyte / west",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/acolyte/south.png",
+        "sha256": "d30a4a965b8124d46f7011f3a5d1cc1063796011c30c1dbec589974441699eaa"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      }
+    ],
+    "prompt": "Paint a clearly separated 16-frame chibi sprite sheet for RagRPG. The FIRST reference dictates character identity. The SECOND reference dictates only its spacious 4-by-4 LANDSCAPE 1312x1199 cell registration and stable foot height. Make all sprites notably smaller than in either reference, at most 215 pixels by 215 pixels tall including hair and arms in each roughly 330 by 300 px cell. Do not use a line grid. Use an actually transparent RGBA blank canvas. Every sprite's center sits at mathematical center of its own independent uniform cell exactly, so the sprites in the image look evenly spaced with at least 30px of clear pixels at each edge and a full clear border. Character is an ivory-robed young female acolyte with full loose pale ash brown waves and bun, faded-blue right stole and plum left stole, small split gold-plum chest medallion, cord waist and sandals, calm attitude. Painted clean dark pixel outlines, 2–3 tone shading and game view slightly from above. FACE strictly screen left, true lateral profile, nose and toes point left, just one eye visible. Both EMPTY hands show at distinct depths throughout, even idle, with exactly two arms. Row 1 four idle variations; row 2 four walk images with feet and opposite arms alternating; row 3 four actions palms in prayer, both up, blessing with one hand, then lowering; row 4 two hurt, then kneel collapse and fully prone compact foetal fall facing left. Prone figure must be tiny and compact, only 170 px wide like a tightly tucked nap, totally independent from neighbor, not stretched in a long sideways sprawl. Keep hair, clothing, palette and anatomical sides. No effects, props, weapons, ground, shadow, lettering, lines, glow or mattes."
+  }
+]

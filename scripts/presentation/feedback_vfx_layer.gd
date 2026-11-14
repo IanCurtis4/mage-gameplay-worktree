@@ -42,18 +42,51 @@ const SIGNATURE_ART := {
 	&"swordsman_terrifying_shout": [&"ground_shockwave", 120.0, 1.0, Color.WHITE, 0.0],
 	&"archer_explosive_trap": [&"fire_burst", 96.0, 1.0, Color.WHITE, 0.0],
 	&"defender_reprisal_wave": [&"ground_shockwave", 132.0, 1.0, Color(0.85, 0.92, 1.0), 0.0],
-	&"defender_counterstroke": [&"slash_arc", 82.0, 1.0, Color(0.85, 0.92, 1.0), 26.0],
+	&"defender_counterstroke": [&"shield_bash", 82.0, 1.0, Color.WHITE, 26.0],
 	&"berserker_blood_rift": [&"blood_rift", 104.0, 1.0, Color.WHITE, 22.0],
 	&"elementalist_lightning_arc": [&"lightning_burst", 60.0, 1.0, Color.WHITE, 0.0],
-	&"geometer_collapse": [&"ground_shockwave", 116.0, 1.0, Color(0.95, 0.9, 0.6), 0.0],
+	&"geometer_collapse": [&"geometer_collapse", 116.0, 1.0, Color.WHITE, 0.0],
 	&"sentinel_explosive_shot": [&"fire_burst", 72.0, 1.0, Color.WHITE, 0.0],
 	&"hunter_freezing_trap": [&"ice_shatter", 92.0, 1.0, Color.WHITE, 0.0],
 	&"warden_summon": [&"summon_portal", 96.0, 1.0, Color.WHITE, 0.0],
+	# Second Codex batch (14/11): the eight signatures that were code-drawn only.
+	&"archer_arrow_rain": [&"arrow_rain", 120.0, 1.0, Color.WHITE, 0.0],
+	&"berserker_wound_leap": [&"wound_leap", 96.0, 1.0, Color.WHITE, 30.0],
+	&"elementalist_tri_nova": [&"tri_nova", 140.0, 1.0, Color.WHITE, 0.0],
+	&"spiritualist_dissipation": [&"spirit_dissipation", 230.0, 1.0, Color.WHITE, 0.0], # Drawn on the placed point; ~ the 100 radius on screen.
+	&"geometer_triangulation": [&"triangulation", 96.0, 1.0, Color.WHITE, 0.0],
+	&"sentinel_headshot": [&"headshot", 70.0, 1.0, Color.WHITE, 24.0],
+	&"hunter_covering_shot": [&"covering_shot", 70.0, 1.0, Color.WHITE, -18.0], # Plays on the hit (SIGNATURE_ART_ON_IMPACT): arrow tip on the target.
+	&"warden_charge": [&"warden_charge", 110.0, 1.0, Color.WHITE, 0.0],
 }
+## Sheets painted pointing right that rotate with the event direction even outside swings/movement
+## (launches and charges); forward offset applies along that direction.
+const DIRECTIONAL := [&"headshot", &"covering_shot", &"warden_charge"]
+## 15/11 playtest: signatures whose sheet plays on the skill's own impact (on the target) instead of on the
+## signature event; the signature event itself (and its audio) is unchanged and drawn by code.
+const SIGNATURE_ART_ON_IMPACT := [&"hunter_covering_shot"]
+## 15/11 playtest: per-element impact accents of non-signature hits, reusing the painted element sheets.
+const IMPACT_ART := {
+	&"elementalist_tri_nova": {
+		&"fire": [&"fire_burst", 58.0, 1.0, Color.WHITE, 0.0],
+		&"ice": [&"ice_shatter", 58.0, 1.0, Color.WHITE, 0.0],
+		&"lightning": [&"lightning_burst", 54.0, 1.0, Color.WHITE, 0.0],
+	},
+}
+## Commit effects drawn on the confirmed target point (payload target_anchor / legacy_target_2d) instead of the caster.
+const TARGET_ANCHORED: Array[StringName] = [&"spiritualist_dissipation"]
+## Movement sheets that play where the travel ends (landing), mirrored by the travel side instead of rotated.
+const LANDING_ART := [&"wound_leap"]
+## Movement trails drawn along the confirmed travel (payload travel_distance): skill -> style.
+const TRAIL_STYLES := {&"berserker_wound_leap": &"leap", &"hunter_covering_shot": &"recoil"}
+const TRAIL_BLOOD := Color(0.75, 0.10, 0.20)
+const TRAIL_BLOOD_HOT := Color(1.0, 0.62, 0.62)
+const TRAIL_WIND := Color(0.91, 0.96, 0.82)
+const TRAIL_LEAF := Color(0.42, 0.72, 0.30)
 ## Non-signature accent: nature trap bursts use the thorns flipbook.
 const NATURE_TRAP_ART := [&"nature_thorns", 104.0, 1.0, Color.WHITE, 0.0]
 ## Dark outline copy (scale) behind the flipbook so pale effects read on light ground.
-const OUTLINED := [&"slash_arc", &"lightning_burst", &"ground_shockwave", &"arcane_warp", &"nature_thorns"]
+const OUTLINED := [&"slash_arc", &"lightning_burst", &"ground_shockwave", &"arcane_warp", &"nature_thorns", &"headshot", &"shield_bash", &"spirit_dissipation"]
 ## P7-C1: the palest/most discreet sheets get a stamped outline (8 offset copies) instead of the single 7% copy:
 ## flipbook id -> [offset in world px at zoom >= 1, outline colour (alpha is scaled by the frame fade)].
 const OUTLINE_STAMP := {
@@ -80,7 +113,10 @@ var _windows: Dictionary = {}
 var _last_hit: Dictionary = {}
 var _recipe_cache: Dictionary = {}
 var _flip_cache: Dictionary = {}
+## Last launch point per skill (canvas local) so an impact sheet can face the way the shot travelled.
+var _launch_from: Dictionary = {}
 var _hash_seed := 0
+static var _canvas_warmup_scheduled := false
 
 func _init() -> void:
 	super()
@@ -89,13 +125,56 @@ func _init() -> void:
 
 func _accepts(kind: StringName) -> bool: return kind in DRAWN_KINDS
 
-## P7-C4: warm the P6 flipbook sheets once when the layer is wired, so the first signature effect does not hitch.
 func configure(source: PresentationEventBridge, controller: Node) -> void:
 	super.configure(source, controller)
-	VfxFlipbookCatalog.preload_all()
+	var ready_ids := VfxFlipbookCatalog.preload_all()
+	if _canvas_warmup_scheduled or ready_ids.is_empty() or not is_inside_tree():
+		return
+	if DisplayServer.get_name() == "headless" or RenderingServer.get_current_rendering_method() != &"gl_compatibility":
+		return
+	_canvas_warmup_scheduled = true
+	_warm_canvas.call_deferred(get_tree().root, ready_ids)
+
+## GL Compatibility can initialize its canvas shader variants on the first draw even with
+## resident atlases. Draw one offscreen frame during setup, using the textured regions and
+## the polygon / antialiased strokes used by the shockwave and thorn underlays.
+static func _warm_canvas(root: Window, ready_ids: Array) -> void:
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(32, 32)
+	viewport.disable_3d = true
+	viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+	var painter := Node2D.new()
+	painter.draw.connect(func() -> void:
+		painter.draw_colored_polygon(PackedVector2Array([Vector2(2, 2), Vector2(6, 2), Vector2(4, 6)]), Color.WHITE)
+		painter.draw_polyline(PackedVector2Array([Vector2(2, 2), Vector2(4, 6), Vector2(6, 2)]), Color.WHITE, 2.0, true)
+		for index: int in ready_ids.size():
+			var id: StringName = ready_ids[index]
+			var texture := VfxFlipbookCatalog.texture(id)
+			var origin := Vector2(index % 3, index / 3) * 8.0
+			painter.draw_texture_rect_region(texture, Rect2(origin, Vector2(8, 8)), Rect2(VfxFlipbookCatalog.frame_region(id, 0))))
+	viewport.add_child(painter)
+	root.add_child(viewport)
+	RenderingServer.frame_post_draw.connect(viewport.queue_free, CONNECT_ONE_SHOT)
+
+func _world_anchor(event: Dictionary) -> Vector3:
+	var anchor: Variant = _target_anchor(event)
+	if anchor is Dictionary and str(anchor.get("stage_id", "")) == str(event.stage_id) and anchor.get("position") is Vector3:
+		var point: Vector3 = anchor.position
+		if point.is_finite(): return point
+	return event.position
+
+func _legacy_anchor(event: Dictionary) -> Variant:
+	if event.kind == &"effect_start" and event.skill_id in TARGET_ANCHORED and event.payload.get("legacy_target_2d") is Vector2:
+		var point: Vector2 = event.payload.legacy_target_2d
+		if point.is_finite(): return point
+	return super(event)
+
+func _target_anchor(event: Dictionary) -> Variant:
+	if event.kind != &"effect_start" or not event.skill_id in TARGET_ANCHORED: return null
+	return event.payload.get("target_anchor")
 
 func _on_stage_cleared() -> void:
-	_windows.clear(); _last_hit.clear(); _clock = 0.0
+	_windows.clear(); _last_hit.clear(); _launch_from.clear(); _clock = 0.0
 
 func _advance(delta: float) -> void:
 	if _active() and is_finite(delta) and delta > 0.0: _clock += delta
@@ -159,19 +238,48 @@ func _make_pulse(event: Dictionary, local: Vector2, legacy: bool) -> Dictionary:
 		&"charge_start": life = clampf(float(event.duration), 0.3, 0.9)
 		&"summon": life = 0.85
 		&"trap_trigger": life = 0.5
+	var skill_id: StringName = event.skill_id
+	var on_impact: bool = recipe.is_signature and recipe.signature in SIGNATURE_ART_ON_IMPACT
+	if kind == &"projectile_launch" and on_impact: _launch_from[skill_id] = local
+	if kind == &"impact" and on_impact and _launch_from.has(skill_id):
+		var travelled: Vector2 = local - (_launch_from[skill_id] as Vector2)
+		if travelled.length_squared() > 16.0: pulse.dir = travelled.normalized()
+	if kind == &"movement" and TRAIL_STYLES.has(skill_id):
+		var travel := _screen_travel(payload, legacy)
+		if travel.length_squared() > 4.0:
+			pulse.trail = TRAIL_STYLES[skill_id]
+			pulse.travel = travel
+			pulse.trail_start = local - travel if str(payload.get("phase", "start")) == "end" else local
+			pulse.travel_time = clampf(float(event.duration), 0.05, 0.5)
+			life = maxf(life, float(pulse.travel_time) + 0.35)
 	var art: Array = []
-	if signed and SIGNATURE_ART.has(recipe.signature): art = SIGNATURE_ART[recipe.signature]
+	if signed and SIGNATURE_ART.has(recipe.signature) and not on_impact: art = SIGNATURE_ART[recipe.signature]
+	elif kind == &"impact" and on_impact and SIGNATURE_ART.has(recipe.signature): art = SIGNATURE_ART[recipe.signature]
+	elif kind == &"impact" and IMPACT_ART.has(skill_id): art = (IMPACT_ART[skill_id] as Dictionary).get(recipe.element, [])
 	elif kind == &"trap_trigger" and recipe.element == &"nature": art = NATURE_TRAP_ART
 	if not art.is_empty():
 		var book := flipbook(art[0])
 		if not book.is_empty() and float(book.fps) > 0.0 and int(book.frames) > 0:
 			var speed: float = art[2]
 			pulse.flipbook = art[0]; pulse.flip_speed = speed; pulse.flip_size = float(art[1]); pulse.flip_tint = art[3]; pulse.flip_forward = float(art[4])
-			life = maxf(life, float(book.frames) / (float(book.fps) * speed))
+			# A landing sheet starts as the body comes down (its first frames are the dive).
+			pulse.flip_delay = float(pulse.travel_time) * 0.5 if art[0] in LANDING_ART and pulse.has("travel") else 0.0
+			life = maxf(life, float(pulse.flip_delay) + float(book.frames) / (float(book.fps) * speed))
 	pulse.life = life
 	_canvas.z_index = Z_FLAT if legacy else Z_SPATIAL
 	z_index = _canvas.z_index
 	return pulse
+
+## Confirmed ground travel (payload travel_distance along direction_2d) as a canvas vector.
+func _screen_travel(payload: Dictionary, legacy: bool) -> Vector2:
+	var raw: Variant = payload.get("travel_distance")
+	var direction: Variant = payload.get("direction_2d")
+	if typeof(raw) not in [TYPE_FLOAT, TYPE_INT] or not direction is Vector2: return Vector2.ZERO
+	var distance := clampf(float(raw), 0.0, 600.0) if is_finite(float(raw)) else 0.0
+	var d: Vector2 = direction
+	if distance <= 0.0 or not d.is_finite() or d.length_squared() < 0.0001: return Vector2.ZERO
+	var ground := d.normalized() * distance
+	return ground if legacy else ProjectionMath.project(Vector3(ground.x, 0.0, ground.y))
 
 func _impact_allowed(event: Dictionary, recipe: Dictionary) -> bool:
 	var skill := String(event.skill_id)
@@ -211,6 +319,7 @@ func _paint() -> void:
 func _draw_pulse(p: Dictionary) -> void:
 	var t: float = clampf(float(p.age) / float(p.life), 0.0, 1.0)
 	var pos: Vector2 = p.position
+	if p.has("trail"): _trail(p)
 	if p.flipbook != &"" and _draw_flipbook(p, pos, t): return
 	match p.kind:
 		&"impact": _impact(p, pos + Vector2(0, -18), t)
@@ -258,9 +367,9 @@ func _ground(p: Dictionary) -> Vector2:
 func _draw_flipbook(p: Dictionary, pos: Vector2, _t: float) -> bool:
 	var book := flipbook(p.flipbook)
 	if book.is_empty(): return false
-	var frame := floori(float(p.age) * float(book.fps) * float(p.flip_speed))
+	var frame := floori((float(p.age) - float(p.get("flip_delay", 0.0))) * float(book.fps) * float(p.flip_speed))
 	var frames := int(book.frames)
-	if frame < 0 or frame >= frames: return true # Finished; nothing else to draw.
+	if frame < 0 or frame >= frames: return true # Not started (landing delay) or finished; nothing else to draw.
 	var grid: Array = book.grid
 	var cell: Array = book.cell
 	var region := Rect2(float(frame % int(grid[0])) * float(cell[0]), float(floori(float(frame) / float(grid[0]))) * float(cell[1]), float(cell[0]), float(cell[1]))
@@ -269,13 +378,18 @@ func _draw_flipbook(p: Dictionary, pos: Vector2, _t: float) -> bool:
 	var fade := clampf((float(frames - frame)) / 3.0, 0.0, 1.0)
 	var center: Vector2 = pos + Vector2(0, -14)
 	var angle := 0.0
-	if p.kind == &"melee_swing" or p.kind == &"movement":
+	var mirror := Vector2.ONE
+	if p.flipbook in LANDING_ART and p.has("travel"):
+		var landing: Vector2 = (p.trail_start as Vector2) + (p.travel as Vector2)
+		center = landing + Vector2(0, -float(p.flip_size) * 0.12)
+		if (p.travel as Vector2).x < 0.0: mirror = Vector2(-1.0, 1.0) # Painted diving left-to-right.
+	elif p.kind == &"melee_swing" or p.kind == &"movement" or p.flipbook in DIRECTIONAL:
 		var dir: Vector2 = p.dir
 		center += dir * float(p.flip_forward)
 		angle = dir.angle()
 	elif p.kind in [&"effect_start", &"area_start", &"summon", &"charge_start", &"trap_trigger", &"teleport"]:
 		center = pos + Vector2(0, -float(p.flip_size) * 0.12) # Ground-seated: centre sits just above the anchor.
-	_canvas.draw_set_transform(center, angle, Vector2.ONE)
+	_canvas.draw_set_transform(center, angle, mirror)
 	if p.flipbook == &"ground_shockwave": _shock_underlay(half, frame, fade)
 	elif p.flipbook == &"nature_thorns": _thorn_ground_ring(half, frame, fade)
 	if OUTLINE_STAMP.has(p.flipbook):
@@ -289,6 +403,64 @@ func _draw_flipbook(p: Dictionary, pos: Vector2, _t: float) -> bool:
 	_canvas.draw_texture_rect_region(book.texture, Rect2(-half, half * 2.0), region, Color(tint, tint.a * fade))
 	_canvas.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	return true
+
+# --- travel trails (15/11 playtest) ------------------------------------------
+func _trail(p: Dictionary) -> void:
+	match p.trail:
+		&"leap": _leap_trail(p)
+		&"recoil": _recoil_trail(p)
+
+## Point `s` (0 = take-off, 1 = landing) of the leap arc, lifted to body height.
+func leap_point(p: Dictionary, s: float) -> Vector2:
+	var travel: Vector2 = p.travel
+	var height := clampf(travel.length() * 0.32, 16.0, 46.0)
+	return (p.trail_start as Vector2) + travel * s + Vector2(0, -16.0 - 4.0 * height * s * (1.0 - s))
+
+## Blood arc over the jump: the head follows the body, the tail catches up after landing; drops fall from the arc.
+func _leap_trail(p: Dictionary) -> void:
+	var flight: float = p.travel_time
+	var age: float = p.age
+	var head := clampf(age / flight, 0.0, 1.0)
+	var tail := clampf((age - flight * 0.35) / (flight + 0.3), 0.0, 1.0)
+	if head - tail > 0.01:
+		var steps := 16
+		var previous := leap_point(p, tail)
+		for i: int in range(1, steps + 1):
+			var s := lerpf(tail, head, float(i) / float(steps))
+			var point := leap_point(p, s)
+			var weight := float(i) / float(steps) # Thin at the tail, thick at the head.
+			_canvas.draw_line(previous, point, Color(SPARK_EDGE, 0.55 * weight), 2.0 + 6.0 * weight, true)
+			_canvas.draw_line(previous, point, Color(TRAIL_BLOOD, 0.85 * weight), 1.2 + 4.5 * weight, true)
+			_canvas.draw_line(previous, point, Color(TRAIL_BLOOD_HOT, 0.7 * weight), 0.6 + 1.4 * weight, true)
+			previous = point
+	for i: int in 6:
+		var s := (float(i) + 0.5 + (_r(p, 30 + i) - 0.5) * 0.6) / 6.0
+		var since := age - flight * s
+		if since <= 0.0 or since > 0.4: continue
+		var drop := leap_point(p, s) + Vector2((_r(p, 40 + i) - 0.5) * 8.0, 60.0 * since * since + 10.0 * since)
+		_canvas.draw_circle(drop, 2.4 * (1.0 - since / 0.4) + 0.6, Color(TRAIL_BLOOD, 1.0 - since / 0.4))
+
+## Instant recoil: wind streaks from where the shot was taken back to the landing spot, swept toward it, plus loose leaves.
+func _recoil_trail(p: Dictionary) -> void:
+	var travel: Vector2 = p.travel
+	var start: Vector2 = (p.trail_start as Vector2) + Vector2(0, -16)
+	var u := clampf(float(p.age) / 0.32, 0.0, 1.0)
+	var fade := 1.0 - u
+	var perp := travel.normalized().orthogonal()
+	for k: int in 3:
+		var side := (float(k) - 1.0) * 7.0
+		var tail := clampf(_ease_out(u) + 0.12 * float(k % 2), 0.0, 1.0)
+		var from := start + travel * tail + perp * side
+		var to := start + travel * (0.92 + 0.08 * _r(p, k)) + perp * side * 0.6
+		if from.distance_squared_to(to) < 1.0: continue
+		_canvas.draw_line(from, to, Color(SPARK_EDGE, 0.35 * fade), 4.0, true)
+		_canvas.draw_line(from, to, Color(TRAIL_WIND, 0.85 * fade), 2.0 - 0.5 * absf(float(k) - 1.0), true)
+	for i: int in 4:
+		var s := 0.15 + 0.22 * float(i)
+		var q := start + travel * s + perp * (_r(p, 50 + i) - 0.5) * 20.0 + Vector2(0, 14.0 * u)
+		var a := _r(p, 60 + i) * TAU + u * 4.0
+		var leaf := PackedVector2Array([q + Vector2.from_angle(a) * 4.0, q + Vector2.from_angle(a + PI * 0.5) * 1.6, q - Vector2.from_angle(a) * 4.0, q - Vector2.from_angle(a + PI * 0.5) * 1.6])
+		_canvas.draw_colored_polygon(leaf, Color(TRAIL_LEAF, fade))
 
 ## On-screen zoom of the world canvas (1.0 when unknown, e.g. outside the tree or headless).
 func current_zoom() -> float:

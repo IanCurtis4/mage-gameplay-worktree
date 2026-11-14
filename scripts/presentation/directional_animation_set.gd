@@ -23,13 +23,18 @@ static func load_manifest(path: String) -> Dictionary:
 	_manifests[path] = result.duplicate()
 	if result.get("ok", false):
 		var bundle: DirectionalAnimationSet = result.bundle
-		_textures[bundle._body.resource_path] = bundle
-		if bundle._weaponless != null: _textures[bundle._weaponless.resource_path] = bundle
-		if bundle._bare_head != null: _textures[bundle._bare_head.resource_path] = bundle
+		for texture: Texture2D in [bundle._body, bundle._weaponless, bundle._bare_head]:
+			if texture == null: continue
+			# Catalog-owned textures have a direct binding for the render loop.
+			# Paths still resolve cold snapshots and equivalent resource handles.
+			_textures[texture] = bundle
+			_textures[texture.resource_path] = bundle
 	return result
 
 static func for_texture(texture: Texture2D) -> DirectionalAnimationSet:
 	if texture == null: return null
+	var bundle: DirectionalAnimationSet = _textures.get(texture)
+	if bundle != null: return bundle
 	var path := texture.resource_path
 	if _textures.has(path): return _textures[path]
 	# Derive the binding from the persisted resource path, also in a fresh process.

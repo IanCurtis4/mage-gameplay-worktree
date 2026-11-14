@@ -1,0 +1,846 @@
+{
+  "tool": "tools/prepare_e08_equipment_icons.py",
+  "generator": "Codex built-in imagegen",
+  "request": "docs/epics/e08_codex_art_1114_brief.md section B",
+  "prompts": "assets/art/e08_codex_1114/equipment_icons/provenance.json",
+  "rights_basis": "project_generated_output",
+  "size": 128,
+  "items": [
+    {
+      "id": "class_set_swordsman_torso",
+      "file": "class_set_swordsman_torso.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/class_set_swordsman.png",
+      "source_sha256": "7b45c30e3fcc75e53594f2c2ee9eba3427f685f0519ccb298c6cead45b18d045",
+      "cell": [
+        0,
+        0,
+        627,
+        1254
+      ],
+      "bbox_in_cell": [
+        80,
+        315,
+        592,
+        939
+      ],
+      "png_sha256": "935881af9fe34f3a10c14ce7079eaacf8b026d28858d898126cf570ab5b041a8"
+    },
+    {
+      "id": "class_set_swordsman_feet",
+      "file": "class_set_swordsman_feet.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/class_set_swordsman.png",
+      "source_sha256": "7b45c30e3fcc75e53594f2c2ee9eba3427f685f0519ccb298c6cead45b18d045",
+      "cell": [
+        627,
+        0,
+        1254,
+        1254
+      ],
+      "bbox_in_cell": [
+        77,
+        459,
+        515,
+        926
+      ],
+      "png_sha256": "8682169f0aca9c11e9cb8f1b6243d66e954ab1854db6141ac4c66fd17903c82a"
+    },
+    {
+      "id": "class_set_mage_torso",
+      "file": "class_set_mage_torso.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/class_set_mage.png",
+      "source_sha256": "861c90a2dfeb6323708208e07751da648f867f60928cb034f4196397cb4d24d7",
+      "cell": [
+        0,
+        0,
+        627,
+        1254
+      ],
+      "bbox_in_cell": [
+        130,
+        380,
+        537,
+        879
+      ],
+      "png_sha256": "d87a43f714a9d490a2c29df9ef1d5ac2e45a5684c80e40766dcfd4d5bab5df0a"
+    },
+    {
+      "id": "class_set_mage_feet",
+      "file": "class_set_mage_feet.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/class_set_mage.png",
+      "source_sha256": "861c90a2dfeb6323708208e07751da648f867f60928cb034f4196397cb4d24d7",
+      "cell": [
+        627,
+        0,
+        1254,
+        1254
+      ],
+      "bbox_in_cell": [
+        93,
+        492,
+        489,
+        799
+      ],
+      "png_sha256": "204a035665f221beb2135b7ad11b30df6cef16b4736326de728e1513fb2dd1f8"
+    },
+    {
+      "id": "class_set_archer_torso",
+      "file": "class_set_archer_torso.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/class_set_archer.png",
+      "source_sha256": "cfba12201ac4612b8680430b00c2bb33d5104dd0d8ea00a51a8739a64acf9374",
+      "cell": [
+        0,
+        0,
+        627,
+        1254
+      ],
+      "bbox_in_cell": [
+        196,
+        405,
+        518,
+        837
+      ],
+      "png_sha256": "0bd2aa44af36c2b3404d187c08184214802dbced36991afb1b5dc412e646e32a"
+    },
+    {
+      "id": "class_set_archer_feet",
+      "file": "class_set_archer_feet.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/class_set_archer.png",
+      "source_sha256": "cfba12201ac4612b8680430b00c2bb33d5104dd0d8ea00a51a8739a64acf9374",
+      "cell": [
+        627,
+        0,
+        1254,
+        1254
+      ],
+      "bbox_in_cell": [
+        76,
+        440,
+        446,
+        838
+      ],
+      "png_sha256": "3973dddd2f94245d64987f4375bd7b54e329b96a7d73e4a705be503bef6d3195"
+    },
+    {
+      "id": "class_set_defender_torso",
+      "file": "class_set_defender_torso.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/class_set_defender.png",
+      "source_sha256": "05a23c72c9507a401fcd65422f23597e97d64000b8f2906c1b843a95f8772ac2",
+      "cell": [
+        0,
+        0,
+        627,
+        1254
+      ],
+      "bbox_in_cell": [
+        79,
+        363,
+        566,
+        890
+      ],
+      "png_sha256": "ac2775d10b767af6460b991c343cb452a2cc3cf36ec32cdd486cdbf97997a6e8"
+    },
+    {
+      "id": "class_set_defender_feet",
+      "file": "class_set_defender_feet.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/class_set_defender.png",
+      "source_sha256": "05a23c72c9507a401fcd65422f23597e97d64000b8f2906c1b843a95f8772ac2",
+      "cell": [
+        627,
+        0,
+        1254,
+        1254
+      ],
+      "bbox_in_cell": [
+        105,
+        358,
+        547,
+        883
+      ],
+      "png_sha256": "dfd8b9437981df5b20828e8537feecdb9020bdfc2fac6e1df452ea880f5be47b"
+    },
+    {
+      "id": "class_set_berserker_torso",
+      "file": "class_set_berserker_torso.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/class_set_berserker.png",
+      "source_sha256": "7f3145e718d026eaac64387eafe141e22fe084c947f7a3c7521585efcef53b0e",
+      "cell": [
+        0,
+        0,
+        627,
+        1254
+      ],
+      "bbox_in_cell": [
+        112,
+        384,
+        577,
+        910
+      ],
+      "png_sha256": "c220568691fd318bb7df34c2d08709a13df9a818edc5de2d1a4b7035a59922fc"
+    },
+    {
+      "id": "class_set_berserker_feet",
+      "file": "class_set_berserker_feet.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/class_set_berserker.png",
+      "source_sha256": "7f3145e718d026eaac64387eafe141e22fe084c947f7a3c7521585efcef53b0e",
+      "cell": [
+        627,
+        0,
+        1254,
+        1254
+      ],
+      "bbox_in_cell": [
+        64,
+        459,
+        489,
+        862
+      ],
+      "png_sha256": "954436c98eb1d0705b3324530886d9497678ee14b991c1d36260aab963e5cb49"
+    },
+    {
+      "id": "class_set_elementalist_torso",
+      "file": "class_set_elementalist_torso.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/class_set_elementalist.png",
+      "source_sha256": "7fc02f6e2d41b3be21cbf460f44874cc5f6bc216730e2958e4b0d824638d535e",
+      "cell": [
+        0,
+        0,
+        627,
+        1254
+      ],
+      "bbox_in_cell": [
+        67,
+        396,
+        587,
+        888
+      ],
+      "png_sha256": "2971fe69f7d205fa96db7f2697ef5e6132017a20e5bb474331a6ea8528a117fa"
+    },
+    {
+      "id": "class_set_elementalist_feet",
+      "file": "class_set_elementalist_feet.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/class_set_elementalist.png",
+      "source_sha256": "7fc02f6e2d41b3be21cbf460f44874cc5f6bc216730e2958e4b0d824638d535e",
+      "cell": [
+        627,
+        0,
+        1254,
+        1254
+      ],
+      "bbox_in_cell": [
+        58,
+        423,
+        557,
+        848
+      ],
+      "png_sha256": "7187c015e54dac6364dfc32a346114ebddd5e464b26c04e47016e5051d0c2a41"
+    },
+    {
+      "id": "class_set_spiritualist_torso",
+      "file": "class_set_spiritualist_torso.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/class_set_spiritualist.png",
+      "source_sha256": "9d218673db8c7a29f30964b978a0c7201db375c82b2674bbc7a7775e14ab06cb",
+      "cell": [
+        0,
+        0,
+        627,
+        1254
+      ],
+      "bbox_in_cell": [
+        93,
+        388,
+        573,
+        882
+      ],
+      "png_sha256": "e952a1b886877f653cd70b351457c4bc4b541a45b580986828c2bfba5e339967"
+    },
+    {
+      "id": "class_set_spiritualist_feet",
+      "file": "class_set_spiritualist_feet.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/class_set_spiritualist.png",
+      "source_sha256": "9d218673db8c7a29f30964b978a0c7201db375c82b2674bbc7a7775e14ab06cb",
+      "cell": [
+        627,
+        0,
+        1254,
+        1254
+      ],
+      "bbox_in_cell": [
+        80,
+        470,
+        535,
+        834
+      ],
+      "png_sha256": "b12d34c1f2ce5bd77ad2716fc199ff691240f74acb449396a592f8d0ad967e09"
+    },
+    {
+      "id": "class_set_mg_ar_torso",
+      "file": "class_set_mg_ar_torso.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/class_set_mg_ar.png",
+      "source_sha256": "480e7edc3a9d2526c0d872ed65586f4b5fa0af3c265f09a0a126342fd6c5057d",
+      "cell": [
+        0,
+        0,
+        627,
+        1254
+      ],
+      "bbox_in_cell": [
+        98,
+        363,
+        594,
+        889
+      ],
+      "png_sha256": "61fcb7f78f4479d9d678de4a9813842c0dfc5d2905596891453e621f880e5bf7"
+    },
+    {
+      "id": "class_set_mg_ar_feet",
+      "file": "class_set_mg_ar_feet.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/class_set_mg_ar.png",
+      "source_sha256": "480e7edc3a9d2526c0d872ed65586f4b5fa0af3c265f09a0a126342fd6c5057d",
+      "cell": [
+        627,
+        0,
+        1254,
+        1254
+      ],
+      "bbox_in_cell": [
+        84,
+        424,
+        478,
+        873
+      ],
+      "png_sha256": "97dbf7724f3e4128f931f3c7089b48fd492fd41acb7161920084bfd33831d788"
+    },
+    {
+      "id": "class_set_sentinel_torso",
+      "file": "class_set_sentinel_torso.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/class_set_sentinel.png",
+      "source_sha256": "118a0c57c8a5279ecf0c2d7c8ba6566db7c9e2ae15b4fb1d7412c019776e4658",
+      "cell": [
+        0,
+        0,
+        627,
+        1254
+      ],
+      "bbox_in_cell": [
+        161,
+        396,
+        538,
+        860
+      ],
+      "png_sha256": "363cc09b9350b57687541161a6f6b988d6fb84bab8e22844e0849ce0934dfe8e"
+    },
+    {
+      "id": "class_set_sentinel_feet",
+      "file": "class_set_sentinel_feet.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/class_set_sentinel.png",
+      "source_sha256": "118a0c57c8a5279ecf0c2d7c8ba6566db7c9e2ae15b4fb1d7412c019776e4658",
+      "cell": [
+        627,
+        0,
+        1254,
+        1254
+      ],
+      "bbox_in_cell": [
+        108,
+        456,
+        433,
+        828
+      ],
+      "png_sha256": "4e9e9cd1577913b9626c3162c8f5496f20cd00b65f4f9c8941c1aff3e6920cdb"
+    },
+    {
+      "id": "class_set_hunter_torso",
+      "file": "class_set_hunter_torso.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/class_set_hunter.png",
+      "source_sha256": "f1e36d76f0482fb9a5cfe39b41f6d2759a69d62bc56dc0d153223ef24a7c0615",
+      "cell": [
+        0,
+        0,
+        627,
+        1254
+      ],
+      "bbox_in_cell": [
+        151,
+        395,
+        517,
+        904
+      ],
+      "png_sha256": "2712df026fb299bde3d1ac76d27de605724337a635af8d686bcd6dd256e1f69f"
+    },
+    {
+      "id": "class_set_hunter_feet",
+      "file": "class_set_hunter_feet.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/class_set_hunter.png",
+      "source_sha256": "f1e36d76f0482fb9a5cfe39b41f6d2759a69d62bc56dc0d153223ef24a7c0615",
+      "cell": [
+        627,
+        0,
+        1254,
+        1254
+      ],
+      "bbox_in_cell": [
+        95,
+        492,
+        470,
+        846
+      ],
+      "png_sha256": "6fefa8c5c3b208db7ae16e7d28bbbac299c57aaac3a47475299bba4b4d52aadd"
+    },
+    {
+      "id": "shared_set_low_torso",
+      "file": "shared_set_low_torso.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/shared_set_low.png",
+      "source_sha256": "f38f3456eb5e1ae62f3cd74869c42b75396e7ebdb6600118d139aef85f067230",
+      "cell": [
+        0,
+        0,
+        627,
+        1254
+      ],
+      "bbox_in_cell": [
+        146,
+        406,
+        523,
+        849
+      ],
+      "png_sha256": "99a2f92aa8361741a1d15037fecb34224a9febbdafb05ed220538416fe331002"
+    },
+    {
+      "id": "shared_set_low_feet",
+      "file": "shared_set_low_feet.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/shared_set_low.png",
+      "source_sha256": "f38f3456eb5e1ae62f3cd74869c42b75396e7ebdb6600118d139aef85f067230",
+      "cell": [
+        627,
+        0,
+        1254,
+        1254
+      ],
+      "bbox_in_cell": [
+        92,
+        459,
+        505,
+        834
+      ],
+      "png_sha256": "cbd3c4ae8ee6f3e524dc9615ee97db459201a14979b493ddfb1026841d7d3a6f"
+    },
+    {
+      "id": "shared_set_mid_torso",
+      "file": "shared_set_mid_torso.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/shared_set_mid.png",
+      "source_sha256": "fe8ea16189e0eb8f14c2fb9a9c45f2f03467a10820412baef899240fb3614dbe",
+      "cell": [
+        0,
+        0,
+        627,
+        1254
+      ],
+      "bbox_in_cell": [
+        167,
+        404,
+        523,
+        856
+      ],
+      "png_sha256": "fa6b0799e748fd1ca02af83879cebb365e4b50202529e962e1e266704311c4a5"
+    },
+    {
+      "id": "shared_set_mid_feet",
+      "file": "shared_set_mid_feet.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/shared_set_mid.png",
+      "source_sha256": "fe8ea16189e0eb8f14c2fb9a9c45f2f03467a10820412baef899240fb3614dbe",
+      "cell": [
+        627,
+        0,
+        1254,
+        1254
+      ],
+      "bbox_in_cell": [
+        97,
+        493,
+        469,
+        811
+      ],
+      "png_sha256": "51040fa54b6a7c2806a6dcbc28367633cfca7837f8d5e4a1642c059e8a6c9f77"
+    },
+    {
+      "id": "shared_set_high_torso",
+      "file": "shared_set_high_torso.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/shared_set_high.png",
+      "source_sha256": "d1a0f3a7a691f91571d84c8825432173f59bf1d793f3318159ab103a561aa1cb",
+      "cell": [
+        0,
+        0,
+        627,
+        1254
+      ],
+      "bbox_in_cell": [
+        78,
+        346,
+        591,
+        903
+      ],
+      "png_sha256": "7776d089e089083e6df291954f6d804040ed021a9148f7a4c06a20bd56c6c433"
+    },
+    {
+      "id": "shared_set_high_feet",
+      "file": "shared_set_high_feet.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/shared_set_high.png",
+      "source_sha256": "d1a0f3a7a691f91571d84c8825432173f59bf1d793f3318159ab103a561aa1cb",
+      "cell": [
+        627,
+        0,
+        1254,
+        1254
+      ],
+      "bbox_in_cell": [
+        137,
+        386,
+        468,
+        883
+      ],
+      "png_sha256": "a5270ebfac0c052627998c088e63d521fecc92e9e7cb13a274d58916f39aac5e"
+    },
+    {
+      "id": "arena_traveler_vest",
+      "file": "arena_traveler_vest.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/arena_torso.png",
+      "source_sha256": "89b6ff71eaa765adcce22e866713f44a2dced170dda5ace3d4b0c08248014de2",
+      "cell": [
+        0,
+        0,
+        418,
+        627
+      ],
+      "bbox_in_cell": [
+        119,
+        184,
+        349,
+        510
+      ],
+      "png_sha256": "9be17a4c992a51922a718c137ca15090c6587b20fec68bb14efd5f898207314e"
+    },
+    {
+      "id": "arena_trailcoat",
+      "file": "arena_trailcoat.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/arena_torso.png",
+      "source_sha256": "89b6ff71eaa765adcce22e866713f44a2dced170dda5ace3d4b0c08248014de2",
+      "cell": [
+        418,
+        0,
+        836,
+        627
+      ],
+      "bbox_in_cell": [
+        69,
+        138,
+        342,
+        550
+      ],
+      "png_sha256": "297575cd907e441cfc900e664fe71db4d0390b9ff346f9b8ab73ede1f667f90a"
+    },
+    {
+      "id": "arena_channeler_robe",
+      "file": "arena_channeler_robe.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/arena_torso.png",
+      "source_sha256": "89b6ff71eaa765adcce22e866713f44a2dced170dda5ace3d4b0c08248014de2",
+      "cell": [
+        836,
+        0,
+        1254,
+        627
+      ],
+      "bbox_in_cell": [
+        54,
+        160,
+        322,
+        548
+      ],
+      "png_sha256": "5a258fffc7c759c97d0300a743afd7574b8210935389f1f606897652087421e6"
+    },
+    {
+      "id": "arena_warden_mail",
+      "file": "arena_warden_mail.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/arena_torso.png",
+      "source_sha256": "89b6ff71eaa765adcce22e866713f44a2dced170dda5ace3d4b0c08248014de2",
+      "cell": [
+        0,
+        627,
+        418,
+        1254
+      ],
+      "bbox_in_cell": [
+        92,
+        119,
+        378,
+        469
+      ],
+      "png_sha256": "f9287d8a2f06c591937ced01443008716917caafe874485fa79fe92686b3edbc"
+    },
+    {
+      "id": "arena_epic_ward",
+      "file": "arena_epic_ward.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/arena_torso.png",
+      "source_sha256": "89b6ff71eaa765adcce22e866713f44a2dced170dda5ace3d4b0c08248014de2",
+      "cell": [
+        418,
+        627,
+        836,
+        1254
+      ],
+      "bbox_in_cell": [
+        53,
+        112,
+        348,
+        484
+      ],
+      "png_sha256": "34bcd63814c1529d67c8501626d7f449e38dbf604be22d4c384aefb48dff1e61"
+    },
+    {
+      "id": "arena_legendary_ward",
+      "file": "arena_legendary_ward.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/arena_torso.png",
+      "source_sha256": "89b6ff71eaa765adcce22e866713f44a2dced170dda5ace3d4b0c08248014de2",
+      "cell": [
+        836,
+        627,
+        1254,
+        1254
+      ],
+      "bbox_in_cell": [
+        21,
+        107,
+        340,
+        494
+      ],
+      "png_sha256": "3a0eba08b1014bd88c0cce9db38a6df94a880af231551e37ced12121cb1d9fa4"
+    },
+    {
+      "id": "arena_traveler_charm",
+      "file": "arena_traveler_charm.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/jewelry.png",
+      "source_sha256": "6f21985f437f0018761d8da057351fd256c1cfa69a54df7d8e1c42c73247b905",
+      "cell": [
+        0,
+        0,
+        418,
+        627
+      ],
+      "bbox_in_cell": [
+        126,
+        202,
+        318,
+        497
+      ],
+      "png_sha256": "29262b5226fc45a839e8bc894431f186b09a21d7728636dbb8344e7cc40d45e5"
+    },
+    {
+      "id": "arena_prismatic_charm",
+      "file": "arena_prismatic_charm.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/jewelry.png",
+      "source_sha256": "6f21985f437f0018761d8da057351fd256c1cfa69a54df7d8e1c42c73247b905",
+      "cell": [
+        418,
+        0,
+        836,
+        627
+      ],
+      "bbox_in_cell": [
+        110,
+        196,
+        306,
+        507
+      ],
+      "png_sha256": "2419359a14149e30bb984cd6f7033c7faa03c2babab5bac8292ae87ec5218893"
+    },
+    {
+      "id": "pilot_sp_jewel",
+      "file": "pilot_sp_jewel.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/jewelry.png",
+      "source_sha256": "6f21985f437f0018761d8da057351fd256c1cfa69a54df7d8e1c42c73247b905",
+      "cell": [
+        836,
+        0,
+        1254,
+        627
+      ],
+      "bbox_in_cell": [
+        86,
+        205,
+        292,
+        500
+      ],
+      "png_sha256": "7e6871d0f75a927d7d5acb1f5e31e40a7b4ec4f3c2e8aebbdc5a7713ab1cc99b"
+    },
+    {
+      "id": "pilot_stride_jewel",
+      "file": "pilot_stride_jewel.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/jewelry.png",
+      "source_sha256": "6f21985f437f0018761d8da057351fd256c1cfa69a54df7d8e1c42c73247b905",
+      "cell": [
+        0,
+        627,
+        418,
+        1254
+      ],
+      "bbox_in_cell": [
+        134,
+        165,
+        319,
+        450
+      ],
+      "png_sha256": "d0b1934641d10b296dfeca4c7ef2ce46dce2badcf4573d41660507add70c866f"
+    },
+    {
+      "id": "pilot_ward_jewel",
+      "file": "pilot_ward_jewel.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/jewelry.png",
+      "source_sha256": "6f21985f437f0018761d8da057351fd256c1cfa69a54df7d8e1c42c73247b905",
+      "cell": [
+        418,
+        627,
+        836,
+        1254
+      ],
+      "bbox_in_cell": [
+        110,
+        165,
+        306,
+        450
+      ],
+      "png_sha256": "55ab5700d544dbae16967dc2bb9894589f5e355ec74f758ba12f7eb9085770d0"
+    },
+    {
+      "id": "pilot_step_neck",
+      "file": "pilot_step_neck.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/jewelry.png",
+      "source_sha256": "6f21985f437f0018761d8da057351fd256c1cfa69a54df7d8e1c42c73247b905",
+      "cell": [
+        836,
+        627,
+        1254,
+        1254
+      ],
+      "bbox_in_cell": [
+        95,
+        165,
+        288,
+        450
+      ],
+      "png_sha256": "8454539d01326ea1fe77f4888fcd5c6fbae8322332a306c6dbc16f5969e5666a"
+    },
+    {
+      "id": "pilot_shoulders",
+      "file": "pilot_shoulders.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/body_pieces.png",
+      "source_sha256": "9555027c6297777f879cd0ae811084089d57800d6c2a63cf70fc0e5777008244",
+      "cell": [
+        0,
+        0,
+        418,
+        627
+      ],
+      "bbox_in_cell": [
+        58,
+        220,
+        396,
+        443
+      ],
+      "png_sha256": "f73e50a4e18f8620a83c02ff66ce26ecd26f7885fbc49b9c0bcf073a863313ec"
+    },
+    {
+      "id": "pilot_arms",
+      "file": "pilot_arms.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/body_pieces.png",
+      "source_sha256": "9555027c6297777f879cd0ae811084089d57800d6c2a63cf70fc0e5777008244",
+      "cell": [
+        418,
+        0,
+        836,
+        627
+      ],
+      "bbox_in_cell": [
+        75,
+        207,
+        332,
+        454
+      ],
+      "png_sha256": "5ea8ec93ec82e6ea4d30965a356c1730460330dd82bc0ae0255a49daa8c34a8d"
+    },
+    {
+      "id": "pilot_cloak",
+      "file": "pilot_cloak.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/body_pieces.png",
+      "source_sha256": "9555027c6297777f879cd0ae811084089d57800d6c2a63cf70fc0e5777008244",
+      "cell": [
+        836,
+        0,
+        1254,
+        627
+      ],
+      "bbox_in_cell": [
+        69,
+        171,
+        326,
+        507
+      ],
+      "png_sha256": "05cf51152d3c10a7160f50fbeed3ee4c5ad8895016291596cfe8fd3a0b4f9c50"
+    },
+    {
+      "id": "pilot_legs",
+      "file": "pilot_legs.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/body_pieces.png",
+      "source_sha256": "9555027c6297777f879cd0ae811084089d57800d6c2a63cf70fc0e5777008244",
+      "cell": [
+        0,
+        627,
+        418,
+        1254
+      ],
+      "bbox_in_cell": [
+        104,
+        123,
+        340,
+        384
+      ],
+      "png_sha256": "4100268e099715997c20f509a23ef92f85e91aca2f19ec03e02780d05cb8f443"
+    },
+    {
+      "id": "pilot_feet",
+      "file": "pilot_feet.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/body_pieces.png",
+      "source_sha256": "9555027c6297777f879cd0ae811084089d57800d6c2a63cf70fc0e5777008244",
+      "cell": [
+        418,
+        627,
+        836,
+        1254
+      ],
+      "bbox_in_cell": [
+        64,
+        143,
+        338,
+        393
+      ],
+      "png_sha256": "b01597dacd198274ff72c06ecf0475c1828c4e7a51713930f65210ab61d74523"
+    },
+    {
+      "id": "spiritualist_prayer_beads",
+      "file": "spiritualist_prayer_beads.png",
+      "source": "assets/art/e08_codex_1114/equipment_icons/body_pieces.png",
+      "source_sha256": "9555027c6297777f879cd0ae811084089d57800d6c2a63cf70fc0e5777008244",
+      "cell": [
+        836,
+        627,
+        1254,
+        1254
+      ],
+      "bbox_in_cell": [
+        91,
+        116,
+        278,
+        401
+      ],
+      "png_sha256": "e40ba38f4410d2ef2dba5f9874c01e60f29e781c5ecf4f43fb2593f6f451b5f0"
+    }
+  ]
+}

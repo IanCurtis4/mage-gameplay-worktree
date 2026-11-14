@@ -30,6 +30,29 @@ func _run() -> void:
 	assert(host.route_camera.limit_left < -10000 and host.route_camera.limit_top < -10000, "pilot flat bounds must not push the isometric player off-screen")
 	assert(host.get_children().all(func(child: Node) -> bool: return not child is ArenaObstacleView), "expedition startup carries no pilot decorations")
 	assert(host.run_state.pending_choices == 2 and host.enemies.size() == 2)
+	var opening := facade.current_profile().expedition_for_character(f["a"])
+	assert(opening.checkpoint["format"] == ExpeditionCheckpointCodec.COMPACT_FORMAT, "active entry uses a compact journal base")
+	var dead := host.enemies[0] as EnemyActor
+	var dead_slot := host.campaign_runtime.slot_for_actor(dead)
+	var generation: int = host.campaign_runtime.state.slots[dead_slot]["generation"]
+	paused = true
+	dead.health.current_hp = 0.0
+	dead.health._death_emitted = true
+	var barrier := SnapshotTickBarrier.new()
+	assert(barrier.acquire(host)["ok"])
+	var journal_service := ExpeditionService.new(facade)
+	var event := {"kind":"mob_death","slot_id":dead_slot,"generation":generation,"event_id":"test_death_"+dead_slot}
+	assert(journal_service.journal_events(host,barrier,[event],"compact_test_death",facade.current_profile().revision)["ok"])
+	barrier.release()
+	var journal_lock := facade.current_profile().expedition_for_character(f["a"])
+	assert(journal_lock.journal.size() == 1)
+	var restored := journal_service._restore(journal_lock)
+	assert(restored.ok, str(restored))
+	var replayed := restored.root as RunController
+	assert(replayed.enemies.size() == 1 and not replayed.campaign_runtime.actors.has(dead_slot))
+	assert(replayed.reward_service._queue == host.reward_service._queue and replayed.reward_service._queue.size() == 1)
+	replayed.free()
+	paused = false
 	assert(host.ui_root.get_node_or_null("ExpeditionStatus") != null and host.expedition_view != null)
 	if "--capture-f7" in OS.get_cmdline_user_args():
 		paused = true
@@ -49,6 +72,11 @@ func _run() -> void:
 	var blocked: Dictionary = await status.run_action({"kind": "travel", "portal_id": "entry_to_left", "stage_id": "entry"})
 	assert(blocked.get("error_code") == &"portal_closed" and current_scene == host)
 	assert(host.run_state.pending_choices == 2 and not host._memory_snapshot_pending)
+	host.enemies[0].health.current_hp *= 0.5
+	host.player.health.current_hp *= 0.75
+	host.player.attack_cooldown = 2.0
+	var player_hp := host.player.health.current_hp
+	var player_point := host.player.world_point().to_data()
 	f["store"].lose_ack = true
 	f["store"].hide_after_ack = true
 	var closed: Dictionary = await status.run_action({"kind": "suspend"})
@@ -69,6 +97,7 @@ func _run() -> void:
 	assert(lobby != null and not paused)
 	var lock := facade.current_profile().expedition_for_character(f["a"])
 	assert(lock != null and lock.lifecycle == &"suspended")
+	assert(lock.checkpoint["format"] == ExpeditionCheckpointCodec.COMPACT_FORMAT, "eligible lobby suspension uses the compact checkpoint")
 	assert(lobby.start_run_button.disabled and lobby.preset_selector.disabled, "suspended owner exposes the authoritative lobby lock")
 	lobby._select_roster_index(1)
 	assert(not lobby.start_run_button.disabled, "an unrelated alt remains free after suspension")
@@ -79,6 +108,12 @@ func _run() -> void:
 	assert(resumed.get("ok", false), str(resumed))
 	host = resumed["root"]
 	assert(host.run_state.pending_choices == 2 and host.campaign_runtime.state.manifest_data["input_hash"] == manifest_hash)
+	assert(host.player.world_point().to_data() == player_point and is_equal_approx(host.player.health.current_hp, player_hp) and is_equal_approx(host.player.attack_cooldown, 2.0))
+	assert(host.enemies.size() == 1 and host.campaign_runtime.state.slots[dead_slot]["life_state"] == "dead")
+	for enemy: EnemyActor in host.enemies:
+		var id := host.campaign_runtime.slot_for_actor(enemy)
+		assert(enemy.world_point().to_data() == host.campaign_runtime.state.slots[id]["home"])
+		assert(is_equal_approx(enemy.health.current_hp, enemy.health.max_hp))
 	assert(host.ui_root.get_node_or_null("ExpeditionStatus") != null)
 	if "--capture-f7" in OS.get_cmdline_user_args():
 		paused = true

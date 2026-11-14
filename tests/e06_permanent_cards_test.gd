@@ -1,5 +1,6 @@
 extends SceneTree
 const F = preload("res://tests/e06_inventory_fixture.gd")
+const H = preload("res://tests/fixtures/e07/f2/confirmed_history.gd")
 var checks := 0
 var failures := 0
 func _initialize() -> void: _run.call_deferred()
@@ -18,20 +19,25 @@ func _run() -> void:
 	check(created["ok"],"create isolated real profile")
 	if not created["ok"]: print(created); quit(1);return
 	var first := facade.current_profile().selected_character_id
-	check(facade.create_character("alt",facade.current_profile().revision,"Colecao compartilhada",&"swordsman")["ok"],"create alt sharing starter instance")
+	# Alt now gets its own starter exemplars and card collection: E07 F2 3b15ae8a (20/10) per-character ownership.
+	check(facade.create_character("alt",facade.current_profile().revision,"Colecao individual",&"swordsman")["ok"],"create alt with its own starter instances")
 	var second := facade.current_profile().selected_character_id
+	check(facade.current_profile().character_by_id(second).equipped[&"main_hand"] != facade.current_profile().character_by_id(first).equipped[&"main_hand"],"alt starter host is a distinct exemplar")
 	check(facade.select_character("select",facade.current_profile().revision,first)["ok"],"select first")
-	var old := ProfileCodec.encode(facade.current_profile(),catalog)["data"] as Dictionary
+	# Schema 1-7 opens protected and migrates only after preview + confirmed digest: E07 F2 3b15ae8a (20/10).
+	var old := H.legacy_envelope(ProfileCodec.encode(facade.current_profile(),catalog)["data"] as Dictionary)
 	old.erase("card_inventory");old["schema_version"] = 4;old["catalog_version"] = 11
 	for entry: Dictionary in old["characters"]: entry.erase("admin_skills_unlocked")
-	var migrated := ProfileCodec.decode(JSON.stringify(old),catalog)
+	check(ProfileCodec.decode(JSON.stringify(old),catalog).get("error_code") == &"migration_required","schema4 opens protected until confirmed")
+	var migrated := H.decode_confirmed(JSON.stringify(old),catalog)
 	check(migrated["ok"] and migrated["migrated"] and migrated["profile"].card_inventory.describe()["owned"].is_empty(),"schema4 migration does not invent old discarded cards")
 	if migrated["ok"]:
-		var output: Dictionary = ProfileCodec.encode(migrated["profile"],catalog)["data"]
+		var output: Dictionary = H.legacy_envelope(ProfileCodec.encode(migrated["profile"],catalog)["data"])
 		for entry: Dictionary in output["characters"]: entry.erase("admin_skills_unlocked")
 		for key: String in ["equipment_instances","characters","settings","lifetime_stats"]: check(output[key] == old[key],"legacy payload preserved: "+key)
 	var reserved := old.duplicate(true);reserved["card_inventory"] = {}
-	check(not ProfileCodec.decode(JSON.stringify(reserved),catalog)["ok"],"old schema cannot smuggle new collection extension")
+	var smuggled := H.decode_confirmed(JSON.stringify(reserved),catalog)
+	check(not smuggled["ok"] and smuggled.get("error_code") != &"migration_required","old schema cannot smuggle new collection extension")
 	var started := facade.start_run("start",facade.current_profile().revision)
 	check(started["ok"],"start real persistent run")
 	if not started["ok"]: print(started);quit(1);return
@@ -75,21 +81,25 @@ func _run() -> void:
 		if outcome!=&"abandoned":check(facade.start_run("start_"+String(outcome),facade.current_profile().revision)["ok"],"new run retains permanent collection")
 	controller.queue_free();await process_frame
 	check(facade.select_character("select_alt",facade.current_profile().revision,second)["ok"],"alt selected")
+	# Cards and hosts belong to one character: the alt neither sees nor edits the owner's card (E07 F2 3b15ae8a).
 	var alt_preview := facade.build_preview(second)
-	check(alt_preview["ok"] and alt_preview["snapshot"].card_inventory.owns(card),"alt observes same collection")
+	check(alt_preview["ok"] and not alt_preview["snapshot"].card_inventory.owns(card) and facade.current_profile().card_inventory.owner_of(card) == first,"alt does not observe the owner's collection")
 	var active: Dictionary = alt_preview["snapshot"].card_inventory.active_sockets(alt_preview["snapshot"].equipped)
-	check(active.get(host,[]).has(card),"alt/preset sharing physical host sees socket")
+	check(not active.has(host),"alt has no active socket on the owner's host")
 	var menu_intent := {"request_id":"menu_unsocket","profile_revision":facade.current_profile().revision,"kind":&"unsocket","equipment_instance_id":host,"socket_index":0}
-	check(facade.preview_inventory_change(second,menu_intent)["ok"],"menu card preview")
+	var revision_before_foreign := facade.current_profile().revision
+	check(not facade.preview_inventory_change(second,menu_intent)["ok"] and not facade.commit_inventory_change(second,menu_intent)["ok"] and facade.current_profile().revision == revision_before_foreign and facade.current_profile().card_inventory.sockets().get(host,[]).has(card),"alt cannot unsocket the owner's card")
+	check(facade.preview_inventory_change(first,menu_intent)["ok"],"menu card preview")
 	store.uncertain = true
-	check(not facade.commit_inventory_change(second,menu_intent)["ok"],"uncertain menu commit cannot publish false success")
+	check(not facade.commit_inventory_change(first,menu_intent)["ok"],"uncertain menu commit cannot publish false success")
 	store.hide_reads = false
-	check(facade.commit_inventory_change(second,menu_intent)["ok"],"menu retry reconciles captured transaction")
+	check(facade.commit_inventory_change(first,menu_intent)["ok"],"menu retry reconciles captured transaction")
 	check(facade.current_profile().card_inventory.owns(card) and facade.current_profile().card_inventory.describe()["free"].has(card),"free removal preserves permanent item")
 	var reopened := ProfileFacade.new(F.FaultStore.new(directory,catalog),ProfileRewardResolver.pilot_progression())
 	check(reopened.open_profile()["ok"] and reopened.current_profile().card_inventory.to_record()==facade.current_profile().card_inventory.to_record(),"restart roundtrip preserves inventory and receipts")
 	var encoded := ProfileCodec.encode(reopened.current_profile(),catalog)
-	check(encoded["ok"] and encoded["data"]["schema_version"]==7 and encoded["data"]["catalog_version"]==14,"current schema/catalog real JSON")
+	# Pin 7→8: E07 F2 3b15ae8a (20/10) made the current envelope schema 8.
+	check(encoded["ok"] and encoded["data"]["schema_version"]==8 and encoded["data"]["catalog_version"]==14,"current schema/catalog real JSON")
 	var raw: Dictionary = encoded["data"]
 	for change: Dictionary in [{"next_counter":0},{"next_counter":1},{"revision":-1},{"instances":{"card_01":String(ticket["card_id"])}}]:
 		var corrupt := raw.duplicate(true);corrupt["card_inventory"].merge(change,true)

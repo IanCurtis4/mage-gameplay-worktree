@@ -1,0 +1,114 @@
+[
+  {
+    "path": "assets/art/e08_codex_1118/characters/dervish/east.png",
+    "sha256": "a462fb2a89ba3e01fecb47d9acaf275a25a8713e399d76c14193f07b50d5b868",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "dervish / east",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1118/characters/dervish/south.png",
+        "sha256": "28dd850c0b9961e3d6220bb4d6b5a3c7cb4e2e86c8450fec3f1a39fb3dd283c4"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/rogue/south_v7.png",
+        "sha256": "eb998304fcc11859fa8f325701c6db429140bec238aadc4ff9e31e1e31fd54d6"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production painted 2D pixel-art game animation sprite sheet for RagRPG Dervixe (dervish), EAST only. Image 1 is the approved SOUTH design and exactly defines outfit, palette and person. Image 2 is the earlier same person's identity only, never use base outfit. Image 3 is the Swordsman atlas for in-game proportions and correct orientation. Same character as the attached south sheet; redraw as a true east view, do not mirror or recolor it. Each figure faces screen RIGHT with ONLY the right eye visible, projecting nose points RIGHT, torso and shoes point RIGHT, chest strongly foreshortened. Show anatomical right side nearest the viewer; far fingers visible at a different height and depth. Match image one EXACTLY, including the original very full loose chestnut hair, half-face charcoal fabric scarf over mouth (do not lower it), turquoise and sandy silk, red sash, wide cream trousers, small bells attached to trim and ribbons at hips. No new accessories or weapons. Cloth stays close to silhouette, all poses have a fully attached body. Row 3 action in chronological order (adapt South actions to the correct viewing angle): c1 turning step with arms both open; c2 compact pirouette keeping face substantially front with visible hands; c3 mimic tossing an unseen juggling object from one empty hand, the other visibly empty; c4 bow, both empty hands clearly separate.\n\nMake one native SQUARE 1254 × 1254 RGBA game source PNG. Exactly sixteen small whole figures, mathematically equal invisible four-by-four grid, sequential row major. The four centers along each axis are ~157, 470, 784, 1097px. Each standing sprite about 205-220px tall INSIDE the centered 313px cell, keep their apparent height to each other consistent and keep standing feet on one baseline near lower middle; maximum 215px overall width including accoutrements and fingertips, plenty of wholly blank transparent alpha gutters and full clear canvas border. Strong upper margin for hair and head fittings. Keep BOTH fallen sprites compact, no wide horizontal sprawl crossing a cell; distinguish the fall from a regular crouch. Main silhouette readable in neutral colours. Row 1 four idle variations; row 2 four alternating walk phases, change lead foot; row 3 four action gestures; row 4 two hit reactions, a kneeling collapse, then a completed strongly prone position. Full body in all sixteen. 3/4 elevated game angle, crisp painted chibi pixel-art, clean dark edges, 2–3 stepped shade tones. Preserve the exact same person, facial likeness, eye and hair details, stature, apparent age, shape and exact costume of the first reference, including true anatomical left/right across the directions. Exactly two arms, two empty hands, two legs in every living pose. Separate near and far hands, distinct appendages and fingers. No weapons, shields, books, empty scabbards, focus objects, staffs, any held or tossed item, particles, visual effects, floor, cast shadow, fog, matte, extra figure, words, frame, grid line, colored backdrop or checkerboard. Real empty alpha outside each figure."
+  },
+  {
+    "path": "assets/art/e08_codex_1118/characters/dervish/north.png",
+    "sha256": "39f0fb6eb76d1644a85d1ea0ee1bc3eab40397afce2ebf4fa9f6c6d6db791a5d",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "dervish / north",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1118/characters/dervish/south.png",
+        "sha256": "28dd850c0b9961e3d6220bb4d6b5a3c7cb4e2e86c8450fec3f1a39fb3dd283c4"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/rogue/south_v7.png",
+        "sha256": "eb998304fcc11859fa8f325701c6db429140bec238aadc4ff9e31e1e31fd54d6"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production painted 2D pixel-art game animation sprite sheet for RagRPG Dervixe (dervish), NORTH only. Image 1 is the approved SOUTH design and exactly defines outfit, palette and person. Image 2 is the earlier same person's identity only, never use base outfit. Image 3 is the Swordsman atlas for in-game proportions and correct orientation. Same character as the attached south sheet; redraw as a true north view, do not mirror or recolor it. Each figure faces AWAY towards the top in all sixteen frames. Show back of head and hair, back garment seams, shoulder blades and back of legs, HEELS pointed toward viewer and toes away. Strictly no front of face, eyes, chest ornament or front of shoes. In walking, the sole of one trailing foot can face camera. The last fallen sprite rests head towards top and feet towards viewer. The hands are distinct to either side when seen from behind. Match image one EXACTLY, including the original very full loose chestnut hair, half-face charcoal fabric scarf over mouth (do not lower it), turquoise and sandy silk, red sash, wide cream trousers, small bells attached to trim and ribbons at hips. No new accessories or weapons. Cloth stays close to silhouette, all poses have a fully attached body. Row 3 action in chronological order (adapt South actions to the correct viewing angle): c1 turning step with arms both open; c2 compact pirouette keeping face substantially front with visible hands; c3 mimic tossing an unseen juggling object from one empty hand, the other visibly empty; c4 bow, both empty hands clearly separate.\n\nMake one native SQUARE 1254 × 1254 RGBA game source PNG. Exactly sixteen small whole figures, mathematically equal invisible four-by-four grid, sequential row major. The four centers along each axis are ~157, 470, 784, 1097px. Each standing sprite about 205-220px tall INSIDE the centered 313px cell, keep their apparent height to each other consistent and keep standing feet on one baseline near lower middle; maximum 215px overall width including accoutrements and fingertips, plenty of wholly blank transparent alpha gutters and full clear canvas border. Strong upper margin for hair and head fittings. Keep BOTH fallen sprites compact, no wide horizontal sprawl crossing a cell; distinguish the fall from a regular crouch. Main silhouette readable in neutral colours. Row 1 four idle variations; row 2 four alternating walk phases, change lead foot; row 3 four action gestures; row 4 two hit reactions, a kneeling collapse, then a completed strongly prone position. Full body in all sixteen. 3/4 elevated game angle, crisp painted chibi pixel-art, clean dark edges, 2–3 stepped shade tones. Preserve the exact same person, facial likeness, eye and hair details, stature, apparent age, shape and exact costume of the first reference, including true anatomical left/right across the directions. Exactly two arms, two empty hands, two legs in every living pose. Separate near and far hands, distinct appendages and fingers. No weapons, shields, books, empty scabbards, focus objects, staffs, any held or tossed item, particles, visual effects, floor, cast shadow, fog, matte, extra figure, words, frame, grid line, colored backdrop or checkerboard. Real empty alpha outside each figure."
+  },
+  {
+    "path": "assets/art/e08_codex_1118/characters/dervish/south_v2.png",
+    "sha256": "a3b411880089814b9ef31136b744bb309b7568180b8b5a9bbe93dc0397f217ad",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "dervish / south",
+    "references": [
+      {
+        "path": "C:/Users/João Pedro/.codex/generated_images/01a1d2cf-b455-7d30-846f-a10387fcb4c9/exec-ca27831f-05e3-446b-8aec-bd2d3bb7a6dc.png",
+        "sha256": "28dd850c0b9961e3d6220bb4d6b5a3c7cb4e2e86c8450fec3f1a39fb3dd283c4"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/rogue/south_v7.png",
+        "sha256": "eb998304fcc11859fa8f325701c6db429140bec238aadc4ff9e31e1e31fd54d6"
+      }
+    ],
+    "selected": false,
+    "prompt": "Use case: precise-object-edit. Edit the first image, a completed RagRPG Dervish sixteen-pose sprite sheet. In every living pose, lower the dark half-face scarf so it is now a small neck wrap and uncover his mouth and cheeks to show the wry friendly smile. Shape the visible lower face to belong to the young Rogue in the second style reference, retaining the same eyes, face proportions, hair style and posture. This is the air-dancer and acrobat branch, with a distinct open face and movement while the shadow outfit wears a raised hood and covered face. Preserve the already drawn costume of turquoise, red, ivory and sand silk, the low gold bells, pouches, full voluminous chestnut hair, body and gesture, same transparency, same facing south, same precise placement as existing first image. All sixteen sprites in exact even 4x4 grid on actual 1254×1254 transparent RGBA canvas, no new objects, no text, no matte, no floor, no shadow, no weapon. The small tied silk scarf can be sand or pale turquoise instead of black if needed to match outfit. Keep two empty anatomically connected hands visible with fingers or clear fists, and same walking, action and falling poses. Keep all sprites fully contained in their columns and rows. Crisp two-to-three-tone dark outlined painted pixel art."
+  },
+  {
+    "path": "assets/art/e08_codex_1118/characters/dervish/south.png",
+    "sha256": "28dd850c0b9961e3d6220bb4d6b5a3c7cb4e2e86c8450fec3f1a39fb3dd283c4",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "dervish / south",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/rogue/south_v7.png",
+        "sha256": "eb998304fcc11859fa8f325701c6db429140bec238aadc4ff9e31e1e31fd54d6"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production 2D pixel-art game animation sprite sheet for RagRPG. Input 1 is the EXACT person, not just art style. Same face, haircut, hair volume, build, apparent age and skin tone in all frames. Only the advanced outfit and class posture change. Input 2 is the Swordsman body atlas for original game's chibi head-to-body proportions and clean pixel-art scale only, never copy its costume. Original sprite character, crisp hand-painted pixel art with thin dark outline and 2–3 stepped tones. True native 1254×1254 RGBA transparent sprite sheet, near the project target 1200×1300. EXACTLY sixteen full-body sprites in four equal columns by four equal rows and no labels. Each pose fully centered in its own 313 pixel cell; keep the complete silhouette about 225 px tall, no longer than 225 px wide, with more than 20 px of true blank alpha all around even at the extremities of costumes, hands, hair and fallen figures. Consistent chibi body dimensions, invisible fixed floor and foot pivot, ample unused alpha gutters even on outside of the canvas. Very slightly elevated front 3/4 overhead camera, ALL sprites facing SOUTH/front with face, chest and toes towards viewer. Row 1 four subtly distinctive idle images. Row 2 four distinct walking phases, use alternating leading foot and opposite arm swing. Row 3 the four action beats supplied. Row 4 two flinches with complete bodies followed by a knees-down collapse pose and a physically complete compact prone pose facing down-screen; tuck the body rather than spreading sideways. Exactly two physically attached arms and two visually distinct empty hands in every living pose with visible fingers. Maintain costume asymmetries strictly on their own physical sides. No weapons, equipment in hands, blades, scabbards, books, shields, staffs, magic effects, floor, shadow, surrounding haze, characters besides this sprite, labeling, checkerboard, drawings in gutters or visible grid.\n\nDervixe (dervish) advanced outfit and identity: Same young male Rogue with full chestnut side-swept tousled exposed hair, same eyes, wry face and light agile build, face clearly recognizable, lower face can show his smile. Developed into a kinetic dancer: light matte silk in sand, turquoise and wind-white, long ribbons attached at hip and moving close to his body, small gold bells sewn to fabric, wide flaring trouser panels, one vivid red sash and a few small belt pouches. Open silhouette, caught mid-step, no raised hood or any weapon. Keep ribbons inside the cell.\nRow 3 actions in order: c1 turning step with arms both open; c2 compact pirouette keeping face substantially front with visible hands; c3 mimic tossing an unseen juggling object from one empty hand, the other visibly empty; c4 bow, both empty hands clearly separate."
+  },
+  {
+    "path": "assets/art/e08_codex_1118/characters/dervish/west.png",
+    "sha256": "795f0c9ed6d2b03ce7747aab2b5a1d84064b692a6482ce51958a7c75d8865c7c",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "dervish / west",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1118/characters/dervish/south.png",
+        "sha256": "28dd850c0b9961e3d6220bb4d6b5a3c7cb4e2e86c8450fec3f1a39fb3dd283c4"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/rogue/south_v7.png",
+        "sha256": "eb998304fcc11859fa8f325701c6db429140bec238aadc4ff9e31e1e31fd54d6"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production painted 2D pixel-art game animation sprite sheet for RagRPG Dervixe (dervish), WEST only. Image 1 is the approved SOUTH design and exactly defines outfit, palette and person. Image 2 is the earlier same person's identity only, never use base outfit. Image 3 is the Swordsman atlas for in-game proportions and correct orientation. Same character as the attached south sheet; redraw as a true west view, do not mirror or recolor it. Each figure faces screen LEFT with ONLY the left eye visible, projecting nose points LEFT, torso and shoes point LEFT, chest strongly foreshortened. Show anatomical left side nearest the viewer; far fingers visible at a different height and depth. Match image one EXACTLY, including the original very full loose chestnut hair, half-face charcoal fabric scarf over mouth (do not lower it), turquoise and sandy silk, red sash, wide cream trousers, small bells attached to trim and ribbons at hips. No new accessories or weapons. Cloth stays close to silhouette, all poses have a fully attached body. Row 3 action in chronological order (adapt South actions to the correct viewing angle): c1 turning step with arms both open; c2 compact pirouette keeping face substantially front with visible hands; c3 mimic tossing an unseen juggling object from one empty hand, the other visibly empty; c4 bow, both empty hands clearly separate.\n\nMake one native SQUARE 1254 × 1254 RGBA game source PNG. Exactly sixteen small whole figures, mathematically equal invisible four-by-four grid, sequential row major. The four centers along each axis are ~157, 470, 784, 1097px. Each standing sprite about 205-220px tall INSIDE the centered 313px cell, keep their apparent height to each other consistent and keep standing feet on one baseline near lower middle; maximum 215px overall width including accoutrements and fingertips, plenty of wholly blank transparent alpha gutters and full clear canvas border. Strong upper margin for hair and head fittings. Keep BOTH fallen sprites compact, no wide horizontal sprawl crossing a cell; distinguish the fall from a regular crouch. Main silhouette readable in neutral colours. Row 1 four idle variations; row 2 four alternating walk phases, change lead foot; row 3 four action gestures; row 4 two hit reactions, a kneeling collapse, then a completed strongly prone position. Full body in all sixteen. 3/4 elevated game angle, crisp painted chibi pixel-art, clean dark edges, 2–3 stepped shade tones. Preserve the exact same person, facial likeness, eye and hair details, stature, apparent age, shape and exact costume of the first reference, including true anatomical left/right across the directions. Exactly two arms, two empty hands, two legs in every living pose. Separate near and far hands, distinct appendages and fingers. No weapons, shields, books, empty scabbards, focus objects, staffs, any held or tossed item, particles, visual effects, floor, cast shadow, fog, matte, extra figure, words, frame, grid line, colored backdrop or checkerboard. Real empty alpha outside each figure."
+  }
+]

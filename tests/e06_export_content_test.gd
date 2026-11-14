@@ -10,7 +10,9 @@ func _run() -> void:
 		push_error("BuildContentLoader unavailable")
 		quit(1)
 		return
-	var expected := {&"mob": 11, &"equipment": 85, &"card": 6, &"augment": 31, &"set": 14}
+	# Mob 11→16: F10 Q4 a49459c8 (03/11) added the five forest phase species to the runtime catalog.
+	var expected := {&"mob": 16, &"equipment": 85, &"card": 6, &"augment": 31, &"set": 14}
+	var forest_species: Array[StringName] = [&"forest_wolf", &"forest_boar", &"forest_stalker", &"forest_canopy_archer", &"forest_ancient_warden"]
 	var failures := 0
 	var checked := 0
 	for origin: StringName in expected:
@@ -40,6 +42,12 @@ func _run() -> void:
 			checked += 1
 			if count != expected[origin]:
 				push_error("%s: catalog count %d differs from %d" % [origin, count, expected[origin]])
+				failures += 1
+		var mob_ids: Array = mobs.call("ids")
+		for species: StringName in forest_species:
+			checked += 1
+			if species not in mob_ids:
+				push_error("mob: forest species %s missing from exported catalog" % species)
 				failures += 1
 	print("E06_EXPORT_CONTENT checks=%d failures=%d" % [checked, failures])
 	quit(1 if failures else 0)

@@ -27,6 +27,7 @@ func configure(world: WorldGeometry) -> Dictionary:
 	var result := world.presentation_snapshot(world.geometry_revision)
 	if not result["ok"]: return result
 	field_views.clear()
+	clear_attack_preview()
 	geometry = world; _epoch = world.configuration_revision
 	_surfaces = result["data"]["surfaces"]
 	for deck: Polygon2D in _decks: deck.queue_free()
@@ -86,6 +87,7 @@ func visible_surfaces() -> Array[String]:
 	return result
 func hide_surfaces(ids: Array[String]) -> void:
 	_hidden = ids.duplicate()
+	clear_attack_preview()
 	if marker != null and marker.surface_id in _hidden: indicate(null,false)
 	for index: int in _decks.size(): _decks[index].visible = _surfaces[index]["surface_id"] not in _hidden
 func pick(canvas_point: Vector2, revision: int) -> Dictionary:
@@ -150,15 +152,29 @@ func _actor_visible(actor: CombatActor, foot: Vector2) -> bool:
 	return point_visible(actor.world_point().position+Vector3.UP*float(actor.world_motion.profile().get("height",0.0))*0.5)
 ## P7-C5: only the destination marker is kept; the planned path is no longer drawn nor stored (`_path_points` is accepted for old callers and ignored).
 func indicate(point: ExpeditionWorldPoint, valid: bool, _path_points: Array = []) -> void:
-	attack_preview = {} # P7-C7: kept only as an inert field for old callers/probes; nothing reads it for drawing.
+	clear_attack_preview()
 	marker = ExpeditionWorldPoint.create(point.stage_id,point.surface_id,point.position) if point != null else null
 	marker_valid = valid
 	if _effects != null: _effects.queue_redraw()
-func _process(_delta: float) -> void: sync()
+func clear_attack_preview() -> void:
+	if attack_preview.is_empty(): return
+	attack_preview = {}
+	if _effects != null: _effects.queue_redraw()
+func set_attack_preview(source: ExpeditionWorldPoint, destination: ExpeditionWorldPoint, skill: StringName) -> void:
+	attack_preview = {"from":source.position,"to":destination.position,"stage":source.stage_id,"surface":source.surface_id,"target_surface":destination.surface_id,"skill":skill}
+	if _effects != null: _effects.queue_redraw()
+func _preview_visible() -> bool:
+	if attack_preview.is_empty() or not current() or controller == null or not is_instance_valid(controller.player): return false
+	if not controller.is_inside_tree() or controller.get_tree().paused or controller.run_finished or not controller.player.is_alive() or controller.cast_intent.active_skill.is_empty() or controller.cast_intent.active_skill != attack_preview.get("skill"): return false
+	var source := controller.player.world_point()
+	return source != null and source.stage_id == attack_preview.get("stage") and source.surface_id == attack_preview.get("surface") and source.position == attack_preview.get("from") and attack_preview.get("target_surface") not in _hidden
+func _process(_delta: float) -> void:
+	if not attack_preview.is_empty() and not _preview_visible(): clear_attack_preview()
+	sync()
 func _draw_effects() -> void:
 	if not current(): return
-	# P7-C7: the skill-aim line (attack_preview) is no longer drawn: it was never cleared, so a rejected aim left a red segment on the ground
-	# away from the character. Only the destination marker below is drawn (it keeps its normal valid/invalid tint and lifecycle).
+	if _preview_visible():
+		_effects.draw_line(project(attack_preview.get("from")),project(attack_preview.get("to")),Color("79e5ba"),3,true)
 	var tint := Color("79e5ba") if marker_valid else Color("ff807d")
 	if marker != null:
 		var center := project(marker.position)

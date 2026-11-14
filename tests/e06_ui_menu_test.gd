@@ -16,15 +16,24 @@ func _run() -> void:
 	var second: Dictionary = facade.create_character("ui-menu-second", facade.current_profile().revision, "Segundo", &"mage")
 	_check(first["ok"] and second["ok"], "two independent characters created by facade")
 	var profile: ProfileState = facade.current_profile()
+	# The published collection is owned by the first character; the alt keeps only its own starters.
+	# Shared-collection fixture replaced after E07 F2 3b15ae8a (20/10) gave every exemplar a per-character owner.
+	var owner_id: String = first.get("character_id", "")
+	var alt_starters := profile.equipment_for_character(second.get("character_id", "")).size()
 	var published := 0
 	for id: StringName in catalog.equipment_ids():
 		if id not in Historical.HISTORICAL_EQUIPMENT_IDS:
 			published += 1
-		if profile.first_instance_for_definition(id).is_empty():
+		var owned_definitions: Array[StringName] = []
+		for instance: EquipmentInstance in profile.equipment_for_character(owner_id).values(): owned_definitions.append(instance.definition_id)
+		if id not in owned_definitions:
 			var metadata := catalog.equipment_metadata(id)
 			metadata["item_level"] = metadata.get("min_item_level", metadata["item_level"])
-			_check(profile.add_equipment_instance(id, metadata)["ok"], "own published exemplar %s" % id)
-	_check(published == 73 and profile.equipment_instance_ids().size() == 85, "all seventy-three added pieces coexist with historical collection")
+			_check(profile.add_equipment_instance(id, metadata, owner_id)["ok"], "own published exemplar %s" % id)
+	var owner_collection := profile.equipment_for_character(owner_id)
+	var owner_definitions := {}
+	for instance: EquipmentInstance in owner_collection.values(): owner_definitions[instance.definition_id] = true
+	_check(published == 73 and catalog.equipment_ids().size() == 85 and owner_collection.size() == 85 and owner_definitions.size() == 85 and alt_starters > 0 and profile.equipment_instance_ids().size() == 85 + alt_starters and profile.equipment_for_character(second.get("character_id", "")).size() == alt_starters, "all seventy-three added pieces coexist with historical collection")
 	_check(store.commit(profile)["ok"], "isolated published collection persisted")
 	var scene := load("res://scenes/character_menu.tscn") as PackedScene
 	var menu: CharacterMenu = scene.instantiate()

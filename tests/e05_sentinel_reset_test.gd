@@ -152,6 +152,9 @@ func _scene() -> RunController:
 	var arena := load("res://scenes/main.tscn").instantiate() as RunController
 	root.add_child(arena)
 	arena.set_process(false)
+	# _ready seeds from ticks; Headshot is a contested roll capped at 98%.
+	# Seed 1 lands its first roll (0.33), keeping impacts deterministic.
+	arena.rng.seed = 1
 	arena.player.sentinel_combat_active = arena.encounter_active
 	arena.player.set_process(false)
 	arena.training_boss.set_process(false)
@@ -183,12 +186,14 @@ func _scene_projectile() -> void:
 		projectile._process(1.0)
 		_check(projectile.position == position and not projectile.is_queued_for_deletion(), "real projectile pauses without premature collision")
 		paused = false
+		var enemy_hp := enemy.health.current_hp
 		var impacts: Array[DamageRequest] = []
 		projectile.hit.connect(func(request: DamageRequest, _actor: CombatActor) -> void: impacts.append(request.copy()))
 		projectile._process(1.0)
 		_check(impacts.size() == 1 and projectile.is_queued_for_deletion(), "continuous collision resolves one impact and removes projectile")
 		if not impacts.is_empty():
 			_check(impacts[0].physical_damage == frozen.physical_damage and impacts[0].emission_id == frozen.emission_id, "impact retains launched snapshot")
+		_check(enemy.health.current_hp < enemy_hp, "seeded contested roll lands a positive direct hit")
 		_close(player.sentinel_state.focus, 54.0, "impact returns intrinsic4 without charging additional Focus")
 	arena._show_result(false)
 	_check(arena.run_finished and paused and player.sentinel_state.focus == 0.0 and player.sentinel_state.observed_target_id == 0, "actual result clears Sentinel state synchronously while paused")

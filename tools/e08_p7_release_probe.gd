@@ -9,6 +9,8 @@ extends SceneTree
 ##   forest <evidence_dir>
 ##       pilot P0/P3 forest probe adapted to P4-P6: entry seed 42, UI 120%, minimap, species
 ##       bodies (V2 directional), P6 feedback layer, P5 ambience, limiter, suspend/resume.
+##   forest_save <evidence_dir>
+##       additionally measures capture and the normal background death/collection paths.
 const MapRelease = preload("res://scripts/map_authoring/release/map_release.gd")
 const PilotVisual = preload("res://scripts/presentation/e08_pilot_visual.gd")
 const Species = preload("res://scripts/presentation/species_presentation_catalog.gd")
@@ -16,6 +18,7 @@ const FOREST_SPECIES: Array[StringName] = [&"forest_wolf", &"forest_boar", &"for
 var checks: Array[Dictionary] = []
 var timings := {}
 var folder := ""
+var measure_save := false
 
 func _initialize() -> void: _run.call_deferred()
 
@@ -28,10 +31,12 @@ func frames(count: int) -> void:
 
 func _run() -> void:
 	var args := OS.get_cmdline_user_args()
-	if args.size() < 2: push_error("Usage: -- <inspect|forest> <evidence_dir> ..."); quit(2); return
+	if args.size() < 2: push_error("Usage: -- <inspect|forest|forest_save> <evidence_dir> ..."); quit(2); return
 	folder = args[1]
 	if args[0] == "inspect" and args.size() == 4: inspect(args[2], args[3])
-	elif args[0] == "forest": await forest()
+	elif args[0] in ["forest", "forest_save"]:
+		measure_save = args[0] == "forest_save"
+		await forest()
 	else: push_error("Unknown mode"); quit(2)
 
 # --- inspect ---------------------------------------------------------------------------------
@@ -91,7 +96,7 @@ func inspect(expected_path: String, app_name: String) -> void:
 	var flipbooks := 0
 	for id: StringName in VfxFlipbookCatalog.ids():
 		if not VfxFlipbookCatalog.definition(id).is_empty() and VfxFlipbookCatalog.texture(id) != null: flipbooks += 1
-	check("vfx_flipbooks_load", flipbooks == VfxFlipbookCatalog.ids().size() and flipbooks == 9, "%d/%d" % [flipbooks, VfxFlipbookCatalog.ids().size()])
+	check("vfx_flipbooks_load", flipbooks == VfxFlipbookCatalog.ids().size() and flipbooks == 19, "%d/%d" % [flipbooks, VfxFlipbookCatalog.ids().size()])
 	var bodies := 0
 	var body_total := 0
 	for path: String in expected.get("directional_bodies", []):
@@ -147,6 +152,9 @@ func inspect(expected_path: String, app_name: String) -> void:
 
 func forest() -> void:
 	root.size = Vector2i(1280, 720)
+	if measure_save:
+		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+		Engine.max_fps = 0
 	var menu: CharacterMenu = load("res://scenes/character_menu.tscn").instantiate()
 	root.add_child(menu); current_scene = menu
 	menu.name_input.text = "Prova do candidato"
@@ -208,6 +216,10 @@ func forest() -> void:
 	check("zoom_out_without_changing_map_or_hud", host.route_camera.zoom.is_equal_approx(Vector2.ONE * 0.7) and minimap._background.bounds == bounds and host.ui_root.scale == hud_scale)
 	await RenderingServer.frame_post_draw
 	check("native_capture", root.get_texture().get_image().save_png(folder.path_join("candidate_forest_zoom.png")) == OK)
+	if measure_save:
+		if not await measure_forest_save(host): finish(); return
+		live -= 4
+		host._update_stage_minimap(0.1)
 	var status := host.ui_root.get_node("ExpeditionStatus") as ExpeditionStatusPanel
 	started = Time.get_ticks_usec()
 	var suspended: Dictionary = await status.run_action({"kind": "suspend"})
@@ -233,6 +245,60 @@ func forest() -> void:
 		check("minimap_rebuilt_from_resumed_world", restored.stage_minimap._markers.has_player and restored.stage_minimap._background.bounds == bounds and restored.stage_minimap._markers.enemies.size() == live)
 	finish()
 
+func measure_forest_save(host: RunController) -> bool:
+	var facade := host.persistent_facade
+	var owner := host.run_state.character_id
+	var requested := host.request_memory_snapshot()
+	if not requested.get("ok", false):
+		check("measurement_snapshot", false, requested.get("error_code"))
+		return false
+	var captured: Dictionary = await host.memory_snapshot_ready
+	host.release_memory_snapshot()
+	check("measurement_snapshot", captured.get("ok", false), captured.get("error_code"))
+	if not captured.get("ok", false): return false
+	timings["capture_ms"] = float(captured["capture_usec"]) / 1000.0
+	timings["checkpoint_encoding_bytes"] = captured["bytes"]
+	var actors: Array[CombatActor] = []
+	for enemy: CombatActor in host.enemies:
+		if enemy.is_alive() and not host.campaign_runtime.slot_for_actor(enemy).is_empty(): actors.append(enemy)
+		if actors.size() == 4: break
+	if actors.size() != 4:
+		check("four_deaths_and_collection", false, actors.size())
+		return false
+	var before := facade.current_profile().expedition_for_character(owner)
+	var journal_before := before.journal.size()
+	var target_sequence := int(before.effective_session()["last_committed_seq"]) + 4
+	var start := Time.get_ticks_usec()
+	var last := start
+	var death_ms := -1.0
+	var samples: Array[float] = []
+	for enemy: CombatActor in actors:
+		enemy.health.current_hp = 0.0
+		enemy.health._death_emitted = true
+		host._on_enemy_died(enemy)
+	var journal_size := journal_before
+	var delivered := false
+	while Time.get_ticks_usec() - start < 30000000:
+		await process_frame
+		var now := Time.get_ticks_usec()
+		samples.append(float(now - last) / 1000.0)
+		last = now
+		# Diagnostic reads on the main thread avoid deep-copying the profile every frame.
+		journal_size = facade._profile.expeditions[before.expedition_id].journal.size()
+		if death_ms < 0.0 and journal_size > journal_before:
+			death_ms = float(now - start) / 1000.0
+		delivered = facade._profile.reward_session["last_committed_seq"] == target_sequence
+		if delivered: break
+	check("four_deaths_and_collection", death_ms >= 0.0 and delivered and host.campaign_runtime.pending_events.is_empty())
+	samples.sort()
+	timings["death_journal_observed_ms"] = death_ms
+	timings["four_tickets_observed_ms"] = float(last - start) / 1000.0 if delivered else -1.0
+	timings["save_window_frames"] = samples.size()
+	timings["save_window_frame_p95_ms"] = samples[int((samples.size() - 1) * 0.95)]
+	timings["save_window_frame_max_ms"] = samples[-1]
+	timings["journal_entries_added"] = journal_size - journal_before
+	return death_ms >= 0.0 and delivered
+
 func rect(control: Control) -> Rect2:
 	return control.get_global_transform_with_canvas() * Rect2(Vector2.ZERO, control.size)
 
@@ -254,7 +320,8 @@ func species_bodies(host: RunController) -> Dictionary:
 	return {"counts": counts, "bad": bad, "wolf_boar_v2": wolf_boar.size() == 2}
 
 func finish() -> void:
-	var ok := checks.size() == 19 and checks.all(func(value: Dictionary) -> bool: return value["ok"])
+	var expected := 21 if measure_save else 19
+	var ok := checks.size() == expected and checks.all(func(value: Dictionary) -> bool: return value["ok"])
 	print("E08_P7_FOREST_RESULT ", JSON.stringify({"ok": ok, "count": checks.size(), "checks": checks, "timings": timings, "mode": "native_standard_engine_exact_release_pack"}))
 	paused = false
 	quit(0 if ok else 1)

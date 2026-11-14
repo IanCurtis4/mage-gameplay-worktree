@@ -1,0 +1,40 @@
+{
+  "id": "spirit_dissipation",
+  "revision": 1,
+  "source": "assets/art/e08_codex_1115/vfx/spirit_dissipation.png",
+  "source_sha256": "740e4699c3fc21d4f8a12bfa8476effe85b454412b97599de6b06b0664042053",
+  "texture": "res://assets/art/e08_vfx/spirit_dissipation/flipbook.png",
+  "grid": [
+    4,
+    4
+  ],
+  "cell": [
+    160,
+    160
+  ],
+  "frames": 16,
+  "empty_frames": [
+    15
+  ],
+  "anchor_uv": [
+    0.5,
+    0.5
+  ],
+  "suggested_fps": 12,
+  "loop": false,
+  "world_diameter_hint": 156.0,
+  "source_common_bbox": [
+    49,
+    77,
+    266,
+    239
+  ],
+  "source_window": [
+    49,
+    50,
+    217
+  ],
+  "peak_frame": 7,
+  "rgba_sha256": "8ffb1d0069e15391db9ddcfad240b57bdeca6dc7916208217bdf17c3f387845e",
+  "png_sha256": "fe44f8983ca2f349a6be295f3caafc15393abb35920dec9f684269150fd571c8"
+}

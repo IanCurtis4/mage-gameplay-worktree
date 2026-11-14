@@ -4,6 +4,7 @@ extends SceneTree
 ## through the expedition service, installs the first field and walks it; then
 ## suspends to the lobby and resumes. Measures the checkpoint the profile keeps.
 const F = preload("res://tests/fixtures/e07/f2/fixture.gd")
+const Compact = preload("res://scripts/core/expedition/persistence/compact_expedition.gd")
 var checks: Array[Dictionary] = []
 var report_travel := 0.0
 func _initialize() -> void: run.call_deferred()
@@ -54,6 +55,7 @@ func run() -> void:
 	var checkpoint_bytes := var_to_bytes(lock.checkpoint).size() if lock != null else -1
 	var profile_bytes := JSON.stringify(ProfileCodec.owned_dictionary(facade.current_profile())).to_utf8_buffer().size()
 	check("profile_fits_its_ceiling",lock != null and profile_bytes < ProfileCodec.MAX_FILE_BYTES,[checkpoint_bytes,profile_bytes])
+	check("entry_uses_compact_format",lock != null and lock.checkpoint.format == ExpeditionCheckpointCodec.COMPACT_FORMAT,Compact.cut_tally)
 	# Walk the field for a few seconds and measure the frames.
 	var origin: ExpeditionWorldPoint = host.player.world_point()
 	var geometry: WorldGeometry = host.player.world_motion.geometry
@@ -109,6 +111,9 @@ func run() -> void:
 	var suspend_ms := (Time.get_ticks_usec()-suspend_started)/1000.0
 	check("suspends_to_the_lobby",suspended.get("ok",false) and current_scene is CharacterMenu,suspended.get("error_code",""))
 	if not suspended.get("ok",false): finish(); return
+	var suspended_lock := facade.current_profile().expedition_for_character(f["a"])
+	check("suspension_uses_compact_format",suspended_lock.checkpoint.format == ExpeditionCheckpointCodec.COMPACT_FORMAT,Compact.cut_tally)
+	var suspended_bytes := int(suspended_lock.checkpoint.byte_count)
 	var lobby := current_scene as CharacterMenu
 	var again := PhaseSelectionPanel.new(); lobby.add_child(again); again.configure(lobby,f["a"])
 	var resume_started := Time.get_ticks_usec()
@@ -117,6 +122,10 @@ func run() -> void:
 	var resumed_ok: bool = resumed.get("ok",false) and (resumed["root"] as RunController).campaign_runtime.state.current_stage_id == "forest_sanctuary_2"
 	check("resumes_the_phase",resumed_ok,resumed.get("error_code",""))
 	check("resume_keeps_authored_presentation",resumed_ok and rich(resumed["root"]))
+	if resumed_ok:
+		var back := resumed["root"] as RunController
+		var homes := back.enemies.all(func(enemy: CombatActor) -> bool: return enemy is EnemyActor and enemy.world_point().to_data() == back.campaign_runtime.state.slots[back.campaign_runtime.slot_for_actor(enemy)].home and is_equal_approx(enemy.health.current_hp,enemy.health.max_hp))
+		check("resume_returns_living_enemies_home",homes and back.campaign_runtime.valid(),back.enemies.size())
 	if resumed_ok:
 		host = resumed["root"] as RunController
 		state = host.campaign_runtime.state
@@ -157,7 +166,7 @@ func run() -> void:
 			status = host.ui_root.get_node("ExpeditionStatus") as ExpeditionStatusPanel
 			var finished: Dictionary = await status.run_action({"kind":"finish","outcome":"completed","source":completion})
 			check("phase_completes",finished.get("ok",false),finished.get("error_code",""))
-	print("F10_FOREST_PLAY_TIMING "+JSON.stringify({"enter_ms":snappedf(enter_ms,1.0),"entry_terminal_frame_ms":snappedf(terminal_frame_ms,0.1),"resume_ms":snappedf(resume_ms,1.0),"longest_frame_while_preparing_ms":snappedf(longest,0.1),"walk_frames":count,"walk_mean_ms":snappedf(total/maxf(1,count),0.1),"walk_worst_ms":snappedf(worst,0.1),"checkpoint_bytes":checkpoint_bytes,"snapshot_raw_bytes":int(lock.checkpoint.get("byte_count",0)) if lock != null else -1,"checkpoint_base64_bytes":String(lock.checkpoint.get("snapshot","")).length() if lock != null else -1,"suspend_ms":snappedf(suspend_ms,1.0),"travel_ms":snappedf(report_travel,1.0),"profile_bytes":profile_bytes,"slots_field_1":state.slots.values().filter(func(slot: Dictionary) -> bool: return slot.stage_id == "forest_sanctuary_1").size()}))
+	print("F10_FOREST_PLAY_TIMING "+JSON.stringify({"enter_ms":snappedf(enter_ms,1.0),"entry_terminal_frame_ms":snappedf(terminal_frame_ms,0.1),"resume_ms":snappedf(resume_ms,1.0),"longest_frame_while_preparing_ms":snappedf(longest,0.1),"walk_frames":count,"walk_mean_ms":snappedf(total/maxf(1,count),0.1),"walk_worst_ms":snappedf(worst,0.1),"checkpoint_bytes":checkpoint_bytes,"snapshot_raw_bytes":int(lock.checkpoint.get("byte_count",0)) if lock != null else -1,"checkpoint_base64_bytes":String(lock.checkpoint.get("snapshot","")).length() if lock != null else -1,"suspend_ms":snappedf(suspend_ms,1.0),"travel_ms":snappedf(report_travel,1.0),"profile_bytes":profile_bytes,"suspended_snapshot_raw_bytes":suspended_bytes,"compact_tally":Compact.cut_tally,"slots_field_1":state.slots.values().filter(func(slot: Dictionary) -> bool: return slot.stage_id == "forest_sanctuary_1").size()}))
 	if resumed.get("ok",false) and is_instance_valid(resumed["root"]): (resumed["root"] as Node).queue_free()
 	finish()
 func rich(host: RunController) -> bool:

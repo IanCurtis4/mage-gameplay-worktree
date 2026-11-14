@@ -389,24 +389,43 @@ func set_selected(value: bool) -> void:
 func _process(delta: float) -> void:
 	if is_inside_tree() and get_tree().paused:
 		return
+	var visual_position := global_position
 	if character_animation != null:
-		character_animation.observe(global_position, delta)
-	var anchor := world_point()
-	var key: Array = [character_animation.draw_key() if character_animation != null else [],
-		anchor.position if anchor != null else global_position,anchor.surface_id if anchor != null else "",
-		world_motion.geometry.configuration_revision if world_motion != null else -1,
-		world_motion.geometry.geometry_revision if world_motion != null else -1,
-		health.current_hp if health != null else 0.0,health.max_hp if health != null else 0.0,
-		sprite_visual_scale,contact_shadows_enabled]
-	if key != _presentation_key or body_drawer.is_valid():
-		_presentation_key = key
-		queue_redraw()
+		character_animation.observe(visual_position, delta)
+	_update_presentation(visual_position)
 	advance_statuses(delta)
 	if _flash_time > 0.0:
 		_flash_time = maxf(0.0, _flash_time - delta)
 		queue_redraw()
 	if _berserker_wound_visual_pulse > 0.0:
 		_berserker_wound_visual_pulse = maxf(0.0, _berserker_wound_visual_pulse - delta)
+		queue_redraw()
+
+func _update_presentation(visual_position: Vector2) -> void:
+	var previous_animation: Array = _presentation_key[0] if not _presentation_key.is_empty() else []
+	var animation := previous_animation
+	if character_animation != null:
+		animation = character_animation._draw_key_after(previous_animation)
+	elif not previous_animation.is_empty():
+		animation = []
+	# Inspect the bound point here without making a detached gameplay DTO on
+	# each frame. Only its value fields enter the presentation snapshot.
+	var anchor := world_motion._point if world_motion != null else null
+	var position_key: Variant = anchor.position if anchor != null else visual_position
+	var surface_id := anchor.surface_id if anchor != null else ""
+	var configuration_revision := world_motion.geometry.configuration_revision if world_motion != null else -1
+	var geometry_revision := world_motion.geometry.geometry_revision if world_motion != null else -1
+	var hp := health.current_hp if health != null else 0.0
+	var max_hp := health.max_hp if health != null else 0.0
+	if _presentation_key.is_empty() or not is_same(animation, previous_animation) \
+			or position_key != _presentation_key[1] or surface_id != _presentation_key[2] \
+			or configuration_revision != _presentation_key[3] or geometry_revision != _presentation_key[4] \
+			or hp != _presentation_key[5] or max_hp != _presentation_key[6] \
+			or sprite_visual_scale != _presentation_key[7] or contact_shadows_enabled != _presentation_key[8]:
+		_presentation_key = [animation, position_key, surface_id, configuration_revision, geometry_revision,
+			hp, max_hp, sprite_visual_scale, contact_shadows_enabled]
+		queue_redraw()
+	elif body_drawer.is_valid():
 		queue_redraw()
 
 func _draw() -> void:

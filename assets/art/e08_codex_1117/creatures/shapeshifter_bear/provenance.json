@@ -1,0 +1,94 @@
+[
+  {
+    "path": "assets/art/e08_codex_1117/creatures/shapeshifter_bear/east.png",
+    "sha256": "e2f72c25241efd4b40624a05d5707c652ac39117f37b6f6662e0b923ef4dd062",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "shapeshifter_bear / east",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/shapeshifter_bear/south.png",
+        "sha256": "90407bc3a830942dc9da59389036709a624de9f9b9a5f513b9e41b07571e9f5c"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/druid/south_v8.png",
+        "sha256": "8893d52868cd94b5f12f4f22aaec0b2d34f5ad020e96bd8044a05d9eb97c4102"
+      },
+      {
+        "path": "assets/art/e08_enemies/directional/animal_companion/east_source_v1.png",
+        "sha256": "7d0708e9b2f2ef40868b2df2fd0577f822c1464d586b795423dcb6e8b2252a88"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production 2D painted pixel-art game animation source sheet for RagRPG Forma de urso (shapeshifter_bear), EAST. First input is exactly this animal's approved front identity; use its exact textures, features, head shape and motifs. Second reference confirms the same Druid, and the third is animal anatomy, layout and cast style only. Same creature as the attached south sheet; redraw as a true east view, do not mirror or recolor it. It must always face RIGHT, true east-facing profile from head to torso, snout or beak at the right and the axis of the body leading towards the right. One eye only in every frame that shows an eye. Original design. Same druid as the attached reference, transformed: keep her body paint, stone necklace and animal tooth recognizable. Creature: the same druid fully transformed into a stocky broad brown bear with high shoulders, about 1.3x her human height, short round ears, warm chestnut fur, with ochre body paint in three short finger strokes on the shoulder and cheek, immediately recognizable rustic necklace of gray stones with a single animal tooth on its cord; cast proportions, accessible wild rather than monstrous. Anatomy: an actual bear with exactly four legs and one short tail even standing on its rear paws; no separate human parts; final frame rests prone. Every live sprite has the same number of limbs, foreshortened for the camera angle. One full animal per cell. Limit animal silhouette and appendages to the central 215×215 px zone of each 313 px cell, with special care to tuck tail, reach and wings in foreshortening and leave lots of actual empty alpha. In north depict back-facing rump and rear of the shoulder, not a reattached back head on the front body. Row 3 action: heavy paw swat, short charging step, rear up on both hind legs, grab with forelegs like a bear hug. One original near-square (1254 × 1254 preferred; approx. 1200 × 1300) RGBA sprite SOURCE PNG with sixteen complete isolated figures, no contact or overlap. Four EXACT evenly spaced columns and rows, each in its own invisible cell, centered anchor shared across every pose, same standing scale and physical proportions throughout. Put everything including horns, tail and any carried weapon into a small centered silhouette with at least 28 clear pixels in all directions from cell divisions. Aim for sprite height and width at most 235 px. Keep weapons and elongated limbs tucked or foreshortened to allow no sprite to cross a cell edge. Keep the last two separate, compact, and centered. Row 1: exactly four idle phases. Row 2: four separate walking phases, alternate foot contact; realistic gait per species. Row 3: four listed attack poses in order. Row 4: first two hit reactions, third begins collapse, fourth fully fallen and short across the cell. Fully drawn chest, feet and tail in each frame, anatomy always consistent. Dark clean hand-painted pixel contour, readable chibi mass with 2–3 shade steps, target game sprite at small scale. Original design for this project. Fully cut out true transparent alpha in all gutters. No loose magic, projectile, gore, blood, floor, shadows, captions, game UI, actual grid, extra objects or matte."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/shapeshifter_bear/north.png",
+    "sha256": "f4f6ebbd0be56f0477be20a804cefb14bc5e5f50fab53c3ebe58049ae9fbb75e",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "shapeshifter_bear / north",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/shapeshifter_bear/south.png",
+        "sha256": "90407bc3a830942dc9da59389036709a624de9f9b9a5f513b9e41b07571e9f5c"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/druid/south_v8.png",
+        "sha256": "8893d52868cd94b5f12f4f22aaec0b2d34f5ad020e96bd8044a05d9eb97c4102"
+      },
+      {
+        "path": "assets/art/e08_enemies/directional/animal_companion/east_source_v1.png",
+        "sha256": "7d0708e9b2f2ef40868b2df2fd0577f822c1464d586b795423dcb6e8b2252a88"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production 2D painted pixel-art game animation source sheet for RagRPG Forma de urso (shapeshifter_bear), NORTH. First input is exactly this animal's approved front identity; use its exact textures, features, head shape and motifs. Second reference confirms the same Druid, and the third is animal anatomy, layout and cast style only. Same creature as the attached south sheet; redraw as a true north view, do not mirror or recolor it. It must always face AWAY toward the very TOP of the game screen in every pose. We see its rump, the back of its neck and head, rear anatomy of the feet and back of folded wings if any. Never show the face, mouth, eyes, nose or front facing toes. Movement clearly goes away from the viewer. In the final frame the creature rests prone with its back and rump facing downscreen and head facing upscreen. Original design. Same druid as the attached reference, transformed: keep her body paint, stone necklace and animal tooth recognizable. Creature: the same druid fully transformed into a stocky broad brown bear with high shoulders, about 1.3x her human height, short round ears, warm chestnut fur, with ochre body paint in three short finger strokes on the shoulder and cheek, immediately recognizable rustic necklace of gray stones with a single animal tooth on its cord; cast proportions, accessible wild rather than monstrous. Anatomy: an actual bear with exactly four legs and one short tail even standing on its rear paws; no separate human parts; final frame rests prone. Every live sprite has the same number of limbs, foreshortened for the camera angle. One full animal per cell. Limit animal silhouette and appendages to the central 215×215 px zone of each 313 px cell, with special care to tuck tail, reach and wings in foreshortening and leave lots of actual empty alpha. In north depict back-facing rump and rear of the shoulder, not a reattached back head on the front body. Row 3 action: heavy paw swat, short charging step, rear up on both hind legs, grab with forelegs like a bear hug. One original near-square (1254 × 1254 preferred; approx. 1200 × 1300) RGBA sprite SOURCE PNG with sixteen complete isolated figures, no contact or overlap. Four EXACT evenly spaced columns and rows, each in its own invisible cell, centered anchor shared across every pose, same standing scale and physical proportions throughout. Put everything including horns, tail and any carried weapon into a small centered silhouette with at least 28 clear pixels in all directions from cell divisions. Aim for sprite height and width at most 235 px. Keep weapons and elongated limbs tucked or foreshortened to allow no sprite to cross a cell edge. Keep the last two separate, compact, and centered. Row 1: exactly four idle phases. Row 2: four separate walking phases, alternate foot contact; realistic gait per species. Row 3: four listed attack poses in order. Row 4: first two hit reactions, third begins collapse, fourth fully fallen and short across the cell. Fully drawn chest, feet and tail in each frame, anatomy always consistent. Dark clean hand-painted pixel contour, readable chibi mass with 2–3 shade steps, target game sprite at small scale. Original design for this project. Fully cut out true transparent alpha in all gutters. No loose magic, projectile, gore, blood, floor, shadows, captions, game UI, actual grid, extra objects or matte."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/shapeshifter_bear/south.png",
+    "sha256": "90407bc3a830942dc9da59389036709a624de9f9b9a5f513b9e41b07571e9f5c",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "shapeshifter_bear / south",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/druid/south_v8.png",
+        "sha256": "8893d52868cd94b5f12f4f22aaec0b2d34f5ad020e96bd8044a05d9eb97c4102"
+      },
+      {
+        "path": "assets/art/e08_enemies/directional/animal_companion/east_source_v1.png",
+        "sha256": "7d0708e9b2f2ef40868b2df2fd0577f822c1464d586b795423dcb6e8b2252a88"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production 2D painted pixel-art game animation source sheet for RagRPG, Forma de urso (shapeshifter_bear), SOUTH/front. First reference is the druid identity, palette, handmade accessories and cast size. Second demonstrates small monster art style and animal anatomy only. Original design. Same druid as the attached reference, transformed: keep her body paint, stone necklace and animal tooth recognizable. The paint is one consistent personal motif of three uneven finger strokes, recolored per form. This is a complete animal and not a hybrid or a person. Creature: the same druid fully transformed into a stocky broad brown bear with high shoulders, about 1.3x her human height, short round ears, warm chestnut fur, with ochre body paint in three short finger strokes on the shoulder and cheek, immediately recognizable rustic necklace of gray stones with a single animal tooth on its cord; cast proportions, accessible wild rather than monstrous. Anatomy: an actual bear with exactly four legs and one short tail even standing on its rear paws; no separate human parts; final frame rests prone. All complete figures have head facing straight down towards viewer, symmetrical foreshortened slight overhead 3/4 front. Row 3: heavy paw swat, short charging step, rear up on both hind legs, grab with forelegs like a bear hug.\n\nOne original near-square (1254 × 1254 preferred; approx. 1200 × 1300) RGBA sprite SOURCE PNG with sixteen complete isolated figures, no contact or overlap. Four EXACT evenly spaced columns and rows, each in its own invisible cell, centered anchor shared across every pose, same standing scale and physical proportions throughout. Put everything including horns, tail and any carried weapon into a small centered silhouette with at least 28 clear pixels in all directions from cell divisions. Aim for sprite height and width at most 235 px. Keep weapons and elongated limbs tucked or foreshortened to allow no sprite to cross a cell edge. Keep the last two separate, compact, and centered. Row 1: exactly four idle phases. Row 2: four separate walking phases, alternate foot contact; realistic gait per species. Row 3: four listed attack poses in order. Row 4: first two hit reactions, third begins collapse, fourth fully fallen and short across the cell. Fully drawn chest, feet and tail in each frame, anatomy always consistent. Dark clean hand-painted pixel contour, readable chibi mass with 2–3 shade steps, target game sprite at small scale. Original design for this project. Fully cut out true transparent alpha in all gutters. No loose magic, projectile, gore, blood, floor, shadows, captions, game UI, actual grid, extra objects or matte."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/shapeshifter_bear/west.png",
+    "sha256": "4a585f2594bb3fd583e385363092f6a7185a9d85f8a650d4c991cf4542104b72",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "shapeshifter_bear / west",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/shapeshifter_bear/south.png",
+        "sha256": "90407bc3a830942dc9da59389036709a624de9f9b9a5f513b9e41b07571e9f5c"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/druid/south_v8.png",
+        "sha256": "8893d52868cd94b5f12f4f22aaec0b2d34f5ad020e96bd8044a05d9eb97c4102"
+      },
+      {
+        "path": "assets/art/e08_enemies/directional/animal_companion/east_source_v1.png",
+        "sha256": "7d0708e9b2f2ef40868b2df2fd0577f822c1464d586b795423dcb6e8b2252a88"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production 2D painted pixel-art game animation source sheet for RagRPG Forma de urso (shapeshifter_bear), WEST. First input is exactly this animal's approved front identity; use its exact textures, features, head shape and motifs. Second reference confirms the same Druid, and the third is animal anatomy, layout and cast style only. Same creature as the attached south sheet; redraw as a true west view, do not mirror or recolor it. It must always face LEFT, true west-facing profile from head to torso, snout or beak at the left and the axis of the body leading towards the left. One eye only in every frame that shows an eye. Original design. Same druid as the attached reference, transformed: keep her body paint, stone necklace and animal tooth recognizable. Creature: the same druid fully transformed into a stocky broad brown bear with high shoulders, about 1.3x her human height, short round ears, warm chestnut fur, with ochre body paint in three short finger strokes on the shoulder and cheek, immediately recognizable rustic necklace of gray stones with a single animal tooth on its cord; cast proportions, accessible wild rather than monstrous. Anatomy: an actual bear with exactly four legs and one short tail even standing on its rear paws; no separate human parts; final frame rests prone. Every live sprite has the same number of limbs, foreshortened for the camera angle. One full animal per cell. Limit animal silhouette and appendages to the central 215×215 px zone of each 313 px cell, with special care to tuck tail, reach and wings in foreshortening and leave lots of actual empty alpha. In north depict back-facing rump and rear of the shoulder, not a reattached back head on the front body. Row 3 action: heavy paw swat, short charging step, rear up on both hind legs, grab with forelegs like a bear hug. One original near-square (1254 × 1254 preferred; approx. 1200 × 1300) RGBA sprite SOURCE PNG with sixteen complete isolated figures, no contact or overlap. Four EXACT evenly spaced columns and rows, each in its own invisible cell, centered anchor shared across every pose, same standing scale and physical proportions throughout. Put everything including horns, tail and any carried weapon into a small centered silhouette with at least 28 clear pixels in all directions from cell divisions. Aim for sprite height and width at most 235 px. Keep weapons and elongated limbs tucked or foreshortened to allow no sprite to cross a cell edge. Keep the last two separate, compact, and centered. Row 1: exactly four idle phases. Row 2: four separate walking phases, alternate foot contact; realistic gait per species. Row 3: four listed attack poses in order. Row 4: first two hit reactions, third begins collapse, fourth fully fallen and short across the cell. Fully drawn chest, feet and tail in each frame, anatomy always consistent. Dark clean hand-painted pixel contour, readable chibi mass with 2–3 shade steps, target game sprite at small scale. Original design for this project. Fully cut out true transparent alpha in all gutters. No loose magic, projectile, gore, blood, floor, shadows, captions, game UI, actual grid, extra objects or matte."
+  }
+]

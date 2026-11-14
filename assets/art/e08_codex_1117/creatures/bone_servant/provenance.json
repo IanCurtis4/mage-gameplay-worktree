@@ -1,0 +1,82 @@
+[
+  {
+    "path": "assets/art/e08_codex_1117/creatures/bone_servant/east.png",
+    "sha256": "cf1092777dcb211f2b59c350d9dfbce63d6c00495aca15889b7c7a7cec14ef6b",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "bone_servant / east",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/bone_servant/south.png",
+        "sha256": "0c49b6278b8c96bcb5ca7da7953f2b5b511979178eaa49accbdd5cf807577c9b"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production painted 2D pixel-art animation source sheet for RagRPG, Ossudo, EAST only. Input 1 gives the exact established creature design. Input 2 is style and game scale only, DO NOT copy its identity or direction. Same creature as the attached south sheet; redraw as a true east view, do not mirror or recolor it. Every one of the sixteen poses is true EAST rightward profile, nose, muzzle, shoulders and feet all point to the RIGHT. One eye only when eyes are open, one side of the chest visible, opposite shoulder mostly behind the body. Preserve mushroom asymmetry: one large ochre cap on creature's left side of skull; smaller bruise-purple clusters on its right. Brighter spotted large cap is the left one. Creature: a short slightly hunched small crooked fragile skeleton serving briefly, almost the warlock's height, yellowed bones, identifiable ochre and bruise purple mushroom caps growing from skull and shoulders, rotten moss in the joints, tatters of burial cloth, faint moss green glow in the eye sockets; frail posture, no armor or warrior outfit. Anatomy: two bony arms, two bony hands, two legs and one skull, no weapon; in row 4 column 3 bones begin buckling and detach, and in column 4 the original bones collapse in a small pile with only a little close spore dust tight to the pile, no gore.  Row 3 attack in sequence: awkward searching scratch with one arm, two-handed shove, skull-forward bite, withdraw its jaw and arms.\n\nMake a near-square 1254×1254 transparent RGBA source PNG with exactly sixteen small, complete figures laid out as an even 4×4 grid of invisible cells. Keep blank alpha around every single sprite, with minimum 24 px blank space along all four sides of every cell, in particular no head, tail, hammer or fallen limbs touch or overlap their neighbors. Fit each whole silhouette inside a centered 235×235 px region per cell, foreshortening wide poses where needed. Constant ground anchor and drawing scale within the view and consistent proportions with front identity sheet. Four idle phases, four alternate walking phases, four attacks below, then two flinch poses, a compact collapse and a compact fully fallen pose, whole body kept tucked or broken apart as specified below. Match in-game crisply painted chibi pixel art, clean dark contours, strongly readable deliberate 2–3 tone shading. Empty real transparent cutout backdrop, no added base, foreground, cast shadow, grid or letters. Original designs. No particles, spells off the body, gore, projectile or floor."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/bone_servant/north_v2.png",
+    "sha256": "7b688fc8ff2db507b360ab1230271792e1d6e36483ae6d28b9dc2c64f083acb9",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "bone_servant / north",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/bone_servant/south.png",
+        "sha256": "0c49b6278b8c96bcb5ca7da7953f2b5b511979178eaa49accbdd5cf807577c9b"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/druid/north_v6.png",
+        "sha256": "fdd1df578e5e83eb2a7db7f884b69d127e536ed3b70b82795241aafcb64195cc"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. RagRPG original crooked skeleton servant NORTH/back. First image for exact skeleton design only; second image for clean transparent behind-camera anatomy and evenly spaced grid. Reconstruct all sprites from behind. Show the occipital bone, spine, shoulder blades, rear hip bones under scraps of burial cloth and flat exposed bone heels, as it walks AWAY towards the top. Do not show eye sockets, nose, rib cage front, face or chest, except the final pile has bones and one skull collapsed on its back-facing side. A small left-side ochre cap on its skull and several bruise purple caps on its right, mushrooms on shoulders, rotten moss on joints. No armor or weapon. Preserve its frail yellowed bones and size. EXACT 4x4 native 1254×1254 RGBA. Develop sprite art as clean isolated silhouette cutouts with at least 28 px totally clear each side of all 16 cells, stable pivot at lower-center of cell, max 230px of height. Cell content in row 1 idle 4, row 2 stagger-walk with alternating feet 4, row 3 scratch away, shove away, jab skull forward away and recover 4, row 4 two hit responses then a split beginning to fall and a small distinct pile of disassembled bones with absolutely no background haze or smoke. Only actual bone, fungi and cloth drawn. Body exactly two arms and two legs, no extra limbs. Crisp pixels, deliberate dark outline and two-step painted shading. Everywhere outside actual outline must be completely clear alpha even around the edges, and there is no wash, fading aura, floor, outline glow, shadow, graphics, text, borders, extra ghosts, spores away from body or checkerboard."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/bone_servant/south.png",
+    "sha256": "0c49b6278b8c96bcb5ca7da7953f2b5b511979178eaa49accbdd5cf807577c9b",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "bone_servant / south",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      },
+      {
+        "path": "assets/art/e08_enemies/directional/animal_companion/east_source_v1.png",
+        "sha256": "7d0708e9b2f2ef40868b2df2fd0577f822c1464d586b795423dcb6e8b2252a88"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production 2D pixel-art animation source sheet for RagRPG, Ossudo (bone_servant), SOUTH/front. Input 1 is the Warlock, for the original cast art style and visual scale only, not a design to copy. Input 2 is the small canine companion for established creature anatomy and rendering in the game, not the design to copy. Creature: a short slightly hunched small crooked fragile skeleton serving briefly, almost the warlock's height, yellowed bones, identifiable ochre and bruise purple mushroom caps growing from skull and shoulders, rotten moss in the joints, tatters of burial cloth, faint moss green glow in the eye sockets; frail posture, no armor or warrior outfit. Anatomy: two bony arms, two bony hands, two legs and one skull, no weapon; in row 4 column 3 bones begin buckling and detach, and in column 4 the original bones collapse in a small pile with only a little close spore dust tight to the pile, no gore.\nThe creature is facing SOUTH/front in every single sprite, both halves of the torso toward the audience, face and feet pointing down-screen at 3/4 overhead. Row 3 attack in chronological order: awkward searching scratch with one arm, two-handed shove, skull-forward bite, withdraw its jaw and arms.\nOne original near-square (1254 × 1254 preferred; approx. 1200 × 1300) RGBA sprite SOURCE PNG with sixteen complete isolated figures, no contact or overlap. Four EXACT evenly spaced columns and rows, each in its own invisible cell, centered anchor shared across every pose, same standing scale and physical proportions throughout. Put everything including horns, tail and any carried weapon into a small centered silhouette with at least 28 clear pixels in all directions from cell divisions. Aim for sprite height and width at most 235 px. Keep weapons and elongated limbs tucked or foreshortened to allow no sprite to cross a cell edge. Keep the last two separate, compact, and centered. Row 1: exactly four idle phases. Row 2: four separate walking phases, alternate foot contact; realistic gait per species. Row 3: four listed attack poses in order. Row 4: first two hit reactions, third begins collapse, fourth fully fallen and short across the cell. Fully drawn chest, feet and tail in each frame, anatomy always consistent. Dark clean hand-painted pixel contour, readable chibi mass with 2–3 shade steps, target game sprite at small scale. Original design for this project. Fully cut out true transparent alpha in all gutters. No loose magic, projectile, gore, blood, floor, shadows, captions, game UI, actual grid, extra objects or matte."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/bone_servant/west.png",
+    "sha256": "64f9e1a6a48f4a3a88dccaea2b310f25dbde0bbb4965e1fcc970ffca3b034441",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "bone_servant / west",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/bone_servant/south.png",
+        "sha256": "0c49b6278b8c96bcb5ca7da7953f2b5b511979178eaa49accbdd5cf807577c9b"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production painted 2D pixel-art animation source sheet for RagRPG, Ossudo, WEST only. Input 1 gives the exact established creature design. Input 2 is style and game scale only, DO NOT copy its identity or direction. Same creature as the attached south sheet; redraw as a true west view, do not mirror or recolor it. Every one of the sixteen poses is true WEST leftward profile, nose, muzzle, shoulders and feet all point to the LEFT. One eye only when eyes are open, one side of the chest visible, opposite shoulder mostly behind the body. Preserve mushroom asymmetry: one large ochre cap on creature's left side of skull; smaller bruise-purple clusters on its right. Brighter spotted large cap is the left one. Creature: a short slightly hunched small crooked fragile skeleton serving briefly, almost the warlock's height, yellowed bones, identifiable ochre and bruise purple mushroom caps growing from skull and shoulders, rotten moss in the joints, tatters of burial cloth, faint moss green glow in the eye sockets; frail posture, no armor or warrior outfit. Anatomy: two bony arms, two bony hands, two legs and one skull, no weapon; in row 4 column 3 bones begin buckling and detach, and in column 4 the original bones collapse in a small pile with only a little close spore dust tight to the pile, no gore.  Row 3 attack in sequence: awkward searching scratch with one arm, two-handed shove, skull-forward bite, withdraw its jaw and arms.\n\nMake a near-square 1254×1254 transparent RGBA source PNG with exactly sixteen small, complete figures laid out as an even 4×4 grid of invisible cells. Keep blank alpha around every single sprite, with minimum 24 px blank space along all four sides of every cell, in particular no head, tail, hammer or fallen limbs touch or overlap their neighbors. Fit each whole silhouette inside a centered 235×235 px region per cell, foreshortening wide poses where needed. Constant ground anchor and drawing scale within the view and consistent proportions with front identity sheet. Four idle phases, four alternate walking phases, four attacks below, then two flinch poses, a compact collapse and a compact fully fallen pose, whole body kept tucked or broken apart as specified below. Match in-game crisply painted chibi pixel art, clean dark contours, strongly readable deliberate 2–3 tone shading. Empty real transparent cutout backdrop, no added base, foreground, cast shadow, grid or letters. Original designs. No particles, spells off the body, gore, projectile or floor."
+  }
+]

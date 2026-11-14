@@ -94,7 +94,19 @@ func start() -> Dictionary:
 	var lock := profile.expedition_for_character(character_id)
 	if lock != null:
 		service_pending = true
-		var resumed := service.resume(lock.expedition_id, character_id, request, profile.revision)
+		var prepared := {}
+		if lock.checkpoint.get("format") == ExpeditionCheckpointCodec.COMPACT_FORMAT:
+			var worker := Thread.new()
+			message.text = "Reconstruindo os mapas da expedição…"
+			if worker.start(ExpeditionService.prepare_compact.bind(lock.checkpoint)) != OK:
+				service_pending = false
+				return _finish({"ok":false,"error_code":&"phase_unavailable"})
+			while worker.is_alive(): await get_tree().process_frame
+			prepared = worker.wait_to_finish()
+			if not prepared.get("ok",false):
+				service_pending = false
+				return _finish(prepared)
+		var resumed := service.resume(lock.expedition_id, character_id, request, profile.revision, prepared)
 		return _finish(resumed)
 	if phase_choice.selected > 0:
 		# Published maps: prepared like the game test, off the main frame.

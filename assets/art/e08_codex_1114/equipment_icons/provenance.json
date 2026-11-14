@@ -1,0 +1,146 @@
+[
+  {
+    "path": "equipment_icons/class_set_archer.png",
+    "sha256": "cfba12201ac4612b8680430b00c2bb33d5104dd0d8ea00a51a8739a64acf9374",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "B1",
+    "prompt": "Create an original 1254 × 1254 pixel, square 1:1 PNG sheet of two RagRPG fantasy item icons on true RGBA alpha. The output canvas must stay square, so leave extra clear space above and below the two items. Place the two at the same vertical center in two equal invisible columns within the square. Torso equipment LEFT, one compact grouped footwear icon RIGHT. Leave at least 45 pixels completely clear between items, and ample clear outer space. Do not crop the sheet to the items. The supplied head equipment is the precise reference for the colors, material, recurring motifs and painted style, and is not to appear in the sheet. Soft light from the upper left, 3/4 front view, clean sharply defined painted contours and large recognizable color masses, no pixel art. Both items must read as separate 48 × 48 px inventory icons. Empty garments only, no body, words, boxes, layout marks, shadows, ground, texture or mist in transparent areas.\nColete da Flecha Certa: a practical close-cut archer vest. Botas do Passo Leve: a pair of lightweight forest archer boots."
+  },
+  {
+    "path": "equipment_icons/class_set_berserker.png",
+    "sha256": "7f3145e718d026eaac64387eafe141e22fe084c947f7a3c7521585efcef53b0e",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "B1",
+    "prompt": "Create an original 1254 × 1254 pixel, square 1:1 PNG sheet of two RagRPG fantasy item icons on true RGBA alpha. The output canvas must stay square, so leave extra clear space above and below the two items. Place the two at the same vertical center in two equal invisible columns within the square. Torso equipment LEFT, one compact grouped footwear icon RIGHT. Leave at least 45 pixels completely clear between items, and ample clear outer space. Do not crop the sheet to the items. The supplied head equipment is the precise reference for the colors, material, recurring motifs and painted style, and is not to appear in the sheet. Soft light from the upper left, 3/4 front view, clean sharply defined painted contours and large recognizable color masses, no pixel art. Both items must read as separate 48 × 48 px inventory icons. Empty garments only, no body, words, boxes, layout marks, shadows, ground, texture or mist in transparent areas.\nPeitoral do Rugido: a rugged heavy fighter chestplate. Botas do Impacto: a pair of heavy battering boots with strong toes."
+  },
+  {
+    "path": "equipment_icons/class_set_defender.png",
+    "sha256": "05a23c72c9507a401fcd65422f23597e97d64000b8f2906c1b843a95f8772ac2",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "B1",
+    "prompt": "Create an original 1254 × 1254 pixel, square 1:1 PNG sheet of two RagRPG fantasy item icons on true RGBA alpha. The output canvas must stay square, so leave extra clear space above and below the two items. Place the two at the same vertical center in two equal invisible columns within the square. Torso equipment LEFT, one compact grouped footwear icon RIGHT. Leave at least 45 pixels completely clear between items, and ample clear outer space. Do not crop the sheet to the items. The supplied head equipment is the precise reference for the colors, material, recurring motifs and painted style, and is not to appear in the sheet. Soft light from the upper left, 3/4 front view, clean sharply defined painted contours and large recognizable color masses, no pixel art. Both items must read as separate 48 × 48 px inventory icons. Empty garments only, no body, words, boxes, layout marks, shadows, ground, texture or mist in transparent areas.\nCouraça do Portão: a broad gatekeeper's metal cuirass. Grevas do Baluarte: a pair of armored tall metal greaves with integrated sabatons."
+  },
+  {
+    "path": "equipment_icons/class_set_elementalist.png",
+    "sha256": "7fc02f6e2d41b3be21cbf460f44874cc5f6bc216730e2958e4b0d824638d535e",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "B1",
+    "prompt": "Create an original 1254 × 1254 pixel, square 1:1 PNG sheet of two RagRPG fantasy item icons on true RGBA alpha. The output canvas must stay square, so leave extra clear space above and below the two items. Place the two at the same vertical center in two equal invisible columns within the square. Torso equipment LEFT, one compact grouped footwear icon RIGHT. Leave at least 45 pixels completely clear between items, and ample clear outer space. Do not crop the sheet to the items. The supplied head equipment is the precise reference for the colors, material, recurring motifs and painted style, and is not to appear in the sheet. Soft light from the upper left, 3/4 front view, clean sharply defined painted contours and large recognizable color masses, no pixel art. Both items must read as separate 48 × 48 px inventory icons. Empty garments only, no body, words, boxes, layout marks, shadows, ground, texture or mist in transparent areas.\nManto das Marés e Chamas: a short sleeved mantle suggesting the flow of tide and flame. Sandálias do Círculo Elemental: a pair of circular-patterned strapped elemental sandals."
+  },
+  {
+    "path": "equipment_icons/class_set_hunter.png",
+    "sha256": "f1e36d76f0482fb9a5cfe39b41f6d2759a69d62bc56dc0d153223ef24a7c0615",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "B1",
+    "prompt": "Create an original 1254 × 1254 pixel, square 1:1 PNG sheet of two RagRPG fantasy item icons on true RGBA alpha. The output canvas must stay square, so leave extra clear space above and below the two items. Place the two at the same vertical center in two equal invisible columns within the square. Torso equipment LEFT, one compact grouped footwear icon RIGHT. Leave at least 45 pixels completely clear between items, and ample clear outer space. Do not crop the sheet to the items. The supplied head equipment is the precise reference for the colors, material, recurring motifs and painted style, and is not to appear in the sheet. Soft light from the upper left, 3/4 front view, clean sharply defined painted contours and large recognizable color masses, no pixel art. Both items must read as separate 48 × 48 px inventory icons. Empty garments only, no body, words, boxes, layout marks, shadows, ground, texture or mist in transparent areas.\nCasaco de Batedora: a practical long-tailed scout coat in the reference's earthy palette. Botas de Rastreamento: a pair of forest tracking boots, subtle practical wraps."
+  },
+  {
+    "path": "equipment_icons/class_set_mage.png",
+    "sha256": "861c90a2dfeb6323708208e07751da648f867f60928cb034f4196397cb4d24d7",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "B1",
+    "prompt": "Create an original 1254 × 1254 pixel, square 1:1 PNG sheet of two RagRPG fantasy item icons on true RGBA alpha. The output canvas must stay square, so leave extra clear space above and below the two items. Place the two at the same vertical center in two equal invisible columns within the square. Torso equipment LEFT, one compact grouped footwear icon RIGHT. Leave at least 45 pixels completely clear between items, and ample clear outer space. Do not crop the sheet to the items. The supplied head equipment is the precise reference for the colors, material, recurring motifs and painted style, and is not to appear in the sheet. Soft light from the upper left, 3/4 front view, clean sharply defined painted contours and large recognizable color masses, no pixel art. Both items must read as separate 48 × 48 px inventory icons. Empty garments only, no body, words, boxes, layout marks, shadows, ground, texture or mist in transparent areas.\nTúnica do Aprendiz Lunar: a fabric moon apprentice tunic. Sapatos de Conjuração: a pair of soft pointed conjurer shoes."
+  },
+  {
+    "path": "equipment_icons/class_set_mg_ar.png",
+    "sha256": "480e7edc3a9d2526c0d872ed65586f4b5fa0af3c265f09a0a126342fd6c5057d",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "B1",
+    "prompt": "Create an original 1254 × 1254 pixel, square 1:1 PNG sheet of two RagRPG fantasy item icons on true RGBA alpha. The output canvas must stay square, so leave extra clear space above and below the two items. Place the two at the same vertical center in two equal invisible columns within the square. Torso equipment LEFT, one compact grouped footwear icon RIGHT. Leave at least 45 pixels completely clear between items, and ample clear outer space. Do not crop the sheet to the items. The supplied head equipment is the precise reference for the colors, material, recurring motifs and painted style, and is not to appear in the sheet. Soft light from the upper left, 3/4 front view, clean sharply defined painted contours and large recognizable color masses, no pixel art. Both items must read as separate 48 × 48 px inventory icons. Empty garments only, no body, words, boxes, layout marks, shadows, ground, texture or mist in transparent areas.\nManto da Figura Perfeita: sleeved geometer mantle with precise fine gold geometric motifs. Botas do Compasso: a pair of tailored boots with small compass-themed inlays."
+  },
+  {
+    "path": "equipment_icons/class_set_sentinel.png",
+    "sha256": "118a0c57c8a5279ecf0c2d7c8ba6566db7c9e2ae15b4fb1d7412c019776e4658",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "B1",
+    "prompt": "Create an original 1254 × 1254 pixel, square 1:1 PNG sheet of two RagRPG fantasy item icons on true RGBA alpha. The output canvas must stay square, so leave extra clear space above and below the two items. Place the two at the same vertical center in two equal invisible columns within the square. Torso equipment LEFT, one compact grouped footwear icon RIGHT. Leave at least 45 pixels completely clear between items, and ample clear outer space. Do not crop the sheet to the items. The supplied head equipment is the precise reference for the colors, material, recurring motifs and painted style, and is not to appear in the sheet. Soft light from the upper left, 3/4 front view, clean sharply defined painted contours and large recognizable color masses, no pixel art. Both items must read as separate 48 × 48 px inventory icons. Empty garments only, no body, words, boxes, layout marks, shadows, ground, texture or mist in transparent areas.\nJaqueta do Vigia: a protective sentinel jacket with a crisp neckline. Botas da Linha Segura: a pair of stable patrol boots."
+  },
+  {
+    "path": "equipment_icons/class_set_spiritualist.png",
+    "sha256": "9d218673db8c7a29f30964b978a0c7201db375c82b2674bbc7a7775e14ab06cb",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "B1",
+    "prompt": "Create an original 1254 × 1254 pixel, square 1:1 PNG sheet of two RagRPG fantasy item icons on true RGBA alpha. The output canvas must stay square, so leave extra clear space above and below the two items. Place the two at the same vertical center in two equal invisible columns within the square. Torso equipment LEFT, one compact grouped footwear icon RIGHT. Leave at least 45 pixels completely clear between items, and ample clear outer space. Do not crop the sheet to the items. The supplied head equipment is the precise reference for the colors, material, recurring motifs and painted style, and is not to appear in the sheet. Soft light from the upper left, 3/4 front view, clean sharply defined painted contours and large recognizable color masses, no pixel art. Both items must read as separate 48 × 48 px inventory icons. Empty garments only, no body, words, boxes, layout marks, shadows, ground, texture or mist in transparent areas.\nManto dos Ecos Gentis: a gentle, flowing sleeved spirit mantle. Sandálias do Caminho Silencioso: a pair of soft, flat, open spiritualist sandals."
+  },
+  {
+    "path": "equipment_icons/class_set_swordsman.png",
+    "sha256": "7b45c30e3fcc75e53594f2c2ee9eba3427f685f0519ccb298c6cead45b18d045",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "B1",
+    "prompt": "Generate an original 1254 by 1254 pixel, square 1:1, RGBA transparent game icon contact sheet. The output canvas must be square and the two items must sit side-by-side in two equal invisible columns within that square, on the same baseline. Leave generous completely clear transparent space between items and above and below. Do not crop the canvas to content. On the LEFT draw a hollow tailored Duellist's jacket. On the RIGHT draw a matching compact pair of sturdy advance boots. Use the reference's crimson and warm cream fabric, trims and knots for the matching set, but show no headgear. Three-quarter front view, painted fantasy RPG item style, strong recognizable silhouette, top-left soft lighting, isolated on real alpha. One piece of equipment per column at a similar scale. It must be legible as individual inventory icons at 48 px. No background, shadows, borders, text, people or other items."
+  },
+  {
+    "path": "equipment_icons/shared_set_high.png",
+    "sha256": "d1a0f3a7a691f91571d84c8825432173f59bf1d793f3318159ab103a561aa1cb",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "B2",
+    "prompt": "Create an original 1254 × 1254 pixel, square 1:1 PNG sheet of two RagRPG fantasy item icons on true RGBA alpha. The output canvas must stay square, so leave extra clear space above and below the two items. Place the two at the same vertical center in two equal invisible columns within the square. Torso equipment LEFT, one compact grouped footwear icon RIGHT. Leave at least 45 pixels completely clear between items, and ample clear outer space. Do not crop the sheet to the items. The supplied head equipment is the precise reference for the colors, material, recurring motifs and painted style, and is not to appear in the sheet. Soft light from the upper left, 3/4 front view, clean sharply defined painted contours and large recognizable color masses, no pixel art. Both items must read as separate 48 × 48 px inventory icons. Empty garments only, no body, words, boxes, layout marks, shadows, ground, texture or mist in transparent areas.\nMatch the provided headgear's gilded star and constellation design on both items. LEFT: a sleeved Constellation mantle with broad celestial embellishment. RIGHT: a pair of Celestial greaves with pointed armored shoes and clean star-inspired ridges."
+  },
+  {
+    "path": "equipment_icons/shared_set_low.png",
+    "sha256": "f38f3456eb5e1ae62f3cd74869c42b75396e7ebdb6600118d139aef85f067230",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "B2",
+    "prompt": "Create an original 1254 × 1254 pixel, square 1:1 PNG sheet of two RagRPG fantasy item icons on true RGBA alpha. The output canvas must stay square, so leave extra clear space above and below the two items. Place the two at the same vertical center in two equal invisible columns within the square. Torso equipment LEFT, one compact grouped footwear icon RIGHT. Leave at least 45 pixels completely clear between items, and ample clear outer space. Do not crop the sheet to the items. The supplied head equipment is the precise reference for the colors, material, recurring motifs and painted style, and is not to appear in the sheet. Soft light from the upper left, 3/4 front view, clean sharply defined painted contours and large recognizable color masses, no pixel art. Both items must read as separate 48 × 48 px inventory icons. Empty garments only, no body, words, boxes, layout marks, shadows, ground, texture or mist in transparent areas.\nUse the provided headgear's moss green and natural leaf details for both items. LEFT: a practical Wayfarer's vest with short cut and leather and green fabric. RIGHT: a pair of rugged, soft Trail boots."
+  },
+  {
+    "path": "equipment_icons/shared_set_mid.png",
+    "sha256": "fe8ea16189e0eb8f14c2fb9a9c45f2f03467a10820412baef899240fb3614dbe",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "B2",
+    "prompt": "Create an original 1254 × 1254 pixel, square 1:1 PNG sheet of two RagRPG fantasy item icons on true RGBA alpha. The output canvas must stay square, so leave extra clear space above and below the two items. Place the two at the same vertical center in two equal invisible columns within the square. Torso equipment LEFT, one compact grouped footwear icon RIGHT. Leave at least 45 pixels completely clear between items, and ample clear outer space. Do not crop the sheet to the items. The supplied head equipment is the precise reference for the colors, material, recurring motifs and painted style, and is not to appear in the sheet. Soft light from the upper left, 3/4 front view, clean sharply defined painted contours and large recognizable color masses, no pixel art. Both items must read as separate 48 × 48 px inventory icons. Empty garments only, no body, words, boxes, layout marks, shadows, ground, texture or mist in transparent areas.\nMatch the provided headgear's smoky indigo and violet moonlit motif on both items. LEFT: a layered Lunar coat with soft sleeves. RIGHT: a pair of Moonlight shoes with small crescent motifs."
+  },
+  {
+    "path": "equipment_icons/arena_torso.png",
+    "sha256": "89b6ff71eaa765adcce22e866713f44a2dced170dda5ace3d4b0c08248014de2",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "B3",
+    "prompt": "Create an original native 1254 × 1254 pixel square 1:1 PNG sheet with genuine transparent RGBA alpha, of equipment icons for RagRPG. Exactly three equal invisible columns by two equal invisible rows on that square canvas, six isolated objects. Do not crop the canvas to its contents. Leave wide fully transparent gutters around each object. Choose a compact recognizable silhouette for every object, designed to remain legible at 48 px. Hand-painted fantasy RPG illustration similar to the supplied art reference, 3/4 front, soft light from upper left, clean hard-edged silhouettes, moderately large details, consistent scale. Never include shadows, color gradient, texture or glow outside each silhouette, no checkerboard, scenery, character or words. Any pair is one compact grouped icon, with both pieces very close together to establish their unity and comfortably within the slot.\nExactly 3 columns by 2 rows, 6 equal invisible cells, each with a different torso icon, isolated, no headgear. TOP LEFT simple brown leather traveler vest with plain stitched seams. TOP CENTER long weathered brown leather trail coat with divided hem. TOP RIGHT blue-indigo cloth spell conductor robe with simple embroidered edging. BOTTOM LEFT steel warden chainmail, brown tabs and recognizable mail texture. BOTTOM CENTER epic arena training breastplate, reinforced layered steel with a strong dark-red and bronze detail. BOTTOM RIGHT legendary arena guard plate, ornate polished dark steel and gold with sculpted shoulders. The six torso silhouettes must read separately from one another."
+  },
+  {
+    "path": "equipment_icons/jewelry.png",
+    "sha256": "6f21985f437f0018761d8da057351fd256c1cfa69a54df7d8e1c42c73247b905",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "B4",
+    "prompt": "Native 1254 × 1254 pixel square RGBA transparent game icon source sheet, EXACTLY two rows with three individually contained icons per row. Think of it as an spacious display of six inventory icons. Each 418 px wide cell has huge clear empty left and right padding: the full silhouette including loops and gems has maximum width 230 pixels and maximum height 240 pixels. No artwork or glow can touch the unseen boundaries. Keep all six centered at the mathematical center of their own cell; rows centered vertically at 313 and 940 px. Painted fantasy RPG art in the style reference, three-quarter front form, lighting softly from top left. Each icon needs a big recognizable silhouette when rendered at 48 px. 1 top left: a compact bronze compass disk pendant and short traveler leather loop. 2 top middle: compact prism amulet with visible rainbow streaks in bronze mount. 3 top right: deep sapphire-blue single reserve gem in silver mount. 4 bottom left: arrow-shaped green emerald stride jewel. 5 bottom middle: amber ward jewel with a protection shield contour. 6 bottom right: compact silver distant step necklace with a short oval chain and stair-step pendant, never touching cell boundary. Six separate clean objects. Background must be true empty alpha with no pattern, no sheet texture, no ground, shadow, cast light, hue, scene, text, labels or frames. Render the icons at a small uniform size relative to each cell."
+  },
+  {
+    "path": "equipment_icons/body_pieces.png",
+    "sha256": "9555027c6297777f879cd0ae811084089d57800d6c2a63cf70fc0e5777008244",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "B5",
+    "prompt": "Create an original native 1254 × 1254 pixel square 1:1 PNG sheet with genuine transparent RGBA alpha, of equipment icons for RagRPG. Exactly three equal invisible columns by two equal invisible rows on that square canvas, six isolated objects. Do not crop the canvas to its contents. Leave wide fully transparent gutters around each object. Choose a compact recognizable silhouette for every object, designed to remain legible at 48 px. Hand-painted fantasy RPG illustration similar to the supplied art reference, 3/4 front, soft light from upper left, clean hard-edged silhouettes, moderately large details, consistent scale. Never include shadows, color gradient, texture or glow outside each silhouette, no checkerboard, scenery, character or words. Any pair is one compact grouped icon, with both pieces very close together to establish their unity and comfortably within the slot.\nExactly 3 columns by 2 rows, 6 equal invisible cells, each with one icon. Match the plain steel helm language for the first five, and match the provided wooden beads for the last. TOP LEFT one compact pair of broad steel bulwark pauldrons, shoulder armor. TOP CENTER compact pair of arena bracers, steel forearm guards with leather straps. TOP RIGHT Watcher's folded draping cloth cloak with steel clasp. BOTTOM LEFT a pair of steel guardian greaves: open-backed shin guards ending above the ankle with straps, no shoes. BOTTOM CENTER a pair of light step boots with subtle steel trim and leather uppers, distinct from the shin guards. BOTTOM RIGHT a coiled wristwrap bracelet of simple richly colored wooden prayer beads arranged into a single small icon, no actual wrist."
+  }
+]

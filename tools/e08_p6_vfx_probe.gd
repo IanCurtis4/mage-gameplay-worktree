@@ -5,7 +5,7 @@ extends SceneTree
 ## world pulses. Captures at zoom 50/100/160 with UI scale 1.2, then measures frame cost with and
 ## without the feedback layer.
 ## P7-C1 adds the `polish` mode (item scenes on flat ground swatches: sand, earth, grass) used for before/after captures.
-## Usage: --script res://tools/e08_p6_vfx_probe.gd -- {output} [package_id] [captures|cost|all|polish|legacy] [scene_prefix]
+## Usage: --script res://tools/e08_p6_vfx_probe.gd -- {output} [package_id] [captures|cost|all|polish|legacy|first_draw] [scene_prefix]
 const MapRelease = preload("res://scripts/map_authoring/release/map_release.gd")
 const PreviewApp = preload("res://scripts/map_authoring/preview/gameplay_app.gd")
 const Candidate = preload("res://scripts/map_authoring/preview/gameplay_candidate.gd")
@@ -156,6 +156,9 @@ func _run() -> void:
 	var package_id: String = args[1] if args.size() > 1 else "forest_terraces"
 	var mode: String = args[2] if args.size() > 2 else "all"
 	scene_filter = args[3] if args.size() > 3 else ""
+	if mode == "first_draw":
+		await first_draw(scene_filter)
+		return
 	if mode == "legacy":
 		await legacy_arena()
 		return
@@ -478,3 +481,97 @@ func legacy_arena() -> void:
 	file.store_string(JSON.stringify(report, "  ", true)); file.close()
 	print("P6VFX_DONE legacy")
 	quit()
+
+## A cold renderer per invocation. The minimal host removes actors and terrain from the timings.
+class FirstDrawHost extends Node2D:
+	var snapshot_passive := false
+
+func first_draw(variant: String) -> void:
+	if DisplayServer.get_name() == "headless":
+		push_error("First-draw probe needs a real renderer")
+		quit(1)
+		return
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	Engine.max_fps = 0
+	var scripts := preload("res://scripts/presentation/feedback_vfx_layer.gd")
+	var probe_host := FirstDrawHost.new()
+	root.add_child(probe_host)
+	var source := PresentationEventBridge.new()
+	probe_host.add_child(source)
+	source.bind_controller(probe_host)
+	source.set_process(false)
+	var feedback: Control = scripts.new()
+	source.add_child(feedback)
+	for i: int in 16:
+		await process_frame
+	var started := Time.get_ticks_usec()
+	feedback.configure(source, probe_host)
+	var configure_ms := (Time.get_ticks_usec() - started) / 1000.0
+	var prep_frame := await first_draw_frame_time()
+	for i: int in 5:
+		await process_frame
+	source.begin_stage("first_draw")
+	var cases: Array = [
+		[&"impact", &"fireball", &"fire_burst"],
+		[&"melee_swing", &"slash", &"slash_arc"],
+		[&"effect_start", &"terrifying_shout", &"ground_shockwave"],
+		[&"trap_trigger", &"hunter_thorn_trap", &"nature_thorns"],
+	]
+	if variant == "reverse":
+		cases.reverse()
+	var rows: Array[Dictionary] = []
+	var idle_frames: Array[Dictionary] = []
+	for i: int in 12:
+		idle_frames.append(await first_draw_frame_time())
+	for effect: Array in cases:
+		var frames: Array[Dictionary] = []
+		for i: int in 6:
+			feedback.pulses.clear()
+			feedback._on_stage_cleared()
+			serial += 1
+			started = Time.get_ticks_usec()
+			var accepted := source.emit_confirmed({
+				"event_id": "first_%d" % serial, "kind": effect[0], "skill_id": effect[1],
+				"stage_id": source.stage_id, "actor_id": "probe", "position": Vector3.ZERO,
+				"surface_id": "", "duration": 0.4, "essential": false,
+				"payload": {"presentation_epoch": source.current_epoch(), "position_unavailable": true,
+					"legacy_position_2d": Vector2(640, 360), "actor_variant": "swordsman"},
+			})
+			var emit_ms := (Time.get_ticks_usec() - started) / 1000.0
+			if not accepted or feedback.pulses.size() != 1 or feedback.pulses[0].flipbook != effect[2]:
+				push_error("First-draw probe did not select flipbook %s" % effect[2])
+				quit(1)
+				return
+			source.world_advanced.emit(0.25)
+			var frame := await first_draw_frame_time()
+			frame["event_ms"] = emit_ms
+			frames.append(frame)
+		var image := root.get_texture().get_image()
+		var err := image.save_png(folder.path_join("%s.png" % effect[2]))
+		if err != OK:
+			push_error("First-draw capture failed (%d)" % err)
+			quit(1)
+			return
+		rows.append({"id": effect[2], "samples": frames})
+	var result := {
+		"renderer": RenderingServer.get_current_rendering_method(),
+		"video_adapter": RenderingServer.get_video_adapter_name(),
+		"configure_ms": configure_ms, "prep_frame": prep_frame,
+		"idle_frames": idle_frames, "effects": rows,
+	}
+	var file := FileAccess.open(folder.path_join("first_draw.json"), FileAccess.WRITE)
+	if file == null:
+		push_error("Could not save first-draw report")
+		quit(1)
+		return
+	file.store_string(JSON.stringify(result, "  ", true))
+	file.close()
+	print("P6VFX_DONE first_draw")
+	quit()
+
+func first_draw_frame_time() -> Dictionary:
+	var started := Time.get_ticks_usec()
+	await RenderingServer.frame_post_draw
+	var to_draw_ms := (Time.get_ticks_usec() - started) / 1000.0
+	await process_frame
+	return {"to_draw_ms": to_draw_ms, "frame_ms": (Time.get_ticks_usec() - started) / 1000.0}

@@ -202,14 +202,19 @@ func position_query(point: ExpeditionWorldPoint, profile: Dictionary, revision: 
 	var occupants: Array[String] = []
 	for id: String in _occupancy:
 		var item: Dictionary = _occupancy[id]
-		var other: Vector3 = item["point"]["position"]
-		if point.position.y < other.y + float(item["height"]) and point.position.y + float(profile["height"]) > other.y and Vector2(point.position.x, point.position.z).distance_to(Vector2(other.x, other.z)) < float(profile["radius"]) + float(item["radius"]): occupants.append(id)
+		if bodies_overlap(point.position, profile, item["point"]["position"], item): occupants.append(id)
 	occupants.sort()
 	return _success({"point": point.to_data(), "occupants": occupants})
 
+static func bodies_overlap(point: Vector3, profile: Dictionary, other: Vector3, other_profile: Dictionary) -> bool:
+	return point.y < other.y + float(other_profile["height"]) and point.y + float(profile["height"]) > other.y and Vector2(point.x, point.z).distance_to(Vector2(other.x, other.z)) < float(profile["radius"]) + float(other_profile["radius"])
+
 func set_occupant(id: String, point: ExpeditionWorldPoint, profile: Dictionary, revision: int) -> Dictionary:
-	var check := position_query(point, profile, revision)
-	if not check["ok"]: return check
+	# Registration has always allowed overlaps. Only callers asking for
+	# admission need position_query's sorted list of nearby bodies.
+	if not _current(revision): return _failure(&"stale_geometry")
+	if not _profile_valid(profile): return _failure(&"invalid_profile")
+	if not _point_valid(point, profile["radius"], profile["height"]): return _failure(&"invalid_support")
 	if id.is_empty(): return _failure(&"invalid_identity")
 	_occupancy[id] = {"point": point.to_data(), "radius": profile["radius"], "height": profile["height"], "profile": profile.duplicate(true)}
 	return _success()

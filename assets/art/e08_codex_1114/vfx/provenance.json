@@ -1,0 +1,92 @@
+[
+  {
+    "path": "vfx/arrow_rain.png",
+    "sha256": "6c0c185aedf2b1f3b1f0961d93316facc12289b8296f9405d790f20f44e02c32",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "A1",
+    "prompt": "Create a brand new transparent PNG game VFX flipbook for RagRPG, Chuva de Flechas (arrow_rain). The supplied ground shockwave sheet is a style and layout reference only. Square source sheet, target 1254×1254 px, EXACTLY a 4 by 4 grid of 16 equal imaginary cells in chronological row-major order. Hand-painted pixel-art with clean alpha, seen from 3/4 above, a 2:1 foreshortened ground ellipse. Several distinct wooden arrows with steel heads fall diagonally from upper left into the ellipse and make tiny brief muted gold glints and tan dust puffs; the floor itself is invisible. Progressive sequence: frames 1–4 first arrows enter, 5–8 volleys and impacts crest, 9–12 last impacts and dust fade, 13–15 a few diminishing particles, 16 almost blank. Keep the center fixed exactly at the center of each cell and one consistent scale, with at least 12% clear transparent padding at every cell edge, all 16 frames aligned. Clear silhouettes at 60–130 px in game, restrained lighting. True transparent alpha wherever nothing is drawn. No boxes, dividers, background color, text, checkerboard, characters, floor tile, camera movement, solid shadow or broad bloom."
+  },
+  {
+    "path": "vfx/shield_bash.png",
+    "sha256": "6e9ab6e250765ee2651ea5e35b56b1e47278ffd45cae7f5db1677ed9d54dd96f",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "A10",
+    "prompt": "Create a brand-new transparent compact pixel art VFX sprite sheet, shield_bash.\nSteel blue right-pointing shield-shaped impact, with a bold compact visible plate of hard pale blue light and 3–6 tiny steel-blue sparks, moving slightly toward the right across the animation. It first appears as a short thin blue rim and reaches its sharp impact at frame 8, then breaks into small steel-blue dashes and vanishes. Combined silhouette and sparks are at most 160 px wide. No physical character, heavy shadows, haze or broad bloom.\nGenerate a native 1254 x 1254 RGBA square PNG of a RagRPG game animation with sixteen frames in four rows of four equal invisible cells, chronological row-major. True alpha zero everywhere apart from tightly isolated sprite shapes. Each frame is its OWN separate sprite; about half the width of its slot, with at least 60 pixels empty transparent space left, right, top, and bottom. Make the drawn effects noticeably smaller within cells than the reference. Wide clear corridors of transparent alpha zero along every row and column boundary, an absolute requirement. Intentionally spacious sheet. Same anchor point and rendering scale in each cell. All frames 1–15 have at least one clear visible element, 16 practically empty. Use the existing sheet as a painted pixel-art style reference only. Viewed 3/4 overhead, ground rings are flattened to 2:1. No visible grid, floor, cast shadows, words, checkerboard, or extra decorative shapes."
+  },
+  {
+    "path": "vfx/wound_leap.png",
+    "sha256": "0a46230ac2201f7fb52ba904b140592c04f2bc9af1751a3b6fbe75f9ae47adc9",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "A2",
+    "prompt": "Create a brand-new transparent game VFX flipbook for RagRPG, wound_leap.\nA rightward landing impact, Rastro de Salto Dilacerante. Dark crimson red tapered motion trail arrives from the upper left and hits hard toward the right and center; angular cracks briefly trace the invisible ground and a little earth and red energy lift. Frames 1–4 narrow red streak enters left, 5–8 compressed slash and radial landing cracks spread, 9–12 broken red streak and earthy motes settle, 13–16 fade. No blood, flesh or gore.\nThis is an actual game animation sprite sheet. Native square PNG output exactly 1254 × 1254 pixels with genuine RGBA transparency. Exactly 16 equally spaced exposures arranged as a 4 x 4 grid of invisible equal cells, chronological left to right top to bottom. Use the reference only for RagRPG's hand-painted pixel-art aesthetic and the grid registration. Three-quarter overhead isometric perspective; any ground effect is foreshortened as a 2:1 ellipse. Every cell has precisely the same pivot at its center and the same scale; provide at least 12% transparent padding at every edge of every cell. Frame 8 is the highest-energy frame and frame 16 is almost blank. At nominal 60 to 130 px each silhouette must read. No visible grid, text, labels, icons unrelated to the effect, checkerboard, scenery, characters, ground tile, solid shadow or broad bloom."
+  },
+  {
+    "path": "vfx/tri_nova.png",
+    "sha256": "cb92d31a38e2658534803210dedbf62fc87838360cba1269f707128e36da3edc",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "A3",
+    "prompt": "Create a brand-new transparent compact pixel art VFX sprite sheet, tri_nova.\nThree equal third-arcs of one flattened ring: orange fire, cyan ice, violet lightning. They all begin near the center, expand with a slight rotation, and thin into sparse colored fragments. Keep the peak ring width under 160 px of the 313 px cell. Clear crisp small colored particles, matte edges, no color veil.\nGenerate a native 1254 x 1254 RGBA square PNG of a RagRPG game animation with sixteen frames in four rows of four equal invisible cells, chronological row-major. True alpha zero everywhere apart from tightly isolated sprite shapes. Each frame is its OWN separate sprite; about half the width of its slot, with at least 60 pixels empty transparent space left, right, top, and bottom. Make the drawn effects noticeably smaller within cells than the reference. Wide clear corridors of transparent alpha zero along every row and column boundary, an absolute requirement. Intentionally spacious sheet. Same anchor point and rendering scale in each cell. All frames 1–15 have at least one clear visible element, 16 practically empty. Use the existing sheet as a painted pixel-art style reference only. Viewed 3/4 overhead, ground rings are flattened to 2:1. No visible grid, floor, cast shadows, words, checkerboard, or extra decorative shapes."
+  },
+  {
+    "path": "vfx/spirit_dissipation.png",
+    "sha256": "c729017f8e8607f499761cbe2558dd456164fcadf7aa925aff9ca0ab5248b456",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "A4",
+    "prompt": "Make a native 1254 × 1254 RGBA 4-by-4 game texture with a transparent alpha channel, a compact RagRPG spirit dissipation animation drawn in pixel art. Render the visible marks as hard, crisp, solid pale lilac and warm ivory ink outlines only, in two or three tight 2:1 isometric concentric ellipse strokes plus 2 to 3 small upward hooked wisps in the middle. Imagine a crisp spectral icon made of brightly colored individual solid pixels. No partially transparent areas, no outer glow, absolutely no airbrush, no tone outside the outlines, and no haze. The interior of every ellipse, the space between outlines, and the exterior are completely empty transparent pixels. Sixteen exact equal cells in chronological order, invisible grid. The entire drawn effect stays in an inner 150 px square centered in each 313 px cell, leaving giant gutters. In 1–4 a single tiny ellipse and one central stroke, in 5–8 expand to 2 to 3 elliptical arcs and a couple short rising wisps, in 9–12 break up into dash fragments, in 13–15 leave a few small ivory and lilac pixels, in 16 completely empty. Same center point for all frames. No text, scenery, reference board, or actual grid."
+  },
+  {
+    "path": "vfx/triangulation.png",
+    "sha256": "0f350d04710a455d8f0418b0a631b4889cadf59fdf1a1232f66da8250afa80b4",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "A5",
+    "prompt": "Create a brand-new transparent game VFX flipbook for RagRPG, triangulation.\nA golden geometer's triangulation sigil. Three glowing gold points on the invisible floor define a foreshortened triangular glyph, with clean hairline golden segments connecting the vertices. Very fine abstract geometric rune marks, no lettering, and a concise gold-white flash on closure. Frames 1–4 vertices and initial strokes appear, 5–8 lines close in order with a flash at eight, 9–12 settled shape thins, 13–16 gold fragments fade.\nThis is an actual game animation sprite sheet. Native square PNG output exactly 1254 × 1254 pixels with genuine RGBA transparency. Exactly 16 equally spaced exposures arranged as a 4 x 4 grid of invisible equal cells, chronological left to right top to bottom. Use the reference only for RagRPG's hand-painted pixel-art aesthetic and the grid registration. Three-quarter overhead isometric perspective; any ground effect is foreshortened as a 2:1 ellipse. Every cell has precisely the same pivot at its center and the same scale; provide at least 12% transparent padding at every edge of every cell. Frame 8 is the highest-energy frame and frame 16 is almost blank. At nominal 60 to 130 px each silhouette must read. No visible grid, text, labels, icons unrelated to the effect, checkerboard, scenery, characters, ground tile, solid shadow or broad bloom."
+  },
+  {
+    "path": "vfx/headshot.png",
+    "sha256": "503004213ee4a49af37238f650e4f7079247dd812e2de8666487307f353fb542",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "A6",
+    "prompt": "Create a brand-new transparent game VFX flipbook for RagRPG, headshot.\nA precise blue-white aimed headshot, facing and traveling to the right. A compact angular target reticle closes around its point and releases a clean narrow projectile streak visibly toward the right. Frames 1–4 fine aim ticks approach the center, 5–8 reticle snaps closed with a single rightward pale electric-blue streak, 9–12 thin streak breaks into short dashes, 13–16 residual light disappears. No bullseye fill, smoke or weapon.\nThis is an actual game animation sprite sheet. Native square PNG output exactly 1254 × 1254 pixels with genuine RGBA transparency. Exactly 16 equally spaced exposures arranged as a 4 x 4 grid of invisible equal cells, chronological left to right top to bottom. Use the reference only for RagRPG's hand-painted pixel-art aesthetic and the grid registration. Three-quarter overhead isometric perspective; any ground effect is foreshortened as a 2:1 ellipse. Every cell has precisely the same pivot at its center and the same scale; provide at least 12% transparent padding at every edge of every cell. Frame 8 is the highest-energy frame and frame 16 is almost blank. At nominal 60 to 130 px each silhouette must read. No visible grid, text, labels, icons unrelated to the effect, checkerboard, scenery, characters, ground tile, solid shadow or broad bloom."
+  },
+  {
+    "path": "vfx/covering_shot.png",
+    "sha256": "650959243bca0adcc96b391b2e133e4e5e2d506285346b634f91455610f8117e",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "A7",
+    "prompt": "Create a brand-new transparent compact pixel art VFX sprite sheet, covering_shot.\nOne small right-facing wooden arrow, pointed to the right, followed by a short narrow fan of vivid green leaves and two thorn tips. Total silhouette of the arrow and trails fits within 160 by 115 pixels of a 313 by 313 pixel frame. Start with two small green strokes and an emerging arrow, peak with a bold arrow at frame 8, then disappear into sparse leaves. NO airbrush glow, colored fog, speedlines spilling out, or shadows.\nGenerate a native 1254 x 1254 RGBA square PNG of a RagRPG game animation with sixteen frames in four rows of four equal invisible cells, chronological row-major. True alpha zero everywhere apart from tightly isolated sprite shapes. Each frame is its OWN separate sprite; about half the width of its slot, with at least 60 pixels empty transparent space left, right, top, and bottom. Make the drawn effects noticeably smaller within cells than the reference. Wide clear corridors of transparent alpha zero along every row and column boundary, an absolute requirement. Intentionally spacious sheet. Same anchor point and rendering scale in each cell. All frames 1–15 have at least one clear visible element, 16 practically empty. Use the existing sheet as a painted pixel-art style reference only. Viewed 3/4 overhead, ground rings are flattened to 2:1. No visible grid, floor, cast shadows, words, checkerboard, or extra decorative shapes."
+  },
+  {
+    "path": "vfx/warden_charge.png",
+    "sha256": "ff2aff5296de4d138438fdd5c9a31813427892916bc3f687aaaab3ec7f9d5891",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "A8",
+    "prompt": "Create a brand-new transparent compact pixel art VFX sprite sheet, warden_charge.\nA small right-facing earthy brunt with a short spray of tan soil, snapped thin roots, and mossy-green leaves visibly blown backwards toward the left. No character. Total silhouette of the spray including all debris must fit within 160 by 130 pixels of each 313 by 313 cell. Start with a short compact brown motion stroke, intensify with soil and roots kicked left at frame 8, then dissipate to a couple of sparse specks. No mist, glow, or background.\nGenerate a native 1254 x 1254 RGBA square PNG of a RagRPG game animation with sixteen frames in four rows of four equal invisible cells, chronological row-major. True alpha zero everywhere apart from tightly isolated sprite shapes. Each frame is its OWN separate sprite; about half the width of its slot, with at least 60 pixels empty transparent space left, right, top, and bottom. Make the drawn effects noticeably smaller within cells than the reference. Wide clear corridors of transparent alpha zero along every row and column boundary, an absolute requirement. Intentionally spacious sheet. Same anchor point and rendering scale in each cell. All frames 1–15 have at least one clear visible element, 16 practically empty. Use the existing sheet as a painted pixel-art style reference only. Viewed 3/4 overhead, ground rings are flattened to 2:1. No visible grid, floor, cast shadows, words, checkerboard, or extra decorative shapes."
+  },
+  {
+    "path": "vfx/geometer_collapse.png",
+    "sha256": "93b85808e5c91f307cb35934917330b662718aec06e596a4a9f7b55c08de4884",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "A9",
+    "prompt": "Native 1254x1254 true transparent RGBA PNG sprite sheet for RagRPG. Exact 4 columns × 4 rows, row-major sixteen frames, each cell precisely aligned to its grid center. Artwork must stay small in each cell, with at least forty px of fully transparent space all around. Bright gold painted pixel-art geometric collapse VFX, casting an elegant geometric sigil that first assembles from dim golden lines, implodes into a bright angular central flash in a shower of straight line fragments, and decays. Row 1 starts as one small thin line and progressively assembles a thin recognizable triangle-and-hexagon glyph in gold; row 2 grows more luminous towards an energetic eight-point angular white-gold flash with a few bright short gold fragments in the eighth frame. Row 3 visibly broken golden shards falling away and dimming. Row 4 first cell several small fragments, second cell two short gold fragments, third cell one SOLID gold dash of at least 10 pixels of visible area near the center, fourteenth and fifteenth frames both must have visibly opaque gold pixels, fourth cell fully empty (frame 16). Style crisp old-school spell glyph made of discrete golden ink pixels, viewed 3/4 from overhead, restrained light, no fog, no matte and no haze, no lettering, character or floor, no visible grid or frames. Strongest effect in frame 8, frame 16 the only empty frame."
+  }
+]

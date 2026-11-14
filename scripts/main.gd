@@ -10,24 +10,26 @@ var _memory_snapshot_pending := false
 var _memory_snapshot_previous_pause := false
 var _memory_snapshot_barrier: SnapshotTickBarrier
 
-func request_memory_snapshot() -> Dictionary:
+func request_memory_snapshot(allow_compact: bool = false) -> Dictionary:
 	if snapshot_passive or _memory_snapshot_pending or not is_inside_tree(): return WorldSkillCast.failure(&"snapshot_barrier_busy")
 	_memory_snapshot_pending = true
-	_capture_memory_snapshot.call_deferred()
+	_capture_memory_snapshot.call_deferred(allow_compact)
 	return {"ok":true,"queued":true}
 
-func _capture_memory_snapshot() -> void:
+func _capture_memory_snapshot(allow_compact: bool) -> void:
 	if not _memory_snapshot_pending: return
 	# A background journal write publishes first; the cut then includes it.
 	if expedition_save_busy() and is_inside_tree():
-		get_tree().process_frame.connect(_capture_memory_snapshot,CONNECT_ONE_SHOT)
+		get_tree().process_frame.connect(_capture_memory_snapshot.bind(allow_compact),CONNECT_ONE_SHOT)
 		return
 	_memory_snapshot_previous_pause = get_tree().paused
 	get_tree().paused = true
 	_memory_snapshot_barrier = SnapshotTickBarrier.new()
 	var result := _memory_snapshot_barrier.acquire(self)
 	if result["ok"]:
-		result = SnapshotRegistry.new().capture(self,_memory_snapshot_barrier)
+		if allow_compact:
+			result = ExpeditionService.Compact.capture(self,_memory_snapshot_barrier)
+		if not result.get("compact",false): result = SnapshotRegistry.new().capture(self,_memory_snapshot_barrier)
 		if result.get("error_code") == &"checkpoint_incomplete" and result.get("detail") == "deferred deletion pending":
 			# Only a queued deletion needs another frame. The barrier already
 			# freezes gameplay; a bound signal disconnects if this host is freed.
@@ -985,6 +987,7 @@ func _update_aim_with_rank(point: Vector2) -> void:
 	bottom_controls.visible = false
 
 func _cancel_aim() -> void:
+	if expedition_view != null: expedition_view.clear_attack_preview()
 	_intent_rank = 0
 	cast_intent.cancel()
 	action_bar_input.cancel()
@@ -2969,7 +2972,7 @@ func _auto_collect() -> void:
 ## cut and canonical checkpoint writer used by suspension replace the chain;
 ## no ticket is granted and no RNG is consumed by compaction itself.
 func _compact_reward_journal() -> void:
-	var queued := request_memory_snapshot()
+	var queued := request_memory_snapshot(true)
 	if not queued.get("ok",false): return
 	var captured: Dictionary = await memory_snapshot_ready
 	var profile := persistent_facade.current_profile()
@@ -4460,6 +4463,8 @@ func attach_expedition_view(view: ExpeditionGeometryView, field_height: float) -
 	if geometer_casting != null:
 		var bound := geometer_casting.bind_world_construction(field_height)
 		if not bound["ok"]: return bound
+	if expedition_view != null: expedition_view.clear_attack_preview()
+	view.clear_attack_preview()
 	expedition_view = view; expedition_field_height = field_height; view.controller = self
 	var stage_biome := String(view.geometry._stage.get("biome",""))
 	_begin_presentation_stage(player.world_point().stage_id, snapshot_passive, stage_biome)
@@ -4481,6 +4486,7 @@ func attach_expedition_view(view: ExpeditionGeometryView, field_height: float) -
 		if actor.world_motion != null and actor.world_motion.geometry == view.geometry: view.observe(actor)
 	return {"ok":true,"error_code":&""}
 func spatial_pointer_move(point: Vector2) -> Dictionary:
+	if expedition_view != null: expedition_view.clear_attack_preview()
 	if expedition_view == null or get_tree().paused or run_finished or not player.is_alive(): return WorldSkillCast.failure(&"pointer_unavailable")
 	var victim := _world_enemy_at(point)
 	if victim != null:
@@ -4535,6 +4541,7 @@ func _pump_world_navigation() -> void:
 	elif not applied["ok"]:
 		expedition_view.indicate(pending.destination,false); status_label.text = "Destino sem caminho transitável."
 func spatial_pointer_skill(skill: StringName, point: Vector2, preview: bool) -> Dictionary:
+	if expedition_view != null: expedition_view.clear_attack_preview()
 	if expedition_view == null or not expedition_view.current() or get_tree().paused or run_finished or not player.is_alive(): return WorldSkillCast.failure(&"pointer_unavailable")
 	var revision := expedition_view.geometry.geometry_revision
 	var victim := _world_enemy_at(point,skill)
@@ -4573,21 +4580,22 @@ func spatial_pointer_skill(skill: StringName, point: Vector2, preview: bool) -> 
 	if ground_field and field_preview.get("ok",false):
 		var data: Dictionary = field_preview.get("data",{}).get("field",{}).get("anchor",{})
 		if not data.is_empty(): feedback_anchor = ExpeditionWorldPoint.create(data["stage_id"],data["surface_id"],data["position"])
-	expedition_view.attack_preview = {"from":player.world_point().position,"to":feedback_anchor.position,"valid":result["ok"]}
 	expedition_view.indicate(feedback_anchor,result["ok"])
+	if preview and result["ok"] and cast_intent.active_skill == skill:
+		expedition_view.set_attack_preview(player.world_point(),feedback_anchor,skill)
 	return result
 
 # This foundation API queues the same F3 barrier. F7 owns lobby/navigation UI.
 func request_durable_suspend(expedition_id: String, phase_id: StringName, request_id: String, expected_revision: int) -> Dictionary:
 	if persistent_facade == null: return WorldSkillCast.failure(&"invalid_session")
-	var requested := request_memory_snapshot()
+	var requested := request_memory_snapshot(true)
 	if not requested["ok"]: return requested
 	var captured: Dictionary = await memory_snapshot_ready
 	# Complete the signal emission before a caller may retire/free this host.
 	await get_tree().process_frame
 	if not captured["ok"]: return captured
 	var service := ExpeditionService.new(persistent_facade)
-	var result := service.commit_cut(self,captured["snapshot"],expedition_id,phase_id,request_id,expected_revision,true,captured["encoding"])
+	var result := service.checkpoint(self,_memory_snapshot_barrier,expedition_id,phase_id,request_id,expected_revision,true,captured) if captured.get("compact",false) else service.commit_cut(self,captured["snapshot"],expedition_id,phase_id,request_id,expected_revision,true,captured["encoding"])
 	# Keep reconciliation context reachable while this scene remains frozen.
 	if result.get("read_only",false): result["transaction_service"] = service
 	return result

@@ -172,7 +172,7 @@ func run_action(command: Dictionary) -> Dictionary:
 			busy = false; uncertain = true
 			message.text = ExpeditionPresentation.error_text(quick.get("error_code", &"unknown"))
 			return quick
-	var requested := host.request_memory_snapshot()
+	var requested := host.request_memory_snapshot(intent["kind"] == "suspend")
 	if not requested["ok"]: return _finish(requested)
 	var captured: Dictionary = await host.memory_snapshot_ready
 	await get_tree().process_frame

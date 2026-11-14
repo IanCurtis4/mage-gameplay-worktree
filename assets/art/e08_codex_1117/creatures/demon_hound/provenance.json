@@ -1,0 +1,106 @@
+[
+  {
+    "path": "assets/art/e08_codex_1117/creatures/demon_hound/east.png",
+    "sha256": "fcdcb977eaa0499590752397d1d84aa5005ba1a44103f4716d146bbe9f5ebe13",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "demon_hound / east",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/demon_hound/south.png",
+        "sha256": "34233e11ac9178cb508f72999e187afb52906a509ce1c8aa115351defacaa21c"
+      },
+      {
+        "path": "assets/art/e08_enemies/directional/animal_companion/east_source_v1.png",
+        "sha256": "7d0708e9b2f2ef40868b2df2fd0577f822c1464d586b795423dcb6e8b2252a88"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production painted 2D pixel-art animation source sheet for RagRPG, Cão demoníaco, EAST only. Input 1 gives the exact established creature design. Input 2 is style and game scale only, DO NOT copy its identity or direction. Same creature as the attached south sheet; redraw as a true east view, do not mirror or recolor it. Every one of the sixteen poses is true EAST rightward profile, nose, muzzle, shoulders and feet all point to the RIGHT. One eye only when eyes are open, one side of the chest visible, opposite shoulder mostly behind the body. Preserve all asymmetry and physical structure, with no new accessories. Creature: an original gaunt demonic hound, tall lean long-legged forest-wolf length, ribs visible through ink-black hide, carmine-ember fissures along spine, long muzzle and bile-yellow eyes, compact dark matte smoke-shaped mane tightly bound to its nape, iron collar carrying a dark contract brand; ink-black, carmine, ember orange, bile-yellow; no green, wings or tentacles. Anatomy: one consistent long canine body, two forelegs and two hind legs, exactly one long tail and naturally attached paws in every live pose; final pose curles down, all four feet tucked close. Exactly four paws and one tail at all times, earlier and later phases keep different fronts and hinds visible according to their depth, one distinct stance for each walk step and attack. Row 3 attack in sequence: pounce from long bent legs, snap with the jaws, short charge in the given direction, crouch and snarl.\n\nMake a near-square 1254×1254 transparent RGBA source PNG with exactly sixteen small, complete figures laid out as an even 4×4 grid of invisible cells. Keep blank alpha around every single sprite, with minimum 24 px blank space along all four sides of every cell, in particular no head, tail, hammer or fallen limbs touch or overlap their neighbors. Fit each whole silhouette inside a centered 235×235 px region per cell, foreshortening wide poses where needed. Constant ground anchor and drawing scale within the view and consistent proportions with front identity sheet. Four idle phases, four alternate walking phases, four attacks below, then two flinch poses, a compact collapse and a compact fully fallen pose, whole body kept tucked or broken apart as specified below. Match in-game crisply painted chibi pixel art, clean dark contours, strongly readable deliberate 2–3 tone shading. Empty real transparent cutout backdrop, no added base, foreground, cast shadow, grid or letters. Original designs. No particles, spells off the body, gore, projectile or floor."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/demon_hound/north_v2.png",
+    "sha256": "86d4503c278798c1b5225140df0af36c803a580ad206b05552ae356616b823b5",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "demon_hound / north",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/demon_hound/north.png",
+        "sha256": "23e40a966666e9e7c08ce3040c5409309f6c0c4732aa8b736309aa6a3551b931"
+      },
+      {
+        "path": "assets/art/e08_codex_1117/creatures/demon_hound/west.png",
+        "sha256": "06e63a173ac281c559e11178fe15bb871a8786102af1be5b2a58c500097b6f3a"
+      },
+      {
+        "path": "assets/art/e08_codex_1117/creatures/demon_hound/south.png",
+        "sha256": "34233e11ac9178cb508f72999e187afb52906a509ce1c8aa115351defacaa21c"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: precise-object-edit. Repair ONE anatomy mistake in the supplied RagRPG demonic hound 4×4 NORTH game sheet (image 1). The profile and front sheets show the established design. The SAME gaunt ink-black hound with attached smoky dark short mane, iron collar, bright carmine spine fissures, four long legs, and ONLY ONE tail with one attachment point on the rump in EVERY SINGLE FRAME. Special correction: in attack row 3 columns 1 and 4 keep one low coherent tail, remove the upper curl entirely, and keep the surrounding pixels wholly transparent. Do not attach a second tail, loop, back plume or horn. The other poses also have exactly ONE clearly traceable pointed tail. Preserve the original sixteen rear-view poses and design, heading ALL AWAY toward the top of the frame with backs of the head, spine, rump, paws facing away and final compact prone rear view, no face. Row 1 idle four slight poses, row 2 four phases of walking away, row 3 pounce, snap, charge and crouched snarl, row 4 two hurt phases, collapse and prone. Do not alter the roughly 1254×1254 cutout PNG or its regular 4 rows and 4 equally spaced columns. One isolated full coherent sprite per cell, at least 20 px clear alpha on each border, especially when tail is up. Clean dark painted pixel art, 2–3 discrete shade tones, no shaded ground, mist, matte, effect outside the creature, labels, text, grids, cast shadows or extra anatomical elements."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/demon_hound/north.png",
+    "sha256": "23e40a966666e9e7c08ce3040c5409309f6c0c4732aa8b736309aa6a3551b931",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "demon_hound / north",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/demon_hound/south.png",
+        "sha256": "34233e11ac9178cb508f72999e187afb52906a509ce1c8aa115351defacaa21c"
+      },
+      {
+        "path": "assets/art/e08_enemies/directional/animal_companion/east_source_v1.png",
+        "sha256": "7d0708e9b2f2ef40868b2df2fd0577f822c1464d586b795423dcb6e8b2252a88"
+      }
+    ],
+    "selected": false,
+    "prompt": "Use case: stylized-concept. Production painted 2D pixel-art animation source sheet for RagRPG, Cão demoníaco, NORTH only. Input 1 gives the exact established creature design. Input 2 is style and game scale only, DO NOT copy its identity or direction. Same creature as the attached south sheet; redraw as a true north view, do not mirror or recolor it. Every one of the sixteen poses is true NORTH back view with shoulders, spine, nape, back of the head and heel anatomy oriented to the viewer and walk clearly AWAY toward the top of the screen. Absolutely no face, snout-front, chest or toes visible. Limbs correctly seen from behind, with a trailing foot's heel or sole toward screen bottom. Prone pose lies away from the camera with the back exposed and feet closest to the viewer. Preserve all asymmetry and physical structure, with no new accessories. Creature: an original gaunt demonic hound, tall lean long-legged forest-wolf length, ribs visible through ink-black hide, carmine-ember fissures along spine, long muzzle and bile-yellow eyes, compact dark matte smoke-shaped mane tightly bound to its nape, iron collar carrying a dark contract brand; ink-black, carmine, ember orange, bile-yellow; no green, wings or tentacles. Anatomy: one consistent long canine body, two forelegs and two hind legs, exactly one long tail and naturally attached paws in every live pose; final pose curles down, all four feet tucked close. Exactly four paws and one tail at all times, earlier and later phases keep different fronts and hinds visible according to their depth, one distinct stance for each walk step and attack. Row 3 attack in sequence: pounce from long bent legs, snap with the jaws, short charge in the given direction, crouch and snarl.\n\nMake a near-square 1254×1254 transparent RGBA source PNG with exactly sixteen small, complete figures laid out as an even 4×4 grid of invisible cells. Keep blank alpha around every single sprite, with minimum 24 px blank space along all four sides of every cell, in particular no head, tail, hammer or fallen limbs touch or overlap their neighbors. Fit each whole silhouette inside a centered 235×235 px region per cell, foreshortening wide poses where needed. Constant ground anchor and drawing scale within the view and consistent proportions with front identity sheet. Four idle phases, four alternate walking phases, four attacks below, then two flinch poses, a compact collapse and a compact fully fallen pose, whole body kept tucked or broken apart as specified below. Match in-game crisply painted chibi pixel art, clean dark contours, strongly readable deliberate 2–3 tone shading. Empty real transparent cutout backdrop, no added base, foreground, cast shadow, grid or letters. Original designs. No particles, spells off the body, gore, projectile or floor."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/demon_hound/south.png",
+    "sha256": "34233e11ac9178cb508f72999e187afb52906a509ce1c8aa115351defacaa21c",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "demon_hound / south",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      },
+      {
+        "path": "assets/art/e08_enemies/directional/animal_companion/east_source_v1.png",
+        "sha256": "7d0708e9b2f2ef40868b2df2fd0577f822c1464d586b795423dcb6e8b2252a88"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production 2D pixel-art animation source sheet for RagRPG, Cão demoníaco (demon_hound), SOUTH/front. Input 1 is the Warlock, for the original cast art style and visual scale only, not a design to copy. Input 2 is the small canine companion for established creature anatomy and rendering in the game, not the design to copy. Creature: an original gaunt demonic hound, tall lean long-legged forest-wolf length, ribs visible through ink-black hide, carmine-ember fissures along spine, long muzzle and bile-yellow eyes, compact dark matte smoke-shaped mane tightly bound to its nape, iron collar carrying a dark contract brand; ink-black, carmine, ember orange, bile-yellow; no green, wings or tentacles. Anatomy: one consistent long canine body, two forelegs and two hind legs, exactly one long tail and naturally attached paws in every live pose; final pose curles down, all four feet tucked close.\nThe creature is facing SOUTH/front in every single sprite, both halves of the torso toward the audience, face and feet pointing down-screen at 3/4 overhead. Row 3 attack in chronological order: pounce from long bent legs, snap with the jaws, short charge in the given direction, crouch and snarl.\nOne original near-square (1254 × 1254 preferred; approx. 1200 × 1300) RGBA sprite SOURCE PNG with sixteen complete isolated figures, no contact or overlap. Four EXACT evenly spaced columns and rows, each in its own invisible cell, centered anchor shared across every pose, same standing scale and physical proportions throughout. Put everything including horns, tail and any carried weapon into a small centered silhouette with at least 28 clear pixels in all directions from cell divisions. Aim for sprite height and width at most 235 px. Keep weapons and elongated limbs tucked or foreshortened to allow no sprite to cross a cell edge. Keep the last two separate, compact, and centered. Row 1: exactly four idle phases. Row 2: four separate walking phases, alternate foot contact; realistic gait per species. Row 3: four listed attack poses in order. Row 4: first two hit reactions, third begins collapse, fourth fully fallen and short across the cell. Fully drawn chest, feet and tail in each frame, anatomy always consistent. Dark clean hand-painted pixel contour, readable chibi mass with 2–3 shade steps, target game sprite at small scale. Original design for this project. Fully cut out true transparent alpha in all gutters. No loose magic, projectile, gore, blood, floor, shadows, captions, game UI, actual grid, extra objects or matte."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/demon_hound/west.png",
+    "sha256": "06e63a173ac281c559e11178fe15bb871a8786102af1be5b2a58c500097b6f3a",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "demon_hound / west",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/demon_hound/south.png",
+        "sha256": "34233e11ac9178cb508f72999e187afb52906a509ce1c8aa115351defacaa21c"
+      },
+      {
+        "path": "assets/art/e08_enemies/directional/animal_companion/east_source_v1.png",
+        "sha256": "7d0708e9b2f2ef40868b2df2fd0577f822c1464d586b795423dcb6e8b2252a88"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production painted 2D pixel-art animation source sheet for RagRPG, Cão demoníaco, WEST only. Input 1 gives the exact established creature design. Input 2 is style and game scale only, DO NOT copy its identity or direction. Same creature as the attached south sheet; redraw as a true west view, do not mirror or recolor it. Every one of the sixteen poses is true WEST leftward profile, nose, muzzle, shoulders and feet all point to the LEFT. One eye only when eyes are open, one side of the chest visible, opposite shoulder mostly behind the body. Preserve all asymmetry and physical structure, with no new accessories. Creature: an original gaunt demonic hound, tall lean long-legged forest-wolf length, ribs visible through ink-black hide, carmine-ember fissures along spine, long muzzle and bile-yellow eyes, compact dark matte smoke-shaped mane tightly bound to its nape, iron collar carrying a dark contract brand; ink-black, carmine, ember orange, bile-yellow; no green, wings or tentacles. Anatomy: one consistent long canine body, two forelegs and two hind legs, exactly one long tail and naturally attached paws in every live pose; final pose curles down, all four feet tucked close. Exactly four paws and one tail at all times, earlier and later phases keep different fronts and hinds visible according to their depth, one distinct stance for each walk step and attack. Row 3 attack in sequence: pounce from long bent legs, snap with the jaws, short charge in the given direction, crouch and snarl.\n\nMake a near-square 1254×1254 transparent RGBA source PNG with exactly sixteen small, complete figures laid out as an even 4×4 grid of invisible cells. Keep blank alpha around every single sprite, with minimum 24 px blank space along all four sides of every cell, in particular no head, tail, hammer or fallen limbs touch or overlap their neighbors. Fit each whole silhouette inside a centered 235×235 px region per cell, foreshortening wide poses where needed. Constant ground anchor and drawing scale within the view and consistent proportions with front identity sheet. Four idle phases, four alternate walking phases, four attacks below, then two flinch poses, a compact collapse and a compact fully fallen pose, whole body kept tucked or broken apart as specified below. Match in-game crisply painted chibi pixel art, clean dark contours, strongly readable deliberate 2–3 tone shading. Empty real transparent cutout backdrop, no added base, foreground, cast shadow, grid or letters. Original designs. No particles, spells off the body, gore, projectile or floor."
+  }
+]

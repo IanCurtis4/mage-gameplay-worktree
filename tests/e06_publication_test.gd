@@ -3,6 +3,7 @@ extends SceneTree
 const Publication = preload("res://tools/content/publication_bundle.gd")
 const Directions = preload("res://tools/content/directions_bundle.gd")
 const Transform = preload("res://tools/content/transform_bundle.gd")
+const H = preload("res://tests/fixtures/e07/f2/confirmed_history.gd")
 const IDENTITIES := ["swordsman", "mage", "archer", "defender", "berserker", "elementalist", "spiritualist", "sentinel", "hunter", "mg_ar"]
 const SOURCE_DIGEST := "b2480230ac8691fe155976ce4e311cfef233e6b32618a3ebd8a7c87fbd0658fd"
 var checks := 0
@@ -69,7 +70,8 @@ func _normalize(value: Variant, reverse_mapping: bool = false) -> Variant:
 	return value
 func _legacy_definitions() -> void:
 	var profile_catalog := ProfileCatalog.pilot()
-	_check(profile_catalog.is_valid() and ProfileState.SCHEMA_VERSION == 7 and ProfileState.CATALOG_VERSION == 14, "additive publication keeps valid catalog14/schema6")
+	# Pin 7→8: E07 F2 3b15ae8a (20/10) made the save envelope schema 8; the publication stays additive on catalog 14.
+	_check(profile_catalog.is_valid() and ProfileState.SCHEMA_VERSION == 8 and ProfileState.CATALOG_VERSION == 14, "additive publication keeps valid catalog14/schema8")
 	var starters: Array[StringName] = []
 	for id: StringName in active.ids(&"equipment"):
 		var item := active.get_definition(&"equipment", id) as EquipmentDefinition
@@ -122,11 +124,15 @@ func _profile_preservation() -> void:
 	var directory := ProjectSettings.globalize_path("res://.godot/verification/e06_publication/profile_%d" % Time.get_ticks_usec())
 	var facade := ProfileFacade.new(ProfileStore.new(directory))
 	_check(facade.create_character("old-first", 0, "Mago antigo", &"mage")["ok"], "isolated profile initial old mage")
-	_check(facade.create_character("old-second", facade.current_profile().revision, "Outro mago", &"mage")["ok"], "second character shares old collection")
+	# Since E07 F2 3b15ae8a (20/10) each character owns its exemplars: the alt gets its own starters and
+	# the historical acquisitions belong to the first mage instead of a profile-wide shared collection.
+	_check(facade.create_character("old-second", facade.current_profile().revision, "Outro mago", &"mage")["ok"], "second character receives its own old starters")
 	var profile := facade.current_profile()
 	var profile_catalog := ProfileCatalog.pilot()
+	var owner_id := profile.characters[0].character_id
 	for old: StringName in mapping:
-		if profile.first_instance_for_definition(old).is_empty(): _check(profile.add_equipment_instance(old, profile_catalog.equipment_metadata(old))["ok"], "historical acquisition added exactly once")
+		var owned := profile.equipment_for_character(owner_id).values().filter(func(item: EquipmentInstance) -> bool: return item.definition_id == old)
+		if owned.is_empty(): _check(profile.add_equipment_instance(old, profile_catalog.equipment_metadata(old), owner_id)["ok"], "historical acquisition added exactly once")
 	var armor := profile.first_instance_for_definition(&"warden_mail")
 	profile.characters[0].presets[1]["equipped"][&"torso"] = armor
 	profile.settings = {"custom": ["preserve", 7.0]}; profile.extension_fields["opaque"] = {"keep": true}
@@ -144,24 +150,40 @@ func _profile_preservation() -> void:
 		_check(again.equipment_instances[id].to_record() == profile.equipment_instances[id].to_record(), "all six exemplar record fields preserved")
 	for index: int in profile.characters.size():
 		_check(again.characters[index].equipped == profile.characters[index].equipped and again.characters[index].presets == profile.characters[index].presets and again.characters[index].action_slots == profile.characters[index].action_slots, "alt, inactive preset and current references preserved")
-	_check(again.characters[0].equipped[&"accessory_1"] == again.characters[1].equipped[&"accessory_1"], "shared old exemplar stays shared across alts")
-	var wire: Dictionary = encoded["data"].duplicate(true)
+	var first_charm: StringName = again.characters[0].equipped[&"accessory_1"]
+	var second_charm: StringName = again.characters[1].equipped[&"accessory_1"]
+	_check(first_charm != second_charm and again.equipment_instances[first_charm].definition_id == again.equipment_instances[second_charm].definition_id and again.equipment_instances[first_charm].owner_character_id == again.characters[0].character_id and again.equipment_instances[second_charm].owner_character_id == again.characters[1].character_id, "each alt keeps its own old exemplar of the same definition")
+	var wire: Dictionary = H.legacy_envelope(encoded["data"])
 	wire["schema_version"] = 2; wire["catalog_version"] = 9
 	for fixture_character: Dictionary in wire["characters"]: fixture_character.erase("admin_skills_unlocked")
 	wire.erase("card_inventory")
 	wire.erase("equipment_instances"); wire.erase("next_equipment_counter")
+	# Schema 2 recorded one shared acquisition per definition; the per-character starter copies (E07 F2)
+	# fold back into that historical collection.
 	wire["equipment_collection"] = []
-	for id: StringName in profile.equipment_instance_ids(): wire["equipment_collection"].append(String(profile.equipment_instances[id].definition_id))
+	for id: StringName in profile.equipment_instance_ids():
+		var definition := String(profile.equipment_instances[id].definition_id)
+		if definition not in wire["equipment_collection"]: wire["equipment_collection"].append(definition)
 	for character: Dictionary in wire["characters"]:
 		character["equipped"] = _old_layout(character["equipped"], profile)
 		for preset: Dictionary in character["presets"]: preset["equipped"] = _old_layout(preset["equipped"], profile)
-	var migrated := ProfileCodec.decode(JSON.stringify(wire))
-	_check(migrated["ok"] and migrated.get("migrated", false), "schema2/catalog9 still migrates under published catalog")
+	# Schema 1-7 migrates only after preview + confirmed digest (E07 F2 3b15ae8a). A selection shared by two alts
+	# goes to the chosen owner; the other alt's reference is removed and listed in the confirmed preview.
+	var wire_text := JSON.stringify(wire)
+	_check(ProfileCodec.decode(wire_text).get("error_code") == &"migration_required", "schema2/catalog9 opens protected until confirmed")
+	var confirmed_preview := H._chosen_preview(wire_text, ProfileCatalog.pilot())
+	var migrated := H.decode_confirmed(wire_text)
+	_check(confirmed_preview.get("ok", false) and confirmed_preview["complete"] and migrated["ok"] and migrated.get("migrated", false), "schema2/catalog9 still migrates under published catalog")
 	if migrated["ok"]:
 		var result: ProfileState = migrated["profile"]
-		_check(result.equipment_instances.size() == profile.equipment_instances.size(), "migration creates one old exemplar per recorded acquisition")
+		var first_id := result.characters[0].character_id
+		var second_id := result.characters[1].character_id
+		_check(result.equipment_instances.size() == wire["equipment_collection"].size(), "migration creates one old exemplar per recorded acquisition")
 		for instance: EquipmentInstance in result.equipment_instances.values(): _check(mapping.has(instance.definition_id), "migration preserves old definition instead of arena equivalent")
-		_check(result.characters[0].presets[1]["equipped"][&"torso"] == result.first_instance_for_definition(&"warden_mail") and result.characters[0].equipped[&"accessory_1"] == result.characters[1].equipped[&"accessory_1"], "legacy preset and shared selection survive publication")
+		var charm: Variant = result.characters[0].equipped[&"accessory_1"]
+		_check(result.characters[0].presets[1]["equipped"][&"torso"] == result.first_instance_for_definition(&"warden_mail") and charm != null and result.equipment_instances[StringName(charm)].definition_id == &"traveler_charm" and result.equipment_instances[StringName(charm)].owner_character_id == first_id, "legacy preset and shared selection survive publication for the chosen owner")
+		var removed: Array = confirmed_preview["plan"]["removals"].filter(func(row: Dictionary) -> bool: return row["character_id"] == second_id and row["slot"] == "accessory_1" and row["instance_id"] == String(charm))
+		_check(result.characters[1].equipped[&"accessory_1"] == null and not removed.is_empty(), "alt reference to the shared exemplar is removed only as listed in the confirmed preview")
 func _old_layout(layout: Dictionary, profile: ProfileState) -> Dictionary:
 	var result := {}
 	for pair: Array in [["weapon", "main_hand"], ["armor", "torso"], ["accessory", "accessory_1"]]:

@@ -1,0 +1,106 @@
+[
+  {
+    "path": "assets/art/e08_codex_1117/creatures/shapeshifter_bird/east.png",
+    "sha256": "75c944c9e4f9faa0a356d3e8a3b65ffbcbcd0b887114e656b7084e9c5991bd59",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "shapeshifter_bird / east",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/shapeshifter_bird/south.png",
+        "sha256": "b3549320676281fa34243665fa20681a53b8c34769fe714b7786cc75bdabac83"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/druid/south_v8.png",
+        "sha256": "8893d52868cd94b5f12f4f22aaec0b2d34f5ad020e96bd8044a05d9eb97c4102"
+      },
+      {
+        "path": "assets/art/e08_enemies/directional/animal_companion/east_source_v1.png",
+        "sha256": "7d0708e9b2f2ef40868b2df2fd0577f822c1464d586b795423dcb6e8b2252a88"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production 2D painted pixel-art game animation source sheet for RagRPG Forma de ave (shapeshifter_bird), EAST. First input is exactly this animal's approved front identity; use its exact textures, features, head shape and motifs. Second reference confirms the same Druid, and the third is animal anatomy, layout and cast style only. Same creature as the attached south sheet; redraw as a true east view, do not mirror or recolor it. It must always face RIGHT, true east-facing profile from head to torso, snout or beak at the right and the axis of the body leading towards the right. One eye only in every frame that shows an eye. Original design. Same druid as the attached reference, transformed: keep her body paint, stone necklace and animal tooth recognizable. Creature: the same druid fully transformed into a large grounded bird of prey around 0.8 times her standing height, chestnut upper body and cream underparts, amber-painted wing stripes in her same three-stroke body-mark motif, a simple gray stone necklace and single animal tooth cord secured at the neck naturally, sturdy short curved beak, original fantasy raptor. Anatomy: real raptor with exactly two wings, two taloned legs, one tail fan, one beak and no extra arms, no humanoid body; wings fold close in both fallen frames. Every live sprite has the same number of limbs, foreshortened for the camera angle. One full animal per cell. Limit animal silhouette and appendages to the central 215×215 px zone of each 313 px cell, with special care to tuck tail, reach and wings in foreshortening and leave lots of actual empty alpha. In north depict back-facing rump and rear of the shoulder, not a reattached back head on the front body. Row 3 action: forceful wing beat, both talons extend forward, short low diving movement, stand with both wings open in guard. One original near-square (1254 × 1254 preferred; approx. 1200 × 1300) RGBA sprite SOURCE PNG with sixteen complete isolated figures, no contact or overlap. Four EXACT evenly spaced columns and rows, each in its own invisible cell, centered anchor shared across every pose, same standing scale and physical proportions throughout. Put everything including horns, tail and any carried weapon into a small centered silhouette with at least 28 clear pixels in all directions from cell divisions. Aim for sprite height and width at most 235 px. Keep weapons and elongated limbs tucked or foreshortened to allow no sprite to cross a cell edge. Keep the last two separate, compact, and centered. Row 1: exactly four idle phases. Row 2: four separate walking phases, alternate foot contact; realistic gait per species. Row 3: four listed attack poses in order. Row 4: first two hit reactions, third begins collapse, fourth fully fallen and short across the cell. Fully drawn chest, feet and tail in each frame, anatomy always consistent. Dark clean hand-painted pixel contour, readable chibi mass with 2–3 shade steps, target game sprite at small scale. Original design for this project. Fully cut out true transparent alpha in all gutters. No loose magic, projectile, gore, blood, floor, shadows, captions, game UI, actual grid, extra objects or matte."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/shapeshifter_bird/north_v2.png",
+    "sha256": "158a19a03c436f726eaa55f7d9707d2527205ed83b0e6f585473ef245d1e31d6",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "shapeshifter_bird / north",
+    "references": [
+      {
+        "path": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a1d2cf-b455-7d30-846f-a10387fcb4c9\\exec-98d6a28c-82b1-425f-bd4b-2e72b3a32345.png",
+        "sha256": "1dbd97837c8ca27e86229169fd36d743bceb5c7092e9a8a15270a7e9f7eb9f71"
+      },
+      {
+        "path": "assets/art/e08_codex_1117/creatures/shapeshifter_bird/south_v2.png",
+        "sha256": "4ee13c9ba1adfa4f71f46158fd00c6ae947a4ef0804ffb0cd19ab9b8608eeba3"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: precise-object-edit. Clean north-facing raptor game sheet for RagRPG. Preserve the exact same dark chestnut and cream bird of prey with short curved beak seen only when anatomically appropriate, the original amber three-stroke wing marks, stone necklace, and attached animal tooth from the south reference (second image). When seen behind the bird faces TOP of the sheet, we see its rear head, spine, back of wings and tail fan, backs of legs, no eyes or beak FEATURING in every pose. Reference one is the NORTH pose sheet to improve. 16 exact north sprites in four rows of four, mathematically equal invisible cells, 1254x1254 RGBA transparent cutout. All feather tips including fully open wings must be firmly INSIDE each 313-pixel cell. Shorten by foreshortening and curving wingtips inward; maximum 205 px span and about 200 px height, similar to original south version with generous gutters. Pay special attention to row 3 column 4, as it MUST leave 35 px blank on each side. Idle 4, walk 4, wing-beat, lunge with talons extended away, dive angled upscreen, both wings half spread in guard, then two hurt reactions, compact collapsing posture and fully prone with feet and tail nearest camera. Exactly two wings, two legs and one tail. Painted crisp chibi pixel art, no terrain, shadow, fog, text, props, visual effects or grid."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/shapeshifter_bird/south_v2.png",
+    "sha256": "4ee13c9ba1adfa4f71f46158fd00c6ae947a4ef0804ffb0cd19ab9b8608eeba3",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "shapeshifter_bird / south",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/shapeshifter_bird/south.png",
+        "sha256": "b3549320676281fa34243665fa20681a53b8c34769fe714b7786cc75bdabac83"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: precise-object-edit. Correct the southern sprite sheet of the druid's large chestnut-and-cream raptor form for RagRPG. Keep this EXACT bird with same amber three-stroke wing paint, stone necklace and attached animal tooth. Just make room for all the wings, especially row 3's last cell. Exactly 1254x1254 RGBA cutout, regular 4x4 sprite cells, each centered and surrounded by blank true alpha. Redraw every wing extension compactly or angled toward the viewer as in foreshortening; opened wings total 195 px wide at the longest never pass 210px. Keep 28px or more completely clear at every border even though wings are open in attack. Redraw the fourth attack as a visible two-winged guard with wings raised and half extended like hooked flaps instead of a flat horizontal spread, both wings fully inside the cell, wing tips taper back inwards. Keep 4 idles with folded wings, 4 walking steps with alternating talons, 4 attack poses (wing flap, rake with talons, short dive, half-open wings in guard), then two flinches, a tight collapse and a tight fallen pose. True south front facing down-screen with clear same 3/4 slightly elevated chibi perspective. Exactly two wings, two taloned legs, beak and one tail fan. Crisp dark contour and painted pixel shading. No scenery, text, shading outside the figure, grid or weapon. Native transparent PNG."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/shapeshifter_bird/south.png",
+    "sha256": "b3549320676281fa34243665fa20681a53b8c34769fe714b7786cc75bdabac83",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "shapeshifter_bird / south",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/druid/south_v8.png",
+        "sha256": "8893d52868cd94b5f12f4f22aaec0b2d34f5ad020e96bd8044a05d9eb97c4102"
+      },
+      {
+        "path": "assets/art/e08_enemies/directional/animal_companion/east_source_v1.png",
+        "sha256": "7d0708e9b2f2ef40868b2df2fd0577f822c1464d586b795423dcb6e8b2252a88"
+      }
+    ],
+    "selected": false,
+    "prompt": "Use case: stylized-concept. Production 2D painted pixel-art game animation source sheet for RagRPG, Forma de ave (shapeshifter_bird), SOUTH/front. First reference is the druid identity, palette, handmade accessories and cast size. Second demonstrates small monster art style and animal anatomy only. Original design. Same druid as the attached reference, transformed: keep her body paint, stone necklace and animal tooth recognizable. The paint is one consistent personal motif of three uneven finger strokes, recolored per form. This is a complete animal and not a hybrid or a person. Creature: the same druid fully transformed into a large grounded bird of prey around 0.8 times her standing height, chestnut upper body and cream underparts, amber-painted wing stripes in her same three-stroke body-mark motif, a simple gray stone necklace and single animal tooth cord secured at the neck naturally, sturdy short curved beak, original fantasy raptor. Anatomy: real raptor with exactly two wings, two taloned legs, one tail fan, one beak and no extra arms, no humanoid body; wings fold close in both fallen frames. All complete figures have head facing straight down towards viewer, symmetrical foreshortened slight overhead 3/4 front. Row 3: forceful wing beat, both talons extend forward, short low diving movement, stand with both wings open in guard.\n\nOne original near-square (1254 × 1254 preferred; approx. 1200 × 1300) RGBA sprite SOURCE PNG with sixteen complete isolated figures, no contact or overlap. Four EXACT evenly spaced columns and rows, each in its own invisible cell, centered anchor shared across every pose, same standing scale and physical proportions throughout. Put everything including horns, tail and any carried weapon into a small centered silhouette with at least 28 clear pixels in all directions from cell divisions. Aim for sprite height and width at most 235 px. Keep weapons and elongated limbs tucked or foreshortened to allow no sprite to cross a cell edge. Keep the last two separate, compact, and centered. Row 1: exactly four idle phases. Row 2: four separate walking phases, alternate foot contact; realistic gait per species. Row 3: four listed attack poses in order. Row 4: first two hit reactions, third begins collapse, fourth fully fallen and short across the cell. Fully drawn chest, feet and tail in each frame, anatomy always consistent. Dark clean hand-painted pixel contour, readable chibi mass with 2–3 shade steps, target game sprite at small scale. Original design for this project. Fully cut out true transparent alpha in all gutters. No loose magic, projectile, gore, blood, floor, shadows, captions, game UI, actual grid, extra objects or matte."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/shapeshifter_bird/west.png",
+    "sha256": "55bea780103c898a6ee5bb52de81e824d0e5bd45116ff1c854d96c81aa492159",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "shapeshifter_bird / west",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/shapeshifter_bird/south.png",
+        "sha256": "b3549320676281fa34243665fa20681a53b8c34769fe714b7786cc75bdabac83"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/druid/south_v8.png",
+        "sha256": "8893d52868cd94b5f12f4f22aaec0b2d34f5ad020e96bd8044a05d9eb97c4102"
+      },
+      {
+        "path": "assets/art/e08_enemies/directional/animal_companion/east_source_v1.png",
+        "sha256": "7d0708e9b2f2ef40868b2df2fd0577f822c1464d586b795423dcb6e8b2252a88"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production 2D painted pixel-art game animation source sheet for RagRPG Forma de ave (shapeshifter_bird), WEST. First input is exactly this animal's approved front identity; use its exact textures, features, head shape and motifs. Second reference confirms the same Druid, and the third is animal anatomy, layout and cast style only. Same creature as the attached south sheet; redraw as a true west view, do not mirror or recolor it. It must always face LEFT, true west-facing profile from head to torso, snout or beak at the left and the axis of the body leading towards the left. One eye only in every frame that shows an eye. Original design. Same druid as the attached reference, transformed: keep her body paint, stone necklace and animal tooth recognizable. Creature: the same druid fully transformed into a large grounded bird of prey around 0.8 times her standing height, chestnut upper body and cream underparts, amber-painted wing stripes in her same three-stroke body-mark motif, a simple gray stone necklace and single animal tooth cord secured at the neck naturally, sturdy short curved beak, original fantasy raptor. Anatomy: real raptor with exactly two wings, two taloned legs, one tail fan, one beak and no extra arms, no humanoid body; wings fold close in both fallen frames. Every live sprite has the same number of limbs, foreshortened for the camera angle. One full animal per cell. Limit animal silhouette and appendages to the central 215×215 px zone of each 313 px cell, with special care to tuck tail, reach and wings in foreshortening and leave lots of actual empty alpha. In north depict back-facing rump and rear of the shoulder, not a reattached back head on the front body. Row 3 action: forceful wing beat, both talons extend forward, short low diving movement, stand with both wings open in guard. One original near-square (1254 × 1254 preferred; approx. 1200 × 1300) RGBA sprite SOURCE PNG with sixteen complete isolated figures, no contact or overlap. Four EXACT evenly spaced columns and rows, each in its own invisible cell, centered anchor shared across every pose, same standing scale and physical proportions throughout. Put everything including horns, tail and any carried weapon into a small centered silhouette with at least 28 clear pixels in all directions from cell divisions. Aim for sprite height and width at most 235 px. Keep weapons and elongated limbs tucked or foreshortened to allow no sprite to cross a cell edge. Keep the last two separate, compact, and centered. Row 1: exactly four idle phases. Row 2: four separate walking phases, alternate foot contact; realistic gait per species. Row 3: four listed attack poses in order. Row 4: first two hit reactions, third begins collapse, fourth fully fallen and short across the cell. Fully drawn chest, feet and tail in each frame, anatomy always consistent. Dark clean hand-painted pixel contour, readable chibi mass with 2–3 shade steps, target game sprite at small scale. Original design for this project. Fully cut out true transparent alpha in all gutters. No loose magic, projectile, gore, blood, floor, shadows, captions, game UI, actual grid, extra objects or matte."
+  }
+]

@@ -16,6 +16,9 @@ static func icon(item: EquipmentDefinition) -> Texture2D:
 	if EquipmentArtCatalog.has_head(item.id):
 		var head := EquipmentArtCatalog.head_icon(item.id)
 		if head!=null:return head
+	# Item-specific painted icon before the shared in-hand prop sprite (only the japamala has both).
+	var own_icon := painted_icon(item.id)
+	if own_icon != null: return own_icon
 	var key_id := EquipmentAttachmentVisual.key_for_definition(item,item.slot)
 	if key_id in EquipmentAttachmentVisual.PROFILES:
 		var painted := EquipmentArtCatalog.prop_texture(key_id,Vector2(EquipmentAttachmentVisual.PROFILES[key_id].size))
@@ -23,6 +26,18 @@ static func icon(item: EquipmentDefinition) -> Texture2D:
 	if item.icon != null: return item.icon
 	var key: String = SURFACES.get(item.id, {&"weapon": "weapon", &"shield": "shield", &"focus": "focus", &"jewelry": "jewelry", &"armor": "plate"}.get(item.item_kind, "plate"))
 	return load("res://assets/art/icons/equipment/%s.svg" % key) as Texture2D
+## E08 C1-art (14/11): painted per-item icons cut from the second Codex batch
+## (tools/prepare_e08_equipment_icons.py). Missing files keep the surface SVG fallback.
+const PAINTED_ICON_DIR := "res://assets/art/icons/equipment/painted/%s.png"
+## Legacy ids show the same piece as their arena revision.
+const PAINTED_ICON_ALIASES := {&"traveler_vest": &"arena_traveler_vest", &"trailcoat": &"arena_trailcoat", &"warden_mail": &"arena_warden_mail", &"channeler_robe": &"arena_channeler_robe", &"traveler_charm": &"arena_traveler_charm", &"prismatic_charm": &"arena_prismatic_charm"}
+static var _painted_icons: Dictionary = {}
+static func painted_icon(id: StringName) -> Texture2D:
+	if id.is_empty(): return null
+	if not _painted_icons.has(id):
+		var path := PAINTED_ICON_DIR % PAINTED_ICON_ALIASES.get(id, id)
+		_painted_icons[id] = load(path) as Texture2D if ResourceLoader.exists(path) else null
+	return _painted_icons[id]
 static func card_icon() -> Texture2D:
 	return load("res://assets/art/icons/equipment/card.svg") as Texture2D
 

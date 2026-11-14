@@ -1,0 +1,150 @@
+[
+  {
+    "path": "assets/art/e08_codex_1116/characters/druid/east_v3.png",
+    "sha256": "303511e458ffe5e30ccd964a60ebc3bb040a6a2e11b95e05ca0eb3e37dadbb63",
+    "width": 1312,
+    "height": 1199,
+    "generator": "Codex built-in imagegen",
+    "request": "druid / east",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/druid/south_v3.png",
+        "sha256": "0164412a072a6a8291a7cdaf5d2d63eae111eb3a468156fe95817a5ad26988eb"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      }
+    ],
+    "prompt": "Use case: stylized-concept. Production animation sprite sheet for RagRPG Druida, true east side view (only ONE eye visible, nose and feet always toward screen RIGHT), never copy the character orientation of either reference. Character matches the first input exactly: broad-stanced female druid with big auburn hair and auburn low braids, thick broad upper body and layered natural raw-leather and fiber with moss, dried leaves, stone and tooth necklace, bright green sprout only on own left shoulder, shin bark wraps and bare toes. Image 1 provides identity, image 2 ONLY the SQUARE-LIKE 1312×1199 landscape canvas and the spacious 4×4 technical registration. Keep each complete sprite comparatively SMALL, maximum width and height 215 px, individually surrounded on all four sides by large TRUE ALPHA transparent margins, open channels at least 55 px between slots. Center all figures on exact grid, stand feet 40 px above each cell's bottom. One complete chibi figure per slot, same scale and center, crisp painted pixel art, 2–3 tones, dark outline. Row 1 idle (even idle shows near and far hand clearly apart at two depths). Row 2 walk with alternating feet. Row 3 action beats: low palm reaching for ground, further crouching reach, curled empty claw fingers, both hands raised, keeping clear empty hands. Row 4 two hurt stages, a very compact falling-to-knees sprite, a compact fully prone sprite with arms folded in and feet tucked, shortest possible silhouette width under 175 px. Neither death pose approaches a gutter. Anatomically correct 2 joined arms and 2 separated EMPTY hands with distinct fingers in all living poses even in profile. Keep all anatomical left-side accents in place. NO spell graphics, props, blade, ground, shadows, text, grids, and no extra lines or background. Genuine rectangular transparent PNG RGBA."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/druid/east_v4.png",
+    "sha256": "33aedcf2ba6a374bc7d8afd4dc669b5380f556af936c7b07fe544ca942f01527",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "druid / east",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/druid/west_v2.png",
+        "sha256": "f19a82bf74090d91523fa21af67304e5c7147609acc564df92eac315ad03a1ba"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/druid/east_v3.png",
+        "sha256": "303511e458ffe5e30ccd964a60ebc3bb040a6a2e11b95e05ca0eb3e37dadbb63"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/druid/south_v8.png",
+        "sha256": "8893d52868cd94b5f12f4f22aaec0b2d34f5ad020e96bd8044a05d9eb97c4102"
+      }
+    ],
+    "prompt": "Use case: stylized-concept. RagRPG DRUID east-facing pixel art game sprite sheet. The FIRST image is the target FIGURE SCALE, character bulk, painterly art and large full hair; it is a LEFT-facing sheet but DO NOT use its direction. The SECOND image is an EAST / RIGHT-facing direction and pose guide. Repaint the great stout shape and full copper-auburn braid volume of FIRST image, as the same grounds-wise druid in true right-facing side profile, uniform scale matching the FIRST image. Third input establishes exact original facial design and earthy asymmetric wardrobe. Each living image shows just ONE eye and faces to the RIGHT, nose and toes point RIGHT and the right shoulder is near camera. Correct anatomical asymmetry. Her only green sprout is on her LEFT, FAR shoulder, so mostly occluded in this east view. Right NEAR shoulder shows only dried ochre leaves. Broad hips and shoulders, full head and thick low braids, heavy earthy layers in moss-green and tan, bark swaddled shins with bare feet. Stable consistent upright height and head dimensions approximately as large as the first sheet, matching the west view. Crisp dark contour, hand-painted chibi pixels. Strict 16 figures in a 4x4 uniform grid 1254x1254, no silhouettes touch the dividers, aim for 18–25px blank clear surrounding pixels at every cell. Row 1 four idle poses. Row 2 four walking phases alternating legs. Row 3 crouch with palm down and one open, reach lower, claw-like empty hand, then raise open hands. Row 4 hurt twice, her kneeling compact fall, then curled little fully prone fall pointing right, arms and feet kept close as one contained silhouette. Two separate arms and visible anatomically connected empty hands even in idle; the near hand sits closer to viewer and far fingertips peek in front. No tools, weapons, effects, labels, floor, shadow, outlines of cells or faint opacity between sprites. True transparent RGBA cutout background."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/druid/north_v3.png",
+    "sha256": "c3be2c7641865bbe8832a8fb01cbdf849499f4b75d7659f05d0afbb61be695e3",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "druid / north",
+    "references": [
+      {
+        "path": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a1d2cf-b455-7d30-846f-a10387fcb4c9\\exec-25daca60-e156-425e-ae9a-f725b0a217d9.png",
+        "sha256": "6f14bf51b722e7266e0f4dff2b9d86870942522bf6f795ec574fc6693c806012"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/druid/south_v3.png",
+        "sha256": "0164412a072a6a8291a7cdaf5d2d63eae111eb3a468156fe95817a5ad26988eb"
+      }
+    ],
+    "prompt": "Use case: precise-object-edit. Deliver RagRPG DRUID real north-facing 16-frame painted pixel art animation, with back of head and torso always visible and never the face. First input is the specific north layout and character to retain, a broad robust young woman with big auburn low braids, raw plant fibre and leather, dried ochre leaves and left emerald sprout, bark leg wraps and bare feet. Second is the confirmed front identity, third is only clean technical layout. Keep the existing four idle, four walking, four crouch/reach/claw/raise-hands, two hurt, one kneeling and one fully fallen. Keep two empty hands on paired anatomically connected arms in all living poses. Repair each border so all complete sprites are spaced. In particular, completely REDRAW the bottom right as a SHORT small lump-like fully fallen sprite about 155 px wide AT THE CENTER of the bottom-right quadrant cell, entirely towards the top of screen, arms and knees under her, body tapers away from viewer, nothing points sideways OR EXTENDS TO THE RIGHT EDGE. Keep at least 35 px of empty transparent border around each cell, especially at the far right and bottom edge of entire image. Do not let the figure touch the outer edge of the canvas. Place figure center at 87.5 percent of sheet width in final cell and leave wide gap to neighbors. Native 1254 × 1254 square RGBA PNG, true alpha and exactly four independent columns by four rows, no floor, effects, props, text, borders, grid marks or shadows."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/druid/north_v6.png",
+    "sha256": "fdd1df578e5e83eb2a7db7f884b69d127e536ed3b70b82795241aafcb64195cc",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "druid / north",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/druid/south_v8.png",
+        "sha256": "8893d52868cd94b5f12f4f22aaec0b2d34f5ad020e96bd8044a05d9eb97c4102"
+      },
+      {
+        "path": "assets/art/e08_characters/directional/spiritualist/north_source_v1.png",
+        "sha256": "8cba46ac111af9fa2cca23d557c357629f098ef01595731217992506f3a148ff"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "prompt": "Use case: stylized-concept. Design the REAR VIEW of this RagRPG DRUID for isometric pixel-art RPG. This is the view of the player character seen from directly behind when she travels away toward the TOP of the game screen. CAMERA FOLLOWS HER FROM BEHIND in ALL CELLS. Draw back-facing shoulders, rear seams of her robe, HEELS of bare feet (never the toes), her forearms point away to the top when extending, back of head with TWO THICK AUBURN BRAIDS cascading over the BACK of her cloak. Look at the Swordsman atlas's north group for silhouettes that read rear. Use the woman in the first image as exact identity: robust stout stance, very full auburn hair, broad body, rough layered natural fibers and leather, ochre dry leaves, moss green, bark shin wraps, single little bright green sprout on her own left shoulder (viewer LEFT in this unmirrored rear view), no chest necklace or belt knot visible on the back. Second image is supplementary for how a rear head and hair look, do not copy its clothes or direction of feet. Device: this is illustrated directly from behind with the camera slightly overhead, never take a front-facing druid body and cover her face with hair. Facing away strongly readable by shoulders, elbows, visible rear soles on raised trailing foot and heels, consistently through all frames. 1254 x 1254 PNG with alpha, rigid 4x4 exactly 16 separate small sprites inside cells of 313x313. Portraits max 215px each including braids, art with substantial complete alpha space at all four borders. Row 1 four idle phases. Row 2 four walk cycles clearly walking AWAY. Row 3 crouch and reach low away from viewer, extend claw along the direction of travel, both palms away raised above shoulder on far side. Arms and hands separated and visible to sides, exact two empty hands, no claws or weapons as objects. Row 4 rear stagger, rear flinch, knees-down collapse viewed from behind, then tightly curled prone fall, face and top of head on far side, feet closest to us at bottom. Use crisp dark chibi pixel-art outline, 2–3-tone shading, nothing besides sprite, no floor, cast shadows, text, visual effects or grid. Strongly emphasize heel view, spine and back orientation even if it means adjusting the arm gestures for a more convincing rear pose."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/druid/south_v3.png",
+    "sha256": "0164412a072a6a8291a7cdaf5d2d63eae111eb3a468156fe95817a5ad26988eb",
+    "width": 1199,
+    "height": 1312,
+    "generator": "Codex built-in imagegen",
+    "request": "druid / south",
+    "references": [
+      {
+        "path": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a1d2cf-b455-7d30-846f-a10387fcb4c9\\exec-a534650f-5b77-4f44-a864-e9c41cd0854e.png",
+        "sha256": "6643e0bb36b2e02b51558b215919871c56f6e0d262adc8042d319a3f5b948c78"
+      }
+    ],
+    "prompt": "Use case: precise-object-edit. Repaint the attached RagRPG female druid sprite sheet as a clean transparent 4x4 production PNG. Keep this same specific face, amber-hazel eyes, very dark auburn braids, leaf-and-fibre druid mantle with dark moss green and tan, stone and tooth necklace, a single vivid little green sprout on her left shoulder, uncovered bare feet, same outfit and palette. Same 16 poses in four columns by four rows, facing SOUTH/front, including two empty anatomically connected hands in every living pose. Clean layout correction: keep the first 3 rows centered vertically in their individual cells and shift the two falling poses in the bottom row (columns 3 and 4) upward enough that no art comes within 25 pixels of the canvas bottom. Make last pose compact and fully inside its cell. Repaint using the same crisp painted chibi pixel-art styling and dark outline. Flat clean cutout around the silhouette with no hue or fog outside, a completely transparent blank space all around every frame. One sprite per cell. Neither outline nor figure ever touches the canvas edge, with visible blank margin bottom and sides. Keep the four walks, exact existing gesture row (low open palm, low reach, empty claw, two raised hands), first two hurt poses and two collapsed poses. One complete figure per cell, no added background, objects, weapons, outline frame, text, particles, cast shadow or grid. Portrait 1200 × 1312-ish PNG with true alpha."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/druid/south_v6.png",
+    "sha256": "3d5ec01f55ba7d1734ff26a30209ffdd69b23dd25ed7d883cc8e3b69c3b71080",
+    "width": 1199,
+    "height": 1312,
+    "generator": "Codex built-in imagegen",
+    "request": "druid / south",
+    "references": [
+      {
+        "path": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a1d2cf-b455-7d30-846f-a10387fcb4c9\\exec-a534650f-5b77-4f44-a864-e9c41cd0854e.png",
+        "sha256": "6643e0bb36b2e02b51558b215919871c56f6e0d262adc8042d319a3f5b948c78"
+      }
+    ],
+    "prompt": "Use case: precise-object-edit. Keep the attached Druida character and the sixteen-pose SOUTH/front RGBA sprite animation sheet. This edit fixes an INTERNAL HORIZONTAL GUTTER, not the bottom. There are four equal columns of character cells. A faulty sprite edge crosses or touches the invisible VERTICAL gutter at exactly 75% of the canvas width, between the TWO RIGHTMOST SPRITES of the bottom row. The bottom row's first two hurt poses stay as they are. In its third and fourth positions, repaint two SEPARATE much narrower compact death poses, one centered at 62.5% of canvas width, the other centered at 87.5% of canvas width. The third is compact on both knees and resting on two arms. The fourth is a low, fully fallen posture but folded tight and facing down-screen, body extending away and NOT sprawling sideways; make its silhouette similar in width to an idle figure's head and shoulders. Keep the whole body separate in each slot. Between each pair leave at least 35 px of blank real alpha; the two death sprites must not ever touch, reach across or create a continuous silhouette. Do not enlarge the others. Maintain the original character's hair, face, costume, accent placement, same four-by-four equal spacing, true transparency, and contrast of the pixel art. No colored matte or glow, effects, text, divider, weapon, floor or shadow. Near 1200 × 1312. Exactly 16 sprites. No props, fully visible empty hands and anatomically connected arms in the living frames."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/druid/south_v8.png",
+    "sha256": "8893d52868cd94b5f12f4f22aaec0b2d34f5ad020e96bd8044a05d9eb97c4102",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "druid / south",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/druid/south_v3.png",
+        "sha256": "0164412a072a6a8291a7cdaf5d2d63eae111eb3a468156fe95817a5ad26988eb"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/acolyte/south_v3.png",
+        "sha256": "24dfbcea205505283e0cd96e65a2eb9fb33f664d13d87748720b50efd37c3a8d"
+      }
+    ],
+    "prompt": "Use case: precise-object-edit. Redraw the FIRST image, keeping the original design exactly, for a clean RagRPG SOUTH animation source. Character features to preserve: same robust broad woman, full loose copper hair, thick braids, wide shoulders, raw layers, moss and dried leaf mantle, stones and tooth, sprout, bare feet. Second image supplies ONLY a technical canvas guide, absolutely do not copy its character. Copy the 4×4 grid positioning and large transparent gaps from the second image. SQUARE canvas 1254×1254 true RGBA transparent. Draw all sprites visibly SMALL inside each equally spaced invisible 313 px cell, no sprite larger than 215×235 px; centered horizontally and same scale for all standing poses, sitting on a foot baseline 35 px above each cell's bottom. Keep at least 25 blank transparent px on ALL sides within every cell. Row 1 four original idle, row 2 four walk with lead foot alternating, row 3 four original character actions unchanged, row 4 two hurt, then small knees-down pose and very compact fully fallen pose, folded under themselves and facing down-screen exactly like a face-first flop, no horizontal sprawl. Every cell has one complete separated front-facing figure at chibi overhead 3/4, no cell overlap, keep exactly two visible empty hands in all living sprites. Reproduce the FIRST character face, hair volume, lay of materials, proportions, color and asymmetry, including no raised hoods and no shorter new haircut. Clean cutout alpha, dark line and two to three gradients of pixel-art paint. No held objects, floor, shadow, props, text, dividers, grids or external effects."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/druid/west_v2.png",
+    "sha256": "f19a82bf74090d91523fa21af67304e5c7147609acc564df92eac315ad03a1ba",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "druid / west",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/druid/south_v3.png",
+        "sha256": "0164412a072a6a8291a7cdaf5d2d63eae111eb3a468156fe95817a5ad26988eb"
+      }
+    ],
+    "prompt": "Use case: stylized-concept. RagRPG WEST Druid game animation sprites. Use supplied image solely for its design of the SAME robust young woman. Original character with sturdy wide trunk and hips, voluminous full reddish-brown hair parted at center, two thick low braids, broadly layered tawny unprocessed leather and woven fibre garments, dried ochre leaves on both shoulders, single bright little leaf sprout on her own left shoulder, simple gray stone necklace and small tooth, moss-green plain shirt, rough bark tied to shin, bare feet and toes. Preserve the full rounded build and the wide braided hair. GAME ASSET PRECISE LAYOUT: output a 1254-by-1254 SQUARE canvas with TRANSPARENT RGBA. Four equally spaced columns and four equally spaced rows. Each individual complete chibi sprite remains SMALL inside its slot (target 204 px wide, 215 px tall, cutout shapes only), visibly floating in an empty alpha channel, plenty of open alpha on EVERY side. Empty corridors min 40 px between cells. Exactly 16 whole images. The stance is towards the LEFT with one eye visible, the nose drawn at the furthest left, feet also left; every pose same true direction west, don't flip the front. Dark crisp pixel-art outline, detailed but limited earthy palette, 2–3 painted tones, slightly overhead. Row 1 subtle idle. Row 2 four alternating walk poses. Row 3 crouch with one palm low and other open, lower reach, visible curled claw hand, then lift both empty open hands. Row 4 two different hurt sprites then compact kneeling collapse and very compact fully prone pose, the latter's arms and feet tucked into its own cell. Two visible empty hands in every living pose including idle and profile; separate depth silhouettes, anatomical arms. No props, no effects, no overlay, no floor, shadow, glow, text, painted backdrop or opaque matte; surrounding pixels are completely clear alpha."
+  }
+]

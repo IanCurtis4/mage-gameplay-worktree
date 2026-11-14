@@ -1,6 +1,6 @@
 class_name VfxFlipbookCatalog
 extends RefCounted
-## Immutable catalog of the P6 raster VFX flipbooks (4x4 atlases of 160x160 cells).
+## Immutable catalog of the E08 raster VFX flipbooks (4x4 atlases of 160x160 cells).
 ## Data only: no nodes, no gameplay references. Fails closed on any invalid manifest.
 
 const MANIFESTS := {
@@ -13,10 +13,21 @@ const MANIFESTS := {
 	&"nature_thorns": "res://assets/art/e08_vfx/nature_thorns/flipbook.json",
 	&"slash_arc": "res://assets/art/e08_vfx/slash_arc/flipbook.json",
 	&"summon_portal": "res://assets/art/e08_vfx/summon_portal/flipbook.json",
+	# Second Codex batch (14/11), packaged from assets/art/e08_codex_1114/vfx.
+	&"arrow_rain": "res://assets/art/e08_vfx/arrow_rain/flipbook.json",
+	&"covering_shot": "res://assets/art/e08_vfx/covering_shot/flipbook.json",
+	&"geometer_collapse": "res://assets/art/e08_vfx/geometer_collapse/flipbook.json",
+	&"headshot": "res://assets/art/e08_vfx/headshot/flipbook.json",
+	&"shield_bash": "res://assets/art/e08_vfx/shield_bash/flipbook.json",
+	&"spirit_dissipation": "res://assets/art/e08_vfx/spirit_dissipation/flipbook.json",
+	&"tri_nova": "res://assets/art/e08_vfx/tri_nova/flipbook.json",
+	&"triangulation": "res://assets/art/e08_vfx/triangulation/flipbook.json",
+	&"warden_charge": "res://assets/art/e08_vfx/warden_charge/flipbook.json",
+	&"wound_leap": "res://assets/art/e08_vfx/wound_leap/flipbook.json",
 }
 
 static var _cache: Dictionary = {}
-## P7-C4: textures kept alive after `preload_all` so the first signature effect does not load or upload one.
+## P7-C4: keep validated textures alive after `preload_all` so the first event reuses them.
 static var _preloaded: Dictionary = {}
 
 ## Loads and validates every flipbook once per process. Missing or invalid sheets are skipped (they stay
@@ -46,6 +57,8 @@ static func frame_region(id: StringName, frame: int) -> Rect2i:
 	return Rect2i((frame % int(grid[0])) * int(cell[0]), floori(float(frame) / float(grid[0])) * int(cell[1]), int(cell[0]), int(cell[1]))
 
 static func texture(id: StringName) -> Texture2D:
+	if _preloaded.has(id):
+		return _preloaded[id]
 	var data := _load(id, MANIFESTS.get(id, ""))
 	if data.is_empty():
 		return null

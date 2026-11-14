@@ -385,6 +385,8 @@ Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f7_authoring_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f7_flow_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f7_actions_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e08_compact_checkpoint_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e08_compact_coverage_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f5_population_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f5_campaign_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f5_recovery_test.gd')

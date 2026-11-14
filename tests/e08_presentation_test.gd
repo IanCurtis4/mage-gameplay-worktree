@@ -111,6 +111,7 @@ func _run() -> void:
 	host.free()
 	events.clear()
 	_atlas_invariants()
+	_presentation_key_invariants()
 	await _atlas_snapshot()
 	await _native_integration()
 	await _p6_player_kinds()
@@ -208,6 +209,39 @@ func _atlas_invariants() -> void:
 	check(not animation.set_body_atlas(variant) and animation.atlas == original, "equipped enemy body explicitly refuses override")
 	animation.equipment_visual = {}; animation = D.legacy_animation(&"animal_companion")
 	check(animation.atlas == original and animation.state != clock, "configure remains explicit default reset")
+
+func _presentation_key_invariants() -> void:
+	var actor := _actor()
+	actor.set_animation_kind(&"gel")
+	root.add_child(actor)
+	var animation := actor.character_animation
+	actor._process(0.01)
+	var idle := actor._presentation_key
+	actor._process(0.01)
+	check(is_same(actor._presentation_key, idle) and actor._presentation_key[0] == animation.draw_key(),
+		"an unchanged directional frame keeps both detached redraw keys")
+	check(is_equal_approx(animation.state.idle_time, 0.02), "unchanged draw commands still advance the exact idle clock")
+	paused = true
+	actor._process(0.25)
+	check(is_same(actor._presentation_key, idle) and is_equal_approx(animation.state.idle_time, 0.02),
+		"pause freezes drawing inputs and animation time")
+	paused = false
+	animation.state.face(Vector2.LEFT)
+	actor._process(0.01)
+	check(not is_same(actor._presentation_key, idle) and actor._presentation_key[0] == animation.draw_key(),
+		"same idle pose on a different cardinal view invalidates the body")
+	var before := actor._presentation_key
+	animation.set_equipment_visual({"main_hand": &"staff"})
+	actor._process(0.01)
+	check(not is_same(actor._presentation_key, before) and before[0][8].is_empty(),
+		"equipment edits invalidate drawing without mutating the previous key")
+	var texture := load("res://assets/art/animations/gel.png") as Texture2D
+	animation.set_equipment_visual({})
+	check(animation.set_body_atlas(texture), "switch to a complete legacy body for the same kind")
+	actor._process(0.01)
+	check(actor._presentation_key[0] == animation.draw_key() and animation.render_descriptor().version == 1,
+		"body replacement drops the directional binding immediately")
+	actor.free()
 
 func _atlas_snapshot() -> void:
 	RunController.selected_class_id = &"mage"
@@ -339,9 +373,16 @@ func _p6_player_kinds() -> void:
 	bridge._fact(&"skill_committed", &"fury", Vector2.ZERO, 0.0, weakref(player), old_epoch)
 	bridge._action(&"slash", Vector2.RIGHT, 0.2, weakref(player), old_epoch)
 	check(events.size() == baseline, "old-epoch callbacks of new kinds are rejected")
+	bridge._travel(&"hunter_covering_shot", Vector2.LEFT, 0.12, 60.0, true, weakref(player), old_epoch)
+	check(events.size() == baseline, "old-epoch travel callbacks are rejected")
 	check(_p6_of(&"heal").size() == 1 and _p6_of(&"movement").size() == 1, "resume replays no heal or movement")
+	# 15/11: a travel fact is a movement event carrying its confirmed distance and phase.
+	player.presentation_travel.emit(&"hunter_covering_shot", Vector2.LEFT, 0.12, 60.0, true)
+	var travel_events := _p6_of(&"movement")
+	check(travel_events.size() == 2 and travel_events.back().skill_id == &"hunter_covering_shot" and is_equal_approx(float(travel_events.back().payload.travel_distance), 60.0) and travel_events.back().payload.phase == "end",
+		"presentation_travel publishes one movement with travel_distance and phase")
 	var fact_connections := player.presentation_fact.get_connections().size()
-	check(fact_connections == 1, "exactly one presentation_fact observer (the bridge)")
+	check(fact_connections == 1 and player.presentation_travel.get_connections().size() == 1, "exactly one presentation_fact/presentation_travel observer (the bridge)")
 	host.free(); twin_parent.free()
 	events.clear()
 	await process_frame

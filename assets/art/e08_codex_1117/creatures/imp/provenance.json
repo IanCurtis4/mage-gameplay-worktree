@@ -1,0 +1,82 @@
+[
+  {
+    "path": "assets/art/e08_codex_1117/creatures/imp/east.png",
+    "sha256": "70ab6d62ce7c1c0a74dd71f40c0f54833e7801ee23b7b7dc67e99e8604e5e540",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "imp / east",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/imp/south.png",
+        "sha256": "d1dbf2f30d863383ddfabc24d01480cbb05405b2023d23f47fbae21bd7aca39d"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production painted 2D pixel-art animation source sheet for RagRPG, Diabrete, EAST only. Input 1 gives the exact established creature design. Input 2 is style and game scale only, DO NOT copy its identity or direction. Same creature as the attached south sheet; redraw as a true east view, do not mirror or recolor it. Every one of the sixteen poses is true EAST rightward profile, nose, muzzle, shoulders and feet all point to the RIGHT. One eye only when eyes are open, one side of the chest visible, opposite shoulder mostly behind the body. Preserve its exact red skin, ears, big dark hair, curved horns, short dark skirt, hand bands, and slim pointed tail. Creature: a small wiry imp familiar about half as tall as the warlock, dark carmine skin, tiny curved horns, large pointed ears, bile-yellow eyes, a fine tail with pointed tip, faint ember cracks on the shoulders, a small iron brand like the warlock's contract scars on his neck and a mischievous grin; ink-black, carmine, bile-yellow and ember-orange. Anatomy: two slender arms with clawed hands, two legs and exactly one tail; no wings; final pose fallen whole.  Row 3 attack in sequence: prepare to throw with one hand, rotate the shoulder with arm cocked, extend that arm in an overhand throw, relax into recovery; the hand is empty and no projectile.\n\nMake a near-square 1254×1254 transparent RGBA source PNG with exactly sixteen small, complete figures laid out as an even 4×4 grid of invisible cells. Keep blank alpha around every single sprite, with minimum 24 px blank space along all four sides of every cell, in particular no head, tail, hammer or fallen limbs touch or overlap their neighbors. Fit each whole silhouette inside a centered 235×235 px region per cell, foreshortening wide poses where needed. Constant ground anchor and drawing scale within the view and consistent proportions with front identity sheet. Four idle phases, four alternate walking phases, four attacks below, then two flinch poses, a compact collapse and a compact fully fallen pose, whole body kept tucked or broken apart as specified below. Match in-game crisply painted chibi pixel art, clean dark contours, strongly readable deliberate 2–3 tone shading. Empty real transparent cutout backdrop, no added base, foreground, cast shadow, grid or letters. Original designs. No particles, spells off the body, gore, projectile or floor."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/imp/north.png",
+    "sha256": "da4c736ae08f742225ec5014348968c1d58df86fd704e481a3314295fb96fc22",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "imp / north",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/imp/south.png",
+        "sha256": "d1dbf2f30d863383ddfabc24d01480cbb05405b2023d23f47fbae21bd7aca39d"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production painted 2D pixel-art animation source sheet for RagRPG, Diabrete, NORTH only. Input 1 gives the exact established creature design. Input 2 is style and game scale only, DO NOT copy its identity or direction. Same creature as the attached south sheet; redraw as a true north view, do not mirror or recolor it. Every one of the sixteen poses is true NORTH back view with shoulders, spine, nape, back of the head and heel anatomy oriented to the viewer and walk clearly AWAY toward the top of the screen. Absolutely no face, snout-front, chest or toes visible. Limbs correctly seen from behind, with a trailing foot's heel or sole toward screen bottom. Prone pose lies away from the camera with the back exposed and feet closest to the viewer. Preserve its exact red skin, ears, big dark hair, curved horns, short dark skirt, hand bands, and slim pointed tail. Creature: a small wiry imp familiar about half as tall as the warlock, dark carmine skin, tiny curved horns, large pointed ears, bile-yellow eyes, a fine tail with pointed tip, faint ember cracks on the shoulders, a small iron brand like the warlock's contract scars on his neck and a mischievous grin; ink-black, carmine, bile-yellow and ember-orange. Anatomy: two slender arms with clawed hands, two legs and exactly one tail; no wings; final pose fallen whole.  Row 3 attack in sequence: prepare to throw with one hand, rotate the shoulder with arm cocked, extend that arm in an overhand throw, relax into recovery; the hand is empty and no projectile.\n\nMake a near-square 1254×1254 transparent RGBA source PNG with exactly sixteen small, complete figures laid out as an even 4×4 grid of invisible cells. Keep blank alpha around every single sprite, with minimum 24 px blank space along all four sides of every cell, in particular no head, tail, hammer or fallen limbs touch or overlap their neighbors. Fit each whole silhouette inside a centered 235×235 px region per cell, foreshortening wide poses where needed. Constant ground anchor and drawing scale within the view and consistent proportions with front identity sheet. Four idle phases, four alternate walking phases, four attacks below, then two flinch poses, a compact collapse and a compact fully fallen pose, whole body kept tucked or broken apart as specified below. Match in-game crisply painted chibi pixel art, clean dark contours, strongly readable deliberate 2–3 tone shading. Empty real transparent cutout backdrop, no added base, foreground, cast shadow, grid or letters. Original designs. No particles, spells off the body, gore, projectile or floor."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/imp/south.png",
+    "sha256": "d1dbf2f30d863383ddfabc24d01480cbb05405b2023d23f47fbae21bd7aca39d",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "imp / south",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      },
+      {
+        "path": "assets/art/e08_enemies/directional/animal_companion/east_source_v1.png",
+        "sha256": "7d0708e9b2f2ef40868b2df2fd0577f822c1464d586b795423dcb6e8b2252a88"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production 2D pixel-art animation source sheet for RagRPG, Diabrete (imp), SOUTH/front. Input 1 is the Warlock, for the original cast art style and visual scale only, not a design to copy. Input 2 is the small canine companion for established creature anatomy and rendering in the game, not the design to copy. Creature: a small wiry imp familiar about half as tall as the warlock, dark carmine skin, tiny curved horns, large pointed ears, bile-yellow eyes, a fine tail with pointed tip, faint ember cracks on the shoulders, a small iron brand like the warlock's contract scars on his neck and a mischievous grin; ink-black, carmine, bile-yellow and ember-orange. Anatomy: two slender arms with clawed hands, two legs and exactly one tail; no wings; final pose fallen whole.\nThe creature is facing SOUTH/front in every single sprite, both halves of the torso toward the audience, face and feet pointing down-screen at 3/4 overhead. Row 3 attack in chronological order: prepare to throw with one hand, rotate the shoulder with arm cocked, extend that arm in an overhand throw, relax into recovery; the hand is empty and no projectile.\nOne original near-square (1254 × 1254 preferred; approx. 1200 × 1300) RGBA sprite SOURCE PNG with sixteen complete isolated figures, no contact or overlap. Four EXACT evenly spaced columns and rows, each in its own invisible cell, centered anchor shared across every pose, same standing scale and physical proportions throughout. Put everything including horns, tail and any carried weapon into a small centered silhouette with at least 28 clear pixels in all directions from cell divisions. Aim for sprite height and width at most 235 px. Keep weapons and elongated limbs tucked or foreshortened to allow no sprite to cross a cell edge. Keep the last two separate, compact, and centered. Row 1: exactly four idle phases. Row 2: four separate walking phases, alternate foot contact; realistic gait per species. Row 3: four listed attack poses in order. Row 4: first two hit reactions, third begins collapse, fourth fully fallen and short across the cell. Fully drawn chest, feet and tail in each frame, anatomy always consistent. Dark clean hand-painted pixel contour, readable chibi mass with 2–3 shade steps, target game sprite at small scale. Original design for this project. Fully cut out true transparent alpha in all gutters. No loose magic, projectile, gore, blood, floor, shadows, captions, game UI, actual grid, extra objects or matte."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/imp/west.png",
+    "sha256": "2db47f34846d3ae3447838bd69c01f4b196f7ce528bb3ab772d68ec074478a0f",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "imp / west",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/imp/south.png",
+        "sha256": "d1dbf2f30d863383ddfabc24d01480cbb05405b2023d23f47fbae21bd7aca39d"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production painted 2D pixel-art animation source sheet for RagRPG, Diabrete, WEST only. Input 1 gives the exact established creature design. Input 2 is style and game scale only, DO NOT copy its identity or direction. Same creature as the attached south sheet; redraw as a true west view, do not mirror or recolor it. Every one of the sixteen poses is true WEST leftward profile, nose, muzzle, shoulders and feet all point to the LEFT. One eye only when eyes are open, one side of the chest visible, opposite shoulder mostly behind the body. Preserve its exact red skin, ears, big dark hair, curved horns, short dark skirt, hand bands, and slim pointed tail. Creature: a small wiry imp familiar about half as tall as the warlock, dark carmine skin, tiny curved horns, large pointed ears, bile-yellow eyes, a fine tail with pointed tip, faint ember cracks on the shoulders, a small iron brand like the warlock's contract scars on his neck and a mischievous grin; ink-black, carmine, bile-yellow and ember-orange. Anatomy: two slender arms with clawed hands, two legs and exactly one tail; no wings; final pose fallen whole.  Row 3 attack in sequence: prepare to throw with one hand, rotate the shoulder with arm cocked, extend that arm in an overhand throw, relax into recovery; the hand is empty and no projectile.\n\nMake a near-square 1254×1254 transparent RGBA source PNG with exactly sixteen small, complete figures laid out as an even 4×4 grid of invisible cells. Keep blank alpha around every single sprite, with minimum 24 px blank space along all four sides of every cell, in particular no head, tail, hammer or fallen limbs touch or overlap their neighbors. Fit each whole silhouette inside a centered 235×235 px region per cell, foreshortening wide poses where needed. Constant ground anchor and drawing scale within the view and consistent proportions with front identity sheet. Four idle phases, four alternate walking phases, four attacks below, then two flinch poses, a compact collapse and a compact fully fallen pose, whole body kept tucked or broken apart as specified below. Match in-game crisply painted chibi pixel art, clean dark contours, strongly readable deliberate 2–3 tone shading. Empty real transparent cutout backdrop, no added base, foreground, cast shadow, grid or letters. Original designs. No particles, spells off the body, gore, projectile or floor."
+  }
+]

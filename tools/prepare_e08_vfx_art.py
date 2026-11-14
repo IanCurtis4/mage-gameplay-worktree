@@ -28,7 +28,17 @@ STAGING = ROOT / "assets/art/e08_vfx/staging"
 OUT = ROOT / "assets/art/e08_vfx"
 IDS = ("arcane_warp", "blood_rift", "fire_burst", "ground_shockwave", "ice_shatter",
        "lightning_burst", "nature_thorns", "slash_arc", "summon_portal")
-FPS = {"slash_arc": 16, "lightning_burst": 16, "summon_portal": 10, "nature_thorns": 10}
+# E08 C1-art (14/11): second Codex batch, prompts recorded in its own provenance.json.
+# Packaged with `python tools/prepare_e08_vfx_art.py codex_1114`; never touches the P6 staging.
+CODEX_1114 = ROOT / "assets/art/e08_codex_1114/vfx"
+CODEX_1114_IDS = ("arrow_rain", "wound_leap", "tri_nova", "spirit_dissipation", "triangulation",
+                  "headshot", "covering_shot", "warden_charge", "geometer_collapse", "shield_bash")
+# E08 15/11 playtest: repaints of two 14/11 sheets, own folder and provenance (14/11 kept intact).
+# Packaged with `python tools/prepare_e08_vfx_art.py codex_1115`; these ids now read from here.
+CODEX_1115 = ROOT / "assets/art/e08_codex_1115/vfx"
+CODEX_1115_IDS = ("spirit_dissipation", "tri_nova")
+FPS = {"slash_arc": 16, "lightning_burst": 16, "summon_portal": 10, "nature_thorns": 10,
+       "headshot": 16, "covering_shot": 16, "shield_bash": 16, "warden_charge": 16}
 GRID = 4
 CELL = 160
 MARGIN = 2
@@ -92,8 +102,14 @@ def alpha_bbox(cell):
     return int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1
 
 
+def source_dir(effect_id):
+    if effect_id in CODEX_1115_IDS:
+        return CODEX_1115
+    return CODEX_1114 if effect_id in CODEX_1114_IDS else STAGING
+
+
 def package(effect_id):
-    source = STAGING / (effect_id + ".png")
+    source = source_dir(effect_id) / (effect_id + ".png")
     sheet = Image.open(source).convert("RGBA")
     cells = slice_cells(sheet)
     boxes = [alpha_bbox(cell) for cell in cells]
@@ -125,6 +141,14 @@ def package(effect_id):
         block = alpha[row * CELL:(row + 1) * CELL, col * CELL:(col + 1) * CELL]
         if not (block > ALPHA_THRESHOLD).any():
             empty.append(index)
+    # Trailing blank cells are dropped from the playback (frames shrinks) so at most the
+    # final played frame is blank; a blank cell before content is a sheet defect.
+    frames = GRID * GRID
+    while len(empty) > 1 and empty[-1] == frames - 1 and empty[-2] == frames - 2:
+        empty.pop()
+        frames -= 1
+    if any(index < frames - 1 for index in empty):
+        raise SystemExit("%s: blank frame before the end %s" % (effect_id, empty))
     peak_box = boxes[peak_index]
     peak_width = (peak_box[2] - peak_box[0]) * inner / side
     out_dir = OUT / effect_id
@@ -136,12 +160,12 @@ def package(effect_id):
     sidecar = {
         "id": effect_id,
         "revision": 1,
-        "source": "assets/art/e08_vfx/staging/%s.png" % effect_id,
+        "source": source.relative_to(ROOT).as_posix(),
         "source_sha256": sha256_file(source),
         "texture": "res://assets/art/e08_vfx/%s/flipbook.png" % effect_id,
         "grid": [GRID, GRID],
         "cell": [CELL, CELL],
-        "frames": GRID * GRID,
+        "frames": frames,
         "empty_frames": empty,
         # bbox centre == packed cell centre: the visual centre of these 3/4-view
         # effects is the ground point.
@@ -184,6 +208,11 @@ def write_provenance():
 
 
 def main():
+    if sys.argv[1:] in (["codex_1114"], ["codex_1115"]):
+        for effect_id in (CODEX_1114_IDS if sys.argv[1] == "codex_1114" else CODEX_1115_IDS):
+            report = package(effect_id)
+            print(effect_id, report["frames"], report["empty_frames"], report["world_diameter_hint"], report["rgba_sha256"][:12])
+        return
     for effect_id in IDS:
         report = package(effect_id)
         print(effect_id, report["empty_frames"], report["world_diameter_hint"], report["rgba_sha256"][:12])

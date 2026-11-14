@@ -1,0 +1,94 @@
+[
+  {
+    "path": "assets/art/e08_codex_1118/characters/champion/east.png",
+    "sha256": "113d8ebe5210496def9f9d1d03af3e44794617f7f0637833819b54003c84fd25",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "champion / east",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1118/characters/champion/south.png",
+        "sha256": "137dee34a2a0819df535d2e546b8fc34f853c81f9838c2f1a7ed0e80a946008d"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/monk/south_v7.png",
+        "sha256": "c9ac5dbc29d462e3dfc2bc5e37d323f3422c92ce6aba4a233ad4341390dfaf62"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production painted 2D pixel-art game animation sprite sheet for RagRPG Campeão (champion), EAST only. Image 1 is the approved SOUTH design and exactly defines outfit, palette and person. Image 2 is the earlier same person's identity only, never use base outfit. Image 3 is the Swordsman atlas for in-game proportions and correct orientation. Same character as the attached south sheet; redraw as a true east view, do not mirror or recolor it. Each figure faces screen RIGHT with ONLY the right eye visible, projecting nose points RIGHT, torso and shoes point RIGHT, chest strongly foreshortened. Show anatomical right side nearest the viewer; far fingers visible at a different height and depth. Keep same young man's ample tossed brown hair, black knotted belt, red and orange training top, white exposed-finger fabric wraps, brown knees and bare feet. No gloves or armour. Fierce smile only visible from appropriate angles. Cloth stays close to silhouette, all poses have a fully attached body. Row 3 action in chronological order (adapt South actions to the correct viewing angle): c1 straight punch with both empty hands readable; c2 short elbow strike with attached hand visible and other hand separate; c3 compact high kick with anatomically coherent bare foot and both hands separately visible; c4 low ready guard.\n\nMake one native SQUARE 1254 × 1254 RGBA game source PNG. Exactly sixteen small whole figures, mathematically equal invisible four-by-four grid, sequential row major. The four centers along each axis are ~157, 470, 784, 1097px. Each standing sprite about 205-220px tall INSIDE the centered 313px cell, keep their apparent height to each other consistent and keep standing feet on one baseline near lower middle; maximum 215px overall width including accoutrements and fingertips, plenty of wholly blank transparent alpha gutters and full clear canvas border. Strong upper margin for hair and head fittings. Keep BOTH fallen sprites compact, no wide horizontal sprawl crossing a cell; distinguish the fall from a regular crouch. Main silhouette readable in neutral colours. Row 1 four idle variations; row 2 four alternating walk phases, change lead foot; row 3 four action gestures; row 4 two hit reactions, a kneeling collapse, then a completed strongly prone position. Full body in all sixteen. 3/4 elevated game angle, crisp painted chibi pixel-art, clean dark edges, 2–3 stepped shade tones. Preserve the exact same person, facial likeness, eye and hair details, stature, apparent age, shape and exact costume of the first reference, including true anatomical left/right across the directions. Exactly two arms, two empty hands, two legs in every living pose. Separate near and far hands, distinct appendages and fingers. No weapons, shields, books, empty scabbards, focus objects, staffs, any held or tossed item, particles, visual effects, floor, cast shadow, fog, matte, extra figure, words, frame, grid line, colored backdrop or checkerboard. Real empty alpha outside each figure."
+  },
+  {
+    "path": "assets/art/e08_codex_1118/characters/champion/north.png",
+    "sha256": "5239ef2472becc5bcbbd5c4f2488575351d7ca48a34edead67c4aaf4e2b39407",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "champion / north",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1118/characters/champion/south.png",
+        "sha256": "137dee34a2a0819df535d2e546b8fc34f853c81f9838c2f1a7ed0e80a946008d"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/monk/south_v7.png",
+        "sha256": "c9ac5dbc29d462e3dfc2bc5e37d323f3422c92ce6aba4a233ad4341390dfaf62"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production painted 2D pixel-art game animation sprite sheet for RagRPG Campeão (champion), NORTH only. Image 1 is the approved SOUTH design and exactly defines outfit, palette and person. Image 2 is the earlier same person's identity only, never use base outfit. Image 3 is the Swordsman atlas for in-game proportions and correct orientation. Same character as the attached south sheet; redraw as a true north view, do not mirror or recolor it. Each figure faces AWAY towards the top in all sixteen frames. Show back of head and hair, back garment seams, shoulder blades and back of legs, HEELS pointed toward viewer and toes away. Strictly no front of face, eyes, chest ornament or front of shoes. In walking, the sole of one trailing foot can face camera. The last fallen sprite rests head towards top and feet towards viewer. The hands are distinct to either side when seen from behind. Keep same young man's ample tossed brown hair, black knotted belt, red and orange training top, white exposed-finger fabric wraps, brown knees and bare feet. No gloves or armour. Fierce smile only visible from appropriate angles. Cloth stays close to silhouette, all poses have a fully attached body. Row 3 action in chronological order (adapt South actions to the correct viewing angle): c1 straight punch with both empty hands readable; c2 short elbow strike with attached hand visible and other hand separate; c3 compact high kick with anatomically coherent bare foot and both hands separately visible; c4 low ready guard.\n\nMake one native SQUARE 1254 × 1254 RGBA game source PNG. Exactly sixteen small whole figures, mathematically equal invisible four-by-four grid, sequential row major. The four centers along each axis are ~157, 470, 784, 1097px. Each standing sprite about 205-220px tall INSIDE the centered 313px cell, keep their apparent height to each other consistent and keep standing feet on one baseline near lower middle; maximum 215px overall width including accoutrements and fingertips, plenty of wholly blank transparent alpha gutters and full clear canvas border. Strong upper margin for hair and head fittings. Keep BOTH fallen sprites compact, no wide horizontal sprawl crossing a cell; distinguish the fall from a regular crouch. Main silhouette readable in neutral colours. Row 1 four idle variations; row 2 four alternating walk phases, change lead foot; row 3 four action gestures; row 4 two hit reactions, a kneeling collapse, then a completed strongly prone position. Full body in all sixteen. 3/4 elevated game angle, crisp painted chibi pixel-art, clean dark edges, 2–3 stepped shade tones. Preserve the exact same person, facial likeness, eye and hair details, stature, apparent age, shape and exact costume of the first reference, including true anatomical left/right across the directions. Exactly two arms, two empty hands, two legs in every living pose. Separate near and far hands, distinct appendages and fingers. No weapons, shields, books, empty scabbards, focus objects, staffs, any held or tossed item, particles, visual effects, floor, cast shadow, fog, matte, extra figure, words, frame, grid line, colored backdrop or checkerboard. Real empty alpha outside each figure."
+  },
+  {
+    "path": "assets/art/e08_codex_1118/characters/champion/south.png",
+    "sha256": "137dee34a2a0819df535d2e546b8fc34f853c81f9838c2f1a7ed0e80a946008d",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "champion / south",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/monk/south_v7.png",
+        "sha256": "c9ac5dbc29d462e3dfc2bc5e37d323f3422c92ce6aba4a233ad4341390dfaf62"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production 2D pixel-art game animation sprite sheet for RagRPG. Input 1 is the EXACT person, not just art style. Same face, haircut, hair volume, build, apparent age and skin tone in all frames. Only the advanced outfit and class posture change. Input 2 is the Swordsman body atlas for original game's chibi head-to-body proportions and clean pixel-art scale only, never copy its costume. Original sprite character, crisp hand-painted pixel art with thin dark outline and 2–3 stepped tones. True native 1254×1254 RGBA transparent sprite sheet, near the project target 1200×1300. EXACTLY sixteen full-body sprites in four equal columns by four equal rows and no labels. Each pose fully centered in its own 313 pixel cell; keep the complete silhouette about 225 px tall, no longer than 225 px wide, with more than 20 px of true blank alpha all around even at the extremities of costumes, hands, hair and fallen figures. Consistent chibi body dimensions, invisible fixed floor and foot pivot, ample unused alpha gutters even on outside of the canvas. Very slightly elevated front 3/4 overhead camera, ALL sprites facing SOUTH/front with face, chest and toes towards viewer. Row 1 four subtly distinctive idle images. Row 2 four distinct walking phases, use alternating leading foot and opposite arm swing. Row 3 the four action beats supplied. Row 4 two flinches with complete bodies followed by a knees-down collapse pose and a physically complete compact prone pose facing down-screen; tuck the body rather than spreading sideways. Exactly two physically attached arms and two visually distinct empty hands in every living pose with visible fingers. Maintain costume asymmetries strictly on their own physical sides. No weapons, equipment in hands, blades, scabbards, books, shields, staffs, magic effects, floor, shadow, surrounding haze, characters besides this sprite, labeling, checkerboard, drawings in gutters or visible grid.\n\nCampeão (champion) advanced outfit and identity: Same gentle young male Monk, preserve full tousled warm brown hair, same complexion and facial features and the same frame. Competitive grin, low wide stance, practical training clothes in red, orange and black with white wraps on hands and forearms, fingers visibly free, small worn leather knee pads, black fabric belt tied in a visible knot, barefoot. The wraps are bound cloth matching the base silhouette, no manopla or weapon added.\nRow 3 actions in order: c1 straight punch with both empty hands readable; c2 short elbow strike with attached hand visible and other hand separate; c3 compact high kick with anatomically coherent bare foot and both hands separately visible; c4 low ready guard."
+  },
+  {
+    "path": "assets/art/e08_codex_1118/characters/champion/west.png",
+    "sha256": "711d8271e01db52b3ea399e2e169281a9619e6aef509c08d78dedac950d234e5",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "champion / west",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1118/characters/champion/south.png",
+        "sha256": "137dee34a2a0819df535d2e546b8fc34f853c81f9838c2f1a7ed0e80a946008d"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/monk/south_v7.png",
+        "sha256": "c9ac5dbc29d462e3dfc2bc5e37d323f3422c92ce6aba4a233ad4341390dfaf62"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production painted 2D pixel-art game animation sprite sheet for RagRPG Campeão (champion), WEST only. Image 1 is the approved SOUTH design and exactly defines outfit, palette and person. Image 2 is the earlier same person's identity only, never use base outfit. Image 3 is the Swordsman atlas for in-game proportions and correct orientation. Same character as the attached south sheet; redraw as a true west view, do not mirror or recolor it. Each figure faces screen LEFT with ONLY the left eye visible, projecting nose points LEFT, torso and shoes point LEFT, chest strongly foreshortened. Show anatomical left side nearest the viewer; far fingers visible at a different height and depth. Keep same young man's ample tossed brown hair, black knotted belt, red and orange training top, white exposed-finger fabric wraps, brown knees and bare feet. No gloves or armour. Fierce smile only visible from appropriate angles. Cloth stays close to silhouette, all poses have a fully attached body. Row 3 action in chronological order (adapt South actions to the correct viewing angle): c1 straight punch with both empty hands readable; c2 short elbow strike with attached hand visible and other hand separate; c3 compact high kick with anatomically coherent bare foot and both hands separately visible; c4 low ready guard.\n\nMake one native SQUARE 1254 × 1254 RGBA game source PNG. Exactly sixteen small whole figures, mathematically equal invisible four-by-four grid, sequential row major. The four centers along each axis are ~157, 470, 784, 1097px. Each standing sprite about 205-220px tall INSIDE the centered 313px cell, keep their apparent height to each other consistent and keep standing feet on one baseline near lower middle; maximum 215px overall width including accoutrements and fingertips, plenty of wholly blank transparent alpha gutters and full clear canvas border. Strong upper margin for hair and head fittings. Keep BOTH fallen sprites compact, no wide horizontal sprawl crossing a cell; distinguish the fall from a regular crouch. Main silhouette readable in neutral colours. Row 1 four idle variations; row 2 four alternating walk phases, change lead foot; row 3 four action gestures; row 4 two hit reactions, a kneeling collapse, then a completed strongly prone position. Full body in all sixteen. 3/4 elevated game angle, crisp painted chibi pixel-art, clean dark edges, 2–3 stepped shade tones. Preserve the exact same person, facial likeness, eye and hair details, stature, apparent age, shape and exact costume of the first reference, including true anatomical left/right across the directions. Exactly two arms, two empty hands, two legs in every living pose. Separate near and far hands, distinct appendages and fingers. No weapons, shields, books, empty scabbards, focus objects, staffs, any held or tossed item, particles, visual effects, floor, cast shadow, fog, matte, extra figure, words, frame, grid line, colored backdrop or checkerboard. Real empty alpha outside each figure."
+  }
+]

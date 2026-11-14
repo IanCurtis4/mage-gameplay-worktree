@@ -50,6 +50,24 @@ func run() -> void:
 		if objective.stage_id == "forest_sanctuary_1": again.objectives[objective.objective_id] = true
 	check("replay_opens_by_guardian_then_shrine",before_guardian and before_shrine and again.portal_view(forward).open and not again.stages["forest_sanctuary_1"].cleared_once)
 	print("F10_FOREST_PHASE_TIMING "+JSON.stringify({"proof_hits":WorldConnectivityBatch.preparation_proof_hits,"searches":WorldConnectivityBatch.preparation_searches,"prepare_ms":snappedf(prepare_ms,1.0),"maps":prepared.metrics,"manifest_bytes":var_to_bytes(data).size(),"manifest_hash":ExpeditionCanonical.digest(data)}))
+	# E08 session cache: the same definition and pins reuse the preparation.
+	var rules_digest := ExpeditionCanonical.digest(prepared.rules)
+	var hits_before := PhaseRelease.cache_hits
+	started = Time.get_ticks_usec()
+	var repeated := PhaseRelease.prepare("forest_sanctuary")
+	var repeated_ms := (Time.get_ticks_usec()-started)/1000.0
+	check("same_inputs_hit_the_cache",repeated.ok and repeated.get("preparation_cache") == "hit" and PhaseRelease.cache_hits == hits_before+1,[repeated.get("preparation_cache",""),repeated_ms])
+	check("cached_phase_is_identical",repeated.ok and ExpeditionCanonical.digest((repeated.manifest as ExpeditionManifest).to_data()) == ExpeditionCanonical.digest(data) and ExpeditionCanonical.digest(repeated.rules) == rules_digest and repeated.phase_hash == prepared.phase_hash)
+	repeated.rules.erase(repeated.rules.keys()[0])
+	var pins: Dictionary = data.input.authored_presentations
+	var pinned := {"registry_version":MapRelease.VERSION,"packages":pins.values()}
+	var resumed := PhaseRelease.prepare("forest_sanctuary",pinned)
+	check("pinned_listing_of_a_save_hits_the_cache",resumed.ok and resumed.get("preparation_cache") == "hit" and resumed.phase_hash == prepared.phase_hash)
+	check("cached_rules_are_private_copies",resumed.ok and ExpeditionCanonical.digest(resumed.rules) == rules_digest and resumed.rules != repeated.rules)
+	var definition: Dictionary = PhaseRelease.definition("forest_sanctuary").definition
+	var changed: Array = pins.values().map(func(entry: Dictionary) -> Dictionary: return entry.duplicate(true))
+	changed[0].name = String(changed[0].name) + " revisto"
+	check("other_pins_are_another_key",PhaseRelease._cache_key(definition,pinned,PhaseRelease.FOLDER) != PhaseRelease._cache_key(definition,{"registry_version":MapRelease.VERSION,"packages":changed},PhaseRelease.FOLDER) and not PhaseRelease._cache_key(definition,pinned,PhaseRelease.FOLDER).is_empty())
 	finish()
 func finish() -> void:
 	var ok := not checks.is_empty() and checks.all(func(item: Dictionary) -> bool: return item.ok)

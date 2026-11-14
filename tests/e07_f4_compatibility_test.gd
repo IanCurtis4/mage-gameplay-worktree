@@ -27,6 +27,7 @@ func _run() -> void:
 	var decoded := ExpeditionCheckpointCodec.unpack(slot.checkpoint)
 	check(decoded["ok"],"transport validates complete original graph")
 	var snapshot: Dictionary = decoded["snapshot"]
+	check(decoded["encoding"] == SnapshotGraphEncoding.encode_snapshot(snapshot)["encoding"],"transport returns the validated graph encoding for immediate restore")
 	var changed := snapshot.duplicate(true); changed["engine"] = "future"
 	check(ExpeditionCheckpointCodec.pack(changed,slot.checkpoint["owner_digest"],slot.checkpoint["session"]).get("error_code") == &"content_revision_unavailable","engine/content compatibility is explicit")
 	changed = snapshot.duplicate(true); changed["sources"]["res://scripts/main.gd"] = "different"

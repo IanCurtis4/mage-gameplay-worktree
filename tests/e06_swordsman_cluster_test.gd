@@ -1,6 +1,7 @@
 extends SceneTree
 ## Approved cluster gates, historical refunds and four new skill behaviors.
 const TX = preload("res://tests/e06_tx_fixture.gd")
+const H = preload("res://tests/fixtures/e07/f2/confirmed_history.gd")
 class FailingMigrationStore:
 	extends ProfileStore
 	var failure_stage: StringName = &""
@@ -95,13 +96,15 @@ func _migration() -> void:
 	var encoded := ProfileCodec.encode(profile,old)
 	_check(encoded["ok"], "historical legal envelope validates before new gates")
 	if not encoded["ok"]: return
-	var raw: Dictionary = encoded["data"].duplicate(true)
+	# Historical fixture drops the schema-8 ownership envelope; schema 1-7 needs preview + confirmed digest: E07 F2 3b15ae8a (20/10).
+	var raw: Dictionary = H.legacy_envelope(encoded["data"])
 	raw["schema_version"] = 5
 	for fixture_character: Dictionary in raw["characters"]: fixture_character.erase("admin_skills_unlocked")
 	raw["catalog_version"] = 12
 	raw["characters"][0]["action_slots"][12] = "teleport"
 	_durable_migration(raw, catalog)
-	var migrated := ProfileCodec.decode(JSON.stringify(raw),catalog)
+	_check(ProfileCodec.decode(JSON.stringify(raw),catalog).get("error_code") == &"migration_required", "known schema5/catalog12 opens protected until confirmed")
+	var migrated := H.decode_confirmed(JSON.stringify(raw),catalog)
 	_check(migrated["ok"] and migrated.get("migrated",false), "known schema5/catalog12 migrates explicitly")
 	if not migrated["ok"]: return
 	var restored: CharacterState = migrated["profile"].characters[0]
@@ -110,13 +113,15 @@ func _migration() -> void:
 	_check(restored.action_slots[0] == &"defender_anchor" and restored.action_slots[23] == &"defender_line_lock" and restored.action_slots[12] == &"teleport", "refunded skills retain disabled shortcuts alongside the item reference")
 	_check(migrated["migration_removals"][0]["evolution_refund"] == 6 and CharacterProgression.summary(restored,catalog)["evolution_skill_points_available"] == 20, "six invested points return to original evolution wallet")
 	var saved := ProfileCodec.encode(migrated["profile"],catalog)
-	_check(saved["ok"] and saved["data"]["schema_version"] == 7 and saved["data"]["catalog_version"] == 14, "migration report encodes with schema6/catalog14")
+	# Pin 7→8: E07 F2 3b15ae8a (20/10) made the current envelope schema 8.
+	_check(saved["ok"] and saved["data"]["schema_version"] == ProfileState.SCHEMA_VERSION and ProfileState.SCHEMA_VERSION == 8 and saved["data"]["catalog_version"] == 14, "migration report encodes with schema8/catalog14")
 	if saved["ok"]:
 		var reopened := ProfileCodec.decode(saved["text"],catalog)
 		_check(reopened["ok"] and not reopened.get("migrated",false), "new envelope roundtrip never repeats refund")
 		if reopened["ok"]: _check(reopened["profile"].extension_fields.has("swordsman_skill_tree_migration"), "removal receipt remains visible after encoded reload")
 	raw["characters"][0]["purchased_skill_ranks"]["defender_anchor"] = 50
-	_check(not ProfileCodec.decode(JSON.stringify(raw),catalog)["ok"], "invalid legacy investment rejected before refund rather than repaired")
+	var invalid_investment := H.decode_confirmed(JSON.stringify(raw),catalog)
+	_check(not invalid_investment["ok"] and invalid_investment.get("error_code") != &"migration_required", "invalid legacy investment rejected before refund rather than repaired")
 
 func _durable_migration(raw: Dictionary, catalog: ProfileCatalog) -> void:
 	for schema: int in [5, 6]:
@@ -127,13 +132,17 @@ func _durable_migration(raw: Dictionary, catalog: ProfileCatalog) -> void:
 		DirAccess.make_dir_recursive_absolute(directory)
 		_write_fixture(directory.path_join(ProfileStore.PRIMARY_FILE), text)
 		var store := ProfileStore.new(directory, catalog)
-		var decoded := ProfileCodec.decode(text, catalog)
+		var protected := store.load_profile()
+		_check(not protected.get("ok", false) and protected.get("error_code") == &"migration_required" and protected.get("read_only", false) and FileAccess.get_file_as_string(directory.path_join(ProfileStore.PRIMARY_FILE)) == text, "schema%d durable fixture opens protected without rewrite" % schema)
+		var decoded := H.decode_confirmed(text, catalog)
 		_check(decoded["ok"], "historical durable fixture decodes")
 		if not decoded["ok"]: continue
 		var forged: ProfileState = decoded["profile"].copy_state()
 		forged.settings["forged"] = true
 		_check(not store._preflight_commit(forged, true)["ok"] and FileAccess.get_file_as_string(directory.path_join(ProfileStore.PRIMARY_FILE)) == text, "migration authority rejects changed same-revision source without writing")
-		var loaded := store.load_profile()
+		var preview := store.preview_migration()
+		_check(preview.get("ok", false) and preview.get("complete", false) and not store.apply_migration(preview["plan"], preview["plan_digest"].reverse(), "forged-digest")["ok"] and FileAccess.get_file_as_string(directory.path_join(ProfileStore.PRIMARY_FILE)) == text, "migration authority rejects an unconfirmed plan digest without writing")
+		var loaded := H.load_confirmed(store)
 		_check(loaded.get("ok", false) and loaded.get("migrated", false) and loaded.get("warning", &"") == &"profile_migrated", "schema%d migration commits through real store" % schema)
 		if not loaded.get("ok", false): continue
 		var current: ProfileState = loaded["profile"]
@@ -153,7 +162,7 @@ func _durable_migration(raw: Dictionary, catalog: ProfileCatalog) -> void:
 			var failing := FailingMigrationStore.new(failure_directory, catalog)
 			failing.failure_stage = stage
 			if stage == &"existing_pending": _write_fixture(failure_directory.path_join(ProfileStore.PENDING_FILE), "unconfirmed evidence")
-			var failed := failing.load_profile()
+			var failed := H.load_confirmed(failing)
 			_check(not failed["ok"] and FileAccess.get_file_as_string(failure_directory.path_join(ProfileStore.PRIMARY_FILE)) == text, "schema%d failed %s preserves original primary" % [schema, stage])
 			if stage == &"existing_pending": _check(FileAccess.get_file_as_string(failure_directory.path_join(ProfileStore.PENDING_FILE)) == "unconfirmed evidence", "existing pending evidence remains byte-identical")
 

@@ -3,6 +3,7 @@ extends RefCounted
 ## Transport of the F3 envelope, never another runtime serializer or writer.
 const Encoding = preload("res://scripts/core/expedition/snapshot/snapshot_graph_encoding.gd")
 const FORMAT := 2
+const COMPACT_FORMAT := 3
 const MAX_BYTES := Encoding.MAX_BYTES
 ## Base64 of the compressed snapshot: 4/3 of an incompressible MAX_BYTES, plus slack.
 const MAX_ENCODED := 22 * 1024 * 1024
@@ -15,14 +16,21 @@ static func pack(snapshot: Dictionary, owner_digest: String, session: Dictionary
 		if not checked["ok"]: return checked
 		bytes = checked.encoding
 	if bytes.size() > MAX_BYTES: return fail(&"snapshot_too_large")
+	return _pack_bytes(bytes, FORMAT, owner_digest, session)
+
+static func pack_compact(bytes: PackedByteArray, owner_digest: String, session: Dictionary) -> Dictionary:
+	if bytes.is_empty() or bytes.size() > MAX_BYTES: return fail(&"snapshot_too_large")
+	return _pack_bytes(bytes, COMPACT_FORMAT, owner_digest, session)
+
+static func _pack_bytes(bytes: PackedByteArray, format: int, owner_digest: String, session: Dictionary) -> Dictionary:
 	var compressed := bytes.compress(FileAccess.COMPRESSION_DEFLATE)
-	return {"ok":true,"checkpoint":{"format":FORMAT,"snapshot":Marshalls.raw_to_base64(compressed),"byte_count":bytes.size(),"sha256":digest_bytes(bytes),"compressed_sha256":digest_bytes(compressed),"owner_digest":owner_digest,"session":session.duplicate(true)}}
+	return {"ok":true,"checkpoint":{"format":format,"snapshot":Marshalls.raw_to_base64(compressed),"byte_count":bytes.size(),"sha256":digest_bytes(bytes),"compressed_sha256":digest_bytes(compressed),"owner_digest":owner_digest,"session":session.duplicate(true)}}
 
 static func validate_record(raw: Variant) -> Dictionary:
 	if not raw is Dictionary: return fail(&"invalid_checkpoint")
-	if not EquipmentRules.exact_integer(raw.get("format"),1) or int(raw["format"]) not in [1,FORMAT]: return fail(&"checkpoint_version_unavailable")
+	if not EquipmentRules.exact_integer(raw.get("format"),1) or int(raw["format"]) not in [1,FORMAT,COMPACT_FORMAT]: return fail(&"checkpoint_version_unavailable")
 	if raw.size() != (6 if int(raw["format"]) == 1 else 7): return fail(&"invalid_checkpoint")
-	if int(raw["format"]) == FORMAT and not CharacterAssets.valid_digest(raw.get("compressed_sha256")): return fail(&"invalid_checkpoint")
+	if int(raw["format"]) != 1 and not CharacterAssets.valid_digest(raw.get("compressed_sha256")): return fail(&"invalid_checkpoint")
 	if not raw.get("snapshot") is String or raw["snapshot"].is_empty() or raw["snapshot"].length() > MAX_ENCODED: return fail(&"snapshot_too_large")
 	if not EquipmentRules.exact_integer(raw.get("byte_count"),1,MAX_BYTES): return fail(&"snapshot_too_large")
 	if not CharacterAssets.valid_digest(raw.get("sha256")) or not CharacterAssets.valid_digest(raw.get("owner_digest")): return fail(&"invalid_checkpoint")
@@ -33,7 +41,7 @@ static func validate_record(raw: Variant) -> Dictionary:
 	var compressed := Marshalls.base64_to_raw(encoded)
 	if compressed.is_empty() or Marshalls.raw_to_base64(compressed) != encoded: return fail(&"invalid_checkpoint")
 	# Version 2 rejects damaged transport before calling the native inflater.
-	if int(raw["format"]) == FORMAT and digest_bytes(compressed) != raw["compressed_sha256"]: return fail(&"invalid_checkpoint")
+	if int(raw["format"]) != 1 and digest_bytes(compressed) != raw["compressed_sha256"]: return fail(&"invalid_checkpoint")
 	var bytes := compressed.decompress(int(raw["byte_count"]),FileAccess.COMPRESSION_DEFLATE)
 	if bytes.size() != int(raw["byte_count"]) or digest_bytes(bytes) != raw["sha256"]: return fail(&"invalid_checkpoint")
 	return {"ok":true,"bytes":bytes}
@@ -55,6 +63,7 @@ static func _canonical_base64(encoded: String) -> bool:
 	return true
 
 static func unpack(raw: Dictionary) -> Dictionary:
+	if raw.get("format") == COMPACT_FORMAT: return fail(&"checkpoint_version_unavailable")
 	var checked := validate_record(raw)
 	if not checked["ok"]: return checked
 	# Object decoding stays disabled. F3 owns all explicit runtime descriptors.
@@ -68,7 +77,7 @@ static func unpack(raw: Dictionary) -> Dictionary:
 	if not snapshot is Dictionary: return fail(&"invalid_checkpoint")
 	var valid := SnapshotRegistry.new().validate(snapshot)
 	if not valid["ok"]: return valid
-	return {"ok":true,"snapshot":snapshot}
+	return {"ok":true,"snapshot":snapshot,"encoding":valid["encoding"]}
 
 static func owner_digest(profile: ProfileState, character_id: String) -> String:
 	var character := profile.character_by_id(character_id)

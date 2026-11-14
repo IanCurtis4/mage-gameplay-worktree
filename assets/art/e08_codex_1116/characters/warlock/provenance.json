@@ -1,0 +1,90 @@
+[
+  {
+    "path": "assets/art/e08_codex_1116/characters/warlock/east.png",
+    "sha256": "66e360d2cb90e73decadf879cc03f89069b8b8b26080f8da6f445b27d99d54c0",
+    "width": 1366,
+    "height": 1152,
+    "generator": "Codex built-in imagegen",
+    "request": "warlock / east",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      },
+      {
+        "path": "assets/art/e08_characters/directional/spiritualist/south_source_v3.png",
+        "sha256": "0881d0223d0416cc1a72750da5c14399306490c1c5ef6efa09468997adb92dc5"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "prompt": "Use case: stylized-concept. Production RagRPG Bruxo animation source sheet, EAST only. Image 1 is the approved SOUTH character sheet, source of identity and design. Image 2 for art style and layout only, never copy its facing or costume. Image 3 is the Swordsman atlas, use its side-facing rows for in-game scale and profile composition. Same character as the attached south sheet; redraw as a true east view, do not mirror or recolor it. All sixteen poses point strictly screen RIGHT, including BOTH shoulders' depth overlap and toes pointing RIGHT whenever visible. The entire face in every live sprite is in true side profile: just ONE eye visible, nose projects from the RIGHT edge of the face, the other eye wholly hidden behind the nose and head. Chest remains lateral, never faces camera or switches side. The same young man with full shaggy ink-brown hair and slight hunch, knowing smile, an unraised hood at the back of the short dark leather coat, grey inner shirt, worn boots, white wraps and carmine contract marks on forearms, attached horn at his right belt and attached bone-pouch at left, short chain; avoid all greens. Row 3: one open palm offers forward and the other pulls back, then the other hand draws close to chest, front fingers curl over empty air, then recover with open hands visible.\n\nRender one native transparent RGBA game sprite source PNG, near 1200x1312, sixteen separate full-body sprites, one per equal 4x4 cell with clear alpha padding at all sides. Centers spaced on exact quarter grid; figure centers fixed to each cell's horizontal midpoint and a common foot baseline, generous breathing room even on all four outer edges. The characters should be about 76% of the cell height, do not let poses fill a cell. A short curled anatomically complete collapse pose fits in a smaller silhouette than the living poses. Row 1 four idle phases. Row 2 four walk frames, alternating lead foot and contralateral arm, with distinct contact and passing positions. Row 3 action as prescribed. Row 4 two distinct flinches, compact kneeling collapse, then fully prone fall in the facing direction, silhouette centered with empty alpha around it. Respect scale, brows, hair volume, costume shape and anatomical handedness of the approved character. Slightly elevated top-down RPG camera, painted crisp chibi pixel art, dark outline, 2–3 shade tones. Two arms attached at separate shoulders and two distinctly visible empty hands with readable fingers in all living poses; offset near versus far hand vertically and horizontally, both coherent, no extraneous arms. Absolutely no equipment in hands, weapons, sheathed blades, ground, shadows, cast spells, text, labels, marks or grid lines."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/warlock/north.png",
+    "sha256": "74c9a1d7082e4585b96faeea46a192dad8af8c52a9a5baf129d2534aa00708b3",
+    "width": 1108,
+    "height": 1420,
+    "generator": "Codex built-in imagegen",
+    "request": "warlock / north",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      },
+      {
+        "path": "assets/art/e08_characters/directional/spiritualist/south_source_v3.png",
+        "sha256": "0881d0223d0416cc1a72750da5c14399306490c1c5ef6efa09468997adb92dc5"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "prompt": "Use case: stylized-concept. RagRPG Bruxo production 2D pixel-art sprite animation source, NORTH/back only. First input defines the approved character identity from the front. Second input is only for painted pixel-art style and 4x4 layout. Third is Swordsman reference for in-game size and view; see its second group of four rows for how a north-facing back view reads. Same character as the attached south sheet; redraw as a true north/back view, do not mirror or recolor it. In every one of sixteen sprites the back of the head, back of torso, and backs of legs face the viewer while the character aims and walks away toward the top of the canvas. No face or eyes visible, no turning toward camera. Slight overhead fantasy RPG viewpoint, consistent with the cast. Preserve physical left-right garment assignments and let the arms and empty hands be seen at the sides from the back. Shaggy voluminous dark hair, lowered hood resting on the short back of the dark brown coat, worn dark boots, white wraps and carmine skin scars, short chain at belt, horn attachment at his right hip and tiny pouch at left. Raise one empty offering hand, draw the opposite hand toward the chest, flex the outstretched fingers around empty air, relax both arms.\n\nCreate one true RGBA source PNG about 1200×1312, exactly four by four equal invisible cells, one full sprite centered in each. Sprites occupy about 75% of cell height, with generous fully transparent margin on every side. Row 1 four subtle idle frames. Row 2 four walking frames with alternate leading feet. Row 3 four actions listed above. Row 4 two flinch frames, compact falling to knees and fully collapsed facing away. Maintain shared foot anchor within each cell and generous empty padding, compact silhouettes near the end. Exact two visible empty hands and paired anatomically joined arms, fingers visible in all living frames; show hands off the body rather than obscuring them. Chibi proportions, clean dark outlines, painted 2–3 tone crisp pixel art. No weapons, props, sheathed blades, particles, spell effects, ground, shadows, checkerboard, text or grid."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+    "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338",
+    "width": 1312,
+    "height": 1199,
+    "generator": "Codex built-in imagegen",
+    "request": "warlock / south",
+    "references": [
+      {
+        "path": "assets/art/e08_characters/directional/spiritualist/south_source_v3.png",
+        "sha256": "0881d0223d0416cc1a72750da5c14399306490c1c5ef6efa09468997adb92dc5"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "prompt": "Use case: stylized-concept. Production 2D pixel-art game animation sprite sheet for RagRPG, Bruxo (warlock), SOUTH/front. Reference 1: Spiritualist 4 × 4 source sheet for style and layout. Reference 2: Swordsman body atlas for chibi style, in-game size and proportions. Character: a lean, slightly hunched male warlock with a knowing smile, short dark leather coat over a grey shirt, hood down, bandaged forearms with ember-like carmine contract scars visible between the wraps as part of his skin, belt with a short chain, a small horn amulet on his right and a tiny tied pouch of bones on his left, worn boots; ink-black, dark leather brown, grey, carmine marks, small bile-yellow accents, no neon green.\n\nRow 3 action, from left to right: c1 offer the left open palm forward while the right hand is drawn back; c2 draw the right hand toward the chest as the left palm stays extended; c3 curl the visible left fingers over empty air while keeping the right hand readable off the torso; c4 hold and recover, hands separate and empty.\n\nTransparent PNG sprite source sheet, approximately 1200 × 1312 px, portrait or near square. Match the Spiritualist reference sheet's 4 × 4 layout and the Swordsman's in-game proportions. Use the inputs only for style, scale and staging, never copy their character designs. Crisp authored chibi pixel art, large head, short adult body, narrow dark outline, discrete 2–3 tone shading and strong readable costume blocks. Four exact equal-width columns and four exact equal-height rows with invisible grid; each cell contains ONE complete figure, feet included, ample empty space all around, no contact across cells. Same camera at a slightly elevated 3/4 angle, character upright and front-facing towards bottom of screen, both eyes visible when open. Align the foot pivot horizontally to the middle of every cell with a common floor baseline near its bottom. Each standing figure has the same head size and approximately the same height and scale. Row 1 four subtle idle phases; row 2 four distinct walk frames alternating the leading foot, paired counter-swinging arms, and including passing poses; row 3 follows the four requested action beats; row 4 first two cells distinctly flinch or stagger, third and fourth cells collapse and lie on the ground, compact and fully within their own cells, retaining front facing orientation. No blank cells. The front view keeps the vertical camera orientation through every action including sideways movement. Exactly two anatomically connected arms, two empty visible hands, and two legs; on all living frames let both hands read apart from the torso, with coherent wrist joints, thumb shapes and distinct visible fingers. Prayer palms may touch while clearly reading as two separate empty hands. Any accessories are small and attached to clothing, never carried. Keep costume asymmetry on the character's same anatomical side across the sheet. No weapons, sheathed blades, handheld props, extra figures, pets, spell graphics, aura, colored particles, scenery, floor plane, cast shadow, borders, captions, or grid lines. Genuine RGBA cutout alpha outside the figures, no checkerboard."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/warlock/west.png",
+    "sha256": "1af5052d9304abe1233c198660a9d8b74b52270c4f2021141c561df0d12b8674",
+    "width": 1312,
+    "height": 1199,
+    "generator": "Codex built-in imagegen",
+    "request": "warlock / west",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      },
+      {
+        "path": "assets/art/e08_characters/directional/spiritualist/south_source_v3.png",
+        "sha256": "0881d0223d0416cc1a72750da5c14399306490c1c5ef6efa09468997adb92dc5"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "prompt": "Use case: stylized-concept. Production RagRPG Bruxo animation source sheet, WEST only. Image 1 is the approved SOUTH character sheet, source of identity and design. Image 2 for art style and layout only, never copy its facing or costume. Image 3 is the Swordsman atlas, use its side-facing rows for in-game scale and profile composition. Same character as the attached south sheet; redraw as a true west view, do not mirror or recolor it. All sixteen poses point strictly screen LEFT, including BOTH shoulders' depth overlap and toes pointing LEFT whenever visible. The entire face in every live sprite is in true side profile: just ONE eye visible, nose projects from the LEFT edge of the face, the other eye wholly hidden behind the nose and head. Chest remains lateral, never faces camera or switches side. The same young man with full shaggy ink-brown hair and slight hunch, knowing smile, an unraised hood at the back of the short dark leather coat, grey inner shirt, worn boots, white wraps and carmine contract marks on forearms, attached horn at his right belt and attached bone-pouch at left, short chain; avoid all greens. Row 3: one open palm offers forward and the other pulls back, then the other hand draws close to chest, front fingers curl over empty air, then recover with open hands visible.\n\nRender one native transparent RGBA game sprite source PNG, near 1200x1312, sixteen separate full-body sprites, one per equal 4x4 cell with clear alpha padding at all sides. Centers spaced on exact quarter grid; figure centers fixed to each cell's horizontal midpoint and a common foot baseline, generous breathing room even on all four outer edges. The characters should be about 76% of the cell height, do not let poses fill a cell. A short curled anatomically complete collapse pose fits in a smaller silhouette than the living poses. Row 1 four idle phases. Row 2 four walk frames, alternating lead foot and contralateral arm, with distinct contact and passing positions. Row 3 action as prescribed. Row 4 two distinct flinches, compact kneeling collapse, then fully prone fall in the facing direction, silhouette centered with empty alpha around it. Respect scale, brows, hair volume, costume shape and anatomical handedness of the approved character. Slightly elevated top-down RPG camera, painted crisp chibi pixel art, dark outline, 2–3 shade tones. Two arms attached at separate shoulders and two distinctly visible empty hands with readable fingers in all living poses; offset near versus far hand vertically and horizontally, both coherent, no extraneous arms. Absolutely no equipment in hands, weapons, sheathed blades, ground, shadows, cast spells, text, labels, marks or grid lines."
+  }
+]

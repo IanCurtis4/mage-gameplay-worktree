@@ -1,0 +1,120 @@
+[
+  {
+    "path": "assets/art/e08_codex_1116/characters/monk/east_v2.png",
+    "sha256": "c222cadd567b699c8b6f48bdaaaa9681424ee5bd1086791f16f6e61e198ef470",
+    "width": 1312,
+    "height": 1199,
+    "generator": "Codex built-in imagegen",
+    "request": "monk / east",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/monk/south.png",
+        "sha256": "d86bcf99dc877a0d5b1d2031cd96c4d5193dce8af396218bd112f2f49e31a79c"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      }
+    ],
+    "prompt": "Use case: stylized-concept. Production animation sprite sheet for RagRPG Monge, true east side view (only ONE eye visible, nose and feet always toward screen RIGHT), never copy the character orientation of either reference. Character matches the first input exactly: young male monk with full tousled brown hair, short approachable travel-training clothes, cream cloth draped on his own left side, bare right shoulder, muted orange belt, white open-finger wraps, wood beads, worn knee pads and bare toes; no shaved hairstyle nor austere uniform. Image 1 provides identity, image 2 ONLY the SQUARE-LIKE 1312×1199 landscape canvas and the spacious 4×4 technical registration. Keep each complete sprite comparatively SMALL, maximum width and height 215 px, individually surrounded on all four sides by large TRUE ALPHA transparent margins, open channels at least 55 px between slots. Center all figures on exact grid, stand feet 40 px above each cell's bottom. One complete chibi figure per slot, same scale and center, crisp painted pixel art, 2–3 tones, dark outline. Row 1 idle (even idle shows near and far hand clearly apart at two depths). Row 2 walk with alternating feet. Row 3 action beats: palms forward, elbow strike, low kick, breathing with palms open, keeping clear empty hands. Row 4 two hurt stages, a very compact falling-to-knees sprite, a compact fully prone sprite with arms folded in and feet tucked, shortest possible silhouette width under 175 px. Neither death pose approaches a gutter. Anatomically correct 2 joined arms and 2 separated EMPTY hands with distinct fingers in all living poses even in profile. Keep all anatomical left-side accents in place. NO spell graphics, props, blade, ground, shadows, text, grids, and no extra lines or background. Genuine rectangular transparent PNG RGBA."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/monk/north.png",
+    "sha256": "5ca7b1e5c11ab3f5fa511a18747bdf1e117db4d3aacf9d51c160b9de0169b09c",
+    "width": 1108,
+    "height": 1420,
+    "generator": "Codex built-in imagegen",
+    "request": "monk / north",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/monk/south.png",
+        "sha256": "d86bcf99dc877a0d5b1d2031cd96c4d5193dce8af396218bd112f2f49e31a79c"
+      },
+      {
+        "path": "assets/art/e08_characters/directional/spiritualist/south_source_v3.png",
+        "sha256": "0881d0223d0416cc1a72750da5c14399306490c1c5ef6efa09468997adb92dc5"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "prompt": "Use case: stylized-concept. RagRPG Monge production 2D pixel-art sprite animation source, NORTH/back only. First input defines the approved character identity from the front. Second input is only for painted pixel-art style and 4x4 layout. Third is Swordsman reference for in-game size and view; see its second group of four rows for how a north-facing back view reads. Same character as the attached south sheet; redraw as a true north/back view, do not mirror or recolor it. In every one of sixteen sprites the back of the head, back of torso, and backs of legs face the viewer while the character aims and walks away toward the top of the canvas. No face or eyes visible, no turning toward camera. Slight overhead fantasy RPG viewpoint, consistent with the cast. Preserve physical left-right garment assignments and let the arms and empty hands be seen at the sides from the back. Original full tousled brown hair, cream travel-training clothes draped across left shoulder and bare right shoulder, muted orange sash, white hand and forearm wraps, wooden bead necklace at the back of the neckline as warranted, brown knee pads and visibly bare feet. Base-class practical outfit, no shaved head and no additional ascetic or uniform details. Palm strike toward screen top, compact elbow motion, low kick toward screen top with hands separate, then breathing pose with two palms open on either side.\n\nCreate one true RGBA source PNG about 1200×1312, exactly four by four equal invisible cells, one full sprite centered in each. Sprites occupy about 75% of cell height, with generous fully transparent margin on every side. Row 1 four subtle idle frames. Row 2 four walking frames with alternate leading feet. Row 3 four actions listed above. Row 4 two flinch frames, compact falling to knees and fully collapsed facing away. Maintain shared foot anchor within each cell and generous empty padding, compact silhouettes near the end. Exact two visible empty hands and paired anatomically joined arms, fingers visible in all living frames; show hands off the body rather than obscuring them. Chibi proportions, clean dark outlines, painted 2–3 tone crisp pixel art. No weapons, props, sheathed blades, particles, spell effects, ground, shadows, checkerboard, text or grid."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/monk/south_v4.png",
+    "sha256": "cbd41796b75b056fdf4ef4e0c6ad0c9bd746c1c56c4995b037251989c300f94f",
+    "width": 1312,
+    "height": 1199,
+    "generator": "Codex built-in imagegen",
+    "request": "monk / south",
+    "references": [
+      {
+        "path": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a1d2cf-b455-7d30-846f-a10387fcb4c9\\exec-ea6be314-6c5c-4014-be98-e9c975948e28.png",
+        "sha256": "af38ddee943d858ed7185ad6c9806900ff29e72b8b623bcaf28884876b39e2a6"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      }
+    ],
+    "prompt": "Use case: stylized-concept. Draw a new south-facing Monge sprite animation sheet for RagRPG. Input 1 governs character identity and colors: a calm kind young-adult man with dark closely cropped hair, dry humour in his eyes, low solid stance, cream tied rough cloth draped across the left shoulder exposing the right shoulder and upper arm, faded orange sash, white wrist and forearm bandages with bare fingers, short wooden necklace with one bead subtly hovering just above it, worn knee pads, bare feet with toes. Input 2 governs the LANDSCAPE canvas and exact grid registration. Make a 1312 wide × 1199 tall near-square transparent RGBA canvas like input 2. Copy its evenly-spaced four rows by four columns, exact wide clearance around each complete sprite. In particular the final two sprites need free space under their feet and hands, same as the second reference, about 32 px blank beneath them to the border. Shift the last two silhouettes upward and compact them as needed. Use a shared floor anchor for the living sprites near the bottom of each cell, with a 20–30 px gap before the edge. Same silhouette, chest and eyes face front with a slight overhead perspective, each figure one consistent chibi identity and stable proportions matching the cast. First row idle 4, second walk 4 showing clear paired opposite arm swing and alternating feet, third row c1–c4 open forward palm strike, a bent-arm elbow strike keeping both hands visible, low kick, a deliberate breathing stance with open palms. Last row first two flinch or stagger, last two are compact onset of collapse on knees followed by short curled fallen pose facing south. Each of the 14 live poses shows exactly two empty hands with visible fingers and corresponding correctly joined arms. Keep clothing accent and asymmetry on his same anatomical side. Crisp hand-painted pixel-art with dark contour and 2–3 tones. No props, weapons, blur, magic marks, bars, grid, text, shadow, floor, checkerboard or additional elements. PNG with genuine transparency around cutouts."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/monk/south_v7.png",
+    "sha256": "c9ac5dbc29d462e3dfc2bc5e37d323f3422c92ce6aba4a233ad4341390dfaf62",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "monk / south",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/monk/south.png",
+        "sha256": "d86bcf99dc877a0d5b1d2031cd96c4d5193dce8af396218bd112f2f49e31a79c"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/acolyte/south_v3.png",
+        "sha256": "24dfbcea205505283e0cd96e65a2eb9fb33f664d13d87748720b50efd37c3a8d"
+      }
+    ],
+    "prompt": "Use case: precise-object-edit. Redraw the FIRST image, keeping the original design exactly, for a clean RagRPG SOUTH animation source. Character features to preserve: first sheet's unmistakable large tousled warm brown hair, gentle features, cream cloth top with bare right shoulder, belt sash and simple beads, brown knee wraps and bare feet, same soft practical styling. Second image supplies ONLY a technical canvas guide, absolutely do not copy its character. Copy the 4×4 grid positioning and large transparent gaps from the second image. SQUARE canvas 1254×1254 true RGBA transparent. Draw all sprites visibly SMALL inside each equally spaced invisible 313 px cell, no sprite larger than 215×235 px; centered horizontally and same scale for all standing poses, sitting on a foot baseline 35 px above each cell's bottom. Keep at least 25 blank transparent px on ALL sides within every cell. Row 1 four original idle, row 2 four walk with lead foot alternating, row 3 four original character actions unchanged, row 4 two hurt, then small knees-down pose and very compact fully fallen pose, folded under themselves and facing down-screen exactly like a face-first flop, no horizontal sprawl. Every cell has one complete separated front-facing figure at chibi overhead 3/4, no cell overlap, keep exactly two visible empty hands in all living sprites. Reproduce the FIRST character face, hair volume, lay of materials, proportions, color and asymmetry, including no raised hoods and no shorter new haircut. Clean cutout alpha, dark line and two to three gradients of pixel-art paint. No held objects, floor, shadow, props, text, dividers, grids or external effects."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/monk/south.png",
+    "sha256": "d86bcf99dc877a0d5b1d2031cd96c4d5193dce8af396218bd112f2f49e31a79c",
+    "width": 1199,
+    "height": 1312,
+    "generator": "Codex built-in imagegen",
+    "request": "monk / south",
+    "references": [
+      {
+        "path": "assets/art/e08_characters/directional/spiritualist/south_source_v3.png",
+        "sha256": "0881d0223d0416cc1a72750da5c14399306490c1c5ef6efa09468997adb92dc5"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "prompt": "Use case: stylized-concept. Production 2D pixel-art game animation sprite sheet for RagRPG, Monge (monk), SOUTH/front. Reference 1: Spiritualist 4 × 4 source sheet for style and layout. Reference 2: Swordsman body atlas for chibi style, in-game size and proportions. Character: a calm, gentle male monk with a low centre of gravity and dry humour in the eyes, tied undyed cloth garments sleeveless on his right arm, faded orange sash, white hand and forearm wraps leaving fingers free and readable, a short wooden prayer-bead necklace with one visible bead lifted subtly right next to the necklace, worn knee pads, barefoot; cream, brown, faded orange, white wraps, high contrast.\n\nRow 3 action, from left to right: c1 forward open-palm strike, other hand open and visible; c2 compact elbow strike with a clearly connected hand and a distinct second hand; c3 low kick, both hands in separate readable positions; c4 slow breathing stance with both palms open.\n\nTransparent PNG sprite source sheet, approximately 1200 × 1312 px, portrait or near square. Match the Spiritualist reference sheet's 4 × 4 layout and the Swordsman's in-game proportions. Use the inputs only for style, scale and staging, never copy their character designs. Crisp authored chibi pixel art, large head, short adult body, narrow dark outline, discrete 2–3 tone shading and strong readable costume blocks. Four exact equal-width columns and four exact equal-height rows with invisible grid; each cell contains ONE complete figure, feet included, ample empty space all around, no contact across cells. Same camera at a slightly elevated 3/4 angle, character upright and front-facing towards bottom of screen, both eyes visible when open. Align the foot pivot horizontally to the middle of every cell with a common floor baseline near its bottom. Each standing figure has the same head size and approximately the same height and scale. Row 1 four subtle idle phases; row 2 four distinct walk frames alternating the leading foot, paired counter-swinging arms, and including passing poses; row 3 follows the four requested action beats; row 4 first two cells distinctly flinch or stagger, third and fourth cells collapse and lie on the ground, compact and fully within their own cells, retaining front facing orientation. No blank cells. The front view keeps the vertical camera orientation through every action including sideways movement. Exactly two anatomically connected arms, two empty visible hands, and two legs; on all living frames let both hands read apart from the torso, with coherent wrist joints, thumb shapes and distinct visible fingers. Prayer palms may touch while clearly reading as two separate empty hands. Any accessories are small and attached to clothing, never carried. Keep costume asymmetry on the character's same anatomical side across the sheet. No weapons, sheathed blades, handheld props, extra figures, pets, spell graphics, aura, colored particles, scenery, floor plane, cast shadow, borders, captions, or grid lines. Genuine RGBA cutout alpha outside the figures, no checkerboard."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/monk/west_v2.png",
+    "sha256": "cc06482143f17cb32c805ff344d3750afcc6bd928516171393a833456de79fbc",
+    "width": 1312,
+    "height": 1199,
+    "generator": "Codex built-in imagegen",
+    "request": "monk / west",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/monk/south.png",
+        "sha256": "d86bcf99dc877a0d5b1d2031cd96c4d5193dce8af396218bd112f2f49e31a79c"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      }
+    ],
+    "prompt": "Use case: stylized-concept. Production animation sprite sheet for RagRPG Monge, true west side view (only ONE eye visible, nose and feet always toward screen LEFT), never copy the character orientation of either reference. Character matches the first input exactly: young male monk with full tousled brown hair, short approachable travel-training clothes, cream cloth draped on his own left side, bare right shoulder, muted orange belt, white open-finger wraps, wood beads, worn knee pads and bare toes; no shaved hairstyle nor austere uniform. Image 1 provides identity, image 2 ONLY the SQUARE-LIKE 1312×1199 landscape canvas and the spacious 4×4 technical registration. Keep each complete sprite comparatively SMALL, maximum width and height 215 px, individually surrounded on all four sides by large TRUE ALPHA transparent margins, open channels at least 55 px between slots. Center all figures on exact grid, stand feet 40 px above each cell's bottom. One complete chibi figure per slot, same scale and center, crisp painted pixel art, 2–3 tones, dark outline. Row 1 idle (even idle shows near and far hand clearly apart at two depths). Row 2 walk with alternating feet. Row 3 action beats: palms forward, elbow strike, low kick, breathing with palms open, keeping clear empty hands. Row 4 two hurt stages, a very compact falling-to-knees sprite, a compact fully prone sprite with arms folded in and feet tucked, shortest possible silhouette width under 175 px. Neither death pose approaches a gutter. Anatomically correct 2 joined arms and 2 separated EMPTY hands with distinct fingers in all living poses even in profile. Keep all anatomical left-side accents in place. NO spell graphics, props, blade, ground, shadows, text, grids, and no extra lines or background. Genuine rectangular transparent PNG RGBA."
+  }
+]

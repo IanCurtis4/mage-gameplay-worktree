@@ -1,0 +1,98 @@
+[
+  {
+    "path": "assets/art/e08_codex_1117/vfx/aspect_bear_v2.png",
+    "sha256": "6aa774f6810375eb713a77a58583421712f80b57e224f973752fdf702a126501",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "aspect_bear / effect",
+    "references": [
+      {
+        "path": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a1d2cf-b455-7d30-846f-a10387fcb4c9\\exec-dac0e0ab-8f2b-497c-9421-39b0261a17dd.png",
+        "sha256": "bf75131b109cf999d31b7ba89548cff3923d8cb6d25200121fb8b5f6a2a59d81"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: precise-object-edit. Repaint this RagRPG overlay animation with genuinely semi-transparent paint and especially clear open interiors, so the player character will remain visible underneath at the strongest point. Upright spectral bear in moss-green and warm amber, big bear ears, broad fur silhouette and short bark accents, rising at center over the druid and fragments into a handful of ochre leaves. Outline open at points, sides firmer, torso center has absolutely no fill; use 80% hollow negative space in its torso and head so the druid is visible through the bear. Paint only silhouetting fringes of fur and a few short translucent hatch strokes, with warm wispy moss edge shading where needed. Leave the broad shapes entirely OPEN and UNPAINTED in their middle with ALPHA ZERO, including most of the width enclosing the torso, head or wings, and emphasize translucent thin contour and sparse short brush texture on the outside. Only a few bright tips may be opaque, at least 60% transparent even at the peak internally. Preserve the existing sequence and exact 4x4 regular layout, native square 1254×1254 RGBA. Keep all visible pixels and thin translucent edges in compact silhouettes centered in their own cell in a 185×190 px centered zone, never bleed or haze across cell boundaries. Same stable ground anchor and three-quarter overhead view. Frames 1–4 form from small marks, 5–8 coalesce with strongest area in frame 8, 9–12 fade into fragments, 13–15 keep one or a few small clearly visible marks, 16 entirely empty. Stylized delicately painted pixel-art effect, with no background, solid fill, halo, bloom, shadow, characters, floor, outlines of cells, words or fog."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/vfx/aspect_bear.png",
+    "sha256": "bf75131b109cf999d31b7ba89548cff3923d8cb6d25200121fb8b5f6a2a59d81",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "aspect_bear / effect",
+    "references": [
+      {
+        "path": "assets/art/e08_vfx/staging/nature_thorns.png",
+        "sha256": "419bc40da47c158f26fe06967a95f06830eff02e84280cd2bc75e1794e33e12f"
+      }
+    ],
+    "selected": false,
+    "prompt": "Use case: stylized-concept. A RagRPG production fantasy overlay-effect animation sprite sheet in clean hand-painted pixel art. The reference is only for crisp in-game visual language and true 4×4 cell registration. Native 1254×1254 transparent RGBA PNG, exactly 4 columns and 4 rows of equal invisible cells in chronological row-major order. One effect per cell, fixed pivot and consistent spatial scale. Keep effects and all particles centred within an inner max 185×185 px zone in each 313 px cell, never touch a cell border, completely clear alpha gutters. Frames 1–4 form, 5–8 strengthen to a clear peak on 8, 9–12 fragment and fade, 13–15 individually visible little traces, 16 almost blank. Hand-painted edges rather than broad bloom, actual low alpha inside the broad silhouette so an underlying druid reads through. Transparent outside shapes, don't fill the spaces between particles with haze. No character, ground, opaque backing, bright matte, shadow, border, text, grid or other art.\n\nPele de Urso / Bear Skin. A single spiritual bear silhouette stands upright on its hind legs in slight isometric 3/4 front at the center. Clearly readable bear ears, broad chest and forepaws held a little out. A moss-green and warm amber shape outlined in short actual fur-like painted strokes and bark chips. Paint it as luminous, semi-transparent spirit material: controlled faint green interiors (the druid will show through), defined selectively opaque accent strokes in amber and moss on the contour. No dense mascot or whole opaque bear. Begins as a few short amber bark and fur traces, coalesces at center and stands over the implied character space, compact at maximum mass in frame 8, loosens at the edges and breaks up into a small handful of individual ochre dry leaves. A calm sheltering stance with no roar."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/vfx/aspect_bird_v2.png",
+    "sha256": "3718a50d6a4b60aff5fe70dadb4c910e9dbc9baee4b533884acbbbbd236598ce",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "aspect_bird / effect",
+    "references": [
+      {
+        "path": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a1d2cf-b455-7d30-846f-a10387fcb4c9\\exec-f9b17f6b-0b1b-4e54-b4a8-88ea78bc5c8d.png",
+        "sha256": "cd2ff83a9dae39e2eba8003e3eb604f3a43738f74325bdeede69e014192cec98"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: precise-object-edit. Repaint this RagRPG overlay animation with genuinely semi-transparent paint and especially clear open interiors, so the player character will remain visible underneath at the strongest point. Thin feathered wings, one pair spread in a clear ascending rightward pass. One wing projects right and up, the far wing fans back into swept feathers. Brown and cream open feather ribs and trailing shapes; use glassy open feather gaps, not solid panels. Ends as a few individual feathers. No complete bird body or character. Leave the broad shapes entirely OPEN and UNPAINTED in their middle with ALPHA ZERO, including most of the width enclosing the torso, head or wings, and emphasize translucent thin contour and sparse short brush texture on the outside. Only a few bright tips may be opaque, at least 60% transparent even at the peak internally. Preserve the existing sequence and exact 4x4 regular layout, native square 1254×1254 RGBA. Keep all visible pixels and thin translucent edges in compact silhouettes centered in their own cell in a 185×190 px centered zone, never bleed or haze across cell boundaries. Same stable ground anchor and three-quarter overhead view. Frames 1–4 form from small marks, 5–8 coalesce with strongest area in frame 8, 9–12 fade into fragments, 13–15 keep one or a few small clearly visible marks, 16 entirely empty. Stylized delicately painted pixel-art effect, with no background, solid fill, halo, bloom, shadow, characters, floor, outlines of cells, words or fog."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/vfx/aspect_bird.png",
+    "sha256": "cd2ff83a9dae39e2eba8003e3eb604f3a43738f74325bdeede69e014192cec98",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "aspect_bird / effect",
+    "references": [
+      {
+        "path": "assets/art/e08_vfx/staging/slash_arc.png",
+        "sha256": "ca37be2786eb6dfbf1d53f818c67e0accb95e6b55c87ea6679de2a42056c58ea"
+      }
+    ],
+    "selected": false,
+    "prompt": "Use case: stylized-concept. A RagRPG production fantasy overlay-effect animation sprite sheet in clean hand-painted pixel art. The reference is only for crisp in-game visual language and true 4×4 cell registration. Native 1254×1254 transparent RGBA PNG, exactly 4 columns and 4 rows of equal invisible cells in chronological row-major order. One effect per cell, fixed pivot and consistent spatial scale. Keep effects and all particles centred within an inner max 185×185 px zone in each 313 px cell, never touch a cell border, completely clear alpha gutters. Frames 1–4 form, 5–8 strengthen to a clear peak on 8, 9–12 fragment and fade, 13–15 individually visible little traces, 16 almost blank. Hand-painted edges rather than broad bloom, actual low alpha inside the broad silhouette so an underlying druid reads through. Transparent outside shapes, don't fill the spaces between particles with haze. No character, ground, opaque backing, bright matte, shadow, border, text, grid or other art.\n\nSalto da Ave / Bird Leap. Show a single translucent magical pair of spread feathered wings in a rightward and ascending arc, seen in a 3/4 overhead perspective. Tawny brown in the longer feather layers, cream on leading edges, a few separated ochre and cream feathers leaving the wings, no full bird or person. The wings open from a few translucent short sweeping strokes; fully extended toward the right at frame 8 and at maximum small wing span; in 9–12 return to tapering broken silhouettes and individual feathers; 13–15 few final small feathers; 16 blank. Direction of travel clearly screen right and upward, with feather stream trailing softly to left. The broad wings are see-through within painted outer highlights so the character remains readable underneath."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/vfx/aspect_feline_v2.png",
+    "sha256": "0659f97c180ccb249776a76cf2fd56862363f3f2da420f045c777df855d32f98",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "aspect_feline / effect",
+    "references": [
+      {
+        "path": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a1d2cf-b455-7d30-846f-a10387fcb4c9\\exec-88360b26-4072-4837-81de-b13e4e335bde.png",
+        "sha256": "6f5ce3e2ea41709d35801bc36669a4fdc8902ca75cc0bf69dc61c583ae136bfa"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: precise-object-edit. Repaint this RagRPG overlay animation with genuinely semi-transparent paint and especially clear open interiors, so the player character will remain visible underneath at the strongest point. Rightward anatomical silhouette of a quick low cat in a pouncing leap, composed of glowing ochre and bright leaf green contours with a largely hollow body that reads through. Exactly three separated arcing claw trails streaming behind it at the peak (no other claw lines). The cat crosses right while the marks fade and leave a few individual paint flecks. Legs and one cat tail read through lightly spaced colored contours. Leave the broad shapes entirely OPEN and UNPAINTED in their middle with ALPHA ZERO, including most of the width enclosing the torso, head or wings, and emphasize translucent thin contour and sparse short brush texture on the outside. Only a few bright tips may be opaque, at least 60% transparent even at the peak internally. Preserve the existing sequence and exact 4x4 regular layout, native square 1254×1254 RGBA. Keep all visible pixels and thin translucent edges in compact silhouettes centered in their own cell in a 185×190 px centered zone, never bleed or haze across cell boundaries. Same stable ground anchor and three-quarter overhead view. Frames 1–4 form from small marks, 5–8 coalesce with strongest area in frame 8, 9–12 fade into fragments, 13–15 keep one or a few small clearly visible marks, 16 entirely empty. Stylized delicately painted pixel-art effect, with no background, solid fill, halo, bloom, shadow, characters, floor, outlines of cells, words or fog."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/vfx/aspect_feline.png",
+    "sha256": "6f5ce3e2ea41709d35801bc36669a4fdc8902ca75cc0bf69dc61c583ae136bfa",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "aspect_feline / effect",
+    "references": [
+      {
+        "path": "assets/art/e08_vfx/staging/slash_arc.png",
+        "sha256": "ca37be2786eb6dfbf1d53f818c67e0accb95e6b55c87ea6679de2a42056c58ea"
+      }
+    ],
+    "selected": false,
+    "prompt": "Use case: stylized-concept. A RagRPG production fantasy overlay-effect animation sprite sheet in clean hand-painted pixel art. The reference is only for crisp in-game visual language and true 4×4 cell registration. Native 1254×1254 transparent RGBA PNG, exactly 4 columns and 4 rows of equal invisible cells in chronological row-major order. One effect per cell, fixed pivot and consistent spatial scale. Keep effects and all particles centred within an inner max 185×185 px zone in each 313 px cell, never touch a cell border, completely clear alpha gutters. Frames 1–4 form, 5–8 strengthen to a clear peak on 8, 9–12 fragment and fade, 13–15 individually visible little traces, 16 almost blank. Hand-painted edges rather than broad bloom, actual low alpha inside the broad silhouette so an underlying druid reads through. Transparent outside shapes, don't fill the spaces between particles with haze. No character, ground, opaque backing, bright matte, shadow, border, text, grid or other art.\n\nGarra Felina / Feline Claw. Facing exactly screen RIGHT. Lean spectral feline silhouette in a short lunging leap, energy made of translucent ochre and vivid leaf-green brush-pixel highlights. At the crest show exactly THREE distinctive parallel claw marks arcing in the wake behind the rightward leaping cat; their edges read clearly as three separate marks. Thin translucent fills only, game actor must show through wherever there is overlap. Short duration: starts with a little green claw-shaped trace, cat form arrives and sweeps to right at frame 8 with its three bright gouges, the thin spirit silhouette dissolves in order and the three arcing marks and little green traces dissipate. Empty after 15 except tiny fragments. No opaque cat or white halo."
+  }
+]

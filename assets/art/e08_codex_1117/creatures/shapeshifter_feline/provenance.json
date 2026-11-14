@@ -1,0 +1,90 @@
+[
+  {
+    "path": "assets/art/e08_codex_1117/creatures/shapeshifter_feline/east_v2.png",
+    "sha256": "e818e77462d87950d9e8d1aa0c09d8acfabb5b3be228e8ef1f3185617e01b705",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "shapeshifter_feline / east",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/shapeshifter_feline/south.png",
+        "sha256": "266b5cf057283f3515b56cc5863cdc6bc7f02f380584a797fc73e37063662d92"
+      },
+      {
+        "path": "assets/art/e08_enemies/directional/animal_companion/east_source_v1.png",
+        "sha256": "7d0708e9b2f2ef40868b2df2fd0577f822c1464d586b795423dcb6e8b2252a88"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Produce 16 individually cutout transparent fantasy wolf-gray spotted cat sprites in four equal columns by four equal rows, 1254×1254 RGBA native. Same RagRPG shapeshift feline as first input. Second input for natural four-leg anatomy and crisp painted pixel style only. TRUE EAST with a single eye where open, face and all four feet always pointing to the right of screen, torso also right in 3/4 overhead. Ink outline, chibi mass, 2–3 step gray pixel shading. The Druid's original gray low long cat form with dark spots, three distinct leaf green fingerpaint marks on cheek and shoulder, stone necklace and small animal tooth secured near ear. Four legs and one moderately long tail, every frame. Row 1 four idle cells. Row 2 four distinct walk cells. Row 3 compact pounce, open paw swipe, low recoiling crouch, gathered short leap. Row 4 two flinches, then knees give out and whole cat rests prone, deliberately curling tail close. All silhouettes in a 215px x 210px maximum box centered in each 313px cell, wrap tail when needed, no pose reaches the transparent corridors, all sixteen cells independent. Hard alpha cutout immediately around the outer line, the entire empty space must be genuine alpha zero. No diffuse gray wash, haze under the cat, soft halo around character, floor, effects of any kind, lettering, grid, backgrounds, glare, weapons or shadow. Draw only the actual opaque fur, paint and small attached objects with localized antialias at silhouette. Sparse high contrast sprite art."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/shapeshifter_feline/north.png",
+    "sha256": "97c809cb374d7826592f4c1e34047defc1511b902a2222a816f7b9521ceb9552",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "shapeshifter_feline / north",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/shapeshifter_feline/south.png",
+        "sha256": "266b5cf057283f3515b56cc5863cdc6bc7f02f380584a797fc73e37063662d92"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/druid/south_v8.png",
+        "sha256": "8893d52868cd94b5f12f4f22aaec0b2d34f5ad020e96bd8044a05d9eb97c4102"
+      },
+      {
+        "path": "assets/art/e08_enemies/directional/animal_companion/east_source_v1.png",
+        "sha256": "7d0708e9b2f2ef40868b2df2fd0577f822c1464d586b795423dcb6e8b2252a88"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production 2D painted pixel-art game animation source sheet for RagRPG Forma felina (shapeshifter_feline), NORTH. First input is exactly this animal's approved front identity; use its exact textures, features, head shape and motifs. Second reference confirms the same Druid, and the third is animal anatomy, layout and cast style only. Same creature as the attached south sheet; redraw as a true north view, do not mirror or recolor it. It must always face AWAY toward the very TOP of the game screen in every pose. We see its rump, the back of its neck and head, rear anatomy of the feet and back of folded wings if any. Never show the face, mouth, eyes, nose or front facing toes. Movement clearly goes away from the viewer. In the final frame the creature rests prone with its back and rump facing downscreen and head facing upscreen. Original design. Same druid as the attached reference, transformed: keep her body paint, stone necklace and animal tooth recognizable. Creature: the same druid fully transformed into a low long lean gray feline, forest-wolf length, wide soft pads and spotted wolf-gray fur in a natural motif, vivid green body-paint strokes on its shoulder and cheek, the gray stone-necklace and small animal tooth charm attached at the near ear and visually related to the druid's accessories. Anatomy: true cat anatomy, four clearly positioned legs and exactly one coherent long tail, no human parts; final frame rests prone. Every live sprite has the same number of limbs, foreshortened for the camera angle. One full animal per cell. Limit animal silhouette and appendages to the central 215×215 px zone of each 313 px cell, with special care to tuck tail, reach and wings in foreshortening and leave lots of actual empty alpha. In north depict back-facing rump and rear of the shoulder, not a reattached back head on the front body. Row 3 action: pounce, swipe with open paw, crouch back to recoil, short bound with feet gathered. One original near-square (1254 × 1254 preferred; approx. 1200 × 1300) RGBA sprite SOURCE PNG with sixteen complete isolated figures, no contact or overlap. Four EXACT evenly spaced columns and rows, each in its own invisible cell, centered anchor shared across every pose, same standing scale and physical proportions throughout. Put everything including horns, tail and any carried weapon into a small centered silhouette with at least 28 clear pixels in all directions from cell divisions. Aim for sprite height and width at most 235 px. Keep weapons and elongated limbs tucked or foreshortened to allow no sprite to cross a cell edge. Keep the last two separate, compact, and centered. Row 1: exactly four idle phases. Row 2: four separate walking phases, alternate foot contact; realistic gait per species. Row 3: four listed attack poses in order. Row 4: first two hit reactions, third begins collapse, fourth fully fallen and short across the cell. Fully drawn chest, feet and tail in each frame, anatomy always consistent. Dark clean hand-painted pixel contour, readable chibi mass with 2–3 shade steps, target game sprite at small scale. Original design for this project. Fully cut out true transparent alpha in all gutters. No loose magic, projectile, gore, blood, floor, shadows, captions, game UI, actual grid, extra objects or matte."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/shapeshifter_feline/south.png",
+    "sha256": "266b5cf057283f3515b56cc5863cdc6bc7f02f380584a797fc73e37063662d92",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "shapeshifter_feline / south",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/druid/south_v8.png",
+        "sha256": "8893d52868cd94b5f12f4f22aaec0b2d34f5ad020e96bd8044a05d9eb97c4102"
+      },
+      {
+        "path": "assets/art/e08_enemies/directional/animal_companion/east_source_v1.png",
+        "sha256": "7d0708e9b2f2ef40868b2df2fd0577f822c1464d586b795423dcb6e8b2252a88"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production 2D painted pixel-art game animation source sheet for RagRPG, Forma felina (shapeshifter_feline), SOUTH/front. First reference is the druid identity, palette, handmade accessories and cast size. Second demonstrates small monster art style and animal anatomy only. Original design. Same druid as the attached reference, transformed: keep her body paint, stone necklace and animal tooth recognizable. The paint is one consistent personal motif of three uneven finger strokes, recolored per form. This is a complete animal and not a hybrid or a person. Creature: the same druid fully transformed into a low long lean gray feline, forest-wolf length, wide soft pads and spotted wolf-gray fur in a natural motif, vivid green body-paint strokes on its shoulder and cheek, the gray stone-necklace and small animal tooth charm attached at the near ear and visually related to the druid's accessories. Anatomy: true cat anatomy, four clearly positioned legs and exactly one coherent long tail, no human parts; final frame rests prone. All complete figures have head facing straight down towards viewer, symmetrical foreshortened slight overhead 3/4 front. Row 3: pounce, swipe with open paw, crouch back to recoil, short bound with feet gathered.\n\nOne original near-square (1254 × 1254 preferred; approx. 1200 × 1300) RGBA sprite SOURCE PNG with sixteen complete isolated figures, no contact or overlap. Four EXACT evenly spaced columns and rows, each in its own invisible cell, centered anchor shared across every pose, same standing scale and physical proportions throughout. Put everything including horns, tail and any carried weapon into a small centered silhouette with at least 28 clear pixels in all directions from cell divisions. Aim for sprite height and width at most 235 px. Keep weapons and elongated limbs tucked or foreshortened to allow no sprite to cross a cell edge. Keep the last two separate, compact, and centered. Row 1: exactly four idle phases. Row 2: four separate walking phases, alternate foot contact; realistic gait per species. Row 3: four listed attack poses in order. Row 4: first two hit reactions, third begins collapse, fourth fully fallen and short across the cell. Fully drawn chest, feet and tail in each frame, anatomy always consistent. Dark clean hand-painted pixel contour, readable chibi mass with 2–3 shade steps, target game sprite at small scale. Original design for this project. Fully cut out true transparent alpha in all gutters. No loose magic, projectile, gore, blood, floor, shadows, captions, game UI, actual grid, extra objects or matte."
+  },
+  {
+    "path": "assets/art/e08_codex_1117/creatures/shapeshifter_feline/west.png",
+    "sha256": "0c906924a335ec2e83ee1c3e34ba5996085d048b2787be01604d68c770e235e9",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "shapeshifter_feline / west",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1117/creatures/shapeshifter_feline/south.png",
+        "sha256": "266b5cf057283f3515b56cc5863cdc6bc7f02f380584a797fc73e37063662d92"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/druid/south_v8.png",
+        "sha256": "8893d52868cd94b5f12f4f22aaec0b2d34f5ad020e96bd8044a05d9eb97c4102"
+      },
+      {
+        "path": "assets/art/e08_enemies/directional/animal_companion/east_source_v1.png",
+        "sha256": "7d0708e9b2f2ef40868b2df2fd0577f822c1464d586b795423dcb6e8b2252a88"
+      }
+    ],
+    "selected": true,
+    "prompt": "Use case: stylized-concept. Production 2D painted pixel-art game animation source sheet for RagRPG Forma felina (shapeshifter_feline), WEST. First input is exactly this animal's approved front identity; use its exact textures, features, head shape and motifs. Second reference confirms the same Druid, and the third is animal anatomy, layout and cast style only. Same creature as the attached south sheet; redraw as a true west view, do not mirror or recolor it. It must always face LEFT, true west-facing profile from head to torso, snout or beak at the left and the axis of the body leading towards the left. One eye only in every frame that shows an eye. Original design. Same druid as the attached reference, transformed: keep her body paint, stone necklace and animal tooth recognizable. Creature: the same druid fully transformed into a low long lean gray feline, forest-wolf length, wide soft pads and spotted wolf-gray fur in a natural motif, vivid green body-paint strokes on its shoulder and cheek, the gray stone-necklace and small animal tooth charm attached at the near ear and visually related to the druid's accessories. Anatomy: true cat anatomy, four clearly positioned legs and exactly one coherent long tail, no human parts; final frame rests prone. Every live sprite has the same number of limbs, foreshortened for the camera angle. One full animal per cell. Limit animal silhouette and appendages to the central 215×215 px zone of each 313 px cell, with special care to tuck tail, reach and wings in foreshortening and leave lots of actual empty alpha. In north depict back-facing rump and rear of the shoulder, not a reattached back head on the front body. Row 3 action: pounce, swipe with open paw, crouch back to recoil, short bound with feet gathered. One original near-square (1254 × 1254 preferred; approx. 1200 × 1300) RGBA sprite SOURCE PNG with sixteen complete isolated figures, no contact or overlap. Four EXACT evenly spaced columns and rows, each in its own invisible cell, centered anchor shared across every pose, same standing scale and physical proportions throughout. Put everything including horns, tail and any carried weapon into a small centered silhouette with at least 28 clear pixels in all directions from cell divisions. Aim for sprite height and width at most 235 px. Keep weapons and elongated limbs tucked or foreshortened to allow no sprite to cross a cell edge. Keep the last two separate, compact, and centered. Row 1: exactly four idle phases. Row 2: four separate walking phases, alternate foot contact; realistic gait per species. Row 3: four listed attack poses in order. Row 4: first two hit reactions, third begins collapse, fourth fully fallen and short across the cell. Fully drawn chest, feet and tail in each frame, anatomy always consistent. Dark clean hand-painted pixel contour, readable chibi mass with 2–3 shade steps, target game sprite at small scale. Original design for this project. Fully cut out true transparent alpha in all gutters. No loose magic, projectile, gore, blood, floor, shadows, captions, game UI, actual grid, extra objects or matte."
+  }
+]

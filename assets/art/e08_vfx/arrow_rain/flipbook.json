@@ -1,0 +1,38 @@
+{
+  "id": "arrow_rain",
+  "revision": 1,
+  "source": "assets/art/e08_codex_1114/vfx/arrow_rain.png",
+  "source_sha256": "6c0c185aedf2b1f3b1f0961d93316facc12289b8296f9405d790f20f44e02c32",
+  "texture": "res://assets/art/e08_vfx/arrow_rain/flipbook.png",
+  "grid": [
+    4,
+    4
+  ],
+  "cell": [
+    160,
+    160
+  ],
+  "frames": 16,
+  "empty_frames": [],
+  "anchor_uv": [
+    0.5,
+    0.5
+  ],
+  "suggested_fps": 12,
+  "loop": false,
+  "world_diameter_hint": 150.2,
+  "source_common_bbox": [
+    35,
+    52,
+    277,
+    250
+  ],
+  "source_window": [
+    35,
+    30,
+    242
+  ],
+  "peak_frame": 7,
+  "rgba_sha256": "0f83f33fcf486cbab08a847046169b9d2dba46be2cebb7388934624751a1ccd3",
+  "png_sha256": "00c61568fa6fc790027fd176a84c96147ab265a2805904e6bc36236ad7cc4733"
+}

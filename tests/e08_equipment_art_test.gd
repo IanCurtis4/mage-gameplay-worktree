@@ -12,11 +12,39 @@ func check(ok: bool,label: String) -> void:
 	if not ok:failures+=1;push_error(label)
 func run() -> void:
 	catalog_checks()
+	painted_icon_checks()
 	body_checks()
 	head_fit_checks()
 	await transactions()
 	print("E08 equipment art: %d checks, %d failures" % [checks,failures])
 	quit(1 if failures else 0)
+## E08 C1-art (14/11): every piece cut from the second Codex batch resolves to its own painted
+## icon for the real catalog definition; heads/props keep priority; unknown ids keep the SVG.
+func painted_icon_checks() -> void:
+	var manifest: Variant=JSON.parse_string(FileAccess.get_file_as_string("res://assets/art/icons/equipment/painted/manifest.json"))
+	check(manifest is Dictionary and (manifest as Dictionary).get("items") is Array,"painted icon manifest parses")
+	if not manifest is Dictionary:return
+	var catalog := BuildContentLoader.pilot()
+	var items: Array=manifest.items
+	check(items.size()==44,"44 painted equipment icons (%d)" % items.size())
+	var seen: Dictionary={}
+	for row: Dictionary in items:
+		var id := StringName(row.id)
+		check(not seen.has(id),"painted icon listed once "+String(id));seen[id]=true
+		var path := "res://assets/art/icons/equipment/painted/%s.png" % id
+		check(FileAccess.get_sha256(path)==String(row.png_sha256),"painted icon hash "+String(id))
+		var definition := catalog.get_definition(&"equipment",id) as EquipmentDefinition
+		check(definition!=null and definition.slot!=&"head" and definition.slot!=&"main_hand","painted icon names a real non-head item "+String(id))
+		if definition==null:continue
+		var icon := EquipmentPresentation.icon(definition)
+		check(icon!=null and icon==EquipmentPresentation.painted_icon(id) and icon.get_size()==Vector2(128,128),"item shows its painted 128px icon "+String(id))
+	for legacy: StringName in EquipmentPresentation.PAINTED_ICON_ALIASES:
+		var target: StringName=EquipmentPresentation.PAINTED_ICON_ALIASES[legacy]
+		check(seen.has(target) and EquipmentPresentation.painted_icon(legacy)==EquipmentPresentation.painted_icon(target),"legacy item reuses its arena icon "+String(legacy))
+	var stray := EquipmentDefinition.new();stray.id=&"icon_fixture_without_art";stray.item_kind=&"armor";stray.slot=&"torso"
+	check(EquipmentPresentation.painted_icon(stray.id)==null and EquipmentPresentation.icon(stray)==load("res://assets/art/icons/equipment/plate.svg"),"item without painted art keeps the surface SVG")
+	var head := catalog.get_definition(&"equipment",&"pilot_head") as EquipmentDefinition
+	check(head!=null and EquipmentPresentation.icon(head) is AtlasTexture,"heads keep their four-view icon")
 func catalog_checks() -> void:
 	var inventory: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/art/e08_equipment_redesign/inventory.json"))
 	var catalog := BuildContentLoader.pilot()

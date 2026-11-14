@@ -48,6 +48,9 @@ signal resources_changed
 ## by PresentationEvents (a snapshot-excluded Control). Gameplay never connects to it.
 ## kind: skill_committed | heal_source | movement.
 signal presentation_fact(kind: StringName, skill_id: StringName, direction: Vector2, duration: float)
+## Presentation only (same observer and rules as presentation_fact): a `movement` fact whose ground distance is
+## known. `arrived` = emitted after the travel (instant recoil), otherwise before it starts.
+signal presentation_travel(skill_id: StringName, direction: Vector2, duration: float, distance: float, arrived: bool)
 
 const SLASH_SP_COST := 15.0
 const DASH_DURATION := 0.18
@@ -2093,6 +2096,8 @@ func use_hunter_covering_shot(direction: Vector2) -> bool:
 	var facing := _resolved_facing(Vector2(world_cast_direction().x,world_cast_direction().z) if world_motion != null else direction)
 	var origin := global_position + PlayerProjectile.BODY_OFFSET
 	var destination := hunter_recoil_destination(facing)
+	var recoil_heading := -facing
+	var recoil_distance := global_position.distance_to(destination)
 	var rank_definition := _runtime_rank_definition(&"hunter_covering_shot")
 	var request := _make_physical_request(null, &"hunter_covering_shot", stat_breakdown.value(&"precision_attack") * rank_definition.power, DamageRequest.AccuracyMode.GEOMETRY, true)
 	if not _spend(&"hunter_covering_shot"): return false
@@ -2105,6 +2110,8 @@ func use_hunter_covering_shot(direction: Vector2) -> bool:
 		var moved := world_motion.advance(float(plan["data"]["cost"]))
 		world_motion.cancel(); _stop_world_travel()
 		if not moved["ok"]: return true
+		recoil_heading = Vector2(-world_cast_direction().x,-world_cast_direction().z) if _world_executing_cast != null else -facing
+		recoil_distance = float(plan["data"]["cost"])
 	else: global_position = destination
 	_path.clear()
 	_path_index = 0
@@ -2114,6 +2121,9 @@ func use_hunter_covering_shot(direction: Vector2) -> bool:
 	# Movement and the captured shot commit together; basic attack clocks remain.
 	hunter_covering_shot_requested.emit(request, origin, facing)
 	presentation_action.emit(&"basic_attack", facing, 0.18)
+	# Presentation only: the recoil already happened (instant); the trail is drawn back to where it started.
+	if recoil_distance > MOVEMENT_EPSILON and recoil_heading.length_squared() > 0.0001:
+		presentation_travel.emit(&"hunter_covering_shot", recoil_heading.normalized(), 0.12, recoil_distance, true)
 	resources_changed.emit()
 	return true
 
@@ -2636,7 +2646,7 @@ func _use_world_travel_skill(id: StringName, actors: Array[CombatActor]) -> bool
 			_world_advance_guard_facing = facing
 	_path.clear(); _has_path_goal = false; velocity = Vector2.ZERO; target = null; _attack_engaged = false; _attack_recovery = 0.0
 	# Presentation only: the canonical line was planned and applied (retreat) or adopted (dash).
-	presentation_fact.emit(&"movement", id, Vector2(heading.x, heading.z).normalized(), 0.18 if id == &"defender_retreat_guard" else DASH_DURATION)
+	presentation_travel.emit(id, Vector2(heading.x, heading.z).normalized(), 0.18 if id == &"defender_retreat_guard" else DASH_DURATION, float(planned["data"]["cost"]), id == &"defender_retreat_guard")
 	resources_changed.emit()
 	return true
 

@@ -33,15 +33,15 @@ func _check_production_roster() -> void:
 		&"defender": ["Defendente", &"swordsman", &"2-1", &""],
 		&"berserker": ["Berserker", &"swordsman", &"2-2", &""],
 		&"sp_mg": ["Cavaleiro Rúnico", &"swordsman", &"2-3", &"mage"],
-		&"sp_ar": ["Baluarte de Cerco", &"swordsman", &"2-3", &"archer"],
+		&"sp_ar": ["Bastião", &"swordsman", &"2-3", &"archer"],
 		&"elementalist": ["Elementalista", &"mage", &"2-1", &""],
 		&"spiritualist": ["Espiritualista", &"mage", &"2-2", &""],
-		&"mg_sp": ["Devastador Astral", &"mage", &"2-3", &"swordsman"],
+		&"mg_sp": ["Possesso", &"mage", &"2-3", &"swordsman"],
 		&"mg_ar": ["Geômetra", &"mage", &"2-3", &"archer"],
 		&"sentinel": ["Sentinela", &"archer", &"2-1", &""],
 		&"hunter": ["Caçadora", &"archer", &"2-2", &""],
 		&"ar_sp": ["Saqueador", &"archer", &"2-3", &"swordsman"],
-		&"ar_mg": ["Caçador de Espectros", &"archer", &"2-3", &"mage"],
+		&"ar_mg": ["Rastreador", &"archer", &"2-3", &"mage"],
 	}
 	for definition: EvolutionDefinition in definitions:
 		var values: Array = expected[definition.id]

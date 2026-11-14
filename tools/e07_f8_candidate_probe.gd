@@ -212,12 +212,23 @@ func resume_and_complete() -> void:
 			if host.campaign_runtime.state.slots[slot]["stage_id"] != stage or not actor.is_alive(): continue
 			actor.health.current_hp = 0.0
 			actor.health._death_emitted = true
+			# Since 2c597e70/21b0b2fd (31/10) a death is written as a journal entry in the
+			# same frame, without capturing or replacing the world; the full transaction
+			# (scene replacement) remains the fallback when the journal cannot take it.
 			var previous := host
+			var journal_before := host.persistent_facade.current_profile().expedition_for_character(expected["character_id"]).journal.size()
 			host._on_enemy_died(actor)
 			var deadline := Time.get_ticks_msec() + 90000
-			while tree.current_scene == previous and Time.get_ticks_msec() < deadline: await tree.process_frame
-			if not check(tree.current_scene != previous and tree.current_scene is RunController, "death persisted before replacement"): return
-			host = tree.current_scene as RunController
+			while tree.current_scene == previous and (not previous.campaign_runtime.pending_events.is_empty() or previous._memory_snapshot_pending or previous._expedition_flush_running) and Time.get_ticks_msec() < deadline: await tree.process_frame
+			var replaced := tree.current_scene != previous
+			if replaced:
+				if not check(tree.current_scene is RunController, "death persisted before replacement"): return
+				host = tree.current_scene as RunController
+				report["death_replacements"] = int(report.get("death_replacements", 0)) + 1
+			else:
+				var lock_after := host.persistent_facade.current_profile().expedition_for_character(expected["character_id"])
+				if not check(host.campaign_runtime.pending_events.is_empty() and lock_after != null and lock_after.journal.size() == journal_before + 1 and host.campaign_runtime.state.slots[slot]["life_state"] == "dead", "death persisted as one journal entry on the same host"): return
+				report["death_journal_entries"] = int(report.get("death_journal_entries", 0)) + 1
 			tree.paused = true
 		host.combat_participation.observe({}, 6.0)
 		if not check(not host.encounter_active, "canonical combat participation window expires"): return

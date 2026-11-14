@@ -1,5 +1,6 @@
 extends SceneTree
 ## Ranks are cast selections, never learning mutations. Uses real cost/emission APIs.
+const H = preload("res://tests/fixtures/e07/f2/confirmed_history.gd")
 var checks := 0
 var failures := 0
 const PROFILE_ID := "123e4567-e89b-42d3-a456-426614174335"
@@ -72,17 +73,20 @@ func _codec() -> void:
 	if not restored["ok"]: return
 	var copy: CharacterState = restored["profile"].characters[0]
 	_check(copy.action_slots == character.action_slots and CharacterProgression.summary(copy, catalog) == wallet, "roundtrip preserves positions and learning wallets")
-	var old: Dictionary = encoded["data"].duplicate(true)
+	# Historical fixture drops the schema-8 ownership envelope; schema 1-7 needs preview + confirmed digest: E07 F2 3b15ae8a (20/10).
+	var old: Dictionary = H.legacy_envelope(encoded["data"])
 	old["schema_version"] = 5
 	for fixture_character: Dictionary in old["characters"]: fixture_character.erase("admin_skills_unlocked")
 	old["catalog_version"] = 12
 	old["characters"][0]["action_slots"][23] = null
-	var migrated := ProfileCodec.decode(JSON.stringify(old), catalog)
+	_check(ProfileCodec.decode(JSON.stringify(old), catalog).get("error_code") == &"migration_required", "schema5 opens protected until confirmed")
+	var migrated := H.decode_confirmed(JSON.stringify(old), catalog)
 	_check(migrated["ok"] and migrated.get("migrated", false), "schema5 explicit migration succeeds")
 	if migrated["ok"]:
 		_check(migrated["profile"].characters[0].action_slots[0] == &"fireball" and CharacterProgression.summary(migrated["profile"].characters[0], catalog) == wallet, "schema5 highest ID and points unchanged")
 	old["characters"][0]["action_slots"][23] = {"skill_id": "fireball", "rank": 1}
-	_check(not ProfileCodec.decode(JSON.stringify(old), catalog)["ok"], "schema5 cannot disguise schema6 slot")
+	var disguised := H.decode_confirmed(JSON.stringify(old), catalog)
+	_check(not disguised["ok"] and disguised.get("error_code") != &"migration_required", "schema5 cannot disguise schema6 slot")
 	var malicious: Dictionary = encoded["data"].duplicate(true)
 	malicious["characters"][0]["action_slots"][23]["rank"] = 6
 	_check(not ProfileCodec.decode(JSON.stringify(malicious), catalog)["ok"], "codec rejects beyond catalog cap")

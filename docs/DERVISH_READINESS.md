@@ -1,5 +1,10 @@
 # Dervixe — Prontidão e mobilidade
 
+> **Substituído em 14/11/2026.** O usuário pediu um arquétipo próprio (duelista,
+> dançarino, trapaceiro e saltimbanco, com vento e transe de devaneio). A ficha
+> vigente está em [EXTENDED_CLASS_SPECS.md](EXTENDED_CLASS_SPECS.md), família Ladino.
+> Este documento fica só como histórico.
+
 13/09/2026. Proposta de Astra após o usuário delegar a solução. Referências de
 fantasia fornecidas pelo usuário: Combat Rogue, Akshan e swashbuckler. Mecânica
 original proposta abaixo; não pretende reproduzir habilidades atuais desses jogos.

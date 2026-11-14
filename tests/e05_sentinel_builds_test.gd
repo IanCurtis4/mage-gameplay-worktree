@@ -1,6 +1,7 @@
 extends SceneTree
 const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 const TX = preload("res://tests/e06_tx_fixture.gd")
+const H = preload("res://tests/fixtures/e07/f2/confirmed_history.gd")
 ## S6 legal purchases, persistence and comparable allocations. No personal saves.
 
 const PROFILE_ID := "123e4567-e89b-42d3-a456-426614174216"
@@ -257,8 +258,11 @@ func _legacy() -> void:
 	file.store_string(prior_text)
 	file.close()
 	var facade := ProfileFacade.new(ProfileStore.new(path, _catalog()))
-	var opened := facade.open_profile()
-	_check(opened["ok"], "older catalog Archer save migrates through real facade/store")
+	# Schema 1-7 opens protected and migrates only after preview + confirmed digest: E07 F2 3b15ae8a (20/10).
+	var protected := facade.open_profile()
+	_check(not protected.get("ok", false) and protected.get("error_code") == &"migration_required" and _disk("legacy/profile.json") == prior_text, "older catalog Archer save opens protected without automatic rewrite")
+	var opened := H.open_confirmed(facade)
+	_check(opened["ok"] and opened.get("migrated", false), "older catalog Archer save migrates through real facade/store after confirmed preview")
 	if not opened["ok"]:
 		return
 	var character := facade.current_profile().characters[0]

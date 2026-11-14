@@ -2,6 +2,12 @@ extends SceneTree
 const Catalog = preload("res://scripts/presentation/vfx_flipbook_catalog.gd")
 const Fixture = preload("res://tests/fixtures/e07/f1/fixture_input.gd")
 const STAGING := "assets/art/e08_vfx/staging/"
+## Second Codex batch (14/11): own staging folder, prompts recorded per sheet.
+const CODEX_1114 := "assets/art/e08_codex_1114/vfx/"
+## 15/11 repaints of two second-batch sheets: own folder and provenance; the 14/11 rows stay as history.
+const CODEX_1115 := "assets/art/e08_codex_1115/vfx/"
+const CODEX_1115_IDS := [&"spirit_dissipation", &"tri_nova"]
+const CODEX_1114_IDS := [&"arrow_rain", &"covering_shot", &"geometer_collapse", &"headshot", &"shield_bash", &"spirit_dissipation", &"tri_nova", &"triangulation", &"warden_charge", &"wound_leap"]
 var checks := 0
 var failures := 0
 func _initialize() -> void: _run.call_deferred()
@@ -22,7 +28,24 @@ func _rgba_hash(image: Image) -> String:
 func _run() -> void:
 	if not Fixture.sources_current(): push_error("stale fixture"); quit(1); return
 	var ids := Catalog.ids()
-	check(ids.size() == 9, "catalog lists nine flipbooks")
+	check(ids.size() == 19, "catalog lists nineteen flipbooks")
+	var batch_root := FileAccess.get_file_as_string("res://source_root.txt").strip_edges()
+	var batch_file := "res://"+CODEX_1114+"provenance.json"
+	if not FileAccess.file_exists(batch_file) and not batch_root.is_empty(): batch_file = batch_root.path_join(CODEX_1114+"provenance.json")
+	var batch: Variant = JSON.parse_string(FileAccess.get_file_as_string(batch_file))
+	check(batch is Array and (batch as Array).size() == CODEX_1114_IDS.size(), "second batch provenance parses")
+	var batch_assets: Dictionary = {}
+	if batch is Array:
+		for row: Variant in batch:
+			if row is Dictionary: batch_assets[StringName(String(row.get("path", "")).get_file().get_basename())] = row
+	var repaint_file := "res://"+CODEX_1115+"provenance.json"
+	if not FileAccess.file_exists(repaint_file) and not batch_root.is_empty(): repaint_file = batch_root.path_join(CODEX_1115+"provenance.json")
+	var repaint: Variant = JSON.parse_string(FileAccess.get_file_as_string(repaint_file))
+	check(repaint is Array and (repaint as Array).size() == CODEX_1115_IDS.size(), "15/11 repaint provenance parses")
+	var repaint_assets: Dictionary = {}
+	if repaint is Array:
+		for row: Variant in repaint:
+			if row is Dictionary: repaint_assets[StringName(String(row.get("path", "")).get_file().get_basename())] = row
 	var provenance: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://"+STAGING+"provenance.json"))
 	check(provenance is Dictionary and (provenance as Dictionary).get("assets") is Dictionary, "provenance parses")
 	var assets: Dictionary = (provenance as Dictionary).get("assets", {}) if provenance is Dictionary else {}
@@ -73,6 +96,20 @@ func _run() -> void:
 		check(Catalog.frame_at(id, 16.0/fps) == -1 and Catalog.frame_at(id, 999.0) == -1 and Catalog.frame_at(id, INF) == -1, "frame_at finishes without looping: "+String(id))
 		check(Catalog.frame_region(id, -1) == Rect2i() and Catalog.frame_region(id, 16) == Rect2i(), "frame_region out of range is empty: "+String(id))
 		# provenance
+		if id in CODEX_1115_IDS:
+			var row: Dictionary = repaint_assets.get(id, {})
+			var sheet_hash := FileAccess.get_sha256("res://"+CODEX_1115+"%s.png" % id)
+			if sheet_hash.is_empty() and not batch_root.is_empty(): sheet_hash = FileAccess.get_sha256(batch_root.path_join(CODEX_1115+"%s.png" % id))
+			check(def.source == CODEX_1115+"%s.png" % id and sheet_hash == def.source_sha256 and row.get("sha256") == def.source_sha256, "15/11 repaint source hash: "+String(id))
+			check(row.get("generator") == "Codex built-in imagegen" and row.get("prompt") is String and String(row.get("prompt")).length() > 80 and int(row.get("width", 0)) == 1254 and int(row.get("height", 0)) == 1254, "15/11 repaint prompt recorded: "+String(id))
+			continue
+		if id in CODEX_1114_IDS:
+			var row: Dictionary = batch_assets.get(id, {})
+			var sheet_hash := FileAccess.get_sha256("res://"+CODEX_1114+"%s.png" % id)
+			if sheet_hash.is_empty() and not batch_root.is_empty(): sheet_hash = FileAccess.get_sha256(batch_root.path_join(CODEX_1114+"%s.png" % id))
+			check(def.source == CODEX_1114+"%s.png" % id and sheet_hash == def.source_sha256 and row.get("sha256") == def.source_sha256, "second batch source hash: "+String(id))
+			check(row.get("generator") == "Codex built-in imagegen" and row.get("prompt") is String and String(row.get("prompt")).length() > 80 and int(row.get("width", 0)) == 1254 and int(row.get("height", 0)) == 1254, "second batch prompt recorded: "+String(id))
+			continue
 		var entry: Dictionary = assets.get(id, {})
 		var staging_path := "res://"+STAGING+"%s.png" % id
 		var staged_hash := FileAccess.get_sha256(staging_path)
@@ -85,7 +122,7 @@ func _run() -> void:
 	var second := Catalog.definition(&"fire_burst")
 	check(_ints(second.grid) == [4,4] and second.has("cell") and _ints(second.empty_frames) == [15], "definition returns independent copies")
 	var listing := Catalog.ids(); listing.clear()
-	check(Catalog.ids().size() == 9, "ids returns a copy")
+	check(Catalog.ids().size() == 19, "ids returns a copy")
 	# fail closed
 	check(Catalog.definition(&"missing").is_empty() and Catalog.texture(&"missing") == null and Catalog.frame_at(&"missing", 0.0) == -1 and Catalog.frame_region(&"missing", 0) == Rect2i(), "unknown id fails closed")
 	var good := Catalog.definition(&"slash_arc")

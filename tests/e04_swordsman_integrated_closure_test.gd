@@ -79,8 +79,13 @@ func _run() -> void:
 	var defender_passive: Array[Variant] = [&"swordsman_resistance", &"vigor"]
 	var berserker_passive: Array[Variant] = [&"blood_thirst", &"vigor"]
 	var equipment: Dictionary[StringName, Variant] = facade.current_profile().character_by_id(character_id).equipped.duplicate(true)
+	# Each preset now carries its own owner's pieces: E07 F2 3b15ae8a (20/10) gave equipment a per-character owner.
+	var berserker_equipment: Dictionary[StringName, Variant] = facade.current_profile().character_by_id(berserker_id).equipped.duplicate(true)
+	var revision_before_foreign := facade.current_profile().revision
+	var foreign := facade.update_preset("sw-berserker-foreign", revision_before_foreign, berserker_id, 1, berserker_active, berserker_passive, equipment)
+	_check(not foreign.get("ok", false) and facade.current_profile().revision == revision_before_foreign, "preset recusa peças de outro personagem sem gravar")
 	var defender_saved := facade.update_preset("sw-defender", facade.current_profile().revision, character_id, 0, defender_active, defender_passive, equipment)
-	var berserker_saved := facade.update_preset("sw-berserker", facade.current_profile().revision, berserker_id, 1, berserker_active, berserker_passive, equipment)
+	var berserker_saved := facade.update_preset("sw-berserker", facade.current_profile().revision, berserker_id, 1, berserker_active, berserker_passive, berserker_equipment)
 	_check(defender_saved.get("ok", false) and berserker_saved.get("ok", false), "dois presets manuais persistem")
 	var reloaded := ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
 	var reopened := reloaded.open_profile()

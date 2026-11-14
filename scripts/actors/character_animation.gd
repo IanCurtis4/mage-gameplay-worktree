@@ -145,12 +145,22 @@ func _frame_for_view(view: int) -> int:
 	return state.frame_index() if view<0 else view*16+state.pose_index()
 
 func draw_key() -> Array:
+	return _draw_key_after([])
+
+## Reuse the owner's detached snapshot while the same commands remain visible.
+func _draw_key_after(previous: Array) -> Array:
 	var bundle := _active_bundle()
 	var frame := _frame_for_view(state.direction_index() if bundle!=null else -1)
-	return [frame,false if bundle!=null else state.flip_h,state.dead,state.hurt_remaining>0.0,
-		state.action_remaining>0.0,state.action,
-		state.action_duration>0.0 and 1.0-state.action_remaining/state.action_duration<0.75,
-		atlas,_equipment_visual.duplicate()]
+	var flip := bundle == null and state.flip_h
+	var hurt := state.hurt_remaining > 0.0
+	var acting := state.action_remaining > 0.0
+	var early_action := state.action_duration > 0.0 and 1.0 - state.action_remaining / state.action_duration < 0.75
+	if not previous.is_empty() and previous[0] == frame and previous[1] == flip \
+			and previous[2] == state.dead and previous[3] == hurt and previous[4] == acting \
+			and previous[5] == state.action and previous[6] == early_action \
+			and previous[7] == atlas and previous[8] == _equipment_visual:
+		return previous
+	return [frame, flip, state.dead, hurt, acting, state.action, early_action, atlas, _equipment_visual.duplicate()]
 
 ## Single frame/transform authority for body, hands, fingers, helmet and death.
 ## Callers get detached geometry; editing it cannot alter the immutable catalog.
@@ -206,9 +216,11 @@ func draw_on(canvas: CanvasItem, tint: Color = Color.WHITE, visual_scale: float 
 	canvas.draw_set_transform(Vector2.ZERO,0.0,Vector2(-visual_scale if descriptor.flip else visual_scale,visual_scale))
 	canvas.draw_texture_rect_region(descriptor.atlas,descriptor.rect,descriptor.region,tint)
 	canvas.draw_set_transform(Vector2.ZERO,0.0,Vector2.ONE)
+	# 15/11 playtest: the head piece sits on the body, under what the front hand holds
+	# (a staff raised past a wreath must cover it), and the gripping fingers stay on top.
+	EquipmentHeadVisual.draw_resolved(canvas,descriptor,tint,visual_scale,1)
 	ATTACHMENT_VISUAL_SCRIPT.draw_resolved(canvas,descriptor,tint,visual_scale,1)
 	ATTACHMENT_VISUAL_SCRIPT.draw_resolved_fingers(canvas,descriptor,tint,visual_scale)
-	EquipmentHeadVisual.draw_resolved(canvas,descriptor,tint,visual_scale,1)
 
 func source_region(frame: int) -> Rect2:
 	# Integer cell coordinates are explicit; no fractional atlas-row sampling.

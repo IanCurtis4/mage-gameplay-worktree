@@ -5,6 +5,7 @@ var actors: Array[CombatActor] = []
 var draws := 0
 func _initialize() -> void: run.call_deferred()
 func run() -> void:
+	var tick_only := "--cpu-tick" in OS.get_cmdline_user_args()
 	root.size = Vector2i(1280,720); DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	var heights: Array = []; heights.resize(17*17); heights.fill(0.0)
 	var grid := {"origin_xz":[0.0,0.0],"sample_spacing":64.0,"columns":17,"rows":17,"heights":heights}
@@ -24,6 +25,12 @@ func run() -> void:
 		if not actor.bind_world_geometry(world,point,{"radius":18.0,"height":40.0,"connector_kinds":["walk"]},"crowd_%d"%i).ok: quit(1); return
 		actor.position = Project.project(point.position); actor.draw.connect(func() -> void: draws += 1); actors.append(actor)
 	player.free()
+	if tick_only:
+		measure_idle_ticks()
+		return
+	if "--stable-capture" in OS.get_cmdline_user_args():
+		await capture_idle_pose()
+		return
 	for k: int in 12: await process_frame
 	var rows: Array = []
 	for pass_index: int in 6:
@@ -46,4 +53,42 @@ func run() -> void:
 	root.get_texture().get_image().save_png(OS.get_environment("TERRAIN_EVIDENCE").path_join("world_crowd.png"))
 	print("WORLD_CROWD_RESULT ",JSON.stringify({"ok":rows.size()==6,"rows":rows,"draw_calls":Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)})); quit()
 
+## Run the same full actor callback with a fixed delta. Time the 96 actors
+## together, with no frame scheduling or renderer work inside the sample.
+func measure_idle_ticks() -> void:
+	const STEP := 1.0 / 240.0
+	const WARMUP_TICKS := 120
+	const SAMPLE_TICKS := 360
+	var rows: Array[Dictionary] = []
+	for window: int in 6:
+		var times := PackedFloat64Array()
+		times.resize(SAMPLE_TICKS)
+		for tick: int in WARMUP_TICKS + SAMPLE_TICKS:
+			var begin := Time.get_ticks_usec()
+			for actor: CombatActor in actors:
+				actor._process(STEP)
+			var elapsed := Time.get_ticks_usec() - begin
+			if tick >= WARMUP_TICKS:
+				times[tick - WARMUP_TICKS] = elapsed / 1000.0
+		times.sort()
+		rows.append({"pass": window, "mode": "idle_cpu", "actors": actors.size(),
+			"ticks": SAMPLE_TICKS, "median_ms": times[SAMPLE_TICKS / 2],
+			"p95_ms": times[int((SAMPLE_TICKS - 1) * 0.95)], "max_ms": times[-1]})
+	var clock := actors[0].character_animation.state.idle_time
+	var expected_clock := STEP * rows.size() * (WARMUP_TICKS + SAMPLE_TICKS)
+	print("WORLD_CROWD_RESULT ", JSON.stringify({"ok": is_equal_approx(clock, expected_clock),
+		"rows": rows, "animation_seconds": clock, "expected_animation_seconds": expected_clock}))
+	quit()
+
+func capture_idle_pose() -> void:
+	for actor: CombatActor in actors:
+		actor.set_process(false)
+		actor.character_animation.state.idle_time = 0.25
+		actor.character_animation.state.face(Vector2.RIGHT)
+		actor.queue_redraw()
+	await RenderingServer.frame_post_draw
+	var image := root.get_texture().get_image()
+	var error := image.save_png(OS.get_environment("TERRAIN_EVIDENCE").path_join("world_crowd.png"))
+	print("WORLD_CROWD_RESULT ", JSON.stringify({"ok": error == OK, "rows": []}))
+	quit(0 if error == OK else 1)
 

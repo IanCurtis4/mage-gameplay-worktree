@@ -509,15 +509,15 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 		{"id": IdentityIds.DEFENDER, "name": "Defendente", "branch": EvolutionDefinition.BRANCH_2_1, "affinity": &""},
 		{"id": IdentityIds.BERSERKER, "name": "Berserker", "branch": EvolutionDefinition.BRANCH_2_2, "affinity": &""},
 		{"id": IdentityIds.SP_MG, "name": "Cavaleiro Rúnico", "branch": EvolutionDefinition.BRANCH_2_3, "affinity": IdentityIds.MAGE},
-		{"id": IdentityIds.SP_AR, "name": "Baluarte de Cerco", "branch": EvolutionDefinition.BRANCH_2_3, "affinity": IdentityIds.ARCHER},
+		{"id": IdentityIds.SP_AR, "name": "Bastião", "branch": EvolutionDefinition.BRANCH_2_3, "affinity": IdentityIds.ARCHER},
 		{"id": IdentityIds.ELEMENTALIST, "name": "Elementalista", "branch": EvolutionDefinition.BRANCH_2_1, "affinity": &""},
 		{"id": IdentityIds.SPIRITUALIST, "name": "Espiritualista", "branch": EvolutionDefinition.BRANCH_2_2, "affinity": &""},
-		{"id": IdentityIds.MG_SP, "name": "Devastador Astral", "branch": EvolutionDefinition.BRANCH_2_3, "affinity": IdentityIds.SWORDSMAN},
+		{"id": IdentityIds.MG_SP, "name": "Possesso", "branch": EvolutionDefinition.BRANCH_2_3, "affinity": IdentityIds.SWORDSMAN},
 		{"id": IdentityIds.MG_AR, "name": "Geômetra", "branch": EvolutionDefinition.BRANCH_2_3, "affinity": IdentityIds.ARCHER},
 		{"id": IdentityIds.SENTINEL, "name": "Sentinela", "branch": EvolutionDefinition.BRANCH_2_1, "affinity": &""},
 		{"id": IdentityIds.HUNTER, "name": "Caçadora", "branch": EvolutionDefinition.BRANCH_2_2, "affinity": &""},
 		{"id": IdentityIds.AR_SP, "name": "Saqueador", "branch": EvolutionDefinition.BRANCH_2_3, "affinity": IdentityIds.SWORDSMAN},
-		{"id": IdentityIds.AR_MG, "name": "Caçador de Espectros", "branch": EvolutionDefinition.BRANCH_2_3, "affinity": IdentityIds.MAGE},
+		{"id": IdentityIds.AR_MG, "name": "Rastreador", "branch": EvolutionDefinition.BRANCH_2_3, "affinity": IdentityIds.MAGE},
 	]
 	var normalized_overrides: Dictionary[StringName, Dictionary] = {}
 	for raw_id: Variant in overrides:

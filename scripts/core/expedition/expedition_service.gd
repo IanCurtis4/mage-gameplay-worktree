@@ -5,6 +5,7 @@ extends RefCounted
 ## the rest of the queue follows when the background save of this entry ends.
 const COLLECT_BATCH := 2
 const Journal = preload("res://scripts/core/expedition/persistence/expedition_journal_codec.gd")
+const Compact = preload("res://scripts/core/expedition/persistence/compact_expedition.gd")
 var facade: ProfileFacade
 var _pending: Dictionary = {}
 # Checkpoint38: a journal commit written in the background (context until polled).
@@ -27,16 +28,30 @@ func checkpoint(controller: RunController, barrier: SnapshotTickBarrier, expedit
 	# A cut taken under this same held barrier is identical to a fresh capture.
 	var captured := frozen_cut if _frozen(frozen_cut) else SnapshotRegistry.new().capture(controller,barrier)
 	if not captured["ok"]: return captured
+	if captured.get("compact",false):
+		var compact: PackedByteArray = captured["encoding"]
+		# The profile binding is the one seen at capture, as in the exact format:
+		# a cut taken before another commit is stale, never rebound to it.
+		var authority: Dictionary = captured["snapshot"].get("authority",{}) if captured.get("snapshot") is Dictionary else {}
+		if authority.get("profile_id") != profile.profile_id or authority.get("revision") != profile.revision or authority.get("reward_session") != profile.reward_session: return _fail(&"stale_revision")
+		var rehearsed := _rehearse_compact(controller,compact,profile)
+		if rehearsed["ok"]:
+			return commit_cut(controller,authority,expedition_id,phase_id,request_id,expected_revision,suspend,compact,true)
+		# Never replace the durable base with a cut whose resume failed here.
+		Compact.cut_tally["rehearsal_failed"] = int(Compact.cut_tally.get("rehearsal_failed",0)) + 1
+		push_warning("compact cut rehearsal failed, keeping the exact format: " + str(rehearsed))
+		captured = SnapshotRegistry.new().capture(controller,barrier)
+		if not captured["ok"]: return captured
 	return commit_cut(controller,captured["snapshot"],expedition_id,phase_id,request_id,expected_revision,suspend,captured.get("encoding",PackedByteArray()))
 
-func commit_cut(controller: RunController, snapshot: Dictionary, expedition_id: String, phase_id: StringName, request_id: String, expected_revision: int, suspend: bool = false, validated_encoding: PackedByteArray = PackedByteArray()) -> Dictionary:
+func commit_cut(controller: RunController, snapshot: Dictionary, expedition_id: String, phase_id: StringName, request_id: String, expected_revision: int, suspend: bool = false, validated_encoding: PackedByteArray = PackedByteArray(), compact: bool = false) -> Dictionary:
 	if not _pending.is_empty(): return _fail(&"recovery_required")
 	if controller == null or controller.persistent_facade != facade or controller._memory_snapshot_barrier == null and controller.is_inside_tree() and not controller.get_tree().paused: return _fail(&"tick_barrier_required")
 	var profile := facade.current_profile()
 	if profile == null: return _fail(&"profile_unavailable")
 	if not IdentityIds.is_technical_id(expedition_id) or not IdentityIds.is_technical_id(String(phase_id)): return _fail(&"invalid_identity")
 	var operation := "suspend" if suspend else "checkpoint"
-	var fingerprint := _fingerprint(operation,expedition_id,phase_id,ExpeditionCheckpointCodec.digest_bytes(var_to_bytes(snapshot)))
+	var fingerprint := _fingerprint(operation,expedition_id,phase_id,ExpeditionCheckpointCodec.digest_bytes(validated_encoding if compact else var_to_bytes(snapshot)))
 	var replay := _replay(profile,expedition_id,request_id,fingerprint)
 	if not replay.is_empty(): return replay
 	if profile.reward_session == null or profile.reward_session["run_id"] != controller.run_state.run_id or profile.reward_session["character_id"] != controller.run_state.character_id: return _fail(&"invalid_session")
@@ -45,7 +60,7 @@ func commit_cut(controller: RunController, snapshot: Dictionary, expedition_id: 
 	if lock != null and lock.lifecycle not in [&"active",&"suspended",&"recovering"]: return _fail(&"policy_unresolved")
 	if lock != null and (lock.expedition_id != expedition_id or lock.phase_id != phase_id): return _fail(&"expedition_conflict")
 	if profile.expeditions.has(expedition_id) and profile.expeditions[expedition_id].character_id != controller.run_state.character_id: return _fail(&"expedition_conflict")
-	var authority: Dictionary = snapshot.get("authority",{})
+	var authority: Dictionary = snapshot if compact else snapshot.get("authority",{})
 	if authority.get("profile_id") != profile.profile_id or authority.get("revision") != profile.revision or authority.get("reward_session") != profile.reward_session: return _fail(&"stale_revision")
 	var candidate := profile.copy_state()
 	var slot := lock if lock != null else ExpeditionAssetLock.new()
@@ -54,7 +69,8 @@ func commit_cut(controller: RunController, snapshot: Dictionary, expedition_id: 
 	slot.phase_id = phase_id
 	slot.lifecycle = &"suspended" if suspend else (&"recovering" if _unrevived_death(controller) else &"active")
 	slot.revision += 1
-	var packed := ExpeditionCheckpointCodec.pack(snapshot,ExpeditionCheckpointCodec.owner_digest(candidate,slot.character_id),profile.reward_session,validated_encoding)
+	var owner_digest := ExpeditionCheckpointCodec.owner_digest(candidate,slot.character_id)
+	var packed := ExpeditionCheckpointCodec.pack_compact(validated_encoding,owner_digest,profile.reward_session) if compact else ExpeditionCheckpointCodec.pack(snapshot,owner_digest,profile.reward_session,validated_encoding)
 	if not packed["ok"]: return packed
 	slot.checkpoint = packed["checkpoint"]
 	slot.journal = []
@@ -113,7 +129,7 @@ func collect(controller: RunController, barrier: SnapshotTickBarrier, ticket_id:
 	candidate.expeditions[lock.expedition_id] = lock
 	return _commit(candidate,request_id,expected_revision,{"source":weakref(controller),"expedition_id":lock.expedition_id,"ticket_id":ticket_id,"grant":prepared})
 
-func resume(expedition_id: String, character_id: String, request_id: String, expected_revision: int) -> Dictionary:
+func resume(expedition_id: String, character_id: String, request_id: String, expected_revision: int, prepared: Dictionary = {}) -> Dictionary:
 	if not _pending.is_empty(): return _fail(&"recovery_required")
 	var profile := facade.current_profile()
 	if profile == null or not profile.expeditions.has(expedition_id): return _fail(&"invalid_session")
@@ -126,13 +142,13 @@ func resume(expedition_id: String, character_id: String, request_id: String, exp
 	if not replay.is_empty():
 		if not replay.get("ok",false): return replay
 		if lock.lifecycle not in [&"active", &"recovering"] or profile.reward_session != lock.effective_session(): return _fail(&"invalid_session")
-		var reopened := _restore(lock)
+		var reopened := _restore(lock,prepared)
 		if reopened["ok"]: reopened["already_applied"] = true
 		return reopened
 	if profile.revision != expected_revision: return _fail(&"stale_revision")
 	if profile.reward_session != null and profile.reward_session != lock.effective_session(): return _fail(&"run_active")
 	# Compatibility and passive reconstruction must succeed BEFORE changing the durable state.
-	var restored := _restore(lock)
+	var restored := _restore(lock,prepared)
 	if not restored["ok"]: return restored
 	var recovering := _unrevived_death(restored["root"])
 	var candidate := profile.copy_state()
@@ -159,9 +175,24 @@ func reconcile(request_id: String) -> Dictionary:
 		_pending.clear()
 	return result
 
-func _restore(lock: ExpeditionAssetLock) -> Dictionary:
+func _restore(lock: ExpeditionAssetLock, prepared: Dictionary = {}) -> Dictionary:
 	var profile := facade.current_profile()
 	if ExpeditionCheckpointCodec.owner_digest(profile,lock.character_id) != lock.effective_owner_digest(): return _fail(&"checkpoint_assets_mismatch")
+	if lock.checkpoint["format"] == ExpeditionCheckpointCodec.COMPACT_FORMAT:
+		var decoded := _compact_record(lock.checkpoint)
+		if not decoded["ok"]: return decoded
+		var record: Dictionary = decoded["record"]
+		if prepared.is_empty(): prepared = Compact.prepare(record["source"])
+		if not prepared.get("ok",false): return prepared
+		if not Compact.matches(record["source"], prepared["manifest"]): return _fail(&"content_revision_unavailable")
+		var graph := SnapshotGraphEncoding.decode_snapshot(record["graph"])
+		if not graph["ok"]: return graph
+		var snapshot: Dictionary = graph["snapshot"]
+		snapshot["authority"] = {"profile_id":profile.profile_id,"revision":profile.revision,"reward_session":profile.reward_session}
+		var registry := SnapshotRegistry.new()
+		var result := registry.restore(snapshot,facade,PackedByteArray(),_rebuild_compact.bind(prepared,lock))
+		if result["ok"]: result["registry"] = registry
+		return result
 	var decoded := ExpeditionCheckpointCodec.unpack(lock.checkpoint)
 	if not decoded["ok"]: return decoded
 	var snapshot: Dictionary = decoded["snapshot"]
@@ -169,7 +200,9 @@ func _restore(lock: ExpeditionAssetLock) -> Dictionary:
 	# Alts may advance the profile revision without changing this frozen character.
 	snapshot["authority"] = {"profile_id":profile.profile_id,"revision":profile.revision,"reward_session":profile.reward_session}
 	var registry := SnapshotRegistry.new()
-	var result := registry.restore(snapshot,facade)
+	# The decoded graph was just validated. Only its external authority was
+	# rebound from the current profile, and restore checks that binding.
+	var result := registry.restore(snapshot,facade,decoded["encoding"])
 	if result["ok"]:
 		var host := result["root"] as RunController
 		if host == null or host.run_state.character_id != lock.character_id or host.run_state.run_id != lock.checkpoint["session"]["run_id"]:
@@ -183,6 +216,28 @@ func _restore(lock: ExpeditionAssetLock) -> Dictionary:
 		if host.campaign_runtime != null: host.campaign_runtime.state.lifecycle = "recovering" if _unrevived_death(host) else String(lock.lifecycle)
 		result["registry"] = registry
 	return result
+
+static func _compact_record(checkpoint: Dictionary) -> Dictionary:
+	var checked := ExpeditionCheckpointCodec.validate_record(checkpoint)
+	return Compact.decode(checked["bytes"]) if checked["ok"] else checked
+
+static func prepare_compact(checkpoint: Dictionary) -> Dictionary:
+	var decoded := _compact_record(checkpoint)
+	return Compact.prepare(decoded["record"]["source"]) if decoded["ok"] else decoded
+
+func _rebuild_compact(host: RunController, prepared: Dictionary, lock: ExpeditionAssetLock) -> Dictionary:
+	if host.run_state == null or host.run_state.character_id != lock.character_id or host.run_state.run_id != lock.checkpoint["session"]["run_id"]: return _fail(&"invalid_session")
+	var rebuilt := Compact.rebuild(host,prepared)
+	if not rebuilt["ok"]: return rebuilt
+	var runtime := host.campaign_runtime
+	if runtime.state.expedition_id != lock.expedition_id or runtime.state.manifest_data["input"]["phase_id"] != String(lock.phase_id): return _fail(&"invalid_session")
+	var journal := Journal.decode(lock.journal,lock.checkpoint)
+	if not journal["ok"]: return journal
+	for payload: Dictionary in journal["payloads"]:
+		var applied := _journal_apply(host,payload,true,null,true)
+		if not applied["ok"]: return _fail(&"journal_replay_failed")
+	runtime.state.lifecycle = "recovering" if _unrevived_death(host) else String(lock.lifecycle)
+	return Compact.spawn(host)
 
 func _commit(candidate: ProfileState, request_id: String, expected_revision: int, context: Dictionary) -> Dictionary:
 	context["request_id"] = request_id
@@ -314,7 +369,7 @@ func _fingerprint(operation: String, expedition_id: String, phase_id: StringName
 ## A frozen cut is the capture() result the caller took under the barrier it
 ## still holds; its "encoding" is reused only with that same envelope.
 func _frozen(cut: Dictionary) -> bool:
-	return cut.get("ok", false) and cut.get("snapshot") is Dictionary and cut.get("encoding", PackedByteArray()) is PackedByteArray
+	return cut.get("ok", false) and (cut.get("compact",false) or cut.get("snapshot") is Dictionary) and cut.get("encoding", PackedByteArray()) is PackedByteArray
 
 func _fail(code: StringName) -> Dictionary:
 	return ExpeditionCheckpointCodec.fail(code)
@@ -412,12 +467,23 @@ func campaign_command(controller: RunController, barrier: SnapshotTickBarrier, c
 		candidate.reward_session = null
 	var staged_barrier := SnapshotTickBarrier.new()
 	staged_barrier.acquire(staged)
-	var after := SnapshotRegistry.new().capture(staged, staged_barrier)
+	# Entry already creates pristine actors. The compact producer validates the
+	# reconstruction, so it can replace the second exact capture for this case.
+	var compact := Compact.capture(staged,staged_barrier) if entering else {}
+	var after := SnapshotRegistry.new().capture(staged, staged_barrier) if not compact.get("ok",false) else {}
 	staged_barrier.release()
 	staged.free()
-	if not after["ok"]: return after
 	var final_registry := SnapshotRegistry.new()
-	var final_world := final_registry.restore(after["snapshot"], facade, after["encoding"])
+	var final_world: Dictionary
+	if compact.get("ok",false):
+		# Use the already validated manifest for this fresh cut. Loading and
+		# checking the on-disk composition is done on user-initiated resume.
+		var manifest := ExpeditionManifest.new()
+		manifest._data = state.manifest_data
+		final_world = final_registry.restore(compact["snapshot"],facade,compact["encoding"],_rebuild_compact_entry.bind(manifest,state.population_rules))
+	else:
+		if not after["ok"]: return after
+		final_world = final_registry.restore(after["snapshot"], facade, after["encoding"])
 	if not final_world["ok"]: return final_world
 	var slot := lock if lock != null else ExpeditionAssetLock.new()
 	slot.expedition_id = id
@@ -425,7 +491,8 @@ func campaign_command(controller: RunController, barrier: SnapshotTickBarrier, c
 	slot.phase_id = phase
 	slot.lifecycle = StringName(state.lifecycle)
 	slot.revision += 1
-	var packed := ExpeditionCheckpointCodec.pack(after["snapshot"], ExpeditionCheckpointCodec.owner_digest(candidate, slot.character_id), profile.reward_session, after["encoding"])
+	var owner_digest := ExpeditionCheckpointCodec.owner_digest(candidate, slot.character_id)
+	var packed := ExpeditionCheckpointCodec.pack_compact(compact["encoding"],owner_digest,profile.reward_session) if compact.get("ok",false) else ExpeditionCheckpointCodec.pack(after["snapshot"], owner_digest, profile.reward_session, after["encoding"])
 	if not packed["ok"]: final_world["root"].free(); return packed
 	slot.checkpoint = packed["checkpoint"]
 	slot.journal = []
@@ -433,6 +500,37 @@ func campaign_command(controller: RunController, barrier: SnapshotTickBarrier, c
 	candidate.expeditions[id] = slot
 	if state.lifecycle == "suspended": candidate.reward_session = null
 	return _commit(candidate, request_id, expected_revision, {"source": weakref(controller), "expedition_id": id, "campaign": true, "staged": final_world, "staged_registry": final_registry})
+
+func _rebuild_compact_entry(host: RunController, manifest: ExpeditionManifest, rules: Dictionary) -> Dictionary:
+	var rebuilt := Compact.rebuild(host,{"manifest":manifest,"rules":rules})
+	return Compact.spawn(host) if rebuilt["ok"] else rebuilt
+
+## Rehearses the resume of a compact cut before it replaces the durable base:
+## the same envelope and graph decode, binding, rebuild and spawn as _restore,
+## off-tree and discarded. It uses the live, already validated composition; the
+## published/generated one is re-prepared and compared on user resume. The
+## journal is empty because commit_cut writes a new base with no tail.
+func _rehearse_compact(controller: RunController, encoding: PackedByteArray, profile: ProfileState) -> Dictionary:
+	var runtime := controller.campaign_runtime
+	if runtime == null or runtime.state == null: return _fail(&"invalid_session")
+	var decoded := Compact.decode(encoding)
+	if not decoded["ok"]: return decoded
+	var record: Dictionary = decoded["record"]
+	var manifest := ExpeditionManifest.new()
+	manifest._data = runtime.state.manifest_data
+	if not Compact.matches(record["source"],manifest): return _fail(&"content_revision_unavailable")
+	var graph := SnapshotGraphEncoding.decode_snapshot(record["graph"])
+	if not graph["ok"]: return graph
+	var snapshot: Dictionary = graph["snapshot"]
+	snapshot["authority"] = {"profile_id":profile.profile_id,"revision":profile.revision,"reward_session":profile.reward_session}
+	var started := Time.get_ticks_usec()
+	var restored := SnapshotRegistry.new().restore(snapshot,facade,PackedByteArray(),_rebuild_compact_entry.bind(manifest,runtime.state.population_rules))
+	if not restored["ok"]: return restored
+	var host := restored["root"] as RunController
+	var bound := host != null and host.run_state != null and host.run_state.run_id == controller.run_state.run_id and host.run_state.character_id == controller.run_state.character_id and host.campaign_runtime != null and host.campaign_runtime.valid()
+	restored["root"].free()
+	if not bound: return _fail(&"invalid_session")
+	return {"ok":true,"rehearsal_usec":Time.get_ticks_usec()-started}
 
 func _valid_campaign_command(command: Dictionary) -> bool:
 	if not command.get("kind") is String: return false
@@ -789,12 +887,12 @@ func _journal_effects(host: RunController, events: Array) -> Dictionary:
 	return {"ok": true, "payload": payload}
 
 # Same effect live (after the durable write) and on replay over the base. Idempotent.
-func _journal_apply(host: RunController, payload: Dictionary, replay: bool, barrier: SnapshotTickBarrier = null) -> Dictionary:
+func _journal_apply(host: RunController, payload: Dictionary, replay: bool, barrier: SnapshotTickBarrier = null, logical: bool = false) -> Dictionary:
 	var runtime := host.campaign_runtime
 	if runtime == null: return _fail(&"invalid_session")
 	if Journal.is_collect(payload): return _journal_apply_collect(host, payload, replay)
-	if Journal.is_revive(payload): return _journal_apply_revive(host, payload, replay)
-	if Journal.is_wave(payload): return _journal_apply_wave(host, payload, replay)
+	if Journal.is_revive(payload): return _journal_apply_revive(host, payload, replay, logical)
+	if Journal.is_wave(payload): return _journal_apply_wave(host, payload, replay, logical)
 	var disabled: Array[Node] = []
 	var applied := {}
 	for event: Dictionary in payload["events"]:
@@ -810,12 +908,12 @@ func _journal_apply(host: RunController, payload: Dictionary, replay: bool, barr
 			if not died["ok"]: return died
 			applied[event["event_id"]] = true
 			continue
-		if not runtime.actors.has(event["slot_id"]): return _fail(&"invalid_death_source")
-		var actor: EnemyActor = runtime.actors[event["slot_id"]]
+		var actor: EnemyActor = runtime.actors.get(event["slot_id"])
+		if actor == null and not logical: return _fail(&"invalid_death_source")
 		var recorded := runtime.state.record_death(event["slot_id"], int(event["generation"]), event["event_id"])
 		if not recorded["ok"]: return recorded
 		applied[event["event_id"]] = true
-		if not host.enemies.has(actor): continue
+		if logical or not host.enemies.has(actor): continue
 		if actor.is_alive():
 			if not replay: return _fail(&"invalid_death_source")
 			actor.health.current_hp = 0.0
@@ -840,7 +938,7 @@ func _journal_apply(host: RunController, payload: Dictionary, replay: bool, barr
 # Same steps as the full revive on the current stage: penalty (the resulting
 # clock is recorded, since the live clock kept running after the base), return
 # to the last portal, approved HP/SP, and an animation that is alive again.
-func _journal_apply_revive(host: RunController, payload: Dictionary, replay: bool) -> Dictionary:
+func _journal_apply_revive(host: RunController, payload: Dictionary, replay: bool, logical: bool = false) -> Dictionary:
 	var state := host.campaign_runtime.state
 	var revived := state.revive(payload["event_id"])
 	if not revived["ok"]: return revived
@@ -850,22 +948,33 @@ func _journal_apply_revive(host: RunController, payload: Dictionary, replay: boo
 	var born: Array = payload.get("admitted", [])
 	var marked := _journal_mark_pending(state, waiting, born)
 	if not marked["ok"]: return marked
-	var returned := host.campaign_runtime.activate_stage(host, state.anchor["stage_id"], state.anchor)
-	if not returned["ok"]: return returned
+	if logical:
+		var motion := host.player.world_motion
+		var point := ExpeditionPopulationPlanner.point(state.anchor)
+		if point.stage_id != state.current_stage_id: return _fail(&"invalid_checkpoint")
+		var world := motion.geometry
+		var profile := motion._profile
+		var occupant := motion._occupant_id
+		var returned := motion.configure(world,point,profile,occupant)
+		if not returned["ok"]: return returned
+		host.player.position = Vector2(point.position.x,point.position.z)
+	else:
+		var returned := host.campaign_runtime.activate_stage(host, state.anchor["stage_id"], state.anchor)
+		if not returned["ok"]: return returned
 	ExpeditionDeathRecovery.revive(host.player, state.policy)
-	var admitted := _journal_admit(host, born, replay)
+	var admitted := _journal_admit(host, born, replay, logical)
 	if not admitted["ok"]: return admitted
 	_drop_waves(host, int(state.clock.wave_index))
 	return {"ok": true, "disabled": [] as Array[Node]}
 
 # J3: the recorded wave. Replay takes the recorded clock; the live clock kept
 # running during the write and stays as it is.
-func _journal_apply_wave(host: RunController, payload: Dictionary, replay: bool) -> Dictionary:
+func _journal_apply_wave(host: RunController, payload: Dictionary, replay: bool, logical: bool = false) -> Dictionary:
 	var state := host.campaign_runtime.state
 	if replay: _set_clock(state, payload["clock"])
 	var marked := _journal_mark_pending(state, payload["pending"], payload["admitted"])
 	if not marked["ok"]: return marked
-	var admitted := _journal_admit(host, payload["admitted"], replay)
+	var admitted := _journal_admit(host, payload["admitted"], replay, logical)
 	if not admitted["ok"]: return admitted
 	_drop_waves(host, int(payload["clock"][3]))
 	return {"ok": true, "disabled": [] as Array[Node]}
@@ -889,10 +998,11 @@ func _journal_mark_pending(state: ExpeditionCampaignState, pending: Array, admit
 # Births decided by the entry, in order: the same generation step and actor as
 # admit_pending, without a second occupancy decision. Replay creates them at once;
 # the live host queues them, one per frame.
-func _journal_admit(host: RunController, admitted: Array, replay: bool) -> Dictionary:
+func _journal_admit(host: RunController, admitted: Array, replay: bool, logical: bool = false) -> Dictionary:
 	var runtime := host.campaign_runtime
 	for item: Dictionary in admitted:
 		var id: String = item["slot_id"]
+		if not runtime.state.slots.has(id): return _fail(&"invalid_respawn")
 		var slot: Dictionary = runtime.state.slots[id]
 		if slot["life_state"] != "respawn_pending":
 			if int(slot["generation"]) >= int(item["generation"]): continue
@@ -903,6 +1013,7 @@ func _journal_admit(host: RunController, admitted: Array, replay: bool) -> Dicti
 			continue
 		var stepped := runtime.state.admit_respawn(id)
 		if not stepped["ok"]: return stepped
+		if logical: continue
 		var spawned := runtime.spawn_slot(host, id, true)
 		if not spawned["ok"]: return spawned
 	return {"ok": true}

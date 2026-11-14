@@ -1,0 +1,120 @@
+[
+  {
+    "path": "assets/art/e08_codex_1116/characters/rogue/east_v2.png",
+    "sha256": "5b590c3f2cf2515ac340852d475df1afa008b1e36dc0ba13b185a01167776f0d",
+    "width": 1312,
+    "height": 1199,
+    "generator": "Codex built-in imagegen",
+    "request": "rogue / east",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/rogue/south.png",
+        "sha256": "b172c8bf1ce31558721f317ce2c6c547976c15ba84c2b927b408298440e04c0b"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      }
+    ],
+    "prompt": "Paint a clearly separated 16-frame chibi sprite sheet for RagRPG. The FIRST reference dictates character identity. The SECOND reference dictates only its spacious 4-by-4 LANDSCAPE 1312x1199 cell registration and stable foot height. Make all sprites notably smaller than in either reference, at most 215 pixels by 215 pixels tall including hair and arms in each roughly 330 by 300 px cell. Do not use a line grid. Use an actually transparent RGBA blank canvas. Every sprite's center sits at mathematical center of its own independent uniform cell exactly, so the sprites in the image look evenly spaced with at least 30px of clear pixels at each edge and a full clear border. Character is a nimble young male rogue with plenty of full brown hair and low draped hood around his shoulders, charcoal grey fitted travel jerkin, relaxed scarf over the mouth, red fabric on own left upper arm, left wrapped trouser leg, brown pouches and soft boots. Broad beginner costume, keep hair completely visible. Painted clean dark pixel outlines, 2–3 tone shading and game view slightly from above. FACE strictly screen right, true lateral profile, nose and toes point right, just one eye visible. Both EMPTY hands show at distinct depths throughout, even idle, with exactly two arms. Row 1 four idle variations; row 2 four walk images with feet and opposite arms alternating; row 3 four actions low thrust, crossing slash without a blade, open-arm swing and crouch with two hands visible; row 4 two hurt, then kneel collapse and fully prone compact foetal fall facing right. Prone figure must be tiny and compact, only 170 px wide like a tightly tucked nap, totally independent from neighbor, not stretched in a long sideways sprawl. Keep hair, clothing, palette and anatomical sides. No effects, props, weapons, ground, shadow, lettering, lines, glow or mattes."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/rogue/north.png",
+    "sha256": "d01219c3df7ef26d4122edd1c1dacfdef64063ff3198e306311dcfe445613ce1",
+    "width": 1108,
+    "height": 1420,
+    "generator": "Codex built-in imagegen",
+    "request": "rogue / north",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/rogue/south.png",
+        "sha256": "b172c8bf1ce31558721f317ce2c6c547976c15ba84c2b927b408298440e04c0b"
+      },
+      {
+        "path": "assets/art/e08_characters/directional/spiritualist/south_source_v3.png",
+        "sha256": "0881d0223d0416cc1a72750da5c14399306490c1c5ef6efa09468997adb92dc5"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "prompt": "Use case: stylized-concept. RagRPG Ladino production 2D pixel-art sprite animation source, NORTH/back only. First input defines the approved character identity from the front. Second input is only for painted pixel-art style and 4x4 layout. Third is Swordsman reference for in-game size and view; see its second group of four rows for how a north-facing back view reads. Same character as the attached south sheet; redraw as a true north/back view, do not mirror or recolor it. In every one of sixteen sprites the back of the head, back of torso, and backs of legs face the viewer while the character aims and walks away toward the top of the canvas. No face or eyes visible, no turning toward camera. Slight overhead fantasy RPG viewpoint, consistent with the cast. Preserve physical left-right garment assignments and let the arms and empty hands be seen at the sides from the back. Original large tousled chestnut hair without hood raised. Short loose hood lies at back of neck over plain charcoal lead-grey fitted leather travel vest with pouches, red cloth only on left arm, grey wrap only on left leg, soft boots. Broad early adventuring base for multiple paths, preserve a low-key practical scarf and outfit without adding assassin or weapon accents. Low empty-hand thrust north, short cross-body empty-hand sweep, broad sideways arm sweep, then low recoil.\n\nCreate one true RGBA source PNG about 1200×1312, exactly four by four equal invisible cells, one full sprite centered in each. Sprites occupy about 75% of cell height, with generous fully transparent margin on every side. Row 1 four subtle idle frames. Row 2 four walking frames with alternate leading feet. Row 3 four actions listed above. Row 4 two flinch frames, compact falling to knees and fully collapsed facing away. Maintain shared foot anchor within each cell and generous empty padding, compact silhouettes near the end. Exact two visible empty hands and paired anatomically joined arms, fingers visible in all living frames; show hands off the body rather than obscuring them. Chibi proportions, clean dark outlines, painted 2–3 tone crisp pixel art. No weapons, props, sheathed blades, particles, spell effects, ground, shadows, checkerboard, text or grid."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/rogue/south_v4.png",
+    "sha256": "d09e88ca1664afb4ee47620793216fd5ac531bd3dc5375514ed95214d1941437",
+    "width": 1312,
+    "height": 1199,
+    "generator": "Codex built-in imagegen",
+    "request": "rogue / south",
+    "references": [
+      {
+        "path": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a1d2cf-b455-7d30-846f-a10387fcb4c9\\exec-86d2b9ea-6cd4-41ca-8df3-8ad6a5dc9e6d.png",
+        "sha256": "80a4ab41cfeef9f278cfddcf01448684fc87ca551c36f29bb1c5bd45b9f722be"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      }
+    ],
+    "prompt": "Use case: stylized-concept. Draw a new south-facing Ladino sprite animation sheet for RagRPG. Input 1 governs character identity and colors: an agile young-adult man in a fitted lead-grey leather jerkin, short slate hood raised and dark scarf masking the lower face, black cropped fringe, wry narrow eyes, brown straps and small belt pouches, one flat empty sheath and NO blade, only vivid color a red strip on his own left arm, fitted right trouser leg and loosely wrapped left trouser leg, soft leather boots. Input 2 governs the LANDSCAPE canvas and exact grid registration. Make a 1312 wide × 1199 tall near-square transparent RGBA canvas like input 2. Copy its evenly-spaced four rows by four columns, exact wide clearance around each complete sprite. In particular the final two sprites need free space under their feet and hands, same as the second reference, about 32 px blank beneath them to the border. Shift the last two silhouettes upward and compact them as needed. Use a shared floor anchor for the living sprites near the bottom of each cell, with a 20–30 px gap before the edge. Same silhouette, chest and eyes face front with a slight overhead perspective, each figure one consistent chibi identity and stable proportions matching the cast. First row idle 4, second walk 4 showing clear paired opposite arm swing and alternating feet, third row c1–c4 low empty-hand thrust, empty-hand cross-body short slash gesture, sideways arm sweep in the same front orientation, and a crouched recoil with hands apart. Last row first two flinch or stagger, last two are compact onset of collapse on knees followed by short curled fallen pose facing south. Each of the 14 live poses shows exactly two empty hands with visible fingers and corresponding correctly joined arms. Keep clothing accent and asymmetry on his same anatomical side. Crisp hand-painted pixel-art with dark contour and 2–3 tones. No props, weapons, blur, magic marks, bars, grid, text, shadow, floor, checkerboard or additional elements. PNG with genuine transparency around cutouts."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/rogue/south_v7.png",
+    "sha256": "eb998304fcc11859fa8f325701c6db429140bec238aadc4ff9e31e1e31fd54d6",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "rogue / south",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/rogue/south.png",
+        "sha256": "b172c8bf1ce31558721f317ce2c6c547976c15ba84c2b927b408298440e04c0b"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/acolyte/south_v3.png",
+        "sha256": "24dfbcea205505283e0cd96e65a2eb9fb33f664d13d87748720b50efd37c3a8d"
+      }
+    ],
+    "prompt": "Use case: precise-object-edit. Redraw the FIRST image, keeping the original design exactly, for a clean RagRPG SOUTH animation source. Character features to preserve: first sheet's tousled loose chestnut hair all exposed, short lowered hood resting at back shoulders, simple dark scarf and grey travel jerkin with one red strip on own left arm. Second image supplies ONLY a technical canvas guide, absolutely do not copy its character. Copy the 4×4 grid positioning and large transparent gaps from the second image. SQUARE canvas 1254×1254 true RGBA transparent. Draw all sprites visibly SMALL inside each equally spaced invisible 313 px cell, no sprite larger than 215×235 px; centered horizontally and same scale for all standing poses, sitting on a foot baseline 35 px above each cell's bottom. Keep at least 25 blank transparent px on ALL sides within every cell. Row 1 four original idle, row 2 four walk with lead foot alternating, row 3 four original character actions unchanged, row 4 two hurt, then small knees-down pose and very compact fully fallen pose, folded under themselves and facing down-screen exactly like a face-first flop, no horizontal sprawl. Every cell has one complete separated front-facing figure at chibi overhead 3/4, no cell overlap, keep exactly two visible empty hands in all living sprites. Reproduce the FIRST character face, hair volume, lay of materials, proportions, color and asymmetry, including no raised hoods and no shorter new haircut. Clean cutout alpha, dark line and two to three gradients of pixel-art paint. No held objects, floor, shadow, props, text, dividers, grids or external effects."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/rogue/south.png",
+    "sha256": "b172c8bf1ce31558721f317ce2c6c547976c15ba84c2b927b408298440e04c0b",
+    "width": 1199,
+    "height": 1312,
+    "generator": "Codex built-in imagegen",
+    "request": "rogue / south",
+    "references": [
+      {
+        "path": "assets/art/e08_characters/directional/spiritualist/south_source_v3.png",
+        "sha256": "0881d0223d0416cc1a72750da5c14399306490c1c5ef6efa09468997adb92dc5"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "prompt": "Use case: stylized-concept. Production 2D pixel-art game animation sprite sheet for RagRPG, Ladino (rogue), SOUTH/front. Reference 1: Spiritualist 4 × 4 source sheet for style and layout. Reference 2: Swordsman body atlas for chibi style, in-game size and proportions. Character: a light, asymmetric male rogue with a wry look in the eyes, always leaning to move, fitted lead-grey leather jerkin, short hood and a scarf over half the face, many straps and small pouches with empty sheaths, one red cloth band on his left arm as the only vivid colour, his right trouser leg tight and his left with a loose wrap, soft boots; lead grey, leather brown, muted black, a single red.\n\nRow 3 action, from left to right: c1 low empty-hand thrust; c2 short cross-body slicing gesture with an empty hand and the opposite hand held apart; c3 broad open-arm sweep suggesting a turn, while the face and chest stay generally south toward the camera; c4 crouched recoil, both empty hands visibly apart.\n\nTransparent PNG sprite source sheet, approximately 1200 × 1312 px, portrait or near square. Match the Spiritualist reference sheet's 4 × 4 layout and the Swordsman's in-game proportions. Use the inputs only for style, scale and staging, never copy their character designs. Crisp authored chibi pixel art, large head, short adult body, narrow dark outline, discrete 2–3 tone shading and strong readable costume blocks. Four exact equal-width columns and four exact equal-height rows with invisible grid; each cell contains ONE complete figure, feet included, ample empty space all around, no contact across cells. Same camera at a slightly elevated 3/4 angle, character upright and front-facing towards bottom of screen, both eyes visible when open. Align the foot pivot horizontally to the middle of every cell with a common floor baseline near its bottom. Each standing figure has the same head size and approximately the same height and scale. Row 1 four subtle idle phases; row 2 four distinct walk frames alternating the leading foot, paired counter-swinging arms, and including passing poses; row 3 follows the four requested action beats; row 4 first two cells distinctly flinch or stagger, third and fourth cells collapse and lie on the ground, compact and fully within their own cells, retaining front facing orientation. No blank cells. The front view keeps the vertical camera orientation through every action including sideways movement. Exactly two anatomically connected arms, two empty visible hands, and two legs; on all living frames let both hands read apart from the torso, with coherent wrist joints, thumb shapes and distinct visible fingers. Prayer palms may touch while clearly reading as two separate empty hands. Any accessories are small and attached to clothing, never carried. Keep costume asymmetry on the character's same anatomical side across the sheet. No weapons, sheathed blades, handheld props, extra figures, pets, spell graphics, aura, colored particles, scenery, floor plane, cast shadow, borders, captions, or grid lines. Genuine RGBA cutout alpha outside the figures, no checkerboard."
+  },
+  {
+    "path": "assets/art/e08_codex_1116/characters/rogue/west_v2.png",
+    "sha256": "75eea428dedb0cdce26bc09ee295f43e17acc6440686c2ec5be2e82d09580d40",
+    "width": 1312,
+    "height": 1199,
+    "generator": "Codex built-in imagegen",
+    "request": "rogue / west",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1116/characters/rogue/south.png",
+        "sha256": "b172c8bf1ce31558721f317ce2c6c547976c15ba84c2b927b408298440e04c0b"
+      },
+      {
+        "path": "assets/art/e08_codex_1116/characters/warlock/south.png",
+        "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338"
+      }
+    ],
+    "prompt": "Paint a clearly separated 16-frame chibi sprite sheet for RagRPG. The FIRST reference dictates character identity. The SECOND reference dictates only its spacious 4-by-4 LANDSCAPE 1312x1199 cell registration and stable foot height. Make all sprites notably smaller than in either reference, at most 215 pixels by 215 pixels tall including hair and arms in each roughly 330 by 300 px cell. Do not use a line grid. Use an actually transparent RGBA blank canvas. Every sprite's center sits at mathematical center of its own independent uniform cell exactly, so the sprites in the image look evenly spaced with at least 30px of clear pixels at each edge and a full clear border. Character is a nimble young male rogue with plenty of full brown hair and low draped hood around his shoulders, charcoal grey fitted travel jerkin, relaxed scarf over the mouth, red fabric on own left upper arm, left wrapped trouser leg, brown pouches and soft boots. Broad beginner costume, keep hair completely visible. Painted clean dark pixel outlines, 2–3 tone shading and game view slightly from above. FACE strictly screen left, true lateral profile, nose and toes point left, just one eye visible. Both EMPTY hands show at distinct depths throughout, even idle, with exactly two arms. Row 1 four idle variations; row 2 four walk images with feet and opposite arms alternating; row 3 four actions low thrust, crossing slash without a blade, open-arm swing and crouch with two hands visible; row 4 two hurt, then kneel collapse and fully prone compact foetal fall facing left. Prone figure must be tiny and compact, only 170 px wide like a tightly tucked nap, totally independent from neighbor, not stretched in a long sideways sprawl. Keep hair, clothing, palette and anatomical sides. No effects, props, weapons, ground, shadow, lettering, lines, glow or mattes."
+  }
+]

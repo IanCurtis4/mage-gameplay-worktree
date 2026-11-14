@@ -4,9 +4,9 @@ class ProbeService:
 	extends ExpeditionService
 	var restores := 0
 	var last_root: WeakRef
-	func _restore(lock: ExpeditionAssetLock) -> Dictionary:
+	func _restore(lock: ExpeditionAssetLock, prepared: Dictionary = {}) -> Dictionary:
 		restores += 1
-		var result := super._restore(lock)
+		var result := super._restore(lock,prepared)
 		if result.get("ok",false): last_root = weakref(result.root)
 		return result
 

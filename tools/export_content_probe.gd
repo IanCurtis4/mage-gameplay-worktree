@@ -23,7 +23,9 @@ func _run() -> void:
 		push_error("Could not load BuildContentLoader from PCK")
 		quit(2)
 		return
-	var expected := {&"mob": 11, &"equipment": 85, &"card": 6, &"augment": 31, &"set": 14}
+	# F10 Q4 added the five published forest species to the runtime catalog.
+	var expected := {&"mob": 16, &"equipment": 85, &"card": 6, &"augment": 31, &"set": 14}
+	var forest_species: Array[StringName] = [&"forest_wolf", &"forest_boar", &"forest_stalker", &"forest_canopy_archer", &"forest_ancient_warden"]
 	var failures := 0
 	for origin: StringName in expected:
 		var directory := "res://resources/build_effects/%s" % origin
@@ -46,10 +48,15 @@ func _run() -> void:
 		quit(1)
 		return
 	var catalog: Object = loaded["catalog"]
+	var mob_ids: Array = (catalog.call("mob_catalog") as Object).call("ids")
 	for origin: StringName in expected:
-		var count: int = (catalog.call("mob_catalog") as Object).call("ids").size() if origin == &"mob" else (catalog.get("_sets").size() if origin == &"set" else catalog.call("ids", origin).size())
+		var count: int = mob_ids.size() if origin == &"mob" else (catalog.get("_sets").size() if origin == &"set" else catalog.call("ids", origin).size())
 		print("PACK_CATALOG_COUNT ", origin, " ", count)
 		if origin != &"augment" and count != expected[origin]:
+			failures += 1
+	for species: StringName in forest_species:
+		if species not in mob_ids:
+			push_error("PACK_MISSING_FOREST_SPECIES " + String(species))
 			failures += 1
 	print("PACK_PROBE failures=", failures)
 	quit(1 if failures else 0)
