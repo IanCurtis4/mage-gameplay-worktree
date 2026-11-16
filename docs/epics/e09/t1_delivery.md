@@ -329,3 +329,74 @@ Os hashes dos outros 161 passos estão no `summary.jsonl` da rodada final.
   precisa ser pura: sem efeito colateral e sem estado consumido a cada chamada.
 - O commit da Sentinela debita o valor travado na reserva. Se o kit mudar a regra entre a
   preparação e o lançamento, vale o preço da reserva.
+
+### Ajuste A14 — fallback de corpo provado em pasta de fixture (junto da T1.2)
+
+O pedido veio da arquitetura, depois de `476c246a`. A decisão A14 substitui, só para estes
+checks, a regra anterior de não tocar em `kit_seam_test.gd`.
+
+**Motivo.** A T7 (`claude/zealous-roentgen-c183e9`) traz arte de produção para `paladin`,
+`thaumaturge`, `duelist` e `arcane_blade`. Cinco checks de `kit_seam_test` contavam com a
+ausência dessa arte. O fallback continua certo; o que mudou é que agora a arte existe.
+
+**Arquivos alterados**
+
+- `scripts/classes/class_kit_registry.gd`:
+  - novo `install_fixture_body(evolution, pasta)`, só para testes;
+  - `body_folder`, `body_folders` e `body_origin` passam a ler o override;
+  - `clear_fixtures()` também desfaz os corpos de fixture.
+  - Em produção o override é vazio, então o comportamento não muda.
+  - A instalação é recusada para identidade fora dos kits, nome vazio ou pasta que já pertence
+    a uma identidade.
+- `tests/e09/kit_seam_test.gd`:
+  - `_install_fixtures()` instala as pastas `e09_fixture_body_{sp_ac,mg_ac,sp_la}`, que nunca têm
+    arte, e ganhou dois checks: instalação e recusas.
+  - Os cinco checks agora provam o fallback nessas pastas:
+    - "without kit art the origin body is used": `sp_ac` com a pasta de fixture;
+    - "evolution -> actor_kind falls back": `sp_ac` e `mg_ac`, que substitui o `mg_la` de
+      produção;
+    - "body folders follow section 1": `kit_body_path` da pasta de fixture vazio. O check
+      `body_folder(&"mg_la") == &"arcane_blade"` foi mantido;
+    - "a kit body without art configures the origin body": `configure` da pasta de `mg_ac`, que
+      dá `mage`;
+    - "portrait identity uses the same fallback": `sp_la` com a pasta de fixture.
+  - As listas de destinos (T9, A9) não foram tocadas.
+- `t1_kit_seam_api.md`: seção 7 ("Corpo de fixture").
+
+**Validação**
+
+- Rodada `.godot/verification/a14_plain/`, com bootstrap refeito. O `summary.jsonl` tem sha256
+  `67CD2FAC9D427F5ED127592893E25625E390AEBD7B4C7A7335E5909E1740C8AA`. São 10 passos, com 0 falhas e
+  0 ocorrências na busca estrita.
+
+| Passo | Resultado | sha256 da saída |
+|---|---|---|
+| 331 `kit_seam_test` | 189 checks, 0 falhas (+14 = 2 checks × 7 chamadas de `_install_fixtures`) | `89D1D0E32ACB9F19CA0DB0F4865983A85D6B2E21E5B2FF12B5EE6192933A6D69` |
+| 330 `kit_seam_hooks_v3_test` | 63 checks, 0 falhas (hash idêntico) | `D1DFD323C350F8F63140F3D8D86FE01FB566BAEE11ED3A93B953FBF99F78F449` |
+| 329 `kit_seam_hooks_v2_test` | 38 checks, 0 falhas (hash idêntico) | `5182F32B62DE14BE5938AF67C615BFBC0CBB6BDF062A64EDB08131758CF6FA5A` |
+| 10 `combat_animation_test` | PASS, 39 | `DF1D52002E18C5524FA60801186A018CDBC71C91E0248051E38F6565C154FB1E` |
+| 11 `e08_presentation_test` | 2255 checks, 0 falhas | `DF8A4BF3E4C4CFE9CF897EF65BE23D0CA416B02F33626DA96DC9A96216CCA12B` |
+| 30 `battle_ui_test` | PASS, 47 | `F8318896CA4F69C73DFEE75D000BE93183454816283638EE4C14279A62749D21` |
+| 283 `e08_compact_coverage_test` | 95 checks, 0 falhas | `3C65ADD205F98F2D063AFCF6DAD256C3F207D51AAE7376621D38801D89228796` |
+| 294 `e07_f3_snapshot_test` | 52 checks, 0 falhas | `9FC703C4AB2986DDAAB73ED386092F3B8AB71A5EA82C4A7C3C781D2F6F06C0CC` |
+| 1 `editor_import` | PASS (bootstrap) | `4CC45DA0030D44CC7E6C1314A09B11C92C08359A6DC22542E89B62ADC23C1245` |
+| 256 `e07_f1_import_test` | PASS (bootstrap), 3269 arquivos idênticos | `75BE35C945699C39C9235605D69B5EE76D10D7BCB6CC40A1EB437E2F6C56642A` |
+
+**Simulação da arte da T7**
+
+A arte da T7 ainda não está versionada na branch dela. Para simular, criei temporariamente
+`assets/art/e08_characters/directional/{paladin,thaumaturge,duelist,arcane_blade}/presentation.json`,
+copiado de `swordsman`, e removi tudo em seguida. Nada foi commitado.
+
+- A versão nova de `kit_seam_test` teve 189 checks e 0 falhas. O log tem sha256
+  `EDB12442307B4D95E08665B8B97CDA80946A002BB20C489CC77B33C08E1A5DC1`.
+- Como controle, rodei a versão anterior (`476c246a`) no mesmo cenário. Ela teve 3 falhas:
+  "actor_kind falls back", "body folders follow section 1" e "portrait identity".
+
+**Limitações A14**
+
+- No controle, os outros dois checks antigos passaram porque o manifesto copiado declara
+  `kind: swordsman` e cai no fallback por divergência de tipo. Com a arte real da T7, os cinco
+  falhariam. A versão nova não consulta pastas de produção.
+- A regressão de 179 passos da T1.2 rodou antes do A14. Depois dele só rodaram os 10 passos
+  acima, escolhidos porque leem as pastas de corpo ou o snapshot.

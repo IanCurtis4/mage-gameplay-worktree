@@ -419,6 +419,14 @@ abrigos atuais não mudaram.
   também cai, inteiro, no corpo da origem. O jogador, o retrato
   (`BuildPresentation.portrait_identity`) e `CharacterAnimation.configure` usam a mesma regra.
   Pastas de kit exigem `weaponless` como as identidades atuais.
+- **Corpo de fixture (A14, só testes).**
+  - `ClassKitRegistry.install_fixture_body(evolution, pasta)` aponta a pasta de corpo de uma
+    das quatro identidades para uma pasta de fixture, até `clear_fixtures()`.
+  - A instalação é recusada para identidade fora dos kits, nome vazio ou pasta que já pertence
+    a uma identidade.
+  - Use uma pasta que nunca tem arte para provar o fallback da origem sem depender da arte de
+    produção. A prova de que cada híbrida resolve o próprio corpo é da T7
+    (`tests/e09/hybrid_bodies_test.gd`).
 
 ## 8. Snapshot (C1.9)
 
