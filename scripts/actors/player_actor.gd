@@ -2327,8 +2327,8 @@ func kit_concealed() -> bool:
 func can_be_acquired_by_world(observer: CombatActor) -> bool:
 	if world_motion == null or not is_alive() or not is_instance_valid(observer) or observer.world_motion == null or observer.world_motion.geometry != world_motion.geometry: return false
 	# E09 C1.6: an enemy that lost sight of this player cannot acquire it meanwhile.
-	var hostile := observer as EnemyActor
-	if hostile != null and hostile.threat.sight_broken(hostile.threat_id_for(self)): return false
+	var observer_threat := _enemy_threat(observer)
+	if observer_threat != null and observer_threat.sight_broken(_enemy_threat_id(observer)): return false
 	if not is_concealed(): return true
 	if not is_hunter() and kit_concealed(): return false
 	if is_hunter():
@@ -4325,22 +4325,33 @@ func kit_emit_projectile(request: DamageRequest, victim: CombatActor, delivery: 
 
 ## C1.6 primitives applied by this player on an enemy's threat ledger.
 func kit_force_target(enemy: CombatActor, duration: float) -> Dictionary:
-	var hostile := enemy as EnemyActor
-	if not is_instance_valid(hostile): return {"ok": false, "error_code": &"invalid_target"}
-	var source := hostile.threat_id_for(self)
+	var ledger := _enemy_threat(enemy)
+	if ledger == null: return {"ok": false, "error_code": &"invalid_target"}
+	var source := _enemy_threat_id(enemy)
 	if source.is_empty(): return {"ok": false, "error_code": &"invalid_participant"}
-	var result := hostile.threat.force_target(source, duration)
-	if result["ok"]: hostile._select_threat_target()
+	var result := ledger.force_target(source, duration)
+	if result["ok"]: enemy.call(&"_select_threat_target")
 	return result
 
 func kit_break_sight(enemy: CombatActor, duration: float) -> Dictionary:
-	var hostile := enemy as EnemyActor
-	if not is_instance_valid(hostile): return {"ok": false, "error_code": &"invalid_target"}
-	var source := hostile.threat_id_for(self)
+	var ledger := _enemy_threat(enemy)
+	if ledger == null: return {"ok": false, "error_code": &"invalid_target"}
+	var source := _enemy_threat_id(enemy)
 	if source.is_empty(): return {"ok": false, "error_code": &"invalid_participant"}
-	var result := hostile.threat.break_sight(source, duration)
-	if result["ok"]: hostile._select_threat_target()
+	var result := ledger.break_sight(source, duration)
+	if result["ok"]: enemy.call(&"_select_threat_target")
 	return result
+
+## Threat ledger of an enemy actor, or null for any other actor. Duck-typed on purpose:
+## naming the enemy class here closes a script cycle between the player and enemy
+## scripts that Godot 4.7.2 does not release at exit ("resources still in use"),
+## failing tests that load both scripts together with typed lambdas.
+func _enemy_threat(actor: CombatActor) -> ThreatService:
+	if not is_instance_valid(actor) or not actor.has_method(&"threat_id_for"): return null
+	return actor.get(&"threat") as ThreatService
+
+func _enemy_threat_id(actor: CombatActor) -> String:
+	return String(actor.call(&"threat_id_for", self)) if _enemy_threat(actor) != null else ""
 
 ## RunController calls: confirmed damage and kill (after the result claims).
 func kit_damage_dealt(result: Dictionary) -> void:

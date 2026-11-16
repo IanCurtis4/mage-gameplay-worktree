@@ -460,3 +460,11 @@ O kit de fixture completo, que exercita todos os ganchos, está em
   `unknown_runtime_kind`, sem perder dados.
 - **Mapa plano antigo.** `break_sight` não impede a aquisição pela posição
   (`can_be_acquired_by(position)` não conhece o observador); só a ameaça.
+- **Ciclos de script no Godot 4.7.2.** `player_actor.gd` não nomeia `EnemyActor` como tipo
+  (`as`, anotação ou acesso estático); chega ao livro de ameaça por `has_method`/`get`.
+  O ciclo jogador ↔ inimigo entre scripts não é liberado na saída do motor ("resources still
+  in use"), e o verificador trata isso como falha da etapa. `kit_seam_test` impede que a
+  referência volte. Um kit pode usar `EnemyActor` no próprio módulo, porque o registro carrega
+  os módulos por caminho e eles não entram no grafo de compilação de `PlayerActor`. Se uma
+  etapa passar a acusar recursos presos na saída, procure primeiro uma referência nova entre
+  scripts que feche um ciclo.

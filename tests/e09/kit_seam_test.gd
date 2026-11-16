@@ -384,6 +384,37 @@ func _check_threat_primitives() -> void:
 	var revision := plain.revision
 	plain.advance(1.0)
 	_check(plain.revision == revision, "without force or sight breaks, advance stays a no-op")
+	_check_player_threat_helpers()
+
+## The player helpers reach an EnemyActor ledger without naming EnemyActor in
+## player_actor.gd (that script cycle leaks resources at exit in Godot 4.7.2).
+func _check_player_threat_helpers() -> void:
+	_install_fixtures()
+	var player := _kit_player(&"sp_ac")
+	var navigation := ArenaNavigation.new()
+	navigation.configure(Rect2(0, 0, 1000, 700), [], 20.0)
+	var hostile := EnemyActor.new()
+	hostile.configure(&"chaser", navigation, player)
+	player.add_child(hostile)
+	_check(hostile.threat_id_for(player) == "player", "configure registers the kit player on the ledger")
+	var forced := player.kit_force_target(hostile, 2.0)
+	_check(forced["ok"] and hostile.threat.forced_id == "player", "kit_force_target reaches the enemy ledger")
+	var broken := player.kit_break_sight(hostile, 1.0)
+	_check(broken["ok"] and hostile.threat.sight_broken("player"), "kit_break_sight reaches the enemy ledger")
+	var plain_actor := _enemy(Vector2(10, 10), player.stat_breakdown)
+	player.add_child(plain_actor)
+	_check(player.kit_force_target(plain_actor, 1.0)["error_code"] == &"invalid_target" and player.kit_break_sight(plain_actor, 1.0)["error_code"] == &"invalid_target", "a non-enemy actor is an invalid target")
+	var other_player := _kit_player(&"sp_la")
+	var stranger := EnemyActor.new()
+	stranger.configure(&"chaser", navigation, other_player)
+	player.add_child(stranger)
+	_check(player.kit_force_target(stranger, 1.0)["error_code"] == &"invalid_participant", "an enemy without the player registered reports invalid_participant")
+	var source := FileAccess.get_file_as_string("res://scripts/actors/player_actor.gd")
+	var typed_reference := RegEx.create_from_string("(as|:|->)\\s*EnemyActor\\b|EnemyActor\\.")
+	_check(typed_reference.search(source) == null, "player_actor.gd does not reference EnemyActor as a type")
+	player.queue_free()
+	other_player.queue_free()
+	ClassKitRegistry.clear_fixtures()
 
 # --- Snapshot rules -------------------------------------------------------------
 
