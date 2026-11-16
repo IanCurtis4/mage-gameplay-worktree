@@ -21,8 +21,6 @@ const SEAL_KEY := &"paladin_seal"
 const GRACE_FAMILY := &"paladin_grace"
 const FAITH_SOURCE := &"paladin_unshaken_faith"
 const ICE_SOURCE := &"paladin_sanctuary_ice"
-const BASE_WATCHED: Array[StringName] = [&"shield_wall", &"perseverance", &"provoke"]
-const COOLDOWN_JUMP := 0.05
 
 # --- Numbers (k1_contract §2) -------------------------------------------------------
 const OATH_SP: Array[float] = [20.0, 21.0, 22.0, 23.0, 24.0]
@@ -69,8 +67,6 @@ var hour_remaining := 0.0
 var hour_opened_zone := false
 ## Crowd-control resistance currently published by Fé Inabalável (0 outside the Oath).
 var faith_applied := 0.0
-## Last seen canonical cooldown of the watched base skills (cast detection).
-var base_cooldowns: Dictionary = {}
 
 # --- Catalog data (pure) ------------------------------------------------------------
 
@@ -229,7 +225,6 @@ func draw_vfx(effect_id: StringName, canvas: CanvasItem, pulse: Dictionary, posi
 func on_attach(player: PlayerActor) -> void:
 	sanctuary.configure(player, GRACE_FAMILY, ICE_SOURCE)
 	_apply_guard_grace(player)
-	for skill: StringName in BASE_WATCHED: base_cooldowns[skill] = player.skill_cooldown(skill)
 
 func temporary_stat_sources(player: PlayerActor) -> Array[Dictionary]:
 	var sources := sanctuary.temporary_stat_sources(player)
@@ -237,7 +232,6 @@ func temporary_stat_sources(player: PlayerActor) -> Array[Dictionary]:
 	return sources
 
 func on_tick(player: PlayerActor, delta: float) -> void:
-	_watch_base_skills(player)
 	sanctuary.tick(player, delta)
 	if hour_remaining > 0.0:
 		hour_remaining = maxf(0.0, hour_remaining - delta)
@@ -251,11 +245,22 @@ func can_cast(_player: PlayerActor, cast: Dictionary) -> Dictionary:
 func on_cast_confirmed(player: PlayerActor, cast: Dictionary) -> void:
 	if StringName(cast["skill_id"]) != IMPACT: return
 	impact_charges = sanctuary.spend_for_cast(player, cast, 1, IMPACT_MAX_CHARGES)
-	if hour_active():
-		var values := _rank_values(player, IMPACT, int(cast["rank"]))
-		if values != null and values.sp_cost > 0.0:
-			player.recover_sp(values.sp_cost)
-			player.resources_changed.emit()
+
+## T1.2: the Consecrated Impact costs 0 SP during the Hora. Pure read of hour_remaining.
+func skill_cost(_player: PlayerActor, skill_id: StringName, base_cost: float) -> float:
+	return 0.0 if skill_id == IMPACT and hour_active() else base_cost
+
+## T1.2: Shield Wall and Perseverance give +1 Grace per paid commit; Provoke adds 1 to
+## the Seal (up to 3) only when its target is the sealed enemy.
+func on_base_skill_committed(player: PlayerActor, skill_id: StringName, context: Dictionary) -> void:
+	match skill_id:
+		&"shield_wall", &"perseverance":
+			sanctuary.gain({"key": "base:%s@%.5f" % [skill_id, player.kit_time]}, 1)
+		&"provoke":
+			var sealed := sanctuary.sealed_target()
+			var provoked: Variant = context.get("target")
+			if sealed == null or not is_instance_valid(provoked) or provoked != sealed: return
+			if int(sealed.marks.value(SEAL_KEY, 1)) < SEAL_MAX_VALUE: sanctuary.add_to_seal(1)
 
 func resolve_cast(player: PlayerActor, cast: Dictionary) -> bool:
 	var skill := StringName(cast["skill_id"])
@@ -398,21 +403,6 @@ func _sync_faith(player: PlayerActor) -> void:
 	if is_equal_approx(wanted, faith_applied): return
 	faith_applied = wanted
 	if is_instance_valid(player): player.refresh_kit_stats()
-
-## Base skills have no seam hook: their canonical cooldown only rises at payment
-## (PlayerActor._spend), so a rise between two ticks is one confirmed use.
-func _watch_base_skills(player: PlayerActor) -> void:
-	for skill: StringName in BASE_WATCHED:
-		var now := player.skill_cooldown(skill)
-		var before := float(base_cooldowns.get(skill, 0.0))
-		base_cooldowns[skill] = now
-		if now <= before + COOLDOWN_JUMP: continue
-		match skill:
-			&"shield_wall", &"perseverance":
-				sanctuary.gain({"key": "base:%s@%.5f" % [skill, player.kit_time]}, 1)
-			&"provoke":
-				var sealed := sanctuary.sealed_target()
-				if sealed != null and int(sealed.marks.value(SEAL_KEY, 1)) < SEAL_MAX_VALUE: sanctuary.add_to_seal(1)
 
 func _rank_values(player: PlayerActor, skill: StringName, rank: int) -> SkillRankDefinition:
 	var values := player.skill_rank_definition(skill) if is_instance_valid(player) else null

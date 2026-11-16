@@ -158,7 +158,10 @@ func _rotation(player: PlayerActor, boss: CombatActor, authority: SanctuaryAutho
 			return
 	for base: StringName in [&"perseverance", &"provoke"]:
 		if player.skill_rank(base) <= 0 or player.skill_cooldown(base) > 0.0 or player.current_sp < player.skill_cost(base) + 30.0: continue
+		# Provoke enters like RunController._execute_skill: the selected target is noted.
+		if base == &"provoke": player.note_base_commit(base, boss.global_position, boss)
 		var used := player.use_perseverance() if base == &"perseverance" else (authority.is_sealed(boss) and player.use_provoke(boss))
+		player.clear_base_commit_note()
 		if used:
 			tally["casts"][base] = int(tally["casts"].get(base, 0)) + 1
 			return

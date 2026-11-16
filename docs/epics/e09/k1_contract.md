@@ -76,9 +76,10 @@ C2, raio 55). Dano de cada alvo da coluna = `ATQ × base × (1 + 0,40 × cargas)
 
 - Gasta **até 5 cargas** no commit (`spend_for_cast` em `on_cast_confirmed`); com 0 cargas, sai
   o dano base. Com 5 cargas, × 3,0.
-- Na Hora do Juramento: a coluna cobre **todos os inimigos dentro do círculo**, e o SP pago no
-  commit é devolvido no mesmo commit (custo líquido zero). As cargas acima de 5 ficam para o
-  próximo Impacto.
+- Na Hora do Juramento: a coluna cobre **todos os inimigos dentro do círculo**, e o custo de SP
+  é 0 por `ClassKit.skill_cost` (K1.1, T1.2): o cast não exige SP, e o HUD mostra 0. Fora da Hora,
+  o custo é o do rank. As linhas "SP base" do tooltip continuam com o valor do rank. As cargas
+  acima de 5 ficam para o próximo Impacto.
 
 ### Égide do Juramento — `paladin_oath_aegis` (job 28, ativa, própria, defensiva)
 
@@ -153,17 +154,19 @@ Aro de luz sobre um inimigo (`seal` de C2: marca `paladin_seal` em `ActorMarks` 
 |---|---|
 | Parede de Escudos | Cada uso confirmado rende +1 Graça; com Graça de Guarda, os golpes frontais com a postura erguida também rendem. |
 | Perseverança | Cada uso confirmado rende +1 Graça. |
-| Provocar | Com um Selo ativo, cada uso confirmado soma +1 ao valor do Selo (máx. 3). |
+| Provocar | Cada uso confirmado **no inimigo selado** soma +1 ao valor do Selo (máx. 3). Provocar em outro alvo, ou sem alvo no contexto, não soma. |
 
-Detecção: a costura não tem gancho de skill da base. O kit observa, em `on_tick`, o aumento da
-recarga canônica dessas três skills (`skill_cooldown`), que só sobe no pagamento (`_spend`). O
-uso é visto no primeiro tick depois do commit. A chave de Graça é `cast:<skill>@<kit_time>`.
+Detecção (K1.1): `ClassKit.on_base_skill_committed(player, skill_id, context)` da T1.2, uma vez
+por commit pago, no próprio commit (antes da resolução). Cast recusado (recarga, SP, alvo) não
+chega ao gancho e não rende. Baixar a postura da Parede não é pagamento e não rende. O Provocar
+compara `context.target` com o alvo selado da autoridade. A chave de Graça é
+`base:<skill>@<kit_time>`.
 
 ## 3. Estado, snapshot e pausa
 
 - Variáveis do kit (fragmento `scripts/classes/sp_ac/snapshot_manifest.json`): `sanctuary`
-  (autoridade de T5), `impact_charges`, `hour_remaining`, `hour_opened_zone`, `faith_applied`,
-  `base_cooldowns`.
+  (autoridade de T5), `impact_charges`, `hour_remaining`, `hour_opened_zone`, `faith_applied`.
+  Revisão 3 desde o K1.1: `base_cooldowns` saiu com a observação de recarga.
 - Exato: tudo volta, inclusive zona, Égide, Selo e relógio da Hora. Compacto: inelegível com
   zona, Égide, Selo ou Hora ativos (`paladin_hour` além dos motivos de T5); sem eles, a Graça e o
   modo sem limite sobrevivem no jogador.

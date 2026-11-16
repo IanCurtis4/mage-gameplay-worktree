@@ -278,8 +278,9 @@ func _check_excess_heal_and_guard_grace() -> void:
 	var other := _enemy(Vector2(470, 350))
 	player.current_sp = player.max_sp
 	player.use_shield_wall(Vector2.RIGHT)
+	_check(_grace() == 1, "the Parede commit itself yields +1 Grace even without Graça de Guarda (K1.1)")
 	player.apply_damage(_enemy_request(other, 30.0), controller.rng)
-	_check(_grace() == 0, "without Graça de Guarda the stance alone yields no hit Grace")
+	_check(_grace() == 1, "without Graça de Guarda the stance alone yields no hit Grace")
 
 # --- Consecrated Impact ---------------------------------------------------------------
 
@@ -312,7 +313,7 @@ func _check_impact_spend() -> void:
 	_ready_cast(&"paladin_consecrated_impact")
 	sp_before = player.current_sp
 	player.use_kit_skill(&"paladin_consecrated_impact", target.global_position, target)
-	_check(is_equal_approx(sp_before - player.current_sp, 26.0), "R5 Impacto costs 26 SP outside the Hora")
+	_check(is_equal_approx(sp_before - player.current_sp, 26.0) and is_equal_approx(player.skill_cost(&"paladin_consecrated_impact"), 26.0), "R5 Impacto costs 26 SP outside the Hora (skill_cost)")
 
 # --- Égide -------------------------------------------------------------------------
 
@@ -366,43 +367,53 @@ func _check_seal_and_base_interactions() -> void:
 	player.kit_time += 1.0
 	_cast(&"paladin_consecrated_impact", target)
 	_check(_grace() == before + 1, "light damage on the sealed target yields Grace = seal value (1)")
-	# Provocar adds to the seal (cooldown watch on the next tick).
-	_tick(0.01)
+	# Provocar adds to the seal at its own commit (T1.2 hook), only on the sealed enemy.
+	var other := _enemy(Vector2(480, 400))
+	_check(_provoke(other) and int(target.marks.value(&"paladin_seal", 0)) == 1, "Provocar on another enemy does not add to the seal")
+	_check(_provoke(target) and int(target.marks.value(&"paladin_seal", 0)) == 2, "Provocar on the sealed enemy adds 1 at the commit, no tick needed")
 	player.current_sp = player.max_sp
-	_check(player.use_provoke(target), "Provocar commits")
-	_tick(0.01)
-	_check(int(target.marks.value(&"paladin_seal", 0)) == 2, "Provocar with an active seal adds 1 to the seal")
-	player.mage_cooldowns[&"provoke"] = 0.0
-	_tick(0.01)
-	player.current_sp = player.max_sp
-	player.use_provoke(target)
-	_tick(0.01)
-	player.mage_cooldowns[&"provoke"] = 0.0
-	_tick(0.01)
-	player.current_sp = player.max_sp
-	player.use_provoke(target)
-	_tick(0.01)
+	player.mage_cooldowns[&"provoke"] = 5.0
+	player.note_base_commit(&"provoke", target.global_position, target)
+	_check(not player.use_provoke(target) and int(target.marks.value(&"paladin_seal", 0)) == 2, "a refused Provocar (cooldown) adds nothing")
+	player.clear_base_commit_note()
+	player.use_provoke(target) # direct call without entry note: no target in the context
+	_check(int(target.marks.value(&"paladin_seal", 0)) == 2, "a Provocar commit without target in the context adds nothing")
+	_provoke(target)
+	_provoke(target)
 	_check(int(target.marks.value(&"paladin_seal", 0)) == 3, "the seal value stops at 3")
 	before = _grace()
 	player.kit_time += 1.0
 	player.mage_cooldowns[&"paladin_consecrated_impact"] = 0.0
 	_cast(&"paladin_consecrated_impact", target)
 	_check(_grace() == before + 3 - int(kit.get("impact_charges")), "light damage on a seal of value 3 yields 3 Grace")
-	# Parede de Escudos and Perseverança fill Grace once per use.
+	# Parede de Escudos and Perseverança fill Grace once per paid commit, at the commit.
 	authority.grace.charges = 0
 	player.current_sp = player.max_sp
-	player.use_shield_wall(Vector2.RIGHT)
+	player.mage_cooldowns[&"shield_wall"] = 0.0
+	_check(player.use_shield_wall(Vector2.RIGHT) and _grace() == 1, "Parede de Escudos yields +1 Grace at its commit")
 	_tick(0.01)
 	_tick(0.01)
-	_check(_grace() == 1, "Parede de Escudos yields +1 Grace once")
+	_check(_grace() == 1, "the Parede is counted once (ticks add nothing)")
 	player.current_sp = player.max_sp
-	player.use_perseverance()
+	player.mage_cooldowns[&"perseverance"] = 5.0
+	_check(not player.use_perseverance() and _grace() == 1, "a refused Perseverança (cooldown) yields nothing")
+	player.mage_cooldowns[&"perseverance"] = 0.0
+	player.current_sp = player.max_sp
+	_check(player.use_perseverance() and _grace() == 2, "Perseverança yields +1 Grace at its commit")
 	_tick(0.01)
-	_tick(0.01)
-	_check(_grace() == 2, "Perseverança yields +1 Grace once")
+	_check(_grace() == 2, "Perseverança is counted once")
 	player.use_shield_wall(Vector2.RIGHT) # lowering the stance spends nothing
 	_tick(0.01)
 	_check(_grace() == 2, "lowering the Parede (no payment) yields nothing")
+
+## Provoke as RunController._execute_skill does: entry note with the selected target.
+func _provoke(enemy: CombatActor) -> bool:
+	player.mage_cooldowns[&"provoke"] = 0.0
+	player.current_sp = player.max_sp
+	player.note_base_commit(&"provoke", enemy.global_position, enemy)
+	var used := player.use_provoke(enemy)
+	player.clear_base_commit_note()
+	return used
 
 # --- Hora do Juramento ------------------------------------------------------------------
 
@@ -422,11 +433,17 @@ func _check_hour() -> void:
 	authority.grace.charges = 5
 	var back := player.apply_damage(_enemy_request(behind, 40.0), controller.rng)
 	_check(is_equal_approx(float(back.get("kit_damage_multiplier", 1.0)), 0.74) and _grace() == 6, "in the circle a hit from behind is reduced and Grace passes 5")
-	# Impacto: no net SP and the column covers the whole circle.
+	# Impacto: skill_cost 0 (pure read) and the column covers the whole circle.
 	_ready_cast(&"paladin_consecrated_impact")
-	var sp_before := player.current_sp
+	var grace_seen := _grace()
+	var hour_seen := float(kit.get("hour_remaining"))
+	var costs_zero := true
+	for read: int in 10: costs_zero = costs_zero and is_zero_approx(player.skill_cost(&"paladin_consecrated_impact"))
+	_check(costs_zero and _grace() == grace_seen and float(kit.get("hour_remaining")) == hour_seen and is_equal_approx(player.base_skill_cost(&"paladin_consecrated_impact"), 26.0), "skill_cost is 0 in the Hora, a pure read (base cost stays 26)")
+	_check(is_equal_approx(player.skill_cost(&"paladin_oath_aegis"), player.base_skill_cost(&"paladin_oath_aegis")), "the Hora discount is only for the Impacto")
+	player.current_sp = 0.0
 	player.kit_time += 1.0
-	_check(player.use_kit_skill(&"paladin_consecrated_impact", front.global_position, front) and is_equal_approx(player.current_sp, sp_before), "Impacto costs no SP during the Hora")
+	_check(player.use_kit_skill(&"paladin_consecrated_impact", front.global_position, front) and is_zero_approx(player.current_sp), "Impacto casts with 0 SP during the Hora and costs nothing")
 	_check(behind_hits.size() == 1 and behind_hits[0]["skill_id"] == &"paladin_consecrated_impact", "the column falls on the whole circle (enemy behind hit)")
 	paused = true
 	var hour_before := float(kit.get("hour_remaining"))
@@ -510,7 +527,6 @@ func _check_snapshot_formats() -> void:
 	standalone_kit.resolve_cast(standalone, cast)
 	standalone_authority.grace.charges = 7
 	standalone_authority.seal(standalone, enemy, &"paladin_seal", 4.0, 2)
-	standalone_kit.set("base_cooldowns", {&"shield_wall": 3.5, &"perseverance": 0.0, &"provoke": 1.25})
 	standalone.kit_time = 9.0
 	var hour := float(standalone_kit.get("hour_remaining"))
 	var barrier := SnapshotTickBarrier.new()
@@ -528,7 +544,7 @@ func _check_snapshot_formats() -> void:
 			for child: Node in copy.get_children():
 				if child is CombatActor: copied_enemy = child
 			_check(copied != null and copied.zone(&"oath") != null and copied.zone(&"oath").shape == &"circle" and copied.grace.charges == 7 and copied.grace.is_unlimited(), "exact format keeps the circle and the unlimited Grace")
-			_check(copied_kit != null and is_equal_approx(float(copied_kit.get("hour_remaining")), hour) and not bool(copied_kit.get("hour_opened_zone")) and is_equal_approx(float(copied_kit.get("faith_applied")), float(standalone_kit.get("faith_applied"))) and is_equal_approx(float(copied_kit.get("base_cooldowns")[&"provoke"]), 1.25), "exact format keeps the Hora clock, Fé and the base watch")
+			_check(copied_kit != null and is_equal_approx(float(copied_kit.get("hour_remaining")), hour) and not bool(copied_kit.get("hour_opened_zone")) and is_equal_approx(float(copied_kit.get("faith_applied")), float(standalone_kit.get("faith_applied"))) and not "base_cooldowns" in copied_kit, "exact format keeps the Hora clock and Fé (no base watch since K1.1)")
 			_check(copied != null and copied_enemy != null and copied.is_sealed(copied_enemy) and int(copied_enemy.marks.value(&"paladin_seal", 0)) == 2, "exact format keeps the seal with the restored enemy")
 			SnapshotRegistry.new().activate(restored)
 			copy.free()
@@ -549,7 +565,7 @@ func _check_snapshot_formats() -> void:
 		if restored.get("ok", false):
 			var copy: PlayerActor = restored["root"]
 			var copied: SanctuaryAuthority = copy.kit.get("sanctuary")
-			_check(copied != null and copied.grace.charges == 7 and copied.grace.is_unlimited() and copied.zones.is_empty() and is_equal_approx(float(copy.kit.get("base_cooldowns")[&"shield_wall"]), 3.5), "compact format keeps Grace, the unlimited mode and the base watch on the player")
+			_check(copied != null and copied.grace.charges == 7 and copied.grace.is_unlimited() and copied.zones.is_empty() and not "base_cooldowns" in copy.kit, "compact format keeps Grace and the unlimited mode on the player")
 			SnapshotRegistry.new().activate(restored)
 			copy.free()
 	barrier.release()

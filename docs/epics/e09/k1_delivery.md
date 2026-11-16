@@ -176,7 +176,7 @@ Rodadas isoladas, porque o verificador para na primeira falha:
 
 ## Limitações
 
-1. **Base sem gancho.** A costura não avisa quando uma skill da base é usada. O kit percebe a
+1. ~~**Base sem gancho.**~~ **Resolvida no K1.1** (`on_base_skill_committed`). Texto original: A costura não avisa quando uma skill da base é usada. O kit percebe a
    Parede de Escudos, a Perseverança e o Provocar pelo **aumento da recarga canônica** no
    `on_tick`, o que tem duas consequências:
    - o efeito vale no primeiro tick depois do commit;
@@ -184,7 +184,7 @@ Rodadas isoladas, porque o verificador para na primeira falha:
      Provocar com Selo ativo.
    Um gancho `on_base_skill_committed(player, skill_id, target)` na costura (T1) eliminaria as
    duas consequências.
-2. **Impacto sem SP na Hora.** O SP é devolvido no próprio commit (custo líquido zero). Ainda é
+2. ~~**Impacto sem SP na Hora.**~~ **Resolvida no K1.1** (`skill_cost`). Texto original: O SP é devolvido no próprio commit (custo líquido zero). Ainda é
    preciso **ter** o SP do rank para lançar, porque `_can_pay_skill` confere o custo antes do kit.
    Um gancho de custo na costura resolveria isso.
 3. **Juramento sem pré-requisito.** O `ProfileCatalog` não aceita pré-requisito comprado no rank
@@ -216,4 +216,74 @@ Como na T1 e na T5, ficam fora do commit:
 
 - T9 atualiza as listas de destinos (A9). T3 traz os ícones e T7 o corpo.
 - T10 compõe e roda a suíte completa.
-- Ganchos opcionais para a arquitetura avaliar: as limitações 1 e 2.
+- ~~Ganchos opcionais para a arquitetura avaliar: as limitações 1 e 2.~~ Feito no K1.1 (A13).
+
+## K1.1 — ganchos da T1.2 (decisão A13)
+
+- **Base:** merge `--no-ff` de `4fbfd9db` (ponta da T1: T1.2 `ca27db8a`, A14 `be4d6477`), commit
+  `168e0124`, sobre `021bdc6a`. O SHA do commit do K1.1 está no relatório final da sessão: um
+  recibo não registra o próprio SHA.
+- **Custo (limitação 2).** O reembolso de SP em `on_cast_confirmed` saiu. Na Hora, `skill_cost`
+  devolve 0 para `paladin_consecrated_impact` e o custo base para o resto. É uma leitura pura de
+  `hour_remaining`, sem efeito colateral. O cast agora sai com 0 SP, e `base_skill_cost` continua 26.
+- **Base (limitação 1).** A observação de recarga em `on_tick` saiu (`BASE_WATCHED`, `COOLDOWN_JUMP`,
+  `base_cooldowns`). Parede de Escudos e Perseverança dão +1 Graça em `on_base_skill_committed`,
+  no próprio commit. O Provocar só soma ao Selo quando `context.target` é o inimigo selado (regra
+  registrada em `k1_contract.md`). Cast recusado não chega ao gancho, e baixar a postura da Parede
+  não é pagamento.
+- **Snapshot.** `base_cooldowns` saiu do fragmento, que passou para a **revisão 3**. Os formatos
+  exato e compacto foram conferidos sem o campo, nos dois casos de suspensão e retomada de
+  `sp_ac_kit_test`.
+- **Testes.**
+  - `sp_ac_kit_test` agora tem 170 checks. Novos: efeito no commit, sem soma no tick; Provocar em
+    outro alvo ou sem alvo no contexto não soma; Provocar e Perseverança recusados por recarga não
+    rendem; `skill_cost` é 0 e puro (10 leituras sem mudar Graça nem a Hora); o desconto vale só
+    para o Impacto; Impacto com 0 SP na Hora. Ajuste: o check "sem Graça de Guarda a postura não
+    rende Graça por golpe" passou a medir depois do +1 do commit da Parede, que antes só aparecia
+    um tick mais tarde.
+  - `sp_ac_boss_combat_test`: 25 checks, 0 falhas. O Provocar entra como `RunController._execute_skill`
+    (`note_base_commit` com o alvo), e a saída é idêntica à do K1.
+  - O `.uid` do teste de combate foi gerado pelo import e entrou no commit.
+
+### Regressão K1.1
+
+Fixture F1 gerada em `.godot/verification/k1_1_f1_bootstrap/` (`e07_f1_import_test`, com
+`-CheckTimeoutSeconds 300`). Rodada `.godot/verification/k1_1_impact_2/` com `-SkipEditorImport
+-F1Fixture`: 19 passos (os 18 do K1 mais `kit_seam_hooks_v3_test`), todos PASS. `checks.jsonl`
+sha256 `5634E0D1373B350F21FFD07B0A41162BA980331CC2757CBA9E4F2D805B637A3E`.
+
+| Passo | Nome | Checks | sha256 da saída |
+|---|---|---|---|
+| 96–294 | os 14 passos do Espadachim, Defendente, ameaça, snapshot e compacto | PASS | iguais aos da tabela K1 acima |
+| 329 | `kit_seam_hooks_v2_test` | PASS | `5182F32B…F6FA5A` (igual) |
+| 330 | `kit_seam_hooks_v3_test` | 63, 0 falhas | `D1DFD323C350F8F63140F3D8D86FE01FB566BAEE11ED3A93B953FBF99F78F449` |
+| 332 | `sanctuary_test` | 155, 0 falhas | `01B74920…F13A6F` (igual) |
+| 333 | `sp_ac_boss_combat_test` | 25, 0 falhas | `269571175CE4E29BCE0FFE76F032F348A6F9E9773BF33C82E3B7C81FA0719DA6` (igual) |
+| 334 | `sp_ac_kit_test` | 170, 0 falhas | `2229F2DCD6DD2B0F97F05008FDB8F7FD8B119F08B9D2CFEC83B2FE442B6456A7` |
+
+Busca por `SCRIPT ERROR`, `still in use`, `Parse Error` e `Compile Error` nas saídas e nos logs do
+motor da rodada e do bootstrap: **0 ocorrências**.
+
+Rodadas anteriores: `k1_1_impact_1` parou no passo 330 por falta da fixture F1, sem relação com o
+kit. Na primeira `k1_1_impact_2`, o check da Parede citado acima falhou e foi ajustado; a fixture
+foi gerada de novo porque guarda o hash dos testes.
+
+### Falhas A9 que sobraram (listas de destinos, donas da T9)
+
+| Passo | Nome | Resultado | sha256 da saída |
+|---|---|---|---|
+| 108 | `e05_evolution_catalog_test` | FAIL 2 de 55, mais 1 `SCRIPT ERROR` (`sp_ac` ausente em `expected`) | `23F5CDB77407F60B801CCC20B56A4D9D289DA3A7E40E4E7A05B540824F9BD648` (igual ao do K1) |
+| 331 | `kit_seam_test` | 189 checks, 5 falhas | `79A2833D1F73A792ED3C2B61BE34C89B48C4D4A896A0D306782928359803F524` |
+
+As 5 falhas do `kit_seam_test` têm os mesmos nomes do K1. Os checks de corpo da A14 passam.
+
+### Limitações do K1.1
+
+- O Provocar chamado direto, sem nota de entrada (como `use_provoke` num teste), não tem alvo no
+  contexto e não soma ao Selo. Nos caminhos de jogo, plano (`_execute_skill`) e mundo (comando), o
+  alvo chega.
+- A Graça da Parede e da Perseverança ainda usa a chave `base:<skill>@<kit_time>`, porque o contexto
+  não traz um ID de evento.
+- O executável `_console` do Godot deu `CreateProcess failed, error 193` nesta máquina; as rodadas
+  usaram `Godot_v4.7.2-stable_win64.exe`.
+- A suíte completa não foi repetida.
