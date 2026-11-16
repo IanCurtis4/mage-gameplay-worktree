@@ -588,3 +588,25 @@ O usuário aprovou o candidato `db7f9252` depois do teste ("Aprovado", 16/11/202
 produto do E08 com a arte atual das classes; a arte híbrida em staging (1116–1123) não entra no
 pacote, e o pedido 1124 fica pendente. Seguem o avanço do playtest habitual (`codex/playtest`) e
 o merge em `master`, sem push, registrados abaixo.
+
+### Playtest habitual e master — 16/11/2026
+
+- **Playtest habitual** (`C:/Users/João Pedro/Documents/ChatGPT/RagRPG`, `codex/playtest`): avanço por
+  fast-forward de `fba777b3` até o commit aceito `fc91ea66`. Antes do avanço, as 241 alterações
+  locais foram copiadas, com SHA256, para `.tools/playtest_backup_e08_20261116/`
+  (`inventory_before.json`, SHA256 `53735c70c437049dc5e3386b851cae7a378fcd33bb252ad6dad6b69895094e5f`).
+  - 27 caminhos locais coincidiam com o delta do candidato. 20 não rastreados eram idênticos ao
+    candidato e foram removidos antes do avanço; voltaram iguais. 5 rascunhos não rastreados de
+    `docs/map_editor/` eram diferentes e ficam só no backup.
+  - As duas edições locais foram reaplicadas por patch de três vias (`local_changes_overlap.patch`):
+    `export_presets.cfg` mantém o `export_path` local `v0.6` com os `include_filter` do E08, e
+    `docs/epics/e07.md` mantém a seção local do editor de mapas junto ao encerramento do E07.
+  - As outras 214 alterações locais continuam byte-idênticas, e os 5 arquivos de save pessoal
+    (`profile.json`, `profile.backup.json`, `controls.cfg` e `admin_backups`) conferem por hash,
+    sem abrir o conteúdo (`inventory_after.json`, SHA256 `d3c1f259c3d935c1f08d0be1b7723ab13b16eb9d339778ce40c85dfcf17fd21a`).
+  - Importação headless do Godot 4.7.2 no diretório habitual com APPDATA isolado: saída 0, 259 s,
+    sem linhas de erro. Smoke headless de 600 quadros na cena principal, em perfil isolado: saída 0,
+    13 s, sem erro. A importação regravou 1.675 `.import` só no fim de linha (LF/CRLF), o mesmo caso
+    dos 213 que já estavam modificados; só os dois arquivos acima têm mudança real.
+- **master**: fast-forward de `3c35f7f2` (F9) até este registro, histórico linear como na F9, sem
+  push.
