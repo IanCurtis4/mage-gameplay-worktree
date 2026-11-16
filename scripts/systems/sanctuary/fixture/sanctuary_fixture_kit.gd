@@ -15,7 +15,11 @@ func _slot(index: int) -> StringName:
 
 func on_attach(player: PlayerActor) -> void:
 	super(player)
-	sanctuary.configure(player, StringName(String(ClassKitRegistry.IDENTITIES[fixture_id]["prefix"]) + "fixture_family"))
+	var prefix := String(ClassKitRegistry.IDENTITIES[fixture_id]["prefix"])
+	sanctuary.configure(player, StringName(prefix + "fixture_family"), StringName(prefix + "sanctuary_ice"))
+
+func temporary_stat_sources(player: PlayerActor) -> Array[Dictionary]:
+	return sanctuary.temporary_stat_sources(player)
 
 func on_tick(player: PlayerActor, delta: float) -> void:
 	super(player, delta)

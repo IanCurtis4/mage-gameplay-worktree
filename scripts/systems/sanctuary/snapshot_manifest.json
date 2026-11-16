@@ -1,6 +1,6 @@
 {
   "res://scripts/systems/sanctuary/sanctuary_authority.gd": {
-    "revision": 1,
+    "revision": 2,
     "fields": [
       "owner_id",
       "grace_family",
@@ -14,7 +14,9 @@
       "aegis_prototype",
       "aegis_pulses",
       "marked_target_id",
-      "seal_key"
+      "seal_key",
+      "stat_source_id",
+      "ice_defense_applied"
     ],
     "omitted": {
       "_applied": "per-tick memo of applied rules; cleared at the start of every tick, so it is empty at any capture point between ticks"

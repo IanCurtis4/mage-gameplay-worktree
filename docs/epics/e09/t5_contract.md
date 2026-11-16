@@ -69,7 +69,7 @@ desconhecida ou valor fora da faixa recusa a zona (`invalid_rules`).
 | `burn_ratio` | 0,20 | 0,00–1,00 | A cada pulso, cada inimigo dentro recebe dano de luz igual a `burn_stat × burn_ratio` |
 | `burn_stat` | `&"magic_attack"` | `magic_attack`, `melee_attack` | Atributo do `stat_breakdown` do dono, lido no commit |
 | `fire_burn_multiplier` | 1,50 | 1,00–3,00 | Fogo (e tricolor): a queimadura do pulso é multiplicada |
-| `ice_defense` | 0,15 | 0,00–0,50 | Gelo: DEF física e mágica do dono (ver §3.1) |
+| `ice_defense` | 0,15 | 0,00–0,50 | Gelo: +15% de DEF física e mágica do dono, como fonte temporária de atributo (§3.1) |
 | `ice_slow` | 0,25 | 0,00–0,50 | Gelo: lentidão nos inimigos dentro, por pulso |
 | `ice_slow_duration` | 1,2 | 0,5–3,0 | Duração da lentidão (renova a cada pulso) |
 | `lightning_sp_regen` | 0,50 | 0,00–2,00 | Raio: o dono dentro recupera mais `sp_regen × valor × delta` de SP |
@@ -87,19 +87,25 @@ desconhecida ou valor fora da faixa recusa a zona (`invalid_rules`).
   - multiplicador de cura: o maior, uma vez por cura;
   - DEF do gelo: o maior.
 
-### 3.1 Regras que dependem de gancho pedido à arquitetura
+### 3.1 Regras do dono pelos ganchos da T1.1 (decisão A12, 16/11)
 
-A costura de T1 não tem multiplicador de dano no passo 1 nem fonte temporária de atributo
-do kit. A pergunta foi enviada à sessão de arquitetura em 16/11. Enquanto não houver gancho
-novo, vale o plano B, isolado em `SanctuaryAuthority._apply_owner_damage_rule`:
+A pergunta à arquitetura levou à decisão A12: os dois ganchos entram na costura (T1.1,
+`bd66d3c3`) e o plano B foi descartado.
 
-- `owner_damage_taken`: `before_hit_mitigation` multiplica `hit.request.damage_dealt_multiplier`
-  no próprio pedido, que é o objeto que segue para a mitigação existente. O pedido de um
-  inimigo é novo a cada ataque. O ledger (`apply_once`) impede uma segunda aplicação do
-  mesmo pedido, então ele nunca é multiplicado duas vezes num golpe que conta;
-- `ice_defense`: entra como redução extra de dano recebido equivalente,
-  `× (1 − ice_defense)`, no mesmo passo. Não é DEF no `stat_breakdown` e não aparece na
-  ficha. Isso fica registrado como limitação.
+- **`owner_damage_taken`.** `SanctuaryAuthority.before_hit` devolve
+  `{"damage_multiplier": m}` quando `m < 1`. O jogador aplica o multiplicador numa cópia do
+  pedido, depois do teste de `cancel` (C1.4, passo 1). O `hit.request` original não muda, e
+  o resultado traz `kit_damage_multiplier`. Um kit que cancela, como o Aparo, devolve a
+  própria decisão antes.
+- **`ice_defense`.** É DEF de verdade.
+  - `temporary_stat_sources(player)` publica
+    `{"source_id": <prefixo do kit>sanctuary_ice, "increased": {physical_defense, magic_defense}}`,
+    no formato do Marco de Guarda. A fonte entra no `stat_breakdown`, na ficha e nas
+    defesas de `HealthState`.
+  - `sync_stats(player)` chama `player.refresh_kit_stats()` só quando o valor muda: ao
+    entrar ou sair, ao trocar de elemento, ao abrir ou encerrar a zona e na morte. Não cura
+    nem recarrega.
+  - O valor publicado (`ice_defense_applied`) fica no snapshot.
 
 ## 4. Graça
 

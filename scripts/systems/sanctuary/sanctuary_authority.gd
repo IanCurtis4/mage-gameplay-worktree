@@ -22,14 +22,20 @@ var aegis_prototype: DamageRequest
 var aegis_pulses := 0
 var marked_target_id := 0
 var seal_key: StringName = &""
+## Temporary stat source of the ice rule (T1.1 hook), with the kit prefix.
+var stat_source_id: StringName = &"sanctuary_ice_defense"
+## Ice defense currently published to the owner's breakdown (0 when none).
+var ice_defense_applied := 0.0
 ## Per-tick memo "rule:target" so no rule applies twice in one tick. Cleared at the
 ## start of every tick (omitted from the snapshot: it is empty between ticks).
 var _applied: Dictionary = {}
 
-## Called once from the kit's on_attach. `family` is the kit's Grace family.
-func configure(player: PlayerActor, family: StringName = &"grace") -> void:
+## Called once from the kit's on_attach. `family` is the kit's Grace family and
+## `source_id` the kit-prefixed ID of the ice defense stat source.
+func configure(player: PlayerActor, family: StringName = &"grace", source_id: StringName = &"") -> void:
 	owner_id = player.get_instance_id() if is_instance_valid(player) else 0
 	if not family.is_empty(): grace_family = family
+	if not source_id.is_empty(): stat_source_id = source_id
 
 # --- Zones ---------------------------------------------------------------------
 
@@ -98,6 +104,7 @@ func open_zone(player: PlayerActor, config: Dictionary) -> Dictionary:
 		zone.prototype = prototype
 	zones[role] = zone
 	zone.owner_inside = zone.contains(player, player)
+	sync_stats(player)
 	return {"ok": true, "error_code": &"", "zone": zone}
 
 ## Convenience: point of a T1 cast descriptor (world anchor or flat point).
@@ -114,19 +121,24 @@ func has_active_zone() -> bool:
 		if (zones[role] as SanctuaryZone).is_active(): return true
 	return false
 
-func end_zone(role: StringName) -> bool:
+## Ends a zone. With the owner, the ice defense leaves the breakdown at once;
+## otherwise at the next tick.
+func end_zone(role: StringName, player: PlayerActor = null) -> bool:
 	if not zones.has(role): return false
 	(zones[role] as SanctuaryZone)._inside.clear()
 	zones.erase(role)
+	if player != null: sync_stats(player)
 	return true
 
 func set_zone_shape(role: StringName, shape: StringName, radius: float = 0.0) -> Dictionary:
 	var found := zone(role)
 	return found.set_shape(shape, radius) if found != null else SanctuaryRules.failure(&"no_zone", String(role))
 
-func set_zone_element(role: StringName, element: StringName) -> bool:
+func set_zone_element(role: StringName, element: StringName, player: PlayerActor = null) -> bool:
 	var found := zone(role)
-	return found != null and found.set_element(element)
+	if found == null or not found.set_element(element): return false
+	if player != null: sync_stats(player)
+	return true
 
 ## True when the owner stands inside some active zone (presence of the last check).
 func owner_inside_any() -> bool:
@@ -176,6 +188,7 @@ func tick(player: PlayerActor, delta: float, actors: Array = []) -> void:
 		_applied["lightning_sp"] = true
 		if player.recover_sp(player.stat_breakdown.value(&"sp_regen") * sp_bonus * delta) > 0.0: player.resources_changed.emit()
 	for role: StringName in expired: end_zone(role)
+	sync_stats(player)
 	_tick_aegis(player, delta, enemies)
 	_tick_seal()
 	grace.tick(delta, has_active_zone())
@@ -213,31 +226,46 @@ func _pulse(player: PlayerActor, found: SanctuaryZone, enemies: Array, element: 
 # --- Owner rules (forward from before_hit_mitigation and on_heal) -----------------------
 
 ## Damage multiplier on a direct hit on the owner: the smallest owner_damage_taken of
-## the zones the owner is in (cone zones only for hits inside their half-angle), then
-## the strongest ice defense (plan B of t5_contract §3.1). 1.0 outside every zone.
+## the zones the owner is in (cone zones only for hits inside their half-angle).
+## 1.0 outside every zone. The ice rule is real DEF (temporary_stat_sources).
 func owner_damage_multiplier(hit: Dictionary) -> float:
 	var taken := 1.0
-	var ice := 0.0
 	for role: StringName in zones:
 		var found: SanctuaryZone = zones[role]
-		if not found.is_active() or not found.owner_inside: continue
-		if found.covers_hit(float(hit.get("facing_dot", -2.0))): taken = minf(taken, float(found.rules["owner_damage_taken"]))
-		if SanctuaryRules.has_ice(found.element): ice = maxf(ice, float(found.rules["ice_defense"]))
-	return taken * (1.0 - ice)
+		if found.is_active() and found.owner_inside and found.covers_hit(float(hit.get("facing_dot", -2.0))): taken = minf(taken, float(found.rules["owner_damage_taken"]))
+	return taken
 
-## Step 1 of the incoming-hit pipeline. Never cancels; returns {} for the kit.
-func before_hit(player: PlayerActor, hit: Dictionary) -> Dictionary:
-	_apply_owner_damage_rule(player, hit)
-	return {}
-
-## Single place of the damage rule (plan B: the request that continues to the
-## mitigation is scaled in place; see t5_contract §3.1).
-func _apply_owner_damage_rule(_player: PlayerActor, hit: Dictionary) -> float:
+## Step 1 of the incoming-hit pipeline (forward of before_hit_mitigation). Never
+## cancels; returns the T1.1 "damage_multiplier", which the player applies on a copy
+## of the request. A kit that cancels (parry) returns its own decision first.
+func before_hit(_player: PlayerActor, hit: Dictionary) -> Dictionary:
 	var request := hit.get("request") as DamageRequest
-	if request == null or request.is_secondary: return 1.0
+	if request == null or request.is_secondary: return {}
 	var multiplier := owner_damage_multiplier(hit)
-	if multiplier < 1.0: request.damage_dealt_multiplier *= multiplier
-	return multiplier
+	return {"damage_multiplier": multiplier} if multiplier < 1.0 else {}
+
+## Strongest ice defense of the zones the owner is in (0 outside).
+func ice_defense() -> float:
+	var best := 0.0
+	for role: StringName in zones:
+		var found: SanctuaryZone = zones[role]
+		if found.is_active() and found.owner_inside and SanctuaryRules.has_ice(found.element): best = maxf(best, float(found.rules["ice_defense"]))
+	return best
+
+## Forward of ClassKit.temporary_stat_sources: pure read of the published ice defense,
+## in the format of the Marco de Guarda source.
+func temporary_stat_sources(_player: PlayerActor = null) -> Array[Dictionary]:
+	var sources: Array[Dictionary] = []
+	if ice_defense_applied > 0.0: sources.append({"source_id": stat_source_id, "label": "Santuário de gelo", "increased": {&"physical_defense": ice_defense_applied, &"magic_defense": ice_defense_applied}})
+	return sources
+
+## Publishes the ice defense when it changes and asks the player to recompose its
+## breakdown (refresh_kit_stats: no heal, no reset).
+func sync_stats(player: PlayerActor) -> void:
+	var wanted := ice_defense() if is_instance_valid(player) and player.is_alive() else 0.0
+	if is_equal_approx(wanted, ice_defense_applied): return
+	ice_defense_applied = wanted
+	if is_instance_valid(player): player.refresh_kit_stats()
 
 ## Largest heal multiplier of the zones the owner is in (1.0 outside).
 func heal_multiplier() -> float:
@@ -379,8 +407,11 @@ func _remove_seal_mark() -> void:
 # --- Lifecycle and snapshot ----------------------------------------------------------
 
 ## Forward of ClassKit.on_death: zones, Égide, Selo and the unlimited mode end; Grace empties.
-func on_death(_player: PlayerActor) -> void:
+func on_death(player: PlayerActor) -> void:
 	for role: StringName in zones.keys(): end_zone(role)
+	if ice_defense_applied > 0.0:
+		ice_defense_applied = 0.0
+		if is_instance_valid(player): player.refresh_kit_stats()
 	aegis_remaining = 0.0
 	aegis_capacity = 0.0
 	aegis_prototype = null

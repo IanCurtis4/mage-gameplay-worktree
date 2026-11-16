@@ -10,7 +10,9 @@ Executor: Sol (sessão de tarefa T5, Opus 5.5), 16/11/2026. Contrato curto com o
 | Base (`git merge --ff-only`) | `337aa7dfd9673038e3fd162c3fd3ae2826b8d095`, ponta entregue da T1 em `claude/mystifying-moser-f04ddc`, com `771a314f` |
 | Branch | `claude/pensive-wilson-bf9141` |
 | Checkout real | `C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.claude\worktrees\pensive-wilson-bf9141` |
-| SHA entregue | o commit que introduz este recibo, filho direto da base, com código, testes e documentos. É a base de K1 e K2 |
+| Primeira entrega | `9c9384447e5ca427541b26442eb01467ffbd6db1`, com o plano B (substituído) |
+| T1.1 usada | `bd66d3c39ce9db036cfce6fe1e0a699a6b5a9698` (`claude/mystifying-moser-f04ddc`), por `git merge` sem conflito (`f37e9bf7`) |
+| SHA entregue | o commit que atualiza este recibo para os ganchos da T1.1. É a base de K1 e K2 |
 
 Sem push, sem `master`, sem tocar no playtest habitual nem no save pessoal. Só perfis e saves
 de fixture.
@@ -32,7 +34,7 @@ Arquivos, todos dentro do dono exclusivo da T5:
 - `scripts/systems/sanctuary/fixture/sanctuary_fixture_kit.gd` e o fragmento dele: kit de
   teste sobre o kit de fixture da T1, fora do registro de produção. Mostra o repasse dos
   ganchos que K1 e K2 vão copiar;
-- `tests/systems/sanctuary/sanctuary_test.gd`: descoberto pelo `verify.ps1` (passo 330,
+- `tests/systems/sanctuary/sanctuary_test.gd`: descoberto pelo `verify.ps1` (passo 331 com a T1.1,
   `-Test 'sanctuary_test'`);
 - `docs/epics/e09/t5_contract.md` e este recibo.
 
@@ -49,9 +51,10 @@ usa só os ganchos e ajudantes da T1. `player_actor.gd` não mudou, e o sistema 
 var sanctuary := SanctuaryAuthority.new()   # entra em "fields" do fragmento do kit
 
 func causal_families() -> Array[StringName]: return [&"paladin_grace"]   # opcional; ver "Famílias"
-func on_attach(p: PlayerActor) -> void: sanctuary.configure(p, &"paladin_grace")
+func on_attach(p: PlayerActor) -> void: sanctuary.configure(p, &"paladin_grace", &"paladin_sanctuary_ice")
+func temporary_stat_sources(p: PlayerActor) -> Array[Dictionary]: return sanctuary.temporary_stat_sources(p)   # T1.1: DEF do gelo
 func on_tick(p: PlayerActor, d: float) -> void: sanctuary.tick(p, d)
-func before_hit_mitigation(p: PlayerActor, hit: Dictionary) -> Dictionary: return sanctuary.before_hit(p, hit)   # depois do próprio cancelamento (Aparo etc.)
+func before_hit_mitigation(p: PlayerActor, hit: Dictionary) -> Dictionary: return sanctuary.before_hit(p, hit)   # devolve {"damage_multiplier": m} (T1.1); um cancelamento do kit vem antes
 func on_shield_broken(p: PlayerActor, hit: Dictionary, r: Dictionary) -> void: sanctuary.on_shield_broken(p, hit, r)
 func on_heal(p: PlayerActor, req: float, app: float, src: StringName) -> void: sanctuary.on_heal(p, req, app, src)
 func on_death(p: PlayerActor) -> void: sanctuary.on_death(p)
@@ -67,11 +70,11 @@ O exemplo completo e testado é o `sanctuary_fixture_kit.gd`.
 |---|---|
 | `open_zone(player, config) -> {ok, error_code, zone}` | Chamar em `resolve_cast`, porque o protótipo da queimadura herda a raiz causal do cast. `config`: `role`, `skill_id` (obrigatórios), `shape`, `anchor`, `point`, `radius`, `half_angle`, `wide_scale`, `duration`, `pulse_interval`, `element`, `rules`, `family_id` |
 | `SanctuaryAuthority.cast_point(cast)` | Ponto do descritor de cast da T1 (`anchor` no mundo, `point` no mapa plano) |
-| `zone(role)`, `has_active_zone()`, `end_zone(role)` | Consulta e fim |
+| `zone(role)`, `has_active_zone()`, `end_zone(role, player = null)` | Consulta e fim. Com o `player`, a DEF do gelo sai na hora |
 | `set_zone_shape(role, &"circle" \| &"wide_circle", raio = 0)` | Hora do Juramento (cone → círculo) e Aurora (ampliado). Os relógios não reiniciam |
-| `set_zone_element(role, elemento)` | Primeiro feitiço do Círculo Votivo, Coro (tricolor) |
+| `set_zone_element(role, elemento, player = null)` | Primeiro feitiço do Círculo Votivo, Coro (tricolor). Com o `player`, a DEF do gelo se recompõe na hora; sem ele, no próximo tick |
 | `pulse_now(player, role, elemento = &"")` | Mudança de Altar: pulso do elemento antigo |
-| `owner_inside_any()`, `owner_damage_multiplier(hit)`, `heal_multiplier()` | Consultas puras, para tooltip, Fé Inabalável etc. |
+| `owner_inside_any()`, `owner_damage_multiplier(hit)`, `heal_multiplier()`, `ice_defense()` | Consultas puras, para tooltip, Fé Inabalável etc. |
 | `SanctuaryZone.contains(player, ator)` | Pertença, com a geometria do mundo |
 
 ### Graça
@@ -120,7 +123,7 @@ novas no cache de classes globais. O passo `editor_import` do verificador acusou
 `Cannot get class 'GitPlugin'`, a mesma falha de worktree novo que a T1 registrou no passo
 255. Ele não faz parte da regressão abaixo.
 
-### Teste novo: `sanctuary_test` (passo 330), 144 checks, 0 falhas
+### Teste novo: `sanctuary_test` (passo 331 com a T1.1), 155 checks, 0 falhas
 
 Invariantes cobertas:
 
@@ -134,8 +137,17 @@ Invariantes cobertas:
   secundário reivindicado no ledger; nada depois do fim;
 - **nenhuma regra duas vezes no mesmo tick:** duas zonas e um pulso imediato no mesmo tick
   queimam uma vez; o SP do raio entra uma vez com o maior valor; fogo × 1,5;
-- **dano recebido do dono:** cone × 0,80 só de frente; círculo de todos os lados; o menor
-  multiplicador entre zonas; gelo × 0,85 (plano B); tiques secundários fora;
+- **dano recebido do dono, pelo gancho real da T1.1:**
+  - `damage_multiplier` aplicado numa cópia, com o pedido original intacto e
+    `kit_damage_multiplier` no resultado;
+  - cone × 0,80 só de frente; círculo de todos os lados; o menor multiplicador entre zonas;
+  - tiques secundários fora;
+- **DEF do gelo, pelo gancho real da T1.1:**
+  - fonte temporária com o prefixo do kit, +15% de DEF física e mágica;
+  - aparece no breakdown e nas defesas de `HealthState`;
+  - reduz o dano por `CombatMath` e se soma ao multiplicador frontal;
+  - a recomposição não cura nem recarrega;
+  - sai ao encerrar a zona e ao deixar o círculo de gelo na checagem de presença;
 - **cura medida:** sem excedente não gera Graça; 10% de excedente rende 1 carga e guarda 2%;
   teto 5; dentro da zona a cura rende × 1,25 por um bônus reportado e nunca multiplicado de
   novo; aplicado igual ao pedido não tem excedente;
@@ -162,45 +174,38 @@ Invariantes cobertas:
     (`sanctuary_seal`); sem eles é aceito, e a restauração compacta preserva a Graça e o
     modo sem limite.
 
-### Regressão por impacto (`tools/verify.ps1 -Test …`)
+### Regressão por impacto (`tools/verify.ps1 -Test`, com a T1.1 já mesclada)
 
-Rodada 1: `.godot/verification/t5_impact_1/`, `checks.jsonl` sha256
-`E3655400C4316DDA2B32AE24D1291F8C5EE57EE888E17A9150D343BA95D73CFF`.
+Rodada 3: `.godot/verification/t5_impact_3/`, `checks.jsonl` sha256
+`BD3D0CD0FDB449E237029D32563B2FE31E738F83FDD2EFD91FFEA313F9187543`. O plano tem 331 passos.
 
 | Passo | Nome | Resultado | sha256 da saída |
 |---|---|---|---|
+| 267 | `e07_f4_resume_staging_test` | PASS, 91 checks | `F55D20643E903A9915CE1F2A1A1C22291AA234D65AF2D938414EC77198D43DD0` |
 | 268 | `e07_f6_threat_test` | PASS, 43 checks | `C38ACB2F6A0A4F101776B095EE0A68791A65E72A12D77D5317B2EB793EFA2AD3` |
 | 270 | `e07_f6_snapshot_test` | PASS, 40 checks | `2E091952F53115A75311BF2F4CFD595A18B2E8C64FA3076CBF6F844F4CC4EDC6` |
 | 282 | `e08_compact_checkpoint_test` | PASS, 48 checks | `346B73697BFB3C1975A5B0B2196C99CC96AE95E389DFA441C3EDBDC5FFDCA1EC` |
 | 283 | `e08_compact_coverage_test` | PASS, 95 checks | `3C65ADD205F98F2D063AFCF6DAD256C3F207D51AAE7376621D38801D89228796` |
 | 294 | `e07_f3_snapshot_test` | PASS, 52 checks | `9FC703C4AB2986DDAAB73ED386092F3B8AB71A5EA82C4A7C3C781D2F6F06C0CC` |
-| 329 | `kit_seam_test` | PASS, 175 checks | `45F637A085EF4FBA26D70B7A24A6A3BD7882EB0DE61FF85AA0C874B49C034E22`, idêntico ao da T1 |
-| 330 | `sanctuary_test` | PASS, 144 checks | `875AAB8B8E1FC0119F2604CEB7B6AD9B18924ECA075FE915576F49101DF2A881` |
+| 329 | `kit_seam_hooks_v2_test` | PASS, 38 checks | `5182F32B62DE14BE5938AF67C615BFBC0CBB6BDF062A64EDB08131758CF6FA5A`, idêntico ao da T1.1 |
+| 330 | `kit_seam_test` | PASS, 175 checks | `45F637A085EF4FBA26D70B7A24A6A3BD7882EB0DE61FF85AA0C874B49C034E22`, idêntico ao da T1 |
+| 331 | `sanctuary_test` | PASS, 155 checks | `01B74920641522D9B9004D6B7394D056DA28F6F8E2D352E04113B0B605F13A6F` |
 
-Rodada 2: `.godot/verification/t5_impact_2/`.
-
-| Passo | Nome | Resultado | sha256 da saída |
-|---|---|---|---|
-| 267 | `e07_f4_resume_staging_test` | PASS, 91 checks | `069915D17BA6A6494C42E41A2CC0EDA37AA7E06283B35CD16A66E4C42D048299` |
-
-- Busca por `SCRIPT ERROR`, `still in use`, `Parse Error` e `Compile Error` nas saídas e
-  nos logs do motor das duas rodadas: **0 ocorrências**. Nenhum timeout.
+- Busca por `SCRIPT ERROR`, `still in use`, `Parse Error` e `Compile Error` nas saídas e nos
+  logs do motor: **0 ocorrências**. Nenhum timeout.
 - O `WARNING: compact cut rehearsal failed` do passo 282 é o caminho de falha que o próprio
   teste exercita (`rehearsal_failed: 1` no tally).
+- As rodadas 1 e 2 (`t5_impact_1`, `t5_impact_2`) validaram a primeira entrega `9c938444`,
+  ainda com o plano B. Elas ficam como histórico.
 - Passos rodados sem `-F1Fixture`. A suíte completa não foi repetida: a T5 não toca arquivos
   compartilhados.
 
 ## Limitações
 
-1. **Ganchos pedidos à arquitetura, ainda sem resposta.** Perguntei em 16/11 à sessão
-   `local_4643cd66` sobre (1) multiplicador de dano no passo 1 e (2) fonte temporária de
-   atributo do kit. Vale o plano B de `t5_contract.md` §3.1:
-   - o dano recebido na zona escala o próprio `hit.request`;
-   - o gelo dá redução de dano equivalente, **não DEF real**: não aparece na ficha nem no
-     `stat_breakdown`.
-
-   As duas regras ficam numa única função (`_apply_owner_damage_rule` e
-   `owner_damage_multiplier`). Trocar pelo gancho novo não muda a API dos kits.
+1. **Ganchos do dono (resolvido).** Pela decisão A12, o dano recebido e a DEF do gelo usam
+   os ganchos da T1.1 (`bd66d3c3`), e o plano B da primeira entrega saiu. Fica uma
+   observação: o breakdown só se recompõe quando a DEF publicada muda. A presença no círculo
+   fixo é checada a cada 0,25 s, então a DEF entra ou sai com até 0,25 s de atraso.
 2. **Multiplicador de cura:** só vale para curas que a costura reporta em `on_heal`
    (`heal_player`, `hp_regen`, `blood_thirst`). As curas diretas do Berserker e do
    Espiritualista não passam por lá, mas não pertencem às origens Espadachim e Mago.
@@ -234,5 +239,4 @@ Ficaram fora do commit, como na T1:
 ## Próximo passo
 
 - K1 (Paladino) e K2 (Taumaturgo) partem do SHA entregue e seguem a seção "API para K1 e K2".
-- A arquitetura responde às duas perguntas de gancho. Se houver gancho novo, a T5 troca o
-  plano B na própria pasta.
+- Nenhuma pendência de gancho da T5.

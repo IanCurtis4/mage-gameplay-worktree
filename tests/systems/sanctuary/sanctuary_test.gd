@@ -266,10 +266,41 @@ func _check_owner_damage_rule() -> void:
 	var cone_behind := _damage_with(behind, 200.0)
 	_check(absf(cone_front - base_front * 0.80) <= 1.0, "cone: frontal hit takes x0.80 (%s vs %s)" % [cone_front, base_front])
 	_check(is_equal_approx(cone_behind, base_behind), "cone: a hit from behind is not reduced")
-	authority.set_zone_element(&"oath", &"ice")
+	# T1.1 hook: the multiplier is applied on a copy; the original request never changes.
+	var original := _enemy_request(front, 200.0)
+	var hook_rng := RandomNumberGenerator.new()
+	player.health.current_hp = player.health.max_hp
+	var hooked := player.apply_damage(original, hook_rng)
+	_check(original.damage_dealt_multiplier == 1.0 and is_equal_approx(float(hooked.get("kit_damage_multiplier", 1.0)), 0.80), "the zone returns damage_multiplier; the player scales a copy (T1.1)")
+	_check(authority.before_hit(player, {"request": _enemy_request(behind, 10.0), "facing_dot": -1.0}).is_empty(), "no multiplier when the zone does not cover the hit")
+	# T1.1 hook: ice is real DEF in the breakdown (temporary stat source), refreshed without heal.
+	var defense := player.stat_breakdown.value(&"physical_defense")
+	var magic_defense := player.stat_breakdown.value(&"magic_defense")
+	player.health.current_hp = player.health.max_hp * 0.7
+	var deficit := player.health.hp_deficit()
+	var sp_deficit := player.sp_deficit()
+	_check(authority.temporary_stat_sources().is_empty(), "no stat source without ice")
+	authority.set_zone_element(&"oath", &"ice", player)
+	var sources := player.temporary_stat_sources()
+	var ice_source: Dictionary = {}
+	for source: Dictionary in sources:
+		if source.get("source_id") == &"paladin_sanctuary_ice": ice_source = source
+	_check(not ice_source.is_empty() and is_equal_approx(float(ice_source["increased"][&"physical_defense"]), 0.15) and is_equal_approx(float(ice_source["increased"][&"magic_defense"]), 0.15), "ice publishes +15% DEF as a kit-prefixed temporary stat source")
+	_check(player.stat_breakdown.value(&"physical_defense") > defense and player.stat_breakdown.value(&"magic_defense") > magic_defense and is_equal_approx(player.health.physical_defense, player.stat_breakdown.value(&"physical_defense")), "the ice DEF is in the breakdown and in the health defenses")
+	_check(player.health.hp_deficit() == deficit and player.sp_deficit() == sp_deficit, "the stat refresh neither heals nor recharges")
 	var ice_behind := _damage_with(behind, 200.0)
-	_check(absf(ice_behind - base_behind * 0.85) <= 1.0 and absf(_damage_with(front, 200.0) - base_front * 0.80 * 0.85) <= 1.0, "ice defense (plan B) reduces every hit by 15%, after the frontal rule")
-	authority.end_zone(&"oath")
+	_check(ice_behind < base_behind and ice_behind == float(maxi(1, floori(200.0 * 100.0 / (100.0 + player.health.physical_defense) + 0.5))), "ice DEF reduces the damage through CombatMath")
+	_check(absf(_damage_with(front, 200.0) - ice_behind * 0.80) <= 1.0, "the frontal multiplier stacks with the ice DEF")
+	authority.end_zone(&"oath", player)
+	_check(authority.temporary_stat_sources().is_empty() and is_equal_approx(player.stat_breakdown.value(&"physical_defense"), defense), "ending the ice zone removes the DEF")
+	var world_ice := _cast_zone({"role": &"votive", "shape": &"circle", "anchor": &"world", "element": &"ice"})
+	_check(world_ice != null and player.stat_breakdown.value(&"physical_defense") > defense, "an ice circle under the owner gives DEF")
+	var home := player.global_position
+	player.global_position = home + Vector2(400, 0)
+	_tick(0.3)
+	_check(not world_ice.owner_inside and authority.temporary_stat_sources().is_empty() and is_equal_approx(player.stat_breakdown.value(&"physical_defense"), defense), "leaving the ice circle removes the DEF at the next presence check")
+	player.global_position = home
+	authority.end_zone(&"votive", player)
 	_cast_zone({"role": &"votive", "shape": &"circle", "anchor": &"world", "rules": {"owner_damage_taken": 0.6}})
 	_cast_zone({"role": &"oath", "shape": &"cone"})
 	_check(absf(_damage_with(front, 200.0) - base_front * 0.60) <= 1.0, "two zones: the smallest multiplier applies once")
