@@ -1,0 +1,262 @@
+{
+  "schema": "ragrpg_art_provenance_v2",
+  "path_base": "project",
+  "records": [
+    {
+      "path": "assets/art/e08_characters/directional/arcane_blade/body.png",
+      "sha256": "f27ef129457d68735aaef46e08c26883933a9f44c153587a064a6976422c38c8",
+      "width": 256,
+      "height": 1024,
+      "kind": "other",
+      "generator": {
+        "name": "ragrpg directional packer (derived from Codex sheets)",
+        "model": null,
+        "host": "local",
+        "version": "e09-t7"
+      },
+      "request": "arcane_blade directional atlas V2 (mg_la), 64 poses, derived from the selected views; no new generation",
+      "prompt": "",
+      "negative_prompt": null,
+      "seed": null,
+      "params": {
+        "scale": 0.2066115702479339,
+        "cell": 64,
+        "atlas": "256x1024"
+      },
+      "refs": [
+        {
+          "path": "assets/art/e08_codex_1123/characters/mg_la/south.png",
+          "sha256": "f8202be8fd999920d9fc45b17f6797dc699a816e901c94c9acd2487d77296e05"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/mg_la/north_v2.png",
+          "sha256": "1df8df974c197190fc3202d9ea5da6470b0b6f28349cfc605552935c668956d1"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/mg_la/east_v3.png",
+          "sha256": "12afe8905c8cbb46c7b516228aeb7684a8a923e322f8ad0eac6d8eec7a2cce79"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/mg_la/west_v4.png",
+          "sha256": "236064fbe73038c3bfc1b9f08c3402051c18eaf29a37b548df467599d564a427"
+        }
+      ],
+      "post": [
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "arcane_blade",
+            "view": "south",
+            "source": "@south",
+            "target_height": 50,
+            "scale": 0.2066115702479339,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/mg_la/selection.json"
+          },
+          "input_sha256": "f8202be8fd999920d9fc45b17f6797dc699a816e901c94c9acd2487d77296e05",
+          "output_sha256": "f27ef129457d68735aaef46e08c26883933a9f44c153587a064a6976422c38c8"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "arcane_blade",
+            "view": "north",
+            "source": "@north",
+            "target_height": 50,
+            "scale": 0.2066115702479339,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/mg_la/selection.json"
+          },
+          "input_sha256": "1df8df974c197190fc3202d9ea5da6470b0b6f28349cfc605552935c668956d1",
+          "output_sha256": "f27ef129457d68735aaef46e08c26883933a9f44c153587a064a6976422c38c8"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "arcane_blade",
+            "view": "east",
+            "source": "@east",
+            "target_height": 50,
+            "scale": 0.2066115702479339,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/mg_la/selection.json"
+          },
+          "input_sha256": "12afe8905c8cbb46c7b516228aeb7684a8a923e322f8ad0eac6d8eec7a2cce79",
+          "output_sha256": "f27ef129457d68735aaef46e08c26883933a9f44c153587a064a6976422c38c8"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "arcane_blade",
+            "view": "west",
+            "source": "@west",
+            "target_height": 50,
+            "scale": 0.2066115702479339,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/mg_la/selection.json"
+          },
+          "input_sha256": "236064fbe73038c3bfc1b9f08c3402051c18eaf29a37b548df467599d564a427",
+          "output_sha256": "f27ef129457d68735aaef46e08c26883933a9f44c153587a064a6976422c38c8"
+        }
+      ],
+      "selected": true,
+      "review": {
+        "status": "pending",
+        "date": "2026-11-16",
+        "notes": "Technical native capture by Terra (E09 T7, docs/epics/e09/t7_delivery.md); product acceptance is the user's."
+      },
+      "terms": "Derived from the Codex built-in imagegen sheets of assets/art/e08_codex_1123/characters/mg_la (terms and exact prompts in that provenance.json).",
+      "measurements": {
+        "rgba_sha256": "ce1aa89cbcf8680ed9b042744208dc913301d99b019238239956d104d344e4af"
+      }
+    },
+    {
+      "path": "assets/art/e08_characters/directional/arcane_blade/weaponless.png",
+      "sha256": "f27ef129457d68735aaef46e08c26883933a9f44c153587a064a6976422c38c8",
+      "width": 256,
+      "height": 1024,
+      "kind": "other",
+      "generator": {
+        "name": "ragrpg directional packer (derived from Codex sheets)",
+        "model": null,
+        "host": "local",
+        "version": "e09-t7"
+      },
+      "request": "arcane_blade directional atlas V2 (mg_la), 64 poses, derived from the selected views; no new generation",
+      "prompt": "",
+      "negative_prompt": null,
+      "seed": null,
+      "params": {
+        "scale": 0.2066115702479339,
+        "cell": 64,
+        "atlas": "256x1024"
+      },
+      "refs": [
+        {
+          "path": "assets/art/e08_codex_1123/characters/mg_la/south.png",
+          "sha256": "f8202be8fd999920d9fc45b17f6797dc699a816e901c94c9acd2487d77296e05"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/mg_la/north_v2.png",
+          "sha256": "1df8df974c197190fc3202d9ea5da6470b0b6f28349cfc605552935c668956d1"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/mg_la/east_v3.png",
+          "sha256": "12afe8905c8cbb46c7b516228aeb7684a8a923e322f8ad0eac6d8eec7a2cce79"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/mg_la/west_v4.png",
+          "sha256": "236064fbe73038c3bfc1b9f08c3402051c18eaf29a37b548df467599d564a427"
+        }
+      ],
+      "post": [
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "arcane_blade",
+            "view": "south",
+            "source": "@south",
+            "target_height": 50,
+            "scale": 0.2066115702479339,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/mg_la/selection.json"
+          },
+          "input_sha256": "f8202be8fd999920d9fc45b17f6797dc699a816e901c94c9acd2487d77296e05",
+          "output_sha256": "f27ef129457d68735aaef46e08c26883933a9f44c153587a064a6976422c38c8"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "arcane_blade",
+            "view": "north",
+            "source": "@north",
+            "target_height": 50,
+            "scale": 0.2066115702479339,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/mg_la/selection.json"
+          },
+          "input_sha256": "1df8df974c197190fc3202d9ea5da6470b0b6f28349cfc605552935c668956d1",
+          "output_sha256": "f27ef129457d68735aaef46e08c26883933a9f44c153587a064a6976422c38c8"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "arcane_blade",
+            "view": "east",
+            "source": "@east",
+            "target_height": 50,
+            "scale": 0.2066115702479339,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/mg_la/selection.json"
+          },
+          "input_sha256": "12afe8905c8cbb46c7b516228aeb7684a8a923e322f8ad0eac6d8eec7a2cce79",
+          "output_sha256": "f27ef129457d68735aaef46e08c26883933a9f44c153587a064a6976422c38c8"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "arcane_blade",
+            "view": "west",
+            "source": "@west",
+            "target_height": 50,
+            "scale": 0.2066115702479339,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/mg_la/selection.json"
+          },
+          "input_sha256": "236064fbe73038c3bfc1b9f08c3402051c18eaf29a37b548df467599d564a427",
+          "output_sha256": "f27ef129457d68735aaef46e08c26883933a9f44c153587a064a6976422c38c8"
+        }
+      ],
+      "selected": true,
+      "review": {
+        "status": "pending",
+        "date": "2026-11-16",
+        "notes": "Technical native capture by Terra (E09 T7, docs/epics/e09/t7_delivery.md); product acceptance is the user's."
+      },
+      "terms": "Derived from the Codex built-in imagegen sheets of assets/art/e08_codex_1123/characters/mg_la (terms and exact prompts in that provenance.json).",
+      "measurements": {
+        "rgba_sha256": "ce1aa89cbcf8680ed9b042744208dc913301d99b019238239956d104d344e4af"
+      }
+    }
+  ]
+}

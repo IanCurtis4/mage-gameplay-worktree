@@ -1,0 +1,262 @@
+{
+  "schema": "ragrpg_art_provenance_v2",
+  "path_base": "project",
+  "records": [
+    {
+      "path": "assets/art/e08_characters/directional/duelist/body.png",
+      "sha256": "14b573c7c9524b31f04d6d9f8c0414eab5fbd44f7f0d1ec73bc450eead7302a3",
+      "width": 256,
+      "height": 1024,
+      "kind": "other",
+      "generator": {
+        "name": "ragrpg directional packer (derived from Codex sheets)",
+        "model": null,
+        "host": "local",
+        "version": "e09-t7"
+      },
+      "request": "duelist directional atlas V2 (sp_la), 64 poses, derived from the selected views; no new generation",
+      "prompt": "",
+      "negative_prompt": null,
+      "seed": null,
+      "params": {
+        "scale": 0.2066115702479339,
+        "cell": 64,
+        "atlas": "256x1024"
+      },
+      "refs": [
+        {
+          "path": "assets/art/e08_codex_1123/characters/sp_la/south.png",
+          "sha256": "f342ebb56f63bac1b7d25c7302d263354ec6c8e97786231d3ac1c11c921dd5fa"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/sp_la/north_v2.png",
+          "sha256": "d405cbbba75d05bb38adf26e6a8c910a3123daaf4474670be560a2703472dff3"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/sp_la/east.png",
+          "sha256": "96d6cb7a0a32c9bebff902011f9679d8024cf560f56fe67715aa2cfb40d1d4d7"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/sp_la/west.png",
+          "sha256": "d79e539b000316945eca7d46499118e5be07aecfb8c9b0b55ef6dbf1dd91c2f1"
+        }
+      ],
+      "post": [
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "duelist",
+            "view": "south",
+            "source": "@south",
+            "target_height": 50,
+            "scale": 0.2066115702479339,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/sp_la/selection.json"
+          },
+          "input_sha256": "f342ebb56f63bac1b7d25c7302d263354ec6c8e97786231d3ac1c11c921dd5fa",
+          "output_sha256": "14b573c7c9524b31f04d6d9f8c0414eab5fbd44f7f0d1ec73bc450eead7302a3"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "duelist",
+            "view": "north",
+            "source": "@north",
+            "target_height": 50,
+            "scale": 0.2066115702479339,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/sp_la/selection.json"
+          },
+          "input_sha256": "d405cbbba75d05bb38adf26e6a8c910a3123daaf4474670be560a2703472dff3",
+          "output_sha256": "14b573c7c9524b31f04d6d9f8c0414eab5fbd44f7f0d1ec73bc450eead7302a3"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "duelist",
+            "view": "east",
+            "source": "@east",
+            "target_height": 50,
+            "scale": 0.2066115702479339,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/sp_la/selection.json"
+          },
+          "input_sha256": "96d6cb7a0a32c9bebff902011f9679d8024cf560f56fe67715aa2cfb40d1d4d7",
+          "output_sha256": "14b573c7c9524b31f04d6d9f8c0414eab5fbd44f7f0d1ec73bc450eead7302a3"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "duelist",
+            "view": "west",
+            "source": "@west",
+            "target_height": 50,
+            "scale": 0.2066115702479339,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/sp_la/selection.json"
+          },
+          "input_sha256": "d79e539b000316945eca7d46499118e5be07aecfb8c9b0b55ef6dbf1dd91c2f1",
+          "output_sha256": "14b573c7c9524b31f04d6d9f8c0414eab5fbd44f7f0d1ec73bc450eead7302a3"
+        }
+      ],
+      "selected": true,
+      "review": {
+        "status": "pending",
+        "date": "2026-11-16",
+        "notes": "Technical native capture by Terra (E09 T7, docs/epics/e09/t7_delivery.md); product acceptance is the user's."
+      },
+      "terms": "Derived from the Codex built-in imagegen sheets of assets/art/e08_codex_1123/characters/sp_la (terms and exact prompts in that provenance.json).",
+      "measurements": {
+        "rgba_sha256": "5d6b5e05cce3e03f7fc8294910402e3097f9644151f4bd2f5830d216ac472a95"
+      }
+    },
+    {
+      "path": "assets/art/e08_characters/directional/duelist/weaponless.png",
+      "sha256": "14b573c7c9524b31f04d6d9f8c0414eab5fbd44f7f0d1ec73bc450eead7302a3",
+      "width": 256,
+      "height": 1024,
+      "kind": "other",
+      "generator": {
+        "name": "ragrpg directional packer (derived from Codex sheets)",
+        "model": null,
+        "host": "local",
+        "version": "e09-t7"
+      },
+      "request": "duelist directional atlas V2 (sp_la), 64 poses, derived from the selected views; no new generation",
+      "prompt": "",
+      "negative_prompt": null,
+      "seed": null,
+      "params": {
+        "scale": 0.2066115702479339,
+        "cell": 64,
+        "atlas": "256x1024"
+      },
+      "refs": [
+        {
+          "path": "assets/art/e08_codex_1123/characters/sp_la/south.png",
+          "sha256": "f342ebb56f63bac1b7d25c7302d263354ec6c8e97786231d3ac1c11c921dd5fa"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/sp_la/north_v2.png",
+          "sha256": "d405cbbba75d05bb38adf26e6a8c910a3123daaf4474670be560a2703472dff3"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/sp_la/east.png",
+          "sha256": "96d6cb7a0a32c9bebff902011f9679d8024cf560f56fe67715aa2cfb40d1d4d7"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/sp_la/west.png",
+          "sha256": "d79e539b000316945eca7d46499118e5be07aecfb8c9b0b55ef6dbf1dd91c2f1"
+        }
+      ],
+      "post": [
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "duelist",
+            "view": "south",
+            "source": "@south",
+            "target_height": 50,
+            "scale": 0.2066115702479339,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/sp_la/selection.json"
+          },
+          "input_sha256": "f342ebb56f63bac1b7d25c7302d263354ec6c8e97786231d3ac1c11c921dd5fa",
+          "output_sha256": "14b573c7c9524b31f04d6d9f8c0414eab5fbd44f7f0d1ec73bc450eead7302a3"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "duelist",
+            "view": "north",
+            "source": "@north",
+            "target_height": 50,
+            "scale": 0.2066115702479339,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/sp_la/selection.json"
+          },
+          "input_sha256": "d405cbbba75d05bb38adf26e6a8c910a3123daaf4474670be560a2703472dff3",
+          "output_sha256": "14b573c7c9524b31f04d6d9f8c0414eab5fbd44f7f0d1ec73bc450eead7302a3"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "duelist",
+            "view": "east",
+            "source": "@east",
+            "target_height": 50,
+            "scale": 0.2066115702479339,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/sp_la/selection.json"
+          },
+          "input_sha256": "96d6cb7a0a32c9bebff902011f9679d8024cf560f56fe67715aa2cfb40d1d4d7",
+          "output_sha256": "14b573c7c9524b31f04d6d9f8c0414eab5fbd44f7f0d1ec73bc450eead7302a3"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "duelist",
+            "view": "west",
+            "source": "@west",
+            "target_height": 50,
+            "scale": 0.2066115702479339,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/sp_la/selection.json"
+          },
+          "input_sha256": "d79e539b000316945eca7d46499118e5be07aecfb8c9b0b55ef6dbf1dd91c2f1",
+          "output_sha256": "14b573c7c9524b31f04d6d9f8c0414eab5fbd44f7f0d1ec73bc450eead7302a3"
+        }
+      ],
+      "selected": true,
+      "review": {
+        "status": "pending",
+        "date": "2026-11-16",
+        "notes": "Technical native capture by Terra (E09 T7, docs/epics/e09/t7_delivery.md); product acceptance is the user's."
+      },
+      "terms": "Derived from the Codex built-in imagegen sheets of assets/art/e08_codex_1123/characters/sp_la (terms and exact prompts in that provenance.json).",
+      "measurements": {
+        "rgba_sha256": "5d6b5e05cce3e03f7fc8294910402e3097f9644151f4bd2f5830d216ac472a95"
+      }
+    }
+  ]
+}

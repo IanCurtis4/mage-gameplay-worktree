@@ -1,0 +1,262 @@
+{
+  "schema": "ragrpg_art_provenance_v2",
+  "path_base": "project",
+  "records": [
+    {
+      "path": "assets/art/e08_characters/directional/paladin/body.png",
+      "sha256": "e68b4bd709ad6d2e79abda31ea18c3905d8253b41a0ed3c13df287e03baaa641",
+      "width": 256,
+      "height": 1024,
+      "kind": "other",
+      "generator": {
+        "name": "ragrpg directional packer (derived from Codex sheets)",
+        "model": null,
+        "host": "local",
+        "version": "e09-t7"
+      },
+      "request": "paladin directional atlas V2 (sp_ac), 64 poses, derived from the selected views; no new generation",
+      "prompt": "",
+      "negative_prompt": null,
+      "seed": null,
+      "params": {
+        "scale": 0.199203187250996,
+        "cell": 64,
+        "atlas": "256x1024"
+      },
+      "refs": [
+        {
+          "path": "assets/art/e08_codex_1123/characters/sp_ac/south.png",
+          "sha256": "3e0291f22c75e5323427965390dd3a83f8703c4020305788b3b67e19b57f4c8e"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/sp_ac/north_v3.png",
+          "sha256": "2a7a064a1f088961e0fb7be86735ff75924264c0ea5c9b4d982aa7a9b9352d66"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/sp_ac/east_v2.png",
+          "sha256": "a8c287dfd58e8a0d0cb636c1fc4383106da555e94e286a9a0bdd33c7efa5c926"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/sp_ac/west.png",
+          "sha256": "8759411a13d4eeeea0a9561f219b3634cfea9f3cebb6b5079d0add58137ba2dc"
+        }
+      ],
+      "post": [
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "paladin",
+            "view": "south",
+            "source": "@south",
+            "target_height": 50,
+            "scale": 0.199203187250996,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/sp_ac/selection.json"
+          },
+          "input_sha256": "3e0291f22c75e5323427965390dd3a83f8703c4020305788b3b67e19b57f4c8e",
+          "output_sha256": "e68b4bd709ad6d2e79abda31ea18c3905d8253b41a0ed3c13df287e03baaa641"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "paladin",
+            "view": "north",
+            "source": "@north",
+            "target_height": 50,
+            "scale": 0.199203187250996,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/sp_ac/selection.json"
+          },
+          "input_sha256": "2a7a064a1f088961e0fb7be86735ff75924264c0ea5c9b4d982aa7a9b9352d66",
+          "output_sha256": "e68b4bd709ad6d2e79abda31ea18c3905d8253b41a0ed3c13df287e03baaa641"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "paladin",
+            "view": "east",
+            "source": "@east",
+            "target_height": 50,
+            "scale": 0.199203187250996,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/sp_ac/selection.json"
+          },
+          "input_sha256": "a8c287dfd58e8a0d0cb636c1fc4383106da555e94e286a9a0bdd33c7efa5c926",
+          "output_sha256": "e68b4bd709ad6d2e79abda31ea18c3905d8253b41a0ed3c13df287e03baaa641"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "paladin",
+            "view": "west",
+            "source": "@west",
+            "target_height": 50,
+            "scale": 0.199203187250996,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/sp_ac/selection.json"
+          },
+          "input_sha256": "8759411a13d4eeeea0a9561f219b3634cfea9f3cebb6b5079d0add58137ba2dc",
+          "output_sha256": "e68b4bd709ad6d2e79abda31ea18c3905d8253b41a0ed3c13df287e03baaa641"
+        }
+      ],
+      "selected": true,
+      "review": {
+        "status": "pending",
+        "date": "2026-11-16",
+        "notes": "Technical native capture by Terra (E09 T7, docs/epics/e09/t7_delivery.md); product acceptance is the user's."
+      },
+      "terms": "Derived from the Codex built-in imagegen sheets of assets/art/e08_codex_1123/characters/sp_ac (terms and exact prompts in that provenance.json).",
+      "measurements": {
+        "rgba_sha256": "5d058e8abf3c5f66dfd1f5c6dc6a0625336a6342b630a758928db2b172ad9a21"
+      }
+    },
+    {
+      "path": "assets/art/e08_characters/directional/paladin/weaponless.png",
+      "sha256": "e68b4bd709ad6d2e79abda31ea18c3905d8253b41a0ed3c13df287e03baaa641",
+      "width": 256,
+      "height": 1024,
+      "kind": "other",
+      "generator": {
+        "name": "ragrpg directional packer (derived from Codex sheets)",
+        "model": null,
+        "host": "local",
+        "version": "e09-t7"
+      },
+      "request": "paladin directional atlas V2 (sp_ac), 64 poses, derived from the selected views; no new generation",
+      "prompt": "",
+      "negative_prompt": null,
+      "seed": null,
+      "params": {
+        "scale": 0.199203187250996,
+        "cell": 64,
+        "atlas": "256x1024"
+      },
+      "refs": [
+        {
+          "path": "assets/art/e08_codex_1123/characters/sp_ac/south.png",
+          "sha256": "3e0291f22c75e5323427965390dd3a83f8703c4020305788b3b67e19b57f4c8e"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/sp_ac/north_v3.png",
+          "sha256": "2a7a064a1f088961e0fb7be86735ff75924264c0ea5c9b4d982aa7a9b9352d66"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/sp_ac/east_v2.png",
+          "sha256": "a8c287dfd58e8a0d0cb636c1fc4383106da555e94e286a9a0bdd33c7efa5c926"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/sp_ac/west.png",
+          "sha256": "8759411a13d4eeeea0a9561f219b3634cfea9f3cebb6b5079d0add58137ba2dc"
+        }
+      ],
+      "post": [
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "paladin",
+            "view": "south",
+            "source": "@south",
+            "target_height": 50,
+            "scale": 0.199203187250996,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/sp_ac/selection.json"
+          },
+          "input_sha256": "3e0291f22c75e5323427965390dd3a83f8703c4020305788b3b67e19b57f4c8e",
+          "output_sha256": "e68b4bd709ad6d2e79abda31ea18c3905d8253b41a0ed3c13df287e03baaa641"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "paladin",
+            "view": "north",
+            "source": "@north",
+            "target_height": 50,
+            "scale": 0.199203187250996,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/sp_ac/selection.json"
+          },
+          "input_sha256": "2a7a064a1f088961e0fb7be86735ff75924264c0ea5c9b4d982aa7a9b9352d66",
+          "output_sha256": "e68b4bd709ad6d2e79abda31ea18c3905d8253b41a0ed3c13df287e03baaa641"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "paladin",
+            "view": "east",
+            "source": "@east",
+            "target_height": 50,
+            "scale": 0.199203187250996,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/sp_ac/selection.json"
+          },
+          "input_sha256": "a8c287dfd58e8a0d0cb636c1fc4383106da555e94e286a9a0bdd33c7efa5c926",
+          "output_sha256": "e68b4bd709ad6d2e79abda31ea18c3905d8253b41a0ed3c13df287e03baaa641"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "paladin",
+            "view": "west",
+            "source": "@west",
+            "target_height": 50,
+            "scale": 0.199203187250996,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/sp_ac/selection.json"
+          },
+          "input_sha256": "8759411a13d4eeeea0a9561f219b3634cfea9f3cebb6b5079d0add58137ba2dc",
+          "output_sha256": "e68b4bd709ad6d2e79abda31ea18c3905d8253b41a0ed3c13df287e03baaa641"
+        }
+      ],
+      "selected": true,
+      "review": {
+        "status": "pending",
+        "date": "2026-11-16",
+        "notes": "Technical native capture by Terra (E09 T7, docs/epics/e09/t7_delivery.md); product acceptance is the user's."
+      },
+      "terms": "Derived from the Codex built-in imagegen sheets of assets/art/e08_codex_1123/characters/sp_ac (terms and exact prompts in that provenance.json).",
+      "measurements": {
+        "rgba_sha256": "5d058e8abf3c5f66dfd1f5c6dc6a0625336a6342b630a758928db2b172ad9a21"
+      }
+    }
+  ]
+}

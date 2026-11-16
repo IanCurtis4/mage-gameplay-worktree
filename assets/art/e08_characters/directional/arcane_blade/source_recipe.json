@@ -1,0 +1,19 @@
+{
+  "actor_kind": "arcane_blade",
+  "target_height": 50,
+  "selection": "res://assets/art/e08_codex_1123/characters/mg_la/selection.json",
+  "views": {
+    "south": {
+      "source": "@south"
+    },
+    "north": {
+      "source": "@north"
+    },
+    "east": {
+      "source": "@east"
+    },
+    "west": {
+      "source": "@west"
+    }
+  }
+}
