@@ -2,7 +2,7 @@
 
 Tarefa **T7** de [e09.md](../e09.md), contrato **C6** (segunda parte) de [e09_contract.md](../e09_contract.md#7-c6--arte-do-épico-tarefas-t4-e-t7).
 Papel: Terra (Claude Sonnet 5.5, esforço alto). Data: 16/11/2026. Estado proposto: **ENTREGUE**; validação técnica e
-integração ficam a cargo de Sol/T10. Duas expectativas de testes legados mudam por contrato (seção Limitações, itens 1–2).
+integração ficam a cargo de Sol/T10. Atualização 16/11 (depois da resposta da arquitetura, A14 e A15): ponta da T1.2 incorporada por merge e `tests/e08_equipment_art_test.gd` ajustado só nos checks de encaixe de cabeça (seção "Atualização A14/A15").
 
 ## Base e entrega
 
@@ -128,8 +128,8 @@ usaram `-SkipEditorImport`. Cada etapa em invocação própria (o runner para na
 | `e08_directional_npcs_test` | 1.292, 0 | `2cad462f390622d3c9124303f82f5ac82938fc69d364327c508b75918d95ce63` |
 | `e08_species_presentation_test` | 172, 0 | `7a85c7ade6f7bbb41f80c8f62781c01da358327c40dd26951c118707d052e7ec` |
 | `combat_animation_test` | 39, PASS | `df1d52002e18c5524fa60801186a018cdbc71c91e0248051e38f6565c154fb1e` |
-| `e08_equipment_art_test` | 60.459 checks, **1 falha** (limitação 2) | `7b1038a2d584c839b4a191df238438461e89ef74b87c9f41876ffb332378c970` |
-| `kit_seam_test` | 175 checks, **5 falhas** (limitação 1) | `8dd9cccd554f3595f96668a672123443ad1f17f6b4f37092d03f208d559464f5` |
+| `e08_equipment_art_test` (primeira rodada, antes do ajuste A15) | 60.459 checks, 1 falha (`classes.size()==10`) | `7b1038a2d584c839b4a191df238438461e89ef74b87c9f41876ffb332378c970` |
+| `kit_seam_test` (primeira rodada, antes do merge da T1.2) | 175 checks, 5 falhas | `8dd9cccd554f3595f96668a672123443ad1f17f6b4f37092d03f208d559464f5` |
 | `e08_presentation_test` | **não executável** neste checkout (limitação 3) | — |
 
 Busca por `SCRIPT ERROR` e `still in use` em todos os logs de engine e de saída dessas etapas e das duas rodadas da
@@ -139,13 +139,20 @@ Também: `python -I -m unittest discover -s tools/art_pipeline/tests` → 89 tes
 Não rodei a suíte completa (`verify.ps1` sem `-Test`): a mudança toca arte, dados de encaixe de cabeça e ferramentas,
 não o gameplay; sem alteração de runtime.
 
+## Atualização A14/A15 (16/11/2026)
+
+- **A14 (T1.2).** Merge `--no-ff` da ponta `4fbfd9db26a1b753b53ba48cc21fa3fff74178c9` (`claude/mystifying-moser-f04ddc`), que troca os 5 checks do `kit_seam_test` por pastas de corpo de fixture sem arte. Merge limpo, sem conflito. `kit_seam_test`: **189 checks, 0 falhas** (`89d1d0e32acb9f19ca0db0f4865983a85d6b2e21e5b2ff12b5ee6192933a6d69`).
+- **A15 (T7 atualiza o legado que enumera o que ela faz crescer).** `tests/e08_equipment_art_test.gd`, só em `head_fit_checks`: a lista `kinds` ganhou `paladin`, `thaumaturge`, `duelist` e `arcane_blade`, e a contagem passou de `classes.size()==10` para `==14` (igualdade exata, mensagem ajustada). Nenhum outro check foi tocado; contagens de itens e ícones ficam com a T8. Arquivo inteiro: **83.531 checks, 0 falhas** (`e949fe969b4e935f5f7f2ccbe084c3a12bd906b600a96a8123d29d507c3f2a83`); o laço de encaixe agora cobre também as quatro híbridas contra as 14 peças.
+- `hybrid_bodies_test` de novo depois do merge: 6.300 checks, 0 falhas (mesmo hash). `e08_directional_content_test`: 3.461, 0. Nenhum `SCRIPT ERROR` nem `still in use` nos logs desta rodada.
+- Os itens 1 e 2 abaixo ficam **resolvidos**; mantidos como histórico.
+
 ## Limitações e pendências
 
-1. **`tests/e09/kit_seam_test.gd` (T1) falha em 5 checks** (linhas 175, 470, 471, 474, 478): assumem "kit sem arte → corpo
+1. *(resolvida, A14)* **`tests/e09/kit_seam_test.gd` (T1) falhava em 5 checks** (linhas 175, 470, 471, 474, 478): assumem "kit sem arte → corpo
    da origem". Com a arte presente, `kit_body_path(&"paladin")` não é vazio, `actor_kind(sp_ac)` é `paladin`, etc. O
    fallback funciona (coberto em `hybrid_bodies_test`); o teste da T1 só precisa de um corpo-fixture sem arte. Não editei
    (dono T1). Perguntei à sessão de arquitetura quem ajusta; sem resposta até este recibo.
-2. **`tests/e08_equipment_art_test.gd:250` exige 10 classes** na tabela de encaixe; agora há 14 e o laço `kinds` da
+2. *(resolvida, A15)* **`tests/e08_equipment_art_test.gd:250` exigia 10 classes** na tabela de encaixe; agora há 14 e o laço `kinds` da
    linha 248 não cobre as híbridas. Os demais 60.458 checks passam. Mesmo encaminhamento do item 1; sugerido T10 na
    composição.
 3. **`e08_presentation_test` não roda** aqui: `tests/fixtures/e07/f1/fixture_input.gd:48` lê `res://source_root.txt` e
@@ -167,7 +174,7 @@ não o gameplay; sem alteração de runtime.
    Arquivos novos fora da lista de dono, todos sem conflito possível: `tools/prepare_e09_hybrid_calibration.py`,
    `tools/e09_t7_body_probe.gd` (+ `.uid`), `tests/e09/hybrid_bodies_test.gd.uid` e a pasta `t7_evidence/`.
 8. **Próximo passo.** K1–K4 só precisam declarar `ready_for_play`: o corpo de cada evolução já é resolvido pela costura.
-   T10 deve ajustar as expectativas dos itens 1 e 2 na composição e refazer a sonda do PCK com os quatro corpos.
+   T10 refaz a sonda do PCK com os quatro corpos.
 
 ## SHA256 das capturas (`docs/epics/e09/t7_evidence/`)
 
