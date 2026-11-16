@@ -210,7 +210,7 @@ func _check_query_states() -> void:
 	var exact := exact_facade.evolution_options(exact_id)
 	var defender := _option(exact["options"], &"defender")
 	var rune_knight := _option(exact["options"], &"sp_mg")
-	_check(exact_open["ok"] and exact["base_level"] == 10 and exact["job_level"] == 20 and exact["options"].size() == 4, "exact base-10/job-20 threshold returns only the four destinations of the fixed origin")
+	_check(exact_open["ok"] and exact["base_level"] == 10 and exact["job_level"] == 20 and exact["options"].size() == 4 + _ready_kit_ids().filter(func(id: StringName) -> bool: return KIT_METADATA[id][1] == &"swordsman").size(), "exact base-10/job-20 threshold returns only the destinations of the fixed origin: the four E00 plus its ready E09 hybrids")
 	_check(defender["requirements_met"] and defender["content_ready"] and defender["can_select"] and defender["blocking_reasons"].is_empty(), "ready fixture becomes selectable exactly at the accepted threshold")
 	_check(rune_knight["requirements_met"] and not rune_knight["content_ready"] and not rune_knight["can_select"] and rune_knight["blocking_reasons"] == [&"content_unavailable"], "requirements and content readiness remain independent for another destination")
 	_check(_option(exact["options"], &"mg_ar").is_empty(), "directional destination from another origin never leaks into the option list")
