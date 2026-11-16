@@ -20,6 +20,7 @@ static func has_head(id: StringName) -> bool: return id in HEAD_IDS
 static func head_path(id: StringName) -> String:
 	return "res://assets/art/equipment/headgear/%s.png" % id if has_head(id) else ""
 static func prop_path(key: StringName) -> String:
+	if key in E09_PROP_IDS:return "res://assets/art/e09_equipment/props/%s.png" % key
 	return "res://assets/art/equipment/painted/%s.png" % key if key in PROP_KEYS else ""
 static func _checked(path: String,expected: Vector2) -> Texture2D:
 	if path.is_empty():return null

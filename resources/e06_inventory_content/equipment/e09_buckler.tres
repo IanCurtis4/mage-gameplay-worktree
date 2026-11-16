@@ -31,4 +31,4 @@ effects = Array[ExtResource("1_e09fx")]([SubResource("Resource_e09buckler")])
 min_item_level = 2
 max_item_level = 5
 allowed_identities = Array[StringName]([&"swordsman", &"mage", &"archer", &"defender", &"berserker", &"elementalist", &"spiritualist", &"sentinel", &"hunter", &"mg_ar", &"sp_ac", &"mg_ac", &"sp_la", &"mg_la"])
-visual_key = &"shield"
+visual_key = &"buckler"

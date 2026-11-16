@@ -1,7 +1,7 @@
 # E09 T8 — armas novas como itens (contrato C7)
 
-Papel: Terra (Claude Sonnet 5.5, esforço médio). Data: 16/11/2026. Estado proposto: **ENTREGUE
-com uma pendência de arquitetura** (desenho na mão com a arte nova; ver "Limitações").
+Papel: Terra (Claude Sonnet 5.5, esforço médio). Data: 16/11/2026. Estado proposto: **ENTREGUE**,
+com a arte nova também na mão (A16).
 Branch: `claude/beautiful-chebyshev-a49585`. Sem push, sem merge em `master`.
 
 ## Base
@@ -56,6 +56,28 @@ E09, de modo que todas as classes atuais mantêm o acesso à categoria.
   (contagem 8/8/2 certa; só o aviso `alpha_veil` das folhas, que o recorte limpa).
 - Captura de grips: `docs/epics/e09/t8_grips_capture.png` e o script `t8_grips_capture.gd.txt`.
 
+## A16 — arte na mão (autorizada pela arquitetura)
+
+A sessão de arquitetura (`local_4643cd66…`) concedeu a decisão **A16**: esta tarefa passa a ser dona de
+`scripts/actors/equipment_attachment_visual.gd`, só para acrescentar `halo_shield`, `buckler`, `rapier`
+e `prism_staff` a `SUPPORTED` e `PROFILES` (size, grip, angle iguais aos de `hand_rigs.json`). Nenhuma
+chave, lógica ou constante existente mudou. Consequências:
+- as quatro definições passaram a ter `visual_key` próprio (não mais `shield`/`sword`/`staff`);
+- `EquipmentArtCatalog.prop_path` aponta as quatro chaves para `assets/art/e09_equipment/props/`, então
+  `prop_texture` (mão e ícone de reserva) entrega a arte nova;
+- `equipment_items_test.gd` (243 verificações) confere: chave própria em `SUPPORTED`, `PROFILES` igual ao
+  JSON, `describe` do Paladino/Duelista/Taumaturgo/Lâmina Arcana/espadachim/mago devolve a chave própria
+  e `resolve_equipment` usa o grip novo e a textura nova, não a genérica;
+- os testes que percorrem `SUPPORTED` passaram a exercitar as quatro chaves sem mudar de contagem fixa
+  (as verificações crescem sozinhas): `e08_equipment_art` 60459→60475, `e08_directional_rig_compatibility`
+  65568, `e08_directional_content` 5097, `e08_directional_units` 47494→64814, `equipment_hand_alignment`
+  4593 (usa lista própria), todos com 0 falhas;
+- A15: `tests/fixtures/e08_directional/content_fixture.gd` (`equipment_bottom`) lia o PNG do prop sempre em
+  `equipment/painted/`; agora escolhe `e09_equipment/props/` para as quatro chaves, mantendo o oráculo
+  independente do catálogo. Sem isso `e08_directional_content_test` e `e08_directional_units_test` falhavam.
+- A captura de grips passou a usar o caminho real (`resolve_equipment` + `PROFILES` + `prop_texture`), com o
+  mesmo resultado visual da captura anterior.
+
 ## Ajustes em testes legados (A15), cada um registrado
 
 Todos são contagens de itens que crescem com os quatro itens; nenhuma expectativa foi afrouxada.
@@ -66,6 +88,7 @@ Todos são contagens de itens que crescem com os quatro itens; nenhuma expectati
 | `e06_gameplay_content_test.gd` | 85 → 89 equipamentos |
 | `e06_migration_test.gd` | 85 → 89 equipamentos (de 46 para 50 receitas acrescentadas) |
 | `e06_ui_menu_test.gd` | publicados 73 → 77; 85 → 89 no catálogo, na coleção do dono e nas instâncias |
+| `tests/fixtures/e08_directional/content_fixture.gd` | caminho do PNG do prop das quatro chaves (ver A16) |
 
 Sem mudança (conferidos): `e08_equipment_art_test.gd` mantém **44** ícones, porque os quatro novos
 têm manifesto próprio (`e09_equipment/manifest.json`) e a linha 29 também exige que o item não seja
@@ -79,7 +102,9 @@ Nenhum `SCRIPT ERROR` nem `still in use` em nenhuma saída abaixo.
 
 | Teste | Resultado |
 |---|---|
-| `equipment_items_test` | 197 verificações, 0 falhas |
+| `equipment_items_test` | 243 verificações, 0 falhas |
+| `e08_directional_content_test` | 5097, 0 |
+| `e08_directional_rig_compatibility_test` | 65568, 0 |
 | `e06_expanded_equipment_content_test` | 2614, 0 |
 | `e06_gameplay_content_test` | 232, 0 |
 | `e06_migration_test` | 147, 0 |
@@ -89,13 +114,12 @@ Nenhum `SCRIPT ERROR` nem `still in use` em nenhuma saída abaixo.
 | `e06_publication_test` | 1162, 0 |
 | `e06_content_pilot_test` | 481, 0 |
 | `e06_fixes_performance_cache_test` | 0 falhas |
-| `e08_equipment_art_test` | 60459, 0 |
+| `e08_equipment_art_test` | 60475, 0 |
 | `equipment_hand_alignment_test` | 4593, 0 |
-| `e08_directional_units_test` | 47494, 0 |
+| `e08_directional_units_test` | 64814, 0 |
 
 SHA256 dos arquivos de teste tocados ou criados: `equipment_items_test.gd`
-`66d3f31faebdfbad5a974bd58764c6e55310874d10b85f6460e21ec18e1a345b` (versão final, com a rodela e o
-escudo do halo nas medidas finais; os outros testes rodaram com os arquivos abaixo, que não mudaram
+`f67759bc43d676822c7c99c7b6d87fbf987738ab4a4ecd179439fdf71a566ccd` (versão final; `content_fixture.gd` `53b1fd4bacb6fd9559165aad63b055683874529ceac8c00d20dedb9dbdcd9cfa`; os outros testes rodaram com os arquivos abaixo, que não mudaram
 depois):
 `e06_expanded_equipment_content_test.gd` `5821b68bb6e880fdf06ea4104dbc381b6518b2d646668c7539db57f70017b03e`,
 `e06_gameplay_content_test.gd` `e2f27e2728172e07a1640f173b5a231b41816a741d97db15b37ab9efb1881a82`,
@@ -111,24 +135,16 @@ e os `.gd.uid` gerados pela importação fora das pastas desta tarefa.
 
 `docs/epics/e09/t8_grips_capture.png`: o executável do Godot (não headless, GPU) desenha o quadro 0
 parado dos 10 corpos atuais com o Escudo do Halo na mão secundária e, na principal, o florete nas três
-espadachins e o cajado nas três magos, usando os grips de `hand_rigs.json` e a mesma matemática de
-`EquipmentAttachmentVisual.piece_transform`. As empunhaduras caem na mão em todos; o escudo do halo
+espadachins e o cajado nas três magos, usando `EquipmentAttachmentVisual.resolve_equipment` e `PROFILES` (caminho real do jogo). As empunhaduras caem na mão em todos; o escudo do halo
 foi reduzido de 20×32 para 18×29 depois da primeira captura porque cobria o rosto. Só o quadro 0 foi
 visto; ataque, morte e as quatro direções não.
 
 ## Limitações
 
-- **Desenho na mão com a arte nova: pendente de arquitetura.** O render em jogo escolhe o desenho por
-  `visual_key`, e as chaves aceitas (`SUPPORTED`/`PROFILES`) ficam em
-  `scripts/actors/equipment_attachment_visual.gd`, que não está na minha lista. Perguntei à sessão de
-  arquitetura se posso acrescentar as quatro chaves; até a resposta, os itens usam as chaves genéricas
-  (`shield`, `sword`, `staff`) na mão e a arte nova aparece como **ícone** (inventário, loot). O
-  catálogo, os grips e a captura já estão prontos; ligar é acrescentar quatro linhas a `PROFILES`
-  lendo `EquipmentArtCatalog.e09_prop_profile` e trocar o `visual_key` das quatro definições. Os
-  testes legados de mão não cobrem esses quatro até lá.
 - Só o quadro 0 foi conferido visualmente; o resto das 32 poses e das direções usa os mesmos pontos de
   mão dos corpos.
 - Não foi feita a suíte integral nem jogada uma partida com os itens; as rolagens de loot são do
   resolvedor real com uniformes fixos, não de uma run.
+- `placement()` (legado, sem quadro) só balança espada/machado/cajado/arco no ataque por chave; o florete e o cajado novos usam o ângulo do quadro no caminho resolvido, que é o das direcionais.
 - Sem `.import` nas folhas-fonte (regra de `db7f9252`); o `.import` dos props e ícones foi gerado
   pelo editor desta worktree.

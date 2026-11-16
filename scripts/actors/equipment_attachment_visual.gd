@@ -3,7 +3,7 @@ extends RefCounted
 ## Grip-based pixel equipment, calibrated per body frame. Cosmetic geometry only.
 
 const CELL := Vector2(64, 64)
-const SUPPORTED: Array[StringName] = [&"sword", &"axe", &"staff", &"bow", &"shield", &"prismatic_focus", &"wooden_beads"]
+const SUPPORTED: Array[StringName] = [&"sword", &"axe", &"staff", &"bow", &"shield", &"prismatic_focus", &"wooden_beads", &"halo_shield", &"buckler", &"rapier", &"prism_staff"]
 static var _texture_cache: Dictionary = {}
 
 static func describe(snapshot: BuildSnapshot, catalog: BuildEffectCatalog) -> Dictionary:
@@ -39,6 +39,11 @@ const PROFILES := {
 	&"shield": {"size":Vector2(20,26),"grip":Vector2(10,13),"angle":0.0},
 	&"prismatic_focus": {"size":Vector2(14,20),"grip":Vector2(7,16),"angle":-0.10},
 	&"wooden_beads": {"size":Vector2(12,12),"grip":Vector2(6,5),"angle":0.0},
+	# E09 T8 (A16): the four new weapon items. Values mirror assets/art/equipment/hand_rigs.json "props".
+	&"halo_shield": {"size":Vector2(18,29),"grip":Vector2(9,14),"angle":0.0},
+	&"buckler": {"size":Vector2(18,19),"grip":Vector2(9,10),"angle":0.0},
+	&"rapier": {"size":Vector2(10,40),"grip":Vector2(5,33),"angle":0.20},
+	&"prism_staff": {"size":Vector2(13,42),"grip":Vector2(6.5,30),"angle":0.30},
 }
 static var _bounds_cache: Dictionary = {}
 

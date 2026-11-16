@@ -36,6 +36,7 @@ func _run() -> void:
 	eligibility_checks(catalog)
 	loot_checks(catalog)
 	art_checks(catalog)
+	hand_checks(catalog)
 	print("E09 equipment items: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 func catalog_checks(catalog: BuildEffectCatalog) -> void:
@@ -52,7 +53,10 @@ func catalog_checks(catalog: BuildEffectCatalog) -> void:
 		check(item.effects.size() == 1 and item.effects[0].capability() == &"stat" and item.socket_capacity == 1, "stat-only recipe with one socket " + String(id))
 		check(not item.display_name.is_empty() and not item.flavor_text.is_empty() and item.display_name != String(id), "pt-BR visible text " + String(id))
 		check(EquipmentEligibilityRules.validate(EquipmentEligibilityRules.for_resource(item))["ok"], "valid eligibility policy " + String(id))
-		check(EquipmentArtCatalog.e09_prop_profile(id).generic_key == item.visual_key, "in-hand key matches the profile " + String(id))
+		check(item.visual_key == id and id in EquipmentAttachmentVisual.SUPPORTED, "own visual key, not the generic category one " + String(id))
+		var profile := EquipmentArtCatalog.e09_prop_profile(id)
+		var live: Dictionary = EquipmentAttachmentVisual.PROFILES.get(id, {})
+		check(not live.is_empty() and live.size == profile.size and live.grip == profile.grip and is_equal_approx(float(live.angle), float(profile.angle)), "PROFILES mirror hand_rigs.json props " + String(id))
 func eligibility_checks(catalog: BuildEffectCatalog) -> void:
 	var identities: Array[StringName] = EquipmentEligibilityRules.eligible_identities()
 	check(identities.size() == 14, "ten current plus four kit identities")
@@ -152,3 +156,24 @@ func art_checks(catalog: BuildEffectCatalog) -> void:
 		var icon_image := icon.get_image() if icon != null else null
 		check(icon_image != null and maxi(icon_image.get_used_rect().size.x, icon_image.get_used_rect().size.y) >= 110, "icon fills its 128 px frame " + String(id))
 	check(EquipmentArtCatalog.e09_prop_profile(&"shared_sword").is_empty() and EquipmentArtCatalog.e09_prop_texture(&"nope") == null, "unknown ids resolve to nothing")
+func hand_checks(catalog: BuildEffectCatalog) -> void:
+	# A16: the equipped item resolves its own visual and draws its own painted prop in the hand.
+	var cases := [[&"sp_ac", &"halo_shield", &"off_hand"], [&"sp_la", &"buckler", &"off_hand"], [&"sp_la", &"rapier", &"main_hand"], [&"mg_ac", &"prism_staff", &"main_hand"], [&"mg_la", &"prism_staff", &"main_hand"], [&"swordsman", &"rapier", &"main_hand"], [&"mage", &"prism_staff", &"main_hand"]]
+	for row: Array in cases:
+		var item := catalog.get_definition(&"equipment", row[1]) as EquipmentDefinition
+		var state := snapshot(row[0])
+		var created := EquipmentInstance.from_metadata(&"equipment_1", item.id, item.metadata())
+		check(created["ok"], "exemplar for the hand check " + String(row[1]))
+		if not created["ok"]:
+			continue
+		state.equipment_instances[&"equipment_1"] = created["instance"]
+		state.equipped[row[2]] = &"equipment_1"
+		var visual := EquipmentAttachmentVisual.describe(state, catalog)
+		check(visual[row[2]] == row[1], "describe resolves its own key %s for %s" % [row[1], row[0]])
+		for kind: StringName in [&"swordsman", &"mage"]:
+			var anim := CombatAnimationState.new()
+			var placed := EquipmentAttachmentVisual.resolve_equipment(kind, anim, {row[2]: row[1]}, Vector2.ZERO)
+			check(placed.size() == 1 and placed[0].key == row[1] and Vector2(placed[0].grip) == (EquipmentAttachmentVisual.PROFILES[row[1]].grip as Vector2), "resolved placement uses the new grip %s on %s" % [row[1], kind])
+			if placed.size() == 1:
+				var texture := EquipmentArtCatalog.prop_texture(placed[0].key, Vector2(placed[0].size))
+				check(texture == EquipmentArtCatalog.e09_prop_texture(row[1]), "in-hand texture is the new art, not the generic " + String(row[1]))
