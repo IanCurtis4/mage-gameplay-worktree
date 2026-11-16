@@ -178,6 +178,8 @@ Arquivos: `scripts/classes/class_kit.gd`, `scripts/actors/player_actor.gd`,
 ## T1.2 — Custo efetivo e commit das skills da origem (decisão A13)
 
 Pedido da arquitetura em 16/11/2026, feito na mesma branch a partir de `bd66d3c3`.
+Commit entregue: `ca27db8a` (código, testes e documentação). Este registro do SHA está num commit
+de recibo à parte.
 
 Arquivos alterados:
 
