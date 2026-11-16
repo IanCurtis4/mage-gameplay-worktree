@@ -16,8 +16,11 @@
 > [docs/epics/e06.md](docs/epics/e06.md). Gameplay E06 aceito em18/10.
 > E07/F10: [aceite de produto com ressalvas](docs/epics/e07/e07_closure_2026_11_05.md)
 > em5/11; integração operacional separada. E08 abriu
-> [preparação de arquitetura/inventário](docs/epics/e08_opening_2026_11_05.md).
-> Contratos antes dos consumidores; E09+ permanecem reservados.
+> [preparação de arquitetura/inventário](docs/epics/e08_opening_2026_11_05.md)
+> e foi aceito em 16/11. E09 autorizado em 16/11:
+> [quatro híbridas e pipeline de arte neutro](docs/epics/e09.md), uma sessão
+> por tarefa. Contratos antes dos consumidores; E10+ e a reserva antiga de
+> integração/demo permanecem reservados.
 
 - Leia `docs/MVP.md`, `docs/ARCHITECTURE.md` e o contrato/checkpoint correspondente
   antes de editar. E00 e decisões posteriores explícitas prevalecem sobre o piloto.

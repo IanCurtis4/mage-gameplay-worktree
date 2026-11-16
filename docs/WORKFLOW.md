@@ -1,5 +1,10 @@
 # Desenvolvimento, revisão e playtest
 
+> 16/11/2026: E08 aceito e integrado. [E09 autorizado](epics/e09.md), com uma sessão de
+> arquitetura e uma sessão por tarefa, de modelo e esforço proporcionais. O dono exclusivo, as
+> dependências e os critérios de cada tarefa estão no índice do épico. As regras abaixo
+> continuam valendo.
+
 > Estado vigente em 6/11: [piloto aceito com ressalva sonora](epics/e08_p3_product_acceptance.md); P4 autorizado, [contrato](epics/e08_p4_contract.md). Bloqueios por aceite P3 nos registros abaixo são históricos. P5/P6/P7 ainda dependem das entregas anteriores; não despachados.
 
 

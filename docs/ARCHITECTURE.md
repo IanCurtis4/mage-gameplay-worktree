@@ -1,5 +1,14 @@
 # Arquitetura vigente — índice de autoridades e contratos
 
+## E09 — costura de kits e autoridades de família (16/11/2026)
+
+[Contrato E09](epics/e09_contract.md). Uma tarefa (T1) concentra as edições nos arquivos
+compartilhados e cria a costura de kits. Depois dela, cada classe vive em
+`scripts/classes/<id>/` e cada sistema em `scripts/systems/<nome>/`, com fragmento próprio de
+manifesto de snapshot. Santuário/Graça (família Sacerdote) e costas/Sentença (família Assassino)
+nascem como autoridades reaproveitáveis. Arte entra por um pipeline independente do gerador.
+Nada disso está implementado até as entregas registradas no [índice](epics/e09.md).
+
 ## E08 P4 — produtor direcional
 
 [Contrato/API](epics/e08_p4_directional_contract.md), [entrega e limites](epics/e08_p4_directional_delivery.md).

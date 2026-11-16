@@ -8,7 +8,8 @@ latências e tarefas humanas não reproduzidas, sem falsa certificação de flui
 Integração operacional continua separada. [E08](epics/e08_opening_2026_11_05.md)
 inicia arquitetura/inventário de arte, animações e feedback, com contratos antes
 de produção. Os estados de aceite pendente abaixo descrevem as entregas antes
-dessa decisão; E09+ continuam reservados.
+dessa decisão. E08 foi aceito em 16/11; o [E09](epics/e09.md), autorizado na mesma data,
+acrescenta quatro híbridas, ainda não implementadas. E10+ continuam reservados.
 
 ## Editor F10 — 5/11/2026
 
