@@ -1,0 +1,37 @@
+extends SceneTree
+const RIG := preload("res://scripts/actors/equipment_hand_rig.gd")
+const KINDS: Array[StringName] = [&"swordsman", &"defender", &"berserker", &"mage", &"elementalist", &"spiritualist", &"archer", &"sentinel", &"hunter", &"geometer"]
+const S := 5.0
+class Canvas extends Node2D:
+	var kinds: Array[StringName]
+	var bodies: Dictionary = {}
+	func _draw() -> void:
+		var col := 0
+		for kind: StringName in kinds:
+			var origin := Vector2(col % 5 * 64 * S + 0, floorf(col / 5.0) * 64 * S)
+			col += 1
+			var atlas: Texture2D = bodies[kind]
+			var pose: Dictionary = RIG.pose(kind, 0)
+			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+			draw_set_transform_matrix(Transform2D(0.0, Vector2(S, S), 0.0, origin)); draw_texture(atlas, Vector2.ZERO); draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+			var items: Array = [[&"halo_shield", &"off"]]
+			if kind in [&"swordsman", &"defender", &"berserker"]: items.append([&"rapier", &"main"])
+			if kind in [&"mage", &"elementalist", &"spiritualist"]: items.append([&"prism_staff", &"main"])
+			for it: Array in items:
+				var profile := EquipmentArtCatalog.e09_prop_profile(it[0])
+				var hand: Vector2 = pose[it[1]]
+				var t := Transform2D(float(profile.angle), Vector2(S, S), 0.0, origin + hand * S)
+				draw_set_transform_matrix(t)
+				draw_texture_rect(EquipmentArtCatalog.e09_prop_texture(it[0]), Rect2(-(profile.grip as Vector2), profile.size), false)
+				draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+func _initialize() -> void:
+	var vp := SubViewport.new(); vp.size = Vector2i(1600, 650); vp.transparent_bg = true; vp.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	root.add_child(vp)
+	var bg := ColorRect.new(); bg.color = Color(0.24, 0.26, 0.3); bg.size = Vector2(1600, 650); vp.add_child(bg)
+	var c := Canvas.new(); c.kinds = KINDS
+	for k: StringName in KINDS: c.bodies[k] = ImageTexture.create_from_image((load("res://assets/art/animations/%s_weaponless.png" % k) as Texture2D).get_image().get_region(Rect2i(0, 0, 64, 64)))
+	c.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST; vp.add_child(c)
+	var _unused := 0
+	await process_frame; await process_frame; await process_frame
+	var im := vp.get_texture().get_image(); im.convert(Image.FORMAT_RGBA8); print("VP ", im.get_pixel(160, 160), " ", im.get_pixel(5, 5), " ", im.get_pixel(5, 645)); im.save_png(OS.get_environment("T8_OUT"))
+	quit()

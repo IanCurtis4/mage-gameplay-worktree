@@ -1,0 +1,68 @@
+{
+  "schema": "ragrpg_art_validation_report_v1",
+  "tool": {
+    "name": "art_pipeline.validate_sheet",
+    "version": "1.0.0"
+  },
+  "scope": "sheet",
+  "spec": {
+    "schema": "ragrpg_source_sheet_v1",
+    "alpha_threshold": 16,
+    "edge_margin": 1,
+    "min_band": 8,
+    "min_gap": 2,
+    "min_object_pixels": 64,
+    "min_transparent_fraction": 0.25,
+    "veil_warn_pixels": 500,
+    "idle_spread_warn": 0.15,
+    "scale_tolerance": 0.1,
+    "kind": "equipment_row",
+    "direction": null,
+    "background": {
+      "mode": "alpha"
+    },
+    "expected_count": 2
+  },
+  "sheet": {
+    "path": "assets/art/e08_codex_1123/equipment/weapons_e1_v3.png",
+    "sha256": "5ba63f415058032faf8be13c2e5c20cc2979ff93f2d77e7f5cf072ee27f32dfa",
+    "width": 2172,
+    "height": 724,
+    "mode": "RGBA",
+    "format": "PNG"
+  },
+  "issues": [
+    {
+      "code": "alpha_veil",
+      "severity": "warning",
+      "message": "7377 faint pixels (alpha 1-16) away from the figures; clear them with remove_background --veil-alpha",
+      "details": {
+        "veil_pixels": 7377,
+        "alpha_threshold": 16
+      }
+    }
+  ],
+  "measurements": {
+    "transparent_fraction": 0.8814,
+    "veil_pixels": 7377,
+    "objects": [
+      {
+        "x0": 573,
+        "x1": 720,
+        "y0": 64,
+        "y1": 658,
+        "pixels": 22092
+      },
+      {
+        "x0": 1301,
+        "x1": 1705,
+        "y0": 63,
+        "y1": 658,
+        "pixels": 164408,
+        "gap_before_px": 581
+      }
+    ],
+    "object_count": 2
+  },
+  "status": "warn"
+}

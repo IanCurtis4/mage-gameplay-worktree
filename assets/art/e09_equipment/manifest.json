@@ -1,0 +1,129 @@
+{
+  "schema": "e09_equipment_art_v1",
+  "items": [
+    {
+      "id": "halo_shield",
+      "source": "assets/art/e08_codex_1120/equipment/weapons_h1_v2.png",
+      "source_sha256": "b36825e12f9d3729bb5943ccf4ec5c9182b26616ac75c3dd76ee52e00b83016d",
+      "object_index": 5,
+      "objects_in_sheet": 8,
+      "box": [
+        1026,
+        189,
+        1286,
+        602
+      ],
+      "prop_png": "props/halo_shield.png",
+      "prop_size": [
+        72,
+        116
+      ],
+      "prop_sha256": "b12ddc30845b567cd791c8c4c606381f4232248af42489abc8227be9a3925190",
+      "icon_png": "icons/equipment/painted/halo_shield.png",
+      "icon_sha256": "c81b7e872d9619cf35d0f1781c19809376e4489b020911425529fe8374441b36",
+      "post": [
+        {
+          "tool": "assets/art/e09_equipment/prepare_e09_equipment.py",
+          "params": {
+            "clear_alpha_at_or_below": 16,
+            "lanczos": true,
+            "bleed_iterations": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "buckler",
+      "source": "assets/art/e08_codex_1120/equipment/weapons_h1_v2.png",
+      "source_sha256": "b36825e12f9d3729bb5943ccf4ec5c9182b26616ac75c3dd76ee52e00b83016d",
+      "object_index": 4,
+      "objects_in_sheet": 8,
+      "box": [
+        768,
+        288,
+        987,
+        515
+      ],
+      "prop_png": "props/buckler.png",
+      "prop_size": [
+        72,
+        76
+      ],
+      "prop_sha256": "5cf6aa2f1b46fc04d9f1aeab999db03d76bab1803d63ef3f70678f9dcbc74eaf",
+      "icon_png": "icons/equipment/painted/buckler.png",
+      "icon_sha256": "a3f7eef94ac90ebb4ff4fdd0b6eeaee2275e2a05fe1436506a918a4d6f64c6c7",
+      "post": [
+        {
+          "tool": "assets/art/e09_equipment/prepare_e09_equipment.py",
+          "params": {
+            "clear_alpha_at_or_below": 16,
+            "lanczos": true,
+            "bleed_iterations": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "rapier",
+      "source": "assets/art/e08_codex_1123/equipment/weapons_e1_v3.png",
+      "source_sha256": "5ba63f415058032faf8be13c2e5c20cc2979ff93f2d77e7f5cf072ee27f32dfa",
+      "object_index": 1,
+      "objects_in_sheet": 2,
+      "box": [
+        573,
+        64,
+        720,
+        658
+      ],
+      "prop_png": "props/rapier.png",
+      "prop_size": [
+        40,
+        160
+      ],
+      "prop_sha256": "093812b96f9fa868dcf11527a5de23d3a70c82b9f7a51d40a9deadd75c01d67d",
+      "icon_png": "icons/equipment/painted/rapier.png",
+      "icon_sha256": "8625471caf87e9a4b8089c076f292ab2156108d58dbafbde23341536d7be0eed",
+      "post": [
+        {
+          "tool": "assets/art/e09_equipment/prepare_e09_equipment.py",
+          "params": {
+            "clear_alpha_at_or_below": 16,
+            "lanczos": true,
+            "bleed_iterations": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "prism_staff",
+      "source": "assets/art/e08_codex_1120/equipment/weapons_h2.png",
+      "source_sha256": "504d034fd9e0756f5f86cef21f32a773818db9efcc0325b0d1957776d0c9acfc",
+      "object_index": 1,
+      "objects_in_sheet": 8,
+      "box": [
+        89,
+        19,
+        299,
+        695
+      ],
+      "prop_png": "props/prism_staff.png",
+      "prop_size": [
+        52,
+        168
+      ],
+      "prop_sha256": "0d45bff8157dfb83c04e42ffa996ef8758c3ca08579736bffc3ffb1ceb6601e6",
+      "icon_png": "icons/equipment/painted/prism_staff.png",
+      "icon_sha256": "81dbe208a84883b63890f22d6bc46aee9234ad11ea4d18e0875f32ad80f5f105",
+      "post": [
+        {
+          "tool": "assets/art/e09_equipment/prepare_e09_equipment.py",
+          "params": {
+            "clear_alpha_at_or_below": 16,
+            "lanczos": true,
+            "bleed_iterations": 12
+          }
+        }
+      ]
+    }
+  ]
+}
