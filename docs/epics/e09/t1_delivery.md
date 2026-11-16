@@ -333,7 +333,7 @@ Os hashes dos outros 161 passos estão no `summary.jsonl` da rodada final.
 ### Ajuste A14 — fallback de corpo provado em pasta de fixture (junto da T1.2)
 
 O pedido veio da arquitetura, depois de `476c246a`. A decisão A14 substitui, só para estes
-checks, a regra anterior de não tocar em `kit_seam_test.gd`.
+checks, a regra anterior de não tocar em `kit_seam_test.gd`. Commit entregue: `be4d6477`.
 
 **Motivo.** A T7 (`claude/zealous-roentgen-c183e9`) traz arte de produção para `paladin`,
 `thaumaturge`, `duelist` e `arcane_blade`. Cinco checks de `kit_seam_test` contavam com a
