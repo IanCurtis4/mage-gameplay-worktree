@@ -1,6 +1,14 @@
 extends SceneTree
 
 const PROFILE_ID := "123e4567-e89b-42d3-a456-426614174000"
+## E09 A9: the production roster is the twelve E00 identities plus exactly the E09 hybrids
+## whose kit declares ready_for_play. Metadata of each is checked exactly when present.
+const KIT_METADATA := {
+	&"sp_ac": ["Paladino", &"swordsman", &"2-3", &"acolyte"],
+	&"mg_ac": ["Taumaturgo", &"mage", &"2-3", &"acolyte"],
+	&"sp_la": ["Duelista", &"swordsman", &"2-3", &"rogue"],
+	&"mg_la": ["Lâmina Arcana", &"mage", &"2-3", &"rogue"],
+}
 
 var failures := 0
 var checks := 0
@@ -25,6 +33,7 @@ func _check_production_roster() -> void:
 		&"elementalist", &"spiritualist", &"mg_sp", &"mg_ar",
 		&"sentinel", &"hunter", &"ar_sp", &"ar_mg",
 	]
+	expected_order.append_array(_ready_kit_ids())
 	var actual_order: Array[StringName] = []
 	for definition: EvolutionDefinition in definitions:
 		actual_order.append(definition.id)
@@ -43,7 +52,10 @@ func _check_production_roster() -> void:
 		&"ar_sp": ["Saqueador", &"archer", &"2-3", &"swordsman"],
 		&"ar_mg": ["Rastreador", &"archer", &"2-3", &"mage"],
 	}
+	for kit_id: StringName in _ready_kit_ids():
+		expected[kit_id] = KIT_METADATA[kit_id]
 	for definition: EvolutionDefinition in definitions:
+		_check(KIT_METADATA.has(definition.id) == _ready_kit_ids().has(definition.id), "%s is listed only when its kit declares ready_for_play" % definition.id)
 		var values: Array = expected[definition.id]
 		_check(
 			definition.display_name == values[0]
@@ -59,6 +71,9 @@ func _check_production_roster() -> void:
 		var has_spiritualist_metadata := definition.id == &"spiritualist" and definition.entry_skill_id == &"spiritualist_echo_curse" and definition.exclusive_skill_ids == [&"spiritualist_echo_curse", &"spiritualist_echo_recovery", &"spiritualist_soul_drain", &"spiritualist_spectral_veil", &"spiritualist_channel_focus", &"spiritualist_procession", &"spiritualist_dissipation"]
 		var has_no_kit := definition.id not in [&"defender", &"berserker", &"elementalist", &"spiritualist"] and definition.entry_skill_id.is_empty() and definition.exclusive_skill_ids.is_empty()
 		var expected_state := (definition.content_ready and has_defender_metadata) if definition.id == &"defender" else ((definition.content_ready and has_berserker_metadata) if definition.id == &"berserker" else ((definition.content_ready and has_elementalist_metadata) if definition.id == &"elementalist" else ((definition.content_ready and has_spiritualist_metadata) if definition.id == &"spiritualist" else (not definition.content_ready and has_no_kit))))
+		if KIT_METADATA.has(definition.id):
+			# E09: a listed hybrid carries exactly its kit's entry skill and seven skills.
+			expected_state = definition.content_ready and definition.entry_skill_id == ClassKitRegistry.skill_ids(definition.id)[0] and definition.exclusive_skill_ids == ClassKitRegistry.skill_ids(definition.id)
 		if definition.id == &"mg_ar":
 			# G7 enables exactly the completed Geometer kit, not other placeholders.
 			expected_state = definition.content_ready and definition.entry_skill_id == &"geometer_trace" and definition.exclusive_skill_ids == [&"geometer_trace", &"geometer_incidence", &"geometer_translation", &"geometer_triangulation", &"geometer_vector_memory", &"geometer_collapse", &"geometer_rewrite"]
@@ -69,7 +84,11 @@ func _check_production_roster() -> void:
 			expected_state = definition.content_ready and definition.entry_skill_id == &"hunter_freezing_trap" and definition.exclusive_skill_ids == HunterTuning.SKILL_IDS
 		_check(expected_state, "%s readiness matches completed kits and future placeholders" % definition.id)
 	var mage_options := catalog.evolution_definitions_for_origin(&"mage")
-	_check(mage_options.map(func(definition: EvolutionDefinition) -> StringName: return definition.id) == [&"elementalist", &"spiritualist", &"mg_sp", &"mg_ar"], "origin query includes only the four Mage destinations")
+	var expected_mage: Array[StringName] = [&"elementalist", &"spiritualist", &"mg_sp", &"mg_ar"]
+	for kit_id: StringName in _ready_kit_ids():
+		if KIT_METADATA[kit_id][1] == &"mage":
+			expected_mage.append(kit_id)
+	_check(mage_options.map(func(definition: EvolutionDefinition) -> StringName: return definition.id) == expected_mage, "origin query includes the four E00 Mage destinations plus the ready E09 Mage hybrids")
 	var geometer := catalog.evolution_definition(&"mg_ar")
 	_check(geometer.origin_class_id == &"mage" and geometer.affinity_class_id == &"archer", "mg_ar remains Mage origin with Archer affinity")
 	var defender := catalog.evolution_definition(&"defender")
@@ -93,6 +112,15 @@ func _check_production_roster() -> void:
 	for index: int in expected_defender_ids.size():
 		var metadata := catalog.skill_metadata(expected_defender_ids[index])
 		_check(metadata["rank_requirements"][1]["job_level"] == job_gates[index] and metadata["wallet"] == ProfileCatalog.EVOLUTION_WALLET and metadata["required_evolution_id"] == &"defender", "%s keeps its approved job gate and evolution wallet" % expected_defender_ids[index])
+
+## Kits that declare ready_for_play in production (A9); empty skeletons stay absent.
+func _ready_kit_ids() -> Array[StringName]:
+	var ready: Array[StringName] = []
+	for id: StringName in ClassKitRegistry.ids():
+		var kit := ClassKitRegistry.module(id)
+		if kit != null and kit.ready_for_play():
+			ready.append(id)
+	return ready
 
 func _check_validation_and_isolation() -> void:
 	var source := _definition(&"defender", "Defendente", &"swordsman", &"2-1")
