@@ -119,7 +119,8 @@ Obrigações (assinaturas a cargo de Sol, publicadas em `docs/epics/e09/t1_kit_s
     carregado, pela mesma convenção do `geometer_onboarding`.
 13. **Prova.**
     - Um kit de teste de fixture, fora do catálogo de produção, exercita cada gancho.
-    - Regressão completa `-Full -SkipEditorImport`, porque T1 toca o código de todas as
+    - Suíte completa (`tools/verify.ps1` sem filtro `-Test`; `-SkipEditorImport` só quando a
+      importação for feita à parte), porque T1 toca o código de todas as
       classes.
     - Nenhum teste existente muda de expectativa.
 
@@ -370,7 +371,9 @@ classes atuais também podem usar os itens. A Lâmina Arcana usa o cajado da ori
 - **Composição.** Branch `claude/e09-candidato`, a partir do commit de arquitetura. Merge na
   ordem do DAG, resolvendo só conflitos mecânicos. Conflito de conteúdo volta à tarefa dona.
 - **Verificação.**
-  - `tools/verify.ps1 -Full -SkipEditorImport` e importação do editor em worktree limpo.
+  - Suíte completa de `tools/verify.ps1` (sem `-Test`, com `editor_import` em worktree limpo).
+    O executável é `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/godot/Godot_v4.7.2-stable_win64_console.exe`,
+    passado em `-GodotPath` ([TESTING](../TESTING.md)).
   - Supervisão Luna (T11): conclusão, ausência de SCRIPT ERROR, timeouts e hashes dos logs.
 - **Release.**
   - Exportação com as ferramentas de release vigentes para
