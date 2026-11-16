@@ -105,6 +105,22 @@ func on_cast_requested(_player: PlayerActor, _cast: Dictionary) -> void:
 func on_cast_confirmed(_player: PlayerActor, _cast: Dictionary) -> void:
 	pass
 
+## Effective SP cost of any skill of the player, kit or origin (T1.2). Receives the
+## base cost (rank and item modifiers applied); the player floors the answer at 0 and
+## ignores non-finite values. Pure read of kit state: it runs at preview, request,
+## payment check, debit and in the UI.
+func skill_cost(_player: PlayerActor, _skill_id: StringName, base_cost: float) -> float:
+	return base_cost
+
+## Once per paid commit of a skill the kit does not own (T1.2), flat or world, with
+## slash, dash and teleport included; same instant as on_cast_confirmed (after the
+## payment, before the resolution). Never for refused casts, reservations or retries;
+## the basic attack is excluded. context: "target" (CombatActor or null), "point"
+## (Vector2), "world" (bool), "rank" (int), "element" (StringName, empty if none).
+## Must not cast or spend.
+func on_base_skill_committed(_player: PlayerActor, _skill_id: StringName, _context: Dictionary) -> void:
+	pass
+
 ## Executes the skill. Return false only if nothing happened (payment stays spent).
 func resolve_cast(_player: PlayerActor, _cast: Dictionary) -> bool:
 	return false
@@ -120,7 +136,9 @@ func compose_basic_attack(_player: PlayerActor, _target: CombatActor, request: D
 	return request
 
 ## Incoming-hit step 1, before mitigation. Return {"cancel": true, "reason": &"..."}
-## to cancel the whole hit (no damage, no mitigation, no later steps).
+## to cancel the whole hit (no damage, no mitigation, no later steps). Optional
+## "damage_multiplier" (float >= 0, finite; T1.1) scales damage_dealt_multiplier on a
+## copy of the request before mitigation; cancel wins over it, and invalid values are ignored.
 func before_hit_mitigation(_player: PlayerActor, _hit: Dictionary) -> Dictionary:
 	return {}
 
@@ -156,6 +174,13 @@ func on_return(_player: PlayerActor) -> void:
 ## Build or learning changed in the run. No implicit heal, recharge or reset.
 func on_build_changed(_player: PlayerActor) -> void:
 	pass
+
+## Temporary stat sources of the kit (T1.1), same shape as the Defender's
+## "defender_anchor" source: {"source_id", "label", "increased"/...}. Read every time the
+## player rebuilds its breakdown; call PlayerActor.refresh_kit_stats() when the answer
+## changes (zone presence, for example). Pure read of kit state.
+func temporary_stat_sources(_player: PlayerActor) -> Array[Dictionary]:
+	return []
 
 ## An enemy committed an attack against the player (see EnemyAttackEvent keys in the API).
 func on_enemy_attack(_player: PlayerActor, _event: Dictionary) -> void:

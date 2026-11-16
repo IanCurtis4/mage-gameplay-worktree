@@ -70,7 +70,9 @@ Linha de aprendizado:
 
 ```gdscript
 {"skill_id": &"paladin_oath", "category": &"active", "free_rank": 1,
- "max_purchased_rank": 4, "job_level": 20, "prerequisites": {&"shield_wall": 2}}
+ "max_purchased_rank": 4, "job_level": 20}
+{"skill_id": &"paladin_consecrated_impact", "category": &"active", "free_rank": 0,
+ "max_purchased_rank": 5, "job_level": 25, "prerequisites": {&"paladin_oath": 2}}
 ```
 
 - `category` é `ProfileCatalog.ACTIVE` (`&"active"`) ou `PASSIVE` (`&"passive"`), conforme
@@ -78,7 +80,9 @@ Linha de aprendizado:
 - `job_level` é o da posição (20, 23, 25, 28, 31, 34, 37).
 - `free_rank` é 1 só na entrada do job 20; nas outras, 0.
 - `free_rank + max_purchased_rank` é 5 nas ativas e 3 nas passivas.
-- `prerequisites` é opcional; pode citar skills da origem.
+- `prerequisites` é opcional nas posições compradas e pode citar skills da origem.
+  **A entrada do job 20 não leva `prerequisites`**: o R1 grátis é concedido na evolução e
+  não aceita pré-requisito comprado (limitação 3 da K1, decisão A13).
 
 Com `ready_for_play() == true`, o registro exige ainda as 7 skills, um texto `effect` não
 vazio e uma receita de feedback para cada uma (`kit_incomplete`).
@@ -136,7 +140,7 @@ snapshot não chama `on_attach`. Testes podem usar `player.attach_kit(kit)`.
 | `resolve_cast(player, cast) -> bool` | executa a skill | depois do confirmado e da revelação ofensiva |
 | `basic_attack_profile(player) -> {"range", "delivery"}` | ao medir e lançar o ataque básico | `range` substitui `basic_range` da classe; `delivery` = `&"direct"`, `&"mage"` ou `&"precision"` |
 | `compose_basic_attack(player, target, request) -> DamageRequest` | a cada ataque básico | devolva o pedido, uma cópia alterada ou um novo de `kit_make_request` |
-| `before_hit_mitigation(player, hit) -> {"cancel", "reason"}` | golpe recebido, passo 1 | `cancel: true` anula o golpe inteiro |
+| `before_hit_mitigation(player, hit) -> {"cancel", "reason", "damage_multiplier"}` | golpe recebido, passo 1 | `cancel: true` anula o golpe inteiro; `damage_multiplier` (T1.1) escala o dano recebido, ver 4.2 |
 | `after_hit_mitigation(player, hit, result)` | golpe recebido, passo 2 | `hit.frontal` e `hit.facing_dot` |
 | `on_shield_broken(player, hit, result)` | golpe recebido, passo 3 | o golpe levou o último ponto de escudo |
 | `on_heal(player, requested, applied, source)` | curas reportadas | excedente = `requested - applied` |
@@ -145,6 +149,9 @@ snapshot não chama `on_attach`. Testes podem usar `player.attach_kit(kit)`.
 | `on_death(player)` | morte do jogador | antes da recuperação de morte da expedição |
 | `on_return(player)` | primeiro tick vivo depois de uma morte | volta ao portal ou revive |
 | `on_build_changed(player)` | `apply_run_modifiers` (troca de build/aprendizado na run) | sem cura, recarga ou reset implícitos |
+| `temporary_stat_sources(player) -> Array[Dictionary]` (T1.1) | toda recomposição do breakdown do jogador | leitura pura do estado do kit; ver 4.4 |
+| `skill_cost(player, skill_id, base_cost) -> float` (T1.2) | toda leitura do custo efetivo (prévia, pedido, checagem de pagamento, débito, UI) | skills do kit e da origem; piso 0; ver 4.5 |
+| `on_base_skill_committed(player, skill_id, context)` (T1.2) | uma vez por commit pago de skill que não é do kit | mesmo instante de `on_cast_confirmed`; ver 4.5 |
 | `on_enemy_attack(player, event)` | um inimigo comprometeu um ataque contra o jogador | ver 5.3 |
 | `concealment_active(player) -> bool` | ocultação do kit | ver 6 |
 | `on_reveal(player, duration)` | ação ofensiva revelou o jogador | — |
@@ -185,8 +192,17 @@ não passam pelo pipeline.
 1. `before_hit_mitigation(player, hit)`. Com `{"cancel": true, "reason": &"..."}` nada mais
    acontece e o resultado é
    `{"landed": false, "cancelled": true, "cancel_reason", "damage": 0, "actual_damage": 0, "absorbed_damage": 0, "critical": false, "killed": false, "can_trigger_effects": false, "source_id", "target_id", "skill_id"}`.
+   Sem cancelamento, a chave opcional `"damage_multiplier": float` (T1.1) escala o dano
+   recebido: o jogador aplica `damage_dealt_multiplier *= m` numa **cópia** do pedido
+   (`request.copy()`), como a redução frontal já faz. O pedido original nunca muda.
+   - Valor ausente, não numérico, não finito ou negativo é ignorado; `1.0` segue o caminho
+     sem cópia. `0.0` é aceito (golpe aterrissa com dano zero, sem cancelar).
+   - `cancel` tem prioridade: com os dois, o golpe é cancelado e o multiplicador some.
+   - Quando `m != 1`, o resultado ganha `"kit_damage_multiplier": m`.
+   - O multiplicador entra antes das reduções existentes e se multiplica com elas.
 2. Mitigação existente (Parede de Escudos, guardas do Defensor, `HealthState`), depois
-   `after_hit_mitigation(player, hit, result)`.
+   `after_hit_mitigation(player, hit, result)`. `hit["request"]` continua sendo o pedido
+   original, mesmo com multiplicador.
 3. `on_shield_broken(player, hit, result)` se o escudo estava acima de zero e zerou neste golpe.
 
 Descritor `hit`:
@@ -211,12 +227,108 @@ Descritor `hit`:
 | `kit_force_target(enemy, duration)` / `kit_break_sight(enemy, duration)` | primitivas de ameaça (6) a partir do jogador |
 | `kit_concealed() -> bool` | ocultação do kit ativa e não revelada |
 | `has_kit()`, `kit_owns_skill(skill_id)`, `kit_time` | consultas |
+| `refresh_kit_stats()` (T1.1) | recompõe o breakdown depois que as fontes temporárias do kit mudaram (4.4) |
+| `skill_cost(skill_id)` / `base_skill_cost(skill_id)` (T1.2) | custo efetivo (com o kit) e custo antes do kit (4.5) |
+| `PlayerActor.base_skill_element(skill_id)` (T1.2, estático) | elemento canônico de uma skill que não é do kit (4.5) |
 
 Dano de luz (A2): dano mágico (`magic`) numa skill com `SkillDefinition.element = &"light"`.
 Atenção: `SkillDefinition.tags` são descritores de efeito de item (`EffectTags`: `flaming`,
 `freezing`…); uma etiqueta fora dessa lista faz a captura de rank falhar com
 `unknown_effect_tag`. Por isso o elemento tem campo próprio, `element`, com os valores
 `physical`, `fire`, `ice`, `lightning`, `light`, `arcane`, `spirit` ou vazio.
+
+### 4.4 Fontes de atributo temporárias do kit (T1.1)
+
+`ClassKit.temporary_stat_sources(player) -> Array[Dictionary]` devolve vazio por padrão.
+`PlayerActor.temporary_stat_sources()` soma o resultado depois das fontes existentes
+(passo do Caçador, postura do Sentinela, Fúria, Marco de Guarda). Entradas vazias são
+descartadas. O formato é o mesmo da fonte `defender_anchor`:
+
+```gdscript
+{"source_id": &"paladin_zone", "label": "Zona consagrada", "increased": {&"physical_defense": 0.2, &"magic_defense": 0.2}}
+```
+
+- Use um `source_id` com o prefixo do kit. Os valores entram na composição única de
+  `BuildSnapshot.stat_breakdown`, sem fórmula própria no kit.
+- O método é leitura pura do estado do kit e roda em toda recomposição (build, Fúria,
+  Marco, `refresh_kit_stats`).
+- Quando a resposta mudar (entrar ou sair da zona, por exemplo), o kit chama
+  `player.refresh_kit_stats()`. Ele recompõe pelo mesmo caminho de Fúria e do Marco
+  (`_apply_derived_stats(_build_stat_breakdown())`) e emite `resources_changed`.
+  É idempotente, não cura, não recarrega SP e não zera recargas: os déficits de HP e SP
+  continuam iguais. Sem `run_state` ou breakdown ainda, não faz nada.
+- O breakdown não se recompõe sozinho a cada tick; sem a chamada, a fonte só aparece na
+  próxima recomposição de outra origem.
+
+### 4.5 Custo efetivo e commits das skills da origem (T1.2, decisão A13)
+
+**Custo.** `PlayerActor.skill_cost(skill_id)` é a fonte única do custo de SP efetivo, para
+skills do kit e da origem.
+- `base_skill_cost(skill_id)` é o custo antes do kit: o rank em execução, já com os
+  modificadores de item, ou a definição sem ranks.
+- Com kit, o valor passa por `ClassKit.skill_cost(player, skill_id, base_cost)`. O jogador
+  aplica piso 0 e ignora resposta não finita, voltando ao custo base.
+- `_can_pay_skill` (prévia, pedido, cada frame de preparo) e o débito de `_spend` leem
+  `skill_cost`. A UI que mostra custo efetivo (cartões e atalhos do HUD, mensagens de
+  bloqueio) também lê `skill_cost`. As linhas "SP base" do tooltip e do seletor de rank
+  continuam mostrando o custo base.
+- O método é leitura pura: roda muitas vezes por frame.
+- **Reserva do Sentinela.** `sentinel_explosive_shot` reserva `skill_cost` na preparação, e o
+  disparo cobra exatamente o valor reservado, mesmo que o custo do kit tenha mudado. A
+  reserva não é pagamento nem commit.
+
+Exemplo da Aurora (K2), com feitiços pela metade:
+
+```gdscript
+func skill_cost(_player: PlayerActor, skill_id: StringName, base_cost: float) -> float:
+	return base_cost * 0.5 if aurora_active and skill_id in SPELLS else base_cost
+```
+
+**Commit da origem.** `ClassKit.on_base_skill_committed(player, skill_id, context)`.
+- Chamado uma vez por commit pago de skill que o kit não possui, nos caminhos plano e de
+  mundo. Inclui `slash`, `dash`, `teleport` e as ativas de item.
+- Momento: dentro do pagamento canônico, depois de SP e recarga, antes da resolução. É o
+  mesmo instante de `on_cast_confirmed` em `_use_kit_cast`.
+- Nunca é chamado em cast recusado (recarga, SP, alvo, posição), na reserva do Sentinela, num
+  segundo pagamento do mesmo comando de mundo, nem no ataque básico. O disparo da reserva
+  conta uma vez, no commit real.
+- O gancho não deve lançar skill nem gastar recurso.
+
+| Chave de `context` | Valor |
+|---|---|
+| `target` | `CombatActor` vivo ou `null` |
+| `point` | `Vector2` no plano; no mundo, x/z |
+| `world` | `true` no mundo da expedição |
+| `rank` | rank efetivo do commit |
+| `element` | elemento canônico (`base_skill_element`) ou vazio |
+
+De onde vêm `point` e `target`:
+- Comando de mundo: âncora do comando ou, sem âncora, a posição mais a direção; o alvo é o
+  do comando.
+- Despacho plano do `RunController._execute_skill`: o ponto clicado e o alvo selecionado.
+- Teleporte e investida, no plano e no mundo: o destino.
+- Traçado, edição e Colapso do Geômetra: o ponto e o alvo do comando.
+- Disparo da reserva do Sentinela: o alvo e a posição dele.
+- Chamada direta sem entrada, como `use_slash` num teste: posição do jogador, sem alvo.
+
+O registro da entrada (`note_base_commit`) vale só para o próximo pagamento da mesma
+skill. O pagamento consome o registro, inclusive quando o comando de mundo é recusado em
+`_spend`, e o `RunController` limpa a sobra quando o cast é recusado. O registro é transitório:
+nunca existe entre frames, e o `runtime_manifest.json` o declara em `omitted`. Um kit não deve
+ler nem guardar esse registro; o contexto do gancho é a única interface.
+
+**Elemento canônico.** `PlayerActor.base_skill_element(skill_id)` devolve
+`SkillDefinition.element` quando a definição tem um. Sem isso, consulta a tabela de
+gameplay `PlayerActor.BASE_SKILL_ELEMENTS`:
+
+| Elemento | Skills |
+|---|---|
+| fogo | `fireball`, `fire_wall`, `fire_spear` e as de fogo do Elementalista |
+| gelo | `ice_spear`, `ice_wall`, `elementalist_glacial_ring` |
+| raio | `lightning`, `electric_discharge`, `lightning_wall`, `elementalist_lightning_arc` |
+
+Skills físicas, de movimento e o teleporte ficam com elemento vazio. A receita de
+apresentação (`FeedbackRecipeCatalog`) não é fonte de gameplay.
 
 ## 5. Inimigos (C1.5)
 
@@ -307,6 +419,14 @@ abrigos atuais não mudaram.
   também cai, inteiro, no corpo da origem. O jogador, o retrato
   (`BuildPresentation.portrait_identity`) e `CharacterAnimation.configure` usam a mesma regra.
   Pastas de kit exigem `weaponless` como as identidades atuais.
+- **Corpo de fixture (A14, só testes).**
+  - `ClassKitRegistry.install_fixture_body(evolution, pasta)` aponta a pasta de corpo de uma
+    das quatro identidades para uma pasta de fixture, até `clear_fixtures()`.
+  - A instalação é recusada para identidade fora dos kits, nome vazio ou pasta que já pertence
+    a uma identidade.
+  - Use uma pasta que nunca tem arte para provar o fallback da origem sem depender da arte de
+    produção. A prova de que cada híbrida resolve o próprio corpo é da T7
+    (`tests/e09/hybrid_bodies_test.gd`).
 
 ## 8. Snapshot (C1.9)
 
@@ -441,7 +561,11 @@ func after_hit_mitigation(_player: PlayerActor, hit: Dictionary, result: Diction
 ```
 
 O kit de fixture completo, que exercita todos os ganchos, está em
-`scripts/classes/fixture/fixture_kit.gd`, e o teste em `tests/e09/kit_seam_test.gd`.
+`scripts/classes/fixture/fixture_kit.gd`, e o teste em `tests/e09/kit_seam_test.gd`. Os
+ganchos de T1.1 (multiplicador de dano recebido e fontes temporárias) têm teste próprio,
+`tests/e09/kit_seam_hooks_v2_test.gd`, com uma subclasse do kit de fixture. Os de T1.2
+(custo efetivo e commit da origem) estão em `tests/e09/kit_seam_hooks_v3_test.gd`; o kit de
+fixture expõe `cost_scale`, `cost_offset` (identidade por padrão) e `base_commits`.
 
 ## 13. Limitações conhecidas (para quem consome)
 
