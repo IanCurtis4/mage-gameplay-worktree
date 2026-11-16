@@ -1,0 +1,23 @@
+{
+  "schema": "ragrpg_art_selection_v1",
+  "scope": "sp_ac",
+  "updated": "2026-11-16",
+  "selections": {
+    "east": {
+      "path": "east_v2.png",
+      "sha256": "a8c287dfd58e8a0d0cb636c1fc4383106da555e94e286a9a0bdd33c7efa5c926"
+    },
+    "north": {
+      "path": "north_v3.png",
+      "sha256": "2a7a064a1f088961e0fb7be86735ff75924264c0ea5c9b4d982aa7a9b9352d66"
+    },
+    "south": {
+      "path": "south.png",
+      "sha256": "3e0291f22c75e5323427965390dd3a83f8703c4020305788b3b67e19b57f4c8e"
+    },
+    "west": {
+      "path": "west.png",
+      "sha256": "8759411a13d4eeeea0a9561f219b3634cfea9f3cebb6b5079d0add58137ba2dc"
+    }
+  }
+}
