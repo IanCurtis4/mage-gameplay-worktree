@@ -174,3 +174,229 @@ Arquivos: `scripts/classes/class_kit.gd`, `scripts/actors/player_actor.gd`,
   kit a cada tick.
 - O teste com dano zero verifica que `0.0` é aceito e registrado, mas não fixa o valor final
   do dano, que depende do piso de `HealthState`/`CombatMath`.
+
+## T1.2 — Custo efetivo e commit das skills da origem (decisão A13)
+
+Pedido da arquitetura em 16/11/2026, feito na mesma branch a partir de `bd66d3c3`.
+Commit entregue: `ca27db8a` (código, testes e documentação). Este registro do SHA está num commit
+de recibo à parte.
+
+Arquivos alterados:
+
+- `scripts/classes/class_kit.gd`
+- `scripts/actors/player_actor.gd`
+- `scripts/main.gd`
+- `scripts/classes/fixture/{fixture_kit.gd,snapshot_manifest.json}`
+- `scripts/core/expedition/snapshot/runtime_manifest.json`
+- `tests/e09/kit_seam_hooks_v3_test.gd` (novo)
+- `t1_kit_seam_api.md`, nas seções 2.1, 4, 4.3, 4.5 e 12
+
+### `ClassKit.skill_cost(player, skill_id, base_cost) -> float`
+
+- O padrão devolve `base_cost`.
+- `PlayerActor.skill_cost()` passou a ser a fonte única do custo efetivo. Ela chama o kit sobre
+  `base_skill_cost()`, que mantém a regra antiga: o custo vem do rank de runtime ou, na falta dele,
+  de `definition.sp_cost`.
+- Um valor não finito volta ao custo base, e o piso é `0`.
+- Leem esse valor:
+  - `_can_pay_skill`;
+  - `_spend`;
+  - a UI (card do HUD e tooltip);
+  - a reserva da Sentinela.
+- As linhas "SP base" continuam mostrando o custo base.
+- A regra também vale para as skills do próprio kit.
+
+### Reserva da Sentinela (`sentinel_explosive_shot`)
+
+- A reserva trava o custo efetivo no momento da preparação.
+- O lançamento debita exatamente o valor reservado com `_spend(id, reserved_sp)`, mesmo que o kit
+  mude a regra no meio do caminho.
+
+### `ClassKit.on_base_skill_committed(player, skill_id, context)`
+
+- **Onde dispara:** em `_spend`, que é o ponto único de pagamento. A chamada vem depois do débito e
+  do fato `skill_committed`, e antes da resolução.
+- **Quando dispara:**
+  - só para skills que não pertencem ao kit;
+  - uma vez por commit pago. A guarda `first_commit` cobre o comando de mundo, que reentra em
+    `_spend`.
+- **Quando não dispara:**
+  - em cast recusado, porque `_spend` não é alcançado;
+  - no ataque básico, que não passa por `_spend`.
+- **Contexto:** `target` (CombatActor vivo ou `null`), `point`, `world`, `rank` e `element`.
+- **Origem do contexto, nesta ordem:**
+  1. o comando de mundo em execução;
+  2. a nota `note_base_commit()` deixada pelo chamador: `Main._execute_skill`, dash e teleporte nos
+     dois caminhos, Sentinela e Geômetra;
+  3. a posição do jogador.
+- **Elemento:** vem de `SkillDefinition.element`, com a tabela `BASE_SKILL_ELEMENTS` como
+  reserva. Não há aresta Registry → ClassCatalog nem leitura de FeedbackRecipeCatalog.
+- **A nota é transitória:**
+  - `_spend` sempre a consome, inclusive no retorno recusado do comando de mundo;
+  - `Main._execute_skill` a limpa depois do despacho;
+  - ela está declarada em `omitted` no `runtime_manifest.json`, com o motivo.
+
+### Demais pontos
+
+- **Exemplo da API:** a skill de entrada do job 20, no exemplo de `learning_entries`, não tem mais
+  `prerequisites`. O pré-requisito `paladin_oath: 2` foi para uma linha do job 25.
+- **A10:** `player_actor.gd` continua sem nomear `EnemyActor`, porque o contexto tipa `target`
+  como `CombatActor`. A guarda de `kit_seam_test` passou.
+- **Sem mudança de save.** Os dois ganchos produzem estado derivado.
+  - `runtime_manifest.json` só ganhou a justificativa de `_base_commit_hint` em `omitted`. Não há
+    campo novo capturado nem mudança de revisão.
+  - O manifesto do kit de fixture ganhou `cost_scale`, `cost_offset` e `base_commits`. A revisão
+    ficou em 1 porque o arquivo é só de fixture.
+  - O save pessoal não foi tocado.
+- **Kit de fixture:**
+  - a regra de custo é `cost_scale * base + cost_offset`, que por padrão é a identidade;
+  - `base_commits` registra cada commit das skills da origem, só com IDs de entidade;
+  - o v3 cobre o kit sem os ganchos e o jogador sem kit, que se comportam como hoje;
+  - `kit_seam_test.gd` não foi tocado.
+
+### Validação T1.2 (regressão por impacto, sem repetir a suíte inteira)
+
+**Como rodou**
+
+- Os passos rodaram sobre a árvore de trabalho com base em `bd66d3c3`, já com o conteúdo deste
+  commit.
+- O plano tem 331 passos: `kit_seam_hooks_v3_test` é o 330 e `kit_seam_test` passou a ser o 331.
+- Cada passo foi uma chamada `verify.ps1 -FromStep N -ToStep N -CheckTimeoutSeconds 300`.
+- O bootstrap rodou sem fixture; os demais passos, com `-F1Fixture`.
+
+**Primeira rodada** (`.godot/verification/t1_2_impact/`)
+
+- Houve 9 falhas, todas com a mesma causa: o novo membro `_base_commit_hint` não estava
+  classificado no esquema de snapshot (detalhe `checkpoint_incomplete`).
+- Correção:
+  - declarar o membro em `omitted`;
+  - limpar a nota no retorno recusado de `_spend`.
+- Nenhuma expectativa de teste mudou.
+
+**Rodada final** (`.godot/verification/t1_2_impact_r2/`)
+
+- O `summary.jsonl` tem sha256 `C4B20F1F65E23B5AEA6991326954DB8FA3FBA3E4EA5C15CADC1C92EEDE629881`.
+- Foram 179 passos, com 0 falhas, 0 timeouts e nenhuma saída vazia.
+- Passos incluídos:
+  - o bootstrap;
+  - os `e04_*`, que cobrem os ranks das origens Espadachim e Mago, com dash e teleporte;
+  - os `e05_*` de Sentinela, Caçadora, Geômetra, Elementalista, Espiritualista, Defensor e
+    Berserker;
+  - `e07_f6*`, `e08_compact*`, `e07_f3_snapshot`, `e07_f5_death_kits` e `e07_f1_*`;
+  - `mage_gameplay`, `foundation`, `milestone_one`, `combat_animation`, `battle_ui`, `ui_layout`,
+    `arena_flow`, `e02_run_integration`, `e08_pilot` e `e08_presentation`;
+  - `kit_seam`, v2 e v3.
+
+**Busca nas 179 saídas**
+
+- Procurei `SCRIPT ERROR`, `still in use`, `Parse Error`, `Compile Error`, `FAIL` e `ERROR:`,
+  diferenciando maiúsculas e exigindo fronteira de palavra.
+- Resultado: 0 ocorrências.
+
+| Passo | Resultado | sha256 da saída |
+|---|---|---|
+| 330 `kit_seam_hooks_v3_test` | 63 checks, 0 falhas | `D1DFD323C350F8F63140F3D8D86FE01FB566BAEE11ED3A93B953FBF99F78F449` |
+| 329 `kit_seam_hooks_v2_test` | 38 checks, 0 falhas (hash idêntico ao da T1.1) | `5182F32B62DE14BE5938AF67C615BFBC0CBB6BDF062A64EDB08131758CF6FA5A` |
+| 331 `kit_seam_test` | 175 checks, 0 falhas (hash idêntico ao da T1) | `45F637A085EF4FBA26D70B7A24A6A3BD7882EB0DE61FF85AA0C874B49C034E22` |
+| 9 `foundation_test` | PASS, 20 | `10C00F261A4572819C6B3293933D567298A2335AB50E19A710DBE5FA5445374B` |
+| 28 `milestone_one_test` | PASS, 64 | `064BEAF0DAA82FE14CD8323E948F820032897B5E6CE9EDEC03BAD229090F4185` |
+| 33 `mage_gameplay_test` | PASS, 52 | `02D14E4B0067A2FC483B56F165EC8534C00262007966F3D45930D287E2919C5C` |
+| 11 `e08_presentation_test` | 2255 checks, 0 falhas | `DF8A4BF3E4C4CFE9CF897EF65BE23D0CA416B02F33626DA96DC9A96216CCA12B` |
+| 14 `e08_pilot_test` | 350 checks, 0 falhas | `B60FB21A6B5C9B5086AE9BCF8A460F67D313D7BC4EB6CF7DAB24666927D4E52D` |
+| 268 `e07_f6_threat_test` | 43 checks, 0 falhas | `C38ACB2F6A0A4F101776B095EE0A68791A65E72A12D77D5317B2EB793EFA2AD3` |
+| 269 `e07_f6_runtime_test` | 33 checks, 0 falhas | `34E113625593BD4C3EDF7E39D8B9B850F92143576E6D359A55E45841AB119FDA` |
+| 270 `e07_f6_snapshot_test` | 40 checks, 0 falhas | `2E091952F53115A75311BF2F4CFD595A18B2E8C64FA3076CBF6F844F4CC4EDC6` |
+| 282 `e08_compact_checkpoint_test` | 48 checks, 0 falhas | `346B73697BFB3C1975A5B0B2196C99CC96AE95E389DFA441C3EDBDC5FFDCA1EC` |
+| 283 `e08_compact_coverage_test` | 95 checks, 0 falhas | `3C65ADD205F98F2D063AFCF6DAD256C3F207D51AAE7376621D38801D89228796` |
+| 290 `e07_f5_death_kits_test` | 191 checks, 0 falhas | `2DA02990DCFAE18C994ADDD224C583408B5995CE97C3F943C1E96D67D2E843AA` |
+| 294 `e07_f3_snapshot_test` | 52 checks, 0 falhas | `9FC703C4AB2986DDAAB73ED386092F3B8AB71A5EA82C4A7C3C781D2F6F06C0CC` |
+| 310 `e07_f1_guard_travel_test` | 293 checks, 0 falhas | `0DD468D2FE6986F208C9B58766E3916BAE42F315A3B6483D1C5C8AD0CF229EE4` |
+| 1 `editor_import` | PASS (bootstrap) | `D6A10F188CE4A32A185CFEEB67D99F82FFED174CB5E205DF87425A92CB34F093` |
+| 256 `e07_f1_import_test` | PASS (bootstrap), 3269 arquivos idênticos | `3892BA63B513E9779C00B41A69FFBFC22179DB6CFA99277EB01FDAE3D53537E6` |
+
+Os hashes dos outros 161 passos estão no `summary.jsonl` da rodada final.
+
+### Limitações T1.2
+
+- A suíte inteira não foi repetida, conforme o pedido. Os passos fora dos 179 desta
+  regressão não rodaram com estas mudanças.
+- Chamadas planas diretas que não passam por `RunController`/`Main._execute_skill` e não deixam
+  nota recebem a posição do jogador como `point`. Isso só afeta testes e ferramentas, porque o
+  jogo sempre passa pelo `Main`.
+- A prévia do HUD para um rank ainda indisponível continua mostrando o custo base da prévia, e não
+  o custo efetivo do kit.
+- `skill_cost` é avaliado com muita frequência (no HUD, em `_can_pay_skill` e no débito), por isso
+  precisa ser pura: sem efeito colateral e sem estado consumido a cada chamada.
+- O commit da Sentinela debita o valor travado na reserva. Se o kit mudar a regra entre a
+  preparação e o lançamento, vale o preço da reserva.
+
+### Ajuste A14 — fallback de corpo provado em pasta de fixture (junto da T1.2)
+
+O pedido veio da arquitetura, depois de `476c246a`. A decisão A14 substitui, só para estes
+checks, a regra anterior de não tocar em `kit_seam_test.gd`. Commit entregue: `be4d6477`.
+
+**Motivo.** A T7 (`claude/zealous-roentgen-c183e9`) traz arte de produção para `paladin`,
+`thaumaturge`, `duelist` e `arcane_blade`. Cinco checks de `kit_seam_test` contavam com a
+ausência dessa arte. O fallback continua certo; o que mudou é que agora a arte existe.
+
+**Arquivos alterados**
+
+- `scripts/classes/class_kit_registry.gd`:
+  - novo `install_fixture_body(evolution, pasta)`, só para testes;
+  - `body_folder`, `body_folders` e `body_origin` passam a ler o override;
+  - `clear_fixtures()` também desfaz os corpos de fixture.
+  - Em produção o override é vazio, então o comportamento não muda.
+  - A instalação é recusada para identidade fora dos kits, nome vazio ou pasta que já pertence
+    a uma identidade.
+- `tests/e09/kit_seam_test.gd`:
+  - `_install_fixtures()` instala as pastas `e09_fixture_body_{sp_ac,mg_ac,sp_la}`, que nunca têm
+    arte, e ganhou dois checks: instalação e recusas.
+  - Os cinco checks agora provam o fallback nessas pastas:
+    - "without kit art the origin body is used": `sp_ac` com a pasta de fixture;
+    - "evolution -> actor_kind falls back": `sp_ac` e `mg_ac`, que substitui o `mg_la` de
+      produção;
+    - "body folders follow section 1": `kit_body_path` da pasta de fixture vazio. O check
+      `body_folder(&"mg_la") == &"arcane_blade"` foi mantido;
+    - "a kit body without art configures the origin body": `configure` da pasta de `mg_ac`, que
+      dá `mage`;
+    - "portrait identity uses the same fallback": `sp_la` com a pasta de fixture.
+  - As listas de destinos (T9, A9) não foram tocadas.
+- `t1_kit_seam_api.md`: seção 7 ("Corpo de fixture").
+
+**Validação**
+
+- Rodada `.godot/verification/a14_plain/`, com bootstrap refeito. O `summary.jsonl` tem sha256
+  `67CD2FAC9D427F5ED127592893E25625E390AEBD7B4C7A7335E5909E1740C8AA`. São 10 passos, com 0 falhas e
+  0 ocorrências na busca estrita.
+
+| Passo | Resultado | sha256 da saída |
+|---|---|---|
+| 331 `kit_seam_test` | 189 checks, 0 falhas (+14 = 2 checks × 7 chamadas de `_install_fixtures`) | `89D1D0E32ACB9F19CA0DB0F4865983A85D6B2E21E5B2FF12B5EE6192933A6D69` |
+| 330 `kit_seam_hooks_v3_test` | 63 checks, 0 falhas (hash idêntico) | `D1DFD323C350F8F63140F3D8D86FE01FB566BAEE11ED3A93B953FBF99F78F449` |
+| 329 `kit_seam_hooks_v2_test` | 38 checks, 0 falhas (hash idêntico) | `5182F32B62DE14BE5938AF67C615BFBC0CBB6BDF062A64EDB08131758CF6FA5A` |
+| 10 `combat_animation_test` | PASS, 39 | `DF1D52002E18C5524FA60801186A018CDBC71C91E0248051E38F6565C154FB1E` |
+| 11 `e08_presentation_test` | 2255 checks, 0 falhas | `DF8A4BF3E4C4CFE9CF897EF65BE23D0CA416B02F33626DA96DC9A96216CCA12B` |
+| 30 `battle_ui_test` | PASS, 47 | `F8318896CA4F69C73DFEE75D000BE93183454816283638EE4C14279A62749D21` |
+| 283 `e08_compact_coverage_test` | 95 checks, 0 falhas | `3C65ADD205F98F2D063AFCF6DAD256C3F207D51AAE7376621D38801D89228796` |
+| 294 `e07_f3_snapshot_test` | 52 checks, 0 falhas | `9FC703C4AB2986DDAAB73ED386092F3B8AB71A5EA82C4A7C3C781D2F6F06C0CC` |
+| 1 `editor_import` | PASS (bootstrap) | `4CC45DA0030D44CC7E6C1314A09B11C92C08359A6DC22542E89B62ADC23C1245` |
+| 256 `e07_f1_import_test` | PASS (bootstrap), 3269 arquivos idênticos | `75BE35C945699C39C9235605D69B5EE76D10D7BCB6CC40A1EB437E2F6C56642A` |
+
+**Simulação da arte da T7**
+
+A arte da T7 ainda não está versionada na branch dela. Para simular, criei temporariamente
+`assets/art/e08_characters/directional/{paladin,thaumaturge,duelist,arcane_blade}/presentation.json`,
+copiado de `swordsman`, e removi tudo em seguida. Nada foi commitado.
+
+- A versão nova de `kit_seam_test` teve 189 checks e 0 falhas. O log tem sha256
+  `EDB12442307B4D95E08665B8B97CDA80946A002BB20C489CC77B33C08E1A5DC1`.
+- Como controle, rodei a versão anterior (`476c246a`) no mesmo cenário. Ela teve 3 falhas:
+  "actor_kind falls back", "body folders follow section 1" e "portrait identity".
+
+**Limitações A14**
+
+- No controle, os outros dois checks antigos passaram porque o manifesto copiado declara
+  `kind: swordsman` e cai no fallback por divergência de tipo. Com a arte real da T7, os cinco
+  falhariam. A versão nova não consulta pastas de produção.
+- A regressão de 179 passos da T1.2 rodou antes do A14. Depois dele só rodaram os 10 passos
+  acima, escolhidos porque leem as pastas de corpo ou o snapshot.
