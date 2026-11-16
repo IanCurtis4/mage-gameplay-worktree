@@ -12,6 +12,8 @@ var forced_remaining := 0.0
 var engaged := false
 var revision := 0
 var claims: Dictionary = {}
+## E09 C1.6: participant id -> remaining seconds without sight of that participant.
+var sight_breaks: Dictionary = {}
 
 func register(id: String, owner: String, group: String) -> Dictionary:
 	if id.is_empty() or owner.is_empty() or group.is_empty(): return _fail(&"invalid_participant")
@@ -86,14 +88,56 @@ func observe(event: String, kind: StringName, source: String, effective: float, 
 	return _ok()
 
 func advance(delta: float, frozen: bool = false) -> void:
-	if frozen or not is_finite(delta) or delta < 0.0 or forced_remaining <= 0.0: return
-	forced_remaining = maxf(0.0, forced_remaining - delta)
-	if forced_remaining == 0.0: forced_id = ""
+	if frozen or not is_finite(delta) or delta < 0.0: return
+	var changed := false
+	if not sight_breaks.is_empty():
+		for id: String in sight_breaks.keys():
+			sight_breaks[id] = maxf(0.0, float(sight_breaks[id]) - delta)
+			if float(sight_breaks[id]) <= 0.0: sight_breaks.erase(id)
+		changed = true
+	if forced_remaining > 0.0:
+		forced_remaining = maxf(0.0, forced_remaining - delta)
+		if forced_remaining == 0.0: forced_id = ""
+		changed = true
+	if not changed: return
 	_choose()
 	revision += 1
 
+## E09 C1.6: forces this enemy onto `source` for `duration` seconds, through the same
+## forced slot as a taunt but without touching the threat amounts. A longer active
+## force on the same source is kept.
+func force_target(source: String, duration: float) -> Dictionary:
+	if not participants.has(source): return _fail(&"invalid_participant")
+	if not is_finite(duration) or duration <= 0.0: return _fail(&"invalid_payload")
+	if not _eligible(source): return _fail(&"participant_ineligible")
+	var kept := forced_remaining if forced_id == source else 0.0
+	forced_id = source
+	forced_remaining = maxf(duration, kept)
+	groups[participants[source]["group"]] = true
+	engaged = true
+	_choose()
+	revision += 1
+	return _ok()
+
+## E09 C1.6: this enemy loses sight of `source` for `duration` seconds: the source is
+## not eligible and a force on it ends. The selection rule itself is unchanged.
+func break_sight(source: String, duration: float) -> Dictionary:
+	if not participants.has(source): return _fail(&"invalid_participant")
+	if not is_finite(duration) or duration <= 0.0: return _fail(&"invalid_payload")
+	sight_breaks[source] = maxf(duration, float(sight_breaks.get(source, 0.0)))
+	if forced_id == source: forced_id = ""; forced_remaining = 0.0
+	_choose()
+	revision += 1
+	return _ok()
+
+func sight_broken(source: String) -> bool:
+	return float(sight_breaks.get(source, 0.0)) > 0.0
+
+func sight_break_remaining(source: String) -> float:
+	return float(sight_breaks.get(source, 0.0))
+
 func _eligible(id: String) -> bool:
-	return participants.has(id) and participants[id]["alive"] and participants[id]["eligible"]
+	return participants.has(id) and participants[id]["alive"] and participants[id]["eligible"] and not sight_broken(id)
 
 func _choose() -> void:
 	if not engaged: current_id = ""; return
@@ -125,6 +169,8 @@ func view() -> ThreatView:
 
 func valid() -> bool:
 	if revision < 0 or not is_finite(forced_remaining) or forced_remaining < 0.0 or participants.size() != amounts.size(): return false
+	for id: Variant in sight_breaks:
+		if not id is String or not participants.has(id) or typeof(sight_breaks[id]) not in [TYPE_FLOAT, TYPE_INT] or not is_finite(float(sight_breaks[id])) or float(sight_breaks[id]) <= 0.0: return false
 	for id: Variant in participants:
 		if not id is String or id.is_empty() or not participants[id] is Dictionary or not amounts.has(id): return false
 		var p: Dictionary = participants[id]

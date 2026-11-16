@@ -90,6 +90,9 @@ static func portrait_identity(snapshot: BuildSnapshot) -> StringName:
 		return &"geometer"
 	if snapshot.evolution_id in [&"defender", &"berserker", &"elementalist", &"spiritualist", &"geometer", &"sentinel", &"hunter"]:
 		return snapshot.evolution_id
+	# E09 C1.8: kit body folder when its art exists, else the origin body.
+	if ClassKitRegistry.is_kit(snapshot.evolution_id):
+		return ClassKitRegistry.actor_kind(snapshot.evolution_id, snapshot.base_class_id)
 	return snapshot.base_class_id
 
 static func compare(service: RunBuildService, intent: Dictionary) -> Dictionary:

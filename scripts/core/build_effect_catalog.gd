@@ -165,7 +165,7 @@ static func validate_effect(effect: EffectDefinition) -> Dictionary:
 		elif effect.handler_id != EffectDefinition.Handler.SKILL_SCALAR or effect.axis not in SCALAR_AXES or effect.unit != &"units" or not _all_projectile_skills(effect.target_skill_ids):
 			return failure(&"unsupported_skill_axis")
 	elif effect.kind == EffectDefinition.Kind.PROC:
-		if effect.family_id in INTRINSIC_FAMILIES or effect.family_id in INTRINSIC_COMPONENTS or effect.family_id == &"geometer_incidence_refund" or ClassCatalog.skill_definition(effect.family_id) != null:
+		if is_intrinsic_family(effect.family_id) or effect.family_id == &"geometer_incidence_refund" or ClassCatalog.skill_definition(effect.family_id) != null:
 			return failure(&"intrinsic_family_requires_adapter")
 		if effect.handler_id != EffectDefinition.Handler.HIT_DAMAGE or effect.trigger != EffectDefinition.Trigger.ON_HIT or effect.axis not in [&"physical_damage", &"magic_damage"] or effect.magnitude < 0.0 or effect.increased < 0.0 or effect.limit <= 0.0 or effect.unit != &"damage":
 			return failure(&"unsupported_proc")
@@ -188,6 +188,10 @@ static func validate_effect(effect: EffectDefinition) -> Dictionary:
 	else:
 		return failure(&"unsupported_handler")
 	return {"ok": true, "error_code": &"", "request_id": ""}
+
+## E09 C1.2: intrinsic causal families, including the ones declared by class kits.
+static func is_intrinsic_family(family_id: StringName) -> bool:
+	return family_id in INTRINSIC_FAMILIES or family_id in INTRINSIC_COMPONENTS or family_id in ClassKitRegistry.causal_families()
 
 static func definition_allowed(definition: Resource, snapshot: BuildSnapshot) -> bool:
 	return (not definition is EquipmentDefinition or EquipmentEligibilityRules.identity_allowed(definition.metadata(),snapshot.base_class_id,snapshot.evolution_id)) and (definition.allowed_origins.is_empty() or snapshot.base_class_id in definition.allowed_origins) and (definition.allowed_evolutions.is_empty() or snapshot.evolution_id in definition.allowed_evolutions) and (not definition is AugmentDefinition or definition.class_id.is_empty() or definition.class_id == snapshot.base_class_id)

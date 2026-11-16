@@ -28,6 +28,11 @@ var _base_atlas: Texture2D
 var _base_ground_offsets := PackedFloat32Array()
 
 func configure(kind: StringName) -> void:
+	# E09 C1.8: a kit body exists only as a directional unit; without one (or with
+	# an invalid one) the origin body is used as a whole.
+	if ClassKitRegistry.is_body_kind(kind):
+		if _configure_kit_body(kind): return
+		kind = ClassKitRegistry.body_origin(kind)
 	actor_kind = kind
 	if actor_kind not in [&"swordsman", &"mage", &"warrior", &"archer", &"defender", &"berserker", &"elementalist", &"spiritualist", &"geometer", &"sentinel", &"hunter", &"gel", &"beast_master", &"animal_companion"]:
 		actor_kind = &"swordsman"
@@ -50,6 +55,23 @@ func configure(kind: StringName) -> void:
 		var applied := set_directional_manifest(directional)
 		if not applied.ok: push_warning("Directional animation rejected: "+str(applied.get("detail","")))
 
+func _configure_kit_body(kind: StringName) -> bool:
+	var path := DirectionalAnimationSet.kit_body_path(kind)
+	if path.is_empty(): return false
+	var loaded := DirectionalAnimationSet.load_manifest(path)
+	if not loaded.ok or (loaded.bundle as DirectionalAnimationSet).actor_kind() != kind:
+		push_warning("Kit body rejected, using the origin body: " + str(loaded.get("error_code", "directional_kind_mismatch")))
+		return false
+	actor_kind = kind
+	state = CombatAnimationState.new()
+	_observed_position = false
+	var applied := set_directional_manifest(path)
+	return applied.ok
+
+## True for player identities whose equipment contract needs the weaponless body.
+static func is_player_kind(kind: StringName) -> bool:
+	return kind in WEAPONLESS_KINDS or ClassKitRegistry.is_body_kind(kind)
+
 ## Atomic producer API; no new actor fields or persisted graph kinds.
 func set_directional_manifest(path: String) -> Dictionary:
 	var loaded := DirectionalAnimationSet.load_manifest(path)
@@ -65,7 +87,7 @@ func set_directional_manifest(path: String) -> Dictionary:
 ## contracts require their dedicated weaponless body and are explicitly refused.
 ## Only existing atlas fields change; the current animation state stays alive.
 func set_body_atlas(texture: Texture2D) -> bool:
-	if texture == null or actor_kind in WEAPONLESS_KINDS or not _equipment_visual.is_empty(): return false
+	if texture == null or is_player_kind(actor_kind) or not _equipment_visual.is_empty(): return false
 	var path := texture.resource_path
 	if not path.begins_with("res://") or path.contains("::") or not ResourceLoader.exists(path, "Texture2D"): return false
 	if texture.get_size() != Vector2(256, 512): return false
@@ -91,9 +113,10 @@ func _select_atlas_for_visual() -> void:
 		return
 	# A missing/invalid V2 unit after cold restore falls back as a whole.
 	if _base_atlas!=null and _base_atlas.get_size()==DirectionalAnimationSet.SIZE:
-		_base_atlas=load("res://assets/art/animations/%s.png" % actor_kind) as Texture2D
+		var legacy_kind := ClassKitRegistry.body_origin(actor_kind) if ClassKitRegistry.is_body_kind(actor_kind) else actor_kind
+		_base_atlas=load("res://assets/art/animations/%s.png" % legacy_kind) as Texture2D
 		_base_ground_offsets=_measure_ground_offsets(_base_atlas)
-	if not has_player_contract or actor_kind not in WEAPONLESS_KINDS:
+	if not has_player_contract or not is_player_kind(actor_kind):
 		atlas = _base_atlas if _base_atlas != null else atlas
 		_ground_offsets = _base_ground_offsets
 		return

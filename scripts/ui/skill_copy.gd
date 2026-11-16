@@ -99,4 +99,9 @@ const ENTRIES: Dictionary = {
 
 static func text_for(id: StringName) -> Dictionary:
 	var entry: Dictionary = ENTRIES.get(id, {})
+	if entry.is_empty():
+		# E09 C1.2: kit texts live in their module; base entries always win.
+		var kit_entry := ClassKitRegistry.skill_text(id)
+		kit_entry.erase("mechanics")
+		return kit_entry
 	return entry.duplicate(true)

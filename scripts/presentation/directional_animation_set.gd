@@ -17,6 +17,14 @@ var _offsets := PackedFloat32Array()
 static func default_path(kind: StringName) -> String:
 	return "res://assets/art/animations/directional/%s/presentation.json" % kind
 
+## E09 C1.8: manifest of a kit body folder, published path first, then the
+## production folder of T7. Empty when the folder has no art yet.
+static func kit_body_path(kind: StringName) -> String:
+	if kind.is_empty(): return ""
+	for path: String in [default_path(kind), "res://assets/art/e08_characters/directional/%s/presentation.json" % kind]:
+		if FileAccess.file_exists(path): return path
+	return ""
+
 static func load_manifest(path: String) -> Dictionary:
 	if _manifests.has(path): return _manifests[path].duplicate()
 	var result := _load(path)
@@ -65,7 +73,7 @@ static func _validate_data(data: Dictionary, path: String) -> Dictionary:
 		if not loaded.ok: return loaded
 		bundle._weaponless = loaded.texture
 	# All player identities must provide the equipable body as part of the same unit.
-	if bundle._kind in [ &"swordsman", &"archer", &"mage", &"berserker", &"defender", &"hunter", &"sentinel", &"elementalist", &"spiritualist", &"geometer"] and bundle._weaponless == null:
+	if (bundle._kind in [ &"swordsman", &"archer", &"mage", &"berserker", &"defender", &"hunter", &"sentinel", &"elementalist", &"spiritualist", &"geometer"] or ClassKitRegistry.is_body_kind(bundle._kind)) and bundle._weaponless == null:
 		return _failure("missing_weaponless_body")
 	if bundle._weaponless != null and bundle._weaponless.resource_path == bundle._body.resource_path: return _failure("shared_body_paths")
 	if data.has("bare_head"):

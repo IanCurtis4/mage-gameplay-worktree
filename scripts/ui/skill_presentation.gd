@@ -39,6 +39,12 @@ static func icon(id: StringName) -> Texture2D:
 		_icons[id] = load(path) as Texture2D if ResourceLoader.exists(path) else null
 	return _icons[id]
 
+## Short mechanic line: base table first, then the kit module text (E09 C1.2).
+static func mechanics_of(id: StringName) -> String:
+	if MECHANICS.has(id): return MECHANICS[id]
+	var kit_text := String(ClassKitRegistry.skill_text(id).get("mechanics", ""))
+	return kit_text if not kit_text.is_empty() else "Habilidade desta classe."
+
 static func name_of(id: StringName) -> String:
 	var definition := ClassCatalog.skill_definition(id)
 	return definition.display_name if definition != null else "Habilidade indisponível"
@@ -48,6 +54,7 @@ static func job_name(id: StringName, base: StringName = &"") -> String:
 	if id.is_empty():
 		return {&"swordsman": "Espadachim", &"mage": "Mago", &"archer": "Arqueiro"}.get(base, "Classe base")
 	var definition := ProfileCatalog.pilot().evolution_definition(id)
+	if definition == null and ClassKitRegistry.is_kit(id): return ClassKitRegistry.display_name(id)
 	return definition.display_name if definition != null else String(id)
 
 static func prerequisites(option: Dictionary) -> Dictionary:
@@ -84,7 +91,7 @@ static func describe(option: Dictionary, summary: Dictionary = {}) -> String:
 	var copy := SkillCopy.text_for(id)
 	var lines: Array[String] = ["[b]%s[/b]  ·  %s  ·  R%d/%d" % [name_of(id), "Ativa" if active else "Passiva automática", rank, maximum]]
 	if not String(copy.get("flavor", "")).is_empty(): lines.append("[i]" + String(copy["flavor"]) + "[/i]")
-	lines.append(emphasize(String(copy.get("effect", MECHANICS.get(id, "Habilidade desta classe.")))))
+	lines.append(emphasize(String(copy.get("effect", mechanics_of(id)))))
 	if not String(copy.get("combo", "")).is_empty(): lines.append("[b]Interação[/b] · " + emphasize(String(copy["combo"])))
 	var shown_rank := clampi(maxi(rank, int(option.get("item_rank", 0))), 1, maximum)
 	var values := definition.rank_definition(shown_rank)

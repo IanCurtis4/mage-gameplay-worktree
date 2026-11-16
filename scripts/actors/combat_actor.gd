@@ -50,6 +50,12 @@ var weaken_fraction := 0.0
 var attribute_debuffs := AttributeDebuffState.new()
 var hard_controls := HardControlState.new()
 var character_animation: CharacterAnimation
+## E09 C1.5: generic marks (key, owner, value, expiry on the gameplay clock).
+var marks := ActorMarks.new()
+## E09 C1.5: temporary override of the gameplay facing ("turn"); canvas direction.
+var _facing_override := Vector2.ZERO
+var _facing_override_remaining := 0.0
+var _facing_override_owner: StringName = &""
 
 # Explicit logical spatial binding. Rendering/input integration awaits D05 presentation.
 var world_motion: WorldActorMotion
@@ -134,6 +140,59 @@ func apply_damage(request: DamageRequest, rng: RandomNumberGenerator) -> Diction
 
 func is_alive() -> bool:
 	return health != null and health.is_alive()
+
+## E09 C1.5: authoritative gameplay facing, the same direction the presentation
+## draws (canvas space: the 2D arena, or the projected view of the world). An
+## active override wins and is also what the sprite shows.
+func gameplay_facing() -> Vector2:
+	if _facing_override_remaining > 0.0: return _facing_override
+	if character_animation != null and character_animation.state.facing.is_finite() and not character_animation.state.facing.is_zero_approx(): return character_animation.state.facing.normalized()
+	return Vector2.RIGHT
+
+## Gameplay facing on the ground plane (x/z). In the flat arena x/y map to x/z.
+func gameplay_ground_facing() -> Vector3:
+	var facing := gameplay_facing()
+	if world_motion == null: return Vector3(facing.x, 0.0, facing.y).normalized()
+	return canvas_to_ground_direction(facing)
+
+## Inverse of the shared projection for a horizontal direction (y = 0).
+static func canvas_to_ground_direction(direction: Vector2) -> Vector3:
+	var axis := ProjectionMath.AXIS
+	var difference := direction.x / axis.x
+	var total := direction.y / axis.y
+	var ground := Vector3((difference + total) * 0.5, 0.0, (total - difference) * 0.5)
+	return ground.normalized() if not ground.is_zero_approx() else Vector3.RIGHT
+
+static func ground_to_canvas_direction(direction: Vector3) -> Vector2:
+	var projected := ProjectionMath.project(Vector3(direction.x, 0.0, direction.z))
+	return projected.normalized() if not projected.is_zero_approx() else Vector2.RIGHT
+
+## Temporary "turn": the gameplay facing (and the drawn facing) becomes `direction`
+## for `duration` seconds of gameplay clock. A new override replaces the previous one.
+func override_gameplay_facing(direction: Vector2, duration: float, owner: StringName = &"") -> bool:
+	if not is_alive() or not direction.is_finite() or direction.is_zero_approx() or not is_finite(duration) or duration <= 0.0: return false
+	_facing_override = direction.normalized()
+	_facing_override_remaining = duration
+	_facing_override_owner = owner
+	if character_animation != null: character_animation.state.face(_facing_override)
+	queue_redraw()
+	return true
+
+## Same override from a ground direction; in the flat arena x/z map to x/y.
+func override_gameplay_ground_facing(direction: Vector3, duration: float, owner: StringName = &"") -> bool:
+	var canvas := Vector2(direction.x, direction.z) if world_motion == null else ground_to_canvas_direction(direction)
+	return override_gameplay_facing(canvas, duration, owner)
+
+func gameplay_facing_override_remaining() -> float:
+	return _facing_override_remaining
+
+func gameplay_facing_override_owner() -> StringName:
+	return _facing_override_owner if _facing_override_remaining > 0.0 else &""
+
+func clear_gameplay_facing_override() -> void:
+	_facing_override = Vector2.ZERO
+	_facing_override_remaining = 0.0
+	_facing_override_owner = &""
 
 func is_burning() -> bool:
 	return burn_remaining > 0.0
@@ -304,6 +363,8 @@ func clear_statuses() -> void:
 	_sync_debuff_display()
 	electrified_remaining = 0.0
 	hard_controls.clear()
+	marks.clear()
+	clear_gameplay_facing_override()
 	queue_redraw()
 
 func advance_statuses(delta: float, simulation_paused: bool = false) -> void:
@@ -312,6 +373,10 @@ func advance_statuses(delta: float, simulation_paused: bool = false) -> void:
 	var was_rooted := is_rooted()
 	var was_stunned := is_stunned()
 	var was_feared := is_feared()
+	marks.advance(delta)
+	if _facing_override_remaining > 0.0:
+		_facing_override_remaining = maxf(0.0, _facing_override_remaining - delta)
+		if _facing_override_remaining <= 0.0: clear_gameplay_facing_override()
 	hard_controls.advance(delta)
 	if was_rooted != is_rooted() or was_stunned != is_stunned() or was_feared != is_feared():
 		queue_redraw()
@@ -394,6 +459,8 @@ func _process(delta: float) -> void:
 		character_animation.observe(visual_position, delta)
 	_update_presentation(visual_position)
 	advance_statuses(delta)
+	# The drawn facing follows an active gameplay override (A3: visual and rule agree).
+	if _facing_override_remaining > 0.0 and character_animation != null: character_animation.state.face(_facing_override)
 	if _flash_time > 0.0:
 		_flash_time = maxf(0.0, _flash_time - delta)
 		queue_redraw()
