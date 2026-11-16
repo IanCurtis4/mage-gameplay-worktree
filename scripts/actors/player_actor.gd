@@ -1678,13 +1678,27 @@ func apply_damage(request: DamageRequest, rng: RandomNumberGenerator) -> Diction
 	var before := kit.before_hit_mitigation(self, hit)
 	if bool(before.get("cancel", false)):
 		return {"landed": false, "cancelled": true, "cancel_reason": StringName(before.get("reason", &"kit_cancel")), "damage": 0.0, "actual_damage": 0.0, "absorbed_damage": 0.0, "critical": false, "killed": false, "can_trigger_effects": false, "source_id": request.source_id, "target_id": request.target_id, "skill_id": request.skill_id}
+	var multiplier := _kit_damage_multiplier(before)
+	var effective_request := request
+	if multiplier != 1.0:
+		effective_request = request.copy()
+		effective_request.damage_dealt_multiplier *= multiplier
 	var shield_before := health.shield_hp
-	var result := _apply_damage_base(request, rng)
+	var result := _apply_damage_base(effective_request, rng)
 	if result.is_empty(): return result
+	if multiplier != 1.0: result["kit_damage_multiplier"] = multiplier
 	kit.after_hit_mitigation(self, hit, result)
 	if shield_before > 0.0 and health.shield_hp <= 0.0 and float(result.get("absorbed_damage", 0.0)) > 0.0:
 		kit.on_shield_broken(self, hit, result)
 	return result
+
+## T1.1: optional "damage_multiplier" of before_hit_mitigation. Missing, non-numeric,
+## non-finite or negative values are ignored (1.0, no copy of the request).
+static func _kit_damage_multiplier(before: Dictionary) -> float:
+	var raw: Variant = before.get("damage_multiplier", 1.0)
+	if typeof(raw) != TYPE_FLOAT and typeof(raw) != TYPE_INT: return 1.0
+	var value := float(raw)
+	return value if is_finite(value) and value >= 0.0 else 1.0
 
 ## Hit descriptor of the pipeline: request, source, source_id, kind (melee,
 ## projectile, area or unknown), event (enemy attack event or {}), facing_dot and
@@ -3977,7 +3991,18 @@ func temporary_stat_sources() -> Array[Dictionary]:
 			sources.append(source)
 	if _defender_inside_anchor and has_defender_anchor():
 		sources.append({"source_id": &"defender_anchor", "label": "Marco de Guarda", "increased": {&"physical_defense": DEFENDER_ANCHOR_DEFENSE_BONUS, &"magic_defense": DEFENDER_ANCHOR_DEFENSE_BONUS}})
+	if kit != null:
+		for source: Dictionary in kit.temporary_stat_sources(self):
+			if not source.is_empty(): sources.append(source)
 	return sources
+
+## T1.1: rebuilds the breakdown after the kit's temporary sources changed, by the same
+## path as Fury or the Anchor. Idempotent: no heal, no SP refill, no cooldown reset
+## (HP and SP deficits are preserved).
+func refresh_kit_stats() -> void:
+	if run_state == null or stat_breakdown == null: return
+	_apply_derived_stats(_build_stat_breakdown())
+	resources_changed.emit()
 
 func _build_stat_breakdown() -> StatBreakdown:
 	var sources := run_state.stat_modifier_sources()

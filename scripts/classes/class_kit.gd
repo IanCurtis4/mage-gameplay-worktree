@@ -120,7 +120,9 @@ func compose_basic_attack(_player: PlayerActor, _target: CombatActor, request: D
 	return request
 
 ## Incoming-hit step 1, before mitigation. Return {"cancel": true, "reason": &"..."}
-## to cancel the whole hit (no damage, no mitigation, no later steps).
+## to cancel the whole hit (no damage, no mitigation, no later steps). Optional
+## "damage_multiplier" (float >= 0, finite; T1.1) scales damage_dealt_multiplier on a
+## copy of the request before mitigation; cancel wins over it, and invalid values are ignored.
 func before_hit_mitigation(_player: PlayerActor, _hit: Dictionary) -> Dictionary:
 	return {}
 
@@ -156,6 +158,13 @@ func on_return(_player: PlayerActor) -> void:
 ## Build or learning changed in the run. No implicit heal, recharge or reset.
 func on_build_changed(_player: PlayerActor) -> void:
 	pass
+
+## Temporary stat sources of the kit (T1.1), same shape as the Defender's
+## "defender_anchor" source: {"source_id", "label", "increased"/...}. Read every time the
+## player rebuilds its breakdown; call PlayerActor.refresh_kit_stats() when the answer
+## changes (zone presence, for example). Pure read of kit state.
+func temporary_stat_sources(_player: PlayerActor) -> Array[Dictionary]:
+	return []
 
 ## An enemy committed an attack against the player (see EnemyAttackEvent keys in the API).
 func on_enemy_attack(_player: PlayerActor, _event: Dictionary) -> void:
