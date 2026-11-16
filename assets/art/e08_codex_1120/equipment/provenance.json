@@ -1,0 +1,74 @@
+[
+  {
+    "path": "assets/art/e08_codex_1120/equipment/weapons_h1.png",
+    "sha256": "839835dfa1eab4a965d7bc1f724e60ce7531244d7c42ecf3db0caef239a61df7",
+    "width": 2172,
+    "height": 724,
+    "generator": "Codex built-in imagegen",
+    "request": "E08 Codex Art 1120 B | H1",
+    "references": [
+      {
+        "path": "assets/art/e08_equipment_redesign/weapons_source_v2.png",
+        "sha256": "7c40563cf810daefa4a16a21e945e83aa34eb7a53ebf4ac3a258c8a2d7b6e9ca"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/equipment/weapons_b1.png",
+        "sha256": "a4a088a4601b5c245aea177a6aaa37da058514f727cf734d8c6aae33d445fdfa"
+      },
+      {
+        "path": "assets/art/e08_codex_1119/equipment/weapons_daggers.png",
+        "sha256": "1aecbcea607e526757c3ddef5ffc7fcd425e4aa30030366faf7dfdd39ad5474d"
+      }
+    ],
+    "prompt": "Use case: stylized-concept. Source sheet of original hand-painted fantasy game equipment sprites for RagRPG. Image 1 establishes format, detailed organic material painting and style; Image 2 shows book and staff treatments and gives the ivory prayer book design; Image 3 shows one-object-per-column spacing and clean silhouettes. Use the references for style but draw ONLY the eight new specified objects below.\n\nNative ultrawide 3:1 landscape PNG around 2172 × 724 with genuine clear alpha. Exactly one horizontal row of exactly EIGHT objects, one per equal-width column. Each object is independent, separated by a wide fully clear vertical gutter from all neighbors, and kept within generous outer margins. Allow an item to be narrower or shorter to fit comfortably in its own column, especially frontal shields, book with chain, bows with string and leafy branches. Center objects vertically in this sole row. Show each complete object upright as used, handles of hand-held weapons at bottom, and shields from the front. No contact or overlap between objects. Match painted metal, wood and leather textures, fine organic outlines and neutral upper-left highlights. Strong silhouettes readable near 80 × 130 pixels.\n\nLeft to right in exact order:\n1. a single straight dark steel ritual dagger, black leather grip at bottom, one short hinged iron chain attached to the pommel.\n2. a single upright closed blue crystalline cover tome wound tightly in iron chain with one iron padlock.\n3. a single upright darkened bronze khopesh short hook sword, unmistakable bronze curved sickle blade, faded cloth ties attached by the lower handle.\n4. a single small front-facing round polished steel buckler with simple dark rim and central steel boss.\n5. a single front-facing polished steel shield with an engraved gold ring around a small, restrained multicolored stained-glass insert exactly in the center.\n6. a single front-facing gray stone shield, thick gray plates physically bound by living roots and moss.\n7. a single upright ivory acolyte prayer book using the split gold sun / dark plum moon medallion from the left hand book in Image 2, with a long iron flail chain extending upward from the cover in a narrow path within this column.\n8. a single upright ivory acolyte prayer book with the same split sun and moon front cover, with a thin pointed blade emerging from the book's spine and attached directly to it.\n\nDo not add any other equipment, loose objects, hands, bodies, shadows, ground, glow, particles, letters, captions, dividers, grid lines or framing. Empty space is genuinely transparent with no backdrop, stray marks or haze.",
+    "selected": false
+  },
+  {
+    "path": "assets/art/e08_codex_1120/equipment/weapons_h2.png",
+    "sha256": "504d034fd9e0756f5f86cef21f32a773818db9efcc0325b0d1957776d0c9acfc",
+    "width": 2172,
+    "height": 724,
+    "generator": "Codex built-in imagegen",
+    "request": "E08 Codex Art 1120 B | H2",
+    "references": [
+      {
+        "path": "assets/art/e08_equipment_redesign/weapons_source_v2.png",
+        "sha256": "7c40563cf810daefa4a16a21e945e83aa34eb7a53ebf4ac3a258c8a2d7b6e9ca"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/equipment/weapons_b1.png",
+        "sha256": "a4a088a4601b5c245aea177a6aaa37da058514f727cf734d8c6aae33d445fdfa"
+      },
+      {
+        "path": "assets/art/e08_codex_1119/equipment/weapons_daggers.png",
+        "sha256": "1aecbcea607e526757c3ddef5ffc7fcd425e4aa30030366faf7dfdd39ad5474d"
+      }
+    ],
+    "prompt": "Use case: stylized-concept. Source sheet of original hand-painted fantasy game equipment sprites for RagRPG. Image 1 establishes format, detailed organic material painting and style; Image 2 shows book and staff treatments and gives the ivory prayer book design; Image 3 shows one-object-per-column spacing and clean silhouettes. Use the references for style but draw ONLY the eight new specified objects below.\n\nNative ultrawide 3:1 landscape PNG around 2172 × 724 with genuine clear alpha. Exactly one horizontal row of exactly EIGHT objects, one per equal-width column. Each object is independent, separated by a wide fully clear vertical gutter from all neighbors, and kept within generous outer margins. Allow an item to be narrower or shorter to fit comfortably in its own column, especially frontal shields, book with chain, bows with string and leafy branches. Center objects vertically in this sole row. Show each complete object upright as used, handles of hand-held weapons at bottom, and shields from the front. No contact or overlap between objects. Match painted metal, wood and leather textures, fine organic outlines and neutral upper-left highlights. Strong silhouettes readable near 80 × 130 pixels.\n\nLeft to right in exact order:\n1. a pale staff with a circular gold crown holding a faceted prism in its center.\n2. a living wood staff with leaves and a solid crystal tip.\n3. a pale staff with one inclined orbital ring surrounding a sphere at its crown.\n4. a dark bow physically wrapped with iron chain with carmine details.\n5. a light bow with one engraved gold ring on its central grip.\n6. a living wooden bow with leaves sprouting at both tips.\n7. a dark bow with a small hunting knife firmly lashed to the central grip.\n8. a simple pale wooden bow with a short attached strand of wooden beads hanging from its grip.\n\nAll five bows are complete and upright, one taut straight string per bow, and no arrows. Do not add any other equipment, loose objects, hands, bodies, shadows, ground, glow, particles, letters, captions, dividers, grid lines or framing. Empty space is genuinely transparent with no backdrop, stray marks or haze.",
+    "selected": true
+  },
+  {
+    "path": "assets/art/e08_codex_1120/equipment/weapons_h1_v2.png",
+    "sha256": "b36825e12f9d3729bb5943ccf4ec5c9182b26616ac75c3dd76ee52e00b83016d",
+    "width": 2172,
+    "height": 724,
+    "generator": "Codex built-in imagegen",
+    "request": "E08 Codex Art 1120 B | H1",
+    "references": [
+      {
+        "path": "assets/art/e08_equipment_redesign/weapons_source_v2.png",
+        "sha256": "7c40563cf810daefa4a16a21e945e83aa34eb7a53ebf4ac3a258c8a2d7b6e9ca"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/equipment/weapons_b1.png",
+        "sha256": "a4a088a4601b5c245aea177a6aaa37da058514f727cf734d8c6aae33d445fdfa"
+      },
+      {
+        "path": "assets/art/e08_codex_1119/equipment/weapons_daggers.png",
+        "sha256": "1aecbcea607e526757c3ddef5ffc7fcd425e4aa30030366faf7dfdd39ad5474d"
+      }
+    ],
+    "prompt": "Production image with transparent background. The required result is eight painted game icons isolated directly on clear alpha. Every pixel outside the object silhouettes must be empty and fully transparent. Leave clean transparent vertical gaps and generous side padding, especially around the stone shield and the last book. No white, pale or colored background, no background texture, and no shadows behind objects.\n\nUse case: stylized-concept. Source sheet of original hand-painted fantasy game equipment sprites for RagRPG. Image 1 establishes format, detailed organic material painting and style; Image 2 shows book and staff treatments and gives the ivory prayer book design; Image 3 shows one-object-per-column spacing and clean silhouettes. Use the references for style but draw ONLY the eight new specified objects below.\n\nNative ultrawide 3:1 landscape PNG around 2172 × 724 with genuine clear alpha. Exactly one horizontal row of exactly EIGHT objects, one per equal-width column. Each object is independent, separated by a wide fully clear vertical gutter from all neighbors, and kept within generous outer margins. Allow an item to be narrower or shorter to fit comfortably in its own column, especially frontal shields, book with chain, bows with string and leafy branches. Center objects vertically in this sole row. Show each complete object upright as used, handles of hand-held weapons at bottom, and shields from the front. No contact or overlap between objects. Match painted metal, wood and leather textures, fine organic outlines and neutral upper-left highlights. Strong silhouettes readable near 80 × 130 pixels.\n\nLeft to right in exact order:\n1. a single straight dark steel ritual dagger, black leather grip at bottom, one short hinged iron chain attached to the pommel.\n2. a single upright closed blue crystalline cover tome wound tightly in iron chain with one iron padlock.\n3. a single upright darkened bronze khopesh short hook sword, unmistakable bronze curved sickle blade, faded cloth ties attached by the lower handle.\n4. a single small front-facing round polished steel buckler with simple dark rim and central steel boss.\n5. a single front-facing polished steel shield with an engraved gold ring around a small, restrained multicolored stained-glass insert exactly in the center.\n6. a single front-facing gray stone shield, thick gray plates physically bound by living roots and moss.\n7. one upright ivory acolyte prayer book with split gold sun and plum moon medallion, itself the striking weight of a flail; one long narrow S-curve iron chain extending up from its top metal eyelet, with a bare end link (no mace head, no spiked ball, no other attachment).\n8. a single upright ivory acolyte prayer book with the same split sun and moon front cover, with a thin pointed blade emerging from the book's spine and attached directly to it.\n\nDo not add any other equipment, loose objects, hands, bodies, shadows, ground, glow, particles, letters, captions, dividers, grid lines or framing. Empty space is genuinely transparent with no backdrop, stray marks or haze.",
+    "selected": true
+  }
+]

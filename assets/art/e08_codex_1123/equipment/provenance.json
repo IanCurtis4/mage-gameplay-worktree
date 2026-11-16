@@ -1,0 +1,50 @@
+[
+  {
+    "path": "assets/art/e08_codex_1123/equipment/weapons_e1.png",
+    "sha256": "92353081b31d89d30add62447382cc48661edb02dce38264bdfa94df9b16cd74",
+    "width": 2172,
+    "height": 724,
+    "generator": "Codex built-in imagegen",
+    "request": "Espada fina do Duelista e escudo rúnico do Inabalável — folha E1, lote E08 1123",
+    "prompt": "Use case: stylized-concept. Asset type: original RagRPG game equipment sprite source sheet. Native ultrawide landscape PNG about 2172 × 724, genuine transparent RGBA alpha zero everywhere outside the objects. Exactly ONE horizontal row with exactly 2 separate hand-painted fantasy equipment objects, one of each. At 30 percent canvas width, a thin straight polished steel rapier, upright with blade pointing up, plain protective steel cup hilt and one hand grip at bottom wrapped in dark leather with a tiny deep red accent. At 70 percent canvas width, a plain pale steel shield, entirely front-on and upright, ash grey edge with small engraved blue-violet containment runes only along its border. Rune strokes are carved and color-filled metal details, not light or particles; keep broad polished steel face smooth. Both objects completely inside the canvas with generous side and top/bottom margins and a wide empty transparent gap that separates them. Use attached H1 only for painted metal finish, fine organic outlines, consistent relative asset scale, and muted upper-left light. Keep intended silhouette and designs readable downsampled to around 80 × 130 px. No people, hands, labels, typography, grid, border, landscape, shadow, glow, texture wash, dust, semitransparent background veil, floor, or display stands.",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1120/equipment/weapons_h1_v2.png",
+        "sha256": "b36825e12f9d3729bb5943ccf4ec5c9182b26616ac75c3dd76ee52e00b83016d"
+      }
+    ],
+    "selected": false
+  },
+  {
+    "path": "assets/art/e08_codex_1123/equipment/weapons_e1_v2.png",
+    "sha256": "63a964cebfe22f4972341f5be4679148b44f33871f071f57f60e9803ff91138c",
+    "width": 2172,
+    "height": 724,
+    "generator": "Codex built-in imagegen",
+    "request": "Espada fina do Duelista e escudo rúnico do Inabalável — folha E1, lote E08 1123",
+    "prompt": "Use case: stylized-concept. Asset type: original RagRPG game equipment sprite source sheet. Native ultrawide landscape PNG about 2172 × 724, genuine transparent RGBA alpha zero everywhere outside the objects. Exactly ONE horizontal row with exactly 2 separate hand-painted fantasy equipment objects, one of each. At 30 percent canvas width, a thin straight polished steel rapier, upright with blade pointing up, plain protective steel cup hilt and one hand grip at bottom wrapped in dark leather with a tiny deep red accent. At 70 percent canvas width, a plain pale steel shield, entirely front-on and upright, ash grey edge with small engraved blue-violet containment runes only along its border. Rune strokes are carved and color-filled metal details, not light or particles; keep broad polished steel face smooth. Both objects completely inside the canvas with generous side and top/bottom margins and a wide empty transparent gap that separates them. Use attached H1 only for painted metal finish, fine organic outlines, consistent relative asset scale, and muted upper-left light. Keep intended silhouette and designs readable downsampled to around 80 × 130 px. No people, hands, labels, typography, grid, border, landscape, shadow, glow, texture wash, dust, semitransparent background veil, floor, or display stands. Important exact alpha requirement: give the empty background absolutely zero opacity, including the entire large gutters, all corners and outside the objects. Use a spotless fully cleared cutout with no residue. Only antialias the edge exactly adjacent to the painted steel, leather and other asset pixels. Keep both objects precisely 30 and 70 percent across, fully separated.",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1120/equipment/weapons_h1_v2.png",
+        "sha256": "b36825e12f9d3729bb5943ccf4ec5c9182b26616ac75c3dd76ee52e00b83016d"
+      }
+    ],
+    "selected": false
+  },
+  {
+    "path": "assets/art/e08_codex_1123/equipment/weapons_e1_v3.png",
+    "sha256": "5ba63f415058032faf8be13c2e5c20cc2979ff93f2d77e7f5cf072ee27f32dfa",
+    "width": 2172,
+    "height": 724,
+    "generator": "Codex built-in imagegen",
+    "request": "Espada fina do Duelista e escudo rúnico do Inabalável — folha E1, lote E08 1123",
+    "prompt": "Use case: stylized-concept. Asset type: original RagRPG game equipment sprite source sheet. Native ultrawide landscape PNG about 2172 × 724, genuine transparent RGBA alpha zero everywhere outside the objects. Exactly ONE horizontal row with exactly 2 separate hand-painted fantasy equipment objects, one of each. At 30 percent canvas width, a thin straight polished steel rapier, upright with blade pointing up, plain protective steel cup hilt and one hand grip at bottom wrapped in dark leather with a tiny deep red accent. At 70 percent canvas width, a plain pale steel shield, entirely front-on and upright, ash grey edge with small engraved blue-violet containment runes only along its border. Rune strokes are carved and color-filled metal details, not light or particles; keep broad polished steel face smooth. Both objects completely inside the canvas with generous side and top/bottom margins and a wide empty transparent gap that separates them. Use attached H1 only for painted metal finish, fine organic outlines, consistent relative asset scale, and muted upper-left light. Keep intended silhouette and designs readable downsampled to around 80 × 130 px. No people, hands, labels, typography, grid, border, landscape, shadow, glow, texture wash, dust, semitransparent background veil, floor, or display stands. Deliver two sharply isolated, binary-masked complete game sprite cutouts. The canvas in each corner, out to all four margins, all parts of the large central gap, and all exterior pixels beyond the two crisp silhouettes must be EXACTLY RGBA 0,0,0,0. Keep only thin, local edge anti-aliasing where an object physically ends. No white or gray wash, no blurred edges, bleed, halo, texture or chromatic fringe. Put the sword grip in dark brown leather with a red binding and thin polished blade straight up. Keep clearly INDIVIDUAL incised angular rune marks in blue-violet along the entire shield rim. Plain blank polished steel interior. Same visual scale as the attached cast of equipment.",
+    "references": [
+      {
+        "path": "assets/art/e08_codex_1120/equipment/weapons_h1_v2.png",
+        "sha256": "b36825e12f9d3729bb5943ccf4ec5c9182b26616ac75c3dd76ee52e00b83016d"
+      }
+    ],
+    "selected": true
+  }
+]

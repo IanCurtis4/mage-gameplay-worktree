@@ -1,0 +1,454 @@
+[
+  {
+    "path": "assets/art/e08_codex_1123/characters/mg_la/south.png",
+    "sha256": "f8202be8fd999920d9fc45b17f6797dc699a816e901c94c9acd2487d77296e05",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Lâmina Arcana (mg_la) — vista sul, traje híbrido, lote E08 1123",
+    "prompt": "Use case: stylized-concept. Production 2D pixel-art game animation sprite sheet for RagRPG. References attached in order: (1) the person whose identity to preserve, face/hair/build, (2) origin class for silhouette and tailoring only, (3) the affinity class for materials and palette only, (4) cast scale and sprite style, from Swordsman. Use the SOUTH/front block (top 4 rows) of each tall 4x16 atlas. Copy the identity as the same youthful chibi Mage, with brown hair and brown eyes, identical face and build. Now change the outfit to Lâmina Arcana: a thin hooded figure: deep black hood, fitted black and lead-grey layers like the Assassin, a short cape with a faintly reflective inner lining painted in thin blue, red and yellow highlights, face partly shadowed but visible; black and lead grey, small blue, red and yellow glints. Thin almost black silhouette with deep fitted hood and contrasting dark gray sleeves so both uncovered fingertips read. Mage's youthful brown-haired brown-eyed face visible in partial shade. Very short cape, held behind shoulders, has fine blue/red/yellow picks along lining only. A narrow evasive caster, keep distinguishable from the Duelist's silver plate.\n\nCreate one native square 1254×1254 transparent RGBA PNG of exactly 4x4 separate full-body sprites centered in equal 313-pixel cells. All 16 in the SOUTH/front facing direction, slightly top-down game camera as in reference 1. Keep the visible height of each idle figure about 260 pixels crown-to-sole, with about 34 transparent pixels above the crown and 18–20 below shoes. A dark crisp edge, art with clear pixel clusters, limited 2–3 tone shading, chibi proportions. Keep strong alpha gutters on all four edges, leave fully clear empty space between every adjacent figure, never overlap cells or crop anything. In every living pose show both empty hands with clear fingers and correct anatomy, arms distinct from the torso and costume; no cloak or cape hides either hand. Do not add physical equipment or held objects. Gear is separate art. Clothing details remain consistent.\n\nOrdered rows left to right. Row 1: four variants of ordinary standing idle, very slight breath or eyes changes. Row 2: four gait frames of a real walk, alternate leading left and right foot and opposed arms, passing pose between steps, all front. Row 3 exactly these four action poses: 1. stealth crouch with one hand at floor-plane and other out to side; 2. thrust one empty hand forward in a swift extended lunge with opposite hand visible; 3. use the empty lead hand in a rising sweep from hip to shoulder, other hand balancing; 4. quick evasive pivot with the short cape momentarily open but face still south and both hands visible.\nRow 4: columns 1–2 two different STANDING hurt reactions; column 3 drops forward on knees and both hands at the lower part of the cell, face down; column 4 continues the same fall and lies FULLY PRONE face down and compact, with top of head closest to camera, boots trailing, body completely lowered (never on back). Keep all 4x4 sprites front-facing in costume and action. True transparency. No weapons, shield, staff, thin blades, drawn props, magic, particles, runes outside the garment, floating orbs, loose rocks, floor, external shadows, text, captions or divider lines. ",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/mage/body.png",
+        "sha256": "7fbf2b93a17168b0d6b5893fcf8315cc50eb5395b12245011bd54c3099ca026a"
+      },
+      {
+        "path": "assets/art/animations/directional/elementalist/body.png",
+        "sha256": "eb0c8823f0e595ce09abe587e269c31f58ef6ce9a9a4809caaeb9fc343f7fb56"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/assassin/south.png",
+        "sha256": "432d1471ac4c6f12634e08fd9f8fc3bf0f3b8793d4dd7b617d942972ea3d1e67"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "selected": true,
+    "idle_height_px": [
+      243,
+      243,
+      241,
+      240
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/mg_la/south_v2.png",
+    "sha256": "859915392ee6d83f6d994488255e24ad6102eb3c564dfc065e7b1c7ab00a47c1",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Lâmina Arcana (mg_la) — vista sul, traje híbrido, lote E08 1123",
+    "prompt": "Use case: stylized-concept. Production 2D pixel-art game animation sprite sheet for RagRPG. References attached in order: (1) the person whose identity to preserve, face/hair/build, (2) origin class for silhouette and tailoring only, (3) the affinity class for materials and palette only, (4) cast scale and sprite style, from Swordsman. Use the SOUTH/front block (top 4 rows) of each tall 4x16 atlas. Copy the identity as the same youthful chibi Mage, with brown hair and brown eyes, identical face and build. Now change the outfit to Lâmina Arcana: a thin hooded figure: deep black hood, fitted black and lead-grey layers like the Assassin, a short cape with a faintly reflective inner lining painted in thin blue, red and yellow highlights, face partly shadowed but visible; black and lead grey, small blue, red and yellow glints. Thin almost black silhouette with deep fitted hood and contrasting dark gray sleeves so both uncovered fingertips read. Mage's youthful brown-haired brown-eyed face visible in partial shade. Very short cape, held behind shoulders, has fine blue/red/yellow picks along lining only. A narrow evasive caster, keep distinguishable from the Duelist's silver plate.\n\nCreate one native square 1254×1254 transparent RGBA PNG of exactly 4x4 separate full-body sprites centered in equal 313-pixel cells. All 16 in the SOUTH/front facing direction, slightly top-down game camera as in reference 1. Keep the visible height of each idle figure about 260 pixels crown-to-sole, with about 34 transparent pixels above the crown and 18–20 below shoes. A dark crisp edge, art with clear pixel clusters, limited 2–3 tone shading, chibi proportions. Keep strong alpha gutters on all four edges, leave fully clear empty space between every adjacent figure, never overlap cells or crop anything. In every living pose show both empty hands with clear fingers and correct anatomy, arms distinct from the torso and costume; no cloak or cape hides either hand. Do not add physical equipment or held objects. Gear is separate art. Clothing details remain consistent.\n\nOrdered rows left to right. Row 1: four variants of ordinary standing idle, very slight breath or eyes changes. Row 2: four gait frames of a real walk, alternate leading left and right foot and opposed arms, passing pose between steps, all front. Row 3 exactly these four action poses: 1. stealth crouch with one hand at floor-plane and other out to side; 2. thrust one empty hand forward in a swift extended lunge with opposite hand visible; 3. use the empty lead hand in a rising sweep from hip to shoulder, other hand balancing; 4. quick evasive pivot with the short cape momentarily open but face still south and both hands visible.\nRow 4: columns 1–2 two different STANDING hurt reactions; column 3 drops forward on knees and both hands at the lower part of the cell, face down; column 4 continues the same fall and lies FULLY PRONE face down and compact, with top of head closest to camera, boots trailing, body completely lowered (never on back). Keep all 4x4 sprites front-facing in costume and action. True transparency. No weapons, shield, staff, thin blades, drawn props, magic, particles, runes outside the garment, floating orbs, loose rocks, floor, external shadows, text, captions or divider lines. Refine attached fifth image as the editing target. The first four references still control original identity, material and scale. Rework image 5 but make all standing figures 7–8 percent larger (about 260 px externally visible instead of 242). Preserve the fitted hood, costume, four hand gestures and dark gray layers. Remove the face mask/face scarf completely; the hood and shaded brow naturally shadow the face but nose and mouth are visible in all upright front frames. Omit any red waist sash. Restrict blue, red and yellow to very fine muted highlights along the short cape lining. Keep it conspicuously a nimble mage with the same brown hair and eyes from reference 1.",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/mage/body.png",
+        "sha256": "7fbf2b93a17168b0d6b5893fcf8315cc50eb5395b12245011bd54c3099ca026a"
+      },
+      {
+        "path": "assets/art/animations/directional/elementalist/body.png",
+        "sha256": "eb0c8823f0e595ce09abe587e269c31f58ef6ce9a9a4809caaeb9fc343f7fb56"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/assassin/south.png",
+        "sha256": "432d1471ac4c6f12634e08fd9f8fc3bf0f3b8793d4dd7b617d942972ea3d1e67"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/mg_la/south.png",
+        "sha256": "f8202be8fd999920d9fc45b17f6797dc699a816e901c94c9acd2487d77296e05"
+      }
+    ],
+    "selected": false,
+    "idle_height_px": [
+      268,
+      270,
+      268,
+      266
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/mg_la/east.png",
+    "sha256": "491fc2420970ca62bd5a8fc31ca346838267a9e8c041f75c082b5e935b4cf87d",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Lâmina Arcana (mg_la) — vista leste, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. EAST / right side profile. Aim face, body, actions and boot toes to the RIGHT. Head and torso in true right-facing side profile, only one eye visible. Independently drawn (never mirrored). Far hand must be distinct from the near hand. Preserve asymmetry on the correct physical sides of the character.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the third block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Lâmina Arcana, the same youthful chibi Mage, with brown hair and brown eyes, identical face and build. No costume redesign. Keep the original dark coif across the lower front face, hood and asymmetrical short cape with fine colored lining.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 242 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 53 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. stealth crouch with one hand at floor-plane and other out to side; 2. thrust one empty hand forward in a swift extended lunge with opposite hand visible; 3. use the empty lead hand in a rising sweep from hip to shoulder, other hand balancing; 4. quick evasive pivot with the short cape momentarily open but face still south and both hands visible. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. ",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/mage/body.png",
+        "sha256": "7fbf2b93a17168b0d6b5893fcf8315cc50eb5395b12245011bd54c3099ca026a"
+      },
+      {
+        "path": "assets/art/animations/directional/elementalist/body.png",
+        "sha256": "eb0c8823f0e595ce09abe587e269c31f58ef6ce9a9a4809caaeb9fc343f7fb56"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/assassin/south.png",
+        "sha256": "432d1471ac4c6f12634e08fd9f8fc3bf0f3b8793d4dd7b617d942972ea3d1e67"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/mg_la/south.png",
+        "sha256": "f8202be8fd999920d9fc45b17f6797dc699a816e901c94c9acd2487d77296e05"
+      }
+    ],
+    "selected": false,
+    "idle_height_px": [
+      229,
+      232,
+      225,
+      230
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/mg_la/west.png",
+    "sha256": "a4fd76f53523217153e20885dd01359bcd38c97d99117ae817371400dee8e04f",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Lâmina Arcana (mg_la) — vista oeste, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. WEST / left side profile. Aim face, body, actions and boot toes to the LEFT. Head and torso in true left-facing side profile, only one eye visible. Independently drawn (never mirrored). Far hand must be distinct from the near hand. Preserve asymmetry on the correct physical sides of the character.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the fourth block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Lâmina Arcana, the same youthful chibi Mage, with brown hair and brown eyes, identical face and build. No costume redesign. Keep the original dark coif across the lower front face, hood and asymmetrical short cape with fine colored lining.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 242 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 53 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. stealth crouch with one hand at floor-plane and other out to side; 2. thrust one empty hand forward in a swift extended lunge with opposite hand visible; 3. use the empty lead hand in a rising sweep from hip to shoulder, other hand balancing; 4. quick evasive pivot with the short cape momentarily open but face still south and both hands visible. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. ",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/mage/body.png",
+        "sha256": "7fbf2b93a17168b0d6b5893fcf8315cc50eb5395b12245011bd54c3099ca026a"
+      },
+      {
+        "path": "assets/art/animations/directional/elementalist/body.png",
+        "sha256": "eb0c8823f0e595ce09abe587e269c31f58ef6ce9a9a4809caaeb9fc343f7fb56"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/assassin/south.png",
+        "sha256": "432d1471ac4c6f12634e08fd9f8fc3bf0f3b8793d4dd7b617d942972ea3d1e67"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/mg_la/south.png",
+        "sha256": "f8202be8fd999920d9fc45b17f6797dc699a816e901c94c9acd2487d77296e05"
+      }
+    ],
+    "selected": false,
+    "idle_height_px": [
+      232,
+      232,
+      231,
+      231
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/mg_la/east_v2.png",
+    "sha256": "c12c34dadf19bc873331f54581822671e580e3c1b5cd4695a45d301d9fae9e94",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Lâmina Arcana (mg_la) — vista leste, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. EAST / right side profile. Aim face, body, actions and boot toes to the RIGHT. Head and torso in true right-facing side profile, only one eye visible. Independently drawn (never mirrored). Far hand must be distinct from the near hand. Preserve asymmetry on the correct physical sides of the character.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the third block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Lâmina Arcana, the same youthful chibi Mage, with brown hair and brown eyes, identical face and build. No costume redesign. Keep the original dark coif across the lower front face, hood and asymmetrical short cape with fine colored lining.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 242 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 53 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. stealth crouch with one hand at floor-plane and other out to side; 2. thrust one empty hand forward in a swift extended lunge with opposite hand visible; 3. use the empty lead hand in a rising sweep from hip to shoulder, other hand balancing; 4. quick evasive pivot with the short cape momentarily open but face still south and both hands visible. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. Solid 242px visible standing crown-to-heel, leave generous clear space throughout full canvas. Extra careful: every idle and walk has two distinct empty hands visible. Stagger the far forearm past the front of torso, with visible fingertips and hand separated from near one. Turn torso slightly toward the camera only enough to do this while keeping head and toes oriented along the profile. Short cape or airy wide sleeve never masks the hands. Exact zero alpha outside sprites.",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/mage/body.png",
+        "sha256": "7fbf2b93a17168b0d6b5893fcf8315cc50eb5395b12245011bd54c3099ca026a"
+      },
+      {
+        "path": "assets/art/animations/directional/elementalist/body.png",
+        "sha256": "eb0c8823f0e595ce09abe587e269c31f58ef6ce9a9a4809caaeb9fc343f7fb56"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/assassin/south.png",
+        "sha256": "432d1471ac4c6f12634e08fd9f8fc3bf0f3b8793d4dd7b617d942972ea3d1e67"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/mg_la/south.png",
+        "sha256": "f8202be8fd999920d9fc45b17f6797dc699a816e901c94c9acd2487d77296e05"
+      }
+    ],
+    "selected": false,
+    "idle_height_px": [
+      232,
+      232,
+      232,
+      231
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/mg_la/west_v2.png",
+    "sha256": "05c934ad4ef1b1d0122bad8ddf155a61736268427c12fd5f38cadf3d04eede71",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Lâmina Arcana (mg_la) — vista oeste, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. WEST / left side profile. Aim face, body, actions and boot toes to the LEFT. Head and torso in true left-facing side profile, only one eye visible. Independently drawn (never mirrored). Far hand must be distinct from the near hand. Preserve asymmetry on the correct physical sides of the character.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the fourth block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Lâmina Arcana, the same youthful chibi Mage, with brown hair and brown eyes, identical face and build. No costume redesign. Keep the original dark coif across the lower front face, hood and asymmetrical short cape with fine colored lining.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 242 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 53 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. stealth crouch with one hand at floor-plane and other out to side; 2. thrust one empty hand forward in a swift extended lunge with opposite hand visible; 3. use the empty lead hand in a rising sweep from hip to shoulder, other hand balancing; 4. quick evasive pivot with the short cape momentarily open but face still south and both hands visible. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. Solid 242px visible standing crown-to-heel, leave generous clear space throughout full canvas. Extra careful: every idle and walk has two distinct empty hands visible. Stagger the far forearm past the front of torso, with visible fingertips and hand separated from near one. Turn torso slightly toward the camera only enough to do this while keeping head and toes oriented along the profile. Short cape or airy wide sleeve never masks the hands. Exact zero alpha outside sprites.",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/mage/body.png",
+        "sha256": "7fbf2b93a17168b0d6b5893fcf8315cc50eb5395b12245011bd54c3099ca026a"
+      },
+      {
+        "path": "assets/art/animations/directional/elementalist/body.png",
+        "sha256": "eb0c8823f0e595ce09abe587e269c31f58ef6ce9a9a4809caaeb9fc343f7fb56"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/assassin/south.png",
+        "sha256": "432d1471ac4c6f12634e08fd9f8fc3bf0f3b8793d4dd7b617d942972ea3d1e67"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/mg_la/south.png",
+        "sha256": "f8202be8fd999920d9fc45b17f6797dc699a816e901c94c9acd2487d77296e05"
+      }
+    ],
+    "selected": false,
+    "idle_height_px": [
+      223,
+      224,
+      221,
+      222
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/mg_la/north.png",
+    "sha256": "4d37180044ee465af90bc7a3a2ba768c0a1e3e67a932151969d839a8357e982c",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Lâmina Arcana (mg_la) — vista norte, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. NORTH / true rear view. Head, chest and toes face AWAY, upstage toward the top of the sheet in every frame. Show back of head, hairstyle, hood or helmet as appropriate, shoulder blades, and boot heels. Keep cape short, keep hand edges exposed. Correct always-rear shoulder and elbow positions. All forward gestures take place on the far side, anatomically foreshortened and partially occluded by the body. Show dorsum and knuckles or edges of both empty hands, never paint frontal palms or front chest features onto the visible back. Last two poses topple AWAY, soles and heels nearest in the foreground and head and hands above and away within the cell.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the second block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Lâmina Arcana, the same youthful chibi Mage, with brown hair and brown eyes, identical face and build. No costume redesign. Keep the original dark coif across the lower front face, hood and asymmetrical short cape with fine colored lining.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 242 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 53 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. stealth crouch with one hand at floor-plane and other out to side; 2. thrust one empty hand forward in a swift extended lunge with opposite hand visible; 3. use the empty lead hand in a rising sweep from hip to shoulder, other hand balancing; 4. quick evasive pivot with the short cape momentarily open but face still south and both hands visible. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. For all upright frames, narrow rounded heel backs face the camera and hide the toes, shoulders and elbows look correct from behind. No frontal belt clasp or facial features on the back. Keep a distinct four-frame gait alternating trailing boot soles. The last row column 3 shows a forward fall arrested by both palms and BOTH bent knees, top of head upstage, hips still high and boot heels close. In column 4, the hips drop, legs extend away from the crown toward viewer, body collapses compactly face-down with both soles closest and crown farthest. Clearly distinguish C3 and C4. Short hood and very slender silhouette, dark leather or woven cape with a very thin red blue and yellow lining, visible where the cape lifts in the fourth action. Show the mask only if seen in silhouette from behind (no face should be drawn).",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/mage/body.png",
+        "sha256": "7fbf2b93a17168b0d6b5893fcf8315cc50eb5395b12245011bd54c3099ca026a"
+      },
+      {
+        "path": "assets/art/animations/directional/elementalist/body.png",
+        "sha256": "eb0c8823f0e595ce09abe587e269c31f58ef6ce9a9a4809caaeb9fc343f7fb56"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/assassin/south.png",
+        "sha256": "432d1471ac4c6f12634e08fd9f8fc3bf0f3b8793d4dd7b617d942972ea3d1e67"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/mg_la/south.png",
+        "sha256": "f8202be8fd999920d9fc45b17f6797dc699a816e901c94c9acd2487d77296e05"
+      }
+    ],
+    "selected": false,
+    "idle_height_px": [
+      227,
+      230,
+      224,
+      227
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/mg_la/east_v3.png",
+    "sha256": "12afe8905c8cbb46c7b516228aeb7684a8a923e322f8ad0eac6d8eec7a2cce79",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Lâmina Arcana (mg_la) — vista leste, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. EAST / right side profile. Aim face, body, actions and boot toes to the RIGHT. Head and torso in true right-facing side profile, only one eye visible. Independently drawn (never mirrored). Far hand must be distinct from the near hand. Preserve asymmetry on the correct physical sides of the character.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the third block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Lâmina Arcana, the same youthful chibi Mage, with brown hair and brown eyes, identical face and build. No costume redesign. Keep the original dark coif across the lower front face, hood and asymmetrical short cape with fine colored lining.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 242 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 53 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. stealth crouch with one hand at floor-plane and other out to side; 2. thrust one empty hand forward in a swift extended lunge with opposite hand visible; 3. use the empty lead hand in a rising sweep from hip to shoulder, other hand balancing; 4. quick evasive pivot with the short cape momentarily open but face still south and both hands visible. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. Prior card was only 232px tall. Increase the full silhouette (including the dark hood) by four percent to match the approved south at 242px, from local y=44 to y=286 in each top cell. Slim and nimble, dark face scarf. Important idle and walk arrangement: the empty nearer hand rests visibly down by hip and the empty farther forearm angles forward just across the front outline so that the empty far hand and fingers are visible to the viewer. Make two visibly separated hands in every living frame. Turn the torso slightly toward us (about 10 degrees), but keep the head, nose, visible single eye, and toes in true profile. No cape or sleeve over hands. No effects or scenery. Cut alpha cleanly between every cell.",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/mage/body.png",
+        "sha256": "7fbf2b93a17168b0d6b5893fcf8315cc50eb5395b12245011bd54c3099ca026a"
+      },
+      {
+        "path": "assets/art/animations/directional/elementalist/body.png",
+        "sha256": "eb0c8823f0e595ce09abe587e269c31f58ef6ce9a9a4809caaeb9fc343f7fb56"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/assassin/south.png",
+        "sha256": "432d1471ac4c6f12634e08fd9f8fc3bf0f3b8793d4dd7b617d942972ea3d1e67"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/mg_la/south.png",
+        "sha256": "f8202be8fd999920d9fc45b17f6797dc699a816e901c94c9acd2487d77296e05"
+      }
+    ],
+    "selected": true,
+    "idle_height_px": [
+      236,
+      236,
+      234,
+      234
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/mg_la/west_v3.png",
+    "sha256": "f54321a731ff75c2ea73eff407f0729381f78b8569535a0b878ec59629da8f0f",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Lâmina Arcana (mg_la) — vista oeste, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. WEST / left side profile. Aim face, body, actions and boot toes to the LEFT. Head and torso in true left-facing side profile, only one eye visible. Independently drawn (never mirrored). Far hand must be distinct from the near hand. Preserve asymmetry on the correct physical sides of the character.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the fourth block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Lâmina Arcana, the same youthful chibi Mage, with brown hair and brown eyes, identical face and build. No costume redesign. Keep the original dark coif across the lower front face, hood and asymmetrical short cape with fine colored lining.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 242 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 53 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. stealth crouch with one hand at floor-plane and other out to side; 2. thrust one empty hand forward in a swift extended lunge with opposite hand visible; 3. use the empty lead hand in a rising sweep from hip to shoulder, other hand balancing; 4. quick evasive pivot with the short cape momentarily open but face still south and both hands visible. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. Prior card was only 231px tall. Increase the full silhouette (including the dark hood) by four or five percent to match the approved south at 242px, from local y=44 to y=286 in each top cell. Slim, dark face scarf. Important idle and walk arrangement: the empty nearer hand rests visibly down by hip and the empty farther forearm angles forward just across the front outline so that the empty far hand and fingers are visible to the viewer. Make two visibly separated hands in every living frame. Turn the torso slightly toward us (about 10 degrees), but keep the head, nose, visible single eye, and toes in true profile. No cape or sleeve over hands. No effects or scenery. Cut alpha cleanly between every cell.",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/mage/body.png",
+        "sha256": "7fbf2b93a17168b0d6b5893fcf8315cc50eb5395b12245011bd54c3099ca026a"
+      },
+      {
+        "path": "assets/art/animations/directional/elementalist/body.png",
+        "sha256": "eb0c8823f0e595ce09abe587e269c31f58ef6ce9a9a4809caaeb9fc343f7fb56"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/assassin/south.png",
+        "sha256": "432d1471ac4c6f12634e08fd9f8fc3bf0f3b8793d4dd7b617d942972ea3d1e67"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/mg_la/south.png",
+        "sha256": "f8202be8fd999920d9fc45b17f6797dc699a816e901c94c9acd2487d77296e05"
+      }
+    ],
+    "selected": false,
+    "idle_height_px": [
+      231,
+      231,
+      229,
+      228
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/mg_la/north_v2.png",
+    "sha256": "1df8df974c197190fc3202d9ea5da6470b0b6f28349cfc605552935c668956d1",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Lâmina Arcana (mg_la) — vista norte, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. NORTH / true rear view. Head, chest and toes face AWAY, upstage toward the top of the sheet in every frame. Show back of head, hairstyle, hood or helmet as appropriate, shoulder blades, and boot heels. Keep cape short, keep hand edges exposed. Correct always-rear shoulder and elbow positions. All forward gestures take place on the far side, anatomically foreshortened and partially occluded by the body. Show dorsum and knuckles or edges of both empty hands, never paint frontal palms or front chest features onto the visible back. Last two poses topple AWAY, soles and heels nearest in the foreground and head and hands above and away within the cell. The previous drawing of the hooded class was around 227 px and too small. Render a somewhat larger figure, row one 242 px high (crown local y=45, heels local y=287), including hood. The hood has a solid dark grey cloth panel down the back with quiet stitching and hair at the edges. R3C1: kneel leaning forward away, fingertips touch ground ahead of knees on the coast of the silhouette, no hand on the ground behind the feet. In every active frame the arms point away with dorsal knuckles seen from behind. R4C1 and C2 hands in recoil show outer knuckles, never frontal palms. The next two show DISTINCT four-point kneeling contact then full prone fall with soles nearest and skull farthest.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the second block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Lâmina Arcana, the same youthful chibi Mage, with brown hair and brown eyes, identical face and build. No costume redesign. Keep the original dark coif across the lower front face, hood and asymmetrical short cape with fine colored lining.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 242 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 53 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. stealth crouch with one hand at floor-plane and other out to side; 2. thrust one empty hand forward in a swift extended lunge with opposite hand visible; 3. use the empty lead hand in a rising sweep from hip to shoulder, other hand balancing; 4. quick evasive pivot with the short cape momentarily open but face still south and both hands visible. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. The previous drawing of the hooded class was around 227 px and too small. Render a somewhat larger figure, row one 242 px high (crown local y=45, heels local y=287), including hood. The hood has a solid dark grey cloth panel down the back with quiet stitching and hair at the edges. R3C1: kneel leaning forward away, fingertips touch ground ahead of knees on the coast of the silhouette, no hand on the ground behind the feet. In every active frame the arms point away with dorsal knuckles seen from behind. R4C1 and C2 hands in recoil show outer knuckles, never frontal palms. The next two show DISTINCT four-point kneeling contact then full prone fall with soles nearest and skull farthest.",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/mage/body.png",
+        "sha256": "7fbf2b93a17168b0d6b5893fcf8315cc50eb5395b12245011bd54c3099ca026a"
+      },
+      {
+        "path": "assets/art/animations/directional/elementalist/body.png",
+        "sha256": "eb0c8823f0e595ce09abe587e269c31f58ef6ce9a9a4809caaeb9fc343f7fb56"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/assassin/south.png",
+        "sha256": "432d1471ac4c6f12634e08fd9f8fc3bf0f3b8793d4dd7b617d942972ea3d1e67"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/mg_la/south.png",
+        "sha256": "f8202be8fd999920d9fc45b17f6797dc699a816e901c94c9acd2487d77296e05"
+      }
+    ],
+    "selected": true,
+    "idle_height_px": [
+      236,
+      237,
+      235,
+      237
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/mg_la/west_v4.png",
+    "sha256": "236064fbe73038c3bfc1b9f08c3402051c18eaf29a37b548df467599d564a427",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Lâmina Arcana (mg_la) — vista oeste, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. WEST / left side profile. Aim face, body, actions and boot toes to the LEFT. Head and torso in true left-facing side profile, only one eye visible. Independently drawn (never mirrored). Far hand must be distinct from the near hand. Preserve asymmetry on the correct physical sides of the character. Visual priority is to give this west figure a bigger silhouette and full hood height. Prior art had nearly 65px headroom in the top cells, reduce that by 18–20 px without moving the soles. The two empty hands are separated, forward far hand on left edge and near hand down, also in walking. Keep the same outfit, motion, hood with face scarf.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the fourth block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Lâmina Arcana, the same youthful chibi Mage, with brown hair and brown eyes, identical face and build. No costume redesign. Keep the original dark coif across the lower front face, hood and asymmetrical short cape with fine colored lining.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 254 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 41 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. stealth crouch with one hand at floor-plane and other out to side; 2. thrust one empty hand forward in a swift extended lunge with opposite hand visible; 3. use the empty lead hand in a rising sweep from hip to shoulder, other hand balancing; 4. quick evasive pivot with the short cape momentarily open but face still south and both hands visible. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. Visual priority is to give this west figure a bigger silhouette and full hood height. Prior art had nearly 65px headroom in the top cells, reduce that by 18–20 px without moving the soles. The two empty hands are separated, forward far hand on left edge and near hand down, also in walking. Keep the same outfit, motion, hood with face scarf.",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/mage/body.png",
+        "sha256": "7fbf2b93a17168b0d6b5893fcf8315cc50eb5395b12245011bd54c3099ca026a"
+      },
+      {
+        "path": "assets/art/animations/directional/elementalist/body.png",
+        "sha256": "eb0c8823f0e595ce09abe587e269c31f58ef6ce9a9a4809caaeb9fc343f7fb56"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/assassin/south.png",
+        "sha256": "432d1471ac4c6f12634e08fd9f8fc3bf0f3b8793d4dd7b617d942972ea3d1e67"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/mg_la/south.png",
+        "sha256": "f8202be8fd999920d9fc45b17f6797dc699a816e901c94c9acd2487d77296e05"
+      }
+    ],
+    "selected": true,
+    "idle_height_px": [
+      242,
+      246,
+      242,
+      241
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/mg_la/north_v3.png",
+    "sha256": "31671654ce422aae0ef3763ae9f3331f5dcd26e435c1dd51cb178270e69412b5",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Lâmina Arcana (mg_la) — vista norte, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. NORTH / true rear view. Head, chest and toes face AWAY, upstage toward the top of the sheet in every frame. Show back of head, hairstyle, hood or helmet as appropriate, shoulder blades, and boot heels. Keep cape short, keep hand edges exposed. Correct always-rear shoulder and elbow positions. All forward gestures take place on the far side, anatomically foreshortened and partially occluded by the body. Show dorsum and knuckles or edges of both empty hands, never paint frontal palms or front chest features onto the visible back. Last two poses topple AWAY, soles and heels nearest in the foreground and head and hands above and away within the cell. Choreography review, maintain 242-ish px tall in the idle row. Always look upstage with hood fully visible from back. Row 3 distinct silhouettes: C1 a stealth asymmetric crouch on ONE knee, one hand touches down upstage and to the side of the knee, the other clearly off the ground and open away from hip. C2 long empty single-arm thrust, hand at shoulder/chest height aimed straight forward into depth, wrist beyond contour of right shoulder, non-thrust arm back a little. C3 sweep the empty lead hand diagonally above and away from the crown and show the other hand near hip. C4 sideways-feeling escape pivot on one planted heel, torso and hood keep facing away, open short cape and hands apart. Strong distinction C1/C2/C3. For the recoil and actions, we see fingernails and knuckles naturally, not front palm shapes. When completely prone, the back and boot soles face the camera and face stays fully hidden.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the second block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Lâmina Arcana, the same youthful chibi Mage, with brown hair and brown eyes, identical face and build. No costume redesign. Keep the original dark coif across the lower front face, hood and asymmetrical short cape with fine colored lining.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 242 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 53 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. stealth crouch with one hand at floor-plane and other out to side; 2. thrust one empty hand forward in a swift extended lunge with opposite hand visible; 3. use the empty lead hand in a rising sweep from hip to shoulder, other hand balancing; 4. quick evasive pivot with the short cape momentarily open but face still south and both hands visible. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. Choreography review, maintain 242-ish px tall in the idle row. Always look upstage with hood fully visible from back. Row 3 distinct silhouettes: C1 a stealth asymmetric crouch on ONE knee, one hand touches down upstage and to the side of the knee, the other clearly off the ground and open away from hip. C2 long empty single-arm thrust, hand at shoulder/chest height aimed straight forward into depth, wrist beyond contour of right shoulder, non-thrust arm back a little. C3 sweep the empty lead hand diagonally above and away from the crown and show the other hand near hip. C4 sideways-feeling escape pivot on one planted heel, torso and hood keep facing away, open short cape and hands apart. Strong distinction C1/C2/C3. For the recoil and actions, we see fingernails and knuckles naturally, not front palm shapes. When completely prone, the back and boot soles face the camera and face stays fully hidden.",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/mage/body.png",
+        "sha256": "7fbf2b93a17168b0d6b5893fcf8315cc50eb5395b12245011bd54c3099ca026a"
+      },
+      {
+        "path": "assets/art/animations/directional/elementalist/body.png",
+        "sha256": "eb0c8823f0e595ce09abe587e269c31f58ef6ce9a9a4809caaeb9fc343f7fb56"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/assassin/south.png",
+        "sha256": "432d1471ac4c6f12634e08fd9f8fc3bf0f3b8793d4dd7b617d942972ea3d1e67"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/mg_la/south.png",
+        "sha256": "f8202be8fd999920d9fc45b17f6797dc699a816e901c94c9acd2487d77296e05"
+      }
+    ],
+    "selected": false,
+    "idle_height_px": [
+      237,
+      240,
+      235,
+      235
+    ]
+  }
+]

@@ -1,0 +1,188 @@
+[
+  {
+    "path": "assets/art/e08_codex_1123/characters/mg_ac/south.png",
+    "sha256": "fd17dfb2d2a28e06b4557f0f0f8086f05b120e3aea414dbca30aa8a2c936f189",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Taumaturgo (mg_ac) — vista sul, traje híbrido, lote E08 1123",
+    "prompt": "Use case: stylized-concept. Production 2D pixel-art game animation sprite sheet for RagRPG. References attached in order: (1) the person whose identity to preserve, face/hair/build, (2) origin class for silhouette and tailoring only, (3) the affinity class for materials and palette only, (4) cast scale and sprite style, from Swordsman. Use the SOUTH/front block (top 4 rows) of each tall 4x16 atlas. Copy the identity as the same youthful chibi Mage, with brown hair and brown eyes, identical face and build. Now change the outfit to Taumaturgo: the Elementalist's conjurer silhouette in a long straight robe whose panels look like stained glass (blue, red and yellow panes with dark lead lines) over white linen, gold trims and a gold collar like the Priest; blue, white, red, yellow and gold. Robe reads as upright, elongated and rectilinear, with vertical chromatic stained-glass textile panels structured by charcoal leading; keep the white side fabric and soft polished gold collar visible. Treat panes as garment color and design, not projected radiance. Keep brown hair and eyes distinct and visible.\n\nCreate one native square 1254×1254 transparent RGBA PNG of exactly 4x4 separate full-body sprites centered in equal 313-pixel cells. All 16 in the SOUTH/front facing direction, slightly top-down game camera as in reference 1. Keep the visible height of each idle figure about 260 pixels crown-to-sole, with about 34 transparent pixels above the crown and 18–20 below shoes. A dark crisp edge, art with clear pixel clusters, limited 2–3 tone shading, chibi proportions. Keep strong alpha gutters on all four edges, leave fully clear empty space between every adjacent figure, never overlap cells or crop anything. In every living pose show both empty hands with clear fingers and correct anatomy, arms distinct from the torso and costume; no cloak or cape hides either hand. Do not add physical equipment or held objects. Gear is separate art. Clothing details remain consistent.\n\nOrdered rows left to right. Row 1: four variants of ordinary standing idle, very slight breath or eyes changes. Row 2: four gait frames of a real walk, alternate leading left and right foot and opposed arms, passing pose between steps, all front. Row 3 exactly these four action poses: 1. both hands lift and trace a circle in the air, fingers curved, empty air between; 2. one empty flat hand extends forward palm down, other hand visible at the waist; 3. both hands together at chest in prayer; 4. one high empty arm points upward with a finger while other arm stays low.\nRow 4: columns 1–2 two different STANDING hurt reactions; column 3 drops forward on knees and both hands at the lower part of the cell, face down; column 4 continues the same fall and lies FULLY PRONE face down and compact, with top of head closest to camera, boots trailing, body completely lowered (never on back). Keep all 4x4 sprites front-facing in costume and action. True transparency. No weapons, shield, staff, thin blades, drawn props, magic, particles, runes outside the garment, floating orbs, loose rocks, floor, external shadows, text, captions or divider lines. ",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/mage/body.png",
+        "sha256": "7fbf2b93a17168b0d6b5893fcf8315cc50eb5395b12245011bd54c3099ca026a"
+      },
+      {
+        "path": "assets/art/animations/directional/elementalist/body.png",
+        "sha256": "eb0c8823f0e595ce09abe587e269c31f58ef6ce9a9a4809caaeb9fc343f7fb56"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/priest/south.png",
+        "sha256": "9f21a15a47f09a231b8c2efacfb9e01ee369fa093f534f8bb60e3c90ef7ef225"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "selected": true,
+    "idle_height_px": [
+      253,
+      253,
+      253,
+      253
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/mg_ac/east.png",
+    "sha256": "96b169d7d06edd4488e14af349d37917a1ac471334416be0c8fb1a0ecde9673d",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Taumaturgo (mg_ac) — vista leste, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. EAST / right side profile. Aim face, body, actions and boot toes to the RIGHT. Head and torso in true right-facing side profile, only one eye visible. Independently drawn (never mirrored). Far hand must be distinct from the near hand. Preserve asymmetry on the correct physical sides of the character.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the third block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Taumaturgo, the same youthful chibi Mage, with brown hair and brown eyes, identical face and build. No costume redesign. Gold collar and white panels continue naturally around the back, front cape construction must not be duplicated.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 253 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 42 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. both hands lift and trace a circle in the air, fingers curved, empty air between; 2. one empty flat hand extends forward palm down, other hand visible at the waist; 3. both hands together at chest in prayer; 4. one high empty arm points upward with a finger while other arm stays low. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. ",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/mage/body.png",
+        "sha256": "7fbf2b93a17168b0d6b5893fcf8315cc50eb5395b12245011bd54c3099ca026a"
+      },
+      {
+        "path": "assets/art/animations/directional/elementalist/body.png",
+        "sha256": "eb0c8823f0e595ce09abe587e269c31f58ef6ce9a9a4809caaeb9fc343f7fb56"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/priest/south.png",
+        "sha256": "9f21a15a47f09a231b8c2efacfb9e01ee369fa093f534f8bb60e3c90ef7ef225"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/mg_ac/south.png",
+        "sha256": "fd17dfb2d2a28e06b4557f0f0f8086f05b120e3aea414dbca30aa8a2c936f189"
+      }
+    ],
+    "selected": true,
+    "idle_height_px": [
+      255,
+      254,
+      254,
+      254
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/mg_ac/west.png",
+    "sha256": "a16a9c5f5f140dd6989df19a1222ff6d829ba98f13ad1b5aff0fbbc744ac89aa",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Taumaturgo (mg_ac) — vista oeste, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. WEST / left side profile. Aim face, body, actions and boot toes to the LEFT. Head and torso in true left-facing side profile, only one eye visible. Independently drawn (never mirrored). Far hand must be distinct from the near hand. Preserve asymmetry on the correct physical sides of the character.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the fourth block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Taumaturgo, the same youthful chibi Mage, with brown hair and brown eyes, identical face and build. No costume redesign. Gold collar and white panels continue naturally around the back, front cape construction must not be duplicated.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 253 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 42 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. both hands lift and trace a circle in the air, fingers curved, empty air between; 2. one empty flat hand extends forward palm down, other hand visible at the waist; 3. both hands together at chest in prayer; 4. one high empty arm points upward with a finger while other arm stays low. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. ",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/mage/body.png",
+        "sha256": "7fbf2b93a17168b0d6b5893fcf8315cc50eb5395b12245011bd54c3099ca026a"
+      },
+      {
+        "path": "assets/art/animations/directional/elementalist/body.png",
+        "sha256": "eb0c8823f0e595ce09abe587e269c31f58ef6ce9a9a4809caaeb9fc343f7fb56"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/priest/south.png",
+        "sha256": "9f21a15a47f09a231b8c2efacfb9e01ee369fa093f534f8bb60e3c90ef7ef225"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/mg_ac/south.png",
+        "sha256": "fd17dfb2d2a28e06b4557f0f0f8086f05b120e3aea414dbca30aa8a2c936f189"
+      }
+    ],
+    "selected": false,
+    "idle_height_px": [
+      245,
+      245,
+      245,
+      245
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/mg_ac/west_v2.png",
+    "sha256": "4fb71cbf5c5064b643cc39eaa5af146e252e8d98f7f8b63246ff08fcbcc8eb5c",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Taumaturgo (mg_ac) — vista oeste, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. WEST / left side profile. Aim face, body, actions and boot toes to the LEFT. Head and torso in true left-facing side profile, only one eye visible. Independently drawn (never mirrored). Far hand must be distinct from the near hand. Preserve asymmetry on the correct physical sides of the character.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the fourth block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Taumaturgo, the same youthful chibi Mage, with brown hair and brown eyes, identical face and build. No costume redesign. Gold collar and white panels continue naturally around the back, front cape construction must not be duplicated.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 253 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 42 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. both hands lift and trace a circle in the air, fingers curved, empty air between; 2. one empty flat hand extends forward palm down, other hand visible at the waist; 3. both hands together at chest in prayer; 4. one high empty arm points upward with a finger while other arm stays low. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. In every live pose (very specifically all four idle cells, all four walks, and the second recoil), stagger the far elbow so the far hand and fingers peek just in front of the breast and make a distinctly readable second hand. Keep the near hand below and closer to camera with visibly open negative space between hands. Use a near-profile torso with a small 10–15-degree turn toward camera for that separation; eyes, nose and boots still point fully side-on. Entire area outside sprites has clear alpha, no haze.",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/mage/body.png",
+        "sha256": "7fbf2b93a17168b0d6b5893fcf8315cc50eb5395b12245011bd54c3099ca026a"
+      },
+      {
+        "path": "assets/art/animations/directional/elementalist/body.png",
+        "sha256": "eb0c8823f0e595ce09abe587e269c31f58ef6ce9a9a4809caaeb9fc343f7fb56"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/priest/south.png",
+        "sha256": "9f21a15a47f09a231b8c2efacfb9e01ee369fa093f534f8bb60e3c90ef7ef225"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/mg_ac/south.png",
+        "sha256": "fd17dfb2d2a28e06b4557f0f0f8086f05b120e3aea414dbca30aa8a2c936f189"
+      }
+    ],
+    "selected": true,
+    "idle_height_px": [
+      248,
+      248,
+      248,
+      248
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/mg_ac/north.png",
+    "sha256": "3c013991d7496b6c3fae742b54ed288e8ce62785f4de63db99604335239052a7",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Taumaturgo (mg_ac) — vista norte, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. NORTH / true rear view. Head, chest and toes face AWAY, upstage toward the top of the sheet in every frame. Show back of head, hairstyle, hood or helmet as appropriate, shoulder blades, and boot heels. Keep cape short, keep hand edges exposed. Correct always-rear shoulder and elbow positions. All forward gestures take place on the far side, anatomically foreshortened and partially occluded by the body. Show dorsum and knuckles or edges of both empty hands, never paint frontal palms or front chest features onto the visible back. Last two poses topple AWAY, soles and heels nearest in the foreground and head and hands above and away within the cell.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the second block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Taumaturgo, the same youthful chibi Mage, with brown hair and brown eyes, identical face and build. No costume redesign. Gold collar and white panels continue naturally around the back, front cape construction must not be duplicated.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 253 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 42 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. both hands lift and trace a circle in the air, fingers curved, empty air between; 2. one empty flat hand extends forward palm down, other hand visible at the waist; 3. both hands together at chest in prayer; 4. one high empty arm points upward with a finger while other arm stays low. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. For all upright frames, narrow rounded heel backs face the camera and hide the toes, shoulders and elbows look correct from behind. No frontal belt clasp or facial features on the back. Keep a distinct four-frame gait alternating trailing boot soles. The last row column 3 shows a forward fall arrested by both palms and BOTH bent knees, top of head upstage, hips still high and boot heels close. In column 4, the hips drop, legs extend away from the crown toward viewer, body collapses compactly face-down with both soles closest and crown farthest. Clearly distinguish C3 and C4. Distinct vertical geometric stained-glass textile in blue red and gold on the back panels of the longer white robe, gold neck collar, familiar brown hair. Use dorsal fingers in circular and pointing gestures, far-side prayer. No vestment symbols on the rear that resemble a chest clasp.",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/mage/body.png",
+        "sha256": "7fbf2b93a17168b0d6b5893fcf8315cc50eb5395b12245011bd54c3099ca026a"
+      },
+      {
+        "path": "assets/art/animations/directional/elementalist/body.png",
+        "sha256": "eb0c8823f0e595ce09abe587e269c31f58ef6ce9a9a4809caaeb9fc343f7fb56"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/priest/south.png",
+        "sha256": "9f21a15a47f09a231b8c2efacfb9e01ee369fa093f534f8bb60e3c90ef7ef225"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/mg_ac/south.png",
+        "sha256": "fd17dfb2d2a28e06b4557f0f0f8086f05b120e3aea414dbca30aa8a2c936f189"
+      }
+    ],
+    "selected": true,
+    "idle_height_px": [
+      250,
+      248,
+      253,
+      252
+    ]
+  }
+]

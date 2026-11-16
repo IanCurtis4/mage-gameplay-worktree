@@ -1,0 +1,226 @@
+[
+  {
+    "path": "assets/art/e08_codex_1123/characters/sp_la/south.png",
+    "sha256": "f342ebb56f63bac1b7d25c7302d263354ec6c8e97786231d3ac1c11c921dd5fa",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Duelista (sp_la) — vista sul, traje híbrido, lote E08 1123",
+    "prompt": "Use case: stylized-concept. Production 2D pixel-art game animation sprite sheet for RagRPG. References attached in order: (1) the person whose identity to preserve, face/hair/build, (2) origin class for silhouette and tailoring only, (3) the affinity class for materials and palette only, (4) cast scale and sprite style, from Swordsman. Use the SOUTH/front block (top 4 rows) of each tall 4x16 atlas. Copy the identity as the same youthful chibi Swordsman, blue eyes and distinctly spiky red-brown hair. Now change the outfit to Duelista: a slim fencer: fitted black leather coat, light silver plate ONLY on the guard arm and shoulder, a short dark cape over the other shoulder, dark red sash and gloves, slim boots; silver, black and dark red. Choose the character's RIGHT arm for the one and only silver pauldron and silver vambrace. In the south view that arm is on the viewer's LEFT. Put the very short cape behind the opposite shoulder and above the elbow so it never masks the other hand. No second silver pauldron. Fits close along torso, one dark red sash at waist, dark fitted red gloves with separated fingers. Preserve spiky auburn hair and blue eyes.\n\nCreate one native square 1254×1254 transparent RGBA PNG of exactly 4x4 separate full-body sprites centered in equal 313-pixel cells. All 16 in the SOUTH/front facing direction, slightly top-down game camera as in reference 1. Keep the visible height of each idle figure about 260 pixels crown-to-sole, with about 34 transparent pixels above the crown and 18–20 below shoes. A dark crisp edge, art with clear pixel clusters, limited 2–3 tone shading, chibi proportions. Keep strong alpha gutters on all four edges, leave fully clear empty space between every adjacent figure, never overlap cells or crop anything. In every living pose show both empty hands with clear fingers and correct anatomy, arms distinct from the torso and costume; no cloak or cape hides either hand. Do not add physical equipment or held objects. Gear is separate art. Clothing details remain consistent.\n\nOrdered rows left to right. Row 1: four variants of ordinary standing idle, very slight breath or eyes changes. Row 2: four gait frames of a real walk, alternate leading left and right foot and opposed arms, passing pose between steps, all front. Row 3 exactly these four action poses: 1. fencer parry with empty armored guard arm near eye height, other hand low; 2. one empty hand makes a twisting wrist motion as if turning an opponent's arm, other arm ready; 3. a long fencer lunge with one extended empty hand, other hand drawn back and visible; 4. a backward evasion hop with both empty hands balanced, no trail.\nRow 4: columns 1–2 two different STANDING hurt reactions; column 3 drops forward on knees and both hands at the lower part of the cell, face down; column 4 continues the same fall and lies FULLY PRONE face down and compact, with top of head closest to camera, boots trailing, body completely lowered (never on back). Keep all 4x4 sprites front-facing in costume and action. True transparency. No weapons, shield, staff, thin blades, drawn props, magic, particles, runes outside the garment, floating orbs, loose rocks, floor, external shadows, text, captions or divider lines. ",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/animations/directional/defender/body.png",
+        "sha256": "376cff77afffde2ce602e1fec1f233ef489dec90f3a86fb6ca079fb19e292766"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/assassin/south.png",
+        "sha256": "432d1471ac4c6f12634e08fd9f8fc3bf0f3b8793d4dd7b617d942972ea3d1e67"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "selected": true,
+    "idle_height_px": [
+      242,
+      242,
+      242,
+      242
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/sp_la/south_v2.png",
+    "sha256": "86000548acbc59e02fc2b68482f30c2ffc3af2e36cd37b528ece93dbe84ebdb2",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Duelista (sp_la) — vista sul, traje híbrido, lote E08 1123",
+    "prompt": "Use case: stylized-concept. Production 2D pixel-art game animation sprite sheet for RagRPG. References attached in order: (1) the person whose identity to preserve, face/hair/build, (2) origin class for silhouette and tailoring only, (3) the affinity class for materials and palette only, (4) cast scale and sprite style, from Swordsman. Use the SOUTH/front block (top 4 rows) of each tall 4x16 atlas. Copy the identity as the same youthful chibi Swordsman, blue eyes and distinctly spiky red-brown hair. Now change the outfit to Duelista: a slim fencer: fitted black leather coat, light silver plate ONLY on the guard arm and shoulder, a short dark cape over the other shoulder, dark red sash and gloves, slim boots; silver, black and dark red. Choose the character's RIGHT arm for the one and only silver pauldron and silver vambrace. In the south view that arm is on the viewer's LEFT. Put the very short cape behind the opposite shoulder and above the elbow so it never masks the other hand. No second silver pauldron. Fits close along torso, one dark red sash at waist, dark fitted red gloves with separated fingers. Preserve spiky auburn hair and blue eyes.\n\nCreate one native square 1254×1254 transparent RGBA PNG of exactly 4x4 separate full-body sprites centered in equal 313-pixel cells. All 16 in the SOUTH/front facing direction, slightly top-down game camera as in reference 1. Keep the visible height of each idle figure about 260 pixels crown-to-sole, with about 34 transparent pixels above the crown and 18–20 below shoes. A dark crisp edge, art with clear pixel clusters, limited 2–3 tone shading, chibi proportions. Keep strong alpha gutters on all four edges, leave fully clear empty space between every adjacent figure, never overlap cells or crop anything. In every living pose show both empty hands with clear fingers and correct anatomy, arms distinct from the torso and costume; no cloak or cape hides either hand. Do not add physical equipment or held objects. Gear is separate art. Clothing details remain consistent.\n\nOrdered rows left to right. Row 1: four variants of ordinary standing idle, very slight breath or eyes changes. Row 2: four gait frames of a real walk, alternate leading left and right foot and opposed arms, passing pose between steps, all front. Row 3 exactly these four action poses: 1. fencer parry with empty armored guard arm near eye height, other hand low; 2. one empty hand makes a twisting wrist motion as if turning an opponent's arm, other arm ready; 3. a long fencer lunge with one extended empty hand, other hand drawn back and visible; 4. a backward evasion hop with both empty hands balanced, no trail.\nRow 4: columns 1–2 two different STANDING hurt reactions; column 3 drops forward on knees and both hands at the lower part of the cell, face down; column 4 continues the same fall and lies FULLY PRONE face down and compact, with top of head closest to camera, boots trailing, body completely lowered (never on back). Keep all 4x4 sprites front-facing in costume and action. True transparency. No weapons, shield, staff, thin blades, drawn props, magic, particles, runes outside the garment, floating orbs, loose rocks, floor, external shadows, text, captions or divider lines. Refine attached fifth image as the editing target. The first four references still control original identity, material and scale. Preserve the asymmetric outfit, hair, face and sixteen pose silhouettes of image 5, but redraw the standing character visibly larger, roughly 8 percent. Full standing height must be about 260 px instead of 242, crown near y=33 in row 1, foot baseline near y=293. Keep only the character's RIGHT shoulder/arm silver; cape on the opposite shoulder terminates above elbows. Keep a long sharp empty-hand fencer lunge with two clean gloves, and show the torso leaning back and both feet airborne in the backward hop.",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/animations/directional/defender/body.png",
+        "sha256": "376cff77afffde2ce602e1fec1f233ef489dec90f3a86fb6ca079fb19e292766"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/assassin/south.png",
+        "sha256": "432d1471ac4c6f12634e08fd9f8fc3bf0f3b8793d4dd7b617d942972ea3d1e67"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/sp_la/south.png",
+        "sha256": "f342ebb56f63bac1b7d25c7302d263354ec6c8e97786231d3ac1c11c921dd5fa"
+      }
+    ],
+    "selected": false,
+    "idle_height_px": [
+      264,
+      264,
+      264,
+      264
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/sp_la/east.png",
+    "sha256": "96d6cb7a0a32c9bebff902011f9679d8024cf560f56fe67715aa2cfb40d1d4d7",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Duelista (sp_la) — vista leste, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. EAST / right side profile. Aim face, body, actions and boot toes to the RIGHT. Head and torso in true right-facing side profile, only one eye visible. Independently drawn (never mirrored). Far hand must be distinct from the near hand. Preserve asymmetry on the correct physical sides of the character.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the third block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Duelista, the same youthful chibi Swordsman, blue eyes and distinctly spiky red-brown hair. No costume redesign. Physical RIGHT arm is the ONLY silver-plated arm, which appears on viewer's right in the north view. The dark-red cape stays on the other shoulder.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 242 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 53 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. fencer parry with empty armored guard arm near eye height, other hand low; 2. one empty hand makes a twisting wrist motion as if turning an opponent's arm, other arm ready; 3. a long fencer lunge with one extended empty hand, other hand drawn back and visible; 4. a backward evasion hop with both empty hands balanced, no trail. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. ",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/animations/directional/defender/body.png",
+        "sha256": "376cff77afffde2ce602e1fec1f233ef489dec90f3a86fb6ca079fb19e292766"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/assassin/south.png",
+        "sha256": "432d1471ac4c6f12634e08fd9f8fc3bf0f3b8793d4dd7b617d942972ea3d1e67"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/sp_la/south.png",
+        "sha256": "f342ebb56f63bac1b7d25c7302d263354ec6c8e97786231d3ac1c11c921dd5fa"
+      }
+    ],
+    "selected": true,
+    "idle_height_px": [
+      242,
+      242,
+      242,
+      241
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/sp_la/west.png",
+    "sha256": "d79e539b000316945eca7d46499118e5be07aecfb8c9b0b55ef6dbf1dd91c2f1",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Duelista (sp_la) — vista oeste, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. WEST / left side profile. Aim face, body, actions and boot toes to the LEFT. Head and torso in true left-facing side profile, only one eye visible. Independently drawn (never mirrored). Far hand must be distinct from the near hand. Preserve asymmetry on the correct physical sides of the character.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the fourth block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Duelista, the same youthful chibi Swordsman, blue eyes and distinctly spiky red-brown hair. No costume redesign. Physical RIGHT arm is the ONLY silver-plated arm, which appears on viewer's right in the north view. The dark-red cape stays on the other shoulder.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 242 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 53 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. fencer parry with empty armored guard arm near eye height, other hand low; 2. one empty hand makes a twisting wrist motion as if turning an opponent's arm, other arm ready; 3. a long fencer lunge with one extended empty hand, other hand drawn back and visible; 4. a backward evasion hop with both empty hands balanced, no trail. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. ",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/animations/directional/defender/body.png",
+        "sha256": "376cff77afffde2ce602e1fec1f233ef489dec90f3a86fb6ca079fb19e292766"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/assassin/south.png",
+        "sha256": "432d1471ac4c6f12634e08fd9f8fc3bf0f3b8793d4dd7b617d942972ea3d1e67"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/sp_la/south.png",
+        "sha256": "f342ebb56f63bac1b7d25c7302d263354ec6c8e97786231d3ac1c11c921dd5fa"
+      }
+    ],
+    "selected": true,
+    "idle_height_px": [
+      238,
+      236,
+      237,
+      236
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/sp_la/north.png",
+    "sha256": "b34b9189a13751e66a8f9c122eb72bcd3cd63a02b67bae991e4fec69ddd7dd03",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Duelista (sp_la) — vista norte, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. NORTH / true rear view. Head, chest and toes face AWAY, upstage toward the top of the sheet in every frame. Show back of head, hairstyle, hood or helmet as appropriate, shoulder blades, and boot heels. Keep cape short, keep hand edges exposed. Correct always-rear shoulder and elbow positions. All forward gestures take place on the far side, anatomically foreshortened and partially occluded by the body. Show dorsum and knuckles or edges of both empty hands, never paint frontal palms or front chest features onto the visible back. Last two poses topple AWAY, soles and heels nearest in the foreground and head and hands above and away within the cell.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the second block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Duelista, the same youthful chibi Swordsman, blue eyes and distinctly spiky red-brown hair. No costume redesign. Physical RIGHT arm is the ONLY silver-plated arm, which appears on viewer's right in the north view. The dark-red cape stays on the other shoulder.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 242 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 53 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. fencer parry with empty armored guard arm near eye height, other hand low; 2. one empty hand makes a twisting wrist motion as if turning an opponent's arm, other arm ready; 3. a long fencer lunge with one extended empty hand, other hand drawn back and visible; 4. a backward evasion hop with both empty hands balanced, no trail. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. For all upright frames, narrow rounded heel backs face the camera and hide the toes, shoulders and elbows look correct from behind. No frontal belt clasp or facial features on the back. Keep a distinct four-frame gait alternating trailing boot soles. The last row column 3 shows a forward fall arrested by both palms and BOTH bent knees, top of head upstage, hips still high and boot heels close. In column 4, the hips drop, legs extend away from the crown toward viewer, body collapses compactly face-down with both soles closest and crown farthest. Clearly distinguish C3 and C4. The dark red cape stays on the character's LEFT (image left in rear). Solely the character's RIGHT shoulder and right bracer (image right) have silver. Preserve darkness of both gloves. Place the parry and the long thrust at the far side, with wrist/knuckle backs visible beyond silhouette. Distinct backward hop toward viewer with feet airborne and heel backs visible.",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/animations/directional/defender/body.png",
+        "sha256": "376cff77afffde2ce602e1fec1f233ef489dec90f3a86fb6ca079fb19e292766"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/assassin/south.png",
+        "sha256": "432d1471ac4c6f12634e08fd9f8fc3bf0f3b8793d4dd7b617d942972ea3d1e67"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/sp_la/south.png",
+        "sha256": "f342ebb56f63bac1b7d25c7302d263354ec6c8e97786231d3ac1c11c921dd5fa"
+      }
+    ],
+    "selected": false,
+    "idle_height_px": [
+      235,
+      236,
+      229,
+      234
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/sp_la/north_v2.png",
+    "sha256": "d405cbbba75d05bb38adf26e6a8c910a3123daaf4474670be560a2703472dff3",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Duelista (sp_la) — vista norte, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. NORTH / true rear view. Head, chest and toes face AWAY, upstage toward the top of the sheet in every frame. Show back of head, hairstyle, hood or helmet as appropriate, shoulder blades, and boot heels. Keep cape short, keep hand edges exposed. Correct always-rear shoulder and elbow positions. All forward gestures take place on the far side, anatomically foreshortened and partially occluded by the body. Show dorsum and knuckles or edges of both empty hands, never paint frontal palms or front chest features onto the visible back. Last two poses topple AWAY, soles and heels nearest in the foreground and head and hands above and away within the cell. Active visual scale correction only plus rear contact cues. In the first row start clear idle bodies about y=45 and end y=287, all exactly 242 px tall. The previous short rendering had [235,236,229,234]: enlarge at least 3 percent. Cape left, only right arm has silver (screen right). In R4C3 hips high, boots folded underneath and hands partly visible beyond head; R4C4 fully flat belly-down, boot soles nearest. Rotate the backs of empty gloves toward the viewer in every main gesture. All first four sprites are planted with both heels on the same ground level, never stepping.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the second block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Duelista, the same youthful chibi Swordsman, blue eyes and distinctly spiky red-brown hair. No costume redesign. Physical RIGHT arm is the ONLY silver-plated arm, which appears on viewer's right in the north view. The dark-red cape stays on the other shoulder.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 242 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 53 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. fencer parry with empty armored guard arm near eye height, other hand low; 2. one empty hand makes a twisting wrist motion as if turning an opponent's arm, other arm ready; 3. a long fencer lunge with one extended empty hand, other hand drawn back and visible; 4. a backward evasion hop with both empty hands balanced, no trail. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. Active visual scale correction only plus rear contact cues. In the first row start clear idle bodies about y=45 and end y=287, all exactly 242 px tall. The previous short rendering had [235,236,229,234]: enlarge at least 3 percent. Cape left, only right arm has silver (screen right). In R4C3 hips high, boots folded underneath and hands partly visible beyond head; R4C4 fully flat belly-down, boot soles nearest. Rotate the backs of empty gloves toward the viewer in every main gesture. All first four sprites are planted with both heels on the same ground level, never stepping.",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/animations/directional/defender/body.png",
+        "sha256": "376cff77afffde2ce602e1fec1f233ef489dec90f3a86fb6ca079fb19e292766"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/assassin/south.png",
+        "sha256": "432d1471ac4c6f12634e08fd9f8fc3bf0f3b8793d4dd7b617d942972ea3d1e67"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/sp_la/south.png",
+        "sha256": "f342ebb56f63bac1b7d25c7302d263354ec6c8e97786231d3ac1c11c921dd5fa"
+      }
+    ],
+    "selected": true,
+    "idle_height_px": [
+      235,
+      236,
+      235,
+      235
+    ]
+  }
+]
