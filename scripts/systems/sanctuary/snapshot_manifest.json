@@ -1,0 +1,80 @@
+{
+  "res://scripts/systems/sanctuary/sanctuary_authority.gd": {
+    "revision": 1,
+    "fields": [
+      "owner_id",
+      "grace_family",
+      "zones",
+      "grace",
+      "presence_remaining",
+      "tick_serial",
+      "aegis_remaining",
+      "aegis_capacity",
+      "aegis_radius",
+      "aegis_prototype",
+      "aegis_pulses",
+      "marked_target_id",
+      "seal_key"
+    ],
+    "omitted": {
+      "_applied": "per-tick memo of applied rules; cleared at the start of every tick, so it is empty at any capture point between ticks"
+    }
+  },
+  "res://scripts/systems/sanctuary/sanctuary_zone.gd": {
+    "revision": 1,
+    "fields": [
+      "role",
+      "owner_id",
+      "shape",
+      "base_radius",
+      "radius",
+      "half_angle",
+      "anchor_mode",
+      "center",
+      "area",
+      "duration",
+      "remaining",
+      "pulse_interval",
+      "pulse_remaining",
+      "pulses",
+      "element",
+      "rules",
+      "skill_id",
+      "family_id",
+      "prototype",
+      "owner_inside",
+      "_inside"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/systems/sanctuary/sanctuary_grace.gd": {
+    "revision": 1,
+    "fields": [
+      "charges",
+      "cap",
+      "unlimited_remaining",
+      "excess_pool",
+      "excess_fraction",
+      "idle_time",
+      "decay_remaining",
+      "heal_serial",
+      "gained_total",
+      "spent_total",
+      "last_spend_key",
+      "last_spend_amount",
+      "_claimed",
+      "_claim_order"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/systems/sanctuary/sanctuary_rules.gd": {
+    "revision": 1,
+    "fields": [],
+    "omitted": {}
+  },
+  "res://scripts/systems/sanctuary/sanctuary_helpers.gd": {
+    "revision": 1,
+    "fields": [],
+    "omitted": {}
+  }
+}
