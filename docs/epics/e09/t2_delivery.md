@@ -12,7 +12,7 @@ validação (WORKFLOW) e a integração por T10.
 | Origem da worktree | `master` = `acd589eb`; trazido com `git merge --ff-only 771a314f…` (sem conflito) |
 | Branch | `claude/hungry-elbakyan-169f52` (nome criado pela ferramenta; o plano previa `claude/e09-t2`) |
 | Checkout | `C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.claude\worktrees\hungry-elbakyan-169f52` |
-| Commit de conteúdo | ver `git log` da branch: o commit "feat(e09-t2)…". O SHA da ponta vai na mensagem final da sessão (um recibo não contém o próprio SHA) |
+| Commit de conteúdo | `1d42dc55b1d796bdcb3989286589beb7dd8fa5dd` ("feat(e09-t2): generator-neutral art pipeline"). O commit seguinte só acrescenta este SHA ao recibo; a ponta da branch (base de T4) vai na mensagem final, porque um recibo não contém o próprio SHA |
 | Push / `master` | não feitos |
 
 ## O que foi entregue (C5)
