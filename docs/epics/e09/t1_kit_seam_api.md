@@ -136,7 +136,7 @@ snapshot não chama `on_attach`. Testes podem usar `player.attach_kit(kit)`.
 | `resolve_cast(player, cast) -> bool` | executa a skill | depois do confirmado e da revelação ofensiva |
 | `basic_attack_profile(player) -> {"range", "delivery"}` | ao medir e lançar o ataque básico | `range` substitui `basic_range` da classe; `delivery` = `&"direct"`, `&"mage"` ou `&"precision"` |
 | `compose_basic_attack(player, target, request) -> DamageRequest` | a cada ataque básico | devolva o pedido, uma cópia alterada ou um novo de `kit_make_request` |
-| `before_hit_mitigation(player, hit) -> {"cancel", "reason"}` | golpe recebido, passo 1 | `cancel: true` anula o golpe inteiro |
+| `before_hit_mitigation(player, hit) -> {"cancel", "reason", "damage_multiplier"}` | golpe recebido, passo 1 | `cancel: true` anula o golpe inteiro; `damage_multiplier` (T1.1) escala o dano recebido, ver 4.2 |
 | `after_hit_mitigation(player, hit, result)` | golpe recebido, passo 2 | `hit.frontal` e `hit.facing_dot` |
 | `on_shield_broken(player, hit, result)` | golpe recebido, passo 3 | o golpe levou o último ponto de escudo |
 | `on_heal(player, requested, applied, source)` | curas reportadas | excedente = `requested - applied` |
@@ -145,6 +145,7 @@ snapshot não chama `on_attach`. Testes podem usar `player.attach_kit(kit)`.
 | `on_death(player)` | morte do jogador | antes da recuperação de morte da expedição |
 | `on_return(player)` | primeiro tick vivo depois de uma morte | volta ao portal ou revive |
 | `on_build_changed(player)` | `apply_run_modifiers` (troca de build/aprendizado na run) | sem cura, recarga ou reset implícitos |
+| `temporary_stat_sources(player) -> Array[Dictionary]` (T1.1) | toda recomposição do breakdown do jogador | leitura pura do estado do kit; ver 4.4 |
 | `on_enemy_attack(player, event)` | um inimigo comprometeu um ataque contra o jogador | ver 5.3 |
 | `concealment_active(player) -> bool` | ocultação do kit | ver 6 |
 | `on_reveal(player, duration)` | ação ofensiva revelou o jogador | — |
@@ -185,8 +186,17 @@ não passam pelo pipeline.
 1. `before_hit_mitigation(player, hit)`. Com `{"cancel": true, "reason": &"..."}` nada mais
    acontece e o resultado é
    `{"landed": false, "cancelled": true, "cancel_reason", "damage": 0, "actual_damage": 0, "absorbed_damage": 0, "critical": false, "killed": false, "can_trigger_effects": false, "source_id", "target_id", "skill_id"}`.
+   Sem cancelamento, a chave opcional `"damage_multiplier": float` (T1.1) escala o dano
+   recebido: o jogador aplica `damage_dealt_multiplier *= m` numa **cópia** do pedido
+   (`request.copy()`), como a redução frontal já faz. O pedido original nunca muda.
+   - Valor ausente, não numérico, não finito ou negativo é ignorado; `1.0` segue o caminho
+     sem cópia. `0.0` é aceito (golpe aterrissa com dano zero, sem cancelar).
+   - `cancel` tem prioridade: com os dois, o golpe é cancelado e o multiplicador some.
+   - Quando `m != 1`, o resultado ganha `"kit_damage_multiplier": m`.
+   - O multiplicador entra antes das reduções existentes e se multiplica com elas.
 2. Mitigação existente (Parede de Escudos, guardas do Defensor, `HealthState`), depois
-   `after_hit_mitigation(player, hit, result)`.
+   `after_hit_mitigation(player, hit, result)`. `hit["request"]` continua sendo o pedido
+   original, mesmo com multiplicador.
 3. `on_shield_broken(player, hit, result)` se o escudo estava acima de zero e zerou neste golpe.
 
 Descritor `hit`:
@@ -211,12 +221,36 @@ Descritor `hit`:
 | `kit_force_target(enemy, duration)` / `kit_break_sight(enemy, duration)` | primitivas de ameaça (6) a partir do jogador |
 | `kit_concealed() -> bool` | ocultação do kit ativa e não revelada |
 | `has_kit()`, `kit_owns_skill(skill_id)`, `kit_time` | consultas |
+| `refresh_kit_stats()` (T1.1) | recompõe o breakdown depois que as fontes temporárias do kit mudaram (4.4) |
 
 Dano de luz (A2): dano mágico (`magic`) numa skill com `SkillDefinition.element = &"light"`.
 Atenção: `SkillDefinition.tags` são descritores de efeito de item (`EffectTags`: `flaming`,
 `freezing`…); uma etiqueta fora dessa lista faz a captura de rank falhar com
 `unknown_effect_tag`. Por isso o elemento tem campo próprio, `element`, com os valores
 `physical`, `fire`, `ice`, `lightning`, `light`, `arcane`, `spirit` ou vazio.
+
+### 4.4 Fontes de atributo temporárias do kit (T1.1)
+
+`ClassKit.temporary_stat_sources(player) -> Array[Dictionary]` devolve vazio por padrão.
+`PlayerActor.temporary_stat_sources()` soma o resultado depois das fontes existentes
+(passo do Caçador, postura do Sentinela, Fúria, Marco de Guarda). Entradas vazias são
+descartadas. O formato é o mesmo da fonte `defender_anchor`:
+
+```gdscript
+{"source_id": &"paladin_zone", "label": "Zona consagrada", "increased": {&"physical_defense": 0.2, &"magic_defense": 0.2}}
+```
+
+- Use um `source_id` com o prefixo do kit. Os valores entram na composição única de
+  `BuildSnapshot.stat_breakdown`, sem fórmula própria no kit.
+- O método é leitura pura do estado do kit e roda em toda recomposição (build, Fúria,
+  Marco, `refresh_kit_stats`).
+- Quando a resposta mudar (entrar ou sair da zona, por exemplo), o kit chama
+  `player.refresh_kit_stats()`. Ele recompõe pelo mesmo caminho de Fúria e do Marco
+  (`_apply_derived_stats(_build_stat_breakdown())`) e emite `resources_changed`.
+  É idempotente, não cura, não recarrega SP e não zera recargas: os déficits de HP e SP
+  continuam iguais. Sem `run_state` ou breakdown ainda, não faz nada.
+- O breakdown não se recompõe sozinho a cada tick; sem a chamada, a fonte só aparece na
+  próxima recomposição de outra origem.
 
 ## 5. Inimigos (C1.5)
 
@@ -441,7 +475,9 @@ func after_hit_mitigation(_player: PlayerActor, hit: Dictionary, result: Diction
 ```
 
 O kit de fixture completo, que exercita todos os ganchos, está em
-`scripts/classes/fixture/fixture_kit.gd`, e o teste em `tests/e09/kit_seam_test.gd`.
+`scripts/classes/fixture/fixture_kit.gd`, e o teste em `tests/e09/kit_seam_test.gd`. Os
+ganchos de T1.1 (multiplicador de dano recebido e fontes temporárias) têm teste próprio,
+`tests/e09/kit_seam_hooks_v2_test.gd`, com uma subclasse do kit de fixture.
 
 ## 13. Limitações conhecidas (para quem consome)
 
