@@ -57,3 +57,20 @@ captions, letters, imitation text, frame, grid, floor, cast shadow, drop shadow 
 
 Conferir hash, prompt e versão escolhida; comparar com a B2 de 1118; recortar as duas lâminas e
 usá-las no lugar das posições 1 e 2 da B2 no empacotamento.
+
+## Entrega — 14/11/2026
+
+`assets/art/e08_codex_1119/equipment/weapons_daggers.png`, 2172×724 RGBA,
+`1aecbcea607e526757c3ddef5ffc7fcd425e4aa30030366faf7dfdd39ad5474d`, igual ao `provenance.json`
+(uma versão, `"selected": true`, prompt exato e as duas referências com SHA256).
+
+Conferência:
+- **Separadas:** duas colunas opacas sem contato, x 485–668 e 1449–1632, com fundo transparente
+  entre elas. Cada lâmina recorta inteira.
+- **Fiéis à B2:** a reta mantém a lâmina facetada prateada, a guarda dourada e o cabo de couro
+  trançado; a curva mantém o gancho, o entalhe, o canal carmim, o losango vermelho e o pomo com
+  pedra. A curva saiu um pouco mais avermelhada que o aço cinza-escuro da B2. Fica como está; o
+  ajuste de cor, se preciso, é no empacotamento.
+- Sem mãos, texto ou sombra.
+
+Aprovada. No empacotamento, as duas lâminas substituem as posições 1 e 2 da B2.

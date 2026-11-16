@@ -581,3 +581,10 @@ do save `save_pair_02` e a decomposição da retomada registradas em [E08](e08.m
   separadas (briefing 1119) não foram geradas.
 - A avaliação visual e de produto é humana. Aprovação técnica não é aceite do usuário; o playtest
   habitual e `master` não foram tocados.
+
+## Aceite do usuário — 16/11/2026
+
+O usuário aprovou o candidato `db7f9252` depois do teste ("Aprovado", 16/11/2026). Aprovação de
+produto do E08 com a arte atual das classes; a arte híbrida em staging (1116–1123) não entra no
+pacote, e o pedido 1124 fica pendente. Seguem o avanço do playtest habitual (`codex/playtest`) e
+o merge em `master`, sem push, registrados abaixo.
