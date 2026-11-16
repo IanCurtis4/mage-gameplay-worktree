@@ -1,0 +1,20 @@
+{
+  "schema": "ragrpg_review_builds_v1",
+  "identity_id": "mg_ac",
+  "builds": [
+    {
+      "id": "thaumaturge_prism_altar",
+      "name": "Altar Prismático",
+      "base_ranks": {"fireball": 5, "ice_spear": 5, "lightning": 5, "phantom_barrier": 2, "mage_mana_regeneration": 2},
+      "evolution_ranks": {"thaumaturge_votive_circle": 5, "thaumaturge_votive_prism": 3, "thaumaturge_healing_refraction": 2, "thaumaturge_altar_shift": 4, "thaumaturge_elemental_choir": 3, "thaumaturge_prismatic_judgment": 3, "thaumaturge_convergent_dawn": 1},
+      "shortcuts": ["thaumaturge_votive_circle", "fireball", "ice_spear", "lightning", "thaumaturge_altar_shift", "thaumaturge_prismatic_judgment", "thaumaturge_healing_refraction", "phantom_barrier", "thaumaturge_convergent_dawn"]
+    },
+    {
+      "id": "thaumaturge_dawn_choir",
+      "name": "Coro da Aurora",
+      "base_ranks": {"fireball": 4, "ice_spear": 3, "lightning": 3, "fire_wall": 2, "phantom_barrier": 3, "mage_mana_regeneration": 3, "teleport": 1},
+      "evolution_ranks": {"thaumaturge_votive_circle": 3, "thaumaturge_votive_prism": 2, "thaumaturge_healing_refraction": 4, "thaumaturge_altar_shift": 2, "thaumaturge_elemental_choir": 2, "thaumaturge_prismatic_judgment": 3, "thaumaturge_convergent_dawn": 5},
+      "shortcuts": ["thaumaturge_votive_circle", "thaumaturge_convergent_dawn", "fireball", "ice_spear", "lightning", "thaumaturge_prismatic_judgment", "thaumaturge_healing_refraction", "thaumaturge_altar_shift", "fire_wall", "phantom_barrier", "teleport"]
+    }
+  ]
+}
