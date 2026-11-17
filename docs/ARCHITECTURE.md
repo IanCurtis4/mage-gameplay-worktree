@@ -1,5 +1,13 @@
 # Arquitetura vigente — índice de autoridades e contratos
 
+## E12 — leitura de estado do kit e relógio de cast (17/11/2026)
+
+[Contrato E12](epics/e12_contract.md). `ClassKit.hud_state(player)` é uma leitura pura, no
+formato versionado `ragrpg_kit_hud_v1`; `CombatActor.cast_progress()` é a leitura comum dos
+relógios de cast do jogador e dos inimigos. HUD e overlay só desenham esses dados: nenhuma
+regra, fórmula ou campo de save muda. Nada disso está implementado até as entregas registradas
+no [índice](epics/e12.md).
+
 ## E09 — costura de kits e autoridades de família (16/11/2026)
 
 [Contrato E09](epics/e09_contract.md). Uma tarefa (T1) concentra as edições nos arquivos
