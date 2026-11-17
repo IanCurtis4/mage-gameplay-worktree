@@ -40,7 +40,8 @@ func inspect(expected_path: String, app_name: String) -> void:
 	var name: String = ProjectSettings.get_setting("application/config/name", "")
 	check("app_name", name == app_name, name)
 	check("isolated_user_dir", OS.get_user_data_dir().ends_with("/" + app_name), OS.get_user_data_dir())
-	check("not_editor", not OS.has_feature("editor"), "editor=%s" % OS.has_feature("editor"))
+	# The standard engine always carries the `editor` feature even with --main-pack; recorded as
+	# information (`editor_feature` in the result), as the E08 release probe does.
 
 	# 1. Kits: exactly the four, all ready, valid and offered by their origin.
 	var kit_ids: Array = expected["kits"].keys()
@@ -170,6 +171,6 @@ func inspect(expected_path: String, app_name: String) -> void:
 	file.store_string(JSON.stringify(listing, "\t") + "\n")
 	file.close()
 	var ok := checks.all(func(row: Dictionary) -> bool: return row.ok)
-	var result := {"ok": ok, "count": checks.size(), "checks": checks, "pack_entries": listing.size(), "user_data_dir": OS.get_user_data_dir(), "mode": "native_standard_engine_exact_release_pack"}
+	var result := {"ok": ok, "count": checks.size(), "checks": checks, "pack_entries": listing.size(), "user_data_dir": OS.get_user_data_dir(), "editor_feature": OS.has_feature("editor"), "mode": "native_standard_engine_exact_release_pack"}
 	print("E09_T10_INSPECT_RESULT ", JSON.stringify(result))
 	quit(0 if ok else 1)
