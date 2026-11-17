@@ -522,7 +522,7 @@ func _draw() -> void:
 	if health != null:
 		var bar_width := 104.0 if sprite_visual_scale > 1.0 else 52.0
 		var ratio := health.current_hp / health.max_hp
-		var bar_y := -_sprite_visible_height * sprite_visual_scale - 8.0 if sprite_texture != null else -54.0 * sprite_visual_scale
+		var bar_y := overhead_bar_y()
 		draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width, 6), Color(0.08, 0.09, 0.12, 0.9))
 		draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width * ratio, 6), Color("dc5757"))
 	if berserker_wound_visual_stacks > 0:
@@ -566,6 +566,17 @@ func _draw() -> void:
 		draw_arc(Vector2(0, -18), collision_radius + 16.0, -PI * 0.8, PI * 0.8, 28, Color("ba8de9"), 3.0, true)
 	if weaken_remaining > 0.0:
 		draw_arc(Vector2(0, 8), collision_radius + 17.0, 0.0, TAU, 28, Color("a889c4", 0.8), 1.5, true)
+
+## Local y of the top of the overhead HP bar (E12 C2), the same value _draw uses. The cast
+## bar and the overhead kit markers take it as their reference. Presentation only.
+func overhead_bar_y() -> float:
+	return -_sprite_visible_height * sprite_visual_scale - 8.0 if sprite_texture != null else -54.0 * sprite_visual_scale
+
+## Read-only view of the cast clock (E12 C2). Default: no cast. PlayerActor and
+## EnemyActor override it; no rule, signal or field changes. With a cast:
+## {"active": true, "skill_id", "label" (pt-BR), "total", "remaining", "kind", "category"}.
+func cast_progress() -> Dictionary:
+	return {"active": false}
 
 func _draw_target_ring(radius: float, color: Color, width: float) -> void:
 	var points := PackedVector2Array()

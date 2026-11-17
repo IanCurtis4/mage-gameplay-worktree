@@ -2662,6 +2662,21 @@ func cancel_active_cast() -> bool:
 func has_active_cast() -> bool:
 	return active_cast_skill != &""
 
+## E12 C2: read-only view of the preparation clock, flat (_advance_active_cast) and world
+## (_world_prepared_cast) paths alike. A skill without preparation never shows as active.
+func cast_progress() -> Dictionary:
+	if active_cast_skill == &"" or not is_finite(active_cast_total) or active_cast_total <= 0.0: return {"active": false}
+	var definition := ClassCatalog.skill_definition(active_cast_skill)
+	var label := definition.display_name if definition != null and not definition.display_name.is_empty() else "Conjuração"
+	return {"active": true, "skill_id": active_cast_skill, "label": label, "total": active_cast_total, "remaining": clampf(active_cast_remaining, 0.0, active_cast_total), "kind": &"cast", "category": &"player"}
+
+## E12 C1: the kit HUD state (ragrpg_kit_hud_v1), {} without a kit. An invalid state from
+## the kit becomes {} with one warning per kit and error code (KitHudState.checked);
+## never fails the tick. Pure: may be read every HUD update and while paused.
+func kit_hud_state() -> Dictionary:
+	if kit == null: return {}
+	return KitHudState.checked(kit.hud_state(self), kit)
+
 func skill_cast_time(skill_id: StringName) -> float:
 	var rank_definition := _runtime_rank_definition(skill_id)
 	if rank_definition != null:
