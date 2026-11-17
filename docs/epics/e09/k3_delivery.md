@@ -12,7 +12,7 @@ as cinco perguntas: [k3_contract.md](k3_contract.md). Costura: [t1_kit_seam_api.
 | Passo 0.2 | `git merge --no-ff 4fbfd9db26a1b753b53ba48cc21fa3fff74178c9` (ponta da T1 com T1.1, T1.2 e A14) → `7876fd834c17ebd54edd5a928a3c6fb779d234b1`, sem conflito |
 | Branch | `claude/sharp-sanderson-ff7ed8` |
 | Checkout | `C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.claude\worktrees\sharp-sanderson-ff7ed8` |
-| Commit entregue | (no fim desta seção, depois do commit) |
+| Commit entregue | `677f0045e089fb9845f16e14e80825cfe8130568` (conteúdo); este recibo com o SHA vem no commit seguinte |
 
 ## Arquivos (todos de dono exclusivo)
 
