@@ -24,7 +24,8 @@ func _run() -> void:
 		quit(2)
 		return
 	# F10 Q4 added the five published forest species to the runtime catalog.
-	var expected := {&"mob": 16, &"equipment": 85, &"card": 6, &"augment": 31, &"set": 14}
+	# E09 T8 (A15) added the four e09_* equipment items: 85→89.
+	var expected := {&"mob": 16, &"equipment": 89, &"card": 6, &"augment": 31, &"set": 14}
 	var forest_species: Array[StringName] = [&"forest_wolf", &"forest_boar", &"forest_stalker", &"forest_canopy_archer", &"forest_ancient_warden"]
 	var failures := 0
 	for origin: StringName in expected:
