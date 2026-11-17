@@ -252,3 +252,48 @@ rastreabilidade ([t11_supervision.md](t11_supervision.md), seção 4). As respos
 
 Com isso, **T10 e T11 estão entregues**. O candidato está **aprovado tecnicamente e aguarda o aceite
 de produto** do usuário. O merge em `master` continua dependendo desse aceite explícito.
+
+## Playtest habitual — 17/11/2026
+
+O avanço foi feito depois da aprovação técnica da T11, pelo procedimento do WORKFLOW (preparação,
+item 4), e não é aceite de produto.
+
+- **Checkout:** `C:/Users/João Pedro/Documents/ChatGPT/RagRPG`, branch `codex/playtest`.
+- **Avanço:** fast-forward de `acd589eb` até `221b6284`, que é o candidato `3843d324` mais os
+  documentos da T10 e da T11. Nenhum arquivo de runtime muda entre os dois commits.
+- **Backup:** antes do avanço, as 1891 alterações locais (543 ` M` e 1348 não rastreadas) foram
+  copiadas, com SHA256, para `.tools/playtest_backup_e09_20261117/`.
+
+  | Arquivo | SHA256 |
+  |---|---|
+  | `inventory_before.json` | `E80BE96B…17C0` |
+  | `local_tracked_changes.patch` (1625 bytes) | `2E25641A…175B` |
+
+  Das 543 modificações rastreadas, só 2 têm conteúdo: `export_presets.cfg` e `docs/epics/e07.md`. As
+  outras 541 são `.import` que diferem só no fim de linha.
+- **Cruzamento com o delta** (`overlap.json`, SHA256 `C9BAA583…56A1`): 2 caminhos.
+  - **`export_presets.cfg`:** a edição local (`export_path` `v0.4` → `v0.6`) é vizinha das linhas de
+    filtro do E09, e o merge de três vias acusou conflito só por adjacência. O arquivo foi
+    restaurado ao commit, o avanço foi feito e a versão combinada foi gravada: o preset do candidato
+    com a mesma troca local para `v0.6`
+    (`export_presets.resolved.cfg`). Agora o diff local é só essa linha.
+  - **`tests/e08_compact_coverage_test.gd.uid`:** era um arquivo não rastreado e idêntico ao do
+    candidato. Foi removido antes do avanço e voltou pelo commit, com o mesmo conteúdo e só o fim de
+    linha diferente.
+- **Depois do avanço** (`inventory_after.json`, SHA256 `4CC622B7…662F`):
+  - as outras 1889 alterações locais estão **byte-idênticas**, inclusive `docs/epics/e07.md`;
+  - os 5 arquivos de save pessoal (`profile.json`, `profile.backup.json`, `controls.cfg` e os de
+    `admin_backups`) conferem por hash, sem o conteúdo ter sido aberto.
+- **Importação headless** no diretório habitual, com APPDATA e LOCALAPPDATA isolados: saída 0, 41 s,
+  sem linhas de erro.
+  - Ela acrescentou 44 `.import` rastreados que mudam só no fim de linha. Os 585 ` M` em `.import`
+    conferem byte a byte com o índice (`import_eol_check_after.json`, SHA256 `1E7F8815…10FD4`).
+  - Acrescentou também 44 `.import` não rastreados, de arte-fonte, como na E08.
+- **Smoke headless** de 600 quadros na cena principal, com perfil isolado: saída 0, 12 s, sem linhas
+  de erro.
+- **Como jogar:** pare a partida no editor e aceite o reload do projeto. Depois aperte F5 no projeto
+  habitual. Esse caminho usa o perfil pessoal; para testar a escolha de evolução, crie um
+  personagem novo. Os perfis prontos das 8 builds estão no pacote isolado
+  `.tools/playtest_e09/e09_3843d324/`, pelos atalhos "Jogar E09 - …". O roteiro é o
+  [playtest_guide.md](playtest_guide.md).
+- **Git:** sem push e sem merge em `master`, que espera o aceite explícito do usuário.
