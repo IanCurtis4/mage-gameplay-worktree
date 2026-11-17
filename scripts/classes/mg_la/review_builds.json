@@ -1,0 +1,20 @@
+{
+  "schema": "ragrpg_review_builds_v1",
+  "identity_id": "mg_la",
+  "builds": [
+    {
+      "id": "arcane_blade_execution_chain",
+      "name": "Corrente de Execuções",
+      "base_ranks": {"teleport": 5, "ice_spear": 5, "fireball": 3, "lightning": 3, "phantom_barrier": 1, "mage_mana_regeneration": 2},
+      "evolution_ranks": {"arcane_blade_refracted_mark": 2, "arcane_blade_enchanted_edge": 3, "arcane_blade_refraction": 4, "arcane_blade_prismatic_leap": 4, "arcane_blade_light_fracture": 2, "arcane_blade_prismatic_sentence": 5, "arcane_blade_prism_specter": 1},
+      "shortcuts": ["arcane_blade_refracted_mark", "arcane_blade_refraction", "arcane_blade_prismatic_leap", "arcane_blade_prismatic_sentence", "arcane_blade_prism_specter", "teleport", "ice_spear", "fireball", "lightning", "phantom_barrier"]
+    },
+    {
+      "id": "arcane_blade_prism_specter",
+      "name": "Espectro Prismático",
+      "base_ranks": {"teleport": 3, "ice_spear": 4, "fireball": 4, "lightning": 4, "phantom_barrier": 1, "mage_mana_regeneration": 3},
+      "evolution_ranks": {"arcane_blade_refracted_mark": 1, "arcane_blade_enchanted_edge": 2, "arcane_blade_refraction": 3, "arcane_blade_prismatic_leap": 3, "arcane_blade_light_fracture": 3, "arcane_blade_prismatic_sentence": 4, "arcane_blade_prism_specter": 5},
+      "shortcuts": ["arcane_blade_refracted_mark", "arcane_blade_prism_specter", "arcane_blade_refraction", "arcane_blade_prismatic_leap", "arcane_blade_prismatic_sentence", "teleport", "ice_spear", "lightning", "fireball", "phantom_barrier"]
+    }
+  ]
+}
