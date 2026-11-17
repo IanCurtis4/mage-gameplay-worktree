@@ -1,0 +1,1911 @@
+{
+  "schema": "ragrpg_art_archive_index_v1",
+  "created": "2026-11-16",
+  "entries": [
+    {
+      "path": "e08_codex_1119/equipment/provenance.json",
+      "sha256": "4da5d39e87d1795ca03497eb89ca33c119a4717a2574919326c14975792eff61",
+      "size": 2932,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1119/equipment/provenance.json"
+    },
+    {
+      "path": "e08_codex_1119/equipment/weapons_daggers.png",
+      "sha256": "1aecbcea607e526757c3ddef5ffc7fcd425e4aa30030366faf7dfdd39ad5474d",
+      "size": 299337,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1119/equipment/weapons_daggers.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/ac_br/east.png",
+      "sha256": "7b6e82fce61cf53376b3128cb3a8774d2dddbe2199557c1f1d27395f79d9ba5c",
+      "size": 1687383,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/ac_br/east.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/ac_br/north.png",
+      "sha256": "dbca92e3307a7a5214df977c02178c5ca1e0914f2d32fc091161a1b8e2e76436",
+      "size": 1630841,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1120/characters/ac_br/north.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/ac_br/north_v2.png",
+      "sha256": "7d63c21ab57ea10121e958eda18d2c81abf85824d719821f1581badb1e5abc34",
+      "size": 1691639,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/ac_br/north_v2.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/ac_br/provenance.json",
+      "sha256": "e459a3a8df8e55b0278bebbfa75fde24fb083f366b0d277dfafa461dc30eb80e",
+      "size": 25813,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1120/characters/ac_br/provenance.json"
+    },
+    {
+      "path": "e08_codex_1120/characters/ac_br/south.png",
+      "sha256": "e8ca1090d29cfa1622147abe7db36dae8f89837b4f0b006790687a45cc88da55",
+      "size": 1871551,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/ac_br/south.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/ac_br/south_v2.png",
+      "sha256": "c114dbb4b3c7397f051694eebbffac3488e3a4b6c45598ed0a03dd7fa3c28a62",
+      "size": 1443279,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1120/characters/ac_br/south_v2.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/ac_br/west.png",
+      "sha256": "c162f2c8224a4e075f1410347ce8fb5b5d67dccae0d2b4c07828b8b21c554dc0",
+      "size": 1776687,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/ac_br/west.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/ar_br/east.png",
+      "sha256": "c4cc9ccc8642ddc7f471f0a1dd88f87b6eff522d0f9b110124dfea9e0d513c96",
+      "size": 1533294,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/ar_br/east.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/ar_br/north.png",
+      "sha256": "f54fe1bb1d9fae1160d6f57ae6304be3aca3eb7ce29d2bed01dd05fbbaed2898",
+      "size": 1596385,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/ar_br/north.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/ar_br/provenance.json",
+      "sha256": "35990cd1d529e8ff09a71bbaa388ec5955f1952221b230bb9056c76cacb07791",
+      "size": 21320,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1120/characters/ar_br/provenance.json"
+    },
+    {
+      "path": "e08_codex_1120/characters/ar_br/south.png",
+      "sha256": "59664ac9c59be0a388f4aa84d39e185125d8bcab131544e5d2d753021a2380da",
+      "size": 1470426,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/ar_br/south.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/ar_br/south_v2.png",
+      "sha256": "961374521d37f00439ba3f5460f3e24c1b828a0a43800d6033317e52aacc73da",
+      "size": 1377332,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1120/characters/ar_br/south_v2.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/ar_br/west.png",
+      "sha256": "87a1f95eb59fd29b25acbac580a346c43ac7ec8681e087bc92db541abc7bb94f",
+      "size": 1456377,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/ar_br/west.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_dr/east.png",
+      "sha256": "7819c94aa40ba30dca68dd25ae526a1c1cad0816fb4c02edf14dff5d2d7040eb",
+      "size": 1656194,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/br_dr/east.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_dr/north.png",
+      "sha256": "47cfbe590e033205b35ca7bf9c4a72451d1cba6477c1e4bba9dd271472785e38",
+      "size": 1446433,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1120/characters/br_dr/north.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_dr/north_v2.png",
+      "sha256": "0bb9b9f2f13fdf45ae262811266de40a9c3036f1102f8154af14be27ccd98b37",
+      "size": 1538308,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/br_dr/north_v2.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_dr/provenance.json",
+      "sha256": "57e8fc8859a950e9834c37ceba3817f5e628d304128b733edb986a2c58477dc6",
+      "size": 30554,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1120/characters/br_dr/provenance.json"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_dr/south.png",
+      "sha256": "138f13d8946a4a5c5194a6fffdb555b3c60bdd5d6b44ede30482fb1dc8a6c623",
+      "size": 1713251,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/br_dr/south.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_dr/south_v2.png",
+      "sha256": "d9463e9d03267c16ab504064444749735d2bbbec53b84b042adcb47c6e7885dc",
+      "size": 1483600,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1120/characters/br_dr/south_v2.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_dr/west.png",
+      "sha256": "beccf01d1a581197ee471abb9021216f9fed9c8820ebcf5c7cea4be7a7507755",
+      "size": 1609294,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1120/characters/br_dr/west.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_dr/west_v2.png",
+      "sha256": "9f92296c33b32b8412f68342f7707b8bce2c93778d7c5aec4a57d732e5d15d67",
+      "size": 1172485,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/br_dr/west_v2.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_la/east.png",
+      "sha256": "a4055303384341617eb203895bfab41d71711d99df8a9c5b65467d95637674bd",
+      "size": 1196905,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1120/characters/br_la/east.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_la/east_v2.png",
+      "sha256": "a27fe9016a135c09a7cd4a64144637ea905f1d7d1a53ac64eaf8cfb545d24392",
+      "size": 1126989,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1120/characters/br_la/east_v2.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_la/east_v3.png",
+      "sha256": "260052389b3a056ecdb55ad47bad0e7001e7f2652aebc460eae1bff5136b4f4b",
+      "size": 843260,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/br_la/east_v3.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_la/north.png",
+      "sha256": "fca3cf21cbcd03f4cd5a2ba774957a4b3fd3a3661c37ebeb4fb16478160355e7",
+      "size": 1112809,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1120/characters/br_la/north.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_la/north_v2.png",
+      "sha256": "187b1e282fe65147fdddd97cdfdfa53be493567e2090a41db96481d7fc0f2a97",
+      "size": 1431243,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/br_la/north_v2.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_la/provenance.json",
+      "sha256": "b9d152b9705cd26264c387b0840028b9c476a459fb568090ba193e9b1dd643b2",
+      "size": 34313,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1120/characters/br_la/provenance.json"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_la/south.png",
+      "sha256": "3876936b81c5c1d6d7049c055cbe0f5598288658c78c147588926c34c7eff116",
+      "size": 1627202,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/br_la/south.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_la/south_v2.png",
+      "sha256": "7ae5042e5d3edbb82c2c32f6e319ab69268dc67d4e662849740844ef8393cac1",
+      "size": 1411306,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1120/characters/br_la/south_v2.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_la/west.png",
+      "sha256": "2e8985d9971b403aa456d90d5f8ce269301fb2b74d54c06ea42fcfc9c369a48b",
+      "size": 1125112,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/br_la/west.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_mo/east.png",
+      "sha256": "a14aa36c5077444f3dca3c738dedbaa545ba4a07d8fa2523dd4f936ea7a98e38",
+      "size": 1361571,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/br_mo/east.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_mo/north.png",
+      "sha256": "af85f8afec3d8d72b2e3a02f0a1dcb2c5fb6130d3a4685c625b640432bc8677d",
+      "size": 1270549,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/br_mo/north.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_mo/provenance.json",
+      "sha256": "85724ed4dfceaf7dc1906ebf8f17f1e17d56bdd9764b3069511597f125811f65",
+      "size": 16387,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1120/characters/br_mo/provenance.json"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_mo/south.png",
+      "sha256": "34c1fda604affaf76deb0ec5cdfd5bcdf55baefb2abb909a4c24f3735599e2e1",
+      "size": 1395649,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/br_mo/south.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/br_mo/west.png",
+      "sha256": "e5a640246f658173b014164d0358f0f778c10a09ceabe0ba042e55aac105ee63",
+      "size": 1109349,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/br_mo/west.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/mg_br/east.png",
+      "sha256": "bd2f44b1e6f1e4b7f8fce79b37eab1594e54ad4f725c90d8418cf287329af77c",
+      "size": 1375912,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/mg_br/east.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/mg_br/north.png",
+      "sha256": "e39f728f8888deb3bcc73d97b7565f021a9fd2bab3983b56a9653b9d3498a87e",
+      "size": 1449654,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/mg_br/north.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/mg_br/provenance.json",
+      "sha256": "58e143311a44db7dcf201ab2153b34dc28ab7d84b7e189b0359fcb4c2217e73c",
+      "size": 28651,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1120/characters/mg_br/provenance.json"
+    },
+    {
+      "path": "e08_codex_1120/characters/mg_br/south.png",
+      "sha256": "50b4972bc8dcad10a4ba491c50c009bfb39fadd03d9623160e0fc59a71e5b354",
+      "size": 1651007,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/mg_br/south.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/mg_br/south_v2.png",
+      "sha256": "9708eb25f33bd33adf5fb28c1ab124e59319bbeda16c85667020b3bb3cf2201b",
+      "size": 1755532,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1120/characters/mg_br/south_v2.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/mg_br/west.png",
+      "sha256": "4c76a3932707654ebab5382b3d623e40075603ce57d13261ea9ebbe1b7201fd9",
+      "size": 1398687,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1120/characters/mg_br/west.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/mg_br/west_v2.png",
+      "sha256": "05543fd7cb7350e0431adb8d275a4172c6aca236125094a9ec1b1bca6cae26dc",
+      "size": 1598816,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1120/characters/mg_br/west_v2.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/mg_br/west_v3.png",
+      "sha256": "7ef45d1f2d03e5c69884b3c01a870ebdb7164c65b5b297f4c5e6e26fb6518eee",
+      "size": 1346105,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/mg_br/west_v3.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/sp_br/east.png",
+      "sha256": "fd1968c6e2acb3341ef24c380da0f285915430d32ff13c1656da8d675a2eb109",
+      "size": 1469134,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/sp_br/east.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/sp_br/north.png",
+      "sha256": "b6378c5fa9a296ba8d42f226a0f9eca6aefc8b151c5bc07ea332efb05cb4e631",
+      "size": 1615599,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1120/characters/sp_br/north.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/sp_br/north_v2.png",
+      "sha256": "789cfe6ca542a0b536a2b7f21fac01f9b330e0ca7c7b894e1c16cc0244b2597a",
+      "size": 1434474,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/sp_br/north_v2.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/sp_br/provenance.json",
+      "sha256": "cdbf916fe39402179e1685edd385c26db85b22647f8bebdd34684d1bb53159d4",
+      "size": 20969,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1120/characters/sp_br/provenance.json"
+    },
+    {
+      "path": "e08_codex_1120/characters/sp_br/south.png",
+      "sha256": "d876e9215113b13f0c85545116a1006566dc78b3cec88aa6bed0554d08d5bc47",
+      "size": 1514127,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/sp_br/south.png"
+    },
+    {
+      "path": "e08_codex_1120/characters/sp_br/west.png",
+      "sha256": "e07646c9f95010453c478bb0ed1388f9d52610af6414b9ded290b3da98f6cba1",
+      "size": 1424171,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/characters/sp_br/west.png"
+    },
+    {
+      "path": "e08_codex_1120/equipment/provenance.json",
+      "sha256": "888f01679413463390030e4d99e9fdfbdc7dc08ec5a59651d0fa4705b96eba0f",
+      "size": 10639,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1120/equipment/provenance.json"
+    },
+    {
+      "path": "e08_codex_1120/equipment/weapons_h1.png",
+      "sha256": "839835dfa1eab4a965d7bc1f724e60ce7531244d7c42ecf3db0caef239a61df7",
+      "size": 3021954,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1120/equipment/weapons_h1.png"
+    },
+    {
+      "path": "e08_codex_1120/equipment/weapons_h1_v2.png",
+      "sha256": "b36825e12f9d3729bb5943ccf4ec5c9182b26616ac75c3dd76ee52e00b83016d",
+      "size": 1470020,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/equipment/weapons_h1_v2.png"
+    },
+    {
+      "path": "e08_codex_1120/equipment/weapons_h2.png",
+      "sha256": "504d034fd9e0756f5f86cef21f32a773818db9efcc0325b0d1957776d0c9acfc",
+      "size": 1260678,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1120/equipment/weapons_h2.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ac/east.png",
+      "sha256": "461a9716f194a7ba20513cb40eb63da74f8d5952de3b6e57a0d6ba4ce1bbcded",
+      "size": 1871475,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ac/east.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ac/east_v2.png",
+      "sha256": "5a725c7bd1e1e77175e90f753e1fdc0eeecb03200d523c3d3a61e7934b4fa559",
+      "size": 1643253,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ac/east_v2.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ac/east_v3.png",
+      "sha256": "8d63cc724ce7258355611e18ec923cd4133b08e5ab4e99e874c92a9d647de55a",
+      "size": 1754494,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ac/east_v3.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ac/east_v4.png",
+      "sha256": "34ef88763ddfb5c0795482899a426e6d736e0e26c8c51fc83e256b27bb4d5f8e",
+      "size": 1536069,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ac/east_v4.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ac/east_v5.png",
+      "sha256": "55c6caab876a47f548caeb5a3e516131c6822c9d1832a3309b3563e5d15c4320",
+      "size": 1568570,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/br_ac/east_v5.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ac/east_v6.png",
+      "sha256": "a1bbd03b514aefa2d3bb3385b5a6ab10d0fa677c344ce2803b5aaa08ccb7d590",
+      "size": 2023917,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ac/east_v6.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ac/north.png",
+      "sha256": "9763f9e5dd3c2d564ebe54bbef5e19aa1c6a015c954a4e3ddf94acf331287c8c",
+      "size": 1739040,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ac/north.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ac/north_v2.png",
+      "sha256": "eed36d66c49ea003773e00ef5406cf84f78ecfd5eaf9dcaede4a5c51b13aed67",
+      "size": 1882338,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ac/north_v2.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ac/north_v3.png",
+      "sha256": "92ee0008d14ceee19124d04c49c2e8a1a66509e9e25db5ed0289c8862f9e5b00",
+      "size": 1654358,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ac/north_v3.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ac/north_v4.png",
+      "sha256": "b09e31c7cef0e610f926553729f82614b34e9be426c501f355f33c6bb6d59443",
+      "size": 1827403,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/br_ac/north_v4.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ac/north_v5.png",
+      "sha256": "a29ef0702ae268ecb283fca3203a688252760e028b730f55a7ff5378b739f8dd",
+      "size": 1909163,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ac/north_v5.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ac/provenance.json",
+      "sha256": "93894d23deb7f3f4f0e2fd599fd865404a3fe03b97931ae8e415a1d791f70de3",
+      "size": 69784,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1121/characters/br_ac/provenance.json"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ac/south.png",
+      "sha256": "2e983f7aaa037116ad1fab4b68cfed8dd866543a80f3f46a97d8b9dd0f487777",
+      "size": 1701561,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/br_ac/south.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ac/south_v2.png",
+      "sha256": "caa2e7da9a83607a763d108c39119aeb38495c51626654237219019f328ad0f9",
+      "size": 1801420,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ac/south_v2.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ac/west.png",
+      "sha256": "cd5002dbd442a91e89ccdf482e28a749e09f737a40806b2e9894883418ef0ef9",
+      "size": 1691685,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ac/west.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ac/west_v2.png",
+      "sha256": "8a649d612f333525ee180beb3250ef9245c5a0378fa30c965548458a6140155e",
+      "size": 1543795,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ac/west_v2.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ac/west_v3.png",
+      "sha256": "c44e8ea636befe556fd2173c9c2330d154dee53731954b76a416e1a5a2c49ab3",
+      "size": 1852988,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ac/west_v3.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ac/west_v4.png",
+      "sha256": "f7ea4a9749be4892cc560f499fa9f39b80d5a191e5a455885f19e18c1aba0410",
+      "size": 1548176,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ac/west_v4.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ac/west_v5.png",
+      "sha256": "c1c025753e91f92a0ec8a57c96f852e4055ad88925bf3e5e4e48d5764d029d02",
+      "size": 2341362,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/br_ac/west_v5.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ar/east.png",
+      "sha256": "5e88655c9eedd0a85a8fe09addc07a1d703468358537fdae66e41e5612877e57",
+      "size": 3027498,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ar/east.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ar/east_v2.png",
+      "sha256": "899e892ef537c7fb048778e2f5982eeafa2e9b359f2c8c8decb839ae8ff952d7",
+      "size": 1808019,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/br_ar/east_v2.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ar/north.png",
+      "sha256": "dee0943ef672191cdc6d8cd7d54d1a2f5e47351907313a84ef217a0e590a4c40",
+      "size": 1724462,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ar/north.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ar/north_v2.png",
+      "sha256": "294ebee86a59a0e05c7d31ce41a62747f6a05a920d20599181a95b69a2a1d273",
+      "size": 1608090,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ar/north_v2.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ar/north_v3.png",
+      "sha256": "6221d190adf7b13f39360a5818bd25fa9d0fd0d6c1244a8076a95547312c961e",
+      "size": 1546914,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/br_ar/north_v3.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ar/provenance.json",
+      "sha256": "4d4104a02a4714b6969ca5bfb3f7f59cf3faec7bab6f8ab5bd1bd3d4c3d4dd2c",
+      "size": 43071,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1121/characters/br_ar/provenance.json"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ar/south.png",
+      "sha256": "7f409b1390116873add2fd50ae0178f502822efb9dd93592e7e88267632ec2fe",
+      "size": 1697461,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/br_ar/south.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ar/west.png",
+      "sha256": "6375870cc63e11083877b6592c14d8784bc19d9347e0815ab79294f28a6f6f15",
+      "size": 1645206,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ar/west.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ar/west_v2.png",
+      "sha256": "674d864de79a3fb347bd79f992704dde66f8a77a09d9b62df92d2934f847a114",
+      "size": 1459192,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/br_ar/west_v2.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ar/west_v3.png",
+      "sha256": "1fc808a8b75b44f27aea71aace5e01a802198b0259e40420a401a99c36795aa5",
+      "size": 1779820,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ar/west_v3.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ar/west_v4.png",
+      "sha256": "4596c8668ea1fbfb5242ee66ab37d49a0ce1fb6a6fc7ca41d39e5c512090bbe6",
+      "size": 1562635,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ar/west_v4.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_ar/west_v5.png",
+      "sha256": "ef3b5bb3ca5129622e518b36adb31cd307b3051d2f851e3bc44a0685288dc14b",
+      "size": 1560245,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_ar/west_v5.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_mg/east.png",
+      "sha256": "074de1fb587f4753a7b718adda73ac7c5652473ddc631b35efbfb96a46a3d16a",
+      "size": 1491583,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_mg/east.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_mg/east_v2.png",
+      "sha256": "af3de40e16d774912d9d94d34d853359106474269cbf670ab36a782ad1e37504",
+      "size": 1624871,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/br_mg/east_v2.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_mg/north.png",
+      "sha256": "e85a6a79dcb645ab1f3d99ca33cddba654701a399fdcf6f101d6b8ac021cce82",
+      "size": 1463598,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_mg/north.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_mg/north_v2.png",
+      "sha256": "ced7a5f3589b65c00ef62353783413e72051dac1e2f28b70c38cd204f255c26b",
+      "size": 1602946,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/br_mg/north_v2.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_mg/provenance.json",
+      "sha256": "d09705d8fdcf845ed686551f2ecd1e86407a74b743e56fd5f77492a49fd81f1f",
+      "size": 28322,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1121/characters/br_mg/provenance.json"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_mg/south.png",
+      "sha256": "f5d7a8adafcea6f2805c3a22b29ace81b470c3e3cebfa45f91e82ed293e6bd37",
+      "size": 1618174,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/br_mg/south.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_mg/west.png",
+      "sha256": "f46aba41e7297024f11bba7489f095b111a2edbadafd5e12ff4e479a1c684646",
+      "size": 1459316,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/br_mg/west.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_sp/east.png",
+      "sha256": "b56452f6889d3a1767927abfbe9e2fbe99ecadf7a66766329153170325583f7e",
+      "size": 1566682,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_sp/east.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_sp/east_v2.png",
+      "sha256": "61f79b275b4342943578db70e5c495c1d4f377063c189d24eb6b3ce99be0c7e1",
+      "size": 1468407,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/br_sp/east_v2.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_sp/north.png",
+      "sha256": "33baea63d7513bc9bf211ca5d36eac7b6b2d08040adaa5eba554efc4de482db6",
+      "size": 1944088,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_sp/north.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_sp/north_v2.png",
+      "sha256": "fb01f0881475ed3203db82cee81f0b11d392e9f28fbec4b45d524b0960012d47",
+      "size": 1478776,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_sp/north_v2.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_sp/north_v3.png",
+      "sha256": "6a00f1de8eec81ae27bbb77bc8b6ad2bfc5b89074179abdfba2402a99007471a",
+      "size": 1683117,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/br_sp/north_v3.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_sp/provenance.json",
+      "sha256": "7b7bd237fc4139515884990b86f8434e6175a7620f7da77d7ac75df0a0839933",
+      "size": 36141,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1121/characters/br_sp/provenance.json"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_sp/south.png",
+      "sha256": "d8f28d9ee7e3bdcd8fe09e28bdb4a8f6576c00b2df5d96be80235d1377ab1584",
+      "size": 1846027,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/br_sp/south.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_sp/west.png",
+      "sha256": "99465f348b214861b03dc67612d582785197bcf420b019e23242b472d4836970",
+      "size": 1646675,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/br_sp/west.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/br_sp/west_v2.png",
+      "sha256": "397d763f636544227297c4b4700d7ca96a4339bc29f388e8c3de35943eb52335",
+      "size": 1587456,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/br_sp/west_v2.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/dr_br/east.png",
+      "sha256": "33a24164706976b7bcba15734d9d8c5ca6ab5bae81ecbaf4d8b4ccc3595e91e1",
+      "size": 1434594,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/dr_br/east.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/dr_br/north.png",
+      "sha256": "613ba79957cf643959c56e9ea91a1473ffb76c69b5013d5efd16362633c3f68e",
+      "size": 1799185,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/dr_br/north.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/dr_br/north_v2.png",
+      "sha256": "811f5ab1ca1949d607dcf7f95dc4eb0658535eb2a424230b3cd9b30a625f4b53",
+      "size": 1750177,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/dr_br/north_v2.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/dr_br/provenance.json",
+      "sha256": "5792a79b2d571ad0185506cfa5f476c856c7cfa084f2ae750dfa822513b7857d",
+      "size": 26484,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1121/characters/dr_br/provenance.json"
+    },
+    {
+      "path": "e08_codex_1121/characters/dr_br/south.png",
+      "sha256": "ebdbfc0e9ffdc3ddb5f88040b73f7004d56f0eed55fe032ef1bfed30f9021c7f",
+      "size": 1726480,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/dr_br/south.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/dr_br/west.png",
+      "sha256": "a71bed805b323945e6673d8a43b5974305a4935a5388625264b87158769694bb",
+      "size": 1538862,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/dr_br/west.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/dr_br/west_v2.png",
+      "sha256": "d43f32ea0223199d74fce8e105afcfe0359119604096692d064a8284e2ac57de",
+      "size": 1458451,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/dr_br/west_v2.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/la_br/east.png",
+      "sha256": "9b3c6338527050c4e8beb9ac50dca18c69ab1a48300408305089b0b21a0a3374",
+      "size": 1485561,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/la_br/east.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/la_br/north.png",
+      "sha256": "62f3003080bee1177e3e675354a6599b63cb78f74c2735ca48954d3e19bf3962",
+      "size": 1422545,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/la_br/north.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/la_br/north_v2.png",
+      "sha256": "50792338df41c03a5ce8f0d834fe8ef694087ec206d0d7ec4867d02898235f4b",
+      "size": 1437401,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/la_br/north_v2.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/la_br/north_v3.png",
+      "sha256": "e56c2fa7f07602b058e066d8d81d3821e7289004218665db476ee5e9a0b99147",
+      "size": 1486227,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/la_br/north_v3.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/la_br/provenance.json",
+      "sha256": "df2605b526d372e5bf76c4d6c8af63346a2d16b1619001d920555a0025c7f1d1",
+      "size": 24786,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1121/characters/la_br/provenance.json"
+    },
+    {
+      "path": "e08_codex_1121/characters/la_br/south.png",
+      "sha256": "0404a4d6ec911f83baa97c2957c288c2155ed4ce5e10a4d247b081b09e30af02",
+      "size": 1729032,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/la_br/south.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/la_br/west.png",
+      "sha256": "1890dde7a720f1bb5647231dd2c2414e6ab794235453a3ae9f0912f770ed1aaf",
+      "size": 1394937,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/la_br/west.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/mo_br/east.png",
+      "sha256": "d661c219b2acdded5868c858bd1749dcdfce50efb2cbe904044bc25465f7995d",
+      "size": 1580625,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/mo_br/east.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/mo_br/east_v2.png",
+      "sha256": "6776c2c631fdfebc43737866d099a3bc78acc13fa6d82b785a566c068ff12b12",
+      "size": 1280674,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/mo_br/east_v2.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/mo_br/east_v3.png",
+      "sha256": "19c84f15c3c3be6eae5e008eb6f525c4fec1961c49a5fe83709520acb6dafad8",
+      "size": 1573854,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/mo_br/east_v3.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/mo_br/north.png",
+      "sha256": "2cca80467cffe00816b40c693e312d12fa9d7da5a570898e45b77586923634f1",
+      "size": 1577245,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/mo_br/north.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/mo_br/north_v2.png",
+      "sha256": "02115a75c1404518747525fd312fcd0e1f98ae3aa17732c14bac0ca899e73d7c",
+      "size": 1889487,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/mo_br/north_v2.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/mo_br/north_v3.png",
+      "sha256": "978892c317fdef9e7896732092f4d79349724d5e18346b89eb1958cc94dd92b0",
+      "size": 1531152,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/mo_br/north_v3.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/mo_br/provenance.json",
+      "sha256": "bd9f51e38209a920d86b3780bf92eb08d152be6e0a5f4a3dd5ceb7fb9ccbf595",
+      "size": 44242,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1121/characters/mo_br/provenance.json"
+    },
+    {
+      "path": "e08_codex_1121/characters/mo_br/south.png",
+      "sha256": "56b193f381af04ed17da05f9ae673835f3f6c85367a82173d3f5acc1532469bd",
+      "size": 1652286,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/mo_br/south.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/mo_br/south_v2.png",
+      "sha256": "552d5933cd3bfbd64586fc9d540d2b4f21271e86c802a02edb31c37b73ed9cc5",
+      "size": 1661801,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/mo_br/south_v2.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/mo_br/south_v3.png",
+      "sha256": "3598574cbc15149b4b0713eb25d47c48b95ac23b0e05114878a4ea9eaabccfc5",
+      "size": 1640757,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1121/characters/mo_br/south_v3.png"
+    },
+    {
+      "path": "e08_codex_1121/characters/mo_br/west.png",
+      "sha256": "45c605954d8a43008dc742400faec7d081bd9d79709cc31d1956297006c37a70",
+      "size": 1597173,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/characters/mo_br/west.png"
+    },
+    {
+      "path": "e08_codex_1121/equipment/provenance.json",
+      "sha256": "74130ffa0e7b562a0bbc3af4eee35a643c60a45bf2017a968b5fd4c21f29c039",
+      "size": 2766,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1121/equipment/provenance.json"
+    },
+    {
+      "path": "e08_codex_1121/equipment/weapons_n1.png",
+      "sha256": "487fc62d9dcb4143aefac8a7b1312312adb7100b94a2f8fa872f56fdc71354d1",
+      "size": 548163,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/equipment/weapons_n1.png"
+    },
+    {
+      "path": "e08_codex_1121/props/necro_props.png",
+      "sha256": "8262cbd037e8ae9359f13f50b1c3d05acda5ead56c7d012488d4ea4898a26a6a",
+      "size": 1092444,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1121/props/necro_props.png"
+    },
+    {
+      "path": "e08_codex_1121/props/provenance.json",
+      "sha256": "22f2ee7d558045ec3b8c1d5fd8808cd159eb9b50e64c3f85d3b43cc0915511be",
+      "size": 3721,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1121/props/provenance.json"
+    },
+    {
+      "path": "e08_codex_1122/characters/br_sp/east.png",
+      "sha256": "1a09f12d45178f04f3ad6360e69fb59bb767b227de543c6d26e6c2091df4f81d",
+      "size": 1413519,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1122/characters/br_sp/east.png"
+    },
+    {
+      "path": "e08_codex_1122/characters/br_sp/east_v2.png",
+      "sha256": "7c90547064cdaefca505725589743ae8621a16163ece227da8619a7c4a6b17b9",
+      "size": 1289526,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1122/characters/br_sp/east_v2.png"
+    },
+    {
+      "path": "e08_codex_1122/characters/br_sp/north.png",
+      "sha256": "fe5f5ce39a50daab93754e8ce6ac69fbcf6333b4b8e395c53e998c3d6878f595",
+      "size": 1382988,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1122/characters/br_sp/north.png"
+    },
+    {
+      "path": "e08_codex_1122/characters/br_sp/north_v2.png",
+      "sha256": "269f59ae9166e2cfe42adbd2aadcff59119ec429892404ebcfc969817e354eae",
+      "size": 1481338,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1122/characters/br_sp/north_v2.png"
+    },
+    {
+      "path": "e08_codex_1122/characters/br_sp/north_v3.png",
+      "sha256": "8755dce8681f52f82433504e160cbcddb4d95c65aaeff07150c1e0fe8637ad8e",
+      "size": 1453698,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1122/characters/br_sp/north_v3.png"
+    },
+    {
+      "path": "e08_codex_1122/characters/br_sp/north_v4.png",
+      "sha256": "863802e61d3d0900fe6d470ad61efd4cbce2dc26d15b826e2f096d263311d6b9",
+      "size": 1602566,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1122/characters/br_sp/north_v4.png"
+    },
+    {
+      "path": "e08_codex_1122/characters/br_sp/provenance.json",
+      "sha256": "3630c539b0c06b539a1619384ca23894e600eaa3565c2e5358bdafa285ade366",
+      "size": 51282,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1122/characters/br_sp/provenance.json"
+    },
+    {
+      "path": "e08_codex_1122/characters/br_sp/south.png",
+      "sha256": "293c5cccc8e647c0445dbfe00927b001edf2fba00720214115585be62b3453ef",
+      "size": 1808563,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1122/characters/br_sp/south.png"
+    },
+    {
+      "path": "e08_codex_1122/characters/br_sp/south_v2.png",
+      "sha256": "9dee45f903b0b5ed60f2e5034d70b7b569ecfc36567c753f262bc7ff908c79f5",
+      "size": 1531691,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1122/characters/br_sp/south_v2.png"
+    },
+    {
+      "path": "e08_codex_1122/characters/br_sp/west.png",
+      "sha256": "dc22d71244e372f4afe25f4196f17b6ff1f68b7f3ce7868026e33ce1aba5f390",
+      "size": 1517907,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1122/characters/br_sp/west.png"
+    },
+    {
+      "path": "e08_codex_1122/characters/br_sp/west_v2.png",
+      "sha256": "c5dfc6c6c301c8b7a4da341d3dc86018d6e3144b5817e2dff9699b1b78efe7b1",
+      "size": 1372417,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1122/characters/br_sp/west_v2.png"
+    },
+    {
+      "path": "e08_codex_1122/characters/dr_br/north.png",
+      "sha256": "26b15901c4ecf8a5a443a556c1b2f52bfb129c8374f0d80d23dc2484ae2ef697",
+      "size": 1614237,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1122/characters/dr_br/north.png"
+    },
+    {
+      "path": "e08_codex_1122/characters/dr_br/north_v2.png",
+      "sha256": "a5e5806cc84d1d1d80280eb4ad9637ac9ab07441d134827d2eb3124e61516322",
+      "size": 1584347,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1122/characters/dr_br/north_v2.png"
+    },
+    {
+      "path": "e08_codex_1122/characters/dr_br/provenance.json",
+      "sha256": "b76653fe36c4f27036328327510235727e8c4c7dffd35f20c7436ed9fb03a170",
+      "size": 6733,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1122/characters/dr_br/provenance.json"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_ac/east.png",
+      "sha256": "96b169d7d06edd4488e14af349d37917a1ac471334416be0c8fb1a0ecde9673d",
+      "size": 1352374,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/mg_ac/east.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_ac/north.png",
+      "sha256": "3c013991d7496b6c3fae742b54ed288e8ce62785f4de63db99604335239052a7",
+      "size": 1467860,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/mg_ac/north.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_ac/provenance.json",
+      "sha256": "2d4713426216a7e686ce24138f189b530363f2a30b16bc719322d556b8322b5b",
+      "size": 21676,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1123/characters/mg_ac/provenance.json"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_ac/south.png",
+      "sha256": "fd17dfb2d2a28e06b4557f0f0f8086f05b120e3aea414dbca30aa8a2c936f189",
+      "size": 1464877,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/mg_ac/south.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_ac/west.png",
+      "sha256": "a16a9c5f5f140dd6989df19a1222ff6d829ba98f13ad1b5aff0fbbc744ac89aa",
+      "size": 1148402,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_ac/west.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_ac/west_v2.png",
+      "sha256": "4fb71cbf5c5064b643cc39eaa5af146e252e8d98f7f8b63246ff08fcbcc8eb5c",
+      "size": 1247431,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/mg_ac/west_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_dr/east.png",
+      "sha256": "43931d87e84c2b3eeef7e3a76f5fe05779f121fe97e4f20856c5524bf886f7ee",
+      "size": 1075755,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_dr/east.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_dr/east_v2.png",
+      "sha256": "3234a8198e17ab1b873222f28844a40e4016cc118b70e86634fd60a09c4fb7ef",
+      "size": 1087913,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/mg_dr/east_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_dr/north.png",
+      "sha256": "8f5f6d54ed75b242e65274a6948f0c156f110b09af868893ba3d522046610807",
+      "size": 1040961,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_dr/north.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_dr/north_v2.png",
+      "sha256": "ac98cc59d467e6e47888a50fbc3f487641f7f27c641b1de60fe8a6a3ac0d2568",
+      "size": 1167403,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_dr/north_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_dr/north_v3.png",
+      "sha256": "d8cb1ed0613806f868f029a38d72d45d8a52f78477f8cd2bda52ec7a36d23e3d",
+      "size": 1256536,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/mg_dr/north_v3.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_dr/provenance.json",
+      "sha256": "b5e00b32bb0389806f6f5b199b9e9b8a29037fbb72c8d2e77495bb78a0670cd4",
+      "size": 54699,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1123/characters/mg_dr/provenance.json"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_dr/south.png",
+      "sha256": "c2fedbb99a55de19f106e26b5f4d68509d693e49b5a64693f21da725f7d3ecb3",
+      "size": 1286928,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/mg_dr/south.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_dr/south_v2.png",
+      "sha256": "ac30e2aa1160300393e6c98da1a094f6420358708a27b71c2e75de10eef632ea",
+      "size": 1882224,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_dr/south_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_dr/south_v3.png",
+      "sha256": "6e65d53e1ab30208e35fb956937df0de6d5c994c7685bb6b331634e86f55e084",
+      "size": 1409045,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_dr/south_v3.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_dr/south_v4.png",
+      "sha256": "ea17a4009cd88bd31f3e74be80f563ed32efd06eb677c933499022d5316852b8",
+      "size": 1261972,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_dr/south_v4.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_dr/west.png",
+      "sha256": "9d8414ba612b4f274318d92bf650c134d1229a61ce13d98906e4495179d599f2",
+      "size": 1071051,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_dr/west.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_dr/west_v2.png",
+      "sha256": "99564728c7d6691dd30afbc6194cd899427878febd4a410dafa6cd2d05e3a093",
+      "size": 1466881,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/mg_dr/west_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_la/east.png",
+      "sha256": "491fc2420970ca62bd5a8fc31ca346838267a9e8c041f75c082b5e935b4cf87d",
+      "size": 1156394,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_la/east.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_la/east_v2.png",
+      "sha256": "c12c34dadf19bc873331f54581822671e580e3c1b5cd4695a45d301d9fae9e94",
+      "size": 1250221,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_la/east_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_la/east_v3.png",
+      "sha256": "12afe8905c8cbb46c7b516228aeb7684a8a923e322f8ad0eac6d8eec7a2cce79",
+      "size": 1129996,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/mg_la/east_v3.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_la/north.png",
+      "sha256": "4d37180044ee465af90bc7a3a2ba768c0a1e3e67a932151969d839a8357e982c",
+      "size": 945012,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_la/north.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_la/north_v2.png",
+      "sha256": "1df8df974c197190fc3202d9ea5da6470b0b6f28349cfc605552935c668956d1",
+      "size": 1197118,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/mg_la/north_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_la/north_v3.png",
+      "sha256": "31671654ce422aae0ef3763ae9f3331f5dcd26e435c1dd51cb178270e69412b5",
+      "size": 1040504,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_la/north_v3.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_la/provenance.json",
+      "sha256": "b2e78ed2e7ee07b7fbb04fe6bd06e139fdeb4244c8e4ea324afc4af27c34730e",
+      "size": 57804,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1123/characters/mg_la/provenance.json"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_la/south.png",
+      "sha256": "f8202be8fd999920d9fc45b17f6797dc699a816e901c94c9acd2487d77296e05",
+      "size": 1159381,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/mg_la/south.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_la/south_v2.png",
+      "sha256": "859915392ee6d83f6d994488255e24ad6102eb3c564dfc065e7b1c7ab00a47c1",
+      "size": 1510230,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_la/south_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_la/west.png",
+      "sha256": "a4fd76f53523217153e20885dd01359bcd38c97d99117ae817371400dee8e04f",
+      "size": 1083227,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_la/west.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_la/west_v2.png",
+      "sha256": "05c934ad4ef1b1d0122bad8ddf155a61736268427c12fd5f38cadf3d04eede71",
+      "size": 1014319,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_la/west_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_la/west_v3.png",
+      "sha256": "f54321a731ff75c2ea73eff407f0729381f78b8569535a0b878ec59629da8f0f",
+      "size": 1096414,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_la/west_v3.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_la/west_v4.png",
+      "sha256": "236064fbe73038c3bfc1b9f08c3402051c18eaf29a37b548df467599d564a427",
+      "size": 1141118,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/mg_la/west_v4.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_mo/east.png",
+      "sha256": "0e6c4a6a716b86054281e25534b60beb88a412d66718d21fbd0c4fb498a2bb83",
+      "size": 1406795,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_mo/east.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_mo/east_v2.png",
+      "sha256": "a108f4ddb1805f81fbafcc21a2cfd63579f26a6bb3da4287f2d63719577fc38f",
+      "size": 1465939,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/mg_mo/east_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_mo/north.png",
+      "sha256": "0abe926c536e9c0a56f899d56413968f1428eeb0a8fe5d8424a5447b080e525c",
+      "size": 1582375,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/mg_mo/north.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_mo/north_v2.png",
+      "sha256": "dd3af3e6c3efff890186b8a31a153080ad7056cb98c6b510bbf19f2625f7f7ff",
+      "size": 1231374,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_mo/north_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_mo/north_v3.png",
+      "sha256": "707155450ceb7cbf112dc1511a5d7ffc57e204793d1fa71ca8854f45ebf0abfb",
+      "size": 1633397,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_mo/north_v3.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_mo/provenance.json",
+      "sha256": "b1e2e9ee9998d7438e453e91629d5d78fc9d937e8f723ee279538f71d4cb152e",
+      "size": 47351,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1123/characters/mg_mo/provenance.json"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_mo/south.png",
+      "sha256": "25d73119cf18e32804e80ce45a9f140fec32a050a1d4808342009f512a42901a",
+      "size": 1482360,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/mg_mo/south.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_mo/south_v2.png",
+      "sha256": "bb0f6e9b83575a43fc14661807b12d287e2533f6da8064a7fee18c6d2eb5495c",
+      "size": 1825920,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_mo/south_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_mo/west.png",
+      "sha256": "bc8daaa69d51ff70dd33bff4f41e067c0b132b928daa82378e0bd34257da555d",
+      "size": 1680900,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_mo/west.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_mo/west_v2.png",
+      "sha256": "65be79ca65fb018c85fab05b80a757a62f267dd28cde573382c9bf6e52c78ee9",
+      "size": 1269536,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/mg_mo/west_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/mg_mo/west_v3.png",
+      "sha256": "f97d65aceae8885f72735667d762748a567b88da466866fb0eb2b0ddcaf713b5",
+      "size": 1490683,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/mg_mo/west_v3.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_ac/east.png",
+      "sha256": "67ea8ee30ea6493056ac98c47cb672f03efefc3354c48156abe536658908cd67",
+      "size": 3267730,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/sp_ac/east.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_ac/east_v2.png",
+      "sha256": "a8c287dfd58e8a0d0cb636c1fc4383106da555e94e286a9a0bdd33c7efa5c926",
+      "size": 1302198,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/sp_ac/east_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_ac/north.png",
+      "sha256": "a608dc618b3052c5d2988d90857f214d54c523b476df255f696e5de5ae3004ae",
+      "size": 1398347,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/sp_ac/north.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_ac/north_v2.png",
+      "sha256": "d717bf36c23fef0babc93948105a729d87f3daf5069c1dc1a2bfa5d193deac9c",
+      "size": 1250900,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/sp_ac/north_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_ac/north_v3.png",
+      "sha256": "2a7a064a1f088961e0fb7be86735ff75924264c0ea5c9b4d982aa7a9b9352d66",
+      "size": 1351421,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/sp_ac/north_v3.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_ac/provenance.json",
+      "sha256": "4303494387dd57b90e40f59051960532e6c9b2ddad509c12a7981ac668454e0d",
+      "size": 37664,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1123/characters/sp_ac/provenance.json"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_ac/south.png",
+      "sha256": "3e0291f22c75e5323427965390dd3a83f8703c4020305788b3b67e19b57f4c8e",
+      "size": 1610477,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/sp_ac/south.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_ac/south_v2.png",
+      "sha256": "c2422925f06333c3b2e7793d62e5d0c8ca4671cec990df67a7216c6c10b0d34a",
+      "size": 1607078,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/sp_ac/south_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_ac/west.png",
+      "sha256": "8759411a13d4eeeea0a9561f219b3634cfea9f3cebb6b5079d0add58137ba2dc",
+      "size": 1279999,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/sp_ac/west.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_dr/east.png",
+      "sha256": "d9a90734331c4479176552ab8d81d3d20494208bc2e4fd5c6013502287624d09",
+      "size": 1305726,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/sp_dr/east.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_dr/east_v2.png",
+      "sha256": "50133cb3186c0ed986ed43b4a700c20fe29b6c09fd42b082ef7c26013d780f5a",
+      "size": 1476670,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/sp_dr/east_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_dr/north.png",
+      "sha256": "9a1e856e3c3e40617760548a6f0337693c07ace1e040d5ba99ab78146c4bdde6",
+      "size": 1518127,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/sp_dr/north.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_dr/north_v2.png",
+      "sha256": "7719652b8fdb86e8bacd73e67ede4e05c1896e60d5773cefc6648b63310f54d7",
+      "size": 1603305,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/sp_dr/north_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_dr/north_v3.png",
+      "sha256": "d75489f9f7e60c50a0fb5108d2db167919bd259be1f5f94428c9af7f716f3035",
+      "size": 1416652,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/sp_dr/north_v3.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_dr/provenance.json",
+      "sha256": "3b46d7ca5b45bfc43dad80d751cea8f22223e8f50651c06fcff1401968629c59",
+      "size": 61713,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1123/characters/sp_dr/provenance.json"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_dr/south.png",
+      "sha256": "f70f62107d8b0315f38347e7a59ac94370f84c1f0a381a486f157c66d749f69c",
+      "size": 1482747,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/sp_dr/south.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_dr/south_v2.png",
+      "sha256": "43198e570ac4152e02ce680d4eae971df5333051ac94f8b947124f8c8af708b5",
+      "size": 1771526,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/sp_dr/south_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_dr/west.png",
+      "sha256": "94a26bfad809f0883db3625d441f4e5a5208fc13d20606f21bdd848e75735f10",
+      "size": 1329370,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/sp_dr/west.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_dr/west_v2.png",
+      "sha256": "0a4d4f2d086508cc324f886f60de493f66a9b1912d6c67f9aaadf72b168d9053",
+      "size": 1334305,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/sp_dr/west_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_dr/west_v3.png",
+      "sha256": "411003607d0018ec06a3d029a91415631e8c7ac803f33be2e9137567faa57a35",
+      "size": 1184240,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/sp_dr/west_v3.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_dr/west_v4.png",
+      "sha256": "052be80068e7eace8878696af5f2e15642ffab643e7e59eab01dd2f011b9e66d",
+      "size": 1800380,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/sp_dr/west_v4.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_dr/west_v5.png",
+      "sha256": "0a86dc668d0e8380550c32cfc6cc4782c977057c05a87764d10e917a2863a95d",
+      "size": 1134889,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/sp_dr/west_v5.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_dr/west_v6.png",
+      "sha256": "e172e6c7be03ca974ee6a477054781c110817b70c8fe9da429fabf49c936c984",
+      "size": 1348701,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/sp_dr/west_v6.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_la/east.png",
+      "sha256": "96d6cb7a0a32c9bebff902011f9679d8024cf560f56fe67715aa2cfb40d1d4d7",
+      "size": 1123773,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/sp_la/east.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_la/north.png",
+      "sha256": "b34b9189a13751e66a8f9c122eb72bcd3cd63a02b67bae991e4fec69ddd7dd03",
+      "size": 1060980,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/sp_la/north.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_la/north_v2.png",
+      "sha256": "d405cbbba75d05bb38adf26e6a8c910a3123daaf4474670be560a2703472dff3",
+      "size": 1208974,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/sp_la/north_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_la/provenance.json",
+      "sha256": "851d2d9863c0b4e0f802384a8065f5258e46e4643cd4d38bb533e3428a5b9d96",
+      "size": 28380,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1123/characters/sp_la/provenance.json"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_la/south.png",
+      "sha256": "f342ebb56f63bac1b7d25c7302d263354ec6c8e97786231d3ac1c11c921dd5fa",
+      "size": 1222582,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/sp_la/south.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_la/south_v2.png",
+      "sha256": "86000548acbc59e02fc2b68482f30c2ffc3af2e36cd37b528ece93dbe84ebdb2",
+      "size": 1363075,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/characters/sp_la/south_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_la/west.png",
+      "sha256": "d79e539b000316945eca7d46499118e5be07aecfb8c9b0b55ef6dbf1dd91c2f1",
+      "size": 1121319,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/sp_la/west.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_mo/east.png",
+      "sha256": "06993cd7db4b5684e58739df8997c09c98ccf88dd992975be8ab9834eeed2622",
+      "size": 1161677,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/sp_mo/east.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_mo/north.png",
+      "sha256": "b038bf9da70289adc81cfcefe635b6ac1d66b9849111a0f685133778c6c30bb0",
+      "size": 1635671,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/sp_mo/north.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_mo/provenance.json",
+      "sha256": "429fc5654025eb50119bcf13fff656da1b5fe947cc87f6fce3dacbffa26977a2",
+      "size": 17031,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1123/characters/sp_mo/provenance.json"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_mo/south.png",
+      "sha256": "7105fb91ffa7e542c6ff2a58fe19d9ddb3b27efdebaaabce26c2e6cd64032744",
+      "size": 1658675,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/sp_mo/south.png"
+    },
+    {
+      "path": "e08_codex_1123/characters/sp_mo/west.png",
+      "sha256": "5a5cd5f33726b7d0f289b78c0bfa30f16ffbd38c9fbe57ff9dfb56fc34b6b8bd",
+      "size": 1330008,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/characters/sp_mo/west.png"
+    },
+    {
+      "path": "e08_codex_1123/equipment/provenance.json",
+      "sha256": "2e4fb632df8215c0c2882250cfd28a99d05692c3e499ee775e36a23fd3248a84",
+      "size": 6842,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1123/equipment/provenance.json"
+    },
+    {
+      "path": "e08_codex_1123/equipment/weapons_e1.png",
+      "sha256": "92353081b31d89d30add62447382cc48661edb02dce38264bdfa94df9b16cd74",
+      "size": 501136,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/equipment/weapons_e1.png"
+    },
+    {
+      "path": "e08_codex_1123/equipment/weapons_e1_v2.png",
+      "sha256": "63a964cebfe22f4972341f5be4679148b44f33871f071f57f60e9803ff91138c",
+      "size": 508469,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1123/equipment/weapons_e1_v2.png"
+    },
+    {
+      "path": "e08_codex_1123/equipment/weapons_e1_v3.png",
+      "sha256": "5ba63f415058032faf8be13c2e5c20cc2979ff93f2d77e7f5cf072ee27f32dfa",
+      "size": 469139,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1123/equipment/weapons_e1_v3.png"
+    },
+    {
+      "path": "e08_nb_1124/refs/mg_ac_south_on_green.png",
+      "sha256": "3ee98dfd4840e04a722ce25c2b89167f2041c51c762c2082f23c37ecda876bf2",
+      "size": 1043122,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_nb_1124/refs/mg_ac_south_on_green.png"
+    },
+    {
+      "path": "e08_nb_1124/refs/mg_ac_south_on_magenta.png",
+      "sha256": "c8fa736605bfb8ac7f39701df250ffc8764355f00bef0ceaa51b07c6437132c4",
+      "size": 1057442,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_nb_1124/refs/mg_ac_south_on_magenta.png"
+    },
+    {
+      "path": "e08_nb_1124/refs/mg_dr_east_old.png",
+      "sha256": "8e66ca8886a9fb48bc6cdf09d06484bf23cd011882e7bdc467d043f8b15bff39",
+      "size": 814229,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_nb_1124/refs/mg_dr_east_old.png"
+    },
+    {
+      "path": "e08_nb_1124/refs/mg_dr_north_old.png",
+      "sha256": "666fcc046250b34f345a629230ebd49a4c6ee89856a804183630b6556d24422a",
+      "size": 908089,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_nb_1124/refs/mg_dr_north_old.png"
+    },
+    {
+      "path": "e08_nb_1124/refs/mg_dr_south_v4.png",
+      "sha256": "1b57b0e2546ae4d54404559ec1d2495f36d3376f7253a2c7fdeb9aef7dc5332c",
+      "size": 972354,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_nb_1124/refs/mg_dr_south_v4.png"
+    },
+    {
+      "path": "e08_nb_1124/refs/mg_dr_west_old.png",
+      "sha256": "8c26edd97053825d29e2b2ce89f71cd0a868c8e6b8d6f72bd81a43ba16cb87f5",
+      "size": 968629,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_nb_1124/refs/mg_dr_west_old.png"
+    },
+    {
+      "path": "e08_nb_1124/refs/mg_mo_east_old.png",
+      "sha256": "214a79dec4714956d90495bfb8c2a89a414a6ee67526d466bcf5545f0063be0e",
+      "size": 1031150,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_nb_1124/refs/mg_mo_east_old.png"
+    },
+    {
+      "path": "e08_nb_1124/refs/mg_mo_north_old.png",
+      "sha256": "50c2de51caac1d2d6b9ce74cc3cd2eb8f4a03b2df836bc1a991bb2d903a9ad22",
+      "size": 1113358,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_nb_1124/refs/mg_mo_north_old.png"
+    },
+    {
+      "path": "e08_nb_1124/refs/mg_mo_south_old.png",
+      "sha256": "33af63b8db91b5cc53186270bf6789acb077214c1b896aaa561e7613ba0944bf",
+      "size": 1076141,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_nb_1124/refs/mg_mo_south_old.png"
+    },
+    {
+      "path": "e08_nb_1124/refs/mg_mo_west_old.png",
+      "sha256": "3c8a8b1b263625691e80532fced0b690fabf582fad8f3f889310e89f6e467346",
+      "size": 1047568,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_nb_1124/refs/mg_mo_west_old.png"
+    }
+  ],
+  "updated": "2026-11-16",
+  "source_root_hint": "RagRPG/.tools/map-editor-m5/assets/art (staging, somente leitura)",
+  "archive_root_hint": "RagRPG/.tools/art_archive/e08 (fora do Git)",
+  "batches": [
+    "e08_codex_1119",
+    "e08_codex_1120",
+    "e08_codex_1121",
+    "e08_codex_1122",
+    "e08_codex_1123",
+    "e08_nb_1124"
+  ],
+  "totals": {
+    "entries": 236,
+    "png": 207,
+    "selected": 99,
+    "bytes": 301901389
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "schema": "ragrpg_art_selection_v1",
+  "scope": "equipment",
+  "updated": "2026-11-16",
+  "selections": {
+    "weapons_e1": {
+      "path": "weapons_e1_v3.png",
+      "sha256": "5ba63f415058032faf8be13c2e5c20cc2979ff93f2d77e7f5cf072ee27f32dfa"
+    }
+  }
+}

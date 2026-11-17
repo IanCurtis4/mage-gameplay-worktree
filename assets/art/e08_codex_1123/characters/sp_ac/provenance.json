@@ -1,0 +1,302 @@
+[
+  {
+    "path": "assets/art/e08_codex_1123/characters/sp_ac/south.png",
+    "sha256": "3e0291f22c75e5323427965390dd3a83f8703c4020305788b3b67e19b57f4c8e",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Paladino (sp_ac) — vista sul, traje híbrido, lote E08 1123",
+    "prompt": "Use case: stylized-concept. Production 2D pixel-art game animation sprite sheet for RagRPG. References attached in order: (1) the person whose identity to preserve, face/hair/build, (2) origin class for silhouette and tailoring only, (3) the affinity class for materials and palette only, (4) cast scale and sprite style, from Swordsman. Use the SOUTH/front block (top 4 rows) of each tall 4x16 atlas. Copy the identity as the same youthful chibi Swordsman, blue eyes and distinctly spiky red-brown hair. Now change the outfit to Paladino: the Defender's blocky armoured silhouette standing upright and symmetric like the Priest: polished silver plate, an open-faced helm that leaves the face and some hair visible, a sky-blue linen tabard with gold trim over the breastplate, a small engraved gold ring motif on the chest; silver, gold and sky blue. Very upright and symmetrical, calm, squared silver pauldrons. Breezy sky-blue and gold panel falls down front between the legs. Open helm with no visor closing the face, clear pointed auburn forelock and blue eyes. Gold ring is engraved flush in the chest, never floating. No cape is needed.\n\nCreate one native square 1254×1254 transparent RGBA PNG of exactly 4x4 separate full-body sprites centered in equal 313-pixel cells. All 16 in the SOUTH/front facing direction, slightly top-down game camera as in reference 1. Keep the visible height of each idle figure about 260 pixels crown-to-sole, with about 34 transparent pixels above the crown and 18–20 below shoes. A dark crisp edge, art with clear pixel clusters, limited 2–3 tone shading, chibi proportions. Keep strong alpha gutters on all four edges, leave fully clear empty space between every adjacent figure, never overlap cells or crop anything. In every living pose show both empty hands with clear fingers and correct anatomy, arms distinct from the torso and costume; no cloak or cape hides either hand. Do not add physical equipment or held objects. Gear is separate art. Clothing details remain consistent.\n\nOrdered rows left to right. Row 1: four variants of ordinary standing idle, very slight breath or eyes changes. Row 2: four gait frames of a real walk, alternate leading left and right foot and opposed arms, passing pose between steps, all front. Row 3 exactly these four action poses: 1. firmly raise one empty guard forearm upright in front, other hand low at the ribs, an oath stance; 2. empty closed fist punches straight forward and one shoulder stays behind; 3. raise one open hand palm upward for a seal and keep the other visible low; 4. both hands over breastplate, head lowered in reverence.\nRow 4: columns 1–2 two different STANDING hurt reactions; column 3 drops forward on knees and both hands at the lower part of the cell, face down; column 4 continues the same fall and lies FULLY PRONE face down and compact, with top of head closest to camera, boots trailing, body completely lowered (never on back). Keep all 4x4 sprites front-facing in costume and action. True transparency. No weapons, shield, staff, thin blades, drawn props, magic, particles, runes outside the garment, floating orbs, loose rocks, floor, external shadows, text, captions or divider lines. ",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/animations/directional/defender/body.png",
+        "sha256": "376cff77afffde2ce602e1fec1f233ef489dec90f3a86fb6ca079fb19e292766"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/priest/south.png",
+        "sha256": "9f21a15a47f09a231b8c2efacfb9e01ee369fa093f534f8bb60e3c90ef7ef225"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      }
+    ],
+    "selected": true,
+    "idle_height_px": [
+      251,
+      251,
+      251,
+      251
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/sp_ac/south_v2.png",
+    "sha256": "c2422925f06333c3b2e7793d62e5d0c8ca4671cec990df67a7216c6c10b0d34a",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Paladino (sp_ac) — vista sul, traje híbrido, lote E08 1123",
+    "prompt": "Use case: stylized-concept. Production 2D pixel-art game animation sprite sheet for RagRPG. References attached in order: (1) the person whose identity to preserve, face/hair/build, (2) origin class for silhouette and tailoring only, (3) the affinity class for materials and palette only, (4) cast scale and sprite style, from Swordsman. Use the SOUTH/front block (top 4 rows) of each tall 4x16 atlas. Copy the identity as the same youthful chibi Swordsman, blue eyes and distinctly spiky red-brown hair. Now change the outfit to Paladino: the Defender's blocky armoured silhouette standing upright and symmetric like the Priest: polished silver plate, an open-faced helm that leaves the face and some hair visible, a sky-blue linen tabard with gold trim over the breastplate, a small engraved gold ring motif on the chest; silver, gold and sky blue. Very upright and symmetrical, calm, squared silver pauldrons. Breezy sky-blue and gold panel falls down front between the legs. Open helm with no visor closing the face, clear pointed auburn forelock and blue eyes. Gold ring is engraved flush in the chest, never floating. No cape is needed.\n\nCreate one native square 1254×1254 transparent RGBA PNG of exactly 4x4 separate full-body sprites centered in equal 313-pixel cells. All 16 in the SOUTH/front facing direction, slightly top-down game camera as in reference 1. Keep the visible height of each idle figure about 260 pixels crown-to-sole, with about 34 transparent pixels above the crown and 18–20 below shoes. A dark crisp edge, art with clear pixel clusters, limited 2–3 tone shading, chibi proportions. Keep strong alpha gutters on all four edges, leave fully clear empty space between every adjacent figure, never overlap cells or crop anything. In every living pose show both empty hands with clear fingers and correct anatomy, arms distinct from the torso and costume; no cloak or cape hides either hand. Do not add physical equipment or held objects. Gear is separate art. Clothing details remain consistent.\n\nOrdered rows left to right. Row 1: four variants of ordinary standing idle, very slight breath or eyes changes. Row 2: four gait frames of a real walk, alternate leading left and right foot and opposed arms, passing pose between steps, all front. Row 3 exactly these four action poses: 1. firmly raise one empty guard forearm upright in front, other hand low at the ribs, an oath stance; 2. empty closed fist punches straight forward and one shoulder stays behind; 3. raise one open hand palm upward for a seal and keep the other visible low; 4. both hands over breastplate, head lowered in reverence.\nRow 4: columns 1–2 two different STANDING hurt reactions; column 3 drops forward on knees and both hands at the lower part of the cell, face down; column 4 continues the same fall and lies FULLY PRONE face down and compact, with top of head closest to camera, boots trailing, body completely lowered (never on back). Keep all 4x4 sprites front-facing in costume and action. True transparency. No weapons, shield, staff, thin blades, drawn props, magic, particles, runes outside the garment, floating orbs, loose rocks, floor, external shadows, text, captions or divider lines. Refine attached fifth image as the editing target. The first four references still control original identity, material and scale. Preserve the young face, auburn forelock, symmetry, tabard, and all sixteen poses of image 5. Change the tiara into a genuine open-faced polished-silver helmet, with visible metal around the temples, side cheek guards beside the face and a shaped silver cap with an open break for the auburn forelock and top tuft. Use thin gold edging. Full face is visible in the opening. Give the square pauldrons a broader Defender silhouette and redraw the gold ring as an engraved design in the chest plate. Standing idle art exactly about 260 px tall including the helmet.",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/animations/directional/defender/body.png",
+        "sha256": "376cff77afffde2ce602e1fec1f233ef489dec90f3a86fb6ca079fb19e292766"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/priest/south.png",
+        "sha256": "9f21a15a47f09a231b8c2efacfb9e01ee369fa093f534f8bb60e3c90ef7ef225"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/sp_ac/south.png",
+        "sha256": "3e0291f22c75e5323427965390dd3a83f8703c4020305788b3b67e19b57f4c8e"
+      }
+    ],
+    "selected": false,
+    "idle_height_px": [
+      267,
+      267,
+      267,
+      267
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/sp_ac/west.png",
+    "sha256": "8759411a13d4eeeea0a9561f219b3634cfea9f3cebb6b5079d0add58137ba2dc",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Paladino (sp_ac) — vista oeste, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. WEST / left side profile. Aim face, body, actions and boot toes to the LEFT. Head and torso in true left-facing side profile, only one eye visible. Independently drawn (never mirrored). Far hand must be distinct from the near hand. Preserve asymmetry on the correct physical sides of the character.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the fourth block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Paladino, the same youthful chibi Swordsman, blue eyes and distinctly spiky red-brown hair. No costume redesign. The gold ring is on the front breastplate only.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 251 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 44 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. firmly raise one empty guard forearm upright in front, other hand low at the ribs, an oath stance; 2. empty closed fist punches straight forward and one shoulder stays behind; 3. raise one open hand palm upward for a seal and keep the other visible low; 4. both hands over breastplate, head lowered in reverence. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. ",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/animations/directional/defender/body.png",
+        "sha256": "376cff77afffde2ce602e1fec1f233ef489dec90f3a86fb6ca079fb19e292766"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/priest/south.png",
+        "sha256": "9f21a15a47f09a231b8c2efacfb9e01ee369fa093f534f8bb60e3c90ef7ef225"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/sp_ac/south.png",
+        "sha256": "3e0291f22c75e5323427965390dd3a83f8703c4020305788b3b67e19b57f4c8e"
+      }
+    ],
+    "selected": true,
+    "idle_height_px": [
+      258,
+      263,
+      258,
+      258
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/sp_ac/east.png",
+    "sha256": "67ea8ee30ea6493056ac98c47cb672f03efefc3354c48156abe536658908cd67",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Paladino (sp_ac) — vista leste, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. EAST / right side profile. Aim face, body, actions and boot toes to the RIGHT. Head and torso in true right-facing side profile, only one eye visible. Independently drawn (never mirrored). Far hand must be distinct from the near hand. Preserve asymmetry on the correct physical sides of the character.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the third block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Paladino, the same youthful chibi Swordsman, blue eyes and distinctly spiky red-brown hair. No costume redesign. The gold ring is on the front breastplate only.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 251 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 44 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. firmly raise one empty guard forearm upright in front, other hand low at the ribs, an oath stance; 2. empty closed fist punches straight forward and one shoulder stays behind; 3. raise one open hand palm upward for a seal and keep the other visible low; 4. both hands over breastplate, head lowered in reverence. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. ",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/animations/directional/defender/body.png",
+        "sha256": "376cff77afffde2ce602e1fec1f233ef489dec90f3a86fb6ca079fb19e292766"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/priest/south.png",
+        "sha256": "9f21a15a47f09a231b8c2efacfb9e01ee369fa093f534f8bb60e3c90ef7ef225"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/sp_ac/south.png",
+        "sha256": "3e0291f22c75e5323427965390dd3a83f8703c4020305788b3b67e19b57f4c8e"
+      }
+    ],
+    "selected": false,
+    "idle_height_px": [
+      249,
+      251,
+      248,
+      248
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/sp_ac/east_v2.png",
+    "sha256": "a8c287dfd58e8a0d0cb636c1fc4383106da555e94e286a9a0bdd33c7efa5c926",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Paladino (sp_ac) — vista leste, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. EAST / right side profile. Aim face, body, actions and boot toes to the RIGHT. Head and torso in true right-facing side profile, only one eye visible. Independently drawn (never mirrored). Far hand must be distinct from the near hand. Preserve asymmetry on the correct physical sides of the character.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the third block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Paladino, the same youthful chibi Swordsman, blue eyes and distinctly spiky red-brown hair. No costume redesign. The gold ring is on the front breastplate only.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 251 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 44 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. firmly raise one empty guard forearm upright in front, other hand low at the ribs, an oath stance; 2. empty closed fist punches straight forward and one shoulder stays behind; 3. raise one open hand palm upward for a seal and keep the other visible low; 4. both hands over breastplate, head lowered in reverence. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. Keep only the isolated character drawings. The entire canvas around and between them is empty alpha=0, absolutely no opaque or translucent gray, white, beige, or other background, no grey texture, no wash, no smoky veil. Hard, clean alpha around the character shapes. All four neutral figures 251 px from hair to heel. Both empty hands visible in every live pose; especially keep the other fist on the far side of the tabard. Maintain exact right side profile.",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/animations/directional/defender/body.png",
+        "sha256": "376cff77afffde2ce602e1fec1f233ef489dec90f3a86fb6ca079fb19e292766"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/priest/south.png",
+        "sha256": "9f21a15a47f09a231b8c2efacfb9e01ee369fa093f534f8bb60e3c90ef7ef225"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/sp_ac/south.png",
+        "sha256": "3e0291f22c75e5323427965390dd3a83f8703c4020305788b3b67e19b57f4c8e"
+      }
+    ],
+    "selected": true,
+    "idle_height_px": [
+      253,
+      252,
+      254,
+      253
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/sp_ac/north.png",
+    "sha256": "a608dc618b3052c5d2988d90857f214d54c523b476df255f696e5de5ae3004ae",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Paladino (sp_ac) — vista norte, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. NORTH / true rear view. Head, chest and toes face AWAY, upstage toward the top of the sheet in every frame. Show back of head, hairstyle, hood or helmet as appropriate, shoulder blades, and boot heels. Keep cape short, keep hand edges exposed. Correct always-rear shoulder and elbow positions. All forward gestures take place on the far side, anatomically foreshortened and partially occluded by the body. Show dorsum and knuckles or edges of both empty hands, never paint frontal palms or front chest features onto the visible back. Last two poses topple AWAY, soles and heels nearest in the foreground and head and hands above and away within the cell.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the second block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Paladino, the same youthful chibi Swordsman, blue eyes and distinctly spiky red-brown hair. No costume redesign. The gold ring is on the front breastplate only.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 251 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 44 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. firmly raise one empty guard forearm upright in front, other hand low at the ribs, an oath stance; 2. empty closed fist punches straight forward and one shoulder stays behind; 3. raise one open hand palm upward for a seal and keep the other visible low; 4. both hands over breastplate, head lowered in reverence. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. Oath and punch project away from the camera. Both hands rest on the front chest in the fourth gesture. Show a sliver of the fingers around the chest outline on the far side instead of putting hands on the back.",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/animations/directional/defender/body.png",
+        "sha256": "376cff77afffde2ce602e1fec1f233ef489dec90f3a86fb6ca079fb19e292766"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/priest/south.png",
+        "sha256": "9f21a15a47f09a231b8c2efacfb9e01ee369fa093f534f8bb60e3c90ef7ef225"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/sp_ac/south.png",
+        "sha256": "3e0291f22c75e5323427965390dd3a83f8703c4020305788b3b67e19b57f4c8e"
+      }
+    ],
+    "selected": false,
+    "idle_height_px": [
+      239,
+      240,
+      240,
+      235
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/sp_ac/north_v2.png",
+    "sha256": "d717bf36c23fef0babc93948105a729d87f3daf5069c1dc1a2bfa5d193deac9c",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Paladino (sp_ac) — vista norte, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. NORTH / true rear view. Head, chest and toes face AWAY, upstage toward the top of the sheet in every frame. Show back of head, hairstyle, hood or helmet as appropriate, shoulder blades, and boot heels. Keep cape short, keep hand edges exposed. Correct always-rear shoulder and elbow positions. All forward gestures take place on the far side, anatomically foreshortened and partially occluded by the body. Show dorsum and knuckles or edges of both empty hands, never paint frontal palms or front chest features onto the visible back. Last two poses topple AWAY, soles and heels nearest in the foreground and head and hands above and away within the cell.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the second block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Paladino, the same youthful chibi Swordsman, blue eyes and distinctly spiky red-brown hair. No costume redesign. The gold ring is on the front breastplate only.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 251 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 44 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. firmly raise one empty guard forearm upright in front, other hand low at the ribs, an oath stance; 2. empty closed fist punches straight forward and one shoulder stays behind; 3. raise one open hand palm upward for a seal and keep the other visible low; 4. both hands over breastplate, head lowered in reverence. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. Redraw as a TRUE back view with corrected orientation. Only narrow boot heels and heel seams face the camera; toes are hidden behind boots and point toward top of sheet. No front tabard or chest ring on rear cuirass, simple silver back plates, gold borders, short split blue rear waist cloth if visible. The open circlet forms a headband around the back of the thick auburn hair. All idle silhouettes exactly 251 px crown to heel. In actions all hands remain empty, attached to natural shoulder and elbow axes, forward gestures on the far side of the torso; show knuckles and backs of hands and never both frontal palms. R4C3 kneels on BOTH knees as BOTH palms land in front of knees, trunk inclined forward away from the viewer, hips elevated and knees folded; heels nearest with top of head upstage. R4C4 fully sprawled, flat on belly away from the camera, soles at the bottom of its cell. Two visibly distinct successive forward-fall poses. Transparent alpha outside isolated sprites, no colored residual canvas.",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/animations/directional/defender/body.png",
+        "sha256": "376cff77afffde2ce602e1fec1f233ef489dec90f3a86fb6ca079fb19e292766"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/priest/south.png",
+        "sha256": "9f21a15a47f09a231b8c2efacfb9e01ee369fa093f534f8bb60e3c90ef7ef225"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/sp_ac/south.png",
+        "sha256": "3e0291f22c75e5323427965390dd3a83f8703c4020305788b3b67e19b57f4c8e"
+      }
+    ],
+    "selected": false,
+    "idle_height_px": [
+      253,
+      253,
+      252,
+      247
+    ]
+  },
+  {
+    "path": "assets/art/e08_codex_1123/characters/sp_ac/north_v3.png",
+    "sha256": "2a7a064a1f088961e0fb7be86735ff75924264c0ea5c9b4d982aa7a9b9352d66",
+    "width": 1254,
+    "height": 1254,
+    "generator": "Codex built-in imagegen",
+    "request": "Paladino (sp_ac) — vista norte, traje híbrido, lote E08 1123",
+    "prompt": "Production 2D pixel-art game animation sprite sheet for RagRPG. NORTH / true rear view. Head, chest and toes face AWAY, upstage toward the top of the sheet in every frame. Show back of head, hairstyle, hood or helmet as appropriate, shoulder blades, and boot heels. Keep cape short, keep hand edges exposed. Correct always-rear shoulder and elbow positions. All forward gestures take place on the far side, anatomically foreshortened and partially occluded by the body. Show dorsum and knuckles or edges of both empty hands, never paint frontal palms or front chest features onto the visible back. Last two poses topple AWAY, soles and heels nearest in the foreground and head and hands above and away within the cell. Build a physically convincing rear view by taking the folds, heel parts and backs of armor from the NORTH block of Defender, not by drawing a rear head onto a front pose. Use flat segmented silver heel guards, one visible vertical seam centered on each heel above the sole and dark horizontal outsole line. Toe caps are completely out of sight. Paint the torso as a plain silver backplate with a short separate sky-blue cloth visible between the rear armor flaps, no prominent front emblem. R1 height 251 px based on the approved south sheet. R4 C3 is a distinct tall four-point contact on BOTH knees AND BOTH palms, hips up and lower legs folded, rounded heel backs (not two vertical foot soles held toward us), with palms near crown and up beyond the shoulders where visible at sides. R4 C4 the body finally stretches out face-down, low and compact, and both soles come nearest camera after knees extend. Never draw crouch C3 as already lying fully flat. Keep both hands connected to the correct shoulders and fingers angled to the far side in all action poses.\nReference 1 is the base person; reference 2 is the origin silhouette; reference 3 is palette and material ONLY; reference 4 is the Swordsman atlas for sprite scale and style; reference 5, the selected SOUTH sheet, is the exact definition of the identity, costume, body proportions, visual scale, and sixteen pose order. Use the second block of four rows in tall 4x16 atlases for the requested facing. Same character exactly as image 5, Paladino, the same youthful chibi Swordsman, blue eyes and distinctly spiky red-brown hair. No costume redesign. The gold ring is on the front breastplate only.\nNative 1254 by 1254 transparent RGBA, equal 4×4 cells with generous clear gutters, 16 separated full-body sprites at a common baseline. Critically, row one neutral standing head to heel is ONLY 251 pixels tall to preserve scale, precisely the same physical size as image 5. Plan each idle in the 313px cell with approximately 44 px blank above crown and 18 px of clear space below heel. Keep the character centered and do not expand to fill the cell. Same pixel cluster size, dark outline, chibi proportions, and controlled 2–3 tone shading of image 5. No text, grids, shadow, floor, props, sword, staff, shield, staff, magic, aura, particles, orb, stone or disconnected objects.\nRead left to right. R1 four slight idle variants; R2 four walking frames with genuinely alternating leading foot and arm, all same heading; R3 these same four ordered action gestures as reference 5: 1. firmly raise one empty guard forearm upright in front, other hand low at the ribs, an oath stance; 2. empty closed fist punches straight forward and one shoulder stays behind; 3. raise one open hand palm upward for a seal and keep the other visible low; 4. both hands over breastplate, head lowered in reverence. R4 C1–2 two upright hurt reactions; C3 fall forward onto knees and hands; C4 continue the fall and lie fully face-down with compact silhouette pointed in the same direction. Never tip onto the back. Both hands empty, distinct, correctly attached and visible as far as their natural positions permit in every living sprite. Keep every sprite well inside its cell. Build a physically convincing rear view by taking the folds, heel parts and backs of armor from the NORTH block of Defender, not by drawing a rear head onto a front pose. Use flat segmented silver heel guards, one visible vertical seam centered on each heel above the sole and dark horizontal outsole line. Toe caps are completely out of sight. Paint the torso as a plain silver backplate with a short separate sky-blue cloth visible between the rear armor flaps, no prominent front emblem. R1 height 251 px based on the approved south sheet. R4 C3 is a distinct tall four-point contact on BOTH knees AND BOTH palms, hips up and lower legs folded, rounded heel backs (not two vertical foot soles held toward us), with palms near crown and up beyond the shoulders where visible at sides. R4 C4 the body finally stretches out face-down, low and compact, and both soles come nearest camera after knees extend. Never draw crouch C3 as already lying fully flat. Keep both hands connected to the correct shoulders and fingers angled to the far side in all action poses.",
+    "references": [
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/animations/directional/defender/body.png",
+        "sha256": "376cff77afffde2ce602e1fec1f233ef489dec90f3a86fb6ca079fb19e292766"
+      },
+      {
+        "path": "assets/art/e08_codex_1118/characters/priest/south.png",
+        "sha256": "9f21a15a47f09a231b8c2efacfb9e01ee369fa093f534f8bb60e3c90ef7ef225"
+      },
+      {
+        "path": "assets/art/animations/directional/swordsman/body.png",
+        "sha256": "f390cee8e028c4ec82c7310455107dfcc03e9e5f12a417167e8a108edeb05a7a"
+      },
+      {
+        "path": "assets/art/e08_codex_1123/characters/sp_ac/south.png",
+        "sha256": "3e0291f22c75e5323427965390dd3a83f8703c4020305788b3b67e19b57f4c8e"
+      }
+    ],
+    "selected": true,
+    "idle_height_px": [
+      251,
+      250,
+      252,
+      246
+    ]
+  }
+]
