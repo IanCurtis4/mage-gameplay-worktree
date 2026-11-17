@@ -36,6 +36,8 @@ const KIT_ELEMENTS: Array[StringName] = [&"", &"physical", &"fire", &"ice", &"li
 
 static var _modules: Dictionary = {}
 static var _fixtures: Dictionary = {}
+## A14: test-only body folder per identity (install_fixture_body); empty in production.
+static var _fixture_bodies: Dictionary = {}
 ## Bumped whenever the effective module set changes (fixtures); catalogs rebuild on change.
 static var revision := 0
 static var _cache_revision := -1
@@ -58,11 +60,12 @@ static func origin(evolution_id: StringName) -> StringName:
 	return StringName(IDENTITIES.get(evolution_id, {}).get("origin", &""))
 
 static func body_folder(evolution_id: StringName) -> StringName:
+	if _fixture_bodies.has(evolution_id): return _fixture_bodies[evolution_id]
 	return StringName(IDENTITIES.get(evolution_id, {}).get("body", &""))
 
 static func body_folders() -> Array[StringName]:
 	var result: Array[StringName] = []
-	for id: StringName in IDENTITIES: result.append(IDENTITIES[id]["body"])
+	for id: StringName in IDENTITIES: result.append(body_folder(id))
 	return result
 
 static func is_body_kind(kind: StringName) -> bool:
@@ -71,7 +74,7 @@ static func is_body_kind(kind: StringName) -> bool:
 ## Origin body used when a kit body folder has no art yet.
 static func body_origin(kind: StringName) -> StringName:
 	for id: StringName in IDENTITIES:
-		if IDENTITIES[id]["body"] == kind: return IDENTITIES[id]["origin"]
+		if body_folder(id) == kind: return IDENTITIES[id]["origin"]
 	return &""
 
 ## Catalog module instance (fixture first). Null when the module is missing, and
@@ -202,9 +205,20 @@ static func install_fixture(evolution_id: StringName, kit: ClassKit) -> bool:
 	revision += 1
 	return true
 
+## A14: points the body folder of one identity at a fixture folder until
+## clear_fixtures(), so the C1.8 fallback can be proven on a folder that never has
+## art, whatever production art exists. Refuses unknown identities, empty names and
+## folders that already belong to an identity. Never used by production code.
+static func install_fixture_body(evolution_id: StringName, folder: StringName) -> bool:
+	if not IDENTITIES.has(evolution_id) or folder.is_empty() or folder in body_folders(): return false
+	_fixture_bodies[evolution_id] = folder
+	revision += 1
+	return true
+
 static func clear_fixtures() -> void:
-	if _fixtures.is_empty(): return
+	if _fixtures.is_empty() and _fixture_bodies.is_empty(): return
 	_fixtures.clear()
+	_fixture_bodies.clear()
 	revision += 1
 
 # --- Internals ------------------------------------------------------------------

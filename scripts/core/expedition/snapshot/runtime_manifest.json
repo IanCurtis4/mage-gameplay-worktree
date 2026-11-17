@@ -292,7 +292,8 @@
     ],
     "omitted": {
       "current_sp": "computed from deficit; no healing setter on restore",
-      "incoming_attack_event": "transient enemy-attack hint, empty outside PlayerActor.apply_damage"
+      "incoming_attack_event": "transient enemy-attack hint, empty outside PlayerActor.apply_damage",
+      "_base_commit_hint": "transient base-commit context note, empty outside Main._execute_skill and the PlayerActor commit paths"
     }
   },
   "res://scripts/actors/player_projectile.gd": {

@@ -4,6 +4,11 @@ extends SceneTree
 ## every hook; production modules stay empty and unavailable.
 const FixtureKit = preload("res://scripts/classes/fixture/fixture_kit.gd")
 const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
+## A14: body folders that never have art. The C1.8 fallback is proven on them, so the
+## checks hold with or without the production art of the four hybrids (T7).
+const FIXTURE_BODY_SP_AC := &"e09_fixture_body_sp_ac"
+const FIXTURE_BODY_MG_AC := &"e09_fixture_body_mg_ac"
+const FIXTURE_BODY_SP_LA := &"e09_fixture_body_sp_la"
 
 var checks := 0
 var failures := 0
@@ -85,6 +90,8 @@ func _install_fixtures() -> void:
 	_check(ClassKitRegistry.install_fixture(&"sp_ac", FixtureKit.new(&"sp_ac")), "fixture installs over sp_ac")
 	_check(ClassKitRegistry.install_fixture(&"sp_la", FixtureKit.new(&"sp_la")), "fixture installs over sp_la")
 	_check(not ClassKitRegistry.install_fixture(&"mg_ac", FixtureKit.new(&"sp_ac")), "fixture with another ID is refused")
+	_check(ClassKitRegistry.install_fixture_body(&"sp_ac", FIXTURE_BODY_SP_AC) and ClassKitRegistry.install_fixture_body(&"mg_ac", FIXTURE_BODY_MG_AC) and ClassKitRegistry.install_fixture_body(&"sp_la", FIXTURE_BODY_SP_LA), "fixture body folders without art install over sp_ac, mg_ac and sp_la (A14)")
+	_check(not ClassKitRegistry.install_fixture_body(&"mg_ac", &"arcane_blade") and not ClassKitRegistry.install_fixture_body(&"defender", &"e09_fixture_body_defender") and not ClassKitRegistry.install_fixture_body(&"mg_la", &""), "a fixture body colliding with an identity folder, outside the kits or empty is refused")
 
 func _check_fixture_catalogs() -> void:
 	_install_fixtures()
@@ -172,7 +179,7 @@ func _check_player_hooks() -> void:
 	_check(player.has_kit() and kit != null and kit.get_script() == FixtureKit and kit.evolution_id == &"sp_ac", "configure attaches one kit object per character")
 	_check(kit != ClassKitRegistry.module(&"sp_ac"), "the kit object is not the catalog module")
 	_check(kit.get("calls") == ["attach"], "attach hook runs once at configure")
-	_check(player.character_animation.actor_kind == &"swordsman", "without kit art the origin body is used (C1.8)")
+	_check(ClassKitRegistry.body_folder(&"sp_ac") == FIXTURE_BODY_SP_AC and player.character_animation.actor_kind == &"swordsman", "without kit art the origin body is used (C1.8)")
 	_check(&"paladin_oath" in player.available_skill_ids() and player.kit_owns_skill(&"paladin_oath") and not player.kit_owns_skill(&"slash"), "kit skills are learned actives of the player")
 	# Cast requested -> confirmed -> resolved with skill, rank and element.
 	var sp_before := player.current_sp
@@ -467,15 +474,15 @@ func _check_presentation() -> void:
 	_install_fixtures()
 	var effect := ClassKitRegistry.vfx_effect(&"paladin_consecrated_impact", &"impact")
 	_check(effect.get("effect_id") == &"paladin_fixture_burst" and effect.get("kit") == &"sp_ac" and ClassKitRegistry.vfx_effect(&"paladin_consecrated_impact", &"cast_start").is_empty(), "module effect drawers are found by skill and kind")
-	_check(ClassKitRegistry.actor_kind(&"sp_ac", &"swordsman") == &"swordsman" and ClassKitRegistry.actor_kind(&"mg_la", &"mage") == &"mage", "evolution -> actor_kind falls back to the origin body")
-	_check(DirectionalAnimationSet.kit_body_path(&"paladin").is_empty() and ClassKitRegistry.body_folder(&"mg_la") == &"arcane_blade", "body folders follow section 1")
+	_check(ClassKitRegistry.actor_kind(&"sp_ac", &"swordsman") == &"swordsman" and ClassKitRegistry.actor_kind(&"mg_ac", &"mage") == &"mage", "evolution -> actor_kind falls back to the origin body")
+	_check(ClassKitRegistry.body_folder(&"sp_ac") == FIXTURE_BODY_SP_AC and DirectionalAnimationSet.kit_body_path(FIXTURE_BODY_SP_AC).is_empty() and ClassKitRegistry.body_folder(&"mg_la") == &"arcane_blade", "body folders follow section 1")
 	var animation := CharacterAnimation.new()
-	animation.configure(&"thaumaturge")
+	animation.configure(FIXTURE_BODY_MG_AC)
 	_check(animation.actor_kind == &"mage" and animation.atlas != null, "a kit body without art configures the origin body as a whole")
 	var snapshot := BuildSnapshot.new()
 	snapshot.base_class_id = &"swordsman"
 	snapshot.evolution_id = &"sp_la"
-	_check(BuildPresentation.portrait_identity(snapshot) == &"swordsman", "portrait identity uses the same fallback")
+	_check(ClassKitRegistry.body_folder(&"sp_la") == FIXTURE_BODY_SP_LA and BuildPresentation.portrait_identity(snapshot) == &"swordsman", "portrait identity uses the same fallback")
 	var layer: Control = load("res://scripts/presentation/feedback_vfx_layer.gd").new()
 	layer.flipbook_provider = func(id: StringName) -> Dictionary: return {"texture": null, "grid": [1, 1], "cell": [8, 8], "frames": 1, "fps": 10.0, "hint": 8.0} if id == &"paladin_fixture_burst" else {}
 	_check(not layer.flipbook(&"paladin_fixture_burst").is_empty(), "a flipbook with the effect ID replaces the code drawing")

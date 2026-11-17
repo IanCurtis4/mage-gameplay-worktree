@@ -16,6 +16,11 @@ var last_heal: Dictionary = {}
 var last_event: Dictionary = {}
 var ticks := 0.0
 var victim_id := 0
+# T1.2: cost rule (cost_scale * base + cost_offset; identity by default) and the
+# record of origin commits (entity IDs only, never Node references).
+var cost_scale := 1.0
+var cost_offset := 0.0
+var base_commits: Array[Dictionary] = []
 
 func _init(id: StringName = &"") -> void:
 	fixture_id = id
@@ -189,3 +194,10 @@ func on_reveal(_player: PlayerActor, _duration: float) -> void:
 
 func snapshot_compact_blocker(_player: PlayerActor) -> String:
 	return compact_blocker
+
+func skill_cost(_player: PlayerActor, _skill_id: StringName, base_cost: float) -> float:
+	return base_cost * cost_scale + cost_offset
+
+func on_base_skill_committed(_player: PlayerActor, skill_id: StringName, context: Dictionary) -> void:
+	var target_actor: Variant = context.get("target")
+	base_commits.append({"skill_id": skill_id, "target_id": (target_actor as Object).get_instance_id() if is_instance_valid(target_actor) else 0, "point": context.get("point", Vector2.INF), "world": bool(context.get("world", false)), "rank": int(context.get("rank", 0)), "element": StringName(context.get("element", &""))})
