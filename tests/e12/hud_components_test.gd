@@ -88,6 +88,13 @@ func _check_cast_bar() -> void:
 		_close(float(plan["ratio"]), case[1], "fill ratio at remaining %s" % case[0])
 		_check(plan["time_text"] == case[2] and plan["label"] == "Juízo", "name and time text at remaining %s" % case[0])
 		_check(plan["color"] == HudPalette.CAST_FILL, "normal fill color")
+	bar.set_progress(_progress(0.0))
+	var outline_color: Color = bar.plan()["outline_color"]
+	_check(int(bar.plan()["outline_size"]) >= 5 and outline_color.a >= 0.95 and outline_color.get_luminance() < 0.1, "C-H3.1: cast bar text has a dark outline (size >= 5) over any fill")
+	var source := FileAccess.get_file_as_string("res://scripts/ui/hud/cast_bar.gd")
+	_check(source.count("draw_string(") == source.count("draw_string_outline(") and source.count("HudPalette.TEXT_OUTLINE_SIZE") >= 2, "C-H3.1: every cast bar text draw has an outline draw")
+	var actor_source := FileAccess.get_file_as_string("res://scripts/presentation/actor_cast_bar.gd")
+	_check(actor_source.count("draw_string(") == actor_source.count("draw_string_outline(") and ActorCastBar.plan_overhead(_progress(1.0), -60.0, 52.0, &"", true)["outline_size"] == HudPalette.TEXT_OUTLINE_SIZE, "C-H3.1: overhead label has the same outline")
 	bar.set_progress({"active": false})
 	_check(not bar.visible and bar.plan().is_empty(), "{active: false} hides the bar")
 	bar.set_progress(_progress(1.2))

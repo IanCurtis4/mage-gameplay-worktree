@@ -22,7 +22,9 @@ const PIP_EMPTY := Color("3e3440")
 const PIP_OUTLINE := Color("4b2434")
 const TEXT := Color("f6dfc0")
 const TEXT_DIM := Color("b8aa94")
-const TEXT_OUTLINE := Color(0.05, 0.05, 0.08, 0.95)
+const TEXT_OUTLINE := Color(0.02, 0.02, 0.04, 1.0)
+## Outline width of text drawn over a bright cast fill (C-H3.1).
+const TEXT_OUTLINE_SIZE := 6
 
 ## Cast bar colors, shared by CastBar and ActorCastBar.
 const CAST_BACK := Color(0.08, 0.09, 0.12, 0.9)

@@ -99,3 +99,25 @@ O `verify.ps1` roda em `--headless` e não captura.
 H4 liga os quatro componentes no `main.gd`/`combat_actor.gd` depois de H2 e H3: painel junto de
 VIDA e SP, `CastBar` acima da barra de atalhos, `ActorCastBar` no `_draw` com `show_label` para
 `elite`, `rare_elite` e `boss`, e os dois overlays na camada do mundo.
+
+## C-H3.1 — legibilidade do texto da barra de cast (correção)
+
+Pedido da arquitetura: nome e tempo da `CastBar` ficavam ilegíveis sobre o preenchimento claro
+(50 %, 100 % e liberado). Correção, sem mudar razão, cores da paleta nem APIs:
+
+- `HudPalette.TEXT_OUTLINE` passou a quase preto opaco (`0.02, 0.02, 0.04, 1.0`) e ganhou
+  `TEXT_OUTLINE_SIZE = 6` (antes 3, com alfa 0,95). `CastBar` (nome e tempo) e o rótulo do
+  `ActorCastBar` usam as duas constantes; os `plan()` expõem `outline_size` e `outline_color`.
+  O painel só herdou a cor de contorno mais escura (largura 3 mantida).
+- Teste: três checks novos em `hud_components_test` (contorno de tamanho >= 5, opaco e escuro;
+  todo `draw_string` tem o `draw_string_outline` correspondente em `cast_bar.gd` e
+  `actor_cast_bar.gd`; o rótulo do ator usa o mesmo contorno): 167 verificações, 0 falhas.
+- Capturas refeitas: `h3_cast_bar_player.png`, `h3_actor_cast_bar.png`, `h3_resource_panel.png`.
+- `tools/verify.ps1 -SkipEditorImport -F1Fixture -Test 'hud_components_test','hud_seam_test'`
+  (`.godot/verification/h3_c1/`, F1 reimportada antes porque os fontes mudaram): PASS ambos.
+  Logs SHA-256: components `6C770612B5DE131160AA0C767A9A698DA597849CED6A6F75ABA225220B99DA40`,
+  seam `B79A9762A8523F438CA13E40AF22018F08548208BB978E5DA62519A8F5D826AD` (188 verificações).
+- Os números de 164 verificações e o hash do log do recibo acima valem para `f9208c8b`; a
+  entrega corrigida é o commit desta seção.
+- A decisão A7 do índice (IDs ausentes ou mortos em `target_marks` ignorados) já era cumprida
+  pelo `KitWorldOverlay` (testes de ID desconhecido e de ator liberado).

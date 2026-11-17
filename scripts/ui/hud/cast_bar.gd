@@ -53,6 +53,8 @@ func plan() -> Dictionary:
 		"time_text": "%.1fs" % float(source["remaining"]),
 		"ratio": ratio,
 		"color": HudPalette.flash_color(_flash_kind if _flash_time > 0.0 else &""),
+		"outline_size": HudPalette.TEXT_OUTLINE_SIZE,
+		"outline_color": HudPalette.TEXT_OUTLINE,
 	}
 
 func _process(delta: float) -> void:
@@ -78,7 +80,7 @@ func _draw() -> void:
 	var baseline := rect.size.y * 0.5 + FONT_SIZE * 0.36
 	var label: String = data["label"]
 	var time_text: String = data["time_text"]
-	draw_string_outline(font, Vector2(8.0, baseline), label, HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 70.0, FONT_SIZE, 3, HudPalette.TEXT_OUTLINE)
+	draw_string_outline(font, Vector2(8.0, baseline), label, HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 70.0, FONT_SIZE, HudPalette.TEXT_OUTLINE_SIZE, HudPalette.TEXT_OUTLINE)
 	draw_string(font, Vector2(8.0, baseline), label, HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 70.0, FONT_SIZE, HudPalette.TEXT)
-	draw_string_outline(font, Vector2(0.0, baseline), time_text, HORIZONTAL_ALIGNMENT_RIGHT, rect.size.x - 8.0, FONT_SIZE, 3, HudPalette.TEXT_OUTLINE)
+	draw_string_outline(font, Vector2(0.0, baseline), time_text, HORIZONTAL_ALIGNMENT_RIGHT, rect.size.x - 8.0, FONT_SIZE, HudPalette.TEXT_OUTLINE_SIZE, HudPalette.TEXT_OUTLINE)
 	draw_string(font, Vector2(0.0, baseline), time_text, HORIZONTAL_ALIGNMENT_RIGHT, rect.size.x - 8.0, FONT_SIZE, HudPalette.TEXT)

@@ -24,7 +24,7 @@ static func draw_overhead(canvas: CanvasItem, progress: Variant, top_y: float, w
 		var font := ThemeDB.fallback_font
 		var text_width := font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, LABEL_SIZE).x
 		var pos := Vector2(back.position.x + (back.size.x - text_width) * 0.5, back.end.y + LABEL_SIZE + 1.0)
-		canvas.draw_string_outline(font, pos, label, HORIZONTAL_ALIGNMENT_LEFT, -1, LABEL_SIZE, 3, HudPalette.TEXT_OUTLINE)
+		canvas.draw_string_outline(font, pos, label, HORIZONTAL_ALIGNMENT_LEFT, -1, LABEL_SIZE, HudPalette.TEXT_OUTLINE_SIZE, HudPalette.TEXT_OUTLINE)
 		canvas.draw_string(font, pos, label, HORIZONTAL_ALIGNMENT_LEFT, -1, LABEL_SIZE, HudPalette.TEXT)
 
 ## Pure geometry of the bar (also used by tests). Empty when nothing is to be drawn.
@@ -43,4 +43,6 @@ static func plan_overhead(progress: Variant, top_y: float, width: float, flash: 
 		"color": HudPalette.flash_color(flash if flashing else &""),
 		"ratio": ratio,
 		"label": label,
+		"outline_size": HudPalette.TEXT_OUTLINE_SIZE,
+		"outline_color": HudPalette.TEXT_OUTLINE,
 	}
