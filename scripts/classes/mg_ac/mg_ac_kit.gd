@@ -349,6 +349,37 @@ func snapshot_compact_blocker(_player: PlayerActor) -> String:
 	if judgment_pulses_left > 0: return "thaumaturge_judgment"
 	return sanctuary.compact_blocker()
 
+# --- HUD (E12 H2, contract §5) ----------------------------------------------------------
+
+## Pure read for the HUD (ragrpg_kit_hud_v1): Grace (unlimited with the deadline in the
+## Aurora), the Círculo Votivo deadline with the zone's current element (closes limitation
+## 1 of K2), the Coro and Aurora deadlines, the votive zone with its element and the kit
+## refusals of the Círculo and the Mudança de Altar. Values come from the
+## SanctuaryAuthority and the kit state; no formula.
+func hud_state(player: PlayerActor) -> Dictionary:
+	var dawn_total := DAWN_DURATION[clampi(_hud_rank(player, DAWN), 1, 5) - 1]
+	var resources: Array[Dictionary] = [sanctuary.hud_grace(dawn_total)]
+	var zone := sanctuary.zone(ROLE)
+	if zone != null and zone.duration > 0.0:
+		resources.append({"id": &"thaumaturge_votive_circle", "label": "Círculo Votivo", "kind": &"timer", "remaining": minf(zone.remaining, zone.duration), "total": zone.duration, "element": zone.element})
+	if choir_active():
+		resources.append({"id": &"thaumaturge_elemental_choir", "label": "Coro Elemental", "kind": &"timer", "remaining": choir_remaining, "total": maxf(CHOIR_DURATION[clampi(_hud_rank(player, CHOIR), 1, 3) - 1], choir_remaining), "element": TRICOLOR})
+	if dawn_active():
+		resources.append({"id": &"thaumaturge_convergent_dawn", "label": "Aurora Convergente", "kind": &"timer", "remaining": dawn_remaining, "total": maxf(dawn_total, dawn_remaining), "element": SanctuaryAuthority.HUD_LIGHT})
+	return {
+		"schema": KitHudState.SCHEMA, "kit_id": kit_id(), "resources": resources,
+		"skills": {CIRCLE: _hud_readiness(can_cast(player, {"skill_id": CIRCLE})), ALTAR: _hud_readiness(can_cast(player, {"skill_id": ALTAR}))},
+		"zones": sanctuary.hud_zones(player),
+	}
+
+func _hud_rank(player: PlayerActor, skill: StringName) -> int:
+	return maxi(1, player.skill_rank(skill)) if is_instance_valid(player) else 1
+
+## A6 of E12: the readiness of a kit skill is the kit's own can_cast answer (same code).
+static func _hud_readiness(answer: Dictionary) -> Dictionary:
+	if bool(answer.get("ok", false)): return {"ready": true, "reason": &""}
+	return {"ready": false, "reason": StringName(answer.get("error_code", &""))}
+
 # --- Queries (pure) ----------------------------------------------------------------------
 
 func dawn_active() -> bool:

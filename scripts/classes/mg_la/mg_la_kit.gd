@@ -407,6 +407,50 @@ func on_reveal(player: PlayerActor, duration: float) -> void:
 func snapshot_compact_blocker(_player: PlayerActor) -> String:
 	return "arcane_blade_prism_specter_reflections" if specter_pending > 0 else ""
 
+# --- HUD (E12 H2, contract §5) ----------------------------------------------------------
+
+## Pure read for the HUD (ragrpg_kit_hud_v1): the Refração charge with its own recharge
+## (closes limitation 1 of K4), the concealment deadline, the Sentence pips on the living
+## victim, the badges of the pending Espectro reflections and the kit readiness of the
+## Refração (same code as can_cast). Values come from the FlankAuthority and the kit state.
+func hud_state(player: PlayerActor) -> Dictionary:
+	var charges := clampi(refraction_charges, 0, REFRACTION_MAX_CHARGES)
+	var charge := {"id": &"arcane_blade_refraction", "label": "Refração", "kind": &"charges", "value": charges, "max": REFRACTION_MAX_CHARGES, "element": &"arcane"}
+	var refraction := _hud_readiness(can_cast(player, {"skill_id": REFRACTION}))
+	refraction["charges"] = charges
+	refraction["max_charges"] = REFRACTION_MAX_CHARGES
+	if charges < REFRACTION_MAX_CHARGES and refraction_recharge > 0.0:
+		var total := maxf(_refraction_recharge(player), refraction_recharge)
+		charge["remaining"] = refraction_recharge
+		charge["total"] = total
+		refraction["recharge_remaining"] = refraction_recharge
+		refraction["recharge_total"] = total
+	var resources: Array[Dictionary] = [charge]
+	var described := flank.describe(player)
+	if bool(described["concealment_armed"]) and float(described["concealment_remaining"]) > 0.0:
+		var rank := clampi(player.skill_rank(REFRACTION), 1, 5) if is_instance_valid(player) else 1
+		var remaining := float(described["concealment_remaining"])
+		resources.append({"id": &"flank_concealment", "label": "Ocultação", "kind": &"timer", "remaining": remaining, "total": maxf(REFRACTION_DURATION[rank - 1], remaining), "element": &"arcane"})
+	var marks: Array[Dictionary] = []
+	var victim_mark := FlankAuthority.hud_victim_mark(described)
+	if not victim_mark.is_empty(): marks.append(victim_mark)
+	if specter_pending > 0:
+		for enemy: CombatActor in _nearby_actors(player):
+			if not enemy.is_alive() or enemy.marks.owner_of(SPECTER_MARK) != player.get_instance_id(): continue
+			var value: Variant = enemy.marks.value(SPECTER_MARK)
+			if not value is Dictionary or int(value.get("serial", -1)) != specter_serial: continue
+			var element := StringName(value.get("element", ""))
+			marks.append({"target_id": enemy.get_instance_id(), "key": SPECTER_MARK, "kind": &"badge", "element": element if element in ELEMENTS else &""})
+	return {
+		"schema": KitHudState.SCHEMA, "kit_id": kit_id(), "resources": resources,
+		"skills": {REFRACTION: refraction}, "target_marks": marks,
+	}
+
+## A6 of E12: the readiness of a kit skill is the kit's own can_cast answer (same code).
+static func _hud_readiness(answer: Dictionary) -> Dictionary:
+	if bool(answer.get("ok", false)): return {"ready": true, "reason": &""}
+	return {"ready": false, "reason": StringName(answer.get("error_code", &""))}
+
 # --- Queries --------------------------------------------------------------------------
 
 func sentence(player: PlayerActor) -> int:

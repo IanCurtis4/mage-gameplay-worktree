@@ -427,6 +427,46 @@ func teleport_behind(player: PlayerActor, actor: CombatActor, maximum_range: flo
 	if not toward.is_zero_approx(): player.override_gameplay_ground_facing(toward.normalized(), 0.25, &"flank_teleport")
 	return {"ok": true, "error_code": &"", "side": FlankRules.side_between(actor, player)["side"], "angle": point["angle"]}
 
+# --- Read for the HUD (E12 H2) ---------------------------------------------------------------
+
+## Pure read of the authority for the HUD (E12 C4): the living victim and its Sentence,
+## the cap, the own concealment, the opening window and the parry window. Never writes
+## (not even the victim hint cache) and may run every frame or with the tree paused.
+func describe(player: PlayerActor) -> Dictionary:
+	var current := peek_victim(player)
+	return {
+		"victim_id": current.get_instance_id() if current != null else 0,
+		"victim_serial": victim_serial,
+		"sentence": int(FlankRules.victim_mark(current).get("sentence", 0)) if current != null else 0,
+		"sentence_cap": FlankRules.SENTENCE_CAP,
+		"concealment_armed": concealment_armed,
+		"concealment_active": concealment_active(),
+		"concealment_remaining": concealment_remaining,
+		"opening_remaining": opening_remaining,
+		"parry_open": parry_open(),
+		"parry_remaining": parry_remaining,
+		"parry_charges": parry_charges,
+	}
+
+## Sentence pips of the HUD DTO over the living victim of `described` (a describe()
+## answer); {} when there is none.
+static func hud_victim_mark(described: Dictionary) -> Dictionary:
+	var victim_id := int(described.get("victim_id", 0))
+	if victim_id == 0: return {}
+	return {"target_id": victim_id, "key": FlankRules.VICTIM_MARK, "kind": &"pips", "value": clampi(int(described.get("sentence", 0)), 0, FlankRules.SENTENCE_CAP), "max": FlankRules.SENTENCE_CAP}
+
+## Current living victim of the owner without touching the hint cache (pure). Same
+## answer as victim(); the hint is used when it is still right, else the owner's
+## neighbours are scanned (no tree-wide search).
+func peek_victim(player: PlayerActor) -> CombatActor:
+	if victim_serial <= 0 or not is_instance_valid(player): return null
+	if _victim_hint != 0:
+		var hinted := instance_from_id(_victim_hint) as CombatActor
+		if _is_victim(player, hinted, true): return hinted
+	for actor: CombatActor in _candidates(player):
+		if _is_victim(player, actor, true): return actor
+	return null
+
 # --- Internals -------------------------------------------------------------------------------
 
 func _is_victim(player: PlayerActor, actor: CombatActor, require_alive: bool) -> bool:
