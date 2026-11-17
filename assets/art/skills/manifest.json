@@ -1,11 +1,81 @@
 {
   "schema": 1,
-  "source": "ClassCatalog + SentinelTuning.SKILL_IDS + HunterTuning.SKILL_IDS + ItemSkillAdapters.IDS",
+  "source": "ClassCatalog + SentinelTuning.SKILL_IDS + HunterTuning.SKILL_IDS + ItemSkillAdapters.IDS + E09 HYBRID_SKILLS",
   "canvas": [
     64,
     64
   ],
   "entries": [
+    {
+      "id": "arcane_blade_enchanted_edge",
+      "category": "passive",
+      "class": "arcane_blade",
+      "palette": {
+        "background": "#24272d",
+        "silhouette": "#8fcfff"
+      },
+      "sha256": "8659fdd8185ace7398066262d480193a87e4974217fed188340509d4015da57d"
+    },
+    {
+      "id": "arcane_blade_light_fracture",
+      "category": "passive",
+      "class": "arcane_blade",
+      "palette": {
+        "background": "#24272d",
+        "silhouette": "#8fcfff"
+      },
+      "sha256": "b1ed0ade16b99a5b9e3cb818ccab6fc762a63a20de23f093564adab2a8af817f"
+    },
+    {
+      "id": "arcane_blade_prism_specter",
+      "category": "active",
+      "class": "arcane_blade",
+      "palette": {
+        "background": "#24272d",
+        "silhouette": "#8fcfff"
+      },
+      "sha256": "40d1c51d5d479f772b14f7e7eeeca02a3a22d217c955aa130547f278b7bb2175"
+    },
+    {
+      "id": "arcane_blade_prismatic_leap",
+      "category": "active",
+      "class": "arcane_blade",
+      "palette": {
+        "background": "#24272d",
+        "silhouette": "#8fcfff"
+      },
+      "sha256": "6845918d09087609362b25249e93cb98643a237a338c4d488cdc8c883d7662d6"
+    },
+    {
+      "id": "arcane_blade_prismatic_sentence",
+      "category": "active",
+      "class": "arcane_blade",
+      "palette": {
+        "background": "#24272d",
+        "silhouette": "#8fcfff"
+      },
+      "sha256": "50e6777a2d9d4d149a00f80997f91c1455bcbdf2b91ccfead15de314ba105904"
+    },
+    {
+      "id": "arcane_blade_refracted_mark",
+      "category": "active",
+      "class": "arcane_blade",
+      "palette": {
+        "background": "#24272d",
+        "silhouette": "#8fcfff"
+      },
+      "sha256": "2b1696920d90be1b45e8ad8bf15f54cdb484173b3e04e708eff00ea8d397909f"
+    },
+    {
+      "id": "arcane_blade_refraction",
+      "category": "active",
+      "class": "arcane_blade",
+      "palette": {
+        "background": "#24272d",
+        "silhouette": "#8fcfff"
+      },
+      "sha256": "ddd8f319e1b16e76b48dc0a45e15e9ed4989f437f9907df5848609ac50fc1b49"
+    },
     {
       "id": "archer_cadence",
       "category": "passive",
@@ -225,6 +295,76 @@
         "silhouette": "#f1d17b"
       },
       "sha256": "94f23149207bde3370e9dcbaf90bfd65057ec96ed3763e90a1d3c5c1ab6dc6d0"
+    },
+    {
+      "id": "duelist_duel",
+      "category": "active",
+      "class": "duelist",
+      "palette": {
+        "background": "#2b1318",
+        "silhouette": "#d8dde4"
+      },
+      "sha256": "f78ae15981ed263e34042068f42ee24a327900db5e636c02f64f51f56dd5c63d"
+    },
+    {
+      "id": "duelist_fatal_riposte",
+      "category": "active",
+      "class": "duelist",
+      "palette": {
+        "background": "#2b1318",
+        "silhouette": "#d8dde4"
+      },
+      "sha256": "614890e2d6ae1a7ac70bb1bdf17240ef1c20cb7c679812940b0d257e7e9c25d6"
+    },
+    {
+      "id": "duelist_feint",
+      "category": "active",
+      "class": "duelist",
+      "palette": {
+        "background": "#2b1318",
+        "silhouette": "#d8dde4"
+      },
+      "sha256": "c5dabf5723f09d7f5c013f4d93365592ae2c98faf6403aa853e2d2ff284f37ac"
+    },
+    {
+      "id": "duelist_guarded_retreat",
+      "category": "active",
+      "class": "duelist",
+      "palette": {
+        "background": "#2b1318",
+        "silhouette": "#d8dde4"
+      },
+      "sha256": "3c0fb14d6c65697a4cffeef8f4f08bf3ea2d9c8ac3d630c2c3da15420296ca19"
+    },
+    {
+      "id": "duelist_parry",
+      "category": "active",
+      "class": "duelist",
+      "palette": {
+        "background": "#2b1318",
+        "silhouette": "#d8dde4"
+      },
+      "sha256": "991bd35b16da3f1a13d04780c1a12910bdad28ee6e0d8c72d6a05fdd1b48c0a8"
+    },
+    {
+      "id": "duelist_patient_guard",
+      "category": "passive",
+      "class": "duelist",
+      "palette": {
+        "background": "#2b1318",
+        "silhouette": "#d8dde4"
+      },
+      "sha256": "0403a960297c990bbf3cad69e376291fb1aea05847e3001ef3df4ac5ca250138"
+    },
+    {
+      "id": "duelist_read_opponent",
+      "category": "passive",
+      "class": "duelist",
+      "palette": {
+        "background": "#2b1318",
+        "silhouette": "#d8dde4"
+      },
+      "sha256": "f49197fd2adaa5411a674054ea7ca0847d973cacb2be4684d786ffecf0997ae6"
     },
     {
       "id": "electric_discharge",
@@ -587,6 +727,76 @@
       "sha256": "e5a3d856e874a49837fde01c4587295a04c5765cbed84aecd8f3d35ff4ba8e0c"
     },
     {
+      "id": "paladin_condemned_seal",
+      "category": "active",
+      "class": "paladin",
+      "palette": {
+        "background": "#2b4a78",
+        "silhouette": "#f4e3a8"
+      },
+      "sha256": "237ba74e9a082f2d0b899e58f49b7d4dd87bc69dbcfec66cbb0cb5f23a3a70ed"
+    },
+    {
+      "id": "paladin_consecrated_impact",
+      "category": "active",
+      "class": "paladin",
+      "palette": {
+        "background": "#2b4a78",
+        "silhouette": "#f4e3a8"
+      },
+      "sha256": "528f2a8eed6c945395585fe76384ce6452894cf483ff01efe74f6b4a6b7eccbb"
+    },
+    {
+      "id": "paladin_guard_grace",
+      "category": "passive",
+      "class": "paladin",
+      "palette": {
+        "background": "#2b4a78",
+        "silhouette": "#f4e3a8"
+      },
+      "sha256": "7e041ac034e90f5c652d903a23489f69ae9971898b9baf0f596e830326ed06be"
+    },
+    {
+      "id": "paladin_oath",
+      "category": "active",
+      "class": "paladin",
+      "palette": {
+        "background": "#2b4a78",
+        "silhouette": "#f4e3a8"
+      },
+      "sha256": "0fbc2280a2dc65f7295ad62b79c5ee048688b48a9f4ee0bff6f280643f14557e"
+    },
+    {
+      "id": "paladin_oath_aegis",
+      "category": "active",
+      "class": "paladin",
+      "palette": {
+        "background": "#2b4a78",
+        "silhouette": "#f4e3a8"
+      },
+      "sha256": "f81384cf832ee383b06122f3d0680e815f7c9c2e7bffa8f8862217374fb14077"
+    },
+    {
+      "id": "paladin_oath_hour",
+      "category": "active",
+      "class": "paladin",
+      "palette": {
+        "background": "#2b4a78",
+        "silhouette": "#f4e3a8"
+      },
+      "sha256": "5618ce433fd255c64f5009a9ec1324e6c6cb52a7c0e0c2c57b4f26c42c712b2c"
+    },
+    {
+      "id": "paladin_unshaken_faith",
+      "category": "passive",
+      "class": "paladin",
+      "palette": {
+        "background": "#2b4a78",
+        "silhouette": "#f4e3a8"
+      },
+      "sha256": "be81a0ac5fb215e8be22a4742109381f71c03d1e7aa96d5223759418a01e1b41"
+    },
+    {
       "id": "perseverance",
       "category": "active",
       "class": "swordsman",
@@ -875,6 +1085,76 @@
         "silhouette": "#f1c879"
       },
       "sha256": "827233909db038e89f49b4f32d61c2787f88f487cfc5a6911bb64559b8379cd2"
+    },
+    {
+      "id": "thaumaturge_altar_shift",
+      "category": "active",
+      "class": "thaumaturge",
+      "palette": {
+        "background": "#2a3a8c",
+        "silhouette": "#fff0c2"
+      },
+      "sha256": "9ce4955e00236b6c2c9bfe670685d818b9ba5b493ff42e0679acc372399a4b1d"
+    },
+    {
+      "id": "thaumaturge_convergent_dawn",
+      "category": "active",
+      "class": "thaumaturge",
+      "palette": {
+        "background": "#2a3a8c",
+        "silhouette": "#fff0c2"
+      },
+      "sha256": "5eadb61a2cbd996304d2107b7c54867ce51eb047b173a6b0a72ac6cb90c41e16"
+    },
+    {
+      "id": "thaumaturge_elemental_choir",
+      "category": "passive",
+      "class": "thaumaturge",
+      "palette": {
+        "background": "#2a3a8c",
+        "silhouette": "#fff0c2"
+      },
+      "sha256": "2f4c79708b037ca84e2574f1da1d19436afd78cafebd5539a2ba466aad914fb8"
+    },
+    {
+      "id": "thaumaturge_healing_refraction",
+      "category": "active",
+      "class": "thaumaturge",
+      "palette": {
+        "background": "#2a3a8c",
+        "silhouette": "#fff0c2"
+      },
+      "sha256": "8955e659c37698601b94d11b6b8d96e0159052cccaf132605d6960c830332773"
+    },
+    {
+      "id": "thaumaturge_prismatic_judgment",
+      "category": "active",
+      "class": "thaumaturge",
+      "palette": {
+        "background": "#2a3a8c",
+        "silhouette": "#fff0c2"
+      },
+      "sha256": "5577fc27d77fd24bbd17ab5b9630f1ddf2e821e58adec578fc87c4a7e6736ffd"
+    },
+    {
+      "id": "thaumaturge_votive_circle",
+      "category": "active",
+      "class": "thaumaturge",
+      "palette": {
+        "background": "#2a3a8c",
+        "silhouette": "#fff0c2"
+      },
+      "sha256": "2dc62c1bf4c6d578c09147f7ef2a2f435daa911002c24814ff41bc77df18205c"
+    },
+    {
+      "id": "thaumaturge_votive_prism",
+      "category": "passive",
+      "class": "thaumaturge",
+      "palette": {
+        "background": "#2a3a8c",
+        "silhouette": "#fff0c2"
+      },
+      "sha256": "769a0884042b64cb862a4336efa9f1927c5a1034a771d91989578c5c70bd9a9c"
     },
     {
       "id": "trap_technique",
