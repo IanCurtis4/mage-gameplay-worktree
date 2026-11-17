@@ -11,7 +11,9 @@ static func class_definition(class_id: StringName) -> ClassDefinition:
 
 static func skill_definition(skill_id: StringName) -> SkillDefinition:
 	_ensure_built()
-	return _skills.get(skill_id)
+	var definition: SkillDefinition = _skills.get(skill_id)
+	# E09 C1.2: kit skills live in their module; base IDs always win.
+	return definition if definition != null else ClassKitRegistry.skill_definition(skill_id)
 
 static func skill_ids(class_id: StringName) -> Array[StringName]:
 	var definition := class_definition(class_id)
@@ -61,6 +63,8 @@ static func passive_modifier_source(skill_id: StringName, rank: int, invested_vi
 				"label": "Sede de Sangue do Espadachim",
 				"flat": {&"melee_attack": maxf(0.0, invested_vit) * rank_definition.power},
 			}
+		SkillDefinition.Handler.KIT:
+			return ClassKitRegistry.passive_modifier_source(skill_id, rank)
 	return {}
 
 static func blood_thirst_heal_fraction(rank: int) -> float:

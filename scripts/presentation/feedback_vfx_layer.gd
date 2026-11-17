@@ -257,6 +257,14 @@ func _make_pulse(event: Dictionary, local: Vector2, legacy: bool) -> Dictionary:
 	elif kind == &"impact" and on_impact and SIGNATURE_ART.has(recipe.signature): art = SIGNATURE_ART[recipe.signature]
 	elif kind == &"impact" and IMPACT_ART.has(skill_id): art = (IMPACT_ART[skill_id] as Dictionary).get(recipe.element, [])
 	elif kind == &"trap_trigger" and recipe.element == &"nature": art = NATURE_TRAP_ART
+	if art.is_empty():
+		# E09 C1.8: a kit effect plays the flipbook with its own ID when one exists;
+		# otherwise the module draws it in code.
+		var kit_effect := ClassKitRegistry.vfx_effect(skill_id, kind)
+		if not kit_effect.is_empty():
+			var effect_id: StringName = kit_effect["effect_id"]
+			if not flipbook(effect_id).is_empty(): art = [effect_id, float(kit_effect["size"]), 1.0, Color.WHITE, 0.0]
+			else: pulse["kit_effect"] = effect_id; pulse["kit_owner"] = kit_effect["kit"]; life = maxf(life, 0.45)
 	if not art.is_empty():
 		var book := flipbook(art[0])
 		if not book.is_empty() and float(book.fps) > 0.0 and int(book.frames) > 0:
@@ -321,6 +329,7 @@ func _draw_pulse(p: Dictionary) -> void:
 	var pos: Vector2 = p.position
 	if p.has("trail"): _trail(p)
 	if p.flipbook != &"" and _draw_flipbook(p, pos, t): return
+	if p.has("kit_effect") and ClassKitRegistry.draw_vfx(p["kit_owner"], p["kit_effect"], _canvas, p, pos, t): return
 	match p.kind:
 		&"impact": _impact(p, pos + Vector2(0, -18), t)
 		&"melee_swing": _swing(p, pos + Vector2(0, -14), t)

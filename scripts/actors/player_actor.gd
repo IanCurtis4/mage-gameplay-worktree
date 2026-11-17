@@ -251,6 +251,13 @@ var _spiritualist_emission_serial := 0
 var _spiritualist_refunded_emissions: Dictionary[int, bool] = {}
 var spiritualist_focus_remaining := 0.0
 var spiritualist_focus_power := 0.0
+## E09 C1.4: kit object of the active evolution (null for the ten existing identities).
+var kit: ClassKit
+## Gameplay clock of the player (pause-frozen); kit and enemy-attack instants use it.
+var kit_time := 0.0
+var _kit_was_alive := true
+## Transient: enemy attack being resolved by apply_damage (empty outside that call).
+var incoming_attack_event: Dictionary = {}
 
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
@@ -268,6 +275,10 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 	clear_spiritualist_state()
 	clear_sentinel_state()
 	hunter_state.configure(get_instance_id())
+	kit = null
+	kit_time = 0.0
+	_kit_was_alive = true
+	incoming_attack_event = {}
 	var derived := _build_stat_breakdown()
 	var class_color := Color("8e73de") if class_id == &"mage" else Color("6fa85a") if class_id == &"archer" else Color("55a8d9")
 	setup(class_definition.display_name, class_color, derived, 20.0)
@@ -286,6 +297,8 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 		animation_kind = &"sentinel"
 	elif is_hunter():
 		animation_kind = &"hunter"
+	elif _persistent_kit_evolution() != &"":
+		animation_kind = ClassKitRegistry.actor_kind(_persistent_kit_evolution(), class_id)
 	set_animation_kind(animation_kind)
 	_equipment_visual_key = 0
 	_refresh_equipment_visual()
@@ -306,6 +319,28 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 	for skill_id: StringName in available_skill_ids():
 		mage_cooldowns[skill_id] = 0.0
 	process_mode = Node.PROCESS_MODE_PAUSABLE
+	var kit_module := ClassKitRegistry.module(_persistent_kit_evolution())
+	if kit_module != null: attach_kit(kit_module.create_runtime())
+
+## Kit evolution of the persistent build, or empty.
+func _persistent_kit_evolution() -> StringName:
+	if run_state == null or not run_state.uses_persistent_build() or run_state.build_snapshot == null: return &""
+	var evolution := run_state.build_snapshot.evolution_id
+	return evolution if ClassKitRegistry.is_kit(evolution) and ClassKitRegistry.origin(evolution) == class_id else &""
+
+## E09 C1.4: attaches the kit object (configure does it for kit builds; fixtures may call it).
+func attach_kit(value: ClassKit) -> void:
+	kit = value
+	if kit == null: return
+	if kit.evolution_id.is_empty(): kit.evolution_id = kit.kit_id()
+	kit.on_attach(self)
+
+func has_kit() -> bool:
+	return kit != null
+
+## True when the skill belongs to the attached kit.
+func kit_owns_skill(skill_id: StringName) -> bool:
+	return kit != null and ClassKitRegistry.skill_owner(skill_id) == kit.evolution_id and ClassKitRegistry.skill_definition(skill_id) != null
 
 func is_mage() -> bool:
 	return class_id == &"mage"
@@ -524,9 +559,12 @@ func _commit_sentinel_explosive(enemy: CombatActor) -> bool:
 	var reserved_focus := sentinel_state.reserved_focus
 	var request := _make_magic_request(enemy, id, SentinelMath.raw_power(id, skill_rank(id), stat_breakdown), DamageRequest.AccuracyMode.GEOMETRY, true)
 	var facing := _resolved_facing(Vector2(world_cast_direction().x,world_cast_direction().z) if world_motion != null else aim_direction(enemy.global_position))
-	# All launch checks passed. Release then consume the reservation exactly once.
+	# All launch checks passed. Release then consume the reservation exactly once, at
+	# the price locked when it was reserved (T1.2: skill_cost may change meanwhile).
+	var reserved_sp := sentinel_state.reserved_sp
 	sentinel_state.cancel_preparation()
-	if not _spend(id): return false
+	note_base_commit(id, enemy.global_position if is_instance_valid(enemy) else global_position, enemy)
+	if not _spend(id, reserved_sp): return false
 	request.context = _emission_context.copy_context()
 	request.emission_id = int(_emission_context.root_event_id.get_slice(":", _emission_context.root_event_id.get_slice_count(":") - 1))
 	sentinel_state.spend(reserved_focus)
@@ -608,6 +646,7 @@ func apply_run_modifiers(state: RunState) -> void:
 		cancel_sentinel_preparation()
 	var derived := _build_stat_breakdown()
 	_apply_derived_stats(derived)
+	if kit != null: kit.on_build_changed(self)
 	resources_changed.emit()
 	queue_redraw()
 
@@ -1067,6 +1106,7 @@ func use_dash(direction: Vector2) -> bool:
 		return false
 	_commit_action(ClassCatalog.skill_definition(&"dash").action_kind)
 	var facing := _resolved_facing(direction)
+	note_base_commit(&"dash", dash_destination(facing))
 	_spend(&"dash")
 	_stop_dash()
 	_dash_endpoint = dash_destination(facing)
@@ -1630,9 +1670,62 @@ func _commit_action(action_kind: SkillDefinition.ActionKind) -> void:
 	if action_kind == SkillDefinition.ActionKind.OFFENSIVE:
 		clear_shield_stance()
 
+## E09 C1.4: incoming-hit pipeline. With a kit, a direct hit on the player runs in
+## a fixed order: 1) before_hit_mitigation (may cancel), 2) existing mitigation and
+## HealthState, then after_hit_mitigation with "frontal", 3) on_shield_broken.
 func apply_damage(request: DamageRequest, rng: RandomNumberGenerator) -> Dictionary:
 	if request == null:
 		return {}
+	if kit == null or request.is_secondary or request.target_id != get_instance_id():
+		return _apply_damage_base(request, rng)
+	var hit := _kit_hit(request)
+	var before := kit.before_hit_mitigation(self, hit)
+	if bool(before.get("cancel", false)):
+		return {"landed": false, "cancelled": true, "cancel_reason": StringName(before.get("reason", &"kit_cancel")), "damage": 0.0, "actual_damage": 0.0, "absorbed_damage": 0.0, "critical": false, "killed": false, "can_trigger_effects": false, "source_id": request.source_id, "target_id": request.target_id, "skill_id": request.skill_id}
+	var multiplier := _kit_damage_multiplier(before)
+	var effective_request := request
+	if multiplier != 1.0:
+		effective_request = request.copy()
+		effective_request.damage_dealt_multiplier *= multiplier
+	var shield_before := health.shield_hp
+	var result := _apply_damage_base(effective_request, rng)
+	if result.is_empty(): return result
+	if multiplier != 1.0: result["kit_damage_multiplier"] = multiplier
+	kit.after_hit_mitigation(self, hit, result)
+	if shield_before > 0.0 and health.shield_hp <= 0.0 and float(result.get("absorbed_damage", 0.0)) > 0.0:
+		kit.on_shield_broken(self, hit, result)
+	return result
+
+## T1.1: optional "damage_multiplier" of before_hit_mitigation. Missing, non-numeric,
+## non-finite or negative values are ignored (1.0, no copy of the request).
+static func _kit_damage_multiplier(before: Dictionary) -> float:
+	var raw: Variant = before.get("damage_multiplier", 1.0)
+	if typeof(raw) != TYPE_FLOAT and typeof(raw) != TYPE_INT: return 1.0
+	var value := float(raw)
+	return value if is_finite(value) and value >= 0.0 else 1.0
+
+## Hit descriptor of the pipeline: request, source, source_id, kind (melee,
+## projectile, area or unknown), event (enemy attack event or {}), facing_dot and
+## frontal (source inside the half-plane in front of the gameplay facing).
+func _kit_hit(request: DamageRequest) -> Dictionary:
+	var source := instance_from_id(request.source_id) as CombatActor
+	var event := incoming_attack_event.duplicate()
+	var kind := StringName(event.get("kind", &""))
+	if kind.is_empty():
+		kind = &"melee" if request.skill_id == &"enemy_claw" else (&"projectile" if request.skill_id == &"enemy_arrow" else &"unknown")
+	var dot := -2.0
+	if is_instance_valid(source):
+		var offset := Vector3.ZERO
+		if world_motion != null and source.world_motion != null and world_motion.is_current_world() and source.world_motion.is_current_world():
+			offset = source.world_point().position - world_point().position
+			offset.y = 0.0
+		elif world_motion == null:
+			var flat := source.global_position - global_position
+			offset = Vector3(flat.x, 0.0, flat.y)
+		if not offset.is_zero_approx(): dot = offset.normalized().dot(gameplay_ground_facing())
+	return {"request": request, "source": source if is_instance_valid(source) else null, "source_id": request.source_id, "kind": kind, "event": event, "facing_dot": dot, "frontal": dot > 0.0}
+
+func _apply_damage_base(request: DamageRequest, rng: RandomNumberGenerator) -> Dictionary:
 	if request.is_secondary or request.target_id != get_instance_id():
 		return _apply_damage_with_shield(request, rng)
 	var source := instance_from_id(request.source_id) as Node2D
@@ -2237,16 +2330,25 @@ func is_concealed() -> bool:
 		if not is_alive() or not world_motion.is_current_world(): return false
 		if is_hunter(): return hunter_cover.is_hidden(_world_cover_clock_point())
 		if concealment_reveal_remaining > 0.0: return false
+		if kit != null and kit.concealment_active(self): return true
 		for shelter: Dictionary in _world_shelters.values():
 			if _inside_world_shelter(self,shelter): return true
 		return false
 	if is_hunter():
 		return is_alive() and hunter_cover.is_hidden(global_position)
-	return is_alive() and concealment_reveal_remaining <= 0.0 and not _containing_foliage_shelters().is_empty()
+	return is_alive() and concealment_reveal_remaining <= 0.0 and ((kit != null and kit.concealment_active(self)) or not _containing_foliage_shelters().is_empty())
+
+## E09 C1.7: concealment that comes from the kit (not a place) is active and not revealed.
+func kit_concealed() -> bool:
+	return kit != null and is_alive() and concealment_reveal_remaining <= 0.0 and kit.concealment_active(self)
 
 func can_be_acquired_by_world(observer: CombatActor) -> bool:
 	if world_motion == null or not is_alive() or not is_instance_valid(observer) or observer.world_motion == null or observer.world_motion.geometry != world_motion.geometry: return false
+	# E09 C1.6: an enemy that lost sight of this player cannot acquire it meanwhile.
+	var observer_threat := _enemy_threat(observer)
+	if observer_threat != null and observer_threat.sight_broken(_enemy_threat_id(observer)): return false
 	if not is_concealed(): return true
+	if not is_hunter() and kit_concealed(): return false
 	if is_hunter():
 		var shelter: Dictionary = _world_shelters.get(hunter_cover.zone_id,{})
 		return not shelter.is_empty() and _inside_world_shelter(observer,shelter)
@@ -2259,6 +2361,7 @@ func can_be_acquired_by(observer_position: Vector2) -> bool:
 		return false
 	if is_hunter():
 		return not is_concealed() or observer_position.distance_to(hunter_cover.center) <= hunter_cover.radius
+	if kit_concealed(): return false
 	var containing := _containing_foliage_shelters()
 	if concealment_reveal_remaining > 0.0 or containing.is_empty():
 		return true
@@ -2273,7 +2376,9 @@ func reveal_from_offense(duration: float = CONCEALMENT_REVEAL_DURATION) -> bool:
 		concealment_reveal_remaining = hunter_cover.reveal_remaining
 		queue_redraw()
 		return revealed
-	if (_foliage_shelters.is_empty() and _world_shelters.is_empty()) or duration <= 0.0:
+	var kit_hidden := kit_concealed()
+	if kit_hidden and duration > 0.0: kit.on_reveal(self, duration)
+	if (_foliage_shelters.is_empty() and _world_shelters.is_empty() and not kit_hidden) or duration <= 0.0:
 		return false
 	concealment_reveal_remaining = maxf(concealment_reveal_remaining, duration)
 	queue_redraw()
@@ -2329,6 +2434,7 @@ func commit_geometer_shot(command: GeometerCastCommand, construction: GeometerCo
 	var ticket := construction.reserve_shot(check["point"], command.actor_id, command.skill_id == &"geometer_triangulation", skill_rank(&"geometer_triangulation"), navigation, durations.x, durations.y, command.element, bool(run_state.composed_build().get("kit_policies", {}).get(&"geometer_ground_anchor", false)))
 	if ticket == 0:
 		return {"ok": false, "reason": "Construção indisponível."}
+	note_base_commit(command.skill_id, check["point"], check.get("target") as CombatActor)
 	_spend(command.skill_id)
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(command.skill_id)
@@ -2389,6 +2495,7 @@ func commit_geometer_edit(command: GeometerCastCommand, construction: GeometerCo
 	var result := construction.edit(check["point"], command.actor_id, command.skill_id == &"geometer_rewrite", skill_rank(&"geometer_triangulation"), navigation, durations.x, durations.y, command.element)
 	if result["ok"]:
 		cancel_active_cast()
+		note_base_commit(command.skill_id, check["point"])
 		_spend(command.skill_id)
 		reveal_from_offense()
 		presentation_action.emit(&"cast_release", _resolved_facing(aim_direction(check["point"])), 0.12)
@@ -2405,6 +2512,7 @@ func commit_geometer_collapse(command: GeometerCastCommand, construction: Geomet
 		return {"ok": false, "reason": "Sem figura ativa."}
 	# Consume before any signal/damage; callbacks cannot finalize the same instance twice.
 	cancel_active_cast()
+	note_base_commit(command.skill_id, command.point)
 	_spend(command.skill_id)
 	captured = geometer_collapse_snapshot(captured,first)
 	reveal_from_offense()
@@ -2451,6 +2559,55 @@ func geometer_triangle_snapshot() -> Dictionary:
 		captured[component] = request
 	return captured
 
+# --- E09 C1.4: kit casts ------------------------------------------------------------
+
+## Cast descriptor given to every kit cast hook. Keys: skill_id, rank, element,
+## world, anchor (ExpeditionWorldPoint or null), point (Vector2), facing (Vector3,
+## ground), facing_2d (Vector2), target (CombatActor or null), actors.
+func _kit_cast_from_command(command: KitWorldSkillCast) -> Dictionary:
+	var facing := command.direction(self)
+	var anchor := command.anchor()
+	var flat := Vector2(facing.x, facing.z)
+	return {"skill_id": command.skill_id, "rank": skill_rank(command.skill_id), "element": kit.skill_element(command.skill_id), "world": true, "anchor": anchor, "point": Vector2(anchor.position.x, anchor.position.z) if anchor != null else Vector2.ZERO, "facing": facing, "facing_2d": flat.normalized() if not flat.is_zero_approx() else _last_facing, "target": command.target(), "actors": command.actors()}
+
+func _kit_cast_legacy(skill_id: StringName, point: Vector2, enemy: CombatActor) -> Dictionary:
+	var definition := ClassKitRegistry.skill_definition(skill_id)
+	var self_cast := definition != null and definition.targeting == SkillDefinition.Targeting.SELF
+	var facing := aim_direction(enemy.global_position if is_instance_valid(enemy) else point)
+	var actors: Array[CombatActor] = []
+	var controller := get_parent() as RunController
+	if controller != null:
+		for actor: CombatActor in controller.enemies:
+			if is_instance_valid(actor) and actor.is_alive(): actors.append(actor)
+	return {"skill_id": skill_id, "rank": skill_rank(skill_id), "element": kit.skill_element(skill_id), "world": false, "anchor": null, "point": global_position if self_cast else point, "facing": Vector3(facing.x, 0.0, facing.y), "facing_2d": facing, "target": enemy if is_instance_valid(enemy) else null, "actors": actors}
+
+## Canonical commit of a kit cast: action kind, payment (SP/cooldown), confirmed
+## hook, offensive reveal, resolution. Callers validated the cast before this.
+func _use_kit_cast(cast: Dictionary) -> bool:
+	var skill_id: StringName = cast["skill_id"]
+	var definition := ClassKitRegistry.skill_definition(skill_id)
+	if definition == null or not kit_owns_skill(skill_id): return false
+	_commit_action(definition.action_kind)
+	if not _spend(skill_id): return false
+	kit.on_cast_confirmed(self, cast)
+	if definition.action_kind == SkillDefinition.ActionKind.OFFENSIVE: reveal_from_offense()
+	var facing: Vector2 = cast.get("facing_2d", _last_facing)
+	if not facing.is_zero_approx(): _last_facing = facing
+	kit.resolve_cast(self, cast)
+	resources_changed.emit()
+	return true
+
+## Legacy (flat arena) entry used by RunController._execute_skill for kit skills.
+## `requested` is false when the cast already went through begin_skill_cast().
+func use_kit_skill(skill_id: StringName, point: Vector2, enemy: CombatActor = null, requested: bool = true) -> bool:
+	if world_motion != null or not kit_owns_skill(skill_id) or not _can_spend(skill_id): return false
+	var definition := ClassKitRegistry.skill_definition(skill_id)
+	if definition.targeting == SkillDefinition.Targeting.SINGLE_TARGET and not can_target_skill(skill_id, enemy): return false
+	var cast := _kit_cast_legacy(skill_id, point, enemy)
+	if not kit.can_cast(self, cast).get("ok", false): return false
+	if requested: kit.on_cast_requested(self, cast)
+	return _use_kit_cast(cast)
+
 func begin_skill_cast(skill_id: StringName, point: Vector2, enemy: CombatActor = null, geometer_command: GeometerCastCommand = null) -> bool:
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var cast_time := skill_cast_time(skill_id)
@@ -2462,6 +2619,10 @@ func begin_skill_cast(skill_id: StringName, point: Vector2, enemy: CombatActor =
 		return false
 	if definition.targeting == SkillDefinition.Targeting.SINGLE_TARGET and not can_target_skill(skill_id, enemy):
 		return false
+	if kit_owns_skill(skill_id):
+		var kit_cast := _kit_cast_legacy(skill_id, point, enemy)
+		if not kit.can_cast(self, kit_cast).get("ok", false): return false
+		kit.on_cast_requested(self, kit_cast)
 	cancel_active_cast()
 	_prepared_rank_context = _cast_rank_context.duplicate(true) if _cast_rank_context.get("skill_id", &"") == skill_id else {"skill_id": skill_id, "rank": skill_rank(skill_id), "requested_rank": 0, "capture": run_state.skill_effect_capture(skill_id)}
 	active_cast_rank = skill_rank(skill_id)
@@ -2732,6 +2893,7 @@ func _request_captured_world_skill(command: WorldSkillCast) -> Dictionary:
 	var previous := _cast_rank_context
 	_cast_rank_context = command.rank_context
 	var result := _validate_world_skill(command)
+	if result["ok"] and command is KitWorldSkillCast: kit.on_cast_requested(self,_kit_cast_from_command(command as KitWorldSkillCast))
 	if result["ok"]:
 		var duration := skill_cast_time(skill)
 		_world_requesting = true
@@ -2814,6 +2976,14 @@ func _commit_world_geometer(command: WorldGeometerCast) -> bool:
 
 func _capture_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing: Vector3, victim: CombatActor, actors: Array[CombatActor], revision: int, requested_rank: int, field_height: float = 0.0) -> WorldSkillCast:
 	if world_motion == null or not world_motion.is_current_world(): _world_cast_result = WorldSkillCast.failure(&"spatial_binding_required"); return null
+	if kit_owns_skill(skill):
+		var kit_definition := ClassKitRegistry.skill_definition(skill)
+		if not facing.is_finite() or facing.is_zero_approx() or (kit_definition.targeting == SkillDefinition.Targeting.POINT and anchor == null): _world_cast_result = WorldSkillCast.failure(&"invalid_world_intent"); return null
+		var kit_previous := push_cast_rank(skill,requested_rank)
+		var kit_command := KitWorldSkillCast.new()
+		kit_command.capture_kit(self,skill,anchor,facing,victim,actors,revision,_cast_rank_context)
+		restore_cast_rank(kit_previous)
+		return kit_command
 	if not WorldSkillCast.supports(skill): _world_cast_result = WorldSkillCast.failure(&"unsupported_world_skill"); return null
 	if not facing.is_finite() or facing.is_zero_approx() or (skill in WorldSkillCast.POINT_AREAS and anchor == null): _world_cast_result = WorldSkillCast.failure(&"invalid_world_intent"); return null
 	var previous := push_cast_rank(skill,requested_rank)
@@ -2838,6 +3008,10 @@ func _validate_world_skill(command: WorldSkillCast, using_reservation: bool = fa
 	var valid := command.geometry_check(self)
 	if not valid["ok"]: return valid
 	if command is WorldGeometerCast: return valid
+	if command is KitWorldSkillCast:
+		if not kit_owns_skill(command.skill_id): return WorldSkillCast.failure(&"kit_unavailable")
+		var kit_check := kit.can_cast(self,_kit_cast_from_command(command as KitWorldSkillCast))
+		return valid if kit_check.get("ok",false) else WorldSkillCast.failure(StringName(kit_check.get("error_code",&"kit_refused")))
 	if command.skill_id in [&"fire_wall",&"lightning_wall",&"phantom_barrier",&"ice_wall"]:
 		var field := WorldGroundField.new()
 		var centers: Array[float] = [0.0]
@@ -2938,6 +3112,10 @@ func _commit_world_skill(command: WorldSkillCast) -> Dictionary:
 	var victim := command.target()
 	var actors := command.actors()
 	var accepted := false
+	if command is KitWorldSkillCast:
+		accepted = _use_kit_cast(_kit_cast_from_command(command as KitWorldSkillCast))
+		_world_executing_cast = null
+		return {"ok":accepted,"error_code":&"" if accepted else &"skill_rejected","data":{"state":&"committed"} if accepted else {}}
 	match command.skill_id:
 		&"ice_wall": accepted = use_ice_wall(flat,actors)
 		&"fire_wall": accepted = use_fire_wall(flat)
@@ -3025,6 +3203,7 @@ func use_world_teleport(destination: ExpeditionWorldPoint, revision: int) -> boo
 	if world_motion == null or is_rooted() or (class_id != &"mage" and not run_state.has_item_active(&"teleport")) or not _can_pay_skill(&"teleport"): return false
 	var result := world_motion.teleport(destination,skill_range(&"teleport"),revision)
 	if not result["ok"]: return false
+	note_base_commit(&"teleport", Vector2(destination.position.x, destination.position.z))
 	_spend(&"teleport")
 	_stop_world_travel()
 	_path.clear()
@@ -3047,6 +3226,7 @@ func use_world_dash(destination: ExpeditionWorldPoint, revision: int) -> bool:
 	if not route["ok"] or float(route["data"]["cost"]) > skill_range(&"dash"): return false
 	var planned := world_motion.adopt_route(route,destination,revision)
 	if not planned["ok"]: return false
+	note_base_commit(&"dash", Vector2(destination.position.x, destination.position.z))
 	_spend(&"dash")
 	_stop_world_travel()
 	_world_dash_remaining = DASH_DURATION
@@ -3073,6 +3253,7 @@ func use_teleport(point: Vector2) -> bool:
 		return false
 	var destination := teleport_destination(point)
 	var facing := _resolved_facing(global_position.direction_to(destination))
+	note_base_commit(&"teleport", destination)
 	_spend(&"teleport")
 	global_position = destination
 	_path.clear()
@@ -3119,7 +3300,16 @@ func skill_cooldown(skill_id: StringName) -> float:
 		return dash_cooldown
 	return mage_cooldowns.get(skill_id, 0.0)
 
+## Single source of the effective SP cost (T1.2): payment checks, the debit and the
+## UI read it. The kit may change it (floored at 0); lines labelled "SP base" do not.
 func skill_cost(skill_id: StringName) -> float:
+	var base := base_skill_cost(skill_id)
+	if kit == null: return base
+	var value := kit.skill_cost(self, skill_id, base)
+	return maxf(0.0, value) if is_finite(value) else base
+
+## Cost before the kit: runtime rank (item modifiers included) or the unranked definition.
+func base_skill_cost(skill_id: StringName) -> float:
 	var rank_definition := _runtime_rank_definition(skill_id)
 	if rank_definition != null:
 		return rank_definition.sp_cost
@@ -3227,6 +3417,13 @@ func _advance_player(delta: float) -> void:
 	var simulation_paused := is_inside_tree() and get_tree().paused
 	if simulation_paused:
 		return
+	if kit != null:
+		if not _kit_was_alive:
+			_kit_was_alive = true
+			kit.on_return(self)
+		if is_finite(delta) and delta > 0.0:
+			kit_time += delta
+			kit.on_tick(self, delta)
 	if is_hunter():
 		var had_step := hunter_state.step_remaining > 0.0
 		hunter_state.advance(delta)
@@ -3488,7 +3685,9 @@ func regenerate_hp(delta: float, encounter_active: bool, simulation_paused: bool
 	if encounter_active or simulation_paused or delta <= 0.0 or not is_alive() or health.current_hp >= health.max_hp:
 		return false
 	var previous_hp := health.current_hp
-	health.heal(stat_breakdown.value(&"hp_regen") * delta)
+	var requested := stat_breakdown.value(&"hp_regen") * delta
+	health.heal(requested)
+	if kit != null: kit.on_heal(self, requested, health.current_hp - previous_hp, &"hp_regen")
 	if is_equal_approx(previous_hp, health.current_hp):
 		return false
 	resources_changed.emit()
@@ -3506,10 +3705,24 @@ func heal_from_kill() -> float:
 	if health.hp_deficit() > 0.0: presentation_fact.emit(&"heal_source", &"blood_thirst", Vector2.ZERO, 0.0)
 	health.heal(health.max_hp * fraction)
 	var healed := health.current_hp - previous_hp
+	if kit != null: kit.on_heal(self, health.max_hp * fraction, healed, &"blood_thirst")
 	if healed > 0.0:
 		resources_changed.emit()
 		queue_redraw()
 	return healed
+
+## E09 C1.4: heal with the requested and the applied amount reported to the kit
+## (the excess is requested - applied). Returns the applied amount.
+func heal_player(amount: float, source: StringName) -> float:
+	if not is_alive() or not is_finite(amount) or amount <= 0.0: return 0.0
+	var previous_hp := health.current_hp
+	health.heal(amount)
+	var applied := health.current_hp - previous_hp
+	if kit != null: kit.on_heal(self, amount, applied, source)
+	if applied > 0.0:
+		resources_changed.emit()
+		queue_redraw()
+	return applied
 
 func _try_basic_attack() -> void:
 	if not run_state.effect_ledger.can_create_root() or not has_projectile_capacity(&"basic_attack"):
@@ -3537,18 +3750,22 @@ func _try_basic_attack() -> void:
 	reveal_from_offense()
 	queue_redraw()
 	var request: DamageRequest
-	if is_mage():
+	var delivery := _basic_delivery()
+	if delivery == &"mage":
 		request = _make_magic_request(target, &"basic_attack", stat_breakdown.value(&"magic_attack") * class_definition.basic_power, DamageRequest.AccuracyMode.CONTESTED, true)
-	elif is_archer():
+	elif delivery == &"precision":
 		request = _make_physical_request(target, &"basic_attack", stat_breakdown.value(&"precision_attack") * class_definition.basic_power, DamageRequest.AccuracyMode.CONTESTED, true)
 	else:
 		request = _make_physical_request(target, &"basic_attack", stat_breakdown.value(&"melee_attack") * class_definition.basic_power, DamageRequest.AccuracyMode.CONTESTED, true)
+	if kit != null:
+		var composed := kit.compose_basic_attack(self, target, request)
+		if composed != null: request = composed
 	if world_motion != null:
-		world_attack_requested.emit(request,target,&"mage" if is_mage() else (&"precision" if is_archer() else &"direct"))
+		world_attack_requested.emit(request,target,delivery)
 		return
-	if is_mage():
+	if delivery == &"mage":
 		mage_projectile_requested.emit(&"basic_attack", request, target, _last_facing, 1)
-	elif is_archer():
+	elif delivery == &"precision":
 		precision_projectile_requested.emit(&"basic_attack", request, target, _last_facing, 1, 1)
 	else:
 		attack_requested.emit(request, target)
@@ -3615,14 +3832,20 @@ func _can_pay_skill(skill_id: StringName, using_reservation: bool = false) -> bo
 	var available_sp := current_sp if using_reservation and skill_id == &"sentinel_explosive_shot" and sentinel_state.explosive_prepared else sentinel_free_sp()
 	return selected_cast_rank_valid(skill_id) and run_state.effect_ledger.can_create_root() and run_state.effects_valid() and has_projectile_capacity(skill_id) and has_runtime_definition and skill_id in available_skill_ids() and is_alive() and skill_cooldown(skill_id) <= 0.0 and available_sp >= skill_cost(skill_id)
 
-func _spend(skill_id: StringName) -> bool:
+## Canonical payment of a commit. `reserved_cost` >= 0 charges a price locked earlier
+## (the Sentinel's explosive reservation) instead of skill_cost().
+func _spend(skill_id: StringName, reserved_cost: float = -1.0) -> bool:
+	var first_commit := true
 	if _world_executing_cast != null:
-		if _world_executing_cast.skill_id != skill_id or not _validate_world_skill(_world_executing_cast)["ok"]: return false
+		if _world_executing_cast.skill_id != skill_id or not _validate_world_skill(_world_executing_cast)["ok"]:
+			_base_commit_hint = {} # A refused payment never leaves a commit note behind.
+			return false
+		first_commit = not _world_executing_cast.committed
 		_world_executing_cast.committed = true # Before root/payment callbacks can reenter.
 	_begin_effect_emission()
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var rank_definition := _runtime_rank_definition(skill_id)
-	var cost := rank_definition.sp_cost if rank_definition != null else definition.sp_cost
+	var cost := reserved_cost if reserved_cost >= 0.0 else skill_cost(skill_id)
 	var base_cooldown := rank_definition.cooldown if rank_definition != null else definition.cooldown
 	_sp_deficit += cost
 	var cooldown := SentinelMath.cooldown(skill_id, base_cooldown, stat_breakdown) if is_sentinel() else StatCalculator.effective_cooldown(base_cooldown, stat_breakdown)
@@ -3638,7 +3861,62 @@ func _spend(skill_id: StringName) -> bool:
 		mage_cooldowns[&"hunter_total_cover"] = shared_cooldown
 	if _world_executing_cast != null and _world_executing_cast.action_kind == SkillDefinition.ActionKind.OFFENSIVE: clear_shield_stance()
 	presentation_fact.emit(&"skill_committed", skill_id, Vector2.ZERO, 0.0) # After SP/cooldown commit.
+	var hint := _base_commit_hint
+	_base_commit_hint = {}
+	if first_commit and kit != null and not kit_owns_skill(skill_id):
+		kit.on_base_skill_committed(self, skill_id, _base_commit_context(skill_id, hint))
 	return true
+
+# --- T1.2: commit context of origin skills -----------------------------------------
+
+## Optional caller hint for the next commit of `skill_id`: point/target/element known
+## by the entry (RunController flat dispatch, teleport/dash destination, geometer).
+var _base_commit_hint: Dictionary = {}
+
+## Gameplay element of an origin skill, damage element of the base catalog. Gameplay
+## ids only: physical skills, movement and the teleport are empty; presentation
+## recipes (FeedbackRecipeCatalog) are not a gameplay source.
+const BASE_SKILL_ELEMENTS := {
+	&"fireball": &"fire", &"fire_wall": &"fire", &"fire_spear": &"fire",
+	&"ice_spear": &"ice", &"ice_wall": &"ice",
+	&"lightning": &"lightning", &"electric_discharge": &"lightning", &"lightning_wall": &"lightning",
+	&"elementalist_flame_burst": &"fire", &"elementalist_ember_path": &"fire", &"elementalist_tri_nova": &"fire",
+	&"elementalist_glacial_ring": &"ice", &"elementalist_lightning_arc": &"lightning",
+}
+
+## Canonical element of a non-kit skill: SkillDefinition.element when authored, else
+## BASE_SKILL_ELEMENTS, else empty.
+static func base_skill_element(skill_id: StringName) -> StringName:
+	var definition := ClassCatalog.skill_definition(skill_id)
+	if definition != null and not definition.element.is_empty(): return definition.element
+	return StringName(BASE_SKILL_ELEMENTS.get(skill_id, &""))
+
+func note_base_commit(skill_id: StringName, point: Vector2, target_actor: CombatActor = null, element: StringName = &"") -> void:
+	_base_commit_hint = {"skill_id": skill_id, "point": point}
+	if is_instance_valid(target_actor): _base_commit_hint["target"] = target_actor
+	if not element.is_empty(): _base_commit_hint["element"] = element
+
+func clear_base_commit_note() -> void:
+	_base_commit_hint = {}
+
+func _base_commit_context(skill_id: StringName, hint: Dictionary) -> Dictionary:
+	var context := {"target": null, "point": global_position, "world": world_motion != null, "rank": skill_rank(skill_id), "element": base_skill_element(skill_id)}
+	var command := _world_executing_cast
+	if command != null and command.skill_id == skill_id:
+		var victim := command.target()
+		if is_instance_valid(victim) and victim.is_alive(): context["target"] = victim
+		if command.anchor() != null:
+			context["point"] = Vector2(command.anchor().position.x, command.anchor().position.z)
+		else:
+			var direction := command.direction(self)
+			var flat := Vector2(direction.x, direction.z)
+			context["point"] = global_position + (flat if not flat.is_zero_approx() else _last_facing)
+	if StringName(hint.get("skill_id", &"")) == skill_id:
+		if hint.has("point") and (hint["point"] as Vector2).is_finite(): context["point"] = hint["point"]
+		var hinted: Variant = hint.get("target")
+		if is_instance_valid(hinted) and hinted is CombatActor and (hinted as CombatActor).is_alive(): context["target"] = hinted
+		if hint.has("element"): context["element"] = hint["element"]
+	return context
 
 func _resolved_facing(direction: Vector2) -> Vector2:
 	var facing := direction.normalized()
@@ -3705,6 +3983,9 @@ func _move_step(delta: float) -> void:
 		_last_facing = velocity.normalized()
 
 func _on_health_died(actor_id: int) -> void:
+	if kit != null:
+		_kit_was_alive = false
+		kit.on_death(self)
 	var host := get_parent() as RunController
 	if host != null and host.campaign_runtime != null:
 		ExpeditionDeathRecovery.prepare(host)
@@ -3733,7 +4014,21 @@ func _on_health_died(actor_id: int) -> void:
 	super._on_health_died(actor_id)
 
 func basic_attack_distance(enemy: CombatActor) -> float:
-	return collision_radius + enemy.collision_radius + (class_definition.basic_range + _extended_aim_bonus(&"basic_attack")) * sentinel_range_multiplier()
+	return collision_radius + enemy.collision_radius + (_basic_range() + _extended_aim_bonus(&"basic_attack")) * sentinel_range_multiplier()
+
+## E09 C1.4: basic-attack reach beyond bodies; a kit profile may replace the origin value.
+func _basic_range() -> float:
+	if kit != null:
+		var profile := kit.basic_attack_profile(self)
+		if profile.has("range") and is_finite(float(profile["range"])) and float(profile["range"]) > 0.0: return float(profile["range"])
+	return class_definition.basic_range
+
+## Delivery of the basic attack: &"direct" (melee), &"mage" or &"precision" (projectiles).
+func _basic_delivery() -> StringName:
+	if kit != null:
+		var delivery := StringName(kit.basic_attack_profile(self).get("delivery", &""))
+		if delivery in [&"direct", &"mage", &"precision"]: return delivery
+	return &"mage" if is_mage() else (&"precision" if is_archer() else &"direct")
 
 func archer_basic_projectile_range() -> float:
 	return (ARCHER_BASIC_MAX_DISTANCE + _extended_aim_bonus(&"basic_attack")) * sentinel_range_multiplier()
@@ -3750,12 +4045,12 @@ func can_basic_attack(enemy: CombatActor, retain: bool = false) -> bool:
 	if world_motion != null:
 		if not is_instance_valid(enemy) or not enemy.is_alive() or enemy.world_motion == null: return false
 		if not world_motion.is_current_world() or not enemy.world_motion.is_current_world(): return false
-		if is_mage() or is_archer():
+		if _basic_delivery() != &"direct":
 			var radius := PlayerProjectile.DEFAULT_RADIUS
 			var origin := world_point().position+Vector3.UP*maxf(0.0,(float(world_motion.profile()["height"])-radius*2.0)*0.5)
 			var clearance := world_motion.geometry.sweep(origin,origin,{"radius":radius,"height":radius*2.0},world_motion.geometry.geometry_revision)
 			if not clearance["ok"] or clearance["data"]["hit"]: return false
-		var body_range := float(world_motion.profile()["radius"])+float(enemy.world_motion.profile()["radius"])+(class_definition.basic_range+_extended_aim_bonus(&"basic_attack"))*sentinel_range_multiplier()
+		var body_range := float(world_motion.profile()["radius"])+float(enemy.world_motion.profile()["radius"])+(_basic_range()+_extended_aim_bonus(&"basic_attack"))*sentinel_range_multiplier()
 		return world_can_reach(enemy,body_range+(ATTACK_RETENTION if retain else 0.0))
 	if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
 		return false
@@ -3776,7 +4071,18 @@ func temporary_stat_sources() -> Array[Dictionary]:
 			sources.append(source)
 	if _defender_inside_anchor and has_defender_anchor():
 		sources.append({"source_id": &"defender_anchor", "label": "Marco de Guarda", "increased": {&"physical_defense": DEFENDER_ANCHOR_DEFENSE_BONUS, &"magic_defense": DEFENDER_ANCHOR_DEFENSE_BONUS}})
+	if kit != null:
+		for source: Dictionary in kit.temporary_stat_sources(self):
+			if not source.is_empty(): sources.append(source)
 	return sources
+
+## T1.1: rebuilds the breakdown after the kit's temporary sources changed, by the same
+## path as Fury or the Anchor. Idempotent: no heal, no SP refill, no cooldown reset
+## (HP and SP deficits are preserved).
+func refresh_kit_stats() -> void:
+	if run_state == null or stat_breakdown == null: return
+	_apply_derived_stats(_build_stat_breakdown())
+	resources_changed.emit()
 
 func _build_stat_breakdown() -> StatBreakdown:
 	var sources := run_state.stat_modifier_sources()
@@ -3884,6 +4190,12 @@ func _begin_effect_emission() -> void:
 			if id in targets:
 				carriers.append(id)
 		plan = run_state.causal_plan(targets, carriers)
+		if kit != null:
+			var families: Array = plan.get("families", [])
+			for family: StringName in ClassKitRegistry.causal_families(kit.evolution_id):
+				if family not in families: families.append(family)
+			families.sort()
+			plan["families"] = families
 	_emission_context = run_state.effect_ledger.new_root(get_instance_id(), false, "", false, plan)
 
 func claim_effect_result(result: Dictionary, family: StringName, target_id: int, kit_recovery: bool = false) -> bool:
@@ -3943,7 +4255,7 @@ func has_projectile_capacity(skill_id: StringName) -> bool:
 	if not is_inside_tree():
 		return true
 	var projectile_skills: Array[StringName] = [&"basic_attack", &"fireball", &"fire_spear", &"ice_spear", &"lightning", &"electric_discharge", &"double_shot", &"piercing_arrow", &"slowing_arrow", &"arrow_rain", &"hunter_covering_shot", &"sentinel_headshot", &"sentinel_piercing_shot", &"sentinel_concussion_shot", &"sentinel_net_shot", &"sentinel_explosive_shot", &"geometer_trace", &"geometer_triangulation"]
-	if skill_id not in projectile_skills or (skill_id == &"basic_attack" and class_id == &"swordsman"):
+	if skill_id not in projectile_skills or (skill_id == &"basic_attack" and _basic_delivery() == &"direct"):
 		return true
 	var needed := run_state.projectile_count(skill_id) if skill_id in BuildEffectCatalog.PROJECTILE_SKILLS else 1
 	return EffectProcLedger.projectile_slots_available(get_tree(), needed)
@@ -4091,3 +4403,72 @@ func use_berserker_pursuit_cut(enemy: CombatActor) -> bool:
 	presentation_action.emit(&"slash", _resolved_facing(aim_direction(enemy.global_position)), 0.2)
 	resources_changed.emit()
 	return true
+
+# --- E09 C1.4: helpers for kit modules -------------------------------------------
+
+## Damage request with the canonical attacker fields (hit, crit, multipliers, causal
+## context, cast rank, weapons). Damage amounts come from the kit; no formula here.
+func kit_make_request(victim: CombatActor, skill_id: StringName, physical_damage: float, magic_damage: float, accuracy_mode: DamageRequest.AccuracyMode = DamageRequest.AccuracyMode.CONTESTED, can_crit: bool = true) -> DamageRequest:
+	var request := _make_request(victim, skill_id, accuracy_mode, can_crit)
+	request.physical_damage = maxf(0.0, physical_damage)
+	request.magic_damage = maxf(0.0, magic_damage)
+	return request
+
+## Direct hit through RunController (claims, callbacks and ledger as for any skill).
+func kit_emit_hit(request: DamageRequest, victim: CombatActor) -> void:
+	if request != null and is_instance_valid(victim): attack_requested.emit(request, victim)
+
+## Projectile through the existing producers: delivery &"mage" or &"precision".
+func kit_emit_projectile(request: DamageRequest, victim: CombatActor, delivery: StringName = &"mage") -> void:
+	if request == null or not is_instance_valid(victim): return
+	if world_motion != null:
+		world_attack_requested.emit(request, victim, delivery)
+	elif delivery == &"precision":
+		precision_projectile_requested.emit(request.skill_id, request, victim, _last_facing, 1, 1)
+	else:
+		mage_projectile_requested.emit(request.skill_id, request, victim, _last_facing, 1)
+
+## C1.6 primitives applied by this player on an enemy's threat ledger.
+func kit_force_target(enemy: CombatActor, duration: float) -> Dictionary:
+	var ledger := _enemy_threat(enemy)
+	if ledger == null: return {"ok": false, "error_code": &"invalid_target"}
+	var source := _enemy_threat_id(enemy)
+	if source.is_empty(): return {"ok": false, "error_code": &"invalid_participant"}
+	var result := ledger.force_target(source, duration)
+	if result["ok"]: enemy.call(&"_select_threat_target")
+	return result
+
+func kit_break_sight(enemy: CombatActor, duration: float) -> Dictionary:
+	var ledger := _enemy_threat(enemy)
+	if ledger == null: return {"ok": false, "error_code": &"invalid_target"}
+	var source := _enemy_threat_id(enemy)
+	if source.is_empty(): return {"ok": false, "error_code": &"invalid_participant"}
+	var result := ledger.break_sight(source, duration)
+	if result["ok"]: enemy.call(&"_select_threat_target")
+	return result
+
+## Threat ledger of an enemy actor, or null for any other actor. Duck-typed on purpose:
+## naming the enemy class here closes a script cycle between the player and enemy
+## scripts that Godot 4.7.2 does not release at exit ("resources still in use"),
+## failing tests that load both scripts together with typed lambdas.
+func _enemy_threat(actor: CombatActor) -> ThreatService:
+	if not is_instance_valid(actor) or not actor.has_method(&"threat_id_for"): return null
+	return actor.get(&"threat") as ThreatService
+
+func _enemy_threat_id(actor: CombatActor) -> String:
+	return String(actor.call(&"threat_id_for", self)) if _enemy_threat(actor) != null else ""
+
+## RunController calls: confirmed damage and kill (after the result claims).
+func kit_damage_dealt(result: Dictionary) -> void:
+	if kit != null: kit.on_damage_dealt(self, result)
+
+func kit_kill_confirmed(result: Dictionary) -> void:
+	if kit != null: kit.on_kill_confirmed(self, result)
+
+## RunController call: an enemy committed an attack on this player.
+func notify_enemy_attack(event: Dictionary) -> void:
+	if kit != null and is_alive(): kit.on_enemy_attack(self, event)
+
+## Non-empty reason makes a compact cut ineligible (SnapshotRegistry checks it).
+func kit_compact_blocker() -> String:
+	return kit.snapshot_compact_blocker(self) if kit != null else ""

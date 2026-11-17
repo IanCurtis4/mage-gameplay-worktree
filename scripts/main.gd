@@ -215,6 +215,12 @@ var spiritualist_ground: SpiritualistHaloUnderlay
 var geometer_casting: GeometerCasting
 var geometer_onboarding: GeometerOnboarding
 var sentinel_onboarding: SentinelOnboarding
+## E09 C1.12: onboarding of a kit evolution (res://scripts/ui/classes/<id>_onboarding.gd).
+var kit_onboarding: Control
+## E09 C1.5: enemy attack commits waiting for their impact on the player (transient).
+var _kit_attack_commits: Dictionary = {}
+## E09 C1.5: an enemy committed an attack on the player. Keys in the kit seam API.
+signal enemy_attack_committed(event: Dictionary)
 var sentinel_focus_label: Label
 var sentinel_focus_bar: ProgressBar
 var geometer_element_buttons: Dictionary[StringName, Button] = {}
@@ -619,9 +625,20 @@ func _on_skill_cast_ready(skill: StringName, point: Vector2, target_id: int) -> 
 	if get_tree().paused or run_finished or not player.is_alive():
 		return
 	var selected_target := instance_from_id(target_id) as CombatActor if target_id != 0 else null
-	_execute_skill(skill, point, selected_target)
+	_execute_skill(skill, point, selected_target, true)
 
-func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatActor = null) -> void:
+func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatActor = null, prepared: bool = false) -> void:
+	# T1.2: the flat entry tells the commit context its point and target; a refused
+	# cast leaves no note behind.
+	if not player.kit_owns_skill(skill): player.note_base_commit(skill, point, selected_target)
+	_dispatch_skill(skill, point, selected_target, prepared)
+	if is_instance_valid(player): player.clear_base_commit_note()
+
+func _dispatch_skill(skill: StringName, point: Vector2, selected_target: CombatActor = null, prepared: bool = false) -> void:
+	if player.kit_owns_skill(skill):
+		if not player.use_kit_skill(skill, point, selected_target, not prepared):
+			_report_skill_failure(skill, selected_target)
+		return
 	if skill == &"sentinel_absolute_focus":
 		if not player.use_sentinel_absolute_focus():
 			_report_skill_failure(skill, selected_target)
@@ -1371,7 +1388,36 @@ func _on_world_attack_requested(request: DamageRequest, victim: CombatActor, kin
 
 func _on_attack_requested(request: DamageRequest, target_actor: CombatActor) -> void:
 	if target_actor != null and target_actor.is_alive():
+		if target_actor == player and player.has_kit() and instance_from_id(request.source_id) is EnemyActor:
+			_kit_apply_enemy_hit(request, target_actor, &"melee")
+			return
 		target_actor.apply_damage(request, rng)
+
+## E09 C1.5: one key per enemy attack root, shared by the request copies of its projectile.
+func _kit_attack_key(request: DamageRequest) -> String:
+	var root := request.context.root_event_id if request.context != null else ""
+	return root if not root.is_empty() else "%d:%s" % [request.source_id, request.skill_id]
+
+## Publishes the commit of an enemy attack on the player (kit hook and signal).
+func _kit_publish_enemy_attack(request: DamageRequest, target_actor: CombatActor, kind: StringName, immediate: bool) -> void:
+	if request == null or not is_instance_valid(player) or target_actor != player or not player.has_kit() or not player.is_alive(): return
+	var event := {"kind": kind, "attacker_id": request.source_id, "target_id": player.get_instance_id(), "skill_id": request.skill_id, "commit_time": player.kit_time, "impact_time": player.kit_time if immediate else -1.0}
+	if not immediate:
+		if _kit_attack_commits.size() >= 64: _kit_attack_commits.erase(_kit_attack_commits.keys()[0])
+		_kit_attack_commits[_kit_attack_key(request)] = event.duplicate()
+	player.notify_enemy_attack(event)
+	enemy_attack_committed.emit(event)
+
+## Impact of an enemy attack on the kit player: the pipeline sees the event.
+func _kit_apply_enemy_hit(request: DamageRequest, target_actor: CombatActor, default_kind: StringName) -> Dictionary:
+	var key := _kit_attack_key(request)
+	var event: Dictionary = _kit_attack_commits.get(key, {"kind": default_kind, "attacker_id": request.source_id, "target_id": player.get_instance_id(), "skill_id": request.skill_id, "commit_time": player.kit_time})
+	_kit_attack_commits.erase(key)
+	event["impact_time"] = player.kit_time
+	player.incoming_attack_event = event
+	var result := target_actor.apply_damage(request, rng)
+	player.incoming_attack_event = {}
+	return result
 
 func _on_world_defender_hit_requested(request: DamageRequest, target_actor: CombatActor, root_duration: float, push: Vector3) -> void:
 	_on_defender_hit_requested(request,target_actor,root_duration,Vector2.ZERO,push)
@@ -2456,6 +2502,7 @@ func _on_terrifying_shout_requested(origin: Vector2, radius: float, fear_duratio
 		target_actor.apply_attribute_debuff(AttributeDebuffState.DAMAGE_RECEIVED, &"terrifying_shout", PlayerActor.TERRIFYING_SHOUT_DAMAGE_RECEIVED_INCREASE, PlayerActor.TERRIFYING_SHOUT_DEBUFF_DURATION)
 
 func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActor, ranged: bool) -> void:
+	_kit_publish_enemy_attack(request, target_actor, &"projectile" if ranged else &"melee", not ranged)
 	var spatial_source := instance_from_id(request.source_id) as CombatActor
 	if spatial_source != null and spatial_source.world_motion != null:
 		if not ranged:
@@ -2607,6 +2654,7 @@ func _on_enemy_damage_resolved(result: Dictionary) -> void:
 	_prepare_hunter_fan(result)
 	player.prepare_effect_claims(result, candidates)
 	player.resolve_build_effect_procs(result)
+	player.kit_damage_dealt(result) # E09 C1.4: after the claims of this result.
 	player.record_berserker_damage(result)
 	player.record_sentinel_damage(result)
 	player.record_hunter_damage(result)
@@ -2648,6 +2696,7 @@ func _on_enemy_damage_resolved(result: Dictionary) -> void:
 	if victim_id <= 0 or _credited_kills.has(victim_id):
 		return
 	_credited_kills[victim_id] = true
+	player.kit_kill_confirmed(result) # E09 C1.4: once per credited victim.
 	if build.has_passive(&"blood_thirst") and player.claim_effect_result(result, &"blood_thirst", victim_id, true):
 		player.heal_from_kill()
 
@@ -3449,6 +3498,8 @@ func _update_hud() -> void:
 		geometer_onboarding.refresh()
 	if sentinel_onboarding != null:
 		sentinel_onboarding.refresh()
+	if is_instance_valid(kit_onboarding) and kit_onboarding.has_method("refresh"):
+		kit_onboarding.call("refresh")
 	if player == null or player.health == null:
 		return
 	health_label.text = "VIDA  %d / %d" % [ceili(player.health.current_hp), ceili(player.health.max_hp)]
@@ -3811,6 +3862,15 @@ func _build_ui() -> void:
 		sentinel_onboarding = SentinelOnboarding.new()
 		ui_root.add_child(sentinel_onboarding)
 		sentinel_onboarding.configure(player)
+	if player.has_kit():
+		var onboarding_script := ClassKitRegistry.onboarding_script(player.kit.evolution_id)
+		var onboarding: Variant = onboarding_script.new() if onboarding_script != null else null
+		if onboarding is Control:
+			help_panel.hide()
+			kit_onboarding = onboarding
+			ui_root.add_child(kit_onboarding)
+			if kit_onboarding.has_method("configure"): kit_onboarding.call("configure", player)
+		elif onboarding is Object and not onboarding is RefCounted: (onboarding as Object).free()
 	if run_state.build_snapshot != null and run_state.build_snapshot.evolution_id == &"spiritualist":
 		_build_spiritualist_panel()
 	if geometer_casting != null:
@@ -4083,6 +4143,7 @@ func _make_label(text_value: String, size: int, color: Color) -> Label:
 func _on_mob_skill_requested(request: DamageRequest, target_actor: CombatActor, speed: float, maximum_range: float) -> void:
 	var source := instance_from_id(request.source_id) as Node2D
 	if source == null or target_actor == null: return
+	_kit_publish_enemy_attack(request, target_actor, &"projectile", false)
 	var projectile := MageProjectile.new()
 	var color := Color("74c9ff") if request.skill_id == &"ice_spear" else Color("ff793d")
 	projectile.configure_homing(request.copy(), target_actor, source.global_position + Vector2(0, -18), navigation, speed, maximum_range, color)
@@ -4096,7 +4157,7 @@ func _on_mob_skill_requested(request: DamageRequest, target_actor: CombatActor, 
 
 func _on_mob_skill_hit(request: DamageRequest, target_actor: CombatActor) -> void:
 	if target_actor == null or not target_actor.is_alive(): return
-	var result := target_actor.apply_damage(request, rng)
+	var result := _kit_apply_enemy_hit(request, target_actor, &"projectile") if target_actor == player and player.has_kit() else target_actor.apply_damage(request, rng)
 	SkillImpactRules.spear(request.skill_id, result, target_actor)
 
 func _open_inventory() -> void:
@@ -4551,7 +4612,7 @@ func spatial_pointer_skill(skill: StringName, point: Vector2, preview: bool) -> 
 	elif result["ok"]:
 		var data: Dictionary = result["data"]["point"]
 		anchor = ExpeditionWorldPoint.create(data["stage_id"],data["surface_id"],data["position"])
-	elif skill in WorldSkillCast.SELF_AREAS or skill in WorldSkillCast.SELF_STATE or skill in [&"shield_wall",&"sentinel_explosive_shot",&"geometer_collapse"]: anchor = player.world_point()
+	elif skill in WorldSkillCast.SELF_AREAS or skill in WorldSkillCast.SELF_STATE or skill in [&"shield_wall",&"sentinel_explosive_shot",&"geometer_collapse"] or (player.kit_owns_skill(skill) and ClassKitRegistry.skill_definition(skill).targeting == SkillDefinition.Targeting.SELF): anchor = player.world_point()
 	else: expedition_view.indicate(null,false); return result
 	if Input.is_key_pressed(KEY_SHIFT): victim = null
 	var facing := anchor.position-player.world_point().position

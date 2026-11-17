@@ -99,12 +99,17 @@ enum Handler {
 	DEFENDER_RETREAT_GUARD,
 	BERSERKER_PURSUIT_CUT,
 	BERSERKER_DEEP_BLEEDING,
+	## E09 C1: every kit skill; execution belongs to its ClassKit (scripts/classes/<id>/).
+	KIT,
 }
 
 const MAX_ACTIVE_RANK := 5
 const MAX_PASSIVE_RANK := 3
 
 @export var tags: Array[StringName] = []
+## E09 A2: element label of a kit skill (`light` = magic damage tagged as light).
+## Empty for the existing catalog; tags stay EffectTags descriptors only.
+@export var element: StringName = &""
 @export var id: StringName
 @export var display_name: String
 @export var input_key: String
@@ -125,7 +130,7 @@ const MAX_PASSIVE_RANK := 3
 func is_rank_catalog_valid() -> bool:
 	if category < Category.ACTIVE or category > Category.PASSIVE:
 		return false
-	if handler_id <= Handler.UNASSIGNED or handler_id > Handler.BERSERKER_DEEP_BLEEDING:
+	if handler_id <= Handler.UNASSIGNED or handler_id > Handler.KIT:
 		return false
 	if action_kind < ActionKind.OFFENSIVE or action_kind > ActionKind.DEFENSIVE:
 		return false

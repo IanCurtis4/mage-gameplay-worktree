@@ -20,6 +20,17 @@ const AR_SP: StringName = &"ar_sp"
 const MG_AR: StringName = &"mg_ar"
 const AR_MG: StringName = &"ar_mg"
 
+# E09 C1.10: kit hybrids. Kept apart from hybrid_evolution_ids(), whose six-ID list
+# is a stable contract; is_evolution()/evolution_origin() accept these as well.
+const SP_AC: StringName = &"sp_ac"
+const MG_AC: StringName = &"mg_ac"
+const SP_LA: StringName = &"sp_la"
+const MG_LA: StringName = &"mg_la"
+
+# Reserved, non-playable bases: affinity labels only, never character creation.
+const ACOLYTE: StringName = &"acolyte"
+const ROGUE: StringName = &"rogue"
+
 static func base_class_ids() -> Array[StringName]:
 	return [SWORDSMAN, MAGE, ARCHER]
 
@@ -28,6 +39,25 @@ static func pure_evolution_ids() -> Array[StringName]:
 
 static func hybrid_evolution_ids() -> Array[StringName]:
 	return [SP_MG, MG_SP, SP_AR, AR_SP, MG_AR, AR_MG]
+
+static func kit_evolution_ids() -> Array[StringName]:
+	return [SP_AC, MG_AC, SP_LA, MG_LA]
+
+static func reserved_base_ids() -> Array[StringName]:
+	return [ACOLYTE, ROGUE]
+
+static func is_reserved_base(identity_id: StringName) -> bool:
+	return identity_id in reserved_base_ids()
+
+static func is_kit_evolution(evolution_id: StringName) -> bool:
+	return evolution_id in kit_evolution_ids()
+
+## Affinity label of a kit hybrid (reserved base); empty for every other identity.
+static func kit_affinity(evolution_id: StringName) -> StringName:
+	match evolution_id:
+		SP_AC, MG_AC: return ACOLYTE
+		SP_LA, MG_LA: return ROGUE
+	return &""
 
 static func attribute_ids() -> Array[StringName]:
 	return [&"str", &"agi", &"vit", &"int", &"dex", &"luk"]
@@ -60,7 +90,7 @@ static func is_base_class(identity_id: StringName) -> bool:
 	return identity_id in base_class_ids()
 
 static func is_evolution(evolution_id: StringName) -> bool:
-	return evolution_id in pure_evolution_ids() or evolution_id in hybrid_evolution_ids()
+	return evolution_id in pure_evolution_ids() or evolution_id in hybrid_evolution_ids() or evolution_id in kit_evolution_ids()
 
 static func evolution_belongs_to(evolution_id: StringName, base_class_id: StringName) -> bool:
 	if not is_evolution(evolution_id) or not is_base_class(base_class_id):
@@ -69,9 +99,9 @@ static func evolution_belongs_to(evolution_id: StringName, base_class_id: String
 
 static func evolution_origin(evolution_id: StringName) -> StringName:
 	match evolution_id:
-		DEFENDER, BERSERKER, SP_MG, SP_AR:
+		DEFENDER, BERSERKER, SP_MG, SP_AR, SP_AC, SP_LA:
 			return SWORDSMAN
-		ELEMENTALIST, SPIRITUALIST, MG_SP, MG_AR:
+		ELEMENTALIST, SPIRITUALIST, MG_SP, MG_AR, MG_AC, MG_LA:
 			return MAGE
 		SENTINEL, HUNTER, AR_SP, AR_MG:
 			return ARCHER

@@ -7,7 +7,8 @@ param(
     [string[]]$Test = @(),
     [ValidateRange(1, 2147483647)][int]$FromStep = 1,
     [ValidateRange(1, 2147483647)][int]$ToStep = 2147483647,
-    [switch]$List
+    [switch]$List,
+    [string]$PythonPath = ''
 )
 $ErrorActionPreference = 'Stop'
 $projectPath = Split-Path -Parent $PSScriptRoot
@@ -20,6 +21,20 @@ function Add-GodotCheck([string[]]$EngineArguments) {
     } elseif ($EngineArguments -contains '--recovery-mode') { 'e07_f1_native_import' } elseif ($EngineArguments -contains '--import') { 'editor_import' } else { 'smoke' }
     if ($EngineArguments -contains 'res://tools/e07_f8_candidate_probe.tscn') { $name = if ($EngineArguments -contains '--f8-mode=resume') { 'e07_f8_candidate_resume' } else { 'e07_f8_candidate_prepare' } }
     $checkPlan.Add([pscustomobject]@{ index = $checkPlan.Count + 1; name = $name; arguments = $EngineArguments })
+}
+
+# E09 C1.11: Python checks (tools/art_pipeline/tests). They never start Godot.
+function Add-PythonCheck([string]$Name, [string[]]$PythonArguments) {
+    $checkPlan.Add([pscustomobject]@{ index = $checkPlan.Count + 1; name = $Name; arguments = $PythonArguments; kind = 'python' })
+}
+
+function Resolve-PythonExecutable {
+    if (-not [string]::IsNullOrWhiteSpace($PythonPath)) { return (Resolve-Path -LiteralPath $PythonPath).Path }
+    foreach ($candidate in @('python', 'python3', 'py')) {
+        $command = Get-Command $candidate -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($command) { return $command.Source }
+    }
+    throw 'Python is required for the selected art pipeline checks; pass -PythonPath.'
 }
 
 function Invoke-GodotCheck($Check) {
@@ -36,7 +51,13 @@ function Invoke-GodotCheck($Check) {
     $startInfo.CreateNoWindow = $true
     $startInfo.RedirectStandardOutput = $true
     $startInfo.RedirectStandardError = $true
-    foreach ($argument in @('--log-file', $logPath) + $EngineArguments) { $startInfo.ArgumentList.Add($argument) }
+    if ($Check.PSObject.Properties['kind'] -and $Check.kind -eq 'python') {
+        $startInfo.FileName = Resolve-PythonExecutable
+        $startInfo.WorkingDirectory = $projectPath
+        foreach ($argument in $EngineArguments) { $startInfo.ArgumentList.Add($argument) }
+    } else {
+        foreach ($argument in @('--log-file', $logPath) + $EngineArguments) { $startInfo.ArgumentList.Add($argument) }
+    }
     $process = [System.Diagnostics.Process]::new()
     $process.StartInfo = $startInfo
     [void]$process.Start()
@@ -439,6 +460,23 @@ Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/map_editor_asset_manifest_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e08_p5_world_republish_test.gd')
 
+# E09 C1.11: own group, discovered by folder in a stable order. Each kit or system
+# task adds tests/classes/<id>/*_test.gd, tests/systems/<name>/*_test.gd or
+# tests/e09/*_test.gd without editing this runner. Indices of the steps above are kept.
+foreach ($group in @('tests/e09', 'tests/systems', 'tests/classes')) {
+    $groupPath = Join-Path $projectPath $group
+    if (-not (Test-Path -LiteralPath $groupPath)) { continue }
+    $discovered = @(Get-ChildItem -LiteralPath $groupPath -Recurse -File -Filter '*_test.gd' | ForEach-Object {
+        [IO.Path]::GetRelativePath($projectPath, $_.FullName).Replace('\', '/')
+    } | Sort-Object -CaseSensitive)
+    foreach ($relative in $discovered) { Add-GodotCheck @('--headless', '--path', $projectPath, '--script', "res://$relative") }
+}
+# Python tests of the neutral art pipeline (T2); the folder may not exist yet.
+$artPipelineTests = Join-Path $projectPath 'tools/art_pipeline/tests'
+if ((Test-Path -LiteralPath $artPipelineTests) -and @(Get-ChildItem -LiteralPath $artPipelineTests -File -Filter 'test_*.py').Count -gt 0) {
+    Add-PythonCheck 'art_pipeline_tests' @('-I', '-m', 'unittest', 'discover', '-s', 'tools/art_pipeline/tests', '-t', '.', '-p', 'test_*.py', '-v')
+}
+
 if (-not $PSBoundParameters.ContainsKey('ToStep')) { $ToStep = $checkPlan.Count }
 if ($FromStep -gt $ToStep -or $ToStep -gt $checkPlan.Count) {
     throw "Invalid step range $FromStep..$ToStep; use 1..$($checkPlan.Count)."
@@ -485,8 +523,9 @@ if ($F1Fixture) {
         if ($pathIndex -ge 0 -and $check.arguments[$pathIndex + 1] -in @($projectPath, $fixtureF0Path)) { $check.arguments[$pathIndex + 1] = $fixtureF1Path }
     }
 }
-if ([string]::IsNullOrWhiteSpace($GodotPath)) { throw 'GodotPath is required to execute checks; use -List to inspect the plan.' }
-$enginePath = (Resolve-Path -LiteralPath $GodotPath).Path
+$godotSelected = @($selectedChecks | Where-Object { -not ($_.PSObject.Properties['kind'] -and $_.kind -eq 'python') }).Count -gt 0
+if ($godotSelected -and [string]::IsNullOrWhiteSpace($GodotPath)) { throw 'GodotPath is required to execute checks; use -List to inspect the plan.' }
+$enginePath = if ([string]::IsNullOrWhiteSpace($GodotPath)) { '' } else { (Resolve-Path -LiteralPath $GodotPath).Path }
 $verificationPath = if ($VerificationDirectory) { [System.IO.Path]::GetFullPath($VerificationDirectory) } else { Join-Path $projectPath '.godot/verification' }
 [void](New-Item -ItemType Directory -Force -Path $verificationPath)
 $selection = [ordered]@{
@@ -499,7 +538,7 @@ $selection = [ordered]@{
     source_commit = (git -C $projectPath rev-parse HEAD)
     working_tree_status = @(git -C $projectPath status --porcelain)
     runner_sha256 = (Get-FileHash -LiteralPath $PSCommandPath -Algorithm SHA256).Hash
-    engine_path = $enginePath; engine_sha256 = (Get-FileHash -LiteralPath $enginePath -Algorithm SHA256).Hash
+    engine_path = $enginePath; engine_sha256 = if ($enginePath) { (Get-FileHash -LiteralPath $enginePath -Algorithm SHA256).Hash } else { '' }
     timeout_seconds = $CheckTimeoutSeconds; selection = $selection
     total_steps = $checkPlan.Count; selected_steps = $selectedChecks.Count; checks = $selectedChecks
 } | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $verificationPath 'plan.json') -Encoding utf8

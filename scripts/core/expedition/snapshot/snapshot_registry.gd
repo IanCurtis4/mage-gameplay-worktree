@@ -6,6 +6,9 @@ extends RefCounted
 const Encoding = preload("res://scripts/core/expedition/snapshot/snapshot_graph_encoding.gd")
 const FORMAT := 1
 const MANIFEST := "res://scripts/core/expedition/snapshot/runtime_manifest.json"
+## E09 C1.9: each class kit and system folder may bring a manifest fragment.
+const FRAGMENT_FILE := "snapshot_manifest.json"
+const FRAGMENT_ROOTS: Array[String] = ["res://scripts/classes", "res://scripts/systems"]
 const MAX_OBJECTS := 16384
 const MAX_DEPTH := 96
 const MAX_BYTES := Encoding.MAX_BYTES
@@ -43,9 +46,49 @@ func _field(value: Object, name: String) -> Variant:
 func _excluded(value: Object) -> bool:
 	return not _projection.is_empty() and is_instance_valid(value) and _projection["excluded"].has(value.get_instance_id())
 
+## Fragment load problems; any entry makes every capture/validation fail.
+var fragment_errors: Array[Dictionary] = []
+
 func _init() -> void:
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(MANIFEST))
 	if parsed is Dictionary: schemas = parsed
+	_merge_fragments()
+
+## E09 C1.9: fragments are merged with the same schema rules as the main manifest.
+## A fragment may only describe scripts of its own folder, never a main-manifest
+## kind or a kind of another fragment.
+func _merge_fragments() -> void:
+	for path: String in fragment_paths():
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+		if not parsed is Dictionary:
+			fragment_errors.append({"path": path, "error_code": &"invalid_manifest_fragment"})
+			continue
+		var folder := path.get_base_dir()
+		for kind: Variant in parsed:
+			var schema: Variant = parsed[kind]
+			if not kind is String or String(kind).get_base_dir() != folder or not String(kind).ends_with(".gd"):
+				fragment_errors.append({"path": path, "kind": str(kind), "error_code": &"fragment_kind_outside_folder"})
+			elif schemas.has(kind):
+				fragment_errors.append({"path": path, "kind": kind, "error_code": &"fragment_kind_duplicate"})
+			elif not schema is Dictionary or typeof(schema.get("revision")) not in [TYPE_INT, TYPE_FLOAT] or int(schema["revision"]) < 1 or not schema.get("fields") is Array or not schema.get("omitted") is Dictionary or schema.size() != 3:
+				fragment_errors.append({"path": path, "kind": kind, "error_code": &"invalid_manifest_fragment"})
+			else:
+				schema["revision"] = int(schema["revision"])
+				schemas[kind] = schema
+
+## Sorted fragment files under the fragment roots (classes and systems).
+static func fragment_paths() -> Array[String]:
+	var paths: Array[String] = []
+	for root: String in FRAGMENT_ROOTS: _collect_fragments(root, paths)
+	paths.sort()
+	return paths
+
+static func _collect_fragments(directory: String, paths: Array[String]) -> void:
+	var folder := DirAccess.open(directory)
+	if folder == null: return
+	for file: String in folder.get_files():
+		if file.trim_suffix(".remap") == FRAGMENT_FILE: paths.append(directory.path_join(FRAGMENT_FILE))
+	for child: String in folder.get_directories(): _collect_fragments(directory.path_join(child), paths)
 
 func coverage_manifest() -> Dictionary:
 	return schemas.duplicate(true)
@@ -155,6 +198,7 @@ func capture(root: Node, barrier: SnapshotTickBarrier, measure_logical_bytes: bo
 		entities = StableEntityRegistry.new()
 		root.set_meta(StableEntityRegistry.SCOPE_META,entities)
 	_barrier = barrier
+	if not fragment_errors.is_empty(): return StableEntityRegistry.failure(StringName(fragment_errors[0]["error_code"]), str(fragment_errors[0]))
 	if root is RunController and (root.inventory_frozen or root.run_state.transaction_locked or (root.reward_service != null and root.reward_service.has_pending_transaction())):
 		return StableEntityRegistry.failure(&"save_in_progress")
 	_visit(root)
@@ -269,6 +313,7 @@ func _source_revisions() -> Dictionary:
 	_digest_mutex.lock(); var known: Dictionary = _revisions_cache; _digest_mutex.unlock()
 	if not known.is_empty(): return known.duplicate()
 	var paths: Array[String] = [MANIFEST, "res://data/expedition/policies/e07_initial.json"]
+	paths.append_array(fragment_paths())
 	_collect_sources("res://scripts",paths)
 	paths.sort()
 	var result: Dictionary = {}
@@ -976,6 +1021,9 @@ func _validate_runtime_graph(projected: bool = false) -> Dictionary:
 		if not projected and value is WorldGeometry and not WorldGeometry._stage_prisms_valid(value._stage): return StableEntityRegistry.failure(&"invalid_payload", "terrain mass")
 		if not projected and value is ExpeditionCampaignRuntime and not value.valid(): return StableEntityRegistry.failure(&"invalid_payload", "campaign state")
 		if value is ThreatService and not value.valid(): return StableEntityRegistry.failure(&"invalid_payload", "threat state")
+		if value is ActorMarks and not value.valid(): return StableEntityRegistry.failure(&"invalid_payload", "actor marks")
+		# E09 C1.9: an active kit zone or temporary entity keeps the exact format.
+		if projected and value is PlayerActor and not value.kit_compact_blocker().is_empty(): return StableEntityRegistry.failure(&"kit_compact_ineligible", value.kit_compact_blocker())
 		if value is HealthState and (value.damage_sequence < 0 or value.heal_sequence < 0): return StableEntityRegistry.failure(&"invalid_payload", "health sequence")
 		if value is EnemyActor:
 			if not value.patrol_valid(): return StableEntityRegistry.failure(&"invalid_payload", "patrol state")

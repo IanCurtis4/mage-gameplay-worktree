@@ -11,6 +11,7 @@ const MAX_PASSIVE_RANK := 3
 
 # Only the no-override production shape is shared internally; every caller gets a copy.
 static var _default_pilot: ProfileCatalog
+static var _default_pilot_revision := -1
 
 var _skills: Dictionary[StringName, Dictionary] = {}
 var _equipment: Dictionary[StringName, Dictionary] = {}
@@ -26,7 +27,7 @@ static func pilot(
 	evolution_overrides: Dictionary = {}
 ) -> ProfileCatalog:
 	var default_shape := additional_equipment.is_empty() and additional_skills.is_empty() and evolution_overrides.is_empty()
-	if default_shape and _default_pilot != null:
+	if default_shape and _default_pilot != null and _default_pilot_revision == ClassKitRegistry.revision:
 		return _default_pilot.copy_catalog()
 	var catalog := ProfileCatalog.new()
 	for resource: Resource in BuildContentLoader.definitions(&"card"):
@@ -89,6 +90,12 @@ static func pilot(
 	var hunter_override: Dictionary = raw_hunter_override if raw_hunter_override is Dictionary else {}
 	if not hunter_override.has("exclusive_skill_ids") and not hunter_override.has(&"exclusive_skill_ids"):
 		catalog._register_hunter_skills()
+	# E09 C1.2/C1.3: kit learning rows enter only for ready kits or explicit fixture overrides.
+	for kit_id: StringName in ClassKitRegistry.ids():
+		if _kit_included(kit_id, evolution_overrides):
+			catalog._register_kit_skills(kit_id)
+		elif ClassKitRegistry.module(kit_id) != null and ClassKitRegistry.module(kit_id).ready_for_play():
+			catalog._build_error = true # A kit declared ready with invalid data fails loudly.
 	if additional_equipment.is_empty():
 		for resource: Resource in BuildContentLoader.definitions(&"equipment", true):
 			if not resource is EquipmentDefinition:
@@ -122,6 +129,7 @@ static func pilot(
 	catalog.seal()
 	if default_shape:
 		_default_pilot = catalog
+		_default_pilot_revision = ClassKitRegistry.revision
 		return catalog.copy_catalog()
 	return catalog
 
@@ -498,6 +506,18 @@ func _register_hunter_skills() -> void:
 		var free_rank := 1 if skill_id == &"hunter_freezing_trap" else 0
 		add_skill(skill_id, origin, PASSIVE if maximum == 3 else ACTIVE, EVOLUTION_WALLET, free_rank, maximum - free_rank, &"hunter", _evolution_rank_requirements(maximum, gates[index]))
 
+## Ready module, or an explicit fixture override for the kit ID.
+static func _kit_included(kit_id: StringName, overrides: Dictionary) -> bool:
+	return ClassKitRegistry.ready_for_play(kit_id) or overrides.has(kit_id) or overrides.has(String(kit_id))
+
+func _register_kit_skills(kit_id: StringName) -> void:
+	var origin: Array[StringName] = [ClassKitRegistry.origin(kit_id)]
+	for entry: Dictionary in ClassKitRegistry.learning_entries(kit_id):
+		var category := StringName(entry.get("category", &""))
+		var free_rank := int(entry.get("free_rank", 0))
+		var purchased := int(entry.get("max_purchased_rank", 0))
+		add_skill(StringName(entry.get("skill_id", &"")), origin, category, EVOLUTION_WALLET, free_rank, purchased, kit_id, _evolution_rank_requirements(free_rank + purchased, int(entry.get("job_level", 0)), entry.get("prerequisites", {})))
+
 func _evolution_rank_requirements(max_rank: int, job_level: int, prerequisites: Dictionary = {}) -> Dictionary:
 	var requirements: Dictionary = {}
 	for rank: int in range(1, max_rank + 1):
@@ -528,6 +548,8 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 	var known_ids: Dictionary[StringName, bool] = {}
 	for spec: Dictionary in specs:
 		known_ids[spec["id"]] = true
+	for kit_id: StringName in ClassKitRegistry.ids():
+		known_ids[kit_id] = true
 	for evolution_id: StringName in normalized_overrides:
 		if not known_ids.has(evolution_id):
 			_build_error = true
@@ -584,6 +606,24 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 			definition.exclusive_skill_ids = HunterTuning.SKILL_IDS.duplicate()
 		if normalized_overrides.has(definition.id):
 			_apply_evolution_override(definition, normalized_overrides[definition.id])
+		add_evolution(definition)
+	# E09 C1.10: a ready kit (or fixture override) adds its hybrid after the E00 order.
+	# An origin may therefore have more than two 2-3 hybrids.
+	for kit_id: StringName in ClassKitRegistry.ids():
+		if not _kit_included(kit_id, overrides): continue
+		var definition := EvolutionDefinition.new()
+		definition.id = kit_id
+		definition.display_name = ClassKitRegistry.display_name(kit_id)
+		definition.origin_class_id = IdentityIds.evolution_origin(kit_id)
+		definition.branch_kind = EvolutionDefinition.BRANCH_2_3
+		definition.affinity_class_id = IdentityIds.kit_affinity(kit_id)
+		definition.entry_skill_id = ClassKitRegistry.entry_skill_id(kit_id)
+		var exclusive: Array[StringName] = []
+		for entry: Dictionary in ClassKitRegistry.learning_entries(kit_id): exclusive.append(StringName(entry.get("skill_id", &"")))
+		definition.exclusive_skill_ids = exclusive
+		definition.content_ready = ClassKitRegistry.ready_for_play(kit_id)
+		if normalized_overrides.has(kit_id):
+			_apply_evolution_override(definition, normalized_overrides[kit_id])
 		add_evolution(definition)
 
 func _apply_evolution_override(definition: EvolutionDefinition, override: Dictionary) -> void:
@@ -646,7 +686,8 @@ func _evolution_definition_is_valid(definition: EvolutionDefinition) -> bool:
 	else:
 		if definition.branch_kind != EvolutionDefinition.BRANCH_2_3:
 			return false
-		if not IdentityIds.is_base_class(definition.affinity_class_id) or definition.affinity_class_id == definition.origin_class_id:
+		var kit_affinity := IdentityIds.is_kit_evolution(definition.id) and definition.affinity_class_id == IdentityIds.kit_affinity(definition.id)
+		if not kit_affinity and (not IdentityIds.is_base_class(definition.affinity_class_id) or definition.affinity_class_id == definition.origin_class_id):
 			return false
 	var seen_skills: Dictionary[StringName, bool] = {}
 	for skill_id: StringName in definition.exclusive_skill_ids:
