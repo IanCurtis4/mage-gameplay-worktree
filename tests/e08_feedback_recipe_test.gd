@@ -14,19 +14,48 @@ func check(ok: bool, label: String) -> void:
 
 func _initialize() -> void: _run.call_deferred()
 
-## Library of every identity (base classes and their evolutions), split by category.
+## E09 C1 (Sol, 17/11): kit skills reach the catalog and their recipes through the seam
+## (ClassKitRegistry), never through RECIPES. The E08 audio palette got no new cue in E09;
+## these kit kinds have no planned family cue (neither family x element nor family x
+## physical) and fall back to the kind cue, or stay silent where the kind has none. Exact
+## list, documented in docs/epics/e09_contract.md (C1, note on the E08 recipe test): a gap
+## that gains a cue must leave this list.
+const KIT_AUDIO_GAPS: Array[String] = ["paladin_oath/impact", "thaumaturge_votive_circle/impact", "thaumaturge_healing_refraction/heal", "arcane_blade_prism_specter/summon"]
+
+## Library of every identity (base classes and their evolutions), split by category and
+## by source: the E08 base catalog and the E09 kit skills (ClassKitRegistry.skill_owner).
 func _library() -> Dictionary:
 	var catalog := ProfileCatalog.pilot()
 	var active: Array[StringName] = []
 	var passive: Array[StringName] = []
+	var kit_active: Array[StringName] = []
+	var kit_passive: Array[StringName] = []
 	for base: StringName in [&"swordsman", &"mage", &"archer"]:
 		var identities: Array[StringName] = [&""]
 		for evolution: EvolutionDefinition in catalog.evolution_definitions_for_origin(base): identities.append(evolution.id)
 		for evolution: StringName in identities:
 			for skill: StringName in catalog.skill_ids_for_identity(base, evolution):
-				var bucket := active if catalog.skill_metadata(skill)["category"] == ProfileCatalog.ACTIVE else passive
+				var is_active: bool = catalog.skill_metadata(skill)["category"] == ProfileCatalog.ACTIVE
+				var from_kit := not ClassKitRegistry.skill_owner(skill).is_empty()
+				var bucket := (kit_active if is_active else kit_passive) if from_kit else (active if is_active else passive)
 				if skill not in bucket: bucket.append(skill)
+	return {"active":active, "passive":passive, "kit_active":kit_active, "kit_passive":kit_passive}
+
+## Expected kit skills of the production catalog: the seven of each ready kit, by slot category.
+func _expected_kit_skills() -> Dictionary:
+	var active: Array[StringName] = []
+	var passive: Array[StringName] = []
+	for kit: StringName in ClassKitRegistry.ids():
+		if not ClassKitRegistry.ready_for_play(kit): continue
+		var skills := ClassKitRegistry.skill_ids(kit)
+		for index: int in skills.size():
+			(active if ClassKitRegistry.SLOT_CATEGORIES[index] == ProfileCatalog.ACTIVE else passive).append(skills[index])
 	return {"active":active, "passive":passive}
+
+static func _sorted(values: Array[StringName]) -> Array[StringName]:
+	var copy: Array[StringName] = values.duplicate()
+	copy.sort()
+	return copy
 
 ## Bridge kinds a recipe can actually produce (mirrors the bridge emitters).
 func _kinds(recipe: Dictionary) -> Array[StringName]:
@@ -62,6 +91,24 @@ func _run() -> void:
 		check(Recipes.RECIPES.has(skill) and not recipe.generic, "active skill has its own recipe: " + String(skill))
 		check(recipe.family in Recipes.FAMILIES and recipe.element in Recipes.ELEMENTS, "family/element valid: " + String(skill))
 		subjects.append(recipe)
+	# E09 C1 (A15 exact counts): the four ready kits add 5 actives and 2 passives each, the
+	# exact skills of the registry table; their recipe comes from the kit module (seam).
+	var kit_active: Array[StringName] = library.kit_active
+	var expected_kit := _expected_kit_skills()
+	check(ClassKitRegistry.ids().filter(func(kit: StringName) -> bool: return ClassKitRegistry.ready_for_play(kit)).size() == 4, "the four E09 kits are ready in the production catalog")
+	check(kit_active.size() == 20 and library.kit_passive.size() == 8, "the kits expose 20 active and 8 passive skills, got %d/%d" % [kit_active.size(), library.kit_passive.size()])
+	check(_sorted(kit_active) == _sorted(expected_kit.active) and _sorted(library.kit_passive) == _sorted(expected_kit.passive), "kit skills of the catalog are exactly the registry table of the ready kits")
+	for skill: StringName in kit_active:
+		var recipe := Recipes.recipe(skill)
+		var row := ClassKitRegistry.feedback_recipe(skill)
+		check(not Recipes.RECIPES.has(skill) and row.size() == 4 and not recipe.generic and recipe.family == row[0] and recipe.element == row[1] and not recipe.is_signature, "kit active skill has its own recipe through the seam: " + String(skill))
+		check(recipe.family in Recipes.FAMILIES and recipe.element in Recipes.ELEMENTS, "family/element valid: " + String(skill))
+		subjects.append(recipe)
+	# Kit basic attacks: the kit row (C1.2) or the origin row, reported under the kit variant.
+	for kit: StringName in ClassKitRegistry.ids():
+		var kit_basic := Recipes.recipe(&"basic_attack", kit)
+		check(not kit_basic.generic and kit_basic.variant == kit and bool(kit_basic.basic_hit), "kit basic attack recipe: " + String(kit))
+		subjects.append(kit_basic)
 	# Basic attacks: identity-free default plus the three class variants.
 	var expected_basics := {&"swordsman":[&"melee", &"physical"], &"mage":[&"projectile", &"arcane"], &"archer":[&"projectile", &"physical"]}
 	for variant: StringName in expected_basics:
@@ -150,11 +197,18 @@ func _run() -> void:
 	# Audio coverage: every recipe/kind it can produce resolves to a planned family cue
 	# first, ending in the current kind cue where one exists; every planned cue is used.
 	var used := {}
+	var gaps_seen: Array[String] = []
 	for recipe: Dictionary in subjects:
 		check(recipe.audio is Dictionary and not recipe.audio.is_empty(), "recipe exposes its audio chains: " + String(recipe.skill_id))
 		for kind: StringName in _kinds(recipe):
 			var chain := Catalog.candidates(kind, recipe)
-			check(not chain.is_empty() and Catalog.PLANNED.has(chain[0]), "planned cue first for %s/%s: %s" % [recipe.skill_id, kind, chain])
+			var key := "%s/%s" % [recipe.skill_id, kind]
+			if key in KIT_AUDIO_GAPS:
+				# Registered E09 kit gap: a kit skill whose chain has no planned cue at all.
+				gaps_seen.append(key)
+				check(not ClassKitRegistry.skill_owner(recipe.skill_id).is_empty() and not chain.any(func(id: StringName) -> bool: return Catalog.PLANNED.has(id)), "registered kit audio gap still has no planned cue: %s: %s" % [key, chain])
+			else:
+				check(not chain.is_empty() and Catalog.PLANNED.has(chain[0]), "planned cue first for %s: %s" % [key, chain])
 			var fallback := Catalog.for_kind(kind)
 			if fallback == &"": fallback = Catalog.KIND_FALLBACK.get(kind, &"")
 			check(fallback == &"" or chain.back() == fallback, "chain ends with the current kind cue: %s/%s" % [recipe.skill_id, kind])
@@ -163,6 +217,10 @@ func _run() -> void:
 		check(Catalog.PLANNED.has(cast[0]) and cast.back() == &"world.cast_start", "cast chain per element: " + String(recipe.skill_id))
 		for id: StringName in cast: used[id] = true
 		for id: StringName in Catalog.candidates(&"heal", recipe): used[id] = true
+	gaps_seen.sort()
+	var gaps_wanted := KIT_AUDIO_GAPS.duplicate()
+	gaps_wanted.sort()
+	check(gaps_seen == gaps_wanted, "kit audio gaps are exactly the registered list: " + str(gaps_seen))
 	for id: StringName in Catalog.candidates(&"impact", Recipes.for_event({"skill_id":&"basic_attack", "payload":{"source_variant":"archer", "critical":true}})): used[id] = true # P7-C5: critical basic hit
 	for id: StringName in Catalog.planned_cue_ids():
 		check(used.has(id), "planned cue reachable by a recipe: " + String(id))

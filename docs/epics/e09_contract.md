@@ -124,6 +124,28 @@ Obrigações (assinaturas a cargo de Sol, publicadas em `docs/epics/e09/t1_kit_s
       classes.
     - Nenhum teste existente muda de expectativa.
 
+**Nota de Sol (17/11, composição): kits nos testes de catálogo da E08.** A T1 provou a
+costura com kits esqueleto. Com os quatro kits prontos, o catálogo de produção cresce, e o
+teste `tests/e08_feedback_recipe_test.gd` passa a tratá-los assim:
+- **Contagem.** A base da E08 continua contada à parte, com 71 ativas e 22 passivas. Os kits
+  são contados separadamente: 20 ativas e 8 passivas, exatamente as da tabela de
+  `ClassKitRegistry` (A15).
+- **Receita.** A receita de uma skill de kit vem do módulo, pela costura
+  (`ClassKitRegistry.feedback_recipe`), e nunca de `FeedbackRecipeCatalog.RECIPES`. Uma
+  entrada ali esconderia a do kit, porque a base vence.
+- **Áudio.** O E09 não acrescentou deixas à paleta P6. Quando a paleta não tem a deixa
+  família × elemento nem família × físico de um tipo de evento do kit, o kit cai na deixa do
+  tipo, ou fica em silêncio se o tipo não tiver deixa. Isso é uma lacuna de áudio
+  registrada, não um defeito de receita. A lista é exata:
+  - `paladin_oath/impact` e `thaumaturge_votive_circle/impact` (pulso periódico arcano, sem
+    `p6.dot.arcane`): caem em `world.impact`;
+  - `thaumaturge_healing_refraction/heal`, sem `p6.heal.arcane`: fica em silêncio;
+  - `arcane_blade_prism_specter/summon`, sem `p6.summon.arcane`: fica em silêncio.
+
+  A regra "deixa planejada primeiro" da E08 vale para os outros tipos dos kits. Uma lacuna
+  nova reprova o teste. Uma deixa nova, que exige WAV e uma tarefa de áudio própria, tira o
+  item da lista.
+
 ## 3. C2 — Santuário e Graça (tarefa T5)
 
 Autoridade de família do Sacerdote, usada agora pelo Paladino e pelo Taumaturgo e depois pelo

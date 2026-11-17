@@ -20,7 +20,28 @@ const READY := &"ready"
 const INVALID := &"invalid"
 const MIN_BUILDS := 2
 
+## Character name of a review profile: "E09 <build>". ProfileCodec accepts 1 to 24
+## characters (ProfileCodec._valid_display_name); that limit is mirrored here.
+const DISPLAY_PREFIX := "E09 "
+const MAX_DISPLAY_NAME := 24
+const ELLIPSIS := "…"
+
 static var _job_xp_cache := -1
+
+## Sol (17/11, T9 fix): "E09 Corrente de Execuções" has 25 characters and was refused as
+## invalid_display_name. Any build name now yields at most MAX_DISPLAY_NAME characters:
+## the prefixed name when it fits; else the build name alone; else the build name cut to
+## the limit with an ellipsis. Empty names fall back to the prefix only.
+static func review_display_name(build_name: String) -> String:
+	var trimmed := build_name.strip_edges()
+	if trimmed.is_empty():
+		return DISPLAY_PREFIX.strip_edges()
+	var prefixed := DISPLAY_PREFIX + trimmed
+	if prefixed.length() <= MAX_DISPLAY_NAME:
+		return prefixed
+	if trimmed.length() <= MAX_DISPLAY_NAME:
+		return trimmed
+	return trimmed.left(MAX_DISPLAY_NAME - ELLIPSIS.length()).strip_edges() + ELLIPSIS
 
 func _initialize() -> void:
 	_run.call_deferred()
@@ -198,7 +219,7 @@ static func _write_profile(directory: String, identity_id: StringName, build: Di
 		return {"ok": false, "error_code": &"output_not_empty"}
 	var profile := ProfileState.new(IdentityIds.new_profile_id())
 	var character_id := IdentityIds.character_id(profile.profile_id, profile.next_character_counter)
-	var character := CharacterState.new(character_id, "E09 %s" % build["name"], ClassKitRegistry.origin(identity_id))
+	var character := CharacterState.new(character_id, review_display_name(String(build["name"])), ClassKitRegistry.origin(identity_id))
 	character.evolution_id = identity_id
 	character.base_xp_total = ProgressionRules.MAX_BASE_XP
 	character.job_xp_total = review_job_xp()
