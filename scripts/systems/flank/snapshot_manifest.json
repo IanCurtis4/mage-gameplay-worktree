@@ -1,0 +1,35 @@
+{
+  "res://scripts/systems/flank/flank_authority.gd": {
+    "revision": 1,
+    "fields": [
+      "concealment_remaining",
+      "concealment_armed",
+      "hidden_seconds",
+      "opening_remaining",
+      "opening_hidden_seconds",
+      "openings_total",
+      "parry_remaining",
+      "parry_charges",
+      "parried_total",
+      "victim_serial",
+      "gained_total",
+      "_claimed",
+      "_claim_order",
+      "spend_key",
+      "spend_amount",
+      "executions_total",
+      "lethal_total",
+      "execution_kills",
+      "_killed",
+      "_kill_order"
+    ],
+    "omitted": {
+      "_victim_hint": "instance-ID cache of the current victim; rebuilt from the flank_victim mark (owner + victim_serial) after a restore, so the owner never holds an entity reference and the compact cut stays eligible (A5)"
+    }
+  },
+  "res://scripts/systems/flank/flank_rules.gd": {
+    "revision": 1,
+    "fields": [],
+    "omitted": {}
+  }
+}
