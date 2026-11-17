@@ -2,6 +2,12 @@
   "format": "equipment_hand_rigs_v1",
   "cell": 64,
   "pivot": [32, 58],
+  "props": {
+    "halo_shield": {"path": "res://assets/art/e09_equipment/props/halo_shield.png", "size": [18, 29], "grip": [9, 14], "angle": 0.0, "slot": "off_hand", "generic_key": "shield"},
+    "buckler": {"path": "res://assets/art/e09_equipment/props/buckler.png", "size": [18, 19], "grip": [9, 10], "angle": 0.0, "slot": "off_hand", "generic_key": "shield"},
+    "rapier": {"path": "res://assets/art/e09_equipment/props/rapier.png", "size": [10, 40], "grip": [5, 33], "angle": 0.2, "slot": "main_hand", "generic_key": "sword"},
+    "prism_staff": {"path": "res://assets/art/e09_equipment/props/prism_staff.png", "size": [13, 42], "grip": [6.5, 30], "angle": 0.3, "slot": "main_hand", "generic_key": "staff"}
+  },
   "identities": {
     "swordsman": {
       "atlas_sha256": "03650b272fa0313b6742886f7e23905811b9b7ae3932a89c1841f2acb8dc346a",

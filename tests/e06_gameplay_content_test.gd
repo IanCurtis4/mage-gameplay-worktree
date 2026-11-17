@@ -22,7 +22,7 @@ func _run() -> void:
 	# F10 Q4 adds the five forest phase species to the runtime catalog only.
 	var forest := [&"forest_wolf", &"forest_boar", &"forest_stalker", &"forest_canopy_archer", &"forest_ancient_warden"]
 	check(base["catalog"].mob_catalog().ids().size() == 8 and mobs.ids().size() == 16 and forest.all(func(id: StringName) -> bool: return mobs.get_definition(id) != null and base["catalog"].mob_catalog().get_definition(id) == null), "eight frozen species plus3new plus five forest")
-	check(catalog.ids(&"equipment").size() == 85 and catalog.ids(&"card").size() == 6, "expanded85 equipment and preserved6 cards")
+	check(catalog.ids(&"equipment").size() == 89 and catalog.ids(&"card").size() == 6, "expanded89 equipment and preserved6 cards")
 	for stage: int in range(1,7):
 		for index: int in MobCatalog.CATEGORIES.size():
 			var o := occurrence(&"test_gel", MobCatalog.CATEGORIES[index], PlaytestGameplay.origin(stage))

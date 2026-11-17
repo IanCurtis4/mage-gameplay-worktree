@@ -17,10 +17,10 @@ func _run() -> void:
 	check(original["ok"] and loaded["ok"],"base and expanded runtime load")
 	if not loaded["ok"]:print(loaded);quit(1);return
 	var catalog: BuildEffectCatalog = loaded["catalog"]
-	check(original["catalog"].ids(&"equipment").size()==37 and catalog.ids(&"equipment").size()==85,"unchanged base37 plus runtime85 equipment")
+	check(original["catalog"].ids(&"equipment").size()==37 and catalog.ids(&"equipment").size()==89,"unchanged base37 plus runtime89 equipment (85 plus four E09 T8 items)")
 	check(catalog.ids(&"card").size()==6 and BuildContentLoader.definitions(&"set",true).size()==14,"same six cards and existing plus13 sets")
 	var authored := preload("res://tools/content/inventory_fixes_bundle.gd").entries()
-	check(authored.size()==59,"exact closed46 equipment13sets")
+	check(authored.size()==63,"exact closed50 equipment13sets (46 plus four E09 T8 items)")
 	for entry: Dictionary in authored:
 		var definition: Resource = entry["definition"]
 		var policy := EquipmentEligibilityRules.for_resource(definition)

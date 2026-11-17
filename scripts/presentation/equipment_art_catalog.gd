@@ -4,6 +4,9 @@ extends RefCounted
 const FORMAT := &"painted_equipment_v1"
 const HEAD_IDS: Array[StringName] = [&"pilot_head",&"class_set_swordsman_head",&"class_set_archer_head",&"class_set_mage_head",&"class_set_defender_head",&"class_set_berserker_head",&"class_set_elementalist_head",&"class_set_spiritualist_head",&"class_set_sentinel_head",&"class_set_hunter_head",&"class_set_mg_ar_head",&"shared_set_low_head",&"shared_set_mid_head",&"shared_set_high_head"]
 const PROP_KEYS: Array[StringName] = [&"sword",&"axe",&"staff",&"bow",&"shield",&"prismatic_focus",&"wooden_beads"]
+## E09 T8: weapon art of the four new items. Cosmetic only; grips live in hand_rigs.json "props".
+const E09_PROP_IDS: Array[StringName] = [&"halo_shield",&"buckler",&"rapier",&"prism_staff"]
+const HAND_RIGS := "res://assets/art/equipment/hand_rigs.json"
 const HEAD_CELL := Vector2(24,24)
 const HEAD_ANCHOR := Vector2(12,13)
 const SOURCE_SCALE := 4.0
@@ -17,6 +20,7 @@ static func has_head(id: StringName) -> bool: return id in HEAD_IDS
 static func head_path(id: StringName) -> String:
 	return "res://assets/art/equipment/headgear/%s.png" % id if has_head(id) else ""
 static func prop_path(key: StringName) -> String:
+	if key in E09_PROP_IDS:return "res://assets/art/e09_equipment/props/%s.png" % key
 	return "res://assets/art/equipment/painted/%s.png" % key if key in PROP_KEYS else ""
 static func _checked(path: String,expected: Vector2) -> Texture2D:
 	if path.is_empty():return null
@@ -62,3 +66,19 @@ static func head_icon(id: StringName) -> Texture2D:
 		var region := AtlasTexture.new();region.atlas=texture;region.region=Rect2(0,0,96,96);region.filter_clip=true
 		_icons[id]=region
 	return _icons[id] as Texture2D
+static var _e09_props: Dictionary = {}
+static func e09_prop_ids() -> Array[StringName]: return E09_PROP_IDS.duplicate()
+## Immutable per-prop profile {path,size:Vector2,grip:Vector2,angle,slot,generic_key}; empty if unknown.
+static func e09_prop_profile(id: StringName) -> Dictionary:
+	if id not in E09_PROP_IDS:return {}
+	if _e09_props.is_empty():
+		var parsed: Variant=JSON.parse_string(FileAccess.get_file_as_string(HAND_RIGS))
+		if not parsed is Dictionary or not (parsed as Dictionary).get("props") is Dictionary:return {}
+		for key: String in (parsed as Dictionary).props:
+			var raw: Dictionary=parsed.props[key]
+			_e09_props[StringName(key)]={"path":String(raw.path),"size":Vector2(raw.size[0],raw.size[1]),"grip":Vector2(raw.grip[0],raw.grip[1]),"angle":float(raw.angle),"slot":StringName(raw.slot),"generic_key":StringName(raw.generic_key)}
+	return (_e09_props.get(id,{}) as Dictionary).duplicate()
+static func e09_prop_texture(id: StringName) -> Texture2D:
+	var profile := e09_prop_profile(id)
+	if profile.is_empty():return null
+	return _linear(_checked(String(profile.path),(profile.size as Vector2)*SOURCE_SCALE))

@@ -1,0 +1,116 @@
+{
+  "schema": "ragrpg_art_validation_report_v1",
+  "tool": {
+    "name": "art_pipeline.validate_sheet",
+    "version": "1.0.0"
+  },
+  "scope": "sheet",
+  "spec": {
+    "schema": "ragrpg_source_sheet_v1",
+    "alpha_threshold": 16,
+    "edge_margin": 1,
+    "min_band": 8,
+    "min_gap": 2,
+    "min_object_pixels": 64,
+    "min_transparent_fraction": 0.25,
+    "veil_warn_pixels": 500,
+    "idle_spread_warn": 0.15,
+    "scale_tolerance": 0.1,
+    "kind": "equipment_row",
+    "direction": null,
+    "background": {
+      "mode": "alpha"
+    },
+    "expected_count": 8
+  },
+  "sheet": {
+    "path": "assets/art/e08_codex_1120/equipment/weapons_h1_v2.png",
+    "sha256": "b36825e12f9d3729bb5943ccf4ec5c9182b26616ac75c3dd76ee52e00b83016d",
+    "width": 2172,
+    "height": 724,
+    "mode": "RGBA",
+    "format": "PNG"
+  },
+  "issues": [
+    {
+      "code": "alpha_veil",
+      "severity": "warning",
+      "message": "31335 faint pixels (alpha 1-16) away from the figures; clear them with remove_background --veil-alpha",
+      "details": {
+        "veil_pixels": 31335,
+        "alpha_threshold": 16
+      }
+    }
+  ],
+  "measurements": {
+    "transparent_fraction": 0.7038,
+    "veil_pixels": 31335,
+    "objects": [
+      {
+        "x0": 54,
+        "x1": 201,
+        "y0": 114,
+        "y1": 658,
+        "pixels": 27313
+      },
+      {
+        "x0": 255,
+        "x1": 506,
+        "y0": 241,
+        "y1": 620,
+        "pixels": 72193,
+        "gap_before_px": 54
+      },
+      {
+        "x0": 547,
+        "x1": 747,
+        "y0": 96,
+        "y1": 680,
+        "pixels": 42096,
+        "gap_before_px": 41
+      },
+      {
+        "x0": 768,
+        "x1": 987,
+        "y0": 288,
+        "y1": 515,
+        "pixels": 39010,
+        "gap_before_px": 21
+      },
+      {
+        "x0": 1026,
+        "x1": 1286,
+        "y0": 189,
+        "y1": 602,
+        "pixels": 72979,
+        "gap_before_px": 39
+      },
+      {
+        "x0": 1322,
+        "x1": 1610,
+        "y0": 169,
+        "y1": 617,
+        "pixels": 87015,
+        "gap_before_px": 36
+      },
+      {
+        "x0": 1656,
+        "x1": 1861,
+        "y0": 47,
+        "y1": 641,
+        "pixels": 62183,
+        "gap_before_px": 46
+      },
+      {
+        "x0": 1928,
+        "x1": 2132,
+        "y0": 46,
+        "y1": 642,
+        "pixels": 62956,
+        "gap_before_px": 67
+      }
+    ],
+    "object_count": 8
+  },
+  "status": "warn"
+}
