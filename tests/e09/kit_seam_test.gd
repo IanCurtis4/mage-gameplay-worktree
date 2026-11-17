@@ -10,9 +10,30 @@ const FIXTURE_BODY_SP_AC := &"e09_fixture_body_sp_ac"
 const FIXTURE_BODY_MG_AC := &"e09_fixture_body_mg_ac"
 const FIXTURE_BODY_SP_LA := &"e09_fixture_body_sp_la"
 
+## T9 (A9): production kits may be empty skeletons or ready; the lists below follow the
+## kits' ready_for_play and the skeleton behaviour is proven with fixture skeletons.
+const KIT_METADATA := {
+	&"sp_ac": ["Paladino", &"swordsman", &"2-3", &"acolyte"],
+	&"mg_ac": ["Taumaturgo", &"mage", &"2-3", &"acolyte"],
+	&"sp_la": ["Duelista", &"swordsman", &"2-3", &"rogue"],
+	&"mg_la": ["Lâmina Arcana", &"mage", &"2-3", &"rogue"],
+}
+const E00_DESTINATIONS := {
+	&"swordsman": [&"defender", &"berserker", &"sp_mg", &"sp_ar"],
+	&"mage": [&"elementalist", &"spiritualist", &"mg_sp", &"mg_ar"],
+}
+
 var checks := 0
 var failures := 0
 var requests: Array[DamageRequest] = []
+
+## An empty production-like kit: valid, never ready, no skills (the T1 skeleton).
+class SkeletonKit extends ClassKit:
+	var skeleton_id: StringName = &""
+	func _init(id: StringName = &"") -> void:
+		skeleton_id = id
+	func kit_id() -> StringName:
+		return skeleton_id
 
 class ForeignSkillKit extends "res://scripts/classes/fixture/fixture_kit.gd":
 	func skill_definitions() -> Array[SkillDefinition]:
@@ -39,6 +60,7 @@ func _check(condition: bool, label: String) -> void:
 
 func _run() -> void:
 	_check_production_registry()
+	_check_skeleton_and_readiness_states()
 	_check_identities_and_eligibility()
 	_check_fixture_catalogs()
 	_check_forced_overrides()
@@ -59,18 +81,68 @@ func _check_production_registry() -> void:
 	for id: StringName in ClassKitRegistry.ids():
 		var kit := ClassKitRegistry.module(id)
 		_check(kit != null and kit.kit_id() == id and String(ClassKitRegistry.MODULES[id]) == "res://scripts/classes/%s/%s_kit.gd" % [id, id], "%s module loads from its own folder" % id)
-		_check(kit != null and not kit.ready_for_play() and kit.skill_definitions().is_empty(), "%s skeleton is empty and not ready" % id)
-		_check(ClassKitRegistry.validate(id)["ok"] and not ClassKitRegistry.ready_for_play(id), "%s skeleton validates and stays unavailable" % id)
+		var declared := kit != null and kit.ready_for_play()
+		_check(ClassKitRegistry.validate(id)["ok"] and ClassKitRegistry.ready_for_play(id) == declared, "%s validates and its availability follows its declared ready_for_play (A9)" % id)
 		_check(ClassKitRegistry.skill_ids(id).size() == 7 and String(ClassKitRegistry.skill_ids(id)[0]).begins_with(ClassKitRegistry.IDENTITIES[id]["prefix"]), "%s has seven stable prefixed skill IDs" % id)
-		_check(ClassKitRegistry.onboarding_script(id) == null, "%s has no onboarding script yet" % id)
+		var onboarding := ClassKitRegistry.onboarding_script(id)
+		_check(onboarding != null and onboarding.get_instance_base_type() == "Control", "%s has its onboarding script (T9, C1.12)" % id)
 	_check(ClassKitRegistry.validate(&"defender")["error_code"] == &"kit_unknown_identity", "existing identities are not kits")
 	var catalog := ProfileCatalog.pilot()
 	_check(catalog.is_valid(), "production catalog stays valid with the seam")
-	var mage_ids: Array = catalog.evolution_definitions_for_origin(&"mage").map(func(d: EvolutionDefinition) -> StringName: return d.id)
-	var swordsman_ids: Array = catalog.evolution_definitions_for_origin(&"swordsman").map(func(d: EvolutionDefinition) -> StringName: return d.id)
-	_check(mage_ids == [&"elementalist", &"spiritualist", &"mg_sp", &"mg_ar"] and swordsman_ids == [&"defender", &"berserker", &"sp_mg", &"sp_ar"], "unready kits are not offered (C1.3)")
-	_check(ClassCatalog.skill_definition(&"paladin_oath") == null, "unready skeletons publish no skills")
-	_check(ProfileCatalog.pilot().evolution_definition(&"sp_ac") == null and SkillPresentation.job_name(&"sp_ac") == "Paladino", "job name falls back to the kit identity name")
+	_check_destinations(catalog, "production")
+
+## A9: the lists hold the E00 destinations plus exactly the hybrids whose kit is ready;
+## unready kits are absent (C1.3, A7) and every ready hybrid's metadata is exact.
+func _check_destinations(catalog: ProfileCatalog, state: String) -> void:
+	for origin: StringName in E00_DESTINATIONS:
+		var listed: Array = catalog.evolution_definitions_for_origin(origin).map(func(d: EvolutionDefinition) -> StringName: return d.id)
+		_check(listed == _expected_destinations(origin), "%s: %s destinations are the E00 four plus the ready kits only" % [state, origin])
+	for id: StringName in ClassKitRegistry.ids():
+		var ready := ClassKitRegistry.ready_for_play(id)
+		var values: Array = KIT_METADATA[id]
+		# Production kits carry the pt-BR names of the sheets; fixture kits carry their own.
+		var expected_name: String = values[0] if (state == "production" or not ready) else ClassKitRegistry.display_name(id)
+		var definition := catalog.evolution_definition(id)
+		_check((definition != null) == ready, "%s: %s is listed only when ready" % [state, id])
+		if ready and definition != null:
+			_check(definition.display_name == expected_name and definition.origin_class_id == values[1] and definition.branch_kind == values[2] and definition.affinity_class_id == values[3] and definition.content_ready, "%s: %s metadata is exact (name, origin, affinity, 2-3)" % [state, id])
+		_check((ClassCatalog.skill_definition(ClassKitRegistry.skill_ids(id)[0]) != null) == ready, "%s: %s publishes skills only when ready" % [state, id])
+		_check(SkillPresentation.job_name(id) == expected_name, "%s: %s job name is the kit identity name" % [state, id])
+
+func _expected_destinations(origin: StringName) -> Array:
+	var result: Array = E00_DESTINATIONS[origin].duplicate()
+	for id: StringName in ClassKitRegistry.ids():
+		if ClassKitRegistry.origin(id) == origin and ClassKitRegistry.ready_for_play(id):
+			result.append(id)
+	return result
+
+## A17: the skeleton behaviour and the zero/some/all ready states, on fixtures only, so the
+## test holds whatever production kits are ready.
+func _check_skeleton_and_readiness_states() -> void:
+	ClassKitRegistry.clear_fixtures()
+	for id: StringName in ClassKitRegistry.ids():
+		_check(ClassKitRegistry.install_fixture(id, SkeletonKit.new(id)), "skeleton fixture installs over %s" % id)
+	for id: StringName in ClassKitRegistry.ids():
+		var kit := ClassKitRegistry.module(id)
+		_check(kit != null and not kit.ready_for_play() and kit.skill_definitions().is_empty(), "%s skeleton is empty and not ready" % id)
+		_check(ClassKitRegistry.validate(id)["ok"] and not ClassKitRegistry.ready_for_play(id), "%s skeleton validates and stays unavailable" % id)
+	var none := ProfileCatalog.pilot()
+	_check(none.is_valid(), "zero ready kits: catalog valid")
+	_check_destinations(none, "zero ready")
+	_check(none.evolution_definitions().size() == 12, "zero ready: only the twelve E00 identities")
+	# Some ready: one kit of each origin, the other two stay skeletons.
+	_check(ClassKitRegistry.install_fixture(&"sp_ac", FixtureKit.new(&"sp_ac")) and ClassKitRegistry.install_fixture(&"mg_la", FixtureKit.new(&"mg_la")), "ready fixtures install over sp_ac and mg_la")
+	var some := ProfileCatalog.pilot()
+	_check(some.is_valid(), "some ready kits: catalog valid")
+	_check_destinations(some, "some ready")
+	_check(some.evolution_definition(&"mg_ac") == null and some.evolution_definition(&"sp_la") == null and some.evolution_definitions().size() == 14, "some ready: the skeletons stay absent")
+	# All four ready.
+	_check(ClassKitRegistry.install_fixture(&"mg_ac", FixtureKit.new(&"mg_ac")) and ClassKitRegistry.install_fixture(&"sp_la", FixtureKit.new(&"sp_la")), "ready fixtures install over mg_ac and sp_la")
+	var all := ProfileCatalog.pilot()
+	_check(all.is_valid(), "four ready kits: catalog valid")
+	_check_destinations(all, "four ready")
+	_check(all.evolution_definitions().size() == 16, "four ready: the twelve plus the four hybrids")
+	ClassKitRegistry.clear_fixtures()
 
 func _check_identities_and_eligibility() -> void:
 	_check(IdentityIds.hybrid_evolution_ids().size() == 6 and IdentityIds.kit_evolution_ids() == [&"sp_ac", &"mg_ac", &"sp_la", &"mg_la"], "stable hybrid list kept; kit IDs listed apart")
@@ -102,7 +174,7 @@ func _check_fixture_catalogs() -> void:
 	_check(swordsman_ids == [&"defender", &"berserker", &"sp_mg", &"sp_ar", &"sp_ac", &"sp_la"], "an origin can have more than two 2-3 hybrids (C1.10)")
 	var paladin := catalog.evolution_definition(&"sp_ac")
 	_check(paladin != null and paladin.content_ready and paladin.affinity_class_id == &"acolyte" and paladin.branch_kind == EvolutionDefinition.BRANCH_2_3 and paladin.entry_skill_id == &"paladin_oath", "kit evolution carries origin, reserved affinity and entry")
-	_check(catalog.evolution_definitions_for_origin(&"mage").size() == 4, "other origin unchanged")
+	_check(catalog.evolution_definitions_for_origin(&"mage").map(func(d: EvolutionDefinition) -> StringName: return d.id) == _expected_destinations(&"mage"), "other origin unchanged (the E00 four plus its own ready kits)")
 	var library := catalog.skill_ids_for_identity(&"swordsman", &"sp_ac")
 	_check(&"paladin_oath_hour" in library and &"slash" in library and &"duelist_parry" not in library, "kit library joins the origin library only")
 	var entry := catalog.skill_metadata(&"paladin_oath")
@@ -128,6 +200,7 @@ func _check_fixture_catalogs() -> void:
 
 func _check_forced_overrides() -> void:
 	ClassKitRegistry.clear_fixtures()
+	ClassKitRegistry.install_fixture(&"mg_ac", SkeletonKit.new(&"mg_ac"))
 	var unavailable := ProfileCatalog.pilot({}, {}, {&"mg_ac": {"content_ready": false}})
 	_check(unavailable.is_valid() and unavailable.evolution_definition(&"mg_ac") != null and not unavailable.evolution_definition(&"mg_ac").content_ready, "a fixture override can list a skeleton as unavailable")
 	var forced_empty := ProfileCatalog.pilot({}, {}, {&"mg_ac": {"content_ready": true}})

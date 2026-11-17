@@ -576,7 +576,7 @@ func _refresh_evolution_panel(character: Variant, profile: Variant) -> void:
 		var option_label := Label.new()
 		option_label.name = "EvolutionOption_%s" % option["evolution_id"]
 		option_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		option_label.text = "%s · %s\nBase %d / job %d" % [option["display_name"], "Híbrida" if str(option["branch_kind"]) == "2-3" else "Evolução %s" % option["branch_kind"], option["required_base_level"], option["required_job_level"]]
+		option_label.text = "%s · %s\nBase %d / job %d" % [option["display_name"], _evolution_kind_text(option), option["required_base_level"], option["required_job_level"]]
 		evolution_options_list.add_child(option_label)
 		var choose_button := Button.new()
 		choose_button.name = "ChooseEvolution_%s" % option["evolution_id"]
@@ -721,6 +721,20 @@ func _evolution_option_state(option: Dictionary) -> String:
 	if not reasons.is_empty():
 		states.append("bloqueios: %s" % ", ".join(reasons))
 	return " · ".join(states)
+
+## E09 T9: a hybrid names its affinity, so several 2-3 options of one origin stay distinguishable.
+func _evolution_kind_text(option: Dictionary) -> String:
+	if str(option["branch_kind"]) != "2-3":
+		return "Evolução %s" % option["branch_kind"]
+	var affinity := _affinity_name(StringName(option.get("affinity_class_id", &"")))
+	return "Híbrida · afinidade %s" % affinity if not affinity.is_empty() else "Híbrida"
+
+func _affinity_name(affinity_class_id: StringName) -> String:
+	match affinity_class_id:
+		&"swordsman", &"mage", &"archer": return _class_name(affinity_class_id)
+		&"acolyte": return "Acólito"
+		&"rogue": return "Ladino"
+		_: return ""
 
 func _evolution_option_tooltip(option: Dictionary) -> String:
 	if option["can_select"]:
