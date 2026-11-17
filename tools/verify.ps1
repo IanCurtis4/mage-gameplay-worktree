@@ -474,7 +474,9 @@ foreach ($group in @('tests/e09', 'tests/systems', 'tests/classes')) {
 # Python tests of the neutral art pipeline (T2); the folder may not exist yet.
 $artPipelineTests = Join-Path $projectPath 'tools/art_pipeline/tests'
 if ((Test-Path -LiteralPath $artPipelineTests) -and @(Get-ChildItem -LiteralPath $artPipelineTests -File -Filter 'test_*.py').Count -gt 0) {
-    Add-PythonCheck 'art_pipeline_tests' @('-I', '-m', 'unittest', 'discover', '-s', 'tools/art_pipeline/tests', '-t', '.', '-p', 'test_*.py', '-v')
+    # T2's documented command: the tests folder is not a package (`_bootstrap.py` sets sys.path),
+    # so `-t .` makes unittest refuse it ("Start directory is not importable"); T10 fix, 17/11.
+    Add-PythonCheck 'art_pipeline_tests' @('-I', '-m', 'unittest', 'discover', '-s', 'tools/art_pipeline/tests', '-p', 'test_*.py', '-v')
 }
 
 if (-not $PSBoundParameters.ContainsKey('ToStep')) { $ToStep = $checkPlan.Count }
