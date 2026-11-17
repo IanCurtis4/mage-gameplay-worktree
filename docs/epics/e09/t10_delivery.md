@@ -220,3 +220,35 @@ regressão.
 8. **Medição de multidão.** São só duas rodadas e não certificam FPS.
 9. **Ícones fora dos kits.** Quatro skills de catálogo continuam sem ícone, listadas no item Q7 de
    [generation_queue.md](../../art/generation_queue.md).
+
+## Adenda — respostas às ressalvas da T11 (17/11/2026)
+
+A T11 (Luna) deu **aprovação técnica** ao candidato `3843d324`, com três ressalvas de
+rastreabilidade ([t11_supervision.md](t11_supervision.md), seção 4). As respostas:
+
+1. **Console do driver.** Ele existia, mas ficou fora da pasta da rodada: estava no scratchpad da
+   sessão T10. Agora está junto da evidência, fora do Git, com o hash registrado:
+   - `.godot/verification/t10_full_3843d324/driver_console.txt`, SHA256 `2C95221B…C6F2`, 348 linhas
+     (os 347 passos e "round finished");
+   - o console da primeira rodada também foi guardado, em
+     `.godot/verification/t10_full_3eac8f83/driver_console.txt`, SHA256 `5E6BE3BC…5F20`, o hash
+     citado no documento de bloqueio.
+2. **Executável diferente do contrato.** O §9 cita `Godot_v4.7.2-stable_win64_console.exe`, mas as
+   duas rodadas, a exportação e as sondas usaram `Godot_v4.7.2-stable_win64.exe` (SHA256
+   `ab1824f8…`). É a mesma versão 4.7.2 standard. O desvio é deliberado: o exe console falha ao
+   abrir o projeto num caminho com "ã" ("João"), e o exe GUI chamado pelo PowerShell não falha. O
+   desvio fica registrado aqui. O contrato não foi editado, porque não é arquivo da T10.
+3. **Os 617 `.import` mudam só no fim de linha.** A T10 reproduziu o caso no candidato depois da
+   T11, porque as diferenças da rodada não tinham sido guardadas:
+   - **Reprodução:** importação headless do editor na worktree limpa, que deixou 617 `.import` com
+     status ` M`, o mesmo número da rodada.
+   - **Comparação:** cada arquivo foi comparado com o blob do índice
+     (`.godot/verification/t10_full_3843d324/import_eol_check.json`, SHA256 `6EBDE45B…3AA4`).
+   - **Resultado:** os 617 são **idênticos byte a byte** ao blob commitado (LF), e nenhum tem
+     diferença de conteúdo. O status ` M` aparece porque o checkout com `core.autocrlf=true` grava
+     esses arquivos em CRLF, e o Godot os regrava em LF.
+   - **Limite:** a prova vale para a reprodução, não para os bytes exatos da rodada, que não foram
+     guardados. A reprodução usou o mesmo commit, o mesmo motor e o mesmo número de arquivos.
+
+Com isso, **T10 e T11 estão entregues**. O candidato está **aprovado tecnicamente e aguarda o aceite
+de produto** do usuário. O merge em `master` continua dependendo desse aceite explícito.
