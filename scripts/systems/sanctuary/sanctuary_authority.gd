@@ -437,7 +437,69 @@ func describe() -> Dictionary:
 	var roles: Array = zones.keys()
 	roles.sort()
 	for role: StringName in roles: listed.append((zones[role] as SanctuaryZone).describe())
-	return {"grace": grace.charges, "cap": grace.cap, "unlimited": grace.is_unlimited(), "zones": listed, "aegis_remaining": aegis_remaining, "sealed_id": marked_target_id}
+	return {"grace": grace.charges, "cap": grace.cap, "unlimited": grace.is_unlimited(), "zones": listed, "aegis_remaining": aegis_remaining, "sealed_id": marked_target_id, "unlimited_remaining": grace.unlimited_remaining, "aegis_capacity": aegis_capacity, "seal_key": seal_key}
+
+# --- Read for the HUD (E12 H2) -------------------------------------------------------
+
+## Element of Grace, the Égide and the Seal in the HUD (light, A2 of E09).
+const HUD_LIGHT := &"light"
+
+## Grace resource of the HUD DTO (ragrpg_kit_hud_v1): pips 0..cap, or unlimited with the
+## deadline of the peak. `unlimited_total` is the kit's duration of the peak (Hora,
+## Aurora); the total shown is never below the remaining time. Pure.
+func hud_grace(unlimited_total: float = 0.0) -> Dictionary:
+	var entry := {"id": &"sanctuary_grace", "label": "Graça", "kind": &"pips", "value": grace.charges, "max": maxi(1, grace.cap), "element": HUD_LIGHT}
+	if grace.is_unlimited():
+		entry["unlimited"] = true
+		entry["remaining"] = grace.unlimited_remaining
+		entry["total"] = maxf(unlimited_total, grace.unlimited_remaining)
+	return entry
+
+## Active zones of the HUD DTO, sorted by role. World zones carry the ground point of the
+## anchor (the owner's point for owner-anchored zones); flat zones the arena position as
+## Vector3(x, y, 0). Cones carry the owner's facing in the same space. Pure.
+func hud_zones(player: PlayerActor) -> Array[Dictionary]:
+	var listed: Array[Dictionary] = []
+	if not is_instance_valid(player): return listed
+	var world := player.world_motion != null
+	var roles: Array = zones.keys()
+	roles.sort()
+	for role: StringName in roles:
+		var found: SanctuaryZone = zones[role]
+		if not found.is_active() or found.duration <= 0.0: continue
+		var center := Vector3.ZERO
+		if world:
+			var point: ExpeditionWorldPoint = player.world_point() if found.anchor_mode == SanctuaryRules.ANCHOR_OWNER else (found.area.anchor() if found.area != null else null)
+			if point == null: continue
+			center = point.position
+		else:
+			var flat := player.global_position if found.anchor_mode == SanctuaryRules.ANCHOR_OWNER else found.center
+			center = Vector3(flat.x, flat.y, 0.0)
+		var entry := {"role": found.role, "space": &"world" if world else &"flat", "center": center, "shape": found.shape, "radius": found.radius, "element": found.element, "remaining": minf(found.remaining, found.duration), "total": found.duration}
+		if found.shape == SanctuaryRules.SHAPE_CONE:
+			var facing := Vector3.ZERO
+			if world:
+				facing = player.gameplay_ground_facing()
+				facing.y = 0.0
+			else:
+				var flat_facing := player.gameplay_facing()
+				facing = Vector3(flat_facing.x, flat_facing.y, 0.0)
+			if not facing.is_finite() or facing.is_zero_approx(): facing = Vector3.RIGHT
+			entry["half_angle"] = found.half_angle
+			entry["facing"] = facing.normalized()
+		listed.append(entry)
+	return listed
+
+## Égide deadline of the HUD DTO ({} when no Égide). `total` is the kit's duration. Pure.
+func hud_aegis(resource_id: StringName, total: float = SanctuaryRules.AEGIS_DURATION) -> Dictionary:
+	if not aegis_active(): return {}
+	return {"id": resource_id, "label": "Égide", "kind": &"timer", "remaining": aegis_remaining, "total": maxf(total, aegis_remaining), "element": HUD_LIGHT}
+
+## Seal badge of the HUD DTO over the living sealed enemy ({} when none). Pure.
+func hud_seal_mark() -> Dictionary:
+	var enemy := sealed_target()
+	if enemy == null or not enemy.is_alive(): return {}
+	return {"target_id": enemy.get_instance_id(), "key": seal_key, "kind": &"badge", "element": HUD_LIGHT}
 
 func _bind_owner(player: PlayerActor) -> void:
 	if owner_id == 0 and is_instance_valid(player): owner_id = player.get_instance_id()
