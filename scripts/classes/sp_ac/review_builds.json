@@ -1,0 +1,20 @@
+{
+  "schema": "ragrpg_review_builds_v1",
+  "identity_id": "sp_ac",
+  "builds": [
+    {
+      "id": "paladin_bulwark",
+      "name": "Baluarte da Luz",
+      "base_ranks": {"shield_wall": 5, "perseverance": 5, "provoke": 3, "slash": 3, "swordsman_resistance": 3},
+      "evolution_ranks": {"paladin_oath": 5, "paladin_guard_grace": 3, "paladin_consecrated_impact": 3, "paladin_oath_aegis": 4, "paladin_unshaken_faith": 3, "paladin_condemned_seal": 2, "paladin_oath_hour": 1},
+      "shortcuts": ["paladin_oath", "paladin_consecrated_impact", "shield_wall", "paladin_oath_aegis", "paladin_condemned_seal", "provoke", "perseverance", "paladin_oath_hour", "slash"]
+    },
+    {
+      "id": "paladin_hammer",
+      "name": "Martelo Consagrado",
+      "base_ranks": {"slash": 5, "shield_wall": 3, "perseverance": 3, "provoke": 1, "fury": 4, "swordsman_resistance": 3},
+      "evolution_ranks": {"paladin_oath": 3, "paladin_guard_grace": 2, "paladin_consecrated_impact": 5, "paladin_oath_aegis": 2, "paladin_unshaken_faith": 1, "paladin_condemned_seal": 3, "paladin_oath_hour": 5},
+      "shortcuts": ["paladin_oath", "paladin_consecrated_impact", "slash", "fury", "paladin_condemned_seal", "paladin_oath_hour", "shield_wall", "paladin_oath_aegis", "perseverance", "provoke"]
+    }
+  ]
+}
