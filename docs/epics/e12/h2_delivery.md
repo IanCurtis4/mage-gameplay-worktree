@@ -9,8 +9,8 @@ Contrato: [e12_contract.md](../e12_contract.md) §5. API da costura: [h1_hud_sea
 - **Base:** ponta da H1, `03c2c2db31010b4471e33fe40984d894c21cf5ee` (`claude/e12-h1-708c9b`).
 - **Branch:** `claude/e12-h2-e4e790`.
 - **Checkout:** `C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.claude\worktrees\e12-h2-e4e790`.
-- **Commit entregue:** o commit `feat(e12-h2)` desta branch; o SHA fica no commit de registro
-  seguinte (`docs(e12-h2)`), como na H1.
+- **Commit entregue:** `ff0f5f3e8d33f56d95457ea2fb91fd90c62c051d` (`feat(e12-h2)`); este recibo
+  foi registrado no commit `docs(e12-h2)` seguinte, como na H1.
 
 ## O que mudou
 
