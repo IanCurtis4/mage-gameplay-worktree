@@ -1,0 +1,20 @@
+{
+  "schema": "ragrpg_review_builds_v1",
+  "identity_id": "sp_la",
+  "builds": [
+    {
+      "id": "duelist_patient_blade",
+      "name": "Lâmina Paciente",
+      "base_ranks": {"slash": 5, "dash": 5, "shield_wall": 2, "perseverance": 2, "swordsman_resistance": 3, "vigor": 2},
+      "evolution_ranks": {"duelist_parry": 5, "duelist_read_opponent": 3, "duelist_fatal_riposte": 5, "duelist_feint": 3, "duelist_patient_guard": 3, "duelist_guarded_retreat": 1, "duelist_duel": 1},
+      "shortcuts": ["duelist_parry", "duelist_fatal_riposte", "duelist_feint", "duelist_guarded_retreat", "duelist_duel", "dash", "slash", "perseverance"]
+    },
+    {
+      "id": "duelist_arena",
+      "name": "Arena do Duelo",
+      "base_ranks": {"slash": 5, "dash": 3, "fury": 3, "shield_wall": 2, "blood_thirst": 3, "swordsman_resistance": 3},
+      "evolution_ranks": {"duelist_parry": 3, "duelist_read_opponent": 2, "duelist_fatal_riposte": 3, "duelist_feint": 1, "duelist_patient_guard": 2, "duelist_guarded_retreat": 5, "duelist_duel": 5},
+      "shortcuts": ["duelist_parry", "duelist_duel", "duelist_fatal_riposte", "slash", "duelist_guarded_retreat", "dash", "fury", "duelist_feint", "shield_wall"]
+    }
+  ]
+}
