@@ -14,7 +14,10 @@
       "last_heal",
       "last_event",
       "ticks",
-      "victim_id"
+      "victim_id",
+      "cost_scale",
+      "cost_offset",
+      "base_commits"
     ],
     "omitted": {}
   }

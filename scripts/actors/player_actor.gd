@@ -559,9 +559,12 @@ func _commit_sentinel_explosive(enemy: CombatActor) -> bool:
 	var reserved_focus := sentinel_state.reserved_focus
 	var request := _make_magic_request(enemy, id, SentinelMath.raw_power(id, skill_rank(id), stat_breakdown), DamageRequest.AccuracyMode.GEOMETRY, true)
 	var facing := _resolved_facing(Vector2(world_cast_direction().x,world_cast_direction().z) if world_motion != null else aim_direction(enemy.global_position))
-	# All launch checks passed. Release then consume the reservation exactly once.
+	# All launch checks passed. Release then consume the reservation exactly once, at
+	# the price locked when it was reserved (T1.2: skill_cost may change meanwhile).
+	var reserved_sp := sentinel_state.reserved_sp
 	sentinel_state.cancel_preparation()
-	if not _spend(id): return false
+	note_base_commit(id, enemy.global_position if is_instance_valid(enemy) else global_position, enemy)
+	if not _spend(id, reserved_sp): return false
 	request.context = _emission_context.copy_context()
 	request.emission_id = int(_emission_context.root_event_id.get_slice(":", _emission_context.root_event_id.get_slice_count(":") - 1))
 	sentinel_state.spend(reserved_focus)
@@ -1103,6 +1106,7 @@ func use_dash(direction: Vector2) -> bool:
 		return false
 	_commit_action(ClassCatalog.skill_definition(&"dash").action_kind)
 	var facing := _resolved_facing(direction)
+	note_base_commit(&"dash", dash_destination(facing))
 	_spend(&"dash")
 	_stop_dash()
 	_dash_endpoint = dash_destination(facing)
@@ -1678,13 +1682,27 @@ func apply_damage(request: DamageRequest, rng: RandomNumberGenerator) -> Diction
 	var before := kit.before_hit_mitigation(self, hit)
 	if bool(before.get("cancel", false)):
 		return {"landed": false, "cancelled": true, "cancel_reason": StringName(before.get("reason", &"kit_cancel")), "damage": 0.0, "actual_damage": 0.0, "absorbed_damage": 0.0, "critical": false, "killed": false, "can_trigger_effects": false, "source_id": request.source_id, "target_id": request.target_id, "skill_id": request.skill_id}
+	var multiplier := _kit_damage_multiplier(before)
+	var effective_request := request
+	if multiplier != 1.0:
+		effective_request = request.copy()
+		effective_request.damage_dealt_multiplier *= multiplier
 	var shield_before := health.shield_hp
-	var result := _apply_damage_base(request, rng)
+	var result := _apply_damage_base(effective_request, rng)
 	if result.is_empty(): return result
+	if multiplier != 1.0: result["kit_damage_multiplier"] = multiplier
 	kit.after_hit_mitigation(self, hit, result)
 	if shield_before > 0.0 and health.shield_hp <= 0.0 and float(result.get("absorbed_damage", 0.0)) > 0.0:
 		kit.on_shield_broken(self, hit, result)
 	return result
+
+## T1.1: optional "damage_multiplier" of before_hit_mitigation. Missing, non-numeric,
+## non-finite or negative values are ignored (1.0, no copy of the request).
+static func _kit_damage_multiplier(before: Dictionary) -> float:
+	var raw: Variant = before.get("damage_multiplier", 1.0)
+	if typeof(raw) != TYPE_FLOAT and typeof(raw) != TYPE_INT: return 1.0
+	var value := float(raw)
+	return value if is_finite(value) and value >= 0.0 else 1.0
 
 ## Hit descriptor of the pipeline: request, source, source_id, kind (melee,
 ## projectile, area or unknown), event (enemy attack event or {}), facing_dot and
@@ -2416,6 +2434,7 @@ func commit_geometer_shot(command: GeometerCastCommand, construction: GeometerCo
 	var ticket := construction.reserve_shot(check["point"], command.actor_id, command.skill_id == &"geometer_triangulation", skill_rank(&"geometer_triangulation"), navigation, durations.x, durations.y, command.element, bool(run_state.composed_build().get("kit_policies", {}).get(&"geometer_ground_anchor", false)))
 	if ticket == 0:
 		return {"ok": false, "reason": "Construção indisponível."}
+	note_base_commit(command.skill_id, check["point"], check.get("target") as CombatActor)
 	_spend(command.skill_id)
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(command.skill_id)
@@ -2476,6 +2495,7 @@ func commit_geometer_edit(command: GeometerCastCommand, construction: GeometerCo
 	var result := construction.edit(check["point"], command.actor_id, command.skill_id == &"geometer_rewrite", skill_rank(&"geometer_triangulation"), navigation, durations.x, durations.y, command.element)
 	if result["ok"]:
 		cancel_active_cast()
+		note_base_commit(command.skill_id, check["point"])
 		_spend(command.skill_id)
 		reveal_from_offense()
 		presentation_action.emit(&"cast_release", _resolved_facing(aim_direction(check["point"])), 0.12)
@@ -2492,6 +2512,7 @@ func commit_geometer_collapse(command: GeometerCastCommand, construction: Geomet
 		return {"ok": false, "reason": "Sem figura ativa."}
 	# Consume before any signal/damage; callbacks cannot finalize the same instance twice.
 	cancel_active_cast()
+	note_base_commit(command.skill_id, command.point)
 	_spend(command.skill_id)
 	captured = geometer_collapse_snapshot(captured,first)
 	reveal_from_offense()
@@ -3182,6 +3203,7 @@ func use_world_teleport(destination: ExpeditionWorldPoint, revision: int) -> boo
 	if world_motion == null or is_rooted() or (class_id != &"mage" and not run_state.has_item_active(&"teleport")) or not _can_pay_skill(&"teleport"): return false
 	var result := world_motion.teleport(destination,skill_range(&"teleport"),revision)
 	if not result["ok"]: return false
+	note_base_commit(&"teleport", Vector2(destination.position.x, destination.position.z))
 	_spend(&"teleport")
 	_stop_world_travel()
 	_path.clear()
@@ -3204,6 +3226,7 @@ func use_world_dash(destination: ExpeditionWorldPoint, revision: int) -> bool:
 	if not route["ok"] or float(route["data"]["cost"]) > skill_range(&"dash"): return false
 	var planned := world_motion.adopt_route(route,destination,revision)
 	if not planned["ok"]: return false
+	note_base_commit(&"dash", Vector2(destination.position.x, destination.position.z))
 	_spend(&"dash")
 	_stop_world_travel()
 	_world_dash_remaining = DASH_DURATION
@@ -3230,6 +3253,7 @@ func use_teleport(point: Vector2) -> bool:
 		return false
 	var destination := teleport_destination(point)
 	var facing := _resolved_facing(global_position.direction_to(destination))
+	note_base_commit(&"teleport", destination)
 	_spend(&"teleport")
 	global_position = destination
 	_path.clear()
@@ -3276,7 +3300,16 @@ func skill_cooldown(skill_id: StringName) -> float:
 		return dash_cooldown
 	return mage_cooldowns.get(skill_id, 0.0)
 
+## Single source of the effective SP cost (T1.2): payment checks, the debit and the
+## UI read it. The kit may change it (floored at 0); lines labelled "SP base" do not.
 func skill_cost(skill_id: StringName) -> float:
+	var base := base_skill_cost(skill_id)
+	if kit == null: return base
+	var value := kit.skill_cost(self, skill_id, base)
+	return maxf(0.0, value) if is_finite(value) else base
+
+## Cost before the kit: runtime rank (item modifiers included) or the unranked definition.
+func base_skill_cost(skill_id: StringName) -> float:
 	var rank_definition := _runtime_rank_definition(skill_id)
 	if rank_definition != null:
 		return rank_definition.sp_cost
@@ -3799,14 +3832,20 @@ func _can_pay_skill(skill_id: StringName, using_reservation: bool = false) -> bo
 	var available_sp := current_sp if using_reservation and skill_id == &"sentinel_explosive_shot" and sentinel_state.explosive_prepared else sentinel_free_sp()
 	return selected_cast_rank_valid(skill_id) and run_state.effect_ledger.can_create_root() and run_state.effects_valid() and has_projectile_capacity(skill_id) and has_runtime_definition and skill_id in available_skill_ids() and is_alive() and skill_cooldown(skill_id) <= 0.0 and available_sp >= skill_cost(skill_id)
 
-func _spend(skill_id: StringName) -> bool:
+## Canonical payment of a commit. `reserved_cost` >= 0 charges a price locked earlier
+## (the Sentinel's explosive reservation) instead of skill_cost().
+func _spend(skill_id: StringName, reserved_cost: float = -1.0) -> bool:
+	var first_commit := true
 	if _world_executing_cast != null:
-		if _world_executing_cast.skill_id != skill_id or not _validate_world_skill(_world_executing_cast)["ok"]: return false
+		if _world_executing_cast.skill_id != skill_id or not _validate_world_skill(_world_executing_cast)["ok"]:
+			_base_commit_hint = {} # A refused payment never leaves a commit note behind.
+			return false
+		first_commit = not _world_executing_cast.committed
 		_world_executing_cast.committed = true # Before root/payment callbacks can reenter.
 	_begin_effect_emission()
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var rank_definition := _runtime_rank_definition(skill_id)
-	var cost := rank_definition.sp_cost if rank_definition != null else definition.sp_cost
+	var cost := reserved_cost if reserved_cost >= 0.0 else skill_cost(skill_id)
 	var base_cooldown := rank_definition.cooldown if rank_definition != null else definition.cooldown
 	_sp_deficit += cost
 	var cooldown := SentinelMath.cooldown(skill_id, base_cooldown, stat_breakdown) if is_sentinel() else StatCalculator.effective_cooldown(base_cooldown, stat_breakdown)
@@ -3822,7 +3861,62 @@ func _spend(skill_id: StringName) -> bool:
 		mage_cooldowns[&"hunter_total_cover"] = shared_cooldown
 	if _world_executing_cast != null and _world_executing_cast.action_kind == SkillDefinition.ActionKind.OFFENSIVE: clear_shield_stance()
 	presentation_fact.emit(&"skill_committed", skill_id, Vector2.ZERO, 0.0) # After SP/cooldown commit.
+	var hint := _base_commit_hint
+	_base_commit_hint = {}
+	if first_commit and kit != null and not kit_owns_skill(skill_id):
+		kit.on_base_skill_committed(self, skill_id, _base_commit_context(skill_id, hint))
 	return true
+
+# --- T1.2: commit context of origin skills -----------------------------------------
+
+## Optional caller hint for the next commit of `skill_id`: point/target/element known
+## by the entry (RunController flat dispatch, teleport/dash destination, geometer).
+var _base_commit_hint: Dictionary = {}
+
+## Gameplay element of an origin skill, damage element of the base catalog. Gameplay
+## ids only: physical skills, movement and the teleport are empty; presentation
+## recipes (FeedbackRecipeCatalog) are not a gameplay source.
+const BASE_SKILL_ELEMENTS := {
+	&"fireball": &"fire", &"fire_wall": &"fire", &"fire_spear": &"fire",
+	&"ice_spear": &"ice", &"ice_wall": &"ice",
+	&"lightning": &"lightning", &"electric_discharge": &"lightning", &"lightning_wall": &"lightning",
+	&"elementalist_flame_burst": &"fire", &"elementalist_ember_path": &"fire", &"elementalist_tri_nova": &"fire",
+	&"elementalist_glacial_ring": &"ice", &"elementalist_lightning_arc": &"lightning",
+}
+
+## Canonical element of a non-kit skill: SkillDefinition.element when authored, else
+## BASE_SKILL_ELEMENTS, else empty.
+static func base_skill_element(skill_id: StringName) -> StringName:
+	var definition := ClassCatalog.skill_definition(skill_id)
+	if definition != null and not definition.element.is_empty(): return definition.element
+	return StringName(BASE_SKILL_ELEMENTS.get(skill_id, &""))
+
+func note_base_commit(skill_id: StringName, point: Vector2, target_actor: CombatActor = null, element: StringName = &"") -> void:
+	_base_commit_hint = {"skill_id": skill_id, "point": point}
+	if is_instance_valid(target_actor): _base_commit_hint["target"] = target_actor
+	if not element.is_empty(): _base_commit_hint["element"] = element
+
+func clear_base_commit_note() -> void:
+	_base_commit_hint = {}
+
+func _base_commit_context(skill_id: StringName, hint: Dictionary) -> Dictionary:
+	var context := {"target": null, "point": global_position, "world": world_motion != null, "rank": skill_rank(skill_id), "element": base_skill_element(skill_id)}
+	var command := _world_executing_cast
+	if command != null and command.skill_id == skill_id:
+		var victim := command.target()
+		if is_instance_valid(victim) and victim.is_alive(): context["target"] = victim
+		if command.anchor() != null:
+			context["point"] = Vector2(command.anchor().position.x, command.anchor().position.z)
+		else:
+			var direction := command.direction(self)
+			var flat := Vector2(direction.x, direction.z)
+			context["point"] = global_position + (flat if not flat.is_zero_approx() else _last_facing)
+	if StringName(hint.get("skill_id", &"")) == skill_id:
+		if hint.has("point") and (hint["point"] as Vector2).is_finite(): context["point"] = hint["point"]
+		var hinted: Variant = hint.get("target")
+		if is_instance_valid(hinted) and hinted is CombatActor and (hinted as CombatActor).is_alive(): context["target"] = hinted
+		if hint.has("element"): context["element"] = hint["element"]
+	return context
 
 func _resolved_facing(direction: Vector2) -> Vector2:
 	var facing := direction.normalized()
@@ -3977,7 +4071,18 @@ func temporary_stat_sources() -> Array[Dictionary]:
 			sources.append(source)
 	if _defender_inside_anchor and has_defender_anchor():
 		sources.append({"source_id": &"defender_anchor", "label": "Marco de Guarda", "increased": {&"physical_defense": DEFENDER_ANCHOR_DEFENSE_BONUS, &"magic_defense": DEFENDER_ANCHOR_DEFENSE_BONUS}})
+	if kit != null:
+		for source: Dictionary in kit.temporary_stat_sources(self):
+			if not source.is_empty(): sources.append(source)
 	return sources
+
+## T1.1: rebuilds the breakdown after the kit's temporary sources changed, by the same
+## path as Fury or the Anchor. Idempotent: no heal, no SP refill, no cooldown reset
+## (HP and SP deficits are preserved).
+func refresh_kit_stats() -> void:
+	if run_state == null or stat_breakdown == null: return
+	_apply_derived_stats(_build_stat_breakdown())
+	resources_changed.emit()
 
 func _build_stat_breakdown() -> StatBreakdown:
 	var sources := run_state.stat_modifier_sources()

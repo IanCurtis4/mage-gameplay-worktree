@@ -628,6 +628,13 @@ func _on_skill_cast_ready(skill: StringName, point: Vector2, target_id: int) -> 
 	_execute_skill(skill, point, selected_target, true)
 
 func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatActor = null, prepared: bool = false) -> void:
+	# T1.2: the flat entry tells the commit context its point and target; a refused
+	# cast leaves no note behind.
+	if not player.kit_owns_skill(skill): player.note_base_commit(skill, point, selected_target)
+	_dispatch_skill(skill, point, selected_target, prepared)
+	if is_instance_valid(player): player.clear_base_commit_note()
+
+func _dispatch_skill(skill: StringName, point: Vector2, selected_target: CombatActor = null, prepared: bool = false) -> void:
 	if player.kit_owns_skill(skill):
 		if not player.use_kit_skill(skill, point, selected_target, not prepared):
 			_report_skill_failure(skill, selected_target)
