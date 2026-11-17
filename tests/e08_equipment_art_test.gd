@@ -245,9 +245,9 @@ static func atlas_head_top(descriptor: Dictionary,centre: float) -> int:
 func head_fit_checks() -> void:
 	## P7-C6 invariants (every class x every head piece x 64 frames): the piece is seated on the crown,
 	## scaled to the measured head, follows the head per frame and is drawn in front of the body.
-	var kinds: Array[StringName]=[&"swordsman",&"mage",&"archer",&"defender",&"berserker",&"elementalist",&"spiritualist",&"sentinel",&"hunter",&"geometer"]
+	var kinds: Array[StringName]=[&"swordsman",&"mage",&"archer",&"defender",&"berserker",&"elementalist",&"spiritualist",&"sentinel",&"hunter",&"geometer",&"paladin",&"thaumaturge",&"duelist",&"arcane_blade"]
 	var data: Dictionary=EquipmentHeadVisual.fit_data()
-	check(data.classes.size()==10 and data.pieces.size()==14,"head-fit table covers 10 classes and the 14 real head IDs only")
+	check(data.classes.size()==14 and data.pieces.size()==14,"head-fit table covers 14 classes (10 + the four E09 hybrid bodies) and the 14 real head IDs only")
 	check(not data.pieces.has("apple_arrow_study") and not data.pieces.has("eggshell_study"),"study pieces stay outside the fit table")
 	var legacy_checked := false
 	for kind: StringName in kinds:

@@ -1,0 +1,262 @@
+{
+  "schema": "ragrpg_art_provenance_v2",
+  "path_base": "project",
+  "records": [
+    {
+      "path": "assets/art/e08_characters/directional/thaumaturge/body.png",
+      "sha256": "768a03e7e4581a4bb176459230b58bb1fdd1d3390c3205ac280123c397b92768",
+      "width": 256,
+      "height": 1024,
+      "kind": "other",
+      "generator": {
+        "name": "ragrpg directional packer (derived from Codex sheets)",
+        "model": null,
+        "host": "local",
+        "version": "e09-t7"
+      },
+      "request": "thaumaturge directional atlas V2 (mg_ac), 64 poses, derived from the selected views; no new generation",
+      "prompt": "",
+      "negative_prompt": null,
+      "seed": null,
+      "params": {
+        "scale": 0.1976284584980237,
+        "cell": 64,
+        "atlas": "256x1024"
+      },
+      "refs": [
+        {
+          "path": "assets/art/e08_codex_1123/characters/mg_ac/south.png",
+          "sha256": "fd17dfb2d2a28e06b4557f0f0f8086f05b120e3aea414dbca30aa8a2c936f189"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/mg_ac/north.png",
+          "sha256": "3c013991d7496b6c3fae742b54ed288e8ce62785f4de63db99604335239052a7"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/mg_ac/east.png",
+          "sha256": "96b169d7d06edd4488e14af349d37917a1ac471334416be0c8fb1a0ecde9673d"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/mg_ac/west_v2.png",
+          "sha256": "4fb71cbf5c5064b643cc39eaa5af146e252e8d98f7f8b63246ff08fcbcc8eb5c"
+        }
+      ],
+      "post": [
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "thaumaturge",
+            "view": "south",
+            "source": "@south",
+            "target_height": 50,
+            "scale": 0.1976284584980237,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/mg_ac/selection.json"
+          },
+          "input_sha256": "fd17dfb2d2a28e06b4557f0f0f8086f05b120e3aea414dbca30aa8a2c936f189",
+          "output_sha256": "768a03e7e4581a4bb176459230b58bb1fdd1d3390c3205ac280123c397b92768"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "thaumaturge",
+            "view": "north",
+            "source": "@north",
+            "target_height": 50,
+            "scale": 0.1976284584980237,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/mg_ac/selection.json"
+          },
+          "input_sha256": "3c013991d7496b6c3fae742b54ed288e8ce62785f4de63db99604335239052a7",
+          "output_sha256": "768a03e7e4581a4bb176459230b58bb1fdd1d3390c3205ac280123c397b92768"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "thaumaturge",
+            "view": "east",
+            "source": "@east",
+            "target_height": 50,
+            "scale": 0.1976284584980237,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/mg_ac/selection.json"
+          },
+          "input_sha256": "96b169d7d06edd4488e14af349d37917a1ac471334416be0c8fb1a0ecde9673d",
+          "output_sha256": "768a03e7e4581a4bb176459230b58bb1fdd1d3390c3205ac280123c397b92768"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "thaumaturge",
+            "view": "west",
+            "source": "@west",
+            "target_height": 50,
+            "scale": 0.1976284584980237,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/mg_ac/selection.json"
+          },
+          "input_sha256": "4fb71cbf5c5064b643cc39eaa5af146e252e8d98f7f8b63246ff08fcbcc8eb5c",
+          "output_sha256": "768a03e7e4581a4bb176459230b58bb1fdd1d3390c3205ac280123c397b92768"
+        }
+      ],
+      "selected": true,
+      "review": {
+        "status": "pending",
+        "date": "2026-11-16",
+        "notes": "Technical native capture by Terra (E09 T7, docs/epics/e09/t7_delivery.md); product acceptance is the user's."
+      },
+      "terms": "Derived from the Codex built-in imagegen sheets of assets/art/e08_codex_1123/characters/mg_ac (terms and exact prompts in that provenance.json).",
+      "measurements": {
+        "rgba_sha256": "c5e3022813dfe7e36caa223eed74a954075a97c5cb57bff728b9853eb6d2c942"
+      }
+    },
+    {
+      "path": "assets/art/e08_characters/directional/thaumaturge/weaponless.png",
+      "sha256": "768a03e7e4581a4bb176459230b58bb1fdd1d3390c3205ac280123c397b92768",
+      "width": 256,
+      "height": 1024,
+      "kind": "other",
+      "generator": {
+        "name": "ragrpg directional packer (derived from Codex sheets)",
+        "model": null,
+        "host": "local",
+        "version": "e09-t7"
+      },
+      "request": "thaumaturge directional atlas V2 (mg_ac), 64 poses, derived from the selected views; no new generation",
+      "prompt": "",
+      "negative_prompt": null,
+      "seed": null,
+      "params": {
+        "scale": 0.1976284584980237,
+        "cell": 64,
+        "atlas": "256x1024"
+      },
+      "refs": [
+        {
+          "path": "assets/art/e08_codex_1123/characters/mg_ac/south.png",
+          "sha256": "fd17dfb2d2a28e06b4557f0f0f8086f05b120e3aea414dbca30aa8a2c936f189"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/mg_ac/north.png",
+          "sha256": "3c013991d7496b6c3fae742b54ed288e8ce62785f4de63db99604335239052a7"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/mg_ac/east.png",
+          "sha256": "96b169d7d06edd4488e14af349d37917a1ac471334416be0c8fb1a0ecde9673d"
+        },
+        {
+          "path": "assets/art/e08_codex_1123/characters/mg_ac/west_v2.png",
+          "sha256": "4fb71cbf5c5064b643cc39eaa5af146e252e8d98f7f8b63246ff08fcbcc8eb5c"
+        }
+      ],
+      "post": [
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "thaumaturge",
+            "view": "south",
+            "source": "@south",
+            "target_height": 50,
+            "scale": 0.1976284584980237,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/mg_ac/selection.json"
+          },
+          "input_sha256": "fd17dfb2d2a28e06b4557f0f0f8086f05b120e3aea414dbca30aa8a2c936f189",
+          "output_sha256": "768a03e7e4581a4bb176459230b58bb1fdd1d3390c3205ac280123c397b92768"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "thaumaturge",
+            "view": "north",
+            "source": "@north",
+            "target_height": 50,
+            "scale": 0.1976284584980237,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/mg_ac/selection.json"
+          },
+          "input_sha256": "3c013991d7496b6c3fae742b54ed288e8ce62785f4de63db99604335239052a7",
+          "output_sha256": "768a03e7e4581a4bb176459230b58bb1fdd1d3390c3205ac280123c397b92768"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "thaumaturge",
+            "view": "east",
+            "source": "@east",
+            "target_height": 50,
+            "scale": 0.1976284584980237,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/mg_ac/selection.json"
+          },
+          "input_sha256": "96b169d7d06edd4488e14af349d37917a1ac471334416be0c8fb1a0ecde9673d",
+          "output_sha256": "768a03e7e4581a4bb176459230b58bb1fdd1d3390c3205ac280123c397b92768"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e09-t7",
+          "params": {
+            "actor_kind": "thaumaturge",
+            "view": "west",
+            "source": "@west",
+            "target_height": 50,
+            "scale": 0.1976284584980237,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1123/characters/mg_ac/selection.json"
+          },
+          "input_sha256": "4fb71cbf5c5064b643cc39eaa5af146e252e8d98f7f8b63246ff08fcbcc8eb5c",
+          "output_sha256": "768a03e7e4581a4bb176459230b58bb1fdd1d3390c3205ac280123c397b92768"
+        }
+      ],
+      "selected": true,
+      "review": {
+        "status": "pending",
+        "date": "2026-11-16",
+        "notes": "Technical native capture by Terra (E09 T7, docs/epics/e09/t7_delivery.md); product acceptance is the user's."
+      },
+      "terms": "Derived from the Codex built-in imagegen sheets of assets/art/e08_codex_1123/characters/mg_ac (terms and exact prompts in that provenance.json).",
+      "measurements": {
+        "rgba_sha256": "c5e3022813dfe7e36caa223eed74a954075a97c5cb57bff728b9853eb6d2c942"
+      }
+    }
+  ]
+}

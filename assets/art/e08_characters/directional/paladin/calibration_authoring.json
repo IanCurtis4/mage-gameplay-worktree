@@ -1,0 +1,136 @@
+{
+ "format": "ragrpg_e09_calibration_authoring_v1",
+ "note": "Corrections found while reviewing the enlarged cells (tools/prepare_e09_hybrid_calibration.py overlay). left/right = image sides (south/north), near/far = lateral views. Unlisted frames use the skin-component proposal.",
+ "frames": {
+  "8": {
+   "left": [
+    26,
+    29
+   ]
+  },
+  "9": {
+   "left": [
+    22,
+    29
+   ]
+  },
+  "11": {
+   "left": [
+    30,
+    35
+   ],
+   "right": [
+    34,
+    35
+   ]
+  },
+  "20": {
+   "right": [
+    41,
+    40
+   ]
+  },
+  "22": {
+   "right": [
+    41,
+    40
+   ]
+  },
+  "23": {
+   "right": [
+    42,
+    40
+   ]
+  },
+  "24": {
+   "right": [
+    41,
+    27
+   ]
+  },
+  "25": {
+   "right": [
+    43,
+    26
+   ]
+  },
+  "33": {
+   "far": [
+    35,
+    40
+   ]
+  },
+  "38": {
+   "far": [
+    32,
+    38
+   ]
+  },
+  "40": {
+   "far": [
+    41,
+    31
+   ]
+  },
+  "43": {
+   "far": [
+    33,
+    37
+   ]
+  },
+  "49": {
+   "far": [
+    28,
+    39
+   ]
+  },
+  "50": {
+   "far": [
+    26,
+    41
+   ]
+  },
+  "53": {
+   "far": [
+    28,
+    39
+   ]
+  },
+  "54": {
+   "far": [
+    30,
+    40
+   ]
+  },
+  "55": {
+   "far": [
+    30,
+    40
+   ]
+  },
+  "14": {
+   "head_angle": 0.2
+  },
+  "15": {
+   "head_angle": 0.6
+  },
+  "30": {
+   "head_angle": -0.2
+  },
+  "31": {
+   "head_angle": -0.6
+  },
+  "46": {
+   "head_angle": 0.3
+  },
+  "47": {
+   "head_angle": 1.2
+  },
+  "62": {
+   "head_angle": -0.3
+  },
+  "63": {
+   "head_angle": -1.2
+  }
+ }
+}
