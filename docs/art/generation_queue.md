@@ -8,7 +8,8 @@ tarefa do E09 espera por ela. Ícones e efeitos das skills novas saem por códig
 chegar substitui pelo mesmo ID, sem mudar consumidor. A fila só diz o que falta, o formato, onde
 cai e quem consome. Entrar na fila não inicia marco nem autoriza gasto.
 
-Manutenção: a T2 escreve este documento; a T10 atualiza o estado ao integrar o épico. Cada entrega
+Manutenção: a T2 escreve este documento; a T10 atualiza o estado ao integrar o épico (feito em
+17/11/2026, sobre o candidato `claude/e09-candidato`: Q4 com os IDs reservados e Q7 nova). Cada entrega
 nova de arte registra a proveniência (v2) e atualiza a linha daqui.
 
 ## Geradores hoje (16/11/2026)
@@ -32,9 +33,10 @@ viável, a fila espera, e o jogo segue com o que já está pronto.
 | Q1 | 1124: Tempestário e Magister | 7 folhas | média | não (as classes ficam como estão) | **pendente** desde 16/11 (gerador inviável) |
 | Q2 | Conjuntos de classe das quatro híbridas (elmo e ícones) | 4 conjuntos | média | não (D6: fora do E09) | pendente |
 | Q3 | Ícones pintados das 28 skills | 28 ícones | alta entre as pinturas | não (o SVG por código vale) | pendente |
-| Q4 | Efeitos pintados reservados pelos kits | por kit | média | não (efeito em código vale) | pendente; IDs saem dos kits K1–K4 |
+| Q4 | Efeitos pintados reservados pelos kits | 35 IDs (8 + 9 + 7 + 11) | média | não (efeito em código vale) | pendente; IDs publicados pelos kits K1–K4 (17/11) |
 | Q5 | Trajes das híbridas restantes | 28 híbridas × 4 vistas | baixa | não (fora do E09) | pendente |
 | Q6 | Variantes de criatura | ver abaixo | baixa | não | pendente |
+| Q7 | Ícones das 4 skills do catálogo que não têm ícone | 4 ícones | média | não (a barra mostra o ícone genérico) | pendente; achado da T3 |
 
 A ordem da tabela é sugestão de valor por custo: Q3 e Q4 melhoram o que o jogador vê nas quatro
 classes do épico; Q1 corrige duas classes que já têm arte; Q2 completa as quatro classes; Q5 e Q6
@@ -99,8 +101,23 @@ ampliam o elenco.
 - **Formato:** `vfx_source`, grade 4×4 de quadros (do início ao pico), RGBA.
 - **Destino:** `assets/art/e08_vfx/<id>/flipbook.json` (mais as folhas). **Substitui o efeito em
   código pelo mesmo ID**; o consumidor não muda.
-- **Dependência de informação (não de código):** os IDs e o número de estados saem dos recibos
-  `k1`–`k4`. Não gerar antes de o kit publicar o efeito reservado.
+- **IDs reservados (estado de 17/11, candidato E09):** são as chaves de `vfx_effects()` de cada kit,
+  hoje desenhadas por código:
+  - Paladino (8): `paladin_oath_cone`, `paladin_oath_burn`, `paladin_grace_rings`,
+    `paladin_impact_column`, `paladin_aegis_halo`, `paladin_aegis_pulse`, `paladin_seal_ring`,
+    `paladin_hour_circle`;
+  - Taumaturgo (9): `thaumaturge_votive_circle`, `thaumaturge_votive_burn`,
+    `thaumaturge_refraction_wave`, `thaumaturge_refraction_hit`, `thaumaturge_altar_pulse`,
+    `thaumaturge_altar_shock`, `thaumaturge_judgment_mark`, `thaumaturge_judgment_column`,
+    `thaumaturge_dawn_circle`;
+  - Duelista (7): `duelist_parry_flash`, `duelist_riposte_lunge`, `duelist_riposte_strike`,
+    `duelist_feint_step`, `duelist_retreat_step`, `duelist_duel_ring`, `duelist_duel_thrust`;
+  - Lâmina Arcana (11): `arcane_blade_mark_prism`, `arcane_blade_crystal_swing`,
+    `arcane_blade_triad_burst`, `arcane_blade_refraction_veil`, `arcane_blade_leap_flash`,
+    `arcane_blade_leap_strike`, `arcane_blade_light_fracture`, `arcane_blade_sentence_gather`,
+    `arcane_blade_sentence_tricolor`, `arcane_blade_specter_summon`, `arcane_blade_specter_strike`.
+  O número de estados e o tamanho de cada efeito estão no recibo do kit (`k1`–`k4`) e no próprio
+  `vfx_effects()`. Um flipbook com o mesmo ID passa a valer sem mudar o kit.
 - **Pronto quando:** validação sem erro (quadro em branco só aparece como aviso), proveniência
   v2 e escolha do usuário. Efeitos de outras classes do lote 1123 (Silvano, Inabalável,
   Tempestário, Magister) ficam para quando essas classes ganharem kit.
@@ -128,6 +145,15 @@ ampliam o elenco.
   camadas de placa do Cavaleiro de Ossos.
 - **Formato:** `creature_view` × 4 vistas (como os de 1117).
 - **Pronto quando:** como em Q5.
+
+## Q7 — ícones das 4 skills do catálogo sem ícone
+
+- **O que falta:** ícone para `berserker_deep_bleeding`, `berserker_pursuit_cut`,
+  `defender_retreat_guard` e `defender_riposte` (limitação da T3; fora do E09).
+- **Formato e destino:** um SVG por código em `assets/art/skills/<skill_id>.svg`, como os 28 da T3
+  (`tools/prepare_skill_icons.py`), ou pintado em `assets/art/skills/painted/<skill_id>.png`.
+- **Pronto quando:** `prepare_skill_icons.py --check` cobre os quatro IDs e a barra mostra o ícone.
+  Pede tarefa própria autorizada; entrar aqui só registra a falta.
 
 ## Como pedir um item
 
