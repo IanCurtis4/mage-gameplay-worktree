@@ -201,7 +201,7 @@ static func _restrictions_valid(origins: Array[StringName], evolutions: Array[St
 	# for every restriction check. Availability remains a separate composer gate.
 	var seen: Dictionary = {}
 	for origin: StringName in origins:
-		if origin not in [&"swordsman", &"mage", &"archer"] or seen.has(origin):
+		if not IdentityIds.is_base_class(origin) or seen.has(origin):
 			return false
 		seen[origin] = true
 	seen.clear()

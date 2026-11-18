@@ -6,7 +6,10 @@
     "halo_shield": {"path": "res://assets/art/e09_equipment/props/halo_shield.png", "size": [18, 29], "grip": [9, 14], "angle": 0.0, "slot": "off_hand", "generic_key": "shield"},
     "buckler": {"path": "res://assets/art/e09_equipment/props/buckler.png", "size": [18, 19], "grip": [9, 10], "angle": 0.0, "slot": "off_hand", "generic_key": "shield"},
     "rapier": {"path": "res://assets/art/e09_equipment/props/rapier.png", "size": [10, 40], "grip": [5, 33], "angle": 0.2, "slot": "main_hand", "generic_key": "sword"},
-    "prism_staff": {"path": "res://assets/art/e09_equipment/props/prism_staff.png", "size": [13, 42], "grip": [6.5, 30], "angle": 0.3, "slot": "main_hand", "generic_key": "staff"}
+    "prism_staff": {"path": "res://assets/art/e09_equipment/props/prism_staff.png", "size": [13, 42], "grip": [6.5, 30], "angle": 0.3, "slot": "main_hand", "generic_key": "staff"},
+    "prayer_book": {"path": "res://assets/art/e10a_equipment/props/prayer_book.png", "size": [20, 30], "grip": [10, 18], "angle": 0.0, "slot": "main_hand", "generic_key": "staff"},
+    "halo_scepter": {"path": "res://assets/art/e10a_equipment/props/halo_scepter.png", "size": [15, 42], "grip": [7.5, 33], "angle": 0.2, "slot": "main_hand", "generic_key": "staff"},
+    "eye_reliquary": {"path": "res://assets/art/e10a_equipment/props/eye_reliquary.png", "size": [14, 38], "grip": [7, 7], "angle": 0.0, "slot": "main_hand", "generic_key": "staff"}
   },
   "identities": {
     "swordsman": {

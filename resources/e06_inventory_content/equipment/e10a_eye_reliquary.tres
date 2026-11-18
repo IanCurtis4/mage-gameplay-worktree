@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_e10fx"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_e10eq"]
+
+[sub_resource type="Resource" id="Resource_e10aeye_reliquary"]
+script = ExtResource("1_e10fx")
+id = &"eye_reliquary_effect"
+unique_effect_id = &"eye_reliquary_effect"
+family_id = &"eye_reliquary_effect"
+allowed_origins = Array[StringName]([&"acolyte"])
+axis = &"magic_attack"
+unit = &"points"
+magnitude = 2.0
+
+[resource]
+script = ExtResource("2_e10eq")
+id = &"eye_reliquary"
+display_name = "Relicário do Olho Atento"
+flavor_text = "Uma gaiola de metal escurecido guarda um olho que nunca pisca."
+description = "Arma de uma mão: ataque mágico +2."
+allowed_origins = Array[StringName]([&"acolyte"])
+slot = &"main_hand"
+item_kind = &"weapon"
+hand_usage = &"one_hand"
+origin_id = &"demo_arena"
+item_level = 6
+quality_id = &"rare"
+socket_capacity = 1
+effects = Array[ExtResource("1_e10fx")]([SubResource("Resource_e10aeye_reliquary")])
+min_item_level = 6
+max_item_level = 10
+allowed_identities = Array[StringName]([&"acolyte", &"priest", &"cultist"])
+visual_key = &"eye_reliquary"
+

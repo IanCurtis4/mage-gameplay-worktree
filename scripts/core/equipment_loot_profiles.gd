@@ -2,6 +2,8 @@ class_name EquipmentLootProfiles
 extends RefCounted
 ## Approved E06 rates. Production uses authored nominal tiers and fixed growth refs.
 const LEGACY_IDS: Array[StringName] = [&"starter_blade", &"starter_staff", &"starter_bow", &"traveler_vest", &"traveler_charm", &"riposte_blade", &"ember_staff", &"hunters_bow", &"warden_mail", &"channeler_robe", &"trailcoat", &"prismatic_charm"]
+## E10a T9 (A12): the Acólito starter book is also a normal drop (C6), so it is exempt from the starter filter.
+const STARTER_DROPS: Array[StringName] = [&"prayer_book"]
 const CHANCES := {&"normal": 0.04, &"rare": 1.0, &"elite": 0.12, &"rare_elite": 1.0, &"boss": 1.0}
 const CARDS := {&"normal": 0.02, &"rare": 0.06, &"elite": 0.08, &"rare_elite": 0.16, &"boss": 0.40}
 const QUALITY_WEIGHTS := {
@@ -24,7 +26,7 @@ static func production(catalog: BuildEffectCatalog) -> MobLootTable:
 		var equipment: Dictionary = {}
 		for id: StringName in catalog.ids(&"equipment"):
 			var item := catalog.get_definition(&"equipment", id) as EquipmentDefinition
-			if id in LEGACY_IDS or item.starter or item.quality_id == &"legendary" and category != &"boss": continue
+			if id in LEGACY_IDS or item.starter and id not in STARTER_DROPS or item.quality_id == &"legendary" and category != &"boss": continue
 			equipment[id] = 1
 		table.profiles[category] = {"equipment_chance": CHANCES[category], "card_chance": CARDS[category], "quality_weights": QUALITY_WEIGHTS[category].duplicate(true), "equipment_weights": equipment, "socket_weights": {0: 60, 1: 25, 2: 10, 3: 4, 4: 1}}
 	return table

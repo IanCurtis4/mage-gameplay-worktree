@@ -6,6 +6,8 @@ const HEAD_IDS: Array[StringName] = [&"pilot_head",&"class_set_swordsman_head",&
 const PROP_KEYS: Array[StringName] = [&"sword",&"axe",&"staff",&"bow",&"shield",&"prismatic_focus",&"wooden_beads"]
 ## E09 T8: weapon art of the four new items. Cosmetic only; grips live in hand_rigs.json "props".
 const E09_PROP_IDS: Array[StringName] = [&"halo_shield",&"buckler",&"rapier",&"prism_staff"]
+## E10a T9: the three Acólito-family items; same hand_rigs.json "props" section and reader as E09.
+const E10A_PROP_IDS: Array[StringName] = [&"prayer_book",&"halo_scepter",&"eye_reliquary"]
 const HAND_RIGS := "res://assets/art/equipment/hand_rigs.json"
 const HEAD_CELL := Vector2(24,24)
 const HEAD_ANCHOR := Vector2(12,13)
@@ -21,6 +23,7 @@ static func head_path(id: StringName) -> String:
 	return "res://assets/art/equipment/headgear/%s.png" % id if has_head(id) else ""
 static func prop_path(key: StringName) -> String:
 	if key in E09_PROP_IDS:return "res://assets/art/e09_equipment/props/%s.png" % key
+	if key in E10A_PROP_IDS:return "res://assets/art/e10a_equipment/props/%s.png" % key
 	return "res://assets/art/equipment/painted/%s.png" % key if key in PROP_KEYS else ""
 static func _checked(path: String,expected: Vector2) -> Texture2D:
 	if path.is_empty():return null
@@ -68,9 +71,10 @@ static func head_icon(id: StringName) -> Texture2D:
 	return _icons[id] as Texture2D
 static var _e09_props: Dictionary = {}
 static func e09_prop_ids() -> Array[StringName]: return E09_PROP_IDS.duplicate()
+static func e10a_prop_ids() -> Array[StringName]: return E10A_PROP_IDS.duplicate()
 ## Immutable per-prop profile {path,size:Vector2,grip:Vector2,angle,slot,generic_key}; empty if unknown.
 static func e09_prop_profile(id: StringName) -> Dictionary:
-	if id not in E09_PROP_IDS:return {}
+	if id not in E09_PROP_IDS and id not in E10A_PROP_IDS:return {}
 	if _e09_props.is_empty():
 		var parsed: Variant=JSON.parse_string(FileAccess.get_file_as_string(HAND_RIGS))
 		if not parsed is Dictionary or not (parsed as Dictionary).get("props") is Dictionary:return {}

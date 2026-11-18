@@ -40,7 +40,7 @@ func _run() -> void:
 	print("E09 equipment items: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 func catalog_checks(catalog: BuildEffectCatalog) -> void:
-	check(catalog.ids(&"equipment").size() == 89, "89 equipment definitions (85 previous plus four) (%d)" % catalog.ids(&"equipment").size())
+	check(catalog.ids(&"equipment").size() == 92, "92 equipment definitions (85 previous plus four, plus three E10a T9 items) (%d)" % catalog.ids(&"equipment").size())
 	for id: StringName in IDS:
 		var item := catalog.get_definition(&"equipment", id) as EquipmentDefinition
 		check(item != null, "definition exists " + String(id))
