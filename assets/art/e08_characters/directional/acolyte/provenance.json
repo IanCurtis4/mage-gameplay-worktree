@@ -1,0 +1,334 @@
+{
+  "schema": "ragrpg_art_provenance_v2",
+  "path_base": "project",
+  "records": [
+    {
+      "path": "assets/art/e08_characters/directional/acolyte/body.png",
+      "sha256": "3436347ce3cccc9dd768d1c3732435f2b580a0ef50fa3d1c7ed6afc313157690",
+      "width": 256,
+      "height": 1024,
+      "kind": "other",
+      "generator": {
+        "name": "ragrpg directional packer (derived from Codex sheets)",
+        "model": null,
+        "host": "local",
+        "version": "e10a-t8"
+      },
+      "request": "acolyte directional atlas V2, 64 poses, derived from the selected views; no new generation",
+      "prompt": "",
+      "negative_prompt": null,
+      "seed": null,
+      "params": {
+        "scale": 0.20408163265306123,
+        "cell": 64,
+        "atlas": "256x1024"
+      },
+      "refs": [
+        {
+          "path": "assets/art/e08_codex_1116/characters/acolyte/south_v5.png",
+          "sha256": "8bdf9dea7213e80b2d6e78b003f1f1bb2e80be4810b6c12005012010cd7771b6"
+        },
+        {
+          "path": "assets/art/e08_codex_1116/characters/acolyte/north.png",
+          "sha256": "6d06e243759ceee8fb11540c05b80b52e08a4882b03fc95a04ed30a58cdbf7a4"
+        },
+        {
+          "path": "assets/art/e08_codex_1116/characters/acolyte/east_v3.png",
+          "sha256": "ee48158b8546e44fa822b510e49bbbb412483935fd3abb09a13262c2ebb8630b"
+        },
+        {
+          "path": "assets/art/e08_codex_1116/characters/acolyte/west_v3.png",
+          "sha256": "8d7e3f0724f1ec57bc3f1397818a7aed62d0a859bd5d94165893e6c5c067fdfb"
+        }
+      ],
+      "post": [
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "acolyte",
+            "view": "south",
+            "source": "assets/art/e08_codex_1116/characters/acolyte/south_v5.png",
+            "target_height": 50,
+            "scale": 0.20408163265306123,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1116/characters/acolyte/selection.json"
+          },
+          "input_sha256": "8bdf9dea7213e80b2d6e78b003f1f1bb2e80be4810b6c12005012010cd7771b6",
+          "output_sha256": "3436347ce3cccc9dd768d1c3732435f2b580a0ef50fa3d1c7ed6afc313157690"
+        },
+        {
+          "tool": "art_pipeline.normalize_scale",
+          "version": "1.0.0",
+          "params": {
+            "view": "north",
+            "reference_view": "south",
+            "filter": "nearest",
+            "smoothing": false
+          },
+          "input_sha256": "6d06e243759ceee8fb11540c05b80b52e08a4882b03fc95a04ed30a58cdbf7a4",
+          "output_sha256": "f53a98db014337bcaeecd68977f3d70e5fd6368d5334422958a06ddb00c0045e"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "acolyte",
+            "view": "north",
+            "source": "assets/art/e08_characters/directional/acolyte/north_normalized.png",
+            "target_height": 50,
+            "scale": 0.20408163265306123,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1116/characters/acolyte/selection.json"
+          },
+          "input_sha256": "f53a98db014337bcaeecd68977f3d70e5fd6368d5334422958a06ddb00c0045e",
+          "output_sha256": "3436347ce3cccc9dd768d1c3732435f2b580a0ef50fa3d1c7ed6afc313157690"
+        },
+        {
+          "tool": "art_pipeline.normalize_scale",
+          "version": "1.0.0",
+          "params": {
+            "view": "east",
+            "reference_view": "south",
+            "filter": "nearest",
+            "smoothing": false
+          },
+          "input_sha256": "ee48158b8546e44fa822b510e49bbbb412483935fd3abb09a13262c2ebb8630b",
+          "output_sha256": "4e96b92453ee2b8655d049bd348255ea15005db1bcdd8bf7d64be16341f71668"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "acolyte",
+            "view": "east",
+            "source": "assets/art/e08_characters/directional/acolyte/east_normalized.png",
+            "target_height": 50,
+            "scale": 0.20408163265306123,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1116/characters/acolyte/selection.json"
+          },
+          "input_sha256": "4e96b92453ee2b8655d049bd348255ea15005db1bcdd8bf7d64be16341f71668",
+          "output_sha256": "3436347ce3cccc9dd768d1c3732435f2b580a0ef50fa3d1c7ed6afc313157690"
+        },
+        {
+          "tool": "art_pipeline.normalize_scale",
+          "version": "1.0.0",
+          "params": {
+            "view": "west",
+            "reference_view": "south",
+            "filter": "nearest",
+            "smoothing": false
+          },
+          "input_sha256": "8d7e3f0724f1ec57bc3f1397818a7aed62d0a859bd5d94165893e6c5c067fdfb",
+          "output_sha256": "fc1b4ac8eef1cf2a0a9a6d81f1034659d57f1917857195dfe4a40b39a89d07ea"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "acolyte",
+            "view": "west",
+            "source": "assets/art/e08_characters/directional/acolyte/west_normalized.png",
+            "target_height": 50,
+            "scale": 0.20408163265306123,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1116/characters/acolyte/selection.json"
+          },
+          "input_sha256": "fc1b4ac8eef1cf2a0a9a6d81f1034659d57f1917857195dfe4a40b39a89d07ea",
+          "output_sha256": "3436347ce3cccc9dd768d1c3732435f2b580a0ef50fa3d1c7ed6afc313157690"
+        }
+      ],
+      "selected": true,
+      "review": {
+        "status": "pending",
+        "date": "2026-11-18",
+        "notes": "Technical native capture by Terra (E10a T8, docs/epics/e10a/t8_delivery.md); product acceptance belongs to the user."
+      },
+      "terms": "Derived from the Codex built-in imagegen sheets of assets/art/e08_codex_1116/characters/acolyte (terms and exact prompts in that provenance.json).",
+      "measurements": {
+        "rgba_sha256": "c3efbf64b806238962354c516e0c8034cd0071c9ab501ba131c14fb71d62bbd5"
+      }
+    },
+    {
+      "path": "assets/art/e08_characters/directional/acolyte/weaponless.png",
+      "sha256": "3436347ce3cccc9dd768d1c3732435f2b580a0ef50fa3d1c7ed6afc313157690",
+      "width": 256,
+      "height": 1024,
+      "kind": "other",
+      "generator": {
+        "name": "ragrpg directional packer (derived from Codex sheets)",
+        "model": null,
+        "host": "local",
+        "version": "e10a-t8"
+      },
+      "request": "acolyte directional atlas V2, 64 poses, derived from the selected views; no new generation",
+      "prompt": "",
+      "negative_prompt": null,
+      "seed": null,
+      "params": {
+        "scale": 0.20408163265306123,
+        "cell": 64,
+        "atlas": "256x1024"
+      },
+      "refs": [
+        {
+          "path": "assets/art/e08_codex_1116/characters/acolyte/south_v5.png",
+          "sha256": "8bdf9dea7213e80b2d6e78b003f1f1bb2e80be4810b6c12005012010cd7771b6"
+        },
+        {
+          "path": "assets/art/e08_codex_1116/characters/acolyte/north.png",
+          "sha256": "6d06e243759ceee8fb11540c05b80b52e08a4882b03fc95a04ed30a58cdbf7a4"
+        },
+        {
+          "path": "assets/art/e08_codex_1116/characters/acolyte/east_v3.png",
+          "sha256": "ee48158b8546e44fa822b510e49bbbb412483935fd3abb09a13262c2ebb8630b"
+        },
+        {
+          "path": "assets/art/e08_codex_1116/characters/acolyte/west_v3.png",
+          "sha256": "8d7e3f0724f1ec57bc3f1397818a7aed62d0a859bd5d94165893e6c5c067fdfb"
+        }
+      ],
+      "post": [
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "acolyte",
+            "view": "south",
+            "source": "assets/art/e08_codex_1116/characters/acolyte/south_v5.png",
+            "target_height": 50,
+            "scale": 0.20408163265306123,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1116/characters/acolyte/selection.json"
+          },
+          "input_sha256": "8bdf9dea7213e80b2d6e78b003f1f1bb2e80be4810b6c12005012010cd7771b6",
+          "output_sha256": "3436347ce3cccc9dd768d1c3732435f2b580a0ef50fa3d1c7ed6afc313157690"
+        },
+        {
+          "tool": "art_pipeline.normalize_scale",
+          "version": "1.0.0",
+          "params": {
+            "view": "north",
+            "reference_view": "south",
+            "filter": "nearest",
+            "smoothing": false
+          },
+          "input_sha256": "6d06e243759ceee8fb11540c05b80b52e08a4882b03fc95a04ed30a58cdbf7a4",
+          "output_sha256": "f53a98db014337bcaeecd68977f3d70e5fd6368d5334422958a06ddb00c0045e"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "acolyte",
+            "view": "north",
+            "source": "assets/art/e08_characters/directional/acolyte/north_normalized.png",
+            "target_height": 50,
+            "scale": 0.20408163265306123,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1116/characters/acolyte/selection.json"
+          },
+          "input_sha256": "f53a98db014337bcaeecd68977f3d70e5fd6368d5334422958a06ddb00c0045e",
+          "output_sha256": "3436347ce3cccc9dd768d1c3732435f2b580a0ef50fa3d1c7ed6afc313157690"
+        },
+        {
+          "tool": "art_pipeline.normalize_scale",
+          "version": "1.0.0",
+          "params": {
+            "view": "east",
+            "reference_view": "south",
+            "filter": "nearest",
+            "smoothing": false
+          },
+          "input_sha256": "ee48158b8546e44fa822b510e49bbbb412483935fd3abb09a13262c2ebb8630b",
+          "output_sha256": "4e96b92453ee2b8655d049bd348255ea15005db1bcdd8bf7d64be16341f71668"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "acolyte",
+            "view": "east",
+            "source": "assets/art/e08_characters/directional/acolyte/east_normalized.png",
+            "target_height": 50,
+            "scale": 0.20408163265306123,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1116/characters/acolyte/selection.json"
+          },
+          "input_sha256": "4e96b92453ee2b8655d049bd348255ea15005db1bcdd8bf7d64be16341f71668",
+          "output_sha256": "3436347ce3cccc9dd768d1c3732435f2b580a0ef50fa3d1c7ed6afc313157690"
+        },
+        {
+          "tool": "art_pipeline.normalize_scale",
+          "version": "1.0.0",
+          "params": {
+            "view": "west",
+            "reference_view": "south",
+            "filter": "nearest",
+            "smoothing": false
+          },
+          "input_sha256": "8d7e3f0724f1ec57bc3f1397818a7aed62d0a859bd5d94165893e6c5c067fdfb",
+          "output_sha256": "fc1b4ac8eef1cf2a0a9a6d81f1034659d57f1917857195dfe4a40b39a89d07ea"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "acolyte",
+            "view": "west",
+            "source": "assets/art/e08_characters/directional/acolyte/west_normalized.png",
+            "target_height": 50,
+            "scale": 0.20408163265306123,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1116/characters/acolyte/selection.json"
+          },
+          "input_sha256": "fc1b4ac8eef1cf2a0a9a6d81f1034659d57f1917857195dfe4a40b39a89d07ea",
+          "output_sha256": "3436347ce3cccc9dd768d1c3732435f2b580a0ef50fa3d1c7ed6afc313157690"
+        }
+      ],
+      "selected": true,
+      "review": {
+        "status": "pending",
+        "date": "2026-11-18",
+        "notes": "Technical native capture by Terra (E10a T8, docs/epics/e10a/t8_delivery.md); product acceptance belongs to the user."
+      },
+      "terms": "Derived from the Codex built-in imagegen sheets of assets/art/e08_codex_1116/characters/acolyte (terms and exact prompts in that provenance.json).",
+      "measurements": {
+        "rgba_sha256": "c3efbf64b806238962354c516e0c8034cd0071c9ab501ba131c14fb71d62bbd5"
+      }
+    }
+  ]
+}

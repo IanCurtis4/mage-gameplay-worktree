@@ -1,0 +1,262 @@
+{
+  "schema": "ragrpg_art_provenance_v2",
+  "path_base": "project",
+  "records": [
+    {
+      "path": "assets/art/e08_characters/directional/cultist/body.png",
+      "sha256": "ac3d1aea2941def8f5fc501c51b5c8b755a571133eecb59f38cceb175ace33d9",
+      "width": 256,
+      "height": 1024,
+      "kind": "other",
+      "generator": {
+        "name": "ragrpg directional packer (derived from Codex sheets)",
+        "model": null,
+        "host": "local",
+        "version": "e10a-t8"
+      },
+      "request": "cultist directional atlas V2, 64 poses, derived from the selected views; no new generation",
+      "prompt": "",
+      "negative_prompt": null,
+      "seed": null,
+      "params": {
+        "scale": 0.2012072434607646,
+        "cell": 64,
+        "atlas": "256x1024"
+      },
+      "refs": [
+        {
+          "path": "assets/art/e08_codex_1118/characters/cultist/south.png",
+          "sha256": "2c894b80576dc613070f977426ef886134f6bb774d0936eb1317e18452a67948"
+        },
+        {
+          "path": "assets/art/e08_codex_1118/characters/cultist/north.png",
+          "sha256": "ac027bd3a9fd73ce92eaacfaa192ad20c9daec6154b0328aa85fa07b5e9c22f4"
+        },
+        {
+          "path": "assets/art/e08_codex_1118/characters/cultist/east.png",
+          "sha256": "b8dd93b5bafcaa30833109b9515dcede28081b28b3d735ddff6bc4a02c55de30"
+        },
+        {
+          "path": "assets/art/e08_codex_1118/characters/cultist/west.png",
+          "sha256": "c160be76efd1ac17b3c78d9097fc458f25a6a3f9e9f29cbccdd0238dc11a0af8"
+        }
+      ],
+      "post": [
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "cultist",
+            "view": "south",
+            "source": "assets/art/e08_codex_1118/characters/cultist/south.png",
+            "target_height": 50,
+            "scale": 0.2012072434607646,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1118/characters/cultist/selection.json"
+          },
+          "input_sha256": "2c894b80576dc613070f977426ef886134f6bb774d0936eb1317e18452a67948",
+          "output_sha256": "ac3d1aea2941def8f5fc501c51b5c8b755a571133eecb59f38cceb175ace33d9"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "cultist",
+            "view": "north",
+            "source": "assets/art/e08_codex_1118/characters/cultist/north.png",
+            "target_height": 50,
+            "scale": 0.2012072434607646,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1118/characters/cultist/selection.json"
+          },
+          "input_sha256": "ac027bd3a9fd73ce92eaacfaa192ad20c9daec6154b0328aa85fa07b5e9c22f4",
+          "output_sha256": "ac3d1aea2941def8f5fc501c51b5c8b755a571133eecb59f38cceb175ace33d9"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "cultist",
+            "view": "east",
+            "source": "assets/art/e08_codex_1118/characters/cultist/east.png",
+            "target_height": 50,
+            "scale": 0.2012072434607646,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1118/characters/cultist/selection.json"
+          },
+          "input_sha256": "b8dd93b5bafcaa30833109b9515dcede28081b28b3d735ddff6bc4a02c55de30",
+          "output_sha256": "ac3d1aea2941def8f5fc501c51b5c8b755a571133eecb59f38cceb175ace33d9"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "cultist",
+            "view": "west",
+            "source": "assets/art/e08_codex_1118/characters/cultist/west.png",
+            "target_height": 50,
+            "scale": 0.2012072434607646,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1118/characters/cultist/selection.json"
+          },
+          "input_sha256": "c160be76efd1ac17b3c78d9097fc458f25a6a3f9e9f29cbccdd0238dc11a0af8",
+          "output_sha256": "ac3d1aea2941def8f5fc501c51b5c8b755a571133eecb59f38cceb175ace33d9"
+        }
+      ],
+      "selected": true,
+      "review": {
+        "status": "pending",
+        "date": "2026-11-18",
+        "notes": "Technical native capture by Terra (E10a T8, docs/epics/e10a/t8_delivery.md); product acceptance belongs to the user."
+      },
+      "terms": "Derived from the Codex built-in imagegen sheets of assets/art/e08_codex_1118/characters/cultist (terms and exact prompts in that provenance.json).",
+      "measurements": {
+        "rgba_sha256": "8bba5b2127657eb441ba77fd06ca2edef7dbe39d6fb1adc4b26dff0e482582d5"
+      }
+    },
+    {
+      "path": "assets/art/e08_characters/directional/cultist/weaponless.png",
+      "sha256": "ac3d1aea2941def8f5fc501c51b5c8b755a571133eecb59f38cceb175ace33d9",
+      "width": 256,
+      "height": 1024,
+      "kind": "other",
+      "generator": {
+        "name": "ragrpg directional packer (derived from Codex sheets)",
+        "model": null,
+        "host": "local",
+        "version": "e10a-t8"
+      },
+      "request": "cultist directional atlas V2, 64 poses, derived from the selected views; no new generation",
+      "prompt": "",
+      "negative_prompt": null,
+      "seed": null,
+      "params": {
+        "scale": 0.2012072434607646,
+        "cell": 64,
+        "atlas": "256x1024"
+      },
+      "refs": [
+        {
+          "path": "assets/art/e08_codex_1118/characters/cultist/south.png",
+          "sha256": "2c894b80576dc613070f977426ef886134f6bb774d0936eb1317e18452a67948"
+        },
+        {
+          "path": "assets/art/e08_codex_1118/characters/cultist/north.png",
+          "sha256": "ac027bd3a9fd73ce92eaacfaa192ad20c9daec6154b0328aa85fa07b5e9c22f4"
+        },
+        {
+          "path": "assets/art/e08_codex_1118/characters/cultist/east.png",
+          "sha256": "b8dd93b5bafcaa30833109b9515dcede28081b28b3d735ddff6bc4a02c55de30"
+        },
+        {
+          "path": "assets/art/e08_codex_1118/characters/cultist/west.png",
+          "sha256": "c160be76efd1ac17b3c78d9097fc458f25a6a3f9e9f29cbccdd0238dc11a0af8"
+        }
+      ],
+      "post": [
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "cultist",
+            "view": "south",
+            "source": "assets/art/e08_codex_1118/characters/cultist/south.png",
+            "target_height": 50,
+            "scale": 0.2012072434607646,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1118/characters/cultist/selection.json"
+          },
+          "input_sha256": "2c894b80576dc613070f977426ef886134f6bb774d0936eb1317e18452a67948",
+          "output_sha256": "ac3d1aea2941def8f5fc501c51b5c8b755a571133eecb59f38cceb175ace33d9"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "cultist",
+            "view": "north",
+            "source": "assets/art/e08_codex_1118/characters/cultist/north.png",
+            "target_height": 50,
+            "scale": 0.2012072434607646,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1118/characters/cultist/selection.json"
+          },
+          "input_sha256": "ac027bd3a9fd73ce92eaacfaa192ad20c9daec6154b0328aa85fa07b5e9c22f4",
+          "output_sha256": "ac3d1aea2941def8f5fc501c51b5c8b755a571133eecb59f38cceb175ace33d9"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "cultist",
+            "view": "east",
+            "source": "assets/art/e08_codex_1118/characters/cultist/east.png",
+            "target_height": 50,
+            "scale": 0.2012072434607646,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1118/characters/cultist/selection.json"
+          },
+          "input_sha256": "b8dd93b5bafcaa30833109b9515dcede28081b28b3d735ddff6bc4a02c55de30",
+          "output_sha256": "ac3d1aea2941def8f5fc501c51b5c8b755a571133eecb59f38cceb175ace33d9"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "cultist",
+            "view": "west",
+            "source": "assets/art/e08_codex_1118/characters/cultist/west.png",
+            "target_height": 50,
+            "scale": 0.2012072434607646,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1118/characters/cultist/selection.json"
+          },
+          "input_sha256": "c160be76efd1ac17b3c78d9097fc458f25a6a3f9e9f29cbccdd0238dc11a0af8",
+          "output_sha256": "ac3d1aea2941def8f5fc501c51b5c8b755a571133eecb59f38cceb175ace33d9"
+        }
+      ],
+      "selected": true,
+      "review": {
+        "status": "pending",
+        "date": "2026-11-18",
+        "notes": "Technical native capture by Terra (E10a T8, docs/epics/e10a/t8_delivery.md); product acceptance belongs to the user."
+      },
+      "terms": "Derived from the Codex built-in imagegen sheets of assets/art/e08_codex_1118/characters/cultist (terms and exact prompts in that provenance.json).",
+      "measurements": {
+        "rgba_sha256": "8bba5b2127657eb441ba77fd06ca2edef7dbe39d6fb1adc4b26dff0e482582d5"
+      }
+    }
+  ]
+}

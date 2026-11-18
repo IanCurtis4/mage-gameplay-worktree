@@ -1,0 +1,5100 @@
+{
+  "actor_kind": "priest",
+  "authored_rgba_sha256": "e5ac110c42c749bc2965f44ebfc337ce8dd7342ab3e1d9fc8f30f8faa435cd22",
+  "author": "Terra (E10a T8): skin-component palm proposal plus reviewed corrections; native inspection recorded in delivery.md",
+  "notes": {
+    "order": "south,north,east,west; idle4 walk4 action4 hurt2 death2",
+    "main_hand": "anatomical right: S left, N right, E near, W far",
+    "tool": "tools/prepare_e10a_family_calibration.py with calibration_authoring.json"
+  },
+  "frames": [
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            23,
+            43
+          ],
+          "fingers": [
+            22,
+            42,
+            3,
+            3
+          ],
+          "angle": -0.35,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            39,
+            43
+          ],
+          "fingers": [
+            38,
+            42,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            23,
+            43
+          ],
+          "fingers": [
+            23,
+            43,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          16
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            43
+          ],
+          "fingers": [
+            23,
+            42,
+            3,
+            3
+          ],
+          "angle": -0.35,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            40,
+            42
+          ],
+          "fingers": [
+            39,
+            41,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            24,
+            43
+          ],
+          "fingers": [
+            24,
+            43,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          16
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            23,
+            42
+          ],
+          "fingers": [
+            22,
+            41,
+            3,
+            3
+          ],
+          "angle": -0.35,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            40,
+            43
+          ],
+          "fingers": [
+            39,
+            42,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            23,
+            42
+          ],
+          "fingers": [
+            23,
+            42,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          16
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            43
+          ],
+          "fingers": [
+            23,
+            42,
+            3,
+            3
+          ],
+          "angle": -0.35,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            40,
+            43
+          ],
+          "fingers": [
+            39,
+            42,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            24,
+            43
+          ],
+          "fingers": [
+            24,
+            43,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          34,
+          16
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            27,
+            39
+          ],
+          "fingers": [
+            26,
+            38,
+            3,
+            3
+          ],
+          "angle": -0.35,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            41,
+            40
+          ],
+          "fingers": [
+            40,
+            39,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            27,
+            39
+          ],
+          "fingers": [
+            27,
+            39,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          33,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            25,
+            42
+          ],
+          "fingers": [
+            24,
+            41,
+            3,
+            3
+          ],
+          "angle": -0.35,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            40,
+            40
+          ],
+          "fingers": [
+            39,
+            39,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            25,
+            42
+          ],
+          "fingers": [
+            25,
+            42,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            28,
+            38
+          ],
+          "fingers": [
+            27,
+            37,
+            3,
+            3
+          ],
+          "angle": -0.35,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            40,
+            40
+          ],
+          "fingers": [
+            39,
+            39,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            28,
+            38
+          ],
+          "fingers": [
+            28,
+            38,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          34,
+          16
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            40
+          ],
+          "fingers": [
+            23,
+            39,
+            3,
+            3
+          ],
+          "angle": -0.35,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            38,
+            39
+          ],
+          "fingers": [
+            37,
+            38,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            24,
+            40
+          ],
+          "fingers": [
+            24,
+            40,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            31,
+            35
+          ],
+          "fingers": [
+            30,
+            34,
+            3,
+            3
+          ],
+          "angle": -0.35,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": -0.35,
+            "axe": -0.35,
+            "staff": 0.1,
+            "bow": 0.08,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            34,
+            35
+          ],
+          "fingers": [
+            33,
+            34,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": -0.35,
+            "axe": -0.35,
+            "staff": 0.1,
+            "bow": 0.08,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            31,
+            35
+          ],
+          "fingers": [
+            31,
+            35,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            22,
+            32
+          ],
+          "fingers": [
+            21,
+            31,
+            3,
+            3
+          ],
+          "angle": -0.35,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": -0.85,
+            "axe": -0.85,
+            "staff": 0.26,
+            "bow": 0.05,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            41,
+            38
+          ],
+          "fingers": [
+            40,
+            37,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": -0.85,
+            "axe": -0.85,
+            "staff": 0.26,
+            "bow": 0.05,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            22,
+            32
+          ],
+          "fingers": [
+            22,
+            32,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            22,
+            31
+          ],
+          "fingers": [
+            21,
+            30,
+            3,
+            3
+          ],
+          "angle": -0.35,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.75,
+            "axe": 0.75,
+            "staff": 0.28,
+            "bow": 0.12,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            40,
+            37
+          ],
+          "fingers": [
+            39,
+            36,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.75,
+            "axe": 0.75,
+            "staff": 0.28,
+            "bow": 0.12,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            22,
+            31
+          ],
+          "fingers": [
+            22,
+            31,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          34,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            21,
+            40
+          ],
+          "fingers": [
+            20,
+            39,
+            3,
+            3
+          ],
+          "angle": -0.35,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.22,
+            "axe": 0.22,
+            "staff": 0.12,
+            "bow": 0.14,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            41,
+            41
+          ],
+          "fingers": [
+            40,
+            40,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.22,
+            "axe": 0.22,
+            "staff": 0.12,
+            "bow": 0.14,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            21,
+            40
+          ],
+          "fingers": [
+            21,
+            40,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            19,
+            41
+          ],
+          "fingers": [
+            18,
+            40,
+            3,
+            3
+          ],
+          "angle": -0.35,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            44,
+            41
+          ],
+          "fingers": [
+            43,
+            40,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            19,
+            41
+          ],
+          "fingers": [
+            19,
+            41,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          19
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            20,
+            41
+          ],
+          "fingers": [
+            19,
+            40,
+            3,
+            3
+          ],
+          "angle": -0.35,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            44,
+            43
+          ],
+          "fingers": [
+            43,
+            42,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            20,
+            41
+          ],
+          "fingers": [
+            20,
+            41,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          19
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            25,
+            55
+          ],
+          "fingers": [
+            24,
+            54,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            37,
+            55
+          ],
+          "fingers": [
+            36,
+            54,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            25,
+            55
+          ],
+          "fingers": [
+            25,
+            55,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          31
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            55
+          ],
+          "fingers": [
+            23,
+            54,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            39,
+            55
+          ],
+          "fingers": [
+            38,
+            54,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            24,
+            55
+          ],
+          "fingers": [
+            24,
+            55,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          31,
+          41
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            41,
+            42
+          ],
+          "fingers": [
+            40,
+            41,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            23,
+            42
+          ],
+          "fingers": [
+            22,
+            41,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            41,
+            42
+          ],
+          "fingers": [
+            41,
+            42,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          16
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            41,
+            42
+          ],
+          "fingers": [
+            40,
+            41,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            23,
+            42
+          ],
+          "fingers": [
+            22,
+            41,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            41,
+            42
+          ],
+          "fingers": [
+            41,
+            42,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          16
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            41,
+            42
+          ],
+          "fingers": [
+            40,
+            41,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            24,
+            41
+          ],
+          "fingers": [
+            23,
+            40,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            41,
+            42
+          ],
+          "fingers": [
+            41,
+            42,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          16
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            41,
+            42
+          ],
+          "fingers": [
+            40,
+            41,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            24,
+            42
+          ],
+          "fingers": [
+            23,
+            41,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            41,
+            42
+          ],
+          "fingers": [
+            41,
+            42,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          16
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            41,
+            40
+          ],
+          "fingers": [
+            40,
+            39,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            24,
+            39
+          ],
+          "fingers": [
+            23,
+            38,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            41,
+            40
+          ],
+          "fingers": [
+            41,
+            40,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          18
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            38,
+            38
+          ],
+          "fingers": [
+            37,
+            37,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            22,
+            41
+          ],
+          "fingers": [
+            21,
+            40,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            38,
+            38
+          ],
+          "fingers": [
+            38,
+            38,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          18
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            40,
+            38
+          ],
+          "fingers": [
+            39,
+            37,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            23,
+            41
+          ],
+          "fingers": [
+            22,
+            40,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            40,
+            38
+          ],
+          "fingers": [
+            40,
+            38,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          18
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            40,
+            38
+          ],
+          "fingers": [
+            39,
+            37,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            23,
+            42
+          ],
+          "fingers": [
+            22,
+            41,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            40,
+            38
+          ],
+          "fingers": [
+            40,
+            38,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            38,
+            40
+          ],
+          "fingers": [
+            37,
+            39,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": -0.35,
+            "axe": -0.35,
+            "staff": 0.1,
+            "bow": 0.08,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            26,
+            40
+          ],
+          "fingers": [
+            25,
+            39,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": -0.35,
+            "axe": -0.35,
+            "staff": 0.1,
+            "bow": 0.08,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            38,
+            40
+          ],
+          "fingers": [
+            38,
+            40,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          18
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            45,
+            32
+          ],
+          "fingers": [
+            44,
+            31,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": -0.85,
+            "axe": -0.85,
+            "staff": 0.26,
+            "bow": 0.05,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            20,
+            32
+          ],
+          "fingers": [
+            19,
+            31,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": -0.85,
+            "axe": -0.85,
+            "staff": 0.26,
+            "bow": 0.05,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            45,
+            32
+          ],
+          "fingers": [
+            45,
+            32,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          18
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            45,
+            27
+          ],
+          "fingers": [
+            44,
+            26,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.75,
+            "axe": 0.75,
+            "staff": 0.28,
+            "bow": 0.12,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            20,
+            38
+          ],
+          "fingers": [
+            19,
+            37,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.75,
+            "axe": 0.75,
+            "staff": 0.28,
+            "bow": 0.12,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            45,
+            27
+          ],
+          "fingers": [
+            45,
+            27,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            45,
+            41
+          ],
+          "fingers": [
+            44,
+            40,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.22,
+            "axe": 0.22,
+            "staff": 0.12,
+            "bow": 0.14,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            18,
+            39
+          ],
+          "fingers": [
+            17,
+            38,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.22,
+            "axe": 0.22,
+            "staff": 0.12,
+            "bow": 0.14,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            45,
+            41
+          ],
+          "fingers": [
+            45,
+            41,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          18
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            44,
+            39
+          ],
+          "fingers": [
+            43,
+            38,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            20,
+            40
+          ],
+          "fingers": [
+            19,
+            39,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            44,
+            39
+          ],
+          "fingers": [
+            44,
+            39,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          19
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            44,
+            43
+          ],
+          "fingers": [
+            43,
+            42,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            20,
+            43
+          ],
+          "fingers": [
+            19,
+            42,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            44,
+            43
+          ],
+          "fingers": [
+            44,
+            43,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          20
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            37,
+            55
+          ],
+          "fingers": [
+            36,
+            54,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            26,
+            55
+          ],
+          "fingers": [
+            25,
+            54,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            37,
+            55
+          ],
+          "fingers": [
+            37,
+            55,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          29
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            37,
+            55
+          ],
+          "fingers": [
+            36,
+            54,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            25,
+            55
+          ],
+          "fingers": [
+            24,
+            54,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            37,
+            55
+          ],
+          "fingers": [
+            37,
+            55,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          39
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            31,
+            43
+          ],
+          "fingers": [
+            30,
+            42,
+            3,
+            3
+          ],
+          "angle": -0.45,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            42,
+            42
+          ],
+          "fingers": [
+            41,
+            41,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            31,
+            43
+          ],
+          "fingers": [
+            31,
+            43,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          15
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            34,
+            43
+          ],
+          "fingers": [
+            33,
+            42,
+            3,
+            3
+          ],
+          "angle": -0.45,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            43,
+            42
+          ],
+          "fingers": [
+            42,
+            41,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            34,
+            43
+          ],
+          "fingers": [
+            34,
+            43,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          15
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            31,
+            43
+          ],
+          "fingers": [
+            30,
+            42,
+            3,
+            3
+          ],
+          "angle": -0.45,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            42,
+            42
+          ],
+          "fingers": [
+            41,
+            41,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            31,
+            43
+          ],
+          "fingers": [
+            31,
+            43,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          31,
+          15
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            33,
+            42
+          ],
+          "fingers": [
+            32,
+            41,
+            3,
+            3
+          ],
+          "angle": -0.45,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            42,
+            42
+          ],
+          "fingers": [
+            41,
+            41,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            33,
+            42
+          ],
+          "fingers": [
+            33,
+            42,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          15
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            33,
+            40
+          ],
+          "fingers": [
+            32,
+            39,
+            3,
+            3
+          ],
+          "angle": -0.45,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            36,
+            42
+          ],
+          "fingers": [
+            35,
+            41,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            33,
+            40
+          ],
+          "fingers": [
+            33,
+            40,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          31,
+          18
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            32,
+            43
+          ],
+          "fingers": [
+            31,
+            42,
+            3,
+            3
+          ],
+          "angle": -0.45,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            40,
+            42
+          ],
+          "fingers": [
+            39,
+            41,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            32,
+            43
+          ],
+          "fingers": [
+            32,
+            43,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          18
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            41,
+            39
+          ],
+          "fingers": [
+            40,
+            38,
+            3,
+            3
+          ],
+          "angle": -0.45,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            38,
+            43
+          ],
+          "fingers": [
+            37,
+            42,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            41,
+            39
+          ],
+          "fingers": [
+            41,
+            39,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          33,
+          18
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            34,
+            43
+          ],
+          "fingers": [
+            33,
+            42,
+            3,
+            3
+          ],
+          "angle": -0.45,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            42,
+            43
+          ],
+          "fingers": [
+            41,
+            42,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            34,
+            43
+          ],
+          "fingers": [
+            34,
+            43,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          18
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            40,
+            32
+          ],
+          "fingers": [
+            39,
+            31,
+            3,
+            3
+          ],
+          "angle": -0.45,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": -0.35,
+            "axe": -0.35,
+            "staff": 0.1,
+            "bow": 0.08,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            40,
+            30
+          ],
+          "fingers": [
+            39,
+            29,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": -0.35,
+            "axe": -0.35,
+            "staff": 0.1,
+            "bow": 0.08,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            40,
+            32
+          ],
+          "fingers": [
+            40,
+            32,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          15
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            42,
+            37
+          ],
+          "fingers": [
+            41,
+            36,
+            3,
+            3
+          ],
+          "angle": -0.45,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": -0.85,
+            "axe": -0.85,
+            "staff": 0.26,
+            "bow": 0.05,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            28,
+            34
+          ],
+          "fingers": [
+            27,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": -0.85,
+            "axe": -0.85,
+            "staff": 0.26,
+            "bow": 0.05,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            42,
+            37
+          ],
+          "fingers": [
+            42,
+            37,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          29,
+          15
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            42,
+            37
+          ],
+          "fingers": [
+            41,
+            36,
+            3,
+            3
+          ],
+          "angle": -0.45,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.75,
+            "axe": 0.75,
+            "staff": 0.28,
+            "bow": 0.12,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            36,
+            38
+          ],
+          "fingers": [
+            35,
+            37,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.75,
+            "axe": 0.75,
+            "staff": 0.28,
+            "bow": 0.12,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            42,
+            37
+          ],
+          "fingers": [
+            42,
+            37,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          31,
+          15
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            43,
+            39
+          ],
+          "fingers": [
+            42,
+            38,
+            3,
+            3
+          ],
+          "angle": -0.45,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.22,
+            "axe": 0.22,
+            "staff": 0.12,
+            "bow": 0.14,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            26,
+            40
+          ],
+          "fingers": [
+            25,
+            39,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.22,
+            "axe": 0.22,
+            "staff": 0.12,
+            "bow": 0.14,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            43,
+            39
+          ],
+          "fingers": [
+            43,
+            39,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          29,
+          15
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            39
+          ],
+          "fingers": [
+            23,
+            38,
+            3,
+            3
+          ],
+          "angle": -0.45,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            43,
+            39
+          ],
+          "fingers": [
+            42,
+            38,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            24,
+            39
+          ],
+          "fingers": [
+            24,
+            39,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          30,
+          19
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            42
+          ],
+          "fingers": [
+            23,
+            41,
+            3,
+            3
+          ],
+          "angle": -0.45,
+          "depth": 1,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            42,
+            40
+          ],
+          "fingers": [
+            41,
+            39,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 0.2,
+            "axe": 0.22,
+            "staff": 0.3,
+            "bow": 0.65,
+            "shield": 0.0,
+            "prismatic_focus": -0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            24,
+            42
+          ],
+          "fingers": [
+            24,
+            42,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": false
+        }
+      },
+      "head": {
+        "point": [
+          29,
+          19
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            26,
+            55
+          ],
+          "fingers": [
+            25,
+            54,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            37,
+            55
+          ],
+          "fingers": [
+            36,
+            54,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            26,
+            55
+          ],
+          "fingers": [
+            26,
+            55,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          33,
+          30
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            55
+          ],
+          "fingers": [
+            23,
+            54,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            38,
+            55
+          ],
+          "fingers": [
+            37,
+            54,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            24,
+            55
+          ],
+          "fingers": [
+            24,
+            55,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": false,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          39
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            22,
+            43
+          ],
+          "fingers": [
+            21,
+            42,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.2,
+            "axe": -0.22,
+            "staff": -0.3,
+            "bow": -0.65,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            30,
+            46
+          ],
+          "fingers": [
+            29,
+            45,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.2,
+            "axe": -0.22,
+            "staff": -0.3,
+            "bow": -0.65,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            22,
+            43
+          ],
+          "fingers": [
+            22,
+            43,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true
+        }
+      },
+      "head": {
+        "point": [
+          35,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            21,
+            43
+          ],
+          "fingers": [
+            20,
+            42,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.2,
+            "axe": -0.22,
+            "staff": -0.3,
+            "bow": -0.65,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            29,
+            45
+          ],
+          "fingers": [
+            28,
+            44,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.2,
+            "axe": -0.22,
+            "staff": -0.3,
+            "bow": -0.65,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            21,
+            43
+          ],
+          "fingers": [
+            21,
+            43,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true
+        }
+      },
+      "head": {
+        "point": [
+          35,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            22,
+            43
+          ],
+          "fingers": [
+            21,
+            42,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.2,
+            "axe": -0.22,
+            "staff": -0.3,
+            "bow": -0.65,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            27,
+            46
+          ],
+          "fingers": [
+            26,
+            45,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.2,
+            "axe": -0.22,
+            "staff": -0.3,
+            "bow": -0.65,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            22,
+            43
+          ],
+          "fingers": [
+            22,
+            43,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true
+        }
+      },
+      "head": {
+        "point": [
+          35,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            22,
+            43
+          ],
+          "fingers": [
+            21,
+            42,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.2,
+            "axe": -0.22,
+            "staff": -0.3,
+            "bow": -0.65,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            30,
+            45
+          ],
+          "fingers": [
+            29,
+            44,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.2,
+            "axe": -0.22,
+            "staff": -0.3,
+            "bow": -0.65,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            22,
+            43
+          ],
+          "fingers": [
+            22,
+            43,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true
+        }
+      },
+      "head": {
+        "point": [
+          35,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            23,
+            42
+          ],
+          "fingers": [
+            22,
+            41,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.2,
+            "axe": -0.22,
+            "staff": -0.3,
+            "bow": -0.65,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            36,
+            44
+          ],
+          "fingers": [
+            35,
+            43,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.2,
+            "axe": -0.22,
+            "staff": -0.3,
+            "bow": -0.65,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            23,
+            42
+          ],
+          "fingers": [
+            23,
+            42,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true
+        }
+      },
+      "head": {
+        "point": [
+          36,
+          19
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            21,
+            43
+          ],
+          "fingers": [
+            20,
+            42,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.2,
+            "axe": -0.22,
+            "staff": -0.3,
+            "bow": -0.65,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            32,
+            45
+          ],
+          "fingers": [
+            31,
+            44,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.2,
+            "axe": -0.22,
+            "staff": -0.3,
+            "bow": -0.65,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            21,
+            43
+          ],
+          "fingers": [
+            21,
+            43,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true
+        }
+      },
+      "head": {
+        "point": [
+          35,
+          18
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            23,
+            41
+          ],
+          "fingers": [
+            22,
+            40,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.2,
+            "axe": -0.22,
+            "staff": -0.3,
+            "bow": -0.65,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            36,
+            44
+          ],
+          "fingers": [
+            35,
+            43,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.2,
+            "axe": -0.22,
+            "staff": -0.3,
+            "bow": -0.65,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            23,
+            41
+          ],
+          "fingers": [
+            23,
+            41,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true
+        }
+      },
+      "head": {
+        "point": [
+          36,
+          19
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            22,
+            45
+          ],
+          "fingers": [
+            21,
+            44,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.2,
+            "axe": -0.22,
+            "staff": -0.3,
+            "bow": -0.65,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            31,
+            46
+          ],
+          "fingers": [
+            30,
+            45,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.2,
+            "axe": -0.22,
+            "staff": -0.3,
+            "bow": -0.65,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            22,
+            45
+          ],
+          "fingers": [
+            22,
+            45,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true
+        }
+      },
+      "head": {
+        "point": [
+          35,
+          18
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            23,
+            34
+          ],
+          "fingers": [
+            22,
+            33,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {
+            "sword": 0.35,
+            "axe": 0.35,
+            "staff": -0.1,
+            "bow": -0.08,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            25,
+            37
+          ],
+          "fingers": [
+            24,
+            36,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {
+            "sword": 0.35,
+            "axe": 0.35,
+            "staff": -0.1,
+            "bow": -0.08,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            23,
+            34
+          ],
+          "fingers": [
+            23,
+            34,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true
+        }
+      },
+      "head": {
+        "point": [
+          35,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            35,
+            40
+          ],
+          "fingers": [
+            34,
+            39,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {
+            "sword": 0.85,
+            "axe": 0.85,
+            "staff": -0.26,
+            "bow": -0.05,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            18,
+            35
+          ],
+          "fingers": [
+            17,
+            34,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {
+            "sword": 0.85,
+            "axe": 0.85,
+            "staff": -0.26,
+            "bow": -0.05,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            35,
+            40
+          ],
+          "fingers": [
+            35,
+            40,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true
+        }
+      },
+      "head": {
+        "point": [
+          38,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            30,
+            40
+          ],
+          "fingers": [
+            29,
+            39,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.75,
+            "axe": -0.75,
+            "staff": -0.28,
+            "bow": -0.12,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            20,
+            33
+          ],
+          "fingers": [
+            19,
+            32,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.75,
+            "axe": -0.75,
+            "staff": -0.28,
+            "bow": -0.12,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            30,
+            40
+          ],
+          "fingers": [
+            30,
+            40,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true
+        }
+      },
+      "head": {
+        "point": [
+          38,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            19,
+            42
+          ],
+          "fingers": [
+            18,
+            41,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.22,
+            "axe": -0.22,
+            "staff": -0.12,
+            "bow": -0.14,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            35,
+            43
+          ],
+          "fingers": [
+            34,
+            42,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.22,
+            "axe": -0.22,
+            "staff": -0.12,
+            "bow": -0.14,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            19,
+            42
+          ],
+          "fingers": [
+            19,
+            42,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true
+        }
+      },
+      "head": {
+        "point": [
+          38,
+          17
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            21,
+            41
+          ],
+          "fingers": [
+            20,
+            40,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.2,
+            "axe": -0.22,
+            "staff": -0.3,
+            "bow": -0.65,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            36,
+            43
+          ],
+          "fingers": [
+            35,
+            42,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.2,
+            "axe": -0.22,
+            "staff": -0.3,
+            "bow": -0.65,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            21,
+            41
+          ],
+          "fingers": [
+            21,
+            41,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true
+        }
+      },
+      "head": {
+        "point": [
+          36,
+          20
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            22,
+            43
+          ],
+          "fingers": [
+            21,
+            42,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.2,
+            "axe": -0.22,
+            "staff": -0.3,
+            "bow": -0.65,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "off_hand": {
+          "point": [
+            37,
+            42
+          ],
+          "fingers": [
+            36,
+            41,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 1,
+          "flip": true,
+          "angle_overrides": {
+            "sword": -0.2,
+            "axe": -0.22,
+            "staff": -0.3,
+            "bow": -0.65,
+            "shield": -0.0,
+            "prismatic_focus": 0.1,
+            "wooden_beads": 0.0
+          }
+        },
+        "arms": {
+          "point": [
+            22,
+            43
+          ],
+          "fingers": [
+            22,
+            43,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true
+        }
+      },
+      "head": {
+        "point": [
+          36,
+          21
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            25,
+            55
+          ],
+          "fingers": [
+            24,
+            54,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            37,
+            55
+          ],
+          "fingers": [
+            36,
+            54,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            25,
+            55
+          ],
+          "fingers": [
+            25,
+            55,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          32,
+          30
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    },
+    {
+      "ground_y": 57,
+      "slots": {
+        "main_hand": {
+          "point": [
+            24,
+            55
+          ],
+          "fingers": [
+            23,
+            54,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        },
+        "off_hand": {
+          "point": [
+            40,
+            55
+          ],
+          "fingers": [
+            39,
+            54,
+            3,
+            3
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        },
+        "arms": {
+          "point": [
+            24,
+            55
+          ],
+          "fingers": [
+            24,
+            55,
+            1,
+            1
+          ],
+          "angle": 0.0,
+          "depth": 0,
+          "flip": true,
+          "angle_overrides": {
+            "sword": 1.5707963267948966,
+            "axe": 1.5707963267948966,
+            "staff": 1.5707963267948966,
+            "bow": 1.5707963267948966,
+            "shield": 1.5707963267948966,
+            "prismatic_focus": 1.5707963267948966,
+            "wooden_beads": 0.0
+          },
+          "depth_overrides": {}
+        }
+      },
+      "head": {
+        "point": [
+          29,
+          38
+        ],
+        "angle": 0.0,
+        "depth": 1,
+        "flip": false,
+        "visible": true
+      }
+    }
+  ]
+}

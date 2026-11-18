@@ -1,0 +1,19 @@
+{
+  "actor_kind": "acolyte",
+  "target_height": 50,
+  "selection": "res://assets/art/e08_codex_1116/characters/acolyte/selection.json",
+  "views": {
+    "south": {
+      "source": "@south"
+    },
+    "north": {
+      "source": "north_normalized.png"
+    },
+    "east": {
+      "source": "east_normalized.png"
+    },
+    "west": {
+      "source": "west_normalized.png"
+    }
+  }
+}

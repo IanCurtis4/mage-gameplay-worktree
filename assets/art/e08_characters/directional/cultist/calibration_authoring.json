@@ -1,0 +1,48 @@
+{
+  "actor_kind": "cultist",
+  "note": "bare arms read well; corrections only where the detector took bare shoulder or face skin as the far hand (west 48-55) and east 36",
+  "frames": {
+    "0": {
+      "left": [
+        22,
+        43
+      ]
+    },
+    "36": {
+      "far": [
+        39,
+        40
+      ]
+    },
+    "48": {
+      "far": [
+        23,
+        43
+      ]
+    },
+    "49": {
+      "far": [
+        23,
+        42
+      ]
+    },
+    "53": {
+      "far": [
+        24,
+        42
+      ]
+    },
+    "54": {
+      "far": [
+        25,
+        42
+      ]
+    },
+    "55": {
+      "far": [
+        23,
+        42
+      ]
+    }
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "actor_kind": "priest",
+  "note": "same pose set as the Acolyte: corrections for prayer (8), raised hands (9, 10, 25-28), a hidden far hand in east 36/38/42 and west idle/walk 48-51, 55, 56; main_hand_angle leans the halo scepter (profile 0.2) away from the face in the south and east views",
+  "frames": {
+    "8": {
+      "left": [
+        31,
+        35
+      ],
+      "right": [
+        34,
+        35
+      ]
+    },
+    "9": {
+      "left": [
+        22,
+        32
+      ]
+    },
+    "10": {
+      "left": [
+        22,
+        31
+      ]
+    },
+    "25": {
+      "right": [
+        45,
+        32
+      ]
+    },
+    "26": {
+      "right": [
+        45,
+        27
+      ],
+      "left": [
+        20,
+        38
+      ]
+    },
+    "27": {
+      "right": [
+        45,
+        41
+      ]
+    },
+    "28": {
+      "left": [
+        20,
+        40
+      ]
+    },
+    "36": {
+      "far": [
+        36,
+        42
+      ]
+    },
+    "38": {
+      "far": [
+        38,
+        43
+      ]
+    },
+    "42": {
+      "far": [
+        36,
+        38
+      ]
+    },
+    "48": {
+      "far": [
+        22,
+        43
+      ]
+    },
+    "49": {
+      "far": [
+        21,
+        43
+      ]
+    },
+    "50": {
+      "far": [
+        22,
+        43
+      ]
+    },
+    "51": {
+      "far": [
+        22,
+        43
+      ]
+    },
+    "55": {
+      "far": [
+        22,
+        45
+      ]
+    },
+    "56": {
+      "far": [
+        23,
+        34
+      ]
+    }
+  },
+  "main_hand_angle": {
+    "south": -0.35,
+    "east": -0.45
+  }
+}

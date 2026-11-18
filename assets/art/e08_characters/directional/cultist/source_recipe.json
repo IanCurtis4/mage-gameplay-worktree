@@ -1,0 +1,19 @@
+{
+  "actor_kind": "cultist",
+  "target_height": 50,
+  "selection": "res://assets/art/e08_codex_1118/characters/cultist/selection.json",
+  "views": {
+    "south": {
+      "source": "@south"
+    },
+    "north": {
+      "source": "@north"
+    },
+    "east": {
+      "source": "@east"
+    },
+    "west": {
+      "source": "@west"
+    }
+  }
+}

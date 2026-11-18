@@ -1,0 +1,262 @@
+{
+  "schema": "ragrpg_art_provenance_v2",
+  "path_base": "project",
+  "records": [
+    {
+      "path": "assets/art/e08_characters/directional/priest/body.png",
+      "sha256": "ec071b784ca3a90eeb2a0f807a723a7adbce08ab1cfd3d1e81ff70c26a7634e7",
+      "width": 256,
+      "height": 1024,
+      "kind": "other",
+      "generator": {
+        "name": "ragrpg directional packer (derived from Codex sheets)",
+        "model": null,
+        "host": "local",
+        "version": "e10a-t8"
+      },
+      "request": "priest directional atlas V2, 64 poses, derived from the selected views; no new generation",
+      "prompt": "",
+      "negative_prompt": null,
+      "seed": null,
+      "params": {
+        "scale": 0.1937984496124031,
+        "cell": 64,
+        "atlas": "256x1024"
+      },
+      "refs": [
+        {
+          "path": "assets/art/e08_codex_1118/characters/priest/south.png",
+          "sha256": "9f21a15a47f09a231b8c2efacfb9e01ee369fa093f534f8bb60e3c90ef7ef225"
+        },
+        {
+          "path": "assets/art/e08_codex_1118/characters/priest/north.png",
+          "sha256": "44488787a5b996f002d18c853d9d010c8911345fc56ca46be119aebf12466573"
+        },
+        {
+          "path": "assets/art/e08_codex_1118/characters/priest/east.png",
+          "sha256": "c556b5dcaff8dd5bc2aed76b958979ff730ff0848ac61ab6f74a132ae2c9bd9d"
+        },
+        {
+          "path": "assets/art/e08_codex_1118/characters/priest/west_v2.png",
+          "sha256": "9a26446154d7d36c0e9162579bdb49611845955bf478de14742d21a9362090a3"
+        }
+      ],
+      "post": [
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "priest",
+            "view": "south",
+            "source": "assets/art/e08_codex_1118/characters/priest/south.png",
+            "target_height": 50,
+            "scale": 0.1937984496124031,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1118/characters/priest/selection.json"
+          },
+          "input_sha256": "9f21a15a47f09a231b8c2efacfb9e01ee369fa093f534f8bb60e3c90ef7ef225",
+          "output_sha256": "ec071b784ca3a90eeb2a0f807a723a7adbce08ab1cfd3d1e81ff70c26a7634e7"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "priest",
+            "view": "north",
+            "source": "assets/art/e08_codex_1118/characters/priest/north.png",
+            "target_height": 50,
+            "scale": 0.1937984496124031,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1118/characters/priest/selection.json"
+          },
+          "input_sha256": "44488787a5b996f002d18c853d9d010c8911345fc56ca46be119aebf12466573",
+          "output_sha256": "ec071b784ca3a90eeb2a0f807a723a7adbce08ab1cfd3d1e81ff70c26a7634e7"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "priest",
+            "view": "east",
+            "source": "assets/art/e08_codex_1118/characters/priest/east.png",
+            "target_height": 50,
+            "scale": 0.1937984496124031,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1118/characters/priest/selection.json"
+          },
+          "input_sha256": "c556b5dcaff8dd5bc2aed76b958979ff730ff0848ac61ab6f74a132ae2c9bd9d",
+          "output_sha256": "ec071b784ca3a90eeb2a0f807a723a7adbce08ab1cfd3d1e81ff70c26a7634e7"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "priest",
+            "view": "west",
+            "source": "assets/art/e08_codex_1118/characters/priest/west_v2.png",
+            "target_height": 50,
+            "scale": 0.1937984496124031,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1118/characters/priest/selection.json"
+          },
+          "input_sha256": "9a26446154d7d36c0e9162579bdb49611845955bf478de14742d21a9362090a3",
+          "output_sha256": "ec071b784ca3a90eeb2a0f807a723a7adbce08ab1cfd3d1e81ff70c26a7634e7"
+        }
+      ],
+      "selected": true,
+      "review": {
+        "status": "pending",
+        "date": "2026-11-18",
+        "notes": "Technical native capture by Terra (E10a T8, docs/epics/e10a/t8_delivery.md); product acceptance belongs to the user."
+      },
+      "terms": "Derived from the Codex built-in imagegen sheets of assets/art/e08_codex_1118/characters/priest (terms and exact prompts in that provenance.json).",
+      "measurements": {
+        "rgba_sha256": "e5ac110c42c749bc2965f44ebfc337ce8dd7342ab3e1d9fc8f30f8faa435cd22"
+      }
+    },
+    {
+      "path": "assets/art/e08_characters/directional/priest/weaponless.png",
+      "sha256": "ec071b784ca3a90eeb2a0f807a723a7adbce08ab1cfd3d1e81ff70c26a7634e7",
+      "width": 256,
+      "height": 1024,
+      "kind": "other",
+      "generator": {
+        "name": "ragrpg directional packer (derived from Codex sheets)",
+        "model": null,
+        "host": "local",
+        "version": "e10a-t8"
+      },
+      "request": "priest directional atlas V2, 64 poses, derived from the selected views; no new generation",
+      "prompt": "",
+      "negative_prompt": null,
+      "seed": null,
+      "params": {
+        "scale": 0.1937984496124031,
+        "cell": 64,
+        "atlas": "256x1024"
+      },
+      "refs": [
+        {
+          "path": "assets/art/e08_codex_1118/characters/priest/south.png",
+          "sha256": "9f21a15a47f09a231b8c2efacfb9e01ee369fa093f534f8bb60e3c90ef7ef225"
+        },
+        {
+          "path": "assets/art/e08_codex_1118/characters/priest/north.png",
+          "sha256": "44488787a5b996f002d18c853d9d010c8911345fc56ca46be119aebf12466573"
+        },
+        {
+          "path": "assets/art/e08_codex_1118/characters/priest/east.png",
+          "sha256": "c556b5dcaff8dd5bc2aed76b958979ff730ff0848ac61ab6f74a132ae2c9bd9d"
+        },
+        {
+          "path": "assets/art/e08_codex_1118/characters/priest/west_v2.png",
+          "sha256": "9a26446154d7d36c0e9162579bdb49611845955bf478de14742d21a9362090a3"
+        }
+      ],
+      "post": [
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "priest",
+            "view": "south",
+            "source": "assets/art/e08_codex_1118/characters/priest/south.png",
+            "target_height": 50,
+            "scale": 0.1937984496124031,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1118/characters/priest/selection.json"
+          },
+          "input_sha256": "9f21a15a47f09a231b8c2efacfb9e01ee369fa093f534f8bb60e3c90ef7ef225",
+          "output_sha256": "ec071b784ca3a90eeb2a0f807a723a7adbce08ab1cfd3d1e81ff70c26a7634e7"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "priest",
+            "view": "north",
+            "source": "assets/art/e08_codex_1118/characters/priest/north.png",
+            "target_height": 50,
+            "scale": 0.1937984496124031,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1118/characters/priest/selection.json"
+          },
+          "input_sha256": "44488787a5b996f002d18c853d9d010c8911345fc56ca46be119aebf12466573",
+          "output_sha256": "ec071b784ca3a90eeb2a0f807a723a7adbce08ab1cfd3d1e81ff70c26a7634e7"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "priest",
+            "view": "east",
+            "source": "assets/art/e08_codex_1118/characters/priest/east.png",
+            "target_height": 50,
+            "scale": 0.1937984496124031,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1118/characters/priest/selection.json"
+          },
+          "input_sha256": "c556b5dcaff8dd5bc2aed76b958979ff730ff0848ac61ab6f74a132ae2c9bd9d",
+          "output_sha256": "ec071b784ca3a90eeb2a0f807a723a7adbce08ab1cfd3d1e81ff70c26a7634e7"
+        },
+        {
+          "tool": "tools/prepare_e08_directional_art.py",
+          "version": "e10a-t8",
+          "params": {
+            "actor_kind": "priest",
+            "view": "west",
+            "source": "assets/art/e08_codex_1118/characters/priest/west_v2.png",
+            "target_height": 50,
+            "scale": 0.1937984496124031,
+            "grid": [
+              4,
+              4
+            ],
+            "native_cells": false,
+            "selection": "assets/art/e08_codex_1118/characters/priest/selection.json"
+          },
+          "input_sha256": "9a26446154d7d36c0e9162579bdb49611845955bf478de14742d21a9362090a3",
+          "output_sha256": "ec071b784ca3a90eeb2a0f807a723a7adbce08ab1cfd3d1e81ff70c26a7634e7"
+        }
+      ],
+      "selected": true,
+      "review": {
+        "status": "pending",
+        "date": "2026-11-18",
+        "notes": "Technical native capture by Terra (E10a T8, docs/epics/e10a/t8_delivery.md); product acceptance belongs to the user."
+      },
+      "terms": "Derived from the Codex built-in imagegen sheets of assets/art/e08_codex_1118/characters/priest (terms and exact prompts in that provenance.json).",
+      "measurements": {
+        "rgba_sha256": "e5ac110c42c749bc2965f44ebfc337ce8dd7342ab3e1d9fc8f30f8faa435cd22"
+      }
+    }
+  ]
+}
