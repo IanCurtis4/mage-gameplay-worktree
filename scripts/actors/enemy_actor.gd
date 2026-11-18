@@ -30,6 +30,19 @@ var threat_actors: Dictionary[String, PlayerActor] = {}
 var threat_taunt_sequence := 0
 
 var effect_ledger := EffectProcLedger.new("enemy")
+## E10a C1.6: temporary combat-target override {"target_id", "owner_id", "remaining",
+## "reason"}; empty while the combat target is the player (the default).
+var target_override: Dictionary = {}
+## E10a C1.6: registered commit deflections, source -> {"owner_id", "chance", "radius",
+## "remaining"}. At the commit of an attack one may move the hit to a minion in reach.
+var commit_deflections: Dictionary = {}
+## E10a C1.6: state of this enemy's own deterministic RNG (deflection and disorientation).
+var combat_rng_state := 0
+## E10a C1.6: key of DamageRequest.effect_snapshot on enemy-to-enemy damage authored by a
+## player: {"actor_id" (the enemy that attacked), "owner_id" (the author)}.
+const RELAY_KEY := "enemy_relay"
+## Reach of the movement disorientation step (canvas/world units).
+const DISORIENT_STEP := 140.0
 
 signal attack_requested(request: DamageRequest, target: CombatActor, ranged: bool)
 ## Actual navigation-applied walking only. Direct placement/push is not walking.
@@ -147,6 +160,16 @@ func _advance_world_ai(delta: float) -> void:
 		if is_rooted(): world_motion.cancel(); return
 		_world_fear_path()
 		_world_walk(delta)
+		return
+	# E10a C1.6/C1.7: disorientation, then a combat-target override, replace the player AI.
+	if is_disoriented():
+		Patrol.interrupt(self)
+		_cancel_mob_cast_presentation()
+		_advance_disorient_world(delta)
+		return
+	if _override_target() != null:
+		Patrol.interrupt(self)
+		_advance_override_world(delta)
 		return
 	if _uses_engagement():
 		_refresh_engagement(delta)
@@ -312,6 +335,9 @@ func configure_occurrence(spawn: MobOccurrence, catalog: MobCatalog, nav: ArenaN
 	threat_actors.clear()
 	threat_taunt_sequence = 0
 	threat.enemy_id = spawn.occurrence_id
+	target_override = {}
+	commit_deflections = {}
+	combat_rng_state = hash(spawn.occurrence_id)
 	register_threat_actor("player", "player", "local_party", target_player)
 	hunter_last_seen_position = Vector2.INF
 	spawn_home = global_position
@@ -352,6 +378,7 @@ func _process(delta: float) -> void:
 	if is_inside_tree() and get_tree().paused:
 		return
 	_advance_threat(delta)
+	_advance_target_override(delta)
 	var was_feared := is_feared()
 	super._process(delta)
 	if not is_alive() or player == null or not player.is_alive():
@@ -390,6 +417,14 @@ func _process(delta: float) -> void:
 		_repath_time -= delta
 		_update_fear_path()
 		_move_along_path(delta)
+		return
+	# E10a C1.6/C1.7: disorientation, then a combat-target override, replace the player AI.
+	if is_disoriented():
+		_cancel_mob_cast_presentation()
+		_advance_disorient_flat(delta)
+		return
+	if _override_target() != null:
+		_advance_override_flat(delta)
 		return
 	if _uses_engagement():
 		if engagement_mode == &"returning":
@@ -446,7 +481,7 @@ func _try_attack(ranged: bool) -> void:
 	if world_motion != null and not _combat_target_reachable(_declared_attack_range() if ranged else 55.0): return
 	if _uses_engagement() and (not _refresh_engagement(0.0) or engagement_mode != &"engaged"):
 		return
-	if is_stunned() or is_feared() or attack_cooldown > 0.0 or not player_target_acquired or (taunt_remaining <= 0.0 and not _player_acquirable()):
+	if is_stunned() or is_feared() or is_disoriented() or attack_cooldown > 0.0 or not player_target_acquired or (taunt_remaining <= 0.0 and not _player_acquirable()):
 		return
 	if _mob_definition != null and not _mob_definition.skill_ids.is_empty():
 		_try_declared_skill()
@@ -456,21 +491,30 @@ func _try_attack(ranged: bool) -> void:
 	_request_companion_once()
 	if not is_alive(): return
 	attack_cooldown = (1.70 if ranged else 1.30) * stat_breakdown.value(&"attacks_per_second") / attacks_per_second()
+	var request := _basic_attack_request(player, ranged)
+	# E10a C1.6: a registered deflection may move this committed hit to a minion in reach.
+	var victim: CombatActor = player
+	var deflected := _deflect_commit(request)
+	if deflected != null: victim = deflected
+	presentation_fact.emit(&"skill_committed", request.skill_id, Vector2.ZERO, 0.0) # Identifies the basic below.
+	presentation_action.emit(&"basic_attack", global_position.direction_to(victim.global_position), 0.18)
+	attack_requested.emit(request, victim, ranged)
+
+## Basic claw/arrow request of this enemy against `target` (accuracy sources applied, C1.7).
+func _basic_attack_request(target: CombatActor, ranged: bool) -> DamageRequest:
 	var request := DamageRequest.new()
 	request.context = effect_ledger.new_root(get_instance_id(), false, "", false, _causal_plan())
 	request.source_id = get_instance_id()
-	request.target_id = player.get_instance_id()
+	request.target_id = target.get_instance_id()
 	request.skill_id = &"enemy_arrow" if ranged else &"enemy_claw"
 	var attack_id := &"precision_attack" if ranged else &"melee_attack"
 	request.physical_damage = stat_breakdown.value(attack_id) * 0.45
 	request.damage_dealt_multiplier = outgoing_damage_multiplier() * scenario_damage_multiplier
 	request.accuracy_mode = DamageRequest.AccuracyMode.CONTESTED
-	request.hit_rating = stat_breakdown.value(&"hit_rating")
+	request.hit_rating = outgoing_hit_rating(stat_breakdown.value(&"hit_rating"))
 	request.crit_chance = 0.0
 	request.can_crit = false
-	presentation_fact.emit(&"skill_committed", request.skill_id, Vector2.ZERO, 0.0) # Identifies the basic below.
-	presentation_action.emit(&"basic_attack", global_position.direction_to(player.global_position), 0.18)
-	attack_requested.emit(request, player, ranged)
+	return request
 
 func apply_fear(base_duration: float) -> float:
 	var applied_duration := super.apply_fear(base_duration)
@@ -501,6 +545,8 @@ func apply_taunt(duration: float, source_actor: PlayerActor = null) -> bool:
 
 func clear_statuses() -> void:
 	_cancel_mob_cast_presentation()
+	target_override = {}
+	commit_deflections = {}
 	threat.forced_id = ""
 	threat.forced_remaining = 0.0
 	threat._choose()
@@ -638,7 +684,7 @@ func _advance_mob_cast(delta: float) -> void:
 		presentation_action.emit(&"cast_cancel", Vector2.ZERO, 0.0)
 		return
 	var rank: SkillRankDefinition = captured["rank_definition"]
-	if not is_alive() or player == null or not player.is_alive() or is_stunned() or is_feared() or not _combat_target_reachable(rank.range) or _mob_sp < rank.sp_cost or not effect_ledger.can_create_root():
+	if not is_alive() or player == null or not player.is_alive() or is_stunned() or is_feared() or is_disoriented() or not _combat_target_reachable(rank.range) or _mob_sp < rank.sp_cost or not effect_ledger.can_create_root():
 		presentation_action.emit(&"cast_cancel", Vector2.ZERO, 0.0)
 		return
 	if is_inside_tree() and not EffectProcLedger.projectile_slots_available(get_tree(), 1):
@@ -647,10 +693,14 @@ func _advance_mob_cast(delta: float) -> void:
 	var request: DamageRequest = captured["request"]
 	request.context = effect_ledger.new_root(get_instance_id(), false, "", false, _causal_plan())
 	request.damage_dealt_multiplier = outgoing_damage_multiplier() * scenario_damage_multiplier
+	request.hit_rating = outgoing_hit_rating(request.hit_rating)
 	_mob_sp -= rank.sp_cost
 	_mob_cooldowns[request.skill_id] = captured["cooldown"]
-	presentation_action.emit(&"cast_release", global_position.direction_to(player.global_position), 0.18)
-	mob_skill_requested.emit(request, player, rank.projectile_speed, rank.range)
+	var victim: CombatActor = player
+	var deflected := _deflect_commit(request)
+	if deflected != null: victim = deflected
+	presentation_action.emit(&"cast_release", global_position.direction_to(victim.global_position), 0.18)
+	mob_skill_requested.emit(request, victim, rank.projectile_speed, rank.range)
 
 func _declared_attack_range() -> float:
 	if _mob_definition == null or _mob_definition.skill_ids.is_empty(): return 390.0
@@ -796,6 +846,10 @@ func _request_companion_once() -> void:
 	companion_requested.emit(self)
 
 func _on_damage_applied(result: Dictionary) -> void:
+	# E10a C1.6: damage between enemies (authored by a player) never changes threat or engagement.
+	if is_relay_result(result):
+		super._on_damage_applied(result)
+		return
 	observe_threat_damage(result)
 	super._on_damage_applied(result)
 	if not _uses_engagement() or not is_alive() or engagement_mode == &"returning" or float(result.get("actual_damage", 0.0)) <= 0.0 or player == null or not is_instance_valid(player) or not player.is_alive() or int(result.get("source_id", 0)) != player.get_instance_id():
@@ -893,3 +947,222 @@ func _select_threat_target() -> void:
 func _cancel_mob_cast_presentation() -> void:
 	if not _mob_cast.is_empty(): presentation_action.emit(&"cast_cancel", Vector2.ZERO, 0.0)
 	_mob_cast.clear()
+
+# --- E10a C1.6: combat target, commit deflection, enemy-to-enemy damage ---------------
+
+static func _failure(code: StringName) -> Dictionary:
+	return {"ok": false, "error_code": code}
+
+## Points this enemy's chase, reach and attacks at another live CombatActor (an enemy or
+## a decoy) for `duration` seconds of the gameplay clock (pause-frozen). It ends earlier
+## when the target dies or leaves the world, and with the statuses (death). A new
+## override replaces the previous one. Errors: boss_refuses_target, invalid_target,
+## incompatible_target, invalid_payload.
+func set_target_override(target: CombatActor, owner_id: int, duration: float, reason: StringName) -> Dictionary:
+	if hard_controls.boss: return _failure(&"boss_refuses_target")
+	if not is_alive() or not is_instance_valid(target) or target == self or target == player or target.has_method(&"enemy_relay_context") or not target.is_alive() or target.is_queued_for_deletion() or not target.is_inside_tree(): return _failure(&"invalid_target")
+	if (world_motion == null) != (target.world_motion == null) or (world_motion != null and target.world_motion.geometry != world_motion.geometry): return _failure(&"incompatible_target")
+	if not is_finite(duration) or duration <= 0.0 or reason.is_empty() or owner_id < 0: return _failure(&"invalid_payload")
+	target_override = {"target_id": target.get_instance_id(), "owner_id": owner_id, "remaining": duration, "reason": reason}
+	_cancel_mob_cast_presentation() # Never redirect an already captured cast.
+	_clear_engagement_path()
+	return {"ok": true, "error_code": &""}
+
+func clear_target_override() -> void:
+	if target_override.is_empty(): return
+	target_override = {}
+	_clear_engagement_path()
+
+func has_target_override() -> bool:
+	return _override_target() != null
+
+func target_override_remaining() -> float:
+	return float(target_override.get("remaining", 0.0)) if _override_target() != null else 0.0
+
+func target_override_reason() -> StringName:
+	return StringName(target_override.get("reason", &"")) if _override_target() != null else &""
+
+func target_override_owner_id() -> int:
+	return int(target_override.get("owner_id", 0)) if _override_target() != null else 0
+
+## The actor this enemy chases and attacks: the override target, else the player.
+func combat_target() -> CombatActor:
+	var target := _override_target()
+	return target if target != null else player
+
+func _override_target() -> CombatActor:
+	if target_override.is_empty(): return null
+	var target := instance_from_id(int(target_override.get("target_id", 0))) as CombatActor
+	if target == null or not is_instance_valid(target) or not target.is_alive() or target.is_queued_for_deletion() or not target.is_inside_tree(): return null
+	if world_motion != null and (target.world_motion == null or not target.world_motion.is_current_world() or target.world_motion.geometry != world_motion.geometry): return null
+	return target
+
+## Registers a deflection: at each commit of this enemy's attack, with `chance`, the hit
+## goes to a random live non-boss enemy within `radius` (this enemy's RNG), authored by
+## `owner_id`. Nothing in reach: the hit stays on its target. No new hit is created.
+## A new registration under the same source replaces it. Errors: invalid_target, invalid_payload.
+func register_commit_deflection(source: StringName, owner_id: int, chance: float, radius: float, duration: float) -> Dictionary:
+	if not is_alive(): return _failure(&"invalid_target")
+	if source.is_empty() or owner_id < 0 or not is_finite(chance) or chance < 0.0 or chance > 1.0 or not is_finite(radius) or radius <= 0.0 or not is_finite(duration) or duration <= 0.0: return _failure(&"invalid_payload")
+	commit_deflections[source] = {"owner_id": owner_id, "chance": chance, "radius": radius, "remaining": duration}
+	return {"ok": true, "error_code": &""}
+
+func remove_commit_deflection(source: StringName) -> bool:
+	return commit_deflections.erase(source)
+
+func _advance_target_override(delta: float) -> void:
+	if not is_finite(delta) or delta <= 0.0: return
+	if not target_override.is_empty():
+		target_override["remaining"] = float(target_override.get("remaining", 0.0)) - delta
+		if float(target_override["remaining"]) <= 0.0 or _override_target() == null: clear_target_override()
+	for key: Variant in commit_deflections.keys():
+		var entry: Dictionary = commit_deflections[key]
+		entry["remaining"] = float(entry.get("remaining", 0.0)) - delta
+		if float(entry["remaining"]) <= 0.0: commit_deflections.erase(key)
+
+## Uniform roll in [0, 1) from this enemy's own RNG state (deterministic, snapshot-safe).
+func _roll() -> float:
+	var generator := RandomNumberGenerator.new()
+	generator.state = combat_rng_state
+	var value := generator.randf()
+	combat_rng_state = generator.state
+	return value
+
+func _deflect_commit(request: DamageRequest) -> CombatActor:
+	if commit_deflections.is_empty() or request == null: return null
+	var keys: Array = commit_deflections.keys()
+	keys.sort()
+	for key: Variant in keys:
+		var entry: Dictionary = commit_deflections[key]
+		var candidates := _deflection_candidates(float(entry.get("radius", 0.0)))
+		if candidates.is_empty(): continue
+		if _roll() >= float(entry.get("chance", 0.0)): continue
+		var chosen: CombatActor = candidates[mini(candidates.size() - 1, floori(_roll() * float(candidates.size())))]
+		relay_authorship(request, chosen, int(entry.get("owner_id", 0)))
+		return chosen
+	return null
+
+## Another enemy, by method. This script never names its own class (`is EnemyActor`): in
+## Godot 4.7.2 that self-reference kept the catalog scripts alive at exit ("resources
+## still in use", crash in the E04 Mage tests). The same rule holds for PlayerActor below.
+static func _is_enemy(actor: Object) -> bool:
+	return actor != null and actor.has_method(&"set_target_override")
+
+## Live, non-boss enemies of the same host within `radius`, by instance ID.
+func _deflection_candidates(radius: float) -> Array[CombatActor]:
+	var result: Array[CombatActor] = []
+	var controller := get_parent() as RunController
+	if controller == null: return result
+	for actor: CombatActor in controller.enemies:
+		if not is_instance_valid(actor) or actor == self or not _is_enemy(actor) or not actor.is_alive() or actor.is_queued_for_deletion() or actor.hard_controls.boss: continue
+		if world_motion != null:
+			if world_distance_to(actor) > radius: continue
+		elif actor.world_motion != null or global_position.distance_to(actor.global_position) > radius: continue
+		result.append(actor)
+	result.sort_custom(func(a: CombatActor, b: CombatActor) -> bool: return a.get_instance_id() < b.get_instance_id())
+	return result
+
+## Retargets `request` at `victim`. Against another enemy with a live player author the
+## damage becomes the author's (claims, EffectProcLedger root, death callbacks, XP and
+## loot) and carries RELAY_KEY so the victim's threat and engagement do not change.
+func relay_authorship(request: DamageRequest, victim: CombatActor, owner_id: int) -> void:
+	request.target_id = victim.get_instance_id()
+	if not _is_enemy(victim) or owner_id <= 0: return
+	# Duck-typed on purpose (as in the E09 seam): naming the player class here, beside the
+	# typed `player` field, closes a script cycle Godot 4.7.2 does not release at exit.
+	var author := instance_from_id(owner_id) as CombatActor
+	if author == null or not is_instance_valid(author) or not author.is_alive() or not author.has_method(&"enemy_relay_context"): return
+	var context := author.call(&"enemy_relay_context") as CombatEventContext
+	if context == null: return
+	request.source_id = owner_id
+	request.context = context
+	request.effect_snapshot[RELAY_KEY] = {"actor_id": get_instance_id(), "owner_id": owner_id}
+
+## The enemy that physically delivers a request (relayed damage), else its source.
+static func attacker_id(request: DamageRequest) -> int:
+	if request == null: return 0
+	var relay: Variant = request.effect_snapshot.get(RELAY_KEY)
+	return int((relay as Dictionary).get("actor_id", request.source_id)) if relay is Dictionary else request.source_id
+
+static func is_relay_result(result: Dictionary) -> bool:
+	var snapshot: Variant = result.get("effect_snapshot", {})
+	return snapshot is Dictionary and (snapshot as Dictionary).has(RELAY_KEY)
+
+func _override_reach(ranged: bool) -> float:
+	return _declared_attack_range() if ranged else 55.0
+
+func _advance_override_flat(delta: float) -> void:
+	var target := _override_target()
+	var ranged := archetype == &"archer"
+	_repath_time -= delta
+	if global_position.distance_to(target.global_position) <= _override_reach(ranged) and (navigation == null or navigation.is_segment_clear(global_position, target.global_position, 0.0)):
+		_path.clear()
+		_path_index = 0
+		_try_attack_target(target, ranged)
+		return
+	_update_path(target.global_position)
+	_move_along_path(delta)
+
+func _advance_override_world(delta: float) -> void:
+	var target := _override_target()
+	var ranged := archetype == &"archer"
+	if world_can_reach(target, _override_reach(ranged)):
+		world_motion.cancel()
+		_try_attack_target(target, ranged)
+		return
+	_world_plan(target.world_point())
+	_world_walk(delta)
+
+## The archetype's own basic attack against the override target. Declared mob skills
+## stay for the player (limitation registered in the API).
+func _try_attack_target(target: CombatActor, ranged: bool) -> void:
+	if not is_alive() or is_stunned() or is_feared() or is_disoriented() or attack_cooldown > 0.0 or not is_instance_valid(target) or not target.is_alive(): return
+	if not effect_ledger.can_create_root() or (ranged and is_inside_tree() and not EffectProcLedger.projectile_slots_available(get_tree(), 1)): return
+	attack_cooldown = (1.70 if ranged else 1.30) * stat_breakdown.value(&"attacks_per_second") / attacks_per_second()
+	var request := _basic_attack_request(target, ranged)
+	relay_authorship(request, target, int(target_override.get("owner_id", 0)))
+	presentation_fact.emit(&"skill_committed", request.skill_id, Vector2.ZERO, 0.0)
+	presentation_action.emit(&"basic_attack", global_position.direction_to(target.global_position), 0.18)
+	attack_requested.emit(request, target, ranged)
+
+## Wrong heading of the disorientation: rolled once (90 to 270 degrees away from the
+## combat target) unless the source gave one.
+func _disorient_direction(toward: Vector2) -> Vector2:
+	if disorient_heading.is_zero_approx():
+		var base := toward.normalized() if not toward.is_zero_approx() else Vector2.RIGHT
+		disorient_heading = base.rotated(PI * (0.5 + _roll()))
+	return disorient_heading
+
+func _advance_disorient_flat(delta: float) -> void:
+	_repath_time -= delta
+	if is_rooted() or navigation == null:
+		_path.clear()
+		_path_index = 0
+		return
+	if _repath_time <= 0.0 or _path_index >= _path.size():
+		_repath_time = 0.3
+		var target := combat_target()
+		var heading := _disorient_direction(global_position.direction_to(target.global_position) if is_instance_valid(target) else Vector2.ZERO)
+		_path = navigation.get_path(global_position, global_position + heading * DISORIENT_STEP)
+		_path_index = 0
+	_move_along_path(delta)
+
+func _advance_disorient_world(delta: float) -> void:
+	if is_rooted(): world_motion.cancel(); return
+	if _repath_time <= 0.0 or not world_motion.has_route():
+		_repath_time = 0.3
+		world_motion.cancel()
+		var origin := world_point()
+		var target := combat_target()
+		var toward := Vector2.ZERO
+		if is_instance_valid(target) and target.world_motion != null:
+			var offset := target.world_point().position - origin.position
+			toward = Vector2(offset.x, offset.z)
+		var heading := _disorient_direction(toward)
+		# Shorter steps when the full one leaves the ground (as the fear path does).
+		for scale: float in [1.0, 0.5, 0.25]:
+			var support := world_motion.geometry.support_at(origin.surface_id, Vector2(origin.position.x, origin.position.z) + heading * DISORIENT_STEP * scale, world_motion.geometry.geometry_revision)
+			if not support["ok"]: continue
+			var data: Dictionary = support["data"]["point"]
+			if world_motion.plan(ExpeditionWorldPoint.create(data["stage_id"], data["surface_id"], data["position"]), world_motion.geometry.geometry_revision).get("ok", false): break
+	_world_walk(delta)

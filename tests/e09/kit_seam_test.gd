@@ -77,8 +77,10 @@ func _run() -> void:
 
 func _check_production_registry() -> void:
 	ClassKitRegistry.clear_fixtures()
-	_check(ClassKitRegistry.ids() == [&"sp_ac", &"mg_ac", &"sp_la", &"mg_la"], "registry lists exactly the four kit IDs of section 1")
-	for id: StringName in ClassKitRegistry.ids():
+	# E10a C1.11: the registry also lists the pure kits priest and cultist; the E09
+	# checks below cover exactly the four hybrids of section 1.
+	_check(ClassKitRegistry.ids() == [&"sp_ac", &"mg_ac", &"sp_la", &"mg_la", &"priest", &"cultist"] and ClassKitRegistry.hybrid_ids() == [&"sp_ac", &"mg_ac", &"sp_la", &"mg_la"], "registry lists the four hybrids of section 1, then the two E10a pure kits")
+	for id: StringName in ClassKitRegistry.hybrid_ids():
 		var kit := ClassKitRegistry.module(id)
 		_check(kit != null and kit.kit_id() == id and String(ClassKitRegistry.MODULES[id]) == "res://scripts/classes/%s/%s_kit.gd" % [id, id], "%s module loads from its own folder" % id)
 		var declared := kit != null and kit.ready_for_play()
@@ -97,7 +99,7 @@ func _check_destinations(catalog: ProfileCatalog, state: String) -> void:
 	for origin: StringName in E00_DESTINATIONS:
 		var listed: Array = catalog.evolution_definitions_for_origin(origin).map(func(d: EvolutionDefinition) -> StringName: return d.id)
 		_check(listed == _expected_destinations(origin), "%s: %s destinations are the E00 four plus the ready kits only" % [state, origin])
-	for id: StringName in ClassKitRegistry.ids():
+	for id: StringName in ClassKitRegistry.hybrid_ids():
 		var ready := ClassKitRegistry.ready_for_play(id)
 		var values: Array = KIT_METADATA[id]
 		# Production kits carry the pt-BR names of the sheets; fixture kits carry their own.
@@ -111,7 +113,7 @@ func _check_destinations(catalog: ProfileCatalog, state: String) -> void:
 
 func _expected_destinations(origin: StringName) -> Array:
 	var result: Array = E00_DESTINATIONS[origin].duplicate()
-	for id: StringName in ClassKitRegistry.ids():
+	for id: StringName in ClassKitRegistry.hybrid_ids():
 		if ClassKitRegistry.origin(id) == origin and ClassKitRegistry.ready_for_play(id):
 			result.append(id)
 	return result
@@ -120,9 +122,9 @@ func _expected_destinations(origin: StringName) -> Array:
 ## test holds whatever production kits are ready.
 func _check_skeleton_and_readiness_states() -> void:
 	ClassKitRegistry.clear_fixtures()
-	for id: StringName in ClassKitRegistry.ids():
+	for id: StringName in ClassKitRegistry.hybrid_ids():
 		_check(ClassKitRegistry.install_fixture(id, SkeletonKit.new(id)), "skeleton fixture installs over %s" % id)
-	for id: StringName in ClassKitRegistry.ids():
+	for id: StringName in ClassKitRegistry.hybrid_ids():
 		var kit := ClassKitRegistry.module(id)
 		_check(kit != null and not kit.ready_for_play() and kit.skill_definitions().is_empty(), "%s skeleton is empty and not ready" % id)
 		_check(ClassKitRegistry.validate(id)["ok"] and not ClassKitRegistry.ready_for_play(id), "%s skeleton validates and stays unavailable" % id)
@@ -145,15 +147,16 @@ func _check_skeleton_and_readiness_states() -> void:
 	ClassKitRegistry.clear_fixtures()
 
 func _check_identities_and_eligibility() -> void:
-	_check(IdentityIds.hybrid_evolution_ids().size() == 6 and IdentityIds.kit_evolution_ids() == [&"sp_ac", &"mg_ac", &"sp_la", &"mg_la"], "stable hybrid list kept; kit IDs listed apart")
+	_check(IdentityIds.hybrid_evolution_ids().size() == 6 and IdentityIds.kit_evolution_ids() == [&"sp_ac", &"mg_ac", &"sp_la", &"mg_la", &"priest", &"cultist"], "stable hybrid list kept; kit IDs (E09 hybrids, then E10a pure kits) listed apart")
 	for id: StringName in IdentityIds.kit_evolution_ids():
 		_check(IdentityIds.is_evolution(id) and IdentityIds.evolution_origin(id) == ClassKitRegistry.origin(id) and IdentityIds.evolution_belongs_to(id, ClassKitRegistry.origin(id)), "%s is an evolution of its origin" % id)
 		_check(IdentityIds.kit_affinity(id) == ClassKitRegistry.IDENTITIES[id]["affinity"], "%s affinity label matches section 1" % id)
 		_check(EquipmentEligibilityRules.validate({"allowed_identities": [id]})["ok"], "%s is a valid equipment identity" % id)
-	_check(IdentityIds.reserved_base_ids() == [&"acolyte", &"rogue"] and IdentityIds.is_reserved_base(&"rogue"), "acolyte and rogue are reserved bases")
-	_check(not IdentityIds.is_base_class(&"acolyte") and not IdentityIds.is_base_class(&"rogue") and IdentityIds.base_class_ids().size() == 3, "reserved bases are not playable bases")
-	_check(EquipmentEligibilityRules.CURRENT_IDENTITIES.size() == 10 and EquipmentEligibilityRules.eligible_identities().size() == 14, "class-set identity list unchanged; eligibility accepts fourteen")
-	_check(not EquipmentEligibilityRules.validate({"allowed_identities": [&"acolyte"]})["ok"], "a reserved base is not an equipment identity")
+	# E10a C1.11: acolyte became a registered base; rogue stays the only reserved one.
+	_check(IdentityIds.reserved_base_ids() == [&"rogue"] and IdentityIds.is_reserved_base(&"rogue"), "rogue is the reserved base")
+	_check(IdentityIds.is_registered_base(&"acolyte") and not IdentityIds.is_base_class(&"rogue") and IdentityIds.base_class_ids().size() == 3, "the reserved base is not a playable base; the E00 list keeps three")
+	_check(EquipmentEligibilityRules.CURRENT_IDENTITIES.size() == 10 and EquipmentEligibilityRules.eligible_identities().size() == 17, "class-set identity list unchanged; eligibility accepts seventeen (E10a family)")
+	_check(not EquipmentEligibilityRules.validate({"allowed_identities": [&"rogue"]})["ok"], "a reserved base is not an equipment identity")
 
 # --- Fixture data aggregation ------------------------------------------------------
 
@@ -185,7 +188,8 @@ func _check_fixture_catalogs() -> void:
 	_check(not ClassCatalog.passive_modifier_source(&"paladin_guard_grace", 2).is_empty(), "kit passive stat source reaches the shared composition")
 	_check(String(SkillCopy.text_for(&"paladin_oath").get("effect", "")) == "Efeito de teste." and not SkillCopy.text_for(&"paladin_oath").has("mechanics"), "SkillCopy aggregates kit texts")
 	_check(SkillPresentation.mechanics_of(&"paladin_oath") == "Mecânica de teste." and SkillPresentation.mechanics_of(&"slash") == SkillPresentation.MECHANICS[&"slash"], "mechanics line from the module, base first")
-	_check(not FeedbackRecipeCatalog.recipe(&"paladin_oath").generic and FeedbackRecipeCatalog.recipe(&"paladin_oath").element == &"arcane", "FeedbackRecipeCatalog aggregates kit recipes")
+	# E10a C1.8: the Paladino shows its arcane rows in the light colour (presentation only).
+	_check(not FeedbackRecipeCatalog.recipe(&"paladin_oath").generic and FeedbackRecipeCatalog.recipe(&"paladin_oath").element == &"light", "FeedbackRecipeCatalog aggregates kit recipes (arcane rows of the Paladino shown as light)")
 	_check(FeedbackRecipeCatalog.recipe(&"basic_attack", &"sp_ac").family == &"melee" and FeedbackRecipeCatalog.for_event({"kind": &"impact", "skill_id": &"", "payload": {"actor_variant": &"sp_ac"}}).skill_id == &"basic_attack", "kit evolution resolves its basic attack recipe")
 	_check(&"paladin_oath" in FeedbackRecipeCatalog.known_ids(), "kit recipe IDs are known")
 	_check(BuildEffectCatalog.is_intrinsic_family(&"paladin_fixture_family") and not BuildEffectCatalog.is_intrinsic_family(&"other_family"), "kit causal families are intrinsic")

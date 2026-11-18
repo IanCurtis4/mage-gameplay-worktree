@@ -58,8 +58,11 @@ func catalog_checks(catalog: BuildEffectCatalog) -> void:
 		var live: Dictionary = EquipmentAttachmentVisual.PROFILES.get(id, {})
 		check(not live.is_empty() and live.size == profile.size and live.grip == profile.grip and is_equal_approx(float(live.angle), float(profile.angle)), "PROFILES mirror hand_rigs.json props " + String(id))
 func eligibility_checks(catalog: BuildEffectCatalog) -> void:
-	var identities: Array[StringName] = EquipmentEligibilityRules.eligible_identities()
-	check(identities.size() == 14, "ten current plus four kit identities")
+	# E10a C1.11: eligibility also accepts the Acólito family; the E09 items are checked
+	# against the fourteen E09 identities (the family items are T9's).
+	var identities: Array[StringName] = EquipmentEligibilityRules.CURRENT_IDENTITIES.duplicate()
+	identities.append_array(EquipmentEligibilityRules.KIT_IDENTITIES)
+	check(identities.size() == 14 and EquipmentEligibilityRules.eligible_identities().size() == 17, "ten current plus four kit identities (seventeen eligible with the E10a family)")
 	var reference := {&"halo_shield": &"shared_shield", &"buckler": &"shared_shield", &"rapier": &"shared_sword", &"prism_staff": &"shared_wand"}
 	for id: StringName in IDS:
 		var item := catalog.get_definition(&"equipment", id) as EquipmentDefinition

@@ -31,6 +31,10 @@ func _ready() -> void:
 	var names := {&"swordsman":"Espadachim",&"mage":"Mago",&"archer":"Arqueiro"}
 	for id: StringName in IdentityIds.base_class_ids():
 		class_choice.add_item(names[id]); class_choice.set_item_metadata(class_choice.item_count-1,String(id))
+	# E10a C1.3: a registered base joins the list only once its module is ready.
+	for id: StringName in IdentityIds.registered_base_ids():
+		if ClassBaseRegistry.ready_for_play(id):
+			class_choice.add_item(ClassBaseRegistry.display_name(id)); class_choice.set_item_metadata(class_choice.item_count-1,String(id))
 	_button("Abrir jogo",func() -> void: launch())
 	var resume_button := _button("Retomar teste",func() -> void: resume())
 	resume_button.tooltip_text = "Retoma a última revisão testada; ela pode diferir do rascunho atual."

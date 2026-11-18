@@ -40,7 +40,8 @@ func _run() -> void:
 
 func _check_resolution() -> void:
 	ClassKitRegistry.clear_fixtures()
-	_check(ClassKitRegistry.ids() == BODIES.keys(), "the four kit evolutions of section 1 are the four bodies")
+	# E10a C1.11: the registry also lists the pure kits; the four hybrids are these bodies.
+	_check(ClassKitRegistry.hybrid_ids() == BODIES.keys(), "the four kit hybrids of section 1 are the four bodies")
 	for evolution: StringName in BODIES:
 		var expected: Dictionary = BODIES[evolution]
 		var folder: StringName = expected.folder

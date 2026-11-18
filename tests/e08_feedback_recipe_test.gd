@@ -221,6 +221,14 @@ func _run() -> void:
 	var gaps_wanted := KIT_AUDIO_GAPS.duplicate()
 	gaps_wanted.sort()
 	check(gaps_seen == gaps_wanted, "kit audio gaps are exactly the registered list: " + str(gaps_seen))
+	# E10a C1.8: light and shadow get no P6 cue of their own (no new audio). Exact list of the
+	# family x element gaps: every cue family lacks both; the families below fall back to
+	# family x physical, the others (dot, heal, summon, teleport, trap) to the kind cue or silence.
+	var physical_fallback: Array[StringName] = [&"area", &"buff", &"cast", &"charge", &"impact", &"melee", &"movement", &"projectile"]
+	for family: StringName in [&"area", &"buff", &"cast", &"charge", &"dot", &"heal", &"impact", &"melee", &"movement", &"projectile", &"summon", &"teleport", &"trap"]:
+		for element: StringName in [&"light", &"shadow"]:
+			check(not Catalog.PLANNED.has(StringName("p6.%s.%s" % [family, element])), "registered E10a gap: no p6.%s.%s cue" % [family, element])
+		check(Catalog.PLANNED.has(StringName("p6.%s.physical" % family)) == (family in physical_fallback), "light/shadow %s falls back to family x physical only where that cue exists" % family)
 	for id: StringName in Catalog.candidates(&"impact", Recipes.for_event({"skill_id":&"basic_attack", "payload":{"source_variant":"archer", "critical":true}})): used[id] = true # P7-C5: critical basic hit
 	for id: StringName in Catalog.planned_cue_ids():
 		check(used.has(id), "planned cue reachable by a recipe: " + String(id))

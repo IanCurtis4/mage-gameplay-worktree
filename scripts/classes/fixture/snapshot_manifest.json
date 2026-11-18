@@ -20,5 +20,23 @@
       "base_commits"
     ],
     "omitted": {}
+  },
+  "res://scripts/classes/fixture/fixture_base.gd": {
+    "revision": 1,
+    "fields": [
+      "calls",
+      "cancel_next_hit",
+      "hit_multiplier",
+      "compact_blocker",
+      "cost_offset",
+      "basic_bonus",
+      "stat_bonus",
+      "refuse_skill",
+      "ticks",
+      "victim_id",
+      "commits",
+      "last_heal"
+    ],
+    "omitted": {}
   }
 }

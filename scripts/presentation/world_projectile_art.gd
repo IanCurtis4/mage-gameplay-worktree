@@ -18,7 +18,12 @@ const PALETTE := {
 	&"nature": [Color("b4e68c"), Color("5fa84a")],
 	&"geometry": [Color("ebe29b"), Color("c9b45a")],
 	&"blood": [Color("ff7b86"), Color("b02a42")],
+	# E10a C1.8 (D5, C5 palette): light in ivory and gold; shadow in magenta over blue-black.
+	&"light": [Color("fff3d0"), Color("e9bd4f")],
+	&"shadow": [Color("d16ad8"), Color("26294f")],
 }
+## E10a C1.8: turquoise accent of the shadow effects (the "eye").
+const SHADOW_ACCENT := Color("4fd6c4")
 const HALO := Color(0.04, 0.05, 0.09, 0.5)
 
 ## Shapes: orb, spear, bolt, arrow, sentinel_*, trace.

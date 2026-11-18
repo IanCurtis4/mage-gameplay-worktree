@@ -97,6 +97,16 @@ const REQUIREMENTS := {
 	&"geometer_rewrite": {&"geometer_translation": 2},
 }
 
+## E10a C1.2: approved prerequisites of any skill: this map first, then the learning
+## rows of a seam module (registered base or kit), as ProfileCatalog registers them.
+static func requirements_for(skill_id: StringName) -> Dictionary:
+	if REQUIREMENTS.has(skill_id): return (REQUIREMENTS[skill_id] as Dictionary).duplicate(true)
+	var owner := ClassKitRegistry.skill_owner(skill_id)
+	var rows: Array[Dictionary] = ClassBaseRegistry.learning_entries(owner) if ClassBaseRegistry.is_base(owner) else ClassKitRegistry.learning_entries(owner)
+	for row: Dictionary in rows:
+		if StringName(row.get("skill_id", &"")) == skill_id: return (row.get("prerequisites", {}) as Dictionary).duplicate(true)
+	return {}
+
 static func inspect(skill: StringName, options: Array[Dictionary], summary: Dictionary) -> Dictionary:
 	var by_id: Dictionary = {}
 	for option: Dictionary in options:
