@@ -59,6 +59,10 @@ static var _skills: Dictionary = {}
 static var _skill_owner: Dictionary = {}
 static var _validation: Dictionary = {}
 
+## Revision of the whole seam (kits and bases); catalogs cache by it.
+static func seam_revision() -> int:
+	return revision + ClassBaseRegistry.revision
+
 static func ids() -> Array[StringName]:
 	var result: Array[StringName] = []
 	for id: StringName in MODULES: result.append(id)
@@ -308,8 +312,8 @@ static func clear_fixtures() -> void:
 # --- Internals ------------------------------------------------------------------
 
 static func _ensure_cache() -> void:
-	if _cache_revision == revision: return
-	_cache_revision = revision
+	if _cache_revision == seam_revision(): return
+	_cache_revision = seam_revision()
 	_skills = {}
 	_skill_owner = {}
 	_validation = {}

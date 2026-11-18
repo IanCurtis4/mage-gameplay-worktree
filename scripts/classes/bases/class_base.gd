@@ -11,6 +11,11 @@ extends ClassKit
 ## The three E00 bases are not registered and never use this seam.
 
 ## Module ID. Must equal its key in ClassBaseRegistry.
+## Basic-attack types of basic_attack() and the PlayerActor delivery they select. Kept here
+## (ClassBaseRegistry mirrors it) so this script never names the registry that caches its
+## instances: that script cycle is not released at exit by Godot 4.7.2.
+const DELIVERIES := {&"magic": &"mage", &"precision": &"precision", &"direct": &"direct"}
+
 func base_id() -> StringName:
 	return &""
 
@@ -48,4 +53,4 @@ func learning_entries() -> Array[Dictionary]:
 func basic_attack_profile(_player: PlayerActor) -> Dictionary:
 	var data := basic_attack()
 	if data.is_empty(): return {}
-	return {"range": float(data.get("range", 0.0)), "delivery": ClassBaseRegistry.delivery_of(StringName(data.get("delivery", &"")))}
+	return {"range": float(data.get("range", 0.0)), "delivery": StringName(DELIVERIES.get(StringName(data.get("delivery", &"")), &""))}

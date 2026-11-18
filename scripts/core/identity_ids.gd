@@ -36,6 +36,18 @@ const ACOLYTE: StringName = &"acolyte"
 # Reserved, non-playable base: affinity label only, never character creation.
 const ROGUE: StringName = &"rogue"
 
+## E10a: the registries are reached by path, never by class name. IdentityIds is read by
+## almost every script; naming ClassKitRegistry/ClassBaseRegistry here closes script cycles
+## (through ClassKit -> PlayerActor) that Godot 4.7.2 does not release at exit.
+const _BASE_REGISTRY_PATH := "res://scripts/classes/class_base_registry.gd"
+const _KIT_REGISTRY_PATH := "res://scripts/classes/class_kit_registry.gd"
+
+static func _base_registry() -> Script:
+	return load(_BASE_REGISTRY_PATH) as Script
+
+static func _kit_registry() -> Script:
+	return load(_KIT_REGISTRY_PATH) as Script
+
 ## The three E00 bases. Stable contract: registered bases are listed apart
 ## (registered_base_ids()); is_base_class() accepts both.
 static func base_class_ids() -> Array[StringName]:
@@ -43,7 +55,9 @@ static func base_class_ids() -> Array[StringName]:
 
 ## E10a C1.1: bases of ClassBaseRegistry, in registry order (whether ready or not).
 static func registered_base_ids() -> Array[StringName]:
-	return ClassBaseRegistry.ids()
+	var result: Array[StringName] = []
+	result.assign(_base_registry().call(&"ids"))
+	return result
 
 ## E00 bases followed by the registered ones.
 static func all_base_ids() -> Array[StringName]:
@@ -52,7 +66,7 @@ static func all_base_ids() -> Array[StringName]:
 	return result
 
 static func is_registered_base(identity_id: StringName) -> bool:
-	return ClassBaseRegistry.is_base(identity_id)
+	return bool(_base_registry().call(&"is_base", identity_id))
 
 static func pure_evolution_ids() -> Array[StringName]:
 	return [DEFENDER, BERSERKER, ELEMENTALIST, SPIRITUALIST, SENTINEL, HUNTER]
@@ -62,7 +76,9 @@ static func hybrid_evolution_ids() -> Array[StringName]:
 
 ## Every kit evolution of ClassKitRegistry: the four E09 hybrids, then the E10a pure kits.
 static func kit_evolution_ids() -> Array[StringName]:
-	return ClassKitRegistry.ids()
+	var result: Array[StringName] = []
+	result.assign(_kit_registry().call(&"ids"))
+	return result
 
 static func reserved_base_ids() -> Array[StringName]:
 	return [ROGUE]
@@ -76,7 +92,7 @@ static func is_kit_evolution(evolution_id: StringName) -> bool:
 ## Affinity label of a kit hybrid (reserved or registered base); empty for every other
 ## identity, pure kits included.
 static func kit_affinity(evolution_id: StringName) -> StringName:
-	return ClassKitRegistry.affinity(evolution_id)
+	return StringName(_kit_registry().call(&"affinity", evolution_id))
 
 static func attribute_ids() -> Array[StringName]:
 	return [&"str", &"agi", &"vit", &"int", &"dex", &"luk"]
@@ -104,7 +120,9 @@ static func initial_attributes(base_class_id: StringName) -> Dictionary[StringNa
 		ARCHER:
 			return {&"str": 3, &"agi": 7, &"vit": 5, &"int": 2, &"dex": 10, &"luk": 3}
 	# E10a C1.2: a registered base reads its module (empty while the module has none).
-	return ClassBaseRegistry.initial_attributes(base_class_id)
+	var registered: Dictionary[StringName, int] = {}
+	registered.assign(_base_registry().call(&"initial_attributes", base_class_id))
+	return registered
 
 static func is_base_class(identity_id: StringName) -> bool:
 	return identity_id in base_class_ids() or is_registered_base(identity_id)
@@ -127,7 +145,7 @@ static func evolution_origin(evolution_id: StringName) -> StringName:
 			return ARCHER
 		_:
 			# E09/E10a: every kit evolution reads its origin from the registry.
-			return ClassKitRegistry.origin(evolution_id)
+			return StringName(_kit_registry().call(&"origin", evolution_id))
 
 static func character_id(profile_id: String, counter: int) -> String:
 	assert(not profile_id.is_empty())

@@ -7,9 +7,11 @@ const CURRENT_IDENTITIES: Array[StringName] = [&"swordsman",&"mage",&"archer",&"
 const KIT_IDENTITIES: Array[StringName] = [&"sp_ac",&"mg_ac",&"sp_la",&"mg_la"]
 ## E10a C1.10: the registered bases and their pure kits (acolyte, priest, cultist) are
 ## eligible restriction identities too, read from the registries.
+## Registries by path: naming them here closes a script cycle (see IdentityIds).
 static func family_identities() -> Array[StringName]:
-	var ids: Array[StringName] = ClassBaseRegistry.ids()
-	ids.append_array(ClassKitRegistry.pure_ids())
+	var ids: Array[StringName] = []
+	ids.assign((load("res://scripts/classes/class_base_registry.gd") as Script).call(&"ids"))
+	ids.append_array((load("res://scripts/classes/class_kit_registry.gd") as Script).call(&"pure_ids"))
 	return ids
 static func eligible_identities() -> Array[StringName]:
 	var ids: Array[StringName] = CURRENT_IDENTITIES.duplicate()

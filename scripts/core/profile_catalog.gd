@@ -27,7 +27,7 @@ static func pilot(
 	evolution_overrides: Dictionary = {}
 ) -> ProfileCatalog:
 	var default_shape := additional_equipment.is_empty() and additional_skills.is_empty() and evolution_overrides.is_empty()
-	if default_shape and _default_pilot != null and _default_pilot_revision == ClassKitRegistry.revision:
+	if default_shape and _default_pilot != null and _default_pilot_revision == ClassKitRegistry.seam_revision():
 		return _default_pilot.copy_catalog()
 	var catalog := ProfileCatalog.new()
 	for resource: Resource in BuildContentLoader.definitions(&"card"):
@@ -136,7 +136,7 @@ static func pilot(
 	catalog.seal()
 	if default_shape:
 		_default_pilot = catalog
-		_default_pilot_revision = ClassKitRegistry.revision
+		_default_pilot_revision = ClassKitRegistry.seam_revision()
 		return catalog.copy_catalog()
 	return catalog
 

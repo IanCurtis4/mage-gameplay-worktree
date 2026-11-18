@@ -156,10 +156,16 @@ func is_alive() -> bool:
 	return health != null and health.is_alive()
 
 ## E10a C1.7: element tag of a request, from the SkillDefinition of its skill (light and
-## shadow skills always declare it); empty when the skill has none.
+## shadow skills always declare it); empty when the skill has none. The catalog is reached
+## by path on purpose: naming ClassCatalog here closes a script cycle (CombatActor ->
+## ClassCatalog -> ClassKitRegistry -> ClassKit -> PlayerActor) that Godot 4.7.2 does not
+## release at exit (the E09 seam API, limitation "ciclos de script").
+const _CLASS_CATALOG_PATH := "res://scripts/data/class_catalog.gd"
 static func request_element(request: DamageRequest) -> StringName:
-	var definition := ClassCatalog.skill_definition(request.skill_id) if request != null else null
-	return definition.element if definition != null else &""
+	if request == null: return &""
+	var catalog := load(_CLASS_CATALOG_PATH) as Script
+	var definition: Variant = catalog.call(&"skill_definition", request.skill_id) if catalog != null else null
+	return StringName(definition.get(&"element")) if definition is Resource else &""
 
 ## E10a C1.7: adds or replaces a received-damage multiplier for `duration` seconds of the
 ## gameplay clock (pause-frozen; cleared with the statuses). Optional author and element filters.

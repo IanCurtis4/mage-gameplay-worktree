@@ -4,6 +4,8 @@ extends RefCounted
 ## each base task edits its own folder `scripts/classes/bases/<id>/`. The three E00
 ## bases (swordsman, mage, archer) are not registered and keep their fixed code.
 ## API and error codes: docs/epics/e10a/t1_base_seam_api.md.
+## Script cycles: this registry never names ClassKitRegistry nor IdentityIds (they read it);
+## a cycle among these static-state scripts is not released at exit by Godot 4.7.2.
 
 const MODULES := {
 	&"acolyte": "res://scripts/classes/bases/acolyte/acolyte_base.gd",
@@ -28,12 +30,17 @@ const DELIVERIES := {&"magic": &"mage", &"precision": &"precision", &"direct": &
 ## Accepted SkillDefinition.element values of base skills (C1.8: shadow joins light).
 const BASE_ELEMENTS: Array[StringName] = [&"", &"physical", &"fire", &"ice", &"lightning", &"light", &"shadow", &"arcane", &"spirit"]
 const ATTRIBUTE_TOTAL := 30
+## Same six IDs as IdentityIds.attribute_ids() (kept here to avoid a script cycle).
+const ATTRIBUTE_IDS: Array[StringName] = [&"str", &"agi", &"vit", &"int", &"dex", &"luk"]
 const MAX_BASE_JOB_LEVEL := 19
 
 static var _modules: Dictionary = {}
 static var _fixtures: Dictionary = {}
 ## Test-only forced availability per base (force_ready_fixture); empty in production.
 static var _forced_ready: Dictionary = {}
+## Bumped whenever the effective module set changes (fixtures); ClassKitRegistry.seam_revision()
+## adds it to its own, so every catalog rebuilds on change.
+static var revision := 0
 static var _cache_revision := -1
 static var _validation: Dictionary = {}
 
@@ -113,7 +120,7 @@ static func validate(base_id: StringName) -> Dictionary:
 static func install_fixture(base_id: StringName, base: ClassBase) -> bool:
 	if not MODULES.has(base_id) or base == null or base.base_id() != base_id: return false
 	_fixtures[base_id] = base
-	ClassKitRegistry.revision += 1
+	revision += 1
 	return true
 
 ## Forces ready_for_play for a valid module (e.g. a production skeleton) until
@@ -121,20 +128,20 @@ static func install_fixture(base_id: StringName, base: ClassBase) -> bool:
 static func force_ready_fixture(base_id: StringName) -> bool:
 	if not MODULES.has(base_id): return false
 	_forced_ready[base_id] = true
-	ClassKitRegistry.revision += 1
+	revision += 1
 	return true
 
 static func clear_fixtures() -> void:
 	if _fixtures.is_empty() and _forced_ready.is_empty(): return
 	_fixtures.clear()
 	_forced_ready.clear()
-	ClassKitRegistry.revision += 1
+	revision += 1
 
 # --- Internals ------------------------------------------------------------------
 
 static func _ensure_cache() -> void:
-	if _cache_revision == ClassKitRegistry.revision: return
-	_cache_revision = ClassKitRegistry.revision
+	if _cache_revision == revision: return
+	_cache_revision = revision
 	_validation = {}
 	for id: StringName in MODULES:
 		var base := module(id)
@@ -173,10 +180,10 @@ static func _validate_module(id: StringName, base: ClassBase) -> Dictionary:
 	var attributes := base.initial_attributes()
 	if not attributes.is_empty():
 		var total := 0
-		for attribute: StringName in IdentityIds.attribute_ids():
+		for attribute: StringName in ATTRIBUTE_IDS:
 			if not attributes.has(attribute) or not attributes[attribute] is int or int(attributes[attribute]) < 1: return _failure(&"base_attributes_invalid", String(attribute))
 			total += int(attributes[attribute])
-		if attributes.size() != IdentityIds.attribute_ids().size() or total != ATTRIBUTE_TOTAL: return _failure(&"base_attributes_invalid", "total_%d" % total)
+		if attributes.size() != ATTRIBUTE_IDS.size() or total != ATTRIBUTE_TOTAL: return _failure(&"base_attributes_invalid", "total_%d" % total)
 	var attack := base.basic_attack()
 	if not attack.is_empty():
 		if delivery_of(StringName(attack.get("delivery", &""))).is_empty(): return _failure(&"base_attack_invalid", "delivery")
