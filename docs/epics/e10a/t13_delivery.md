@@ -467,3 +467,49 @@ depois dessas tarefas. Vale uma rodada única no fechamento, depois da T11 (e da
 `master`). O passo 148 e o 255 seguem a A7 nessa rodada. Se a arquitetura preferir um alarme antecipado
 dos passos fora do impacto, dá para rodar já só os testes que citam base, identidade ou catálogo de
 criação (o lote da T5 já cobre isso por `grep`).
+
+## Composição 6 — correção de áudio do Cultista (A14) (18/11/2026)
+
+**O candidato voltou ao verde.** A falha aberta na composição 5 (`e08_feedback_recipe_test`, 4 checks
+`planned cue first` do Cultista) está corrigida.
+
+### Merge
+
+| Ordem | Origem | Ponta | Resultado |
+|---|---|---|---|
+| 1 | T7 (`claude/laughing-mclean-ff1bbd`), com a correção `0b67670b` | `4126ad86` | fast-forward do candidato `1f8ee4f5`, porque a branch da T7 já mesclava o candidato nessa ponta. Não há commit de merge novo; a T7 entrou no candidato antes em `d78501a5` |
+| 2 | arquitetura (decisões A13 e A14) | `67383625` | merge `14ab6a29`, sem conflito |
+
+A correção muda só `scripts/classes/cultist/cultist_kit.gd` (`feedback_recipes`, 11 linhas) e o recibo
+da T7. O catálogo de áudio, o catálogo de receitas, `KIT_AUDIO_GAPS` e os `.wav` ficaram intactos (A14:
+as quatro chaves reusam arquivos existentes).
+
+### Testes (12 de 12)
+
+Importação exit 0 (`6D57C91C…A9DB`); bootstrap F1: 255 com a falha conhecida (`AB79025F…831F`), 256
+passou (`558A298C…EDE1`). Um passo por chamada, `-F1Fixture -SkipEditorImport`, timeout 300 s,
+0 timeouts, nenhum `SCRIPT ERROR`, `Parse Error`, `Compile Error`, `still in use` ou `ObjectDB`.
+
+| Passo | Teste | Resultado | Saída (8) |
+|---|---|---|---|
+| 26 | `e08_feedback_recipe_test` | **PASS, 1433 checks, 0 falhas** (era FAIL, 4 de 1425) | `1601B34D` |
+| 27 | `e08_feedback_vfx_test` | 697, 0 falhas | `BF9FE3B0` (igual à composição 5) |
+| 25 | `e08_vfx_art_test` | 1238, 0 falhas | `100CB3FA` |
+| 344 | `cultist_kit_test` | 215 | `215686C4` (igual) |
+| 342 | `cultist_boss_combat_test` | 49 | `88E65883` (igual) |
+| 343 | `cultist_campaign_kill_test` | 20 | `212B00D3` (igual) |
+| 333 | `kit_seam_test` | 276 | `60643509` (igual) |
+| 331 / 332 | `kit_seam_hooks_v2_test` / `v3_test` | 38 / 63 | `5182F32B` / `D1DFD323` (iguais) |
+| 335 | `base_seam_test` | 172 | `F78A568B` (igual) |
+| 108 | `e05_evolution_catalog_test` | PASS, 99 | `90F3F112` (igual) |
+| 338 | `madness_test` | 276 | `D4DAEAF5` (igual) |
+
+Logs em `.godot/verification/t13_c6/` (fora do Git). Com a contagem da recipe subindo de 1425 para
+1433 checks, o teste agora percorre as quatro chaves com cue planejado.
+
+### Evidências ignoradas pelo Git e worktree
+
+As duas pastas novas da T7, `.godot/verification_t7d1` (4 arquivos) e `verification_t7d2` (26), foram
+para `.godot/verification/e10a_t7_evidence/`; o manifesto de SHA256 foi refeito
+(138 linhas, `3B183327…`). A worktree reaberta da T7 só tinha `.import` e a fixture F1 regenerável
+(não copiada). Removida de novo; a branch `claude/laughing-mclean-ff1bbd` fica em `4126ad86`. Saiu do registro do Git; a pasta ficou vazia e ocupada (`Device or resource busy`). Disco: 32 GB livres.
