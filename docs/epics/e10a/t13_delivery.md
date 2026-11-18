@@ -23,11 +23,12 @@ Todos com `--no-ff` e **sem nenhum conflito**, na ordem do DAG.
 | 2 | T2 | `a9d055f0` | `f086d87e` |
 | 3 | T3 | `db11b181` | `674f35e3` |
 
-Ponta do candidato depois dos merges: `674f35e3`. Este recibo e o estado do índice entram num
-commit seguinte, só de `docs/`.
+Ponta do candidato depois dos merges: `674f35e3`. Este recibo e o estado do índice entraram em
+`d3208b7e`, só de `docs/`.
 
 A branch da arquitetura andou depois da base: `35df9cef` (decisão A8, uma linha em
-`docs/epics/e10a.md`). Não faz parte desta composição; entra no próximo merge (ver "Pendências").
+`docs/epics/e10a.md`). Entrou em seguida por merge `--no-ff`, sem conflito: `d54dcf95`.
+Não mexe em código; os testes acima valem para os dois commits.
 
 ### Importação e testes de impacto
 
@@ -124,8 +125,6 @@ Antes de remover, conferi que o que sobrava no `git status` era só ruído:
   **vazias**, mas o `rmdir` e o `rm -rf` responderam `Device or resource busy`: alguma sessão
   (as das próprias tarefas, ociosas) ainda as usa como diretório de trabalho. Sem custo de disco;
   somem quando essas sessões forem arquivadas.
-- Falta merge da ponta da arquitetura (`35df9cef`, só docs) no candidato; entra na próxima
-  composição.
 - `.gitattributes` para os SVG de `assets/art/skills/` (acima).
 - O `.godot/` de importação do candidato nasceu em CRLF e foi reimportado depois da restauração
   dos SVG em LF; o `.svg.import` é recalculado na próxima importação.
