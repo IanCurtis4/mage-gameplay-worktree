@@ -513,3 +513,59 @@ As duas pastas novas da T7, `.godot/verification_t7d1` (4 arquivos) e `verificat
 para `.godot/verification/e10a_t7_evidence/`; o manifesto de SHA256 foi refeito
 (138 linhas, `3B183327…`). A worktree reaberta da T7 só tinha `.import` e a fixture F1 regenerável
 (não copiada). Removida de novo; a branch `claude/laughing-mclean-ff1bbd` fica em `4126ad86`. Saiu do registro do Git; a pasta ficou vazia e ocupada (`Device or resource busy`). Disco: 32 GB livres.
+
+## Composição 7 — T9 (itens da família) (18/11/2026)
+
+### Merge
+
+| Origem | Base da T9 | Ponta mesclada | Merge |
+|---|---|---|---|
+| T9 (`claude/musing-austin-58a118`) | `58c0ea90` | `6b7e3df8` | `5f702caa` |
+
+`--no-ff`, **sem conflito**, sobre o candidato `bbcf3b74`. 38 arquivos: os três itens (`e10a_*.tres`), a arte e
+os ícones, `hand_rigs.json`, `equipment_loot_profiles.gd`, `equipment_art_catalog.gd`,
+`equipment_attachment_visual.gd` (só `SUPPORTED` e `PROFILES`), as armaduras de tecido do Mago, o teste novo
+`tests/e10a/equipment_items_test.gd` e as enumerações legadas de 89 → 92 equipamentos. Pela A13, a T9 trocou uma
+linha de `scripts/core/build_effect_catalog.gd` (`_restrictions_valid` passa a usar
+`IdentityIds.is_base_class`), para o catálogo aceitar `acolyte` como origem.
+
+### O `base_seam_test:124` que a T9 relatou falhando
+
+A T9 mediu sobre `58c0ea90`, que não tinha o meu ajuste. O `15f4c131` (composição 5) já fez a soma exata da
+A11: o Acólito oferece `[priest, cultist]`. Depois deste merge o `base_seam_test` segue **verde**
+(172 checks, `F78A568B`, igual às composições 5 e 6). Nada a fazer.
+
+### Importação e testes de impacto
+
+- **Importação:** exit 0 (`B2104F6B…9C7`). **Bootstrap F1:** 255 com a falha conhecida (`AB79025F…831F`),
+  256 passou (`0013A6F1…7CC8`).
+- **32 passos (31 nomes; `equipment_items_test` tem dois, o do E09 e o do E10a), todos verdes**, um passo por
+  chamada, `-F1Fixture -SkipEditorImport`, timeout 300 s, 0 timeouts, nenhum `SCRIPT ERROR`, `Parse Error`,
+  `Compile Error`, `still in use` ou `ObjectDB`.
+- **`e07_f1_composition_test` passa** (299 checks, 27 receitas, `1C86C151`): era o que a T9 não pôde rodar, porque
+  exige a fixture F1 e ela editou arquivos. No candidato, com o bootstrap refeito, roda.
+
+| Passo | Teste | Resultado | Saída (8) |
+|---|---|---|---|
+| 329 | `equipment_items_test` (E09) | 244, 0 falhas | `EB9A6284` (igual) |
+| 337 | `equipment_items_test` (E10a) | **301**, 0 falhas | `97A9EEBE` |
+| 20 | `e08_equipment_art_test` | 83559, 0 falhas | `1D5901A8` |
+| 19 | `e08_directional_units_test` | 77804, 0 falhas | `F42ED54C` |
+| 18 / 21 | `e08_directional_content_test` / `e08_directional_rig_compatibility_test` | 6324 / 83328, 0 falhas | `D0CF826C` / `32793134` |
+| 239 | `equipment_hand_alignment_test` | 4593, 0 falhas | `38A87BF0` |
+| 236 / 250 / 227 | `e06_expanded_equipment_content_test` / `e06_export_content_test` / `e06_gameplay_content_test` | 2707 / 174 / 232 | `D170193A` / `A8D0F599` / `4472C31B` |
+| 5 / 223 | `e06_migration_test` / `e06_ui_menu_test` | 150 / 120 | `7003DA6B` / `CAE15161` |
+| 226 / 224 / 221 / 213 / 235 | `e06_production_loot_test`, `e06_power_progression_test`, `e06_publication_test`, `e06_content_pilot_test`, `e06_fixes_performance_cache_test` | 54 / 2439 / 1162 / 481 / 0 falhas | `7FC0CB19`, `2CBF2463`, `787D3A35`, `7BD005C8`, `B1056F0B` |
+| — | os 11 testes de restrição (A13): `e06_content_authoring` 60, `e06_effects_composition` 70, `e06_effects_runtime` 53, `e06_inventory_persistence` 14, `e06_review_boundaries` 7, `e06_review_identity` 4, `e06_review_persistence_edges` 15, `e06_tx_composition` 60, `e06_tx_inventory` 24, `e06_tx_loot` 49, `e06_rewards` 51 | 0 falhas, números iguais aos do recibo da T9 | hashes em `t13_c7/impact/*` |
+| 321 | `e07_f1_composition_test` | 299, 0 falhas | `1C86C151` |
+| 335 / 108 / 26 | `base_seam_test` / `e05_evolution_catalog_test` / `e08_feedback_recipe_test` | 172 / PASS 99 / PASS 1433 | `F78A568B` / `90F3F112` / `1601B34D` (iguais) |
+
+Logs em `.godot/verification/t13_c7/` (fora do Git).
+
+### Evidências ignoradas pelo Git e worktree
+
+A worktree da T9 não tinha pasta de evidência nomeada. Copiei os 66 arquivos soltos de
+`.godot/verification/` (logs e `checks.jsonl` das rodadas dela) para
+`.godot/verification/e10a_t9_evidence/`, com manifesto de SHA256 (`C3B5CFBD…`, 66 linhas). As subpastas
+(`e06_*`, `e07_f1`, `e07_f2`, `e08_art_units`, 1,1 GB) são fixtures geradas e regenerável, e não foram copiadas.
+A worktree só tinha `.import` reescritos. Removida; a branch `claude/musing-austin-58a118` fica em `6b7e3df8`. Registro e pasta saíram por inteiro (desta vez sem resíduo). Disco: 29 GB livres (94% usados; outras sessões também consomem).
