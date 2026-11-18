@@ -394,6 +394,13 @@ func _process(delta: float) -> void:
 		_mob_cooldowns[skill] = maxf(0.0, float(_mob_cooldowns[skill]) - delta)
 	if taunt_remaining > 0.0: queue_redraw()
 	_recover_out_of_combat(delta)
+	# E10a A8 (T4): a combat hold keeps the enemy still, without attacks or casts, on both paths.
+	if has_combat_hold():
+		_cancel_mob_cast_presentation()
+		_path.clear()
+		_path_index = 0
+		if world_motion != null: world_motion.cancel()
+		return
 	if world_motion != null:
 		_advance_world_ai(delta)
 		return
@@ -967,6 +974,33 @@ func set_target_override(target: CombatActor, owner_id: int, duration: float, re
 	_cancel_mob_cast_presentation() # Never redirect an already captured cast.
 	_clear_engagement_path()
 	return {"ok": true, "error_code": &""}
+
+## E10a A8 (T4): combat hold. The enemy neither moves, attacks nor casts for `duration`
+## seconds of the gameplay clock (the Delirium without a target). It is not a control: no
+## HardControlState, no stun drawing, no "controlled" bonus. Stored as an ActorMarks mark
+## (pause-frozen, in the snapshot with the enemy, cleared with death and the statuses). A
+## boss refuses. Errors: boss_refuses_hold, invalid_target, invalid_payload.
+const COMBAT_HOLD_MARK := &"combat_hold"
+
+func set_combat_hold(owner_id: int, duration: float, reason: StringName) -> Dictionary:
+	if hard_controls.boss: return _failure(&"boss_refuses_hold")
+	if not is_alive(): return _failure(&"invalid_target")
+	if owner_id < 0 or reason.is_empty() or not is_finite(duration) or duration <= 0.0: return _failure(&"invalid_payload")
+	if not marks.set_mark(COMBAT_HOLD_MARK, owner_id, reason, duration): return _failure(&"invalid_payload")
+	_cancel_mob_cast_presentation()
+	_path.clear()
+	_path_index = 0
+	if world_motion != null: world_motion.cancel()
+	return {"ok": true, "error_code": &""}
+
+func clear_combat_hold() -> void:
+	marks.remove(COMBAT_HOLD_MARK)
+
+func has_combat_hold() -> bool:
+	return marks.has_mark(COMBAT_HOLD_MARK)
+
+func combat_hold_remaining() -> float:
+	return marks.remaining(COMBAT_HOLD_MARK)
 
 func clear_target_override() -> void:
 	if target_override.is_empty(): return

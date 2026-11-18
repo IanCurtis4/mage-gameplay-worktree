@@ -1,0 +1,49 @@
+{
+  "res://scripts/systems/madness/madness_authority.gd": {
+    "revision": 1,
+    "fields": [
+      "owner_id",
+      "stat_source_id",
+      "delirium_duration",
+      "ecstasy",
+      "ecstasy_published",
+      "entry_serial",
+      "arrival_serial",
+      "idol_serial",
+      "idol_ticks",
+      "idol_tick_remaining",
+      "idol_tick",
+      "idol_radius",
+      "idol_madness",
+      "last_tick_stamp",
+      "gained_total",
+      "_claimed",
+      "_claim_order"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/systems/madness/madness_ecstasy.gd": {
+    "revision": 1,
+    "fields": [
+      "charges",
+      "enabled",
+      "idle_time",
+      "decay_remaining",
+      "matk_per_charge",
+      "cost_per_charge",
+      "onus_per_charge",
+      "gained_total"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/systems/madness/madness_rules.gd": {
+    "revision": 1,
+    "fields": [],
+    "omitted": {}
+  },
+  "res://scripts/systems/madness/madness_helpers.gd": {
+    "revision": 1,
+    "fields": [],
+    "omitted": {}
+  }
+}
