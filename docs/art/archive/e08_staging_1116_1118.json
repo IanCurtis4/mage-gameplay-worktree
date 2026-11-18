@@ -1,0 +1,763 @@
+{
+  "schema": "ragrpg_art_archive_index_v1",
+  "created": "2026-11-18",
+  "entries": [
+    {
+      "path": "e08_codex_1116/characters/acolyte/east_v3.png",
+      "sha256": "ee48158b8546e44fa822b510e49bbbb412483935fd3abb09a13262c2ebb8630b",
+      "size": 1107121,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/acolyte/east_v3.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/acolyte/north.png",
+      "sha256": "6d06e243759ceee8fb11540c05b80b52e08a4882b03fc95a04ed30a58cdbf7a4",
+      "size": 1626968,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/acolyte/north.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/acolyte/provenance.json",
+      "sha256": "7bb8e4862c936663c03581fcee9847aa3c1954d94658dbb131912b9a42954eca",
+      "size": 15736,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/acolyte/provenance.json"
+    },
+    {
+      "path": "e08_codex_1116/characters/acolyte/south.png",
+      "sha256": "d30a4a965b8124d46f7011f3a5d1cc1063796011c30c1dbec589974441699eaa",
+      "size": 1537467,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/acolyte/south.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/acolyte/south_v3.png",
+      "sha256": "24dfbcea205505283e0cd96e65a2eb9fb33f664d13d87748720b50efd37c3a8d",
+      "size": 1260845,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/acolyte/south_v3.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/acolyte/south_v5.png",
+      "sha256": "8bdf9dea7213e80b2d6e78b003f1f1bb2e80be4810b6c12005012010cd7771b6",
+      "size": 1440782,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/acolyte/south_v5.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/acolyte/west_v3.png",
+      "sha256": "8d7e3f0724f1ec57bc3f1397818a7aed62d0a859bd5d94165893e6c5c067fdfb",
+      "size": 1189496,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/acolyte/west_v3.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/druid/east_v3.png",
+      "sha256": "303511e458ffe5e30ccd964a60ebc3bb040a6a2e11b95e05ca0eb3e37dadbb63",
+      "size": 1139942,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/druid/east_v3.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/druid/east_v4.png",
+      "sha256": "33aedcf2ba6a374bc7d8afd4dc669b5380f556af936c7b07fe544ca942f01527",
+      "size": 1667740,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/druid/east_v4.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/druid/north_v3.png",
+      "sha256": "c3be2c7641865bbe8832a8fb01cbdf849499f4b75d7659f05d0afbb61be695e3",
+      "size": 1424367,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/druid/north_v3.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/druid/north_v6.png",
+      "sha256": "fdd1df578e5e83eb2a7db7f884b69d127e536ed3b70b82795241aafcb64195cc",
+      "size": 1389164,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/druid/north_v6.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/druid/provenance.json",
+      "sha256": "403922df8e3a8c415845a71e86c0a78a0d62edd3bdd1c9f36a7e80150046ada2",
+      "size": 19571,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/druid/provenance.json"
+    },
+    {
+      "path": "e08_codex_1116/characters/druid/south_v3.png",
+      "sha256": "0164412a072a6a8291a7cdaf5d2d63eae111eb3a468156fe95817a5ad26988eb",
+      "size": 1752115,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/druid/south_v3.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/druid/south_v6.png",
+      "sha256": "3d5ec01f55ba7d1734ff26a30209ffdd69b23dd25ed7d883cc8e3b69c3b71080",
+      "size": 1459770,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/druid/south_v6.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/druid/south_v8.png",
+      "sha256": "8893d52868cd94b5f12f4f22aaec0b2d34f5ad020e96bd8044a05d9eb97c4102",
+      "size": 1039819,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/druid/south_v8.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/druid/west_v2.png",
+      "sha256": "f19a82bf74090d91523fa21af67304e5c7147609acc564df92eac315ad03a1ba",
+      "size": 1623354,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/druid/west_v2.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/monk/east_v2.png",
+      "sha256": "c222cadd567b699c8b6f48bdaaaa9681424ee5bd1086791f16f6e61e198ef470",
+      "size": 1045370,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/monk/east_v2.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/monk/north.png",
+      "sha256": "5ca7b1e5c11ab3f5fa511a18747bdf1e117db4d3aacf9d51c160b9de0169b09c",
+      "size": 1396559,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/monk/north.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/monk/provenance.json",
+      "sha256": "504c1b02e95762ed7c7a46fef24106fd249df225bfba1cb6ba130e4c9c158166",
+      "size": 17128,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/monk/provenance.json"
+    },
+    {
+      "path": "e08_codex_1116/characters/monk/south.png",
+      "sha256": "d86bcf99dc877a0d5b1d2031cd96c4d5193dce8af396218bd112f2f49e31a79c",
+      "size": 1582197,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/monk/south.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/monk/south_v4.png",
+      "sha256": "cbd41796b75b056fdf4ef4e0c6ad0c9bd746c1c56c4995b037251989c300f94f",
+      "size": 1382799,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/monk/south_v4.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/monk/south_v7.png",
+      "sha256": "c9ac5dbc29d462e3dfc2bc5e37d323f3422c92ce6aba4a233ad4341390dfaf62",
+      "size": 1380348,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/monk/south_v7.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/monk/west_v2.png",
+      "sha256": "cc06482143f17cb32c805ff344d3750afcc6bd928516171393a833456de79fbc",
+      "size": 1164802,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/monk/west_v2.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/rogue/east_v2.png",
+      "sha256": "5b590c3f2cf2515ac340852d475df1afa008b1e36dc0ba13b185a01167776f0d",
+      "size": 960630,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/rogue/east_v2.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/rogue/north.png",
+      "sha256": "d01219c3df7ef26d4122edd1c1dacfdef64063ff3198e306311dcfe445613ce1",
+      "size": 1387378,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/rogue/north.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/rogue/provenance.json",
+      "sha256": "8d302aea108f6e20d241be7faf5b740134d32a6434e8b0986e40db510c48127c",
+      "size": 17185,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/rogue/provenance.json"
+    },
+    {
+      "path": "e08_codex_1116/characters/rogue/south.png",
+      "sha256": "b172c8bf1ce31558721f317ce2c6c547976c15ba84c2b927b408298440e04c0b",
+      "size": 1477771,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/rogue/south.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/rogue/south_v4.png",
+      "sha256": "d09e88ca1664afb4ee47620793216fd5ac531bd3dc5375514ed95214d1941437",
+      "size": 1368651,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/rogue/south_v4.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/rogue/south_v7.png",
+      "sha256": "eb998304fcc11859fa8f325701c6db429140bec238aadc4ff9e31e1e31fd54d6",
+      "size": 1391339,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/rogue/south_v7.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/rogue/west_v2.png",
+      "sha256": "75eea428dedb0cdce26bc09ee295f43e17acc6440686c2ec5be2e82d09580d40",
+      "size": 916221,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/rogue/west_v2.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/warlock/east.png",
+      "sha256": "66e360d2cb90e73decadf879cc03f89069b8b8b26080f8da6f445b27d99d54c0",
+      "size": 1172748,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/warlock/east.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/warlock/north.png",
+      "sha256": "74c9a1d7082e4585b96faeea46a192dad8af8c52a9a5baf129d2534aa00708b3",
+      "size": 1345381,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/warlock/north.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/warlock/provenance.json",
+      "sha256": "68425240c91a3e2da712123f64ace0c8246b82d690dba6fe2137b863847a1d49",
+      "size": 14075,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/warlock/provenance.json"
+    },
+    {
+      "path": "e08_codex_1116/characters/warlock/south.png",
+      "sha256": "c4bace0bef0af4b8a26801cace8be09b4b28291c3281c7e723e7fbf25ec1b338",
+      "size": 1272867,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/warlock/south.png"
+    },
+    {
+      "path": "e08_codex_1116/characters/warlock/west.png",
+      "sha256": "1af5052d9304abe1233c198660a9d8b74b52270c4f2021141c561df0d12b8674",
+      "size": 1272700,
+      "type": "png",
+      "selected": null,
+      "archived_path": "e08_codex_1116/characters/warlock/west.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/ascended/east_v2.png",
+      "sha256": "b8e836f9506a80f61c72c0933263377a1e7cabd3a1141aa77fe562c1a9c0558c",
+      "size": 1502755,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/ascended/east_v2.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/ascended/north.png",
+      "sha256": "c2181888c06b1791f1b7d5153834042cf17a070f96a700a93bb37388cb3a1362",
+      "size": 1387819,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/ascended/north.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/ascended/provenance.json",
+      "sha256": "5f22e317f1594c8455333d26b5471f540351043f932d4d972a621b170938c533",
+      "size": 12777,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1118/characters/ascended/provenance.json"
+    },
+    {
+      "path": "e08_codex_1118/characters/ascended/south.png",
+      "sha256": "cddf6996b95e6334baf2d2194bc270dceaec6c3f97a49a8a5f7d40aa6a8b6b4d",
+      "size": 1499830,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/ascended/south.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/ascended/west_v2.png",
+      "sha256": "0c0a52b266e001046b332584fff61003527aeb155a25128841e7a918f0d28bdb",
+      "size": 1539678,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/ascended/west_v2.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/assassin/east.png",
+      "sha256": "62284936bb277e9626a1990b4cb9afc6d23ec66c1fe4810805cb14df262ce98a",
+      "size": 1014623,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/assassin/east.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/assassin/north.png",
+      "sha256": "1e499f3ac6f0c84a5ba30313d8988df6b61433289445ffd65e795adb84a455b9",
+      "size": 1239017,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/assassin/north.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/assassin/provenance.json",
+      "sha256": "d0d2847401e2aec8a981323b6344c5c39c34db3353c58a87c285ea056ad34b8f",
+      "size": 15292,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1118/characters/assassin/provenance.json"
+    },
+    {
+      "path": "e08_codex_1118/characters/assassin/south.png",
+      "sha256": "432d1471ac4c6f12634e08fd9f8fc3bf0f3b8793d4dd7b617d942972ea3d1e67",
+      "size": 1071005,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/assassin/south.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/assassin/west.png",
+      "sha256": "c21ee0cc0ac84fd46c75df108e0ed09b83987ec329ef71b6ec782196cde7c827",
+      "size": 1068191,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/assassin/west.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/champion/east.png",
+      "sha256": "113d8ebe5210496def9f9d1d03af3e44794617f7f0637833819b54003c84fd25",
+      "size": 1135693,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/champion/east.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/champion/north.png",
+      "sha256": "5239ef2472becc5bcbbd5c4f2488575351d7ca48a34edead67c4aaf4e2b39407",
+      "size": 1250096,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/champion/north.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/champion/provenance.json",
+      "sha256": "55b761adaa08171ed975e2e0f293f4c97307dc0a5ff7cf10dc3d5713250f0649",
+      "size": 15442,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1118/characters/champion/provenance.json"
+    },
+    {
+      "path": "e08_codex_1118/characters/champion/south.png",
+      "sha256": "137dee34a2a0819df535d2e546b8fc34f853c81f9838c2f1a7ed0e80a946008d",
+      "size": 1432605,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/champion/south.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/champion/west.png",
+      "sha256": "711d8271e01db52b3ea399e2e169281a9619e6aef509c08d78dedac950d234e5",
+      "size": 1512140,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/champion/west.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/cultist/east.png",
+      "sha256": "b8dd93b5bafcaa30833109b9515dcede28081b28b3d735ddff6bc4a02c55de30",
+      "size": 1369633,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/cultist/east.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/cultist/north.png",
+      "sha256": "ac027bd3a9fd73ce92eaacfaa192ad20c9daec6154b0328aa85fa07b5e9c22f4",
+      "size": 1506350,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/cultist/north.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/cultist/provenance.json",
+      "sha256": "f00d4243cf6fb946c367921c783b4c6a3885737bc64d2ea3e3f98607cbeb8427",
+      "size": 15400,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1118/characters/cultist/provenance.json"
+    },
+    {
+      "path": "e08_codex_1118/characters/cultist/south.png",
+      "sha256": "2c894b80576dc613070f977426ef886134f6bb774d0936eb1317e18452a67948",
+      "size": 1426804,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/cultist/south.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/cultist/west.png",
+      "sha256": "c160be76efd1ac17b3c78d9097fc458f25a6a3f9e9f29cbccdd0238dc11a0af8",
+      "size": 1395360,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/cultist/west.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/demonologist/east.png",
+      "sha256": "a6ff117d17ff5b0b16386ef6f53c2f8b00a87f7bbcf50cd50d9e70b5027e1360",
+      "size": 1078779,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/demonologist/east.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/demonologist/north.png",
+      "sha256": "f6bd8dc111872fee9db310f19aa9d802e358397bd1018f57ceedd3c6ad0f27fd",
+      "size": 1218545,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/demonologist/north.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/demonologist/provenance.json",
+      "sha256": "57b0264183189cc601c13a5a7b4096026159bbd2ae99c9d13f0f2c8fccb497c1",
+      "size": 20430,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1118/characters/demonologist/provenance.json"
+    },
+    {
+      "path": "e08_codex_1118/characters/demonologist/south.png",
+      "sha256": "4d6b3fd6b821ce1345d7eda396ba0170e804acdef512489c379141b17a558f73",
+      "size": 1123948,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1118/characters/demonologist/south.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/demonologist/south_v2.png",
+      "sha256": "7a8ac80a921443a7423f94834b10c721a66358d4ff5f8171616d8b13ba7f7dff",
+      "size": 1359035,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1118/characters/demonologist/south_v2.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/demonologist/south_v3.png",
+      "sha256": "f507b3b9a034e2ab99ee44ae6d78bc6569dd8eaf6f60251e609d97fb24a0dee8",
+      "size": 1111858,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/demonologist/south_v3.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/demonologist/west.png",
+      "sha256": "95739775467467d331f4988bec47ddd14dbc6037b129a072a0bf4b483a238c89",
+      "size": 1129265,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/demonologist/west.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/dervish/east.png",
+      "sha256": "a462fb2a89ba3e01fecb47d9acaf275a25a8713e399d76c14193f07b50d5b868",
+      "size": 1427104,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/dervish/east.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/dervish/north.png",
+      "sha256": "39f0fb6eb76d1644a85d1ea0ee1bc3eab40397afce2ebf4fa9f6c6d6db791a5d",
+      "size": 1368019,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/dervish/north.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/dervish/provenance.json",
+      "sha256": "a03954f82373a2caaf9cb3e95210f25a6a74a80e9d385de0dfa76aaed809c961",
+      "size": 17768,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1118/characters/dervish/provenance.json"
+    },
+    {
+      "path": "e08_codex_1118/characters/dervish/south.png",
+      "sha256": "28dd850c0b9961e3d6220bb4d6b5a3c7cb4e2e86c8450fec3f1a39fb3dd283c4",
+      "size": 1418353,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/dervish/south.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/dervish/south_v2.png",
+      "sha256": "a3b411880089814b9ef31136b744bb309b7568180b8b5a9bbe93dc0397f217ad",
+      "size": 1451571,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1118/characters/dervish/south_v2.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/dervish/west.png",
+      "sha256": "795f0c9ed6d2b03ce7747aab2b5a1d84064b692a6482ce51958a7c75d8865c7c",
+      "size": 1280007,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/dervish/west.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/naturalist/east.png",
+      "sha256": "2fce970c580636e11759ef18d1a31282fc6fbb8b2290821cb2094680b179f7f3",
+      "size": 1328517,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/naturalist/east.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/naturalist/north.png",
+      "sha256": "9f01da6c63d939a62f8c8f7c4e7289ffb3767105706de2e7083a15ed0b521020",
+      "size": 1368149,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/naturalist/north.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/naturalist/provenance.json",
+      "sha256": "0450d96af87bed90c2d3cf2bfd0d1bdc4513facf51f01679bdeb14e5e4c3ae92",
+      "size": 15499,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1118/characters/naturalist/provenance.json"
+    },
+    {
+      "path": "e08_codex_1118/characters/naturalist/south.png",
+      "sha256": "4ef6eaff803e9d56af6fe758e38c7a9321ab6f331b13c99833a428703f2a124b",
+      "size": 1222091,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/naturalist/south.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/naturalist/west.png",
+      "sha256": "d27be33fa20ba73176ea52c6213ff45326c793aa9516bb278bbee1148afdf4c1",
+      "size": 1368297,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/naturalist/west.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/necromancer/east.png",
+      "sha256": "c0217b2906014d4d3684da1a8b9cc44159b4a7473430e0e95ad4dc518377a9b1",
+      "size": 1383459,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/necromancer/east.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/necromancer/north.png",
+      "sha256": "0a6a8acd76946e86823f169c0cbfe9e0a0e7223ce8dddbec99aab78d1946634a",
+      "size": 1565262,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/necromancer/north.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/necromancer/provenance.json",
+      "sha256": "bb9b3deb064af4bd03641f3a7c4d951065a65aa85132168c222def61dfd89b07",
+      "size": 20017,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1118/characters/necromancer/provenance.json"
+    },
+    {
+      "path": "e08_codex_1118/characters/necromancer/south.png",
+      "sha256": "dfc79b14f019dcc0a75e1ca3235cef5897e824ce964362402380c0ca8695bbe4",
+      "size": 1603246,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1118/characters/necromancer/south.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/necromancer/south_v2.png",
+      "sha256": "d7339e4f3f85072e3a49bc7fc0978f42b58f64a1313606e8768d99f7e6594850",
+      "size": 1366860,
+      "type": "png",
+      "selected": false,
+      "archived_path": "e08_codex_1118/characters/necromancer/south_v2.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/necromancer/south_v3.png",
+      "sha256": "0938f9fd398462b0ac2302331803b49c4b22e9aab4b12b38eca5e19a1459e61e",
+      "size": 1568853,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/necromancer/south_v3.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/necromancer/west.png",
+      "sha256": "0a1d9f84d6a16ca8830ab70632acc46b2348d5ec642afebdd4b04b0821a74766",
+      "size": 1348580,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/necromancer/west.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/priest/east.png",
+      "sha256": "c556b5dcaff8dd5bc2aed76b958979ff730ff0848ac61ab6f74a132ae2c9bd9d",
+      "size": 1319015,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/priest/east.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/priest/north.png",
+      "sha256": "44488787a5b996f002d18c853d9d010c8911345fc56ca46be119aebf12466573",
+      "size": 1328148,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/priest/north.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/priest/provenance.json",
+      "sha256": "1b3a63617ca024269f28910d3cb9f28dc1dce932ac9172ee18ed163a1814c462",
+      "size": 13569,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1118/characters/priest/provenance.json"
+    },
+    {
+      "path": "e08_codex_1118/characters/priest/south.png",
+      "sha256": "9f21a15a47f09a231b8c2efacfb9e01ee369fa093f534f8bb60e3c90ef7ef225",
+      "size": 1440743,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/priest/south.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/priest/west_v2.png",
+      "sha256": "9a26446154d7d36c0e9162579bdb49611845955bf478de14742d21a9362090a3",
+      "size": 1357187,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/priest/west_v2.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/shapeshifter/east.png",
+      "sha256": "ff6155db3a7da051b2cae61b8308ac1e64fa09abcc292b4c384bd37d956a8675",
+      "size": 1233646,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/shapeshifter/east.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/shapeshifter/north.png",
+      "sha256": "0700616a2e355cc5e901213116c3b7a95889236e7f4a1778b92f9c2e4b1c3e5c",
+      "size": 1522560,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/shapeshifter/north.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/shapeshifter/provenance.json",
+      "sha256": "c775d41ccd09cbedead0647393e59d4e9d4758266ce33252989654b8b5f0d5db",
+      "size": 15753,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1118/characters/shapeshifter/provenance.json"
+    },
+    {
+      "path": "e08_codex_1118/characters/shapeshifter/south.png",
+      "sha256": "d7df665fb7a12091b463e3e212d4b01158af7065f145e116bc60ce4ff694f57e",
+      "size": 1337858,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/shapeshifter/south.png"
+    },
+    {
+      "path": "e08_codex_1118/characters/shapeshifter/west.png",
+      "sha256": "48e01b8a2eb45e757d2fee1f016c94e7b5fc6fcb420273046ce7ca2286656025",
+      "size": 1421216,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/characters/shapeshifter/west.png"
+    },
+    {
+      "path": "e08_codex_1118/equipment/provenance.json",
+      "sha256": "c35bd4ecb70eccedf4552f60d547e8b90a21827c1642735fd8cfe8dc3085cb6c",
+      "size": 6513,
+      "type": "metadata",
+      "selected": null,
+      "archived_path": "e08_codex_1118/equipment/provenance.json"
+    },
+    {
+      "path": "e08_codex_1118/equipment/weapons_b1.png",
+      "sha256": "a4a088a4601b5c245aea177a6aaa37da058514f727cf734d8c6aae33d445fdfa",
+      "size": 1619977,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/equipment/weapons_b1.png"
+    },
+    {
+      "path": "e08_codex_1118/equipment/weapons_b2.png",
+      "sha256": "bd26c9d138506907140a6200f2aa519e2e3104f095fd4c819d3d475e1a5bb534",
+      "size": 1255099,
+      "type": "png",
+      "selected": true,
+      "archived_path": "e08_codex_1118/equipment/weapons_b2.png"
+    }
+  ],
+  "updated": "2026-11-18",
+  "source_root_hint": "map-editor-m5/assets/art (staging)",
+  "archive_root_hint": ".tools/art_archive/e08",
+  "batches": [
+    "e08_codex_1116",
+    "e08_codex_1118"
+  ],
+  "totals": {
+    "entries": 93,
+    "png": 77,
+    "selected": 42,
+    "bytes": 103705712
+  }
+}

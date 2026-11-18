@@ -1,0 +1,23 @@
+{
+  "schema": "ragrpg_art_selection_v1",
+  "scope": "e08_codex_1118/characters/priest",
+  "updated": "2026-11-18",
+  "selections": {
+    "east": {
+      "path": "east.png",
+      "sha256": "c556b5dcaff8dd5bc2aed76b958979ff730ff0848ac61ab6f74a132ae2c9bd9d"
+    },
+    "north": {
+      "path": "north.png",
+      "sha256": "44488787a5b996f002d18c853d9d010c8911345fc56ca46be119aebf12466573"
+    },
+    "south": {
+      "path": "south.png",
+      "sha256": "9f21a15a47f09a231b8c2efacfb9e01ee369fa093f534f8bb60e3c90ef7ef225"
+    },
+    "west": {
+      "path": "west_v2.png",
+      "sha256": "9a26446154d7d36c0e9162579bdb49611845955bf478de14742d21a9362090a3"
+    }
+  }
+}

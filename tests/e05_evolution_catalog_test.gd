@@ -8,6 +8,7 @@ const KIT_METADATA := {
 	&"mg_ac": ["Taumaturgo", &"mage", &"2-3", &"acolyte"],
 	&"sp_la": ["Duelista", &"swordsman", &"2-3", &"rogue"],
 	&"mg_la": ["Lâmina Arcana", &"mage", &"2-3", &"rogue"],
+	&"priest": ["Sacerdote", &"acolyte", &"2-1", &""],
 	&"cultist": ["Cultista", &"acolyte", &"2-2", &""],
 }
 
@@ -118,9 +119,9 @@ func _check_production_roster() -> void:
 func _ready_kit_ids() -> Array[StringName]:
 	var ready: Array[StringName] = []
 	for id: StringName in ClassKitRegistry.ids():
-		if IdentityIds.is_registered_base(ClassKitRegistry.origin(id)) and not ProfileCatalog.pilot().base_class_is_available(ClassKitRegistry.origin(id)): continue
 		var kit := ClassKitRegistry.module(id)
 		if kit != null and kit.ready_for_play():
+			if IdentityIds.is_registered_base(ClassKitRegistry.origin(id)) and not ProfileCatalog.pilot().base_class_is_available(ClassKitRegistry.origin(id)): continue
 			ready.append(id)
 	return ready
 

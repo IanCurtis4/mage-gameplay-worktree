@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" shape-rendering="geometricPrecision">
+  <defs><clipPath id="lt"><rect x="0" y="0" width="32" height="64"/></clipPath><clipPath id="sh"><rect x="32" y="0" width="32" height="64"/></clipPath></defs>
+  <g clip-path="url(#lt)">
+  <rect x="4" y="4" width="56" height="56" rx="8" fill="#3d2a52"/><path d="M7 18V7h11M46 7h11v11M7 46v11h11M46 57h11V46" fill="none" stroke="#f0cf7f" stroke-width="2"/>
+  <g fill="#f0cf7f" stroke="#f0cf7f" stroke-linecap="round" stroke-linejoin="round" transform="translate(4 4) scale(.875)"><path d="M7 32 55 11v42z"/><path d="M24 32q4-6 8 0t8 0M24 23q4-6 8 0t8 0M24 41q4-6 8 0t8 0" fill="none" stroke="#f0cf7f" stroke-width="2.8" stroke="#3d2a52"/></g>
+  </g>
+  <g clip-path="url(#sh)">
+  <rect x="4" y="4" width="56" height="56" rx="8" fill="#f0cf7f"/><path d="M7 18V7h11M46 7h11v11M7 46v11h11M46 57h11V46" fill="none" stroke="#3d2a52" stroke-width="2"/>
+  <g fill="#3d2a52" stroke="#3d2a52" stroke-linecap="round" stroke-linejoin="round" transform="translate(4 4) scale(.875)"><path d="M7 32 55 11v42z"/><path d="M24 32q4-6 8 0t8 0M24 23q4-6 8 0t8 0M24 41q4-6 8 0t8 0" fill="none" stroke="#3d2a52" stroke-width="2.8" stroke="#f0cf7f"/></g>
+  </g>
+</svg>

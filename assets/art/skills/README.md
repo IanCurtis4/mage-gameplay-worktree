@@ -9,3 +9,7 @@ Lote original de 89 símbolos vetoriais em 64×64, gerados por `tools/prepare_sk
 ## Ícones das híbridas E09
 
 28 ícones SVG 64×64 das quatro híbridas (Paladino `paladin_`, Taumaturgo `thaumaturge_`, Duelista `duelist_`, Lâmina Arcana `arcane_blade_`; IDs do contrato `docs/epics/e09_contract.md`), gerados pelo mesmo script. Paletas de duas cores por classe, a partir das fichas; passivas com contorno. Enquanto o `ClassCatalog` não registra essas skills, o gerador e o `--check` as cobrem pela lista explícita `HYBRID_SKILLS`. Um ícone pintado que vier depois substitui o SVG pelo mesmo ID. Prancha de revisão: `docs/epics/e09/t3_icons_review.png`.
+
+## Ícones da família Acólito E10a
+
+22 ícones SVG 64×64: base Acólito (`acolyte_`, 8), Sacerdote (`priest_`, 7) e Cultista (`cultist_`, 7); IDs do contrato `docs/epics/e10a_contract.md` §1, gerados pelo mesmo script e cobertos pelo `--check` por lista exata (`E10A_SKILLS`). A base divide o ladrilho ao meio com as cores trocadas (luz dourada sobre ameixa, sombra ameixa sobre dourado); o Sacerdote usa azul-céu, marfim e dourado pálido com moldura circular; o Cultista, preto-azulado, magenta e turquesa. Passivas com contorno. Um PNG pintado em `painted/<id>.png` substitui o SVG pelo mesmo ID. Prancha de revisão: `docs/epics/e10a/t3_icons_review.png`.
