@@ -1,7 +1,28 @@
 {
   "res://scripts/classes/bases/acolyte/acolyte_base.gd": {
-    "revision": 1,
-    "fields": [],
+    "revision": 2,
+    "fields": [
+      "madness",
+      "prayer_pulses",
+      "prayer_tick",
+      "prayer_fraction",
+      "votive_remaining",
+      "votive_capacity",
+      "marked_target_id",
+      "seal_remaining",
+      "seal_tick",
+      "seal_prototype",
+      "vision_remaining",
+      "vision_range_bonus",
+      "vision_charged",
+      "devotion_element",
+      "devotion_pair_remaining",
+      "devotion_bonus",
+      "devotion_ready_remaining",
+      "devotion_fresh",
+      "devotion_spent",
+      "devotion_rearm"
+    ],
     "omitted": {}
   }
 }

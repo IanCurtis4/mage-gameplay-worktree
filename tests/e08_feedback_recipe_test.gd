@@ -20,7 +20,7 @@ func _initialize() -> void: _run.call_deferred()
 ## physical) and fall back to the kind cue, or stay silent where the kind has none. Exact
 ## list, documented in docs/epics/e09_contract.md (C1, note on the E08 recipe test): a gap
 ## that gains a cue must leave this list.
-const KIT_AUDIO_GAPS: Array[String] = ["paladin_oath/impact", "thaumaturge_votive_circle/impact", "thaumaturge_healing_refraction/heal", "arcane_blade_prism_specter/summon"]
+const KIT_AUDIO_GAPS: Array[String] = ["paladin_oath/impact", "thaumaturge_votive_circle/impact", "thaumaturge_healing_refraction/heal", "arcane_blade_prism_specter/summon", "acolyte_shadow_seal/impact", "priest_sanctuary/impact"]
 
 ## Library of every identity (base classes and their evolutions), split by category and
 ## by source: the E08 base catalog and the E09 kit skills (ClassKitRegistry.skill_owner).
@@ -30,7 +30,7 @@ func _library() -> Dictionary:
 	var passive: Array[StringName] = []
 	var kit_active: Array[StringName] = []
 	var kit_passive: Array[StringName] = []
-	for base: StringName in [&"swordsman", &"mage", &"archer"]:
+	for base: StringName in [&"swordsman", &"mage", &"archer", &"acolyte"]:
 		var identities: Array[StringName] = [&""]
 		for evolution: EvolutionDefinition in catalog.evolution_definitions_for_origin(base): identities.append(evolution.id)
 		for evolution: StringName in identities:
@@ -53,6 +53,12 @@ func _expected_kit_skills() -> Dictionary:
 		var skills := ClassKitRegistry.skill_ids(kit)
 		for index: int in skills.size():
 			(active if ClassKitRegistry.SLOT_CATEGORIES[index] == ProfileCatalog.ACTIVE else passive).append(skills[index])
+	# E10a T5 (A10 item 3, A11): the library of a registered base that is available is published too.
+	for base: StringName in ClassBaseRegistry.ids():
+		if not ProfileCatalog.pilot().base_class_is_available(base): continue
+		var base_skills := ClassBaseRegistry.skill_ids(base)
+		for index: int in base_skills.size():
+			(active if ClassBaseRegistry.SKILL_CATEGORIES[base][index] == ProfileCatalog.ACTIVE else passive).append(base_skills[index])
 	return {"active":active, "passive":passive}
 
 static func _sorted(values: Array[StringName]) -> Array[StringName]:
@@ -98,10 +104,11 @@ func _run() -> void:
 	# exact skills of the registry table; their recipe comes from the kit module (seam).
 	var kit_active: Array[StringName] = library.kit_active
 	var expected_kit := _expected_kit_skills()
-	# E10a A9: the four E09 kits, the Sacerdote (T6) and the Cultista (T7) are ready (4 + 1 + 1 = 6); the
-	# pure kits' skills stay out of the catalog walk while their Acólito base is not ready (A10.2).
+	# E10a A9/A11: the four E09 kits, the Sacerdote (T6) and the Cultista (T7) are ready (4 + 1 + 1 = 6).
 	check(ClassKitRegistry.ids().filter(func(kit: StringName) -> bool: return ClassKitRegistry.ready_for_play(kit)).size() == 6, "the four E09 kits, the E10a Sacerdote and the Cultista are ready in the production catalog")
-	check(kit_active.size() == 20 and library.kit_passive.size() == 8, "the kits offered by the catalog expose 20 active and 8 passive skills (the E10a pure kits wait for a ready base), got %d/%d" % [kit_active.size(), library.kit_passive.size()])
+	# With the Acólito base ready the catalog also offers the pure kits (A10.2, A11): 20/8 of the E09 kits, plus 6/2 of
+	# the Acólito base, 5/2 of the Sacerdote and 5/2 of the Cultista.
+	check(kit_active.size() == 36 and library.kit_passive.size() == 14, "the kits and the Acólito base offered by the catalog expose 36 active and 14 passive skills (20/8 of the four E09 kits, plus 6/2 of the Acólito base, 5/2 of the Sacerdote and 5/2 of the Cultista), got %d/%d" % [kit_active.size(), library.kit_passive.size()])
 	check(_sorted(kit_active) == _sorted(expected_kit.active) and _sorted(library.kit_passive) == _sorted(expected_kit.passive), "kit skills of the catalog are exactly the registry table of the ready kits")
 	for skill: StringName in kit_active:
 		var recipe := Recipes.recipe(skill)
