@@ -960,7 +960,7 @@ static func _failure(code: StringName) -> Dictionary:
 ## incompatible_target, invalid_payload.
 func set_target_override(target: CombatActor, owner_id: int, duration: float, reason: StringName) -> Dictionary:
 	if hard_controls.boss: return _failure(&"boss_refuses_target")
-	if not is_alive() or not is_instance_valid(target) or target == self or target is PlayerActor or not target.is_alive() or target.is_queued_for_deletion() or not target.is_inside_tree(): return _failure(&"invalid_target")
+	if not is_alive() or not is_instance_valid(target) or target == self or target == player or target.has_method(&"enemy_relay_context") or not target.is_alive() or target.is_queued_for_deletion() or not target.is_inside_tree(): return _failure(&"invalid_target")
 	if (world_motion == null) != (target.world_motion == null) or (world_motion != null and target.world_motion.geometry != world_motion.geometry): return _failure(&"incompatible_target")
 	if not is_finite(duration) or duration <= 0.0 or reason.is_empty() or owner_id < 0: return _failure(&"invalid_payload")
 	target_override = {"target_id": target.get_instance_id(), "owner_id": owner_id, "remaining": duration, "reason": reason}
@@ -1042,13 +1042,19 @@ func _deflect_commit(request: DamageRequest) -> CombatActor:
 		return chosen
 	return null
 
+## Another enemy, by method. This script never names its own class (`is EnemyActor`): in
+## Godot 4.7.2 that self-reference kept the catalog scripts alive at exit ("resources
+## still in use", crash in the E04 Mage tests). The same rule holds for PlayerActor below.
+static func _is_enemy(actor: Object) -> bool:
+	return actor != null and actor.has_method(&"set_target_override")
+
 ## Live, non-boss enemies of the same host within `radius`, by instance ID.
 func _deflection_candidates(radius: float) -> Array[CombatActor]:
 	var result: Array[CombatActor] = []
 	var controller := get_parent() as RunController
 	if controller == null: return result
 	for actor: CombatActor in controller.enemies:
-		if not is_instance_valid(actor) or actor == self or not actor is EnemyActor or not actor.is_alive() or actor.is_queued_for_deletion() or actor.hard_controls.boss: continue
+		if not is_instance_valid(actor) or actor == self or not _is_enemy(actor) or not actor.is_alive() or actor.is_queued_for_deletion() or actor.hard_controls.boss: continue
 		if world_motion != null:
 			if world_distance_to(actor) > radius: continue
 		elif actor.world_motion != null or global_position.distance_to(actor.global_position) > radius: continue
@@ -1061,10 +1067,12 @@ func _deflection_candidates(radius: float) -> Array[CombatActor]:
 ## loot) and carries RELAY_KEY so the victim's threat and engagement do not change.
 func relay_authorship(request: DamageRequest, victim: CombatActor, owner_id: int) -> void:
 	request.target_id = victim.get_instance_id()
-	if not victim is EnemyActor or owner_id <= 0: return
-	var author := instance_from_id(owner_id) as PlayerActor
-	if author == null or not is_instance_valid(author) or not author.is_alive(): return
-	var context := author.enemy_relay_context()
+	if not _is_enemy(victim) or owner_id <= 0: return
+	# Duck-typed on purpose (as in the E09 seam): naming the player class here, beside the
+	# typed `player` field, closes a script cycle Godot 4.7.2 does not release at exit.
+	var author := instance_from_id(owner_id) as CombatActor
+	if author == null or not is_instance_valid(author) or not author.is_alive() or not author.has_method(&"enemy_relay_context"): return
+	var context := author.call(&"enemy_relay_context") as CombatEventContext
 	if context == null: return
 	request.source_id = owner_id
 	request.context = context

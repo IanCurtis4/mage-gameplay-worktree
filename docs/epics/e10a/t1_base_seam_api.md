@@ -200,8 +200,9 @@ Sem dono vivo, o golpe fica com a autoria do inimigo. Golpe numa isca é sempre 
 | Método | Uso |
 |---|---|
 | `KitDecoy.spawn(host, owner, point, hp, duration, drawer_id, source_tag = &"") -> {"ok", "error_code", "decoy"}` | cria sob `host` (o `RunController`); `point` é `Vector2` no mapa plano ou `ExpeditionWorldPoint` no mundo (dono ligado ao mundo). Erros: `invalid_owner`, `invalid_payload`, `spatial_binding_required` e os de posição do mundo |
-| `KitDecoy.decoys_of(host, owner_id = 0, source_tag = &"")` | iscas vivas do host, por dono e etiqueta (ex.: "um Ídolo por dono") |
-| `decoy.remove(reason = &"removed")` | remove (idempotente); emite `decoy_removed(decoy, reason)` |
+| `KitDecoy.decoys_of(host, owner_id = 0, source_tag = &"") -> Array[CombatActor]` | iscas vivas do host, por dono e etiqueta (ex.: "um Ídolo por dono") |
+| `KitDecoy.is_decoy(node)` | reconhece uma isca pelo caminho do script |
+| `decoy.remove(reason = &"removed")` | remove (idempotente); emite `decoy_removed(decoy: CombatActor, reason)` |
 | `KitDecoy.register_drawer(id, Callable(canvas, decoy, remaining))`, `unregister_drawer(id)` | desenhador do sistema (só apresentação, não persiste) |
 
 - Campos no manifesto: `owner_id`, `remaining`, `drawer_id`, `source_id_tag`, `removal_reason`.
@@ -296,5 +297,13 @@ Fontes em `CombatActor`, compostas **uma vez** em `CombatMath`:
    acrescenta `acolyte` explicitamente.
 6. **Skills iniciais** (`starting_skill_ids`) alimentam só a `ClassDefinition` do mapa plano;
    personagens persistentes nascem com os atalhos vazios, como as bases do E00.
-7. **XP e loot** de um abate entre inimigos seguem a morte do inimigo (sem teste de campanha
+7. **Ciclos de script (Godot 4.7.2).** Um script que nomeia a própria `class_name` em código
+   (`is EnemyActor` dentro de `enemy_actor.gd`) manteve os scripts dos catálogos vivos na saída
+   ("22 resources still in use" e crash `0xC0000005` nos testes do Mago do E04). Regra: um
+   script não nomeia a própria classe nem a do par (`PlayerActor` ↔ `EnemyActor`); reconhece
+   por método (`EnemyActor._is_enemy`) ou por caminho (`KitDecoy.is_decoy`). Os registros são
+   lidos por caminho em `IdentityIds` e `EquipmentEligibilityRules`, e `ClassBaseRegistry` não
+   nomeia `ClassKitRegistry` nem `IdentityIds` (revisão própria, somada por
+   `ClassKitRegistry.seam_revision()`). `tests/e10a/enemy_target_test.gd` vigia a regra.
+8. **XP e loot** de um abate entre inimigos seguem a morte do inimigo (sem teste de campanha
    nesta tarefa); o crédito ao jogador (`_credited_kills`, `on_kill_confirmed`) está provado.

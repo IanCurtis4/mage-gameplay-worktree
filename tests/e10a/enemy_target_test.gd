@@ -29,6 +29,7 @@ func _check(condition: bool, label: String) -> void:
 		push_error("FAIL: " + label)
 
 func _run() -> void:
+	_check_script_cycles()
 	_check_math()
 	_check_modifiers()
 	_check_flat_override()
@@ -96,6 +97,25 @@ func _hostile(at: Vector2, boss: bool = false) -> EnemyActor:
 func _landing(request: DamageRequest) -> DamageRequest:
 	request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
 	return request
+
+# --- Script cycles --------------------------------------------------------------------
+
+## In Godot 4.7.2 a script that names its own class_name (`is EnemyActor` inside
+## enemy_actor.gd) kept the catalog scripts alive at exit ("resources still in use", crash
+## in the E04 Mage tests). These scripts recognise peers by method or path instead.
+func _check_script_cycles() -> void:
+	for row: Array in [["res://scripts/actors/enemy_actor.gd", "EnemyActor"], ["res://scripts/classes/kit_decoy.gd", "KitDecoy"]]:
+		var count := 0
+		var regex := RegEx.create_from_string("(^|[^A-Za-z0-9_])%s([^A-Za-z0-9_]|$)" % row[1])
+		for line: String in FileAccess.get_file_as_string(row[0]).split(char(10)):
+			var code := line.strip_edges()
+			# Typed signal parameters predate E10a (`companion_requested(master: EnemyActor)`) and
+			# did not leak; the guard covers code.
+			if code.begins_with("#") or code.begins_with("class_name") or code.begins_with("signal "): continue
+			if regex.search(code.split("#")[0]) != null: count += 1
+		_check(count == 0, "%s never names its own class (%d references)" % [row[0], count])
+	var player_source := FileAccess.get_file_as_string("res://scripts/actors/player_actor.gd")
+	_check(not player_source.contains("EnemyActor") and not player_source.contains("KitDecoy"), "player_actor.gd names neither EnemyActor nor KitDecoy")
 
 # --- CombatMath composition (C1.7) ----------------------------------------------------
 

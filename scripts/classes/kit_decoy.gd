@@ -6,7 +6,12 @@ extends CombatActor
 ## the owning system registers. While one exists the compact cut is ineligible (the
 ## node joins `player_effects`). API: docs/epics/e10a/t1_base_seam_api.md.
 
-signal decoy_removed(decoy: KitDecoy, reason: StringName)
+signal decoy_removed(decoy: CombatActor, reason: StringName)
+
+## This script never names its own class: in Godot 4.7.2 a script that references its own
+## class_name kept the catalog scripts alive at exit (found in EnemyActor, E10a T1). It
+## creates and recognizes decoys by its own path instead.
+const SCRIPT_PATH := "res://scripts/classes/kit_decoy.gd"
 
 const GROUP := &"kit_decoys"
 const DEFAULT_RADIUS := 18.0
@@ -22,7 +27,7 @@ var source_id_tag: StringName = &""
 ## Empty while alive; why the decoy left (&"expired", &"destroyed", &"removed").
 var removal_reason: StringName = &""
 
-## drawer_id -> Callable(canvas: CanvasItem, decoy: KitDecoy, t: float). Process-local;
+## drawer_id -> Callable(canvas: CanvasItem, decoy (KitDecoy), remaining: float). Process-local;
 ## a missing drawer falls back to the default circle.
 static var _drawers: Dictionary = {}
 
@@ -41,8 +46,8 @@ static func unregister_drawer(id: StringName) -> void:
 static func spawn(host: Node, owner: PlayerActor, point: Variant, hp: float, duration: float, drawer: StringName, source_tag: StringName = &"") -> Dictionary:
 	if host == null or not is_instance_valid(owner) or not owner.is_alive(): return {"ok": false, "error_code": &"invalid_owner", "decoy": null}
 	if not is_finite(hp) or hp <= 0.0 or not is_finite(duration) or duration <= 0.0: return {"ok": false, "error_code": &"invalid_payload", "decoy": null}
-	var decoy := KitDecoy.new()
-	decoy.name = "KitDecoy"
+	var decoy: Variant = (load(SCRIPT_PATH) as Script).new()
+	decoy.name = "Decoy"
 	decoy.owner_id = owner.get_instance_id()
 	decoy.remaining = duration
 	decoy.drawer_id = drawer
@@ -56,7 +61,7 @@ static func spawn(host: Node, owner: PlayerActor, point: Variant, hp: float, dur
 		if owner.world_motion == null or not owner.world_motion.is_current_world():
 			decoy.free()
 			return {"ok": false, "error_code": &"spatial_binding_required", "decoy": null}
-		var bound := decoy.bind_world_geometry(owner.world_motion.geometry, point, owner.world_motion.profile(), "decoy_%d" % decoy.get_instance_id())
+		var bound: Dictionary = decoy.bind_world_geometry(owner.world_motion.geometry, point, owner.world_motion.profile(), "decoy_%d" % decoy.get_instance_id())
 		if not bound["ok"]:
 			decoy.free()
 			return {"ok": false, "error_code": bound.get("error_code", &"invalid_position"), "decoy": null}
@@ -72,17 +77,22 @@ static func spawn(host: Node, owner: PlayerActor, point: Variant, hp: float, dur
 	return {"ok": true, "error_code": &"", "decoy": decoy}
 
 ## Live decoys under `host`, optionally of one owner and source tag, by instance ID.
-static func decoys_of(host: Node, owner_id_filter: int = 0, source_tag: StringName = &"") -> Array[KitDecoy]:
-	var result: Array[KitDecoy] = []
+static func decoys_of(host: Node, owner_id_filter: int = 0, source_tag: StringName = &"") -> Array[CombatActor]:
+	var result: Array[CombatActor] = []
 	if host == null: return result
 	for node: Node in host.get_children():
-		var decoy := node as KitDecoy
-		if decoy == null or not decoy.is_active(): continue
-		if owner_id_filter != 0 and decoy.owner_id != owner_id_filter: continue
-		if not source_tag.is_empty() and decoy.source_id_tag != source_tag: continue
+		if not is_decoy(node): continue
+		var decoy := node as CombatActor
+		if not decoy.call(&"is_active"): continue
+		if owner_id_filter != 0 and int(decoy.get(&"owner_id")) != owner_id_filter: continue
+		if not source_tag.is_empty() and StringName(decoy.get(&"source_id_tag")) != source_tag: continue
 		result.append(decoy)
-	result.sort_custom(func(a: KitDecoy, b: KitDecoy) -> bool: return a.get_instance_id() < b.get_instance_id())
+	result.sort_custom(func(a: CombatActor, b: CombatActor) -> bool: return a.get_instance_id() < b.get_instance_id())
 	return result
+
+## True for a decoy node (by script, never by class name).
+static func is_decoy(node: Object) -> bool:
+	return node != null and is_instance_valid(node) and node.get_script() != null and (node.get_script() as Script).resource_path == SCRIPT_PATH
 
 func is_active() -> bool:
 	return removal_reason.is_empty() and is_alive() and not is_queued_for_deletion()
