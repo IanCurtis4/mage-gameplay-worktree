@@ -17,7 +17,8 @@ import numpy as np
 from PIL import Image
 
 KINDS = ['archer', 'berserker', 'defender', 'elementalist', 'geometer', 'hunter', 'mage', 'sentinel', 'spiritualist', 'swordsman',
-         'arcane_blade', 'duelist', 'paladin', 'thaumaturge']  # E09 T7: the four hybrid bodies
+         'arcane_blade', 'duelist', 'paladin', 'thaumaturge',  # E09 T7: the four hybrid bodies
+         'acolyte', 'cultist', 'priest']  # E10a T8: the Acolyte family bodies
 BASE = 'assets/art/e08_characters/directional/'
 HEAD = 'assets/art/equipment/headgear/'
 OUT = 'scripts/actors/equipment_head_fit_data.gd'

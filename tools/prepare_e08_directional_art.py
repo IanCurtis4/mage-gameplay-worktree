@@ -11,7 +11,8 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTIONS = ('south', 'north', 'east', 'west')
 KINDS = ('swordsman','archer','mage','berserker','defender','hunter','sentinel','elementalist','spiritualist','geometer',
-         'paladin','thaumaturge','duelist','arcane_blade')
+         'paladin','thaumaturge','duelist','arcane_blade',
+         'acolyte','priest','cultist')
 sys.path.insert(0, str(ROOT / 'tools'))
 from art_pipeline.selection import load_selection  # E09: chosen source versions come from selection.json
 
