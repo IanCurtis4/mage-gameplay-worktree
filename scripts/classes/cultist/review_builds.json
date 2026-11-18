@@ -1,0 +1,20 @@
+{
+  "schema": "ragrpg_review_builds_v1",
+  "identity_id": "cultist",
+  "builds": [
+    {
+      "id": "cultist_prophet",
+      "name": "Profeta",
+      "base_ranks": {"acolyte_punishing_light": 1, "acolyte_shadow_seal": 3, "acolyte_disturbing_whisper": 5, "acolyte_prayer": 4, "acolyte_votive_shield": 4, "acolyte_protective_faith": 2},
+      "evolution_ranks": {"cultist_abyss_gaze": 5, "cultist_ecstasy": 3, "cultist_impossible_idol": 4, "cultist_shared_delirium": 5, "cultist_open_pupil": 3, "cultist_impossible_geometry": 0, "cultist_revelation": 1},
+      "shortcuts": ["cultist_abyss_gaze", "cultist_impossible_idol", "cultist_shared_delirium", "acolyte_disturbing_whisper", "cultist_revelation", "acolyte_shadow_seal", "acolyte_votive_shield", "acolyte_prayer", "acolyte_punishing_light"]
+    },
+    {
+      "id": "cultist_seer",
+      "name": "Vidente",
+      "base_ranks": {"acolyte_punishing_light": 2, "acolyte_shadow_seal": 5, "acolyte_prayer": 1, "acolyte_votive_shield": 5, "acolyte_devotion": 3, "acolyte_protective_faith": 3},
+      "evolution_ranks": {"cultist_abyss_gaze": 5, "cultist_ecstasy": 0, "cultist_impossible_idol": 1, "cultist_shared_delirium": 2, "cultist_open_pupil": 3, "cultist_impossible_geometry": 5, "cultist_revelation": 5},
+      "shortcuts": ["cultist_abyss_gaze", "cultist_impossible_geometry", "acolyte_shadow_seal", "acolyte_votive_shield", "cultist_revelation", "acolyte_prayer", "acolyte_punishing_light", "cultist_impossible_idol", "cultist_shared_delirium"]
+    }
+  ]
+}

@@ -9,6 +9,7 @@ const KIT_METADATA := {
 	&"sp_la": ["Duelista", &"swordsman", &"2-3", &"rogue"],
 	&"mg_la": ["Lâmina Arcana", &"mage", &"2-3", &"rogue"],
 	&"priest": ["Sacerdote", &"acolyte", &"2-1", &""],
+	&"cultist": ["Cultista", &"acolyte", &"2-2", &""],
 }
 
 var failures := 0

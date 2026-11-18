@@ -98,7 +98,9 @@ func _run() -> void:
 	# exact skills of the registry table; their recipe comes from the kit module (seam).
 	var kit_active: Array[StringName] = library.kit_active
 	var expected_kit := _expected_kit_skills()
-	check(ClassKitRegistry.ids().filter(func(kit: StringName) -> bool: return ClassKitRegistry.ready_for_play(kit)).size() == 5, "the four E09 kits and the E10a Sacerdote are ready in the production catalog")
+	# E10a A9: the four E09 kits, the Sacerdote (T6) and the Cultista (T7) are ready (4 + 1 + 1 = 6); the
+	# pure kits' skills stay out of the catalog walk while their Acólito base is not ready (A10.2).
+	check(ClassKitRegistry.ids().filter(func(kit: StringName) -> bool: return ClassKitRegistry.ready_for_play(kit)).size() == 6, "the four E09 kits, the E10a Sacerdote and the Cultista are ready in the production catalog")
 	check(kit_active.size() == 20 and library.kit_passive.size() == 8, "the kits offered by the catalog expose 20 active and 8 passive skills (the E10a pure kits wait for a ready base), got %d/%d" % [kit_active.size(), library.kit_passive.size()])
 	check(_sorted(kit_active) == _sorted(expected_kit.active) and _sorted(library.kit_passive) == _sorted(expected_kit.passive), "kit skills of the catalog are exactly the registry table of the ready kits")
 	for skill: StringName in kit_active:
