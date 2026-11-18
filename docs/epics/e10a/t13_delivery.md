@@ -136,3 +136,72 @@ Antes de remover, conferi que o que sobrava no `git status` era só ruído:
 Esta composição valida só o impacto de T1–T3. A suíte completa, o passo 148, a exportação, as
 sondas do PCK, os perfis, o roteiro e a medição são do fechamento (§11). O playtest habitual
 (`codex/playtest`) não foi tocado.
+
+## Composição 2 — T4 e ponta da arquitetura (18/11/2026)
+
+### Merges
+
+`--no-ff`, sem conflito de conteúdo (o merge da arquitetura combinou `docs/epics/e10a.md`
+automaticamente).
+
+| Ordem | Origem | Ponta mesclada | Merge |
+|---|---|---|---|
+| 1 | T4 (`claude/wizardly-hermann-10d51a`) | `e35525c7` (entrega principal `0f9820f1`) | `7903a8f3` |
+| 2 | arquitetura (`claude/e10a-arquitetura-a413a1`, decisões A8 e A9) | `0c157d47` | `d927f8aa` |
+
+A T4 parte da ponta da T1 e editou `scripts/actors/enemy_actor.gd` por exceção registrada (A8,
+retenção de combate).
+
+### Importação e testes de impacto
+
+- **Importação** (`editor_import`, motor `Godot_v4.7.2-stable_win64.exe`): exit 0, saída
+  `3B091DA3…1980` (`.godot/verification/t13_c2/import/`).
+- **Bootstrap F1** refeito, porque a T4 acrescentou fontes: 255 com a falha conhecida (`AB79025F…831F`,
+  `GitPlugin`) e 256 passou (`926B80A4…8A15`).
+- **Impacto**, um passo por chamada, `-F1Fixture -SkipEditorImport`, timeout 300 s. 16 de 16, 0
+  timeouts, nenhum `SCRIPT ERROR`, `Parse Error`, `Compile Error`, `still in use` ou `ObjectDB`
+  nas saídas e nos logs do motor.
+
+| Passo | Teste | Checks | Saída (8) |
+|---|---|---|---|
+| 338 | `madness_test` (T4) | 276, 0 falhas | `D4DAEAF5` |
+| 335 | `base_seam_test` | 171, 0 falhas | `83E3C22E` (igual à composição 1) |
+| 336 | `enemy_target_test` | 88, 0 falhas | `61C1F89F` (igual) |
+| 333 | `kit_seam_test` | 276, 0 falhas | `60643509` (igual) |
+| 331 | `kit_seam_hooks_v2_test` | 38, 0 falhas | `5182F32B` |
+| 332 | `kit_seam_hooks_v3_test` | 63, 0 falhas | `D1DFD323` |
+| 339 | `sanctuary_test` | 155, 0 falhas | `01B74920` |
+| 337 | `flank_test` | 205, 0 falhas | `D23DC5D7` |
+| 111 | `e05_training_boss_test` | PASS, 17 | `F0B3638A` |
+| 206 | `e06_tx_mob_test` | 27, 0 falhas | `5D56F0CD` |
+| 209 | `e06_rx_mob_ai_test` | 4, 0 falhas | `B9569774` |
+| 228 | `e06_gameplay_ai_test` | 76, 0 falhas | `3E3923BE` |
+| 268 | `e07_f6_threat_test` | 43, 0 falhas | `C38ACB2F` |
+| 298 | `e07_f3_mob_state_test` | 372, 0 falhas, 4 cenários | `A84CACBF` |
+| 270 | `e07_f6_snapshot_test` | 40, 0 falhas | `2E091952` |
+| 294 | `e07_f3_snapshot_test` | 52, 0 falhas | `9FC703C4` |
+
+O `madness_test` deu 276 checks; o recibo da T4 registra 275 na rodada da tabela e 276 depois do
+reforço da A8, rodado direto. O número de agora é o da ponta mesclada. Logs em
+`.godot/verification/t13_c2/impact/<teste>/` (fora do Git).
+
+### Evidências ignoradas pelo Git, preservadas
+
+`.godot/verification_t4` (43 arquivos) e `.godot/verification_t4b` (14) foram copiados para
+`.godot/verification/e10a_t4_evidence/`, com manifesto de SHA256 por arquivo em
+`.godot/verification/e10a_t4_evidence_manifest.sha256` (57 linhas, SHA256 do manifesto
+`A118D331…`). Nada além disso a preservar: o `git status` da worktree tinha só `.import`
+reescritos e `.gd.uid` de `docs/map_editor`, que não foram versionados (pedido da arquitetura).
+
+### Worktree removida
+
+`wizardly-hermann-10d51a` (branch `claude/wizardly-hermann-10d51a`, mantida em `e35525c7`):
+`git worktree remove --force`, que cancelou o registro mas falhou com `Filename too long`; o resto
+saiu com `rm -rf`. O disco ficou com 28 GB livres logo após o registro cancelado.
+
+### Conta da A9 para o fechamento
+
+A9 manda T6 e T7 atualizarem, cada uma no próprio ramo, as linhas de contagem de kits prontos em
+`tests/e08_feedback_recipe_test.gd` e `tests/e10a/base_seam_test.gd`. Ao compor as duas a T13
+confere a soma exata: **6 kits** com `priest` e `cultist` prontos. Ainda não há nada a somar;
+esta conta é preenchida nas composições de T6 e T7.
