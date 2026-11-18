@@ -108,7 +108,9 @@ ajudante deixa de excluir o Sacerdote; essa atualização é de quem ligar a bas
 - só ela deixava 1 check falhando ("twelve accepted E00 identities"), porque `_ready_kit_ids()` conta
   kits prontos e o catálogo de produção ainda não oferece o Sacerdote (base esqueleto). O ajudante ganhou
   o mesmo filtro de base disponível aceito para `_expected_kit_skills()` (A10 item 2): kit puro só conta
-  quando a base registrada está disponível. Nenhuma expectativa foi enfraquecida;
+  quando a base registrada está disponível. Item 4 da A10 (`71674fe9`, a pedido da T7): o filtro entrou como a linha única, idêntica à da T7,
+  `if IdentityIds.is_registered_base(ClassKitRegistry.origin(id)) and not ProfileCatalog.pilot().base_class_is_available(ClassKitRegistry.origin(id)): continue`,
+  dentro do `if` de `_ready_kit_ids()`, sem outro ajuste nesse arquivo (mesmo resultado e mesmo hash). Nenhuma expectativa foi enfraquecida;
 - resultado: PASS, 93 checks, 0 SCRIPT ERROR, sha256 `6B7F3B5BBE61238BDDBAAA633CB0AF8DD4276D4F1E4B833DEBADC01062C87AB2`
   (antes: FAIL com 2 SCRIPT ERROR). Quando a T5 ligar a base, o filtro deixa de excluir o Sacerdote e o
   teste passa a esperá-lo no catálogo.
