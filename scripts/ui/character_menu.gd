@@ -26,6 +26,14 @@ var _evolution_retries: Dictionary[String, Dictionary] = {}
 var status_label: Label
 var roster_list: ItemList
 var name_input: LineEdit
+## E10a C7: creation order and the pt-BR blurb of each base class.
+const CREATION_CLASS_IDS: Array[StringName] = [&"swordsman", &"mage", &"archer", &"acolyte"]
+const CLASS_DESCRIPTIONS := {
+	&"swordsman": "Combate corpo a corpo: espada, escudo e resistência.",
+	&"mage": "Magia elemental à distância: fogo, gelo e raio.",
+	&"archer": "Ataques à distância com arco: precisão e mobilidade.",
+	&"acolyte": "Fé e sombra: luz que fere e cura, e sussurros que perturbam. Evolui para Sacerdote ou Cultista.",
+}
 var create_button: Button
 var create_buttons: Array[Button] = []
 var select_button: Button
@@ -464,6 +472,7 @@ func _class_name(base_class_id: StringName) -> String:
 		&"swordsman": return "Espadachim"
 		&"mage": return "Mago"
 		&"archer": return "Arqueiro"
+		&"acolyte": return "Acólito"
 		_: return "Classe indisponível"
 
 func _roster_identity_name(character: CharacterState) -> String:
@@ -1038,12 +1047,25 @@ func _build_ui() -> void:
 	name_input.placeholder_text = "Nome do personagem (opcional)"
 	name_input.max_length = 48
 	create_panel.add_child(name_input)
-	for class_id: StringName in [&"swordsman", &"mage", &"archer"]:
+	var creation_catalog := ProfileCatalog.pilot()
+	for class_id: StringName in CREATION_CLASS_IDS:
+		# E10a C7: a registered base (Acólito) is offered only when its module is ready (C1.3).
+		if not creation_catalog.base_class_is_available(class_id):
+			continue
 		var button := Button.new()
+		button.name = "Create_%s" % class_id
 		button.text = "Criar %s" % _class_name(class_id)
+		button.tooltip_text = CLASS_DESCRIPTIONS[class_id]
 		button.custom_minimum_size = Vector2(0, 44)
 		button.pressed.connect(create_character.bind(class_id))
 		create_panel.add_child(button)
+		var class_description := Label.new()
+		class_description.name = "CreateDescription_%s" % class_id
+		class_description.text = CLASS_DESCRIPTIONS[class_id]
+		class_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		class_description.add_theme_font_size_override("font_size", 13)
+		class_description.add_theme_color_override("font_color", Color("bcc6d2"))
+		create_panel.add_child(class_description)
 		create_buttons.append(button)
 		if class_id == &"swordsman":
 			create_button = button

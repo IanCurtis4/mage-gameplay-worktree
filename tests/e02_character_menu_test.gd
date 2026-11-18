@@ -20,7 +20,7 @@ func _initialize() -> void:
 	menu.set_profile_directory(root_directory.path_join("profile"))
 	root.add_child(menu)
 	await process_frame
-	_check(menu.roster_list.item_count == 0 and menu.empty_label.visible and menu.select_button.disabled and menu.progression_state_label.text.contains("Crie ou selecione") and menu.skill_window.skill_entries.is_empty() and menu.create_buttons.size() == 3 and menu.create_buttons[2].text == "Criar Arqueiro", "empty roster has an explicit state, cannot select a skill tree, and exposes all available base classes")
+	_check(menu.roster_list.item_count == 0 and menu.empty_label.visible and menu.select_button.disabled and menu.progression_state_label.text.contains("Crie ou selecione") and menu.skill_window.skill_entries.is_empty() and menu.create_buttons.size() == 4 and menu.create_buttons[2].text == "Criar Arqueiro" and menu.create_buttons[3].text == "Criar Acólito", "empty roster has an explicit state, cannot select a skill tree, and exposes all available base classes")
 	menu.name_input.text = "Lina"
 	var swordsman: Dictionary = menu.create_character(&"swordsman")
 	var mage: Dictionary = menu.create_character(&"mage")

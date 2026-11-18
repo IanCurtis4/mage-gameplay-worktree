@@ -1,0 +1,62 @@
+extends SceneTree
+const OUT := "res://docs/epics/e10a/"
+func _initialize() -> void:
+	_run.call_deferred()
+func _menu(label: String, character: CharacterState) -> CharacterMenu:
+	var directory := ProjectSettings.globalize_path("res://.godot/verification/e10a_capture/" + label)
+	DirAccess.make_dir_recursive_absolute(directory)
+	var catalog := ProfileCatalog.pilot()
+	if character != null:
+		var profile := ProfileState.new("123e4567-e89b-42d3-a456-426614174102")
+		character.character_id = IdentityIds.character_id(profile.profile_id, profile.next_character_counter)
+		profile.characters.append(character)
+		profile.next_character_counter += 1
+		profile.selected_character_id = character.character_id
+		ProfileStore.new(directory, catalog).commit(profile)
+	var menu := (load("res://scenes/character_menu.tscn") as PackedScene).instantiate() as CharacterMenu
+	menu.set_profile_facade(ProfileFacade.new(ProfileStore.new(directory, catalog)))
+	root.add_child(menu)
+	return menu
+func _shot(name: String) -> void:
+	await process_frame
+	await process_frame
+	await create_timer(0.4).timeout
+	root.get_texture().get_image().save_png(ProjectSettings.globalize_path(OUT + name))
+func _run() -> void:
+	root.size = Vector2i(1280, 720)
+	var menu := _menu("a", null)
+	await process_frame
+	var last: Control = menu.create_buttons[3]
+	await process_frame
+	var scrolls := menu.find_children("*", "ScrollContainer", true, false)
+	for sc in scrolls:
+		(sc as ScrollContainer).scroll_vertical = 100000
+	await _shot("t10_capture_creation.png")
+	menu.queue_free()
+	var c := CharacterState.new("x", "Acólito de teste", &"acolyte")
+	c.base_xp_total = ProgressionRules.EVOLUTION_MIN_BASE_XP
+	c.job_xp_total = ProgressionRules.EVOLUTION_MIN_JOB_XP
+	menu = _menu("b", c)
+	await process_frame
+	menu.menu_tabs.current_tab = 2
+	await process_frame
+	await process_frame
+	for sc in menu.find_children("*", "ScrollContainer", true, false):
+		if (sc as ScrollContainer).is_visible_in_tree():
+			(sc as ScrollContainer).ensure_control_visible(menu.evolution_options_list)
+	await _shot("t10_capture_evolution_choice.png")
+	menu.queue_free()
+	var bg := ColorRect.new()
+	bg.color = Color("20242c")
+	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	root.add_child(bg)
+	var player := PlayerActor.new()
+	player.attach_origin_kit(ClassBaseRegistry.module(&"acolyte").create_runtime())
+	player.attach_kit(ClassKitRegistry.module(&"cultist").create_runtime())
+	var guide: Control = ClassKitRegistry.onboarding_script(&"cultist").new()
+	guide.configure(player)
+	bg.add_child(guide)
+	await process_frame
+	guide.toggle_button.pressed.emit()
+	await _shot("t10_capture_onboarding_cultist.png")
+	quit()

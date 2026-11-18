@@ -105,11 +105,20 @@ func _resize_panel() -> void:
 	if _panel != null:
 		_panel.size.y = _panel.get_combined_minimum_size().y
 
-## Visible only for a player whose kit is this guide's evolution.
+## E10a A7.5: `has_kit()` is true with an origin module only, so `kit` can be null; the guide
+## of a base (acolyte) follows the origin module, the guide of a pure kit follows the kit.
+func _active_identity() -> StringName:
+	if _player.kit != null:
+		return _player.kit.evolution_id
+	if _player.origin_kit != null:
+		return _player.origin_kit.evolution_id
+	return &""
+
+## Visible only for a player whose kit (or, before the evolution, base module) is this guide's identity.
 func refresh() -> void:
 	if status_label == null:
 		return
-	visible = is_instance_valid(_player) and _player.has_kit() and _player.kit.evolution_id == identity_id()
+	visible = is_instance_valid(_player) and _player.has_kit() and _active_identity() == identity_id()
 	if not visible:
 		return
 	var message := status_text()
