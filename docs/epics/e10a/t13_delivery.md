@@ -289,3 +289,70 @@ em T6 e T7 (A10.4); por isso um conflito nessa linha, se vier, é mecânico e se
 única. As linhas de contagem de `tests/e08_feedback_recipe_test.gd` e de `tests/e10a/base_seam_test.gd`
 vão conflitar entre T6 e T7: a regra é escrever o número exato da soma (5 + 1 = 6), nunca `>=`, e registrar
 a conta aqui. As contagens de skills publicadas (20/8) só mudam quando a T5 liga o Acólito (A10.3, A11).
+
+## Composição 4 — T7 (Cultista) e ponta da arquitetura (18/11/2026)
+
+### Merges e conflitos
+
+| Ordem | Origem | Ponta mesclada | Merge |
+|---|---|---|---|
+| 1 | T7 (`claude/laughing-mclean-ff1bbd`, sobre a T4) | `de11f99d` | `d78501a5` |
+| 2 | arquitetura (decisão A12: T9 antes da T8) | `f5940eb7` | `8a59a084` |
+
+O merge da T7 teve **três conflitos de conteúdo, todos previstos por A9 e A10**, nos checks de
+contagem dos três arquivos compartilhados. Resolvidos por mim com a soma exata, sem enfraquecer check:
+
+| Arquivo | T6 (HEAD) | T7 | Resolução |
+|---|---|---|---|
+| `tests/e08_feedback_recipe_test.gd` | kits prontos `== 5` (4 + `priest`) | `== 5` (4 + `cultist`) | **`== 6`** (4 do E09 + `priest` + `cultist`). As contagens de skills publicadas ficam **20 ativas e 8 passivas**: o Acólito ainda é esqueleto e o filtro de base disponível (A10.2, idêntico nos dois lados) exclui as puras do catálogo |
+| `tests/e10a/base_seam_test.gd` | `priest` pronto, 7 skills; `cultist` esqueleto | `cultist` pronto, 7 skills; `priest` esqueleto | os dois prontos com 7 skills (ramo `if`/`elif`); o resto continua esqueleto vazio |
+| `tests/e05_evolution_catalog_test.gd` | linha `priest` no `KIT_METADATA` | linha `cultist` | as duas linhas (`2-1` e `2-2`). O filtro de `_ready_kit_ids()` ficou duplicado depois do merge (T6 dentro do `if`, T7 no começo do laço) e eu fiquei com **uma só linha, dentro do `if`** (A10.4); o resultado é o mesmo |
+
+**Conta final de A9 e A10 nesta composição:** 4 + 1 + 1 = **6 kits prontos**; skills publicadas
+**20/8**, sem mudança. Elas mudam quando a T5 ligar o Acólito (A10.3 e A11): a T5 atualiza o
+número exato e a T13 repete esta conta. O `ui_evolution_test` e a lista de destinos continuam como
+estão, sem edição, e passam.
+
+### Importação e testes de impacto
+
+- **Importação:** exit 0, saída `BA6F88E5…6277D` (`.godot/verification/t13_c4/import/`).
+- **Bootstrap F1:** 255 com a falha conhecida (`AB79025F…831F`); 256 passou (`9503A8E6…C1BF`).
+- **Impacto:** **27 de 27**, um passo por chamada, `-F1Fixture -SkipEditorImport`, timeout 300 s,
+  0 timeouts e nenhum `SCRIPT ERROR`, `Parse Error`, `Compile Error`, `still in use` ou `ObjectDB`.
+
+| Passo | Teste | Checks | Saída (8) |
+|---|---|---|---|
+| 342 | `cultist_kit_test` (T7) | 215, 0 falhas | `215686C4` |
+| 340 | `cultist_boss_combat_test` (T7) | 50, 0 falhas | `4DFDDBDF` |
+| 341 | `cultist_campaign_kill_test` (T7) | 20, 0 falhas | `212B00D3` |
+| 349 / 348 | `priest_kit_test` / `priest_boss_combat_test` | 220 / 32 | `942D0B90` / `16BBBC37` (iguais) |
+| 338, 339, 335, 336 | `madness_test`, `sanctuary_test`, `base_seam_test`, `enemy_target_test` | 276, 155, 171, 88 | `D4DAEAF5`, `01B74920`, `83E3C22E`, `61C1F89F` (iguais) |
+| 333, 331, 332 | `kit_seam_test`, `kit_seam_hooks_v2_test`, `kit_seam_hooks_v3_test` | 276, 38, 63 | `60643509`, `5182F32B`, `D1DFD323` (iguais) |
+| 108 | `e05_evolution_catalog_test` | PASS, 93 | `6B7F3B5B` (igual) |
+| 26 | `e08_feedback_recipe_test` | PASS, 1309 | `AA05DF9D` (igual) |
+| 27 | `e08_feedback_vfx_test` | **681**, 0 falhas | `00676B42` (eram 667; o Cultista soma 14) |
+| 334, 337 | `ui_evolution_test`, `flank_test` | 97, 205 | `DF7B1619`, `D23DC5D7` (iguais) |
+| 344 / 343 | `mg_ac_kit_test` / `mg_ac_boss_combat_test` | 177 / 29 | `814D744C` / `66AC49C6` |
+| 346 / 345 / 347 | `mg_la_kit_test` / `mg_la_boss_combat_test` / `mg_la_world_leap_test` | 231 / 33 / 49 | `B480859D` / `6710C89E` / `F2E59EE4` |
+| 351 / 350 | `sp_ac_kit_test` / `sp_ac_boss_combat_test` | 170 / 25 | `2229F2DC` / `26957117` |
+| 353 / 352 / 354 | `sp_la_kit_test` / `sp_la_boss_combat_test` / `sp_la_parry_ai_test` | 217 / 31 / 55 | `D2DC91B2` / `4F9C0F3F` / `4F0C254B` |
+
+Logs em `.godot/verification/t13_c4/impact/<teste>/` (fora do Git).
+
+**A repetir na composição da T5:** `cultist_boss_combat_test` (e `cultist_campaign_kill_test`), porque
+com a base real do Acólito ele passa a usar a base sem edição (pedido da arquitetura).
+
+### Evidências ignoradas pelo Git, preservadas
+
+As 14 pastas `.godot/verification_t7*` (`_t7`, `_t7_a`, `_t7_campaign`, `_t7_cultist_*` ×3, `_t7_f1b/c/d`,
+`_t7_import1/2/3`, `_t7b`, `_t7c`) foram para `.godot/verification/e10a_t7_evidence/`, com manifesto de
+SHA256 por arquivo em `.godot/verification/e10a_t7_evidence_manifest.sha256` (108 linhas,
+`42E094E0…`). A `_t7c` é a leva final de 23 passos que o recibo da T7 cita. **Não copiei**
+`.godot/verification/` da worktree (1,1 GB, 6351 arquivos): é a fixture F1 gerada (`e07_f1`, `e07_f2`,
+`e07_f5`) que o recibo da T7 não cita e que `e07_f1_import_test` refaz no candidato.
+O `git status` da worktree tinha só `.import` reescritos e `.gd.uid` de `docs/map_editor`.
+
+### Worktree removida
+
+`laughing-mclean-ff1bbd` (branch `claude/laughing-mclean-ff1bbd` mantida em `de11f99d`):
+`git worktree remove --force` e, onde sobrou resíduo, `rm -rf`.
