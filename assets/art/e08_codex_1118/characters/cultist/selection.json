@@ -1,0 +1,23 @@
+{
+  "schema": "ragrpg_art_selection_v1",
+  "scope": "e08_codex_1118/characters/cultist",
+  "updated": "2026-11-18",
+  "selections": {
+    "east": {
+      "path": "east.png",
+      "sha256": "b8dd93b5bafcaa30833109b9515dcede28081b28b3d735ddff6bc4a02c55de30"
+    },
+    "north": {
+      "path": "north.png",
+      "sha256": "ac027bd3a9fd73ce92eaacfaa192ad20c9daec6154b0328aa85fa07b5e9c22f4"
+    },
+    "south": {
+      "path": "south.png",
+      "sha256": "2c894b80576dc613070f977426ef886134f6bb774d0936eb1317e18452a67948"
+    },
+    "west": {
+      "path": "west.png",
+      "sha256": "c160be76efd1ac17b3c78d9097fc458f25a6a3f9e9f29cbccdd0238dc11a0af8"
+    }
+  }
+}
