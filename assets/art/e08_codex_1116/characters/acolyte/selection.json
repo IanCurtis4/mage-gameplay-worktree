@@ -1,0 +1,27 @@
+{
+  "schema": "ragrpg_art_selection_v1",
+  "scope": "e08_codex_1116/characters/acolyte",
+  "updated": "2026-11-18",
+  "selections": {
+    "east": {
+      "path": "east_v3.png",
+      "sha256": "ee48158b8546e44fa822b510e49bbbb412483935fd3abb09a13262c2ebb8630b",
+      "inferred": "latest version; the source provenance has no selected flag"
+    },
+    "north": {
+      "path": "north.png",
+      "sha256": "6d06e243759ceee8fb11540c05b80b52e08a4882b03fc95a04ed30a58cdbf7a4",
+      "inferred": "latest version; the source provenance has no selected flag"
+    },
+    "south": {
+      "path": "south_v5.png",
+      "sha256": "8bdf9dea7213e80b2d6e78b003f1f1bb2e80be4810b6c12005012010cd7771b6",
+      "inferred": "latest version; the source provenance has no selected flag"
+    },
+    "west": {
+      "path": "west_v3.png",
+      "sha256": "8d7e3f0724f1ec57bc3f1397818a7aed62d0a859bd5d94165893e6c5c067fdfb",
+      "inferred": "latest version; the source provenance has no selected flag"
+    }
+  }
+}
