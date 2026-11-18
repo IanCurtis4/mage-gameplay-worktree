@@ -206,3 +206,86 @@ A9 manda T6 e T7 atualizarem, cada uma no próprio ramo, as linhas de contagem d
 `tests/e08_feedback_recipe_test.gd` e `tests/e10a/base_seam_test.gd`. Ao compor as duas a T13
 confere a soma exata: **6 kits** com `priest` e `cultist` prontos. Ainda não há nada a somar;
 esta conta é preenchida nas composições de T6 e T7.
+
+## Composição 3 — T6 (Sacerdote) e ponta da arquitetura (18/11/2026)
+
+### Merges
+
+`--no-ff`, sem conflito de conteúdo (o `docs/epics/e10a.md` combinou sozinho).
+
+| Ordem | Origem | Ponta mesclada | Merge |
+|---|---|---|---|
+| 1 | T6 (`claude/infallible-mirzakhani-b3eda2`) | `ce629e74` | `caa13976` |
+| 2 | arquitetura (A10, A11, linha nova da T10) | `2aa10bf6` | `a63e66ae` |
+
+A T6 tocou 12 arquivos (módulo e testes do Sacerdote, `review_builds.json`, o manifesto de
+snapshot, o recibo) e, por A9 e A10, só estes checks de arquivos compartilhados:
+`tests/e05_evolution_catalog_test.gd` (linha do Sacerdote em `KIT_METADATA` e o filtro de base
+disponível em `_ready_kit_ids()`), `tests/e08_feedback_recipe_test.gd` e
+`tests/e10a/base_seam_test.gd`.
+
+### Importação e testes de impacto
+
+- **Importação:** exit 0, saída `8F510058…CABDE` (`.godot/verification/t13_c3/import/`).
+- **Bootstrap F1** refeito: 255 com a falha conhecida (`AB79025F…831F`); 256 passou
+  (`825BC43F…0F84`).
+- **Impacto**, um passo por chamada, `-F1Fixture -SkipEditorImport`, timeout 300 s: **24 de 24**,
+  0 timeouts, 0 `SCRIPT ERROR`, `Parse Error`, `Compile Error`, `still in use` e `ObjectDB` nas
+  saídas e nos logs. Com a fixture F1 em dia, `kit_seam_hooks_v3_test` e `e08_feedback_vfx_test`
+  passam (na worktree da T6 falhavam por falta de `source_hashes.json`).
+
+| Passo | Teste | Checks | Saída (8) |
+|---|---|---|---|
+| 346 | `priest_kit_test` (T6) | 220, 0 falhas | `942D0B90` |
+| 345 | `priest_boss_combat_test` (T6) | 32, 0 falhas | `16BBBC37` |
+| 339 | `sanctuary_test` | 155 | `01B74920` (igual à composição 2) |
+| 333 | `kit_seam_test` | 276 | `60643509` (igual) |
+| 331 | `kit_seam_hooks_v2_test` | 38 | `5182F32B` (igual) |
+| 332 | `kit_seam_hooks_v3_test` | 63 | `D1DFD323` (igual) |
+| 336 | `enemy_target_test` | 88 | `61C1F89F` (igual) |
+| 335 | `base_seam_test` | 171 | `83E3C22E` (igual) |
+| 338 | `madness_test` | 276 | `D4DAEAF5` (igual) |
+| 108 | `e05_evolution_catalog_test` | PASS, 93 | `6B7F3B5B` (igual ao E09 e ao recibo da T6) |
+| 26 | `e08_feedback_recipe_test` | PASS, 1309 | `AA05DF9D` (igual) |
+| 27 | `e08_feedback_vfx_test` | 667, 0 falhas | `C1554DC5` (eram 653; o Sacerdote soma 14) |
+| 334 | `ui_evolution_test` | 97 | `DF7B1619` (igual) |
+| 337 | `flank_test` | 205 | `D23DC5D7` (igual) |
+| 341 / 340 | `mg_ac_kit_test` / `mg_ac_boss_combat_test` | 177 / 29 | `814D744C` / `66AC49C6` |
+| 343 / 342 / 344 | `mg_la_kit_test` / `mg_la_boss_combat_test` / `mg_la_world_leap_test` | 231 / 33 / 49 | `B480859D` / `6710C89E` / `F2E59EE4` |
+| 348 / 347 | `sp_ac_kit_test` / `sp_ac_boss_combat_test` | 170 / 25 | `2229F2DC` / `26957117` |
+| 350 / 349 / 351 | `sp_la_kit_test` / `sp_la_boss_combat_test` / `sp_la_parry_ai_test` | 217 / 31 / 55 | `D2DC91B2` / `4F9C0F3F` / `4F0C254B` |
+
+Logs em `.godot/verification/t13_c3/impact/<teste>/` (fora do Git).
+
+### Evidências ignoradas pelo Git, preservadas
+
+Em `.godot/verification/e10a_t6_evidence/`, com manifesto de SHA256 por arquivo em
+`.godot/verification/e10a_t6_evidence_manifest.sha256` (66 linhas, SHA256 `CE141DDA…E16B`):
+`t6_final.txt`, `t6_final2.txt` (a rodada final de 23 testes que o recibo da T6 cita;
+`86989078…`), `t6_impact3.txt` e a pasta `verification/` (63 arquivos) da worktree. A pasta
+`.godot/f1_visual_fixture` estava vazia. O `git status` da worktree só tinha `.import`
+reescritos e `.gd.uid` de `docs/map_editor`, que não foram versionados.
+
+### Worktree removida
+
+`infallible-mirzakhani-b3eda2` (branch `claude/infallible-mirzakhani-b3eda2`, mantida em
+`ce629e74`) removida por `git worktree remove --force` e, onde sobrou resíduo, `rm -rf`. O `git worktree remove` falhou com `Permission denied`, mas a worktree saiu do registro (`git worktree list` sem ela)
+e a pasta ficou vazia e ocupada (`Device or resource busy`, a sessão da T6 a usa como diretório). Disco: 32 GB livres (93% usados).
+
+### Conta das contagens (A9 e A10) até aqui
+
+A T7 ainda não entregou, então a soma final não existe. O que o candidato tem agora:
+
+| Contagem | Valor no candidato | Onde |
+|---|---|---|
+| Kits prontos no catálogo de produção | **5** (os 4 do E09 + `priest`) | `tests/e08_feedback_recipe_test.gd` |
+| Skills de kit ofertadas pelo catálogo | **20 ativas, 8 passivas**, sem mudança: o filtro de base disponível (A10.2) exclui o Sacerdote enquanto o Acólito for esqueleto | idem |
+| Esqueletos que seguem vazios | `cultist` | `tests/e10a/base_seam_test.gd` |
+| `priest` | pronto, 7 skills | idem |
+
+**Soma esperada ao compor a T7:** 6 kits prontos (4 do E09, `priest` e `cultist`), com o `cultist` com as
+suas skills e `base_seam_test` sem esqueletos de pura. O filtro de `_ready_kit_ids()` é uma linha idêntica
+em T6 e T7 (A10.4); por isso um conflito nessa linha, se vier, é mecânico e se resolve ficando com a linha
+única. As linhas de contagem de `tests/e08_feedback_recipe_test.gd` e de `tests/e10a/base_seam_test.gd`
+vão conflitar entre T6 e T7: a regra é escrever o número exato da soma (5 + 1 = 6), nunca `>=`, e registrar
+a conta aqui. As contagens de skills publicadas (20/8) só mudam quando a T5 liga o Acólito (A10.3, A11).
