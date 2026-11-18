@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" shape-rendering="geometricPrecision">
+  <path d="M7 6Q32 12 57 6Q53 32 57 58Q32 52 7 58Q11 32 7 6z" fill="#0c1426"/><path d="M7 6Q32 12 57 6Q53 32 57 58Q32 52 7 58Q11 32 7 6z" fill="none" stroke="#35d6c6" stroke-width="2.5" stroke-linejoin="round"/>
+  <g fill="#e64fc3" stroke="#e64fc3" stroke-linecap="round" stroke-linejoin="round" transform="translate(4 4) scale(.875)"><path d="M32 3L36.4 15.6L46.5 6.9L44 20L57.1 17.5L48.4 27.6L61 32L48.4 36.4L57.1 46.5L44 44L46.5 57.1L36.4 48.4L32 61L27.6 48.4L17.5 57.1L20 44L6.9 46.5L15.6 36.4L3 32L15.6 27.6L6.9 17.5L20 20L17.5 6.9L27.6 15.6z"/><path d="M19 32Q32 21 45 32Q32 43 19 32z" fill="#0c1426" stroke="none"/><circle cx="32" cy="32" r="4.5"/></g>
+</svg>

@@ -25,6 +25,11 @@ PALETTES = {
     "thaumaturge": {"background": "#2a3a8c", "silhouette": "#fff0c2"},    # blue + white-gold
     "duelist": {"background": "#2b1318", "silhouette": "#d8dde4"},        # dark red/black + silver
     "arcane_blade": {"background": "#24272d", "silhouette": "#8fcfff"},   # lead grey/black + crystal blue
+    # E10a Acolyte family (docs/epics/e10a_contract.md section 6). The base splits its tile in two halves with the
+    # colours swapped: left half plum + gold, right half gold + plum ("light and shadow, side not chosen yet").
+    "acolyte": {"background": "#3d2a52", "silhouette": "#f0cf7f"},                         # plum (shadow) + gold (light)
+    "priest": {"background": "#315f95", "silhouette": "#f6efd9", "accent": "#e8cf85"},      # sky blue + ivory + pale gold
+    "cultist": {"background": "#0c1426", "silhouette": "#e64fc3", "accent": "#35d6c6"},     # blue-black + magenta + turquoise
 }
 
 # Semantic glyphs are intentionally drawn from primitives, not copied from existing art.
@@ -262,6 +267,120 @@ SPECIAL.update({
 })
 
 
+# ---- E10a: 22 Acolyte-family skills (T3). IDs are fixed by docs/epics/e10a_contract.md section 1. ----
+E10A_SKILLS = {
+    "acolyte": ["acolyte_punishing_light", "acolyte_prayer", "acolyte_votive_shield", "acolyte_shadow_seal",
+                "acolyte_disturbing_whisper", "acolyte_eldritch_vision", "acolyte_devotion", "acolyte_protective_faith"],
+    "priest": ["priest_sanctuary", "priest_grace", "priest_aegis", "priest_judgment", "priest_exorcist",
+               "priest_light_seal", "priest_holy_hour"],
+    "cultist": ["cultist_abyss_gaze", "cultist_ecstasy", "cultist_impossible_idol", "cultist_shared_delirium",
+                "cultist_open_pupil", "cultist_impossible_geometry", "cultist_revelation"],
+}
+E10A_IDS = [i for ids in E10A_SKILLS.values() for i in ids]
+E10A_PASSIVES = {"acolyte_devotion", "acolyte_protective_faith", "priest_grace", "priest_exorcist",
+                 "cultist_ecstasy", "cultist_open_pupil"}
+E10A_CLASSES = tuple(E10A_SKILLS)
+# --check enforces these exact kit lists (28 from E09 + 22 from E10a = 50), independent of the catalog.
+EXPECTED_KIT_COUNTS = {"E09": 28, "E10a": 22}
+
+
+def _star(cx: float, cy: float, r1: float, r2: float, n: int, start: float = -90.0) -> str:
+    pts = []
+    for i in range(2 * n):
+        x, y = _xy(cx, cy, r1 if i % 2 == 0 else r2, start + i * 180.0 / n)
+        pts.append(f"{x:g} {y:g}")
+    return "M" + "L".join(pts) + "z"
+
+
+def _spiral(cx: float, cy: float, r0: float, r1: float, turns: float, start: float = 0.0, steps: int = 48) -> str:
+    pts = []
+    for i in range(steps + 1):
+        t = i / steps
+        x, y = _xy(cx, cy, r0 + (r1 - r0) * t, start + 360.0 * turns * t)
+        pts.append(f"{x:g} {y:g}")
+    return "M" + "L".join(pts)
+
+
+def _arc(cx: float, cy: float, r: float, a0: float, a1: float) -> str:
+    x0, y0 = _xy(cx, cy, r, a0)
+    x1, y1 = _xy(cx, cy, r, a1)
+    large = 1 if abs(a1 - a0) > 180 else 0
+    return f"M{x0:g} {y0:g}A{r:g} {r:g} 0 {large} 1 {x1:g} {y1:g}"
+
+
+def _eye(cx: float, cy: float, w: float, h: float) -> str:
+    return f"M{cx - w:g} {cy:g}Q{cx:g} {cy - h:g} {cx + w:g} {cy:g}Q{cx:g} {cy + h:g} {cx - w:g} {cy:g}z"
+
+
+BGSTROKE = ' stroke="@bg"'
+# "@bg" is replaced by the tile colour (negative space); "@acc" by the accent colour.
+E10A_SHAPES = {
+    # Base: light and shadow share each symbol
+    "lightbeam": '<circle cx="46" cy="32" r="8"/>' f'<path d="M6 32h31M12 23h18M12 41h18" {_line(4)}/>'
+                 f'<path d="{_rays(46, 32, 12, 19, 5, -60, 120, False)}" {_line(3)}/>',
+    "prayhands": '<path d="M32 9Q47 22 42 53H22Q17 22 32 9z"/>' f'<path d="M32 24v24" {_line(3, BGSTROKE)}/>'
+                 f'<path d="M13 30q-5 8 0 16M51 30q5 8 0 16" {_line(3)}/>',
+    "votiveshield": '<path d="M32 7 51 15v14c0 13-8 22-19 28C21 51 13 42 13 29V15z"/>'
+                    '<path d="M32 21q9 9 4 15a6.5 6.5 0 0 1-8 0q-5-6 4-15z" fill="@bg" stroke="none"/>',
+    "shadowseal": f'<path d="{_ringd(32, 32, 20)}" {_line(4)}/><path d="M39 21a12 12 0 1 0 0 22 9 9 0 1 1 0-22z"/>'
+                  f'<path d="M32 4v6M32 54v6M4 32h6M54 32h6" {_line(3.5)}/>',
+    "whispercone": '<path d="M7 32 55 11v42z"/>' f'<path d="M24 32q4-6 8 0t8 0M24 23q4-6 8 0t8 0M24 41q4-6 8 0t8 0" {_line(2.8, BGSTROKE)}/>',
+    "farsight": '<path d="M3 32Q21 12 39 32Q21 52 3 32z"/><circle cx="21" cy="32" r="6" fill="@bg" stroke="none"/>'
+                f'<path d="M43 32h5" {_line(3.5, " stroke-dasharray=\"1 4\"")}/>'
+                f'<path d="{_ringd(55, 32, 5.5)}" {_line(3)}/><circle cx="55" cy="32" r="1.8"/>',
+    "sunmoon": f'<path d="{_ringd(19, 32, 8)}" {_line(3)}/><path d="{_rays(19, 32, 12, 17, 8)}" {_line(3)}/>'
+               f'<path d="M50 17a15 15 0 1 0 0 30 11 11 0 1 1 0-30z" {_line(3)}/>'
+               f'<path d="M19 55q13 8 26 0M19 9q13-8 26 0" {_line(2.5)}/>',
+    "faitharch": f'<path d="M14 54V30Q14 10 32 10T50 30V54z" {_line(3.5)}/><path d="M32 24v22M23 34h18" {_line(3.5)}/>'
+                 f'<path d="M8 54h48" {_line(3)}/>',
+    # Priest: closed rings, circles and verticals
+    "sanctuarycircle": f'<path d="M8 45a24 10 0 1 0 48 0a24 10 0 1 0-48 0z" {_line(4)}/>'
+                       f'<path d="M18 45a14 5.5 0 1 0 28 0a14 5.5 0 1 0-28 0z" {_line(2.5)}/>'
+                       '<circle cx="8" cy="45" r="3"/><circle cx="56" cy="45" r="3"/><circle cx="32" cy="35" r="3"/><circle cx="32" cy="55" r="3"/>'
+                       '<circle cx="32" cy="13" r="5"/><path d="M32 21 23 41h18z"/>',
+    "halostack": f'<path d="M18 17a14 4.5 0 1 0 28 0a14 4.5 0 1 0-28 0zM14 31a18 5.5 0 1 0 36 0a18 5.5 0 1 0-36 0zM10 46a22 7 0 1 0 44 0a22 7 0 1 0-44 0z" {_line(3.5)}/>'
+                 f'<path d="M32 4v5M32 55v5" {_line(3)}/>',
+    "haloaegis": f'<path d="{_ringd(32, 34, 20)}" {_line(4)}/><path d="{_ringd(32, 34, 27)}" {_line(2.5, " stroke-dasharray=\"2 5\"")}/>'
+                 '<circle cx="32" cy="26" r="5"/><path d="M32 33 23 49h18z"/>',
+    "judgmentarrow": '<path d="M26 4h12v24h9L32 44 17 28h9z"/>' f'<path d="M10 8v26M54 8v26" {_line(3.5)}/>'
+                     f'<path d="M8 51a24 7 0 1 0 48 0a24 7 0 1 0-48 0z" {_line(3.5)}/>',
+    "crackedshield": f'<path d="M32 9 47 15v13q0 12-15 20Q17 40 17 28V15z" {_line(3.5)}/>'
+                     f'<path d="M33 9 27 22l8 6-6 10 3 10" {_line(3.5)}/><path d="M41 44l5 7M24 45l-5 7M50 32h6" {_line(3)}/>',
+    "closingring": f'<path d="M28 10A22 22 0 0 0 28 54M36 10A22 22 0 0 1 36 54" {_line(5)}/>'
+                   '<path d="M32 16 27 6h10zM32 48 27 58h10z"/><path d="M32 25l7 7-7 7-7-7z"/>',
+    "grandcircle": f'<path d="M4 47a28 11 0 1 0 56 0a28 11 0 1 0-56 0z" {_line(3, " stroke-dasharray=\"6 4\"")}/>'
+                   f'<path d="M14 47a18 7 0 1 0 36 0a18 7 0 1 0-36 0z" {_line(4)}/>'
+                   f'<path d="{_star(32, 24, 17, 7, 8)}"/>',
+    # Cultist: eyes and open spirals
+    "abyssgaze": '<path d="M3 27Q32 2 61 27Q32 52 3 27z"/>' f'<path d="{_spiral(32, 27, 1.5, 11, 2.2, -90)}" {_line(3, BGSTROKE)}/>'
+                 f'<path d="M20 50v6M32 52v6M44 50v6" {_line(3.5)}/>',
+    "grinring": f'<path d="{_arc(32, 33, 22, -60, 240)}" {_line(4)}/><path d="M20 27l9 4M44 27l-9 4" {_line(3.5)}/>'
+                f'<path d="M18 40Q32 55 46 40" {_line(4.5)}/>',
+    "idolstele": '<path d="M19 57V28L32 7l13 21v29z"/>' f'<path d="{_eye(32, 36, 9, 14)}" fill="@bg" stroke="none"/><circle cx="32" cy="36" r="3.2"/>'
+                 f'<path d="M11 57h42" {_line(4)}/>',
+    "eyechain": f'<path d="{_eye(16, 17, 10, 11)}"/><path d="{_eye(48, 17, 10, 11)}"/><path d="{_eye(32, 49, 10, 11)}"/>'
+                '<circle cx="16" cy="17" r="3" fill="@bg" stroke="none"/><circle cx="48" cy="17" r="3" fill="@bg" stroke="none"/>'
+                '<circle cx="32" cy="49" r="3" fill="@bg" stroke="none"/>'
+                f'<path d="M29 17h6M20 27l8 14M44 27l-8 14" {_line(3, " stroke-dasharray=\"2 4\"")}/>',
+    "dilatedeye": f'<path d="{_eye(32, 32, 28, 26)}" {_line(3.5)}/><path d="{_ringd(32, 32, 11)}" {_line(3)}/>'
+                  f'<path d="{_ringd(32, 32, 4)}" {_line(2.5)}/><path d="{_rays(32, 32, 14, 19, 8, 22.5)}" {_line(2.5)}/>',
+    "squarespiral": f'<path d="M9 9H55V55H15V19H47V47H23V27H39V39H31" {_line(4.5, " stroke-linejoin=\"miter\"")}/><circle cx="31" cy="33" r="2.5"/>',
+    "revelationburst": f'<path d="{_star(32, 32, 29, 17, 12)}"/>' f'<path d="{_eye(32, 32, 13, 11)}" fill="@bg" stroke="none"/><circle cx="32" cy="32" r="4.5"/>',
+}
+SHAPES.update(E10A_SHAPES)
+SPECIAL.update({
+    "acolyte_punishing_light": "lightbeam", "acolyte_prayer": "prayhands", "acolyte_votive_shield": "votiveshield",
+    "acolyte_shadow_seal": "shadowseal", "acolyte_disturbing_whisper": "whispercone", "acolyte_eldritch_vision": "farsight",
+    "acolyte_devotion": "sunmoon", "acolyte_protective_faith": "faitharch",
+    "priest_sanctuary": "sanctuarycircle", "priest_grace": "halostack", "priest_aegis": "haloaegis",
+    "priest_judgment": "judgmentarrow", "priest_exorcist": "crackedshield", "priest_light_seal": "closingring",
+    "priest_holy_hour": "grandcircle",
+    "cultist_abyss_gaze": "abyssgaze", "cultist_ecstasy": "grinring", "cultist_impossible_idol": "idolstele",
+    "cultist_shared_delirium": "eyechain", "cultist_open_pupil": "dilatedeye",
+    "cultist_impossible_geometry": "squarespiral", "cultist_revelation": "revelationburst",
+})
+
+
 def ids_from_catalog() -> list[str]:
     source = CLASS_SOURCE.read_text(encoding="utf-8-sig")
     ids = set(re.findall(r'_add_(?:passive_)?skill\(&"([^\"]+)"', source))
@@ -274,6 +393,7 @@ def ids_from_catalog() -> list[str]:
     # These executable item adapters are real IDs and intentionally reuse their catalog art.
     ids.update(("fire_spear", "ice_spear", "teleport"))
     ids.update(HYBRID_IDS)  # E09 IDs: explicit list until T1/K1-K4 register them in ClassCatalog
+    ids.update(E10A_IDS)  # E10a IDs: explicit list until the E10a modules register them
     ids -= PENDING_ICON_IDS
     return sorted(ids)
 
@@ -281,13 +401,13 @@ def ids_from_catalog() -> list[str]:
 def category_for(skill_id: str) -> str:
     if skill_id in {"swordsman_resistance", "vigor", "blood_thirst", "mage_mana_regeneration", "archer_precision", "archer_cadence", "trap_technique", "defender_watch", "defender_guard_return", "berserker_obstinacy", "berserker_pursuit", "elementalist_prismatic_focus", "elementalist_prismatic_resonance", "spiritualist_echo_recovery", "spiritualist_channel_focus", "geometer_incidence", "geometer_vector_memory", "sentinel_precision_stance", "sentinel_opening_read", "hunter_shooting_discipline", "hunter_easy_prey"}:
         return "passive"
-    if skill_id in HYBRID_PASSIVES:
+    if skill_id in HYBRID_PASSIVES or skill_id in E10A_PASSIVES:
         return "passive"
     return "active"
 
 
 def class_for(skill_id: str) -> str:
-    for prefix in HYBRID_CLASSES:
+    for prefix in HYBRID_CLASSES + E10A_CLASSES:
         if skill_id.startswith(prefix + "_"):
             return prefix
     for prefix in ("defender", "berserker", "elementalist", "spiritualist", "geometer", "sentinel", "hunter"):
@@ -300,43 +420,66 @@ def class_for(skill_id: str) -> str:
     return "swordsman"
 
 
+def _frame(cls: str, category: str, bg: str, fg: str, acc: str) -> str:
+    """Tile behind the glyph. Mirrors the E06/E09 convention: passives sit on the plain rounded square."""
+    if cls == "acolyte":
+        return f'<rect x="4" y="4" width="56" height="56" rx="8" fill="{bg}"/><path d="M7 18V7h11M46 7h11v11M7 46v11h11M46 57h11V46" fill="none" stroke="{fg}" stroke-width="2"/>'
+    if category == "passive":
+        if cls in ("priest", "cultist"):
+            return f'<rect x="5" y="5" width="54" height="54" rx="8" fill="{bg}"/><rect x="8.5" y="8.5" width="47" height="47" rx="5" fill="none" stroke="{acc}" stroke-width="2"/>'
+        return f'<rect x="5" y="5" width="54" height="54" rx="8" fill="{bg}"/>'
+    if cls == "priest":
+        return f'<circle cx="32" cy="32" r="29" fill="{bg}"/><circle cx="32" cy="32" r="26" fill="none" stroke="{acc}" stroke-width="2.5"/>'
+    if cls == "cultist":
+        pinch = "M7 6Q32 12 57 6Q53 32 57 58Q32 52 7 58Q11 32 7 6z"
+        return f'<path d="{pinch}" fill="{bg}"/><path d="{pinch}" fill="none" stroke="{acc}" stroke-width="2.5" stroke-linejoin="round"/>'
+    if cls in ("mage", "elementalist", "thaumaturge"):
+        return f'<path d="M15 8h33q9 0 9 8v31q0 9-9 9H15q-8 0-8-7V15q0-7 8-7z" fill="{bg}"/><path d="M15 8q-7 1-7 7t7 7V8m33 48q8-1 8-7t-8-7v14M15 8h32M16 56h32" fill="none" stroke="{fg}" stroke-width="2.5"/>'
+    if cls == "spiritualist":
+        return f'<path d="M32 3C42 2 44 10 50 12S59 23 57 31 62 44 52 48 44 62 34 59 21 62 17 54 4 49 7 39 1 26 10 19 16 8 24 8Z" fill="{bg}"/><path d="M15 10q16-10 32 5M53 48q-16 16-33 6" fill="none" stroke="{fg}" stroke-width="2"/>'
+    if cls in ("defender", "paladin"):
+        return f'<path d="M7 7h50v24q0 20-25 29Q7 51 7 31Z" fill="{bg}"/><path d="M10 11h44M10 34q2 14 22 23 20-9 22-23" fill="none" stroke="{fg}" stroke-width="2"/>'
+    if cls == "berserker":
+        return f'<path d="M6 12 15 4 32 7 49 4 58 12 55 31 59 50 49 59 32 56 15 59 5 50 9 31Z" fill="{bg}"/><path d="M7 14 15 7M57 49l-8 7" stroke="{fg}" stroke-width="3"/>'
+    if cls == "hunter":
+        return f'<path d="M5 31Q11 5 38 5L59 12Q57 49 28 59L6 52Z" fill="{bg}"/><path d="M9 49q0-30 28-39M54 16q-3 25-23 36" fill="none" stroke="{fg}" stroke-width="2"/>'
+    if cls == "geometer":
+        return f'<path d="M32 3 61 57H3Z" fill="{bg}"/><path d="M27 9 7 52h50L37 9" fill="none" stroke="{fg}" stroke-width="2"/>'
+    if cls == "sentinel":
+        return f'<rect x="4" y="4" width="56" height="56" rx="8" fill="{bg}"/><path d="M7 18V7h11M46 7h11v11M7 46v11h11M46 57h11V46" fill="none" stroke="{fg}" stroke-width="2.5"/>'
+    if cls == "arcane_blade":
+        return f'<path d="M20 4h24l16 16v24L44 60H20L4 44V20z" fill="{bg}"/><path d="M21 8h22l13 13M8 43l13 13M43 56l13-13" fill="none" stroke="{fg}" stroke-width="2.5"/>'
+    if cls == "archer":
+        return f'<path d="M5 10h40L60 32 45 54H5Z" fill="{bg}"/><path d="M8 13h35M8 51h35m7-9 7-10-7-10" fill="none" stroke="{fg}" stroke-width="2"/>'
+    return f'<rect x="4" y="4" width="56" height="56" rx="4" fill="{bg}"/><path d="M7 18V7h11M46 7h11v11M7 46v11h11M46 57h11V46" fill="none" stroke="{fg}" stroke-width="2"/>'
+
+
+def _tile(skill_id: str, cls: str, category: str, bg: str, fg: str, acc: str) -> str:
+    """One complete tile (frame + glyph) with the given colours."""
+    shape = SHAPES[SPECIAL[skill_id]].replace("currentColor", fg).replace("@bg", bg).replace("@acc", acc)
+    # Passive glyphs are contour-only; active glyphs use solid silhouettes.
+    paint = 'fill="none" stroke="%s" stroke-width="3"' % fg if category == "passive" else 'fill="%s" stroke="%s"' % (fg, fg)
+    xf = "translate(6.4 6.4) scale(.8)" if cls == "priest" and category != "passive" else "translate(4 4) scale(.875)"  # round tile: more margin
+    return (f'{_frame(cls, category, bg, fg, acc)}\n'
+            f'  <g {paint} stroke-linecap="round" stroke-linejoin="round" transform="{xf}">{shape}</g>')
+
+
 def svg_for(skill_id: str, cls: str, category: str) -> str:
     glyph = SPECIAL.get(skill_id)
     if glyph is None or glyph not in SHAPES:
         raise ValueError(f"No original glyph defined for {skill_id}")
-    bg, fg = PALETTES[cls]["background"], PALETTES[cls]["silhouette"]
-    # Passive glyphs are contour-only; active glyphs use solid silhouettes.
-    shape = SHAPES[glyph]
-    paint = 'fill="none" stroke="%s" stroke-width="3"' % fg if category == "passive" else 'fill="%s" stroke="%s"' % (fg, fg)
-    shape = shape.replace('currentColor', fg)
-    if category == "passive":
-        frame = f'<rect x="5" y="5" width="54" height="54" rx="8" fill="{bg}"/>'
-    elif cls in ("mage", "elementalist", "thaumaturge"):
-        frame = f'<path d="M15 8h33q9 0 9 8v31q0 9-9 9H15q-8 0-8-7V15q0-7 8-7z" fill="{bg}"/><path d="M15 8q-7 1-7 7t7 7V8m33 48q8-1 8-7t-8-7v14M15 8h32M16 56h32" fill="none" stroke="{fg}" stroke-width="2.5"/>'
-    elif cls == "spiritualist":
-        frame = f'<path d="M32 3C42 2 44 10 50 12S59 23 57 31 62 44 52 48 44 62 34 59 21 62 17 54 4 49 7 39 1 26 10 19 16 8 24 8Z" fill="{bg}"/><path d="M15 10q16-10 32 5M53 48q-16 16-33 6" fill="none" stroke="{fg}" stroke-width="2"/>'
-    elif cls in ("defender", "paladin"):
-        frame = f'<path d="M7 7h50v24q0 20-25 29Q7 51 7 31Z" fill="{bg}"/><path d="M10 11h44M10 34q2 14 22 23 20-9 22-23" fill="none" stroke="{fg}" stroke-width="2"/>'
-    elif cls == "berserker":
-        frame = f'<path d="M6 12 15 4 32 7 49 4 58 12 55 31 59 50 49 59 32 56 15 59 5 50 9 31Z" fill="{bg}"/><path d="M7 14 15 7M57 49l-8 7" stroke="{fg}" stroke-width="3"/>'
-    elif cls == "hunter":
-        frame = f'<path d="M5 31Q11 5 38 5L59 12Q57 49 28 59L6 52Z" fill="{bg}"/><path d="M9 49q0-30 28-39M54 16q-3 25-23 36" fill="none" stroke="{fg}" stroke-width="2"/>'
-    elif cls == "geometer":
-        frame = f'<path d="M32 3 61 57H3Z" fill="{bg}"/><path d="M27 9 7 52h50L37 9" fill="none" stroke="{fg}" stroke-width="2"/>'
-    elif cls == "sentinel":
-        frame = f'<rect x="4" y="4" width="56" height="56" rx="8" fill="{bg}"/><path d="M7 18V7h11M46 7h11v11M7 46v11h11M46 57h11V46" fill="none" stroke="{fg}" stroke-width="2.5"/>'
-    elif cls == "arcane_blade":
-        frame = f'<path d="M20 4h24l16 16v24L44 60H20L4 44V20z" fill="{bg}"/><path d="M21 8h22l13 13M8 43l13 13M43 56l13-13" fill="none" stroke="{fg}" stroke-width="2.5"/>'
-    elif cls == "archer":
-        frame = f'<path d="M5 10h40L60 32 45 54H5Z" fill="{bg}"/><path d="M8 13h35M8 51h35m7-9 7-10-7-10" fill="none" stroke="{fg}" stroke-width="2"/>'
-    else:
-        frame = f'<rect x="4" y="4" width="56" height="56" rx="4" fill="{bg}"/><path d="M7 18V7h11M46 7h11v11M7 46v11h11M46 57h11V46" fill="none" stroke="{fg}" stroke-width="2"/>'
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" shape-rendering="geometricPrecision">
-  {frame}
-  <g {paint} stroke-linecap="round" stroke-linejoin="round" transform="translate(4 4) scale(.875)">{shape}</g>
-</svg>
-'''
-
+    pal = PALETTES[cls]
+    bg, fg, acc = pal["background"], pal["silhouette"], pal.get("accent", pal["silhouette"])
+    head = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" shape-rendering="geometricPrecision">'
+    if cls == "acolyte":
+        # Light (gold on plum) on the left half, shadow (plum on gold) on the right half.
+        return (f'{head}\n'
+                '  <defs><clipPath id="lt"><rect x="0" y="0" width="32" height="64"/></clipPath>'
+                '<clipPath id="sh"><rect x="32" y="0" width="32" height="64"/></clipPath></defs>\n'
+                f'  <g clip-path="url(#lt)">\n  {_tile(skill_id, cls, category, bg, fg, acc)}\n  </g>\n'
+                f'  <g clip-path="url(#sh)">\n  {_tile(skill_id, cls, category, fg, bg, acc)}\n  </g>\n'
+                '</svg>\n')
+    return f'{head}\n  {_tile(skill_id, cls, category, bg, fg, acc)}\n</svg>\n'
 
 
 def build(write: bool) -> dict:
@@ -347,6 +490,15 @@ def build(write: bool) -> dict:
         missing = sorted(set(ids) - SPECIAL.keys())
         extra = sorted(SPECIAL.keys() - set(ids))
         raise ValueError(f"Catalog/glyph mismatch ({len(ids)} ids, {len(SPECIAL)} motifs); missing={missing}, extra={extra}")
+    # Exact kit lists: 28 (E09) + 22 (E10a) = 50, each ID once, each present in the icon ID set.
+    kit = {"E09": HYBRID_IDS, "E10a": E10A_IDS}
+    for name, expected in EXPECTED_KIT_COUNTS.items():
+        if len(kit[name]) != expected or len(set(kit[name])) != expected:
+            raise ValueError(f"{name} kit list must hold exactly {expected} distinct IDs, found {len(kit[name])}")
+    if len(set(HYBRID_IDS) | set(E10A_IDS)) != sum(EXPECTED_KIT_COUNTS.values()):
+        raise ValueError("E09 and E10a kit lists overlap")
+    if not (set(HYBRID_IDS) | set(E10A_IDS)) <= set(ids):
+        raise ValueError("kit IDs missing from the icon ID set")
     entries = []
     for skill_id in ids:
         cls, category = class_for(skill_id), category_for(skill_id)
@@ -355,7 +507,7 @@ def build(write: bool) -> dict:
         entries.append({"id": skill_id, "category": category, "class": cls, "palette": PALETTES[cls], "sha256": digest})
         if write:
             (OUT / f"{skill_id}.svg").write_text(svg, encoding="utf-8", newline="\n")
-    return {"schema": 1, "source": "ClassCatalog + SentinelTuning.SKILL_IDS + HunterTuning.SKILL_IDS + ItemSkillAdapters.IDS + E09 HYBRID_SKILLS", "canvas": [64, 64], "entries": entries}
+    return {"schema": 1, "source": "ClassCatalog + SentinelTuning.SKILL_IDS + HunterTuning.SKILL_IDS + ItemSkillAdapters.IDS + E09 HYBRID_SKILLS + E10a E10A_SKILLS", "canvas": [64, 64], "entries": entries}
 
 
 def main() -> None:
@@ -392,7 +544,23 @@ def main() -> None:
                 "Prancha de revisão: `docs/epics/e09/t3_icons_review.png`.\n"
             )
             readme.write_text(current.rstrip() + e09, encoding="utf-8", newline="\n")
+            current = readme.read_text(encoding="utf-8-sig")
+        if "## Ícones da família Acólito E10a" not in current:
+            e10a = (
+                "\n\n## Ícones da família Acólito E10a\n\n"
+                "22 ícones SVG 64×64: base Acólito (`acolyte_`, 8), Sacerdote (`priest_`, 7) e Cultista (`cultist_`, 7); IDs do contrato "
+                "`docs/epics/e10a_contract.md` §1, gerados pelo mesmo script e cobertos pelo `--check` por lista exata (`E10A_SKILLS`). "
+                "A base divide o ladrilho ao meio com as cores trocadas (luz dourada sobre ameixa, sombra ameixa sobre dourado); o Sacerdote "
+                "usa azul-céu, marfim e dourado pálido com moldura circular; o Cultista, preto-azulado, magenta e turquesa. Passivas com contorno. "
+                "Um PNG pintado em `painted/<id>.png` substitui o SVG pelo mesmo ID. Prancha de revisão: `docs/epics/e10a/t3_icons_review.png`.\n"
+            )
+            readme.write_text(current.rstrip() + e10a, encoding="utf-8", newline="\n")
     else:
+        have = {e["id"] for e in manifest["entries"]}
+        missing_kit = sorted((set(HYBRID_IDS) | set(E10A_IDS)) - have)
+        if missing_kit:
+            raise SystemExit(f"Kit icons missing from manifest: {missing_kit}")
+        print(f"kit IDs checked by exact list: E09={len(HYBRID_IDS)} E10a={len(E10A_IDS)} total={len(HYBRID_IDS) + len(E10A_IDS)}")
         for entry in manifest["entries"]:
             file = OUT / f"{entry['id']}.svg"
             if not file.exists() or hashlib.sha256(file.read_bytes()).hexdigest() != entry["sha256"]:
