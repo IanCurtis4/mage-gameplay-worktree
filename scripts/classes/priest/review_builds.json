@@ -1,0 +1,20 @@
+{
+  "schema": "ragrpg_review_builds_v1",
+  "identity_id": "priest",
+  "builds": [
+    {
+      "id": "priest_bastion",
+      "name": "Bastião da Fé",
+      "base_ranks": {"acolyte_prayer": 5, "acolyte_votive_shield": 5, "acolyte_punishing_light": 2, "acolyte_shadow_seal": 1, "acolyte_devotion": 3, "acolyte_protective_faith": 3},
+      "evolution_ranks": {"priest_sanctuary": 5, "priest_grace": 3, "priest_aegis": 5, "priest_judgment": 3, "priest_holy_hour": 5},
+      "shortcuts": ["priest_sanctuary", "priest_aegis", "acolyte_prayer", "acolyte_votive_shield", "priest_holy_hour", "priest_judgment", "acolyte_punishing_light"]
+    },
+    {
+      "id": "priest_inquisition",
+      "name": "Inquisição",
+      "base_ranks": {"acolyte_punishing_light": 5, "acolyte_prayer": 5, "acolyte_votive_shield": 4, "acolyte_protective_faith": 3, "acolyte_shadow_seal": 1, "acolyte_devotion": 1},
+      "evolution_ranks": {"priest_sanctuary": 3, "priest_grace": 3, "priest_judgment": 5, "priest_exorcist": 3, "priest_light_seal": 4, "priest_holy_hour": 3},
+      "shortcuts": ["priest_sanctuary", "priest_judgment", "priest_light_seal", "acolyte_prayer", "priest_holy_hour", "acolyte_punishing_light", "acolyte_votive_shield"]
+    }
+  ]
+}

@@ -122,7 +122,11 @@ func _check_production_state() -> void:
 		var id: StringName = row[0]
 		var kit := ClassKitRegistry.module(id)
 		_check(kit != null and kit.kit_id() == id and String(ClassKitRegistry.MODULES[id]) == "res://scripts/classes/%s/%s_kit.gd" % [id, id], "%s skeleton loads from its own folder" % id)
-		_check(ClassKitRegistry.validate(id)["ok"] and not ClassKitRegistry.ready_for_play(id) and kit.skill_definitions().is_empty(), "%s skeleton validates, empty and not ready" % id)
+		if id == &"priest":
+			# E10a T6 (A9, A15 of E09): the Sacerdote is delivered and ready; its own tests live in tests/classes/priest.
+			_check(ClassKitRegistry.validate(id)["ok"] and ClassKitRegistry.ready_for_play(id) and kit.skill_definitions().size() == 7, "priest is a ready kit with its seven skills (T6)")
+		else:
+			_check(ClassKitRegistry.validate(id)["ok"] and not ClassKitRegistry.ready_for_play(id) and kit.skill_definitions().is_empty(), "%s skeleton validates, empty and not ready" % id)
 		_check(ClassKitRegistry.origin(id) == &"acolyte" and ClassKitRegistry.branch(id) == row[1] and ClassKitRegistry.affinity(id).is_empty() and ClassKitRegistry.is_pure(id), "%s: origin acolyte, branch %s by data" % [id, row[1]])
 		_check(ClassKitRegistry.display_name(id) == row[2] and ClassKitRegistry.skill_ids(id).size() == 7 and String(ClassKitRegistry.skill_ids(id)[0]).begins_with(String(id) + "_"), "%s: name and seven prefixed IDs of section 1" % id)
 		_check(IdentityIds.is_evolution(id) and IdentityIds.evolution_origin(id) == &"acolyte" and IdentityIds.evolution_belongs_to(id, &"acolyte") and IdentityIds.kit_affinity(id).is_empty(), "%s is an evolution of the Acólito, without affinity" % id)

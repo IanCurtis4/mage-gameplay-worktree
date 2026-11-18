@@ -47,6 +47,9 @@ func _expected_kit_skills() -> Dictionary:
 	var passive: Array[StringName] = []
 	for kit: StringName in ClassKitRegistry.ids():
 		if not ClassKitRegistry.ready_for_play(kit): continue
+		# E10a: a pure kit is offered (and its skills published) only with a ready base module.
+		var origin := ClassKitRegistry.origin(kit)
+		if IdentityIds.is_registered_base(origin) and not ProfileCatalog.pilot().base_class_is_available(origin): continue
 		var skills := ClassKitRegistry.skill_ids(kit)
 		for index: int in skills.size():
 			(active if ClassKitRegistry.SLOT_CATEGORIES[index] == ProfileCatalog.ACTIVE else passive).append(skills[index])
@@ -95,8 +98,8 @@ func _run() -> void:
 	# exact skills of the registry table; their recipe comes from the kit module (seam).
 	var kit_active: Array[StringName] = library.kit_active
 	var expected_kit := _expected_kit_skills()
-	check(ClassKitRegistry.ids().filter(func(kit: StringName) -> bool: return ClassKitRegistry.ready_for_play(kit)).size() == 4, "the four E09 kits are ready in the production catalog")
-	check(kit_active.size() == 20 and library.kit_passive.size() == 8, "the kits expose 20 active and 8 passive skills, got %d/%d" % [kit_active.size(), library.kit_passive.size()])
+	check(ClassKitRegistry.ids().filter(func(kit: StringName) -> bool: return ClassKitRegistry.ready_for_play(kit)).size() == 5, "the four E09 kits and the E10a Sacerdote are ready in the production catalog")
+	check(kit_active.size() == 20 and library.kit_passive.size() == 8, "the kits offered by the catalog expose 20 active and 8 passive skills (the E10a pure kits wait for a ready base), got %d/%d" % [kit_active.size(), library.kit_passive.size()])
 	check(_sorted(kit_active) == _sorted(expected_kit.active) and _sorted(library.kit_passive) == _sorted(expected_kit.passive), "kit skills of the catalog are exactly the registry table of the ready kits")
 	for skill: StringName in kit_active:
 		var recipe := Recipes.recipe(skill)
