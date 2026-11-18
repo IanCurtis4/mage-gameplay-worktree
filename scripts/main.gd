@@ -2503,7 +2503,8 @@ func _on_terrifying_shout_requested(origin: Vector2, radius: float, fear_duratio
 
 func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActor, ranged: bool) -> void:
 	_kit_publish_enemy_attack(request, target_actor, &"projectile" if ranged else &"melee", not ranged)
-	var spatial_source := instance_from_id(request.source_id) as CombatActor
+	# E10a C1.6: a hit relayed to another enemy is delivered by the enemy that attacked.
+	var spatial_source := instance_from_id(EnemyActor.attacker_id(request)) as CombatActor
 	if spatial_source != null and spatial_source.world_motion != null:
 		if not ranged:
 			if spatial_source.world_can_reach(target_actor,55.0): _on_attack_requested(request,target_actor)
@@ -2520,7 +2521,7 @@ func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActo
 		_on_attack_requested(request, target_actor)
 		return
 	var projectile := ArrowProjectile.new()
-	var source := instance_from_id(request.source_id) as Node2D
+	var source := instance_from_id(EnemyActor.attacker_id(request)) as Node2D
 	if source == null:
 		projectile.queue_free()
 		return
@@ -3863,7 +3864,9 @@ func _build_ui() -> void:
 		ui_root.add_child(sentinel_onboarding)
 		sentinel_onboarding.configure(player)
 	if player.has_kit():
-		var onboarding_script := ClassKitRegistry.onboarding_script(player.kit.evolution_id)
+		# E10a C1.4: the evolution kit's onboarding, else the registered base's.
+		var onboarding_script := ClassKitRegistry.onboarding_script(player.kit.evolution_id) if player.kit != null else null
+		if onboarding_script == null and player.origin_kit != null: onboarding_script = ClassKitRegistry.onboarding_script(player.origin_kit.evolution_id)
 		var onboarding: Variant = onboarding_script.new() if onboarding_script != null else null
 		if onboarding is Control:
 			help_panel.hide()
@@ -4141,7 +4144,7 @@ func _make_label(text_value: String, size: int, color: Color) -> Label:
 	return label
 
 func _on_mob_skill_requested(request: DamageRequest, target_actor: CombatActor, speed: float, maximum_range: float) -> void:
-	var source := instance_from_id(request.source_id) as Node2D
+	var source := instance_from_id(EnemyActor.attacker_id(request)) as Node2D
 	if source == null or target_actor == null: return
 	_kit_publish_enemy_attack(request, target_actor, &"projectile", false)
 	var projectile := MageProjectile.new()

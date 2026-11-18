@@ -34,7 +34,7 @@
     }
   },
   "res://scripts/actors/combat_actor.gd": {
-    "revision": 3,
+    "revision": 4,
     "fields": [
       "actor_name",
       "actor_color",
@@ -71,7 +71,10 @@
       "marks",
       "_facing_override",
       "_facing_override_remaining",
-      "_facing_override_owner"
+      "_facing_override_owner",
+      "received_damage_sources",
+      "accuracy_sources",
+      "disorient_heading"
     ],
     "omitted": {
       "contact_shadows_enabled": "local presentation preference; defaults to enabled on restore",
@@ -80,7 +83,7 @@
     }
   },
   "res://scripts/actors/enemy_actor.gd": {
-    "revision": 3,
+    "revision": 4,
     "fields": [
       "effect_ledger",
       "is_summoned",
@@ -116,7 +119,10 @@
       "threat_actors",
       "threat_taunt_sequence",
       "_charge_remaining",
-      "_charge_cooldown"
+      "_charge_cooldown",
+      "target_override",
+      "commit_deflections",
+      "combat_rng_state"
     ],
     "omitted": {
       "taunt_remaining": "computed projection of threat.forced_remaining"
@@ -160,7 +166,7 @@
     "omitted": {}
   },
   "res://scripts/actors/player_actor.gd": {
-    "revision": 2,
+    "revision": 3,
     "fields": [
       "navigation",
       "run_state",
@@ -288,7 +294,8 @@
       "_equipment_visual_key",
       "kit",
       "kit_time",
-      "_kit_was_alive"
+      "_kit_was_alive",
+      "origin_kit"
     ],
     "omitted": {
       "current_sp": "computed from deficit; no healing setter on restore",
@@ -1061,7 +1068,7 @@
     "omitted": {}
   },
   "res://scripts/data/class_definition.gd": {
-    "revision": 1,
+    "revision": 2,
     "fields": [
       "id",
       "display_name",
@@ -1069,7 +1076,8 @@
       "skill_ids",
       "passive_id",
       "basic_power",
-      "basic_range"
+      "basic_range",
+      "basic_delivery"
     ],
     "omitted": {}
   },

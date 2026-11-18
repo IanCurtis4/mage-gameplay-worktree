@@ -6,7 +6,8 @@ extends RefCounted
 const Audio = preload("res://scripts/presentation/audio_event_catalog.gd")
 
 const FAMILIES: Array[StringName] = [&"cast", &"projectile", &"melee", &"impact", &"area", &"trap", &"buff", &"heal", &"movement", &"summon", &"charge", &"teleport", &"death", &"revive"]
-const ELEMENTS: Array[StringName] = [&"physical", &"fire", &"ice", &"lightning", &"arcane", &"spirit", &"nature", &"geometry", &"blood"]
+## E10a C1.8: light and shadow have their own colour and effect (no new audio cue).
+const ELEMENTS: Array[StringName] = [&"physical", &"fire", &"ice", &"lightning", &"arcane", &"spirit", &"nature", &"geometry", &"blood", &"light", &"shadow"]
 
 ## Flags (bit field, index 3 of each row).
 const COMMIT := 1   ## The bridge publishes `effect_start` when the skill use is committed.
@@ -182,10 +183,16 @@ static func recipe(skill_id: StringName, variant: StringName = &"") -> Dictionar
 	var variants: Dictionary = VARIANTS.get(skill_id, {})
 	if not variant.is_empty() and variants.has(variant): return _build(skill_id, variants[variant], variant, false)
 	# E09 C1.2: a kit evolution reports its own basic-attack row; else the origin row applies.
-	if skill_id == &"basic_attack" and ClassKitRegistry.is_kit(variant):
+	# E10a C1.8: a registered base does the same, and a kit of that base falls back to it;
+	# a base without its own row uses the row of its basic-attack delivery.
+	if skill_id == &"basic_attack" and (ClassKitRegistry.is_kit(variant) or ClassBaseRegistry.is_base(variant)):
 		var kit_basic := ClassKitRegistry.basic_attack_recipe(variant)
 		if kit_basic.size() == 4: return _build(skill_id, kit_basic, variant, false)
-		var origin := ClassKitRegistry.origin(variant)
+		var origin := ClassKitRegistry.origin(variant) if ClassKitRegistry.is_kit(variant) else variant
+		if ClassBaseRegistry.is_base(origin):
+			var base_basic := ClassKitRegistry.basic_attack_recipe(origin)
+			if base_basic.size() == 4: return _build(skill_id, base_basic, variant, false)
+			origin = {&"mage": &"mage", &"precision": &"archer"}.get(ClassBaseRegistry.basic_attack(origin)["delivery"], &"swordsman")
 		if variants.has(origin): return _build(skill_id, variants[origin], variant, false)
 	if RECIPES.has(skill_id): return _build(skill_id, RECIPES[skill_id], &"", false)
 	var kit_row := ClassKitRegistry.feedback_recipe(skill_id)
@@ -205,7 +212,7 @@ static func for_event(event: Dictionary) -> Dictionary:
 	var variant := StringName(str(raw_variant)) if raw_variant is String or raw_variant is StringName else &""
 	var skill: StringName = event.get("skill_id", &"") if event.get("skill_id") is StringName else &""
 	# P7-C7: a hit/launch of a player class with no skill id is its auto-attack (presentation derivation only).
-	if skill.is_empty() and (variant in BASIC_ATTACK_OWNERS or ClassKitRegistry.is_kit(variant)) and event.get("kind") in [&"impact", &"projectile_launch"]: skill = &"basic_attack"
+	if skill.is_empty() and (variant in BASIC_ATTACK_OWNERS or ClassKitRegistry.is_kit(variant) or ClassBaseRegistry.is_base(variant)) and event.get("kind") in [&"impact", &"projectile_launch"]: skill = &"basic_attack"
 	var result := recipe(skill, variant)
 	var element := element_override(result, payload)
 	var critical: bool = bool(result.basic_hit) and payload.get("critical") is bool and payload.critical

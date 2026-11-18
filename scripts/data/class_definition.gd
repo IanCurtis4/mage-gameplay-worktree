@@ -9,4 +9,7 @@ extends Resource
 @export var passive_id: StringName
 @export var basic_power: float = 1.0
 @export var basic_range: float = 50.0
+## E10a C1.2: basic-attack delivery (&"direct", &"mage" or &"precision") of a registered
+## base; empty keeps the E00 rule by class (mage, archer, otherwise direct).
+@export var basic_delivery: StringName = &""
 

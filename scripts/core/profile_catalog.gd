@@ -69,6 +69,13 @@ static func pilot(
 	catalog.add_skill(&"archer_precision", [&"archer"], PASSIVE, BASE_WALLET, 0, 3)
 	catalog.add_skill(&"archer_cadence", [&"archer"], PASSIVE, BASE_WALLET, 0, 3)
 	catalog.add_skill(&"trap_technique", [&"archer"], PASSIVE, BASE_WALLET, 0, 3)
+	# E10a C1.2/C1.3: a registered base adds its library only when its module is ready
+	# (or forced by a fixture); a base declared ready with invalid data fails loudly.
+	for base_id: StringName in ClassBaseRegistry.ids():
+		if ClassBaseRegistry.ready_for_play(base_id):
+			catalog._register_base_skills(base_id)
+		elif ClassBaseRegistry.module(base_id) != null and ClassBaseRegistry.module(base_id).ready_for_play():
+			catalog._build_error = true
 	# A fixture may replace Defender's entire exclusive library; production never mixes both sets.
 	if not evolution_overrides.has(&"defender") and not evolution_overrides.has("defender"):
 		catalog._register_defender_skills()
@@ -94,8 +101,8 @@ static func pilot(
 	for kit_id: StringName in ClassKitRegistry.ids():
 		if _kit_included(kit_id, evolution_overrides):
 			catalog._register_kit_skills(kit_id)
-		elif ClassKitRegistry.module(kit_id) != null and ClassKitRegistry.module(kit_id).ready_for_play():
-			catalog._build_error = true # A kit declared ready with invalid data fails loudly.
+		elif ClassKitRegistry.module(kit_id) != null and ClassKitRegistry.module(kit_id).ready_for_play() and not ClassKitRegistry.ready_for_play(kit_id):
+			catalog._build_error = true # A kit declared ready with invalid data fails loudly (an unready base only hides it).
 	if additional_equipment.is_empty():
 		for resource: Resource in BuildContentLoader.definitions(&"equipment", true):
 			if not resource is EquipmentDefinition:
@@ -294,6 +301,9 @@ func knows_equipment(item_id: StringName) -> bool:
 
 func base_class_is_available(base_class_id: StringName) -> bool:
 	if not IdentityIds.is_base_class(base_class_id):
+		return false
+	# E10a C1.3: a registered base appears in creation only when its module is ready.
+	if IdentityIds.is_registered_base(base_class_id) and (not ClassBaseRegistry.ready_for_play(base_class_id) or IdentityIds.initial_attributes(base_class_id).is_empty()):
 		return false
 	var counts := _base_skill_counts(base_class_id)
 	return counts[ACTIVE] >= 2 and counts[PASSIVE] >= 1
@@ -506,9 +516,24 @@ func _register_hunter_skills() -> void:
 		var free_rank := 1 if skill_id == &"hunter_freezing_trap" else 0
 		add_skill(skill_id, origin, PASSIVE if maximum == 3 else ACTIVE, EVOLUTION_WALLET, free_rank, maximum - free_rank, &"hunter", _evolution_rank_requirements(maximum, gates[index]))
 
-## Ready module, or an explicit fixture override for the kit ID.
+## Ready module, or an explicit fixture override for the kit ID. E10a C1.3: the pure
+## kit of a registered base is offered only while that base is ready as well.
 static func _kit_included(kit_id: StringName, overrides: Dictionary) -> bool:
-	return ClassKitRegistry.ready_for_play(kit_id) or overrides.has(kit_id) or overrides.has(String(kit_id))
+	if overrides.has(kit_id) or overrides.has(String(kit_id)): return true
+	var origin := ClassKitRegistry.origin(kit_id)
+	if IdentityIds.is_registered_base(origin) and not ClassBaseRegistry.ready_for_play(origin): return false
+	return ClassKitRegistry.ready_for_play(kit_id)
+
+## E10a C1.2: base library rows (base wallet, free rank 0, prerequisites of the module).
+func _register_base_skills(base_id: StringName) -> void:
+	var origin: Array[StringName] = [base_id]
+	for entry: Dictionary in ClassBaseRegistry.learning_entries(base_id):
+		var category := StringName(entry.get("category", &""))
+		var purchased := int(entry.get("max_purchased_rank", 0))
+		var requirements := {}
+		for rank: int in range(1, purchased + 1):
+			requirements[rank] = {"job_level": int(entry.get("job_level", 1)), "skill_ranks": (entry.get("prerequisites", {}) as Dictionary).duplicate(true)}
+		add_skill(StringName(entry.get("skill_id", &"")), origin, category, BASE_WALLET, 0, purchased, &"", requirements)
 
 func _register_kit_skills(kit_id: StringName) -> void:
 	var origin: Array[StringName] = [ClassKitRegistry.origin(kit_id)]
@@ -615,7 +640,8 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 		definition.id = kit_id
 		definition.display_name = ClassKitRegistry.display_name(kit_id)
 		definition.origin_class_id = IdentityIds.evolution_origin(kit_id)
-		definition.branch_kind = EvolutionDefinition.BRANCH_2_3
+		# E10a C1.5: the branch comes from the registry (2-1/2-2 pure, 2-3 hybrid).
+		definition.branch_kind = ClassKitRegistry.branch(kit_id)
 		definition.affinity_class_id = IdentityIds.kit_affinity(kit_id)
 		definition.entry_skill_id = ClassKitRegistry.entry_skill_id(kit_id)
 		var exclusive: Array[StringName] = []
@@ -679,7 +705,7 @@ func _evolution_definition_is_valid(definition: EvolutionDefinition) -> bool:
 		return false
 	if definition.required_base_level != 10 or definition.required_job_level != ProgressionRules.UNEVOLVED_MAX_JOB_LEVEL:
 		return false
-	var is_pure := definition.id in IdentityIds.pure_evolution_ids()
+	var is_pure := definition.id in IdentityIds.pure_evolution_ids() or ClassKitRegistry.is_pure(definition.id)
 	if is_pure:
 		if definition.branch_kind not in [EvolutionDefinition.BRANCH_2_1, EvolutionDefinition.BRANCH_2_2] or not definition.affinity_class_id.is_empty():
 			return false

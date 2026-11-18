@@ -159,7 +159,8 @@ func _kit_player(id: StringName) -> PlayerActor:
 
 func _check_onboarding() -> void:
 	ClassKitRegistry.clear_fixtures()
-	for id: StringName in ClassKitRegistry.ids():
+	# E10a C1.11: the E09 onboarding covers the four hybrids; the pure kits are T10's.
+	for id: StringName in ClassKitRegistry.hybrid_ids():
 		var script := ClassKitRegistry.onboarding_script(id)
 		_check(script != null, "%s onboarding script is discovered by the C1.12 convention" % id)
 		if script == null:

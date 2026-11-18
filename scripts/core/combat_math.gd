@@ -52,3 +52,31 @@ static func resolve(
 		"damage": damage,
 		"can_trigger_effects": landed and damage > 0 and not request.is_secondary,
 	}
+
+## E10a C1.7: the single composition of the generic received-damage sources of an
+## actor (CombatActor.received_damage_sources). Each entry is {"multiplier": float >= 0,
+## "owner_id": int (0 = any author), "element": StringName (empty = any)}; entries whose
+## filters match the request author and the skill element multiply together.
+static func received_damage_multiplier(sources: Dictionary, author_id: int, element: StringName) -> float:
+	var result := 1.0
+	var keys: Array = sources.keys()
+	keys.sort()
+	for key: Variant in keys:
+		var entry: Dictionary = sources[key]
+		var owner := int(entry.get("owner_id", 0))
+		var wanted := StringName(entry.get("element", &""))
+		if owner != 0 and owner != author_id: continue
+		if not wanted.is_empty() and wanted != element: continue
+		result *= maxf(0.0, float(entry.get("multiplier", 1.0)))
+	return result
+
+## E10a C1.7: the single composition of the accuracy reductions of an actor's own
+## attacks (CombatActor.accuracy_sources): each {"reduction": 0..1} multiplies the hit
+## rating by (1 - reduction).
+static func accuracy_multiplier(sources: Dictionary) -> float:
+	var result := 1.0
+	var keys: Array = sources.keys()
+	keys.sort()
+	for key: Variant in keys:
+		result *= 1.0 - clampf(float((sources[key] as Dictionary).get("reduction", 0.0)), 0.0, 1.0)
+	return result

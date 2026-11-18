@@ -52,6 +52,8 @@ static func name_of(id: StringName) -> String:
 static func job_name(id: StringName, base: StringName = &"") -> String:
 	if id == &"items": return "Equipamentos"
 	if id.is_empty():
+		# E10a C1.2: a registered base names itself through its module.
+		if ClassBaseRegistry.is_base(base): return ClassBaseRegistry.display_name(base)
 		return {&"swordsman": "Espadachim", &"mage": "Mago", &"archer": "Arqueiro"}.get(base, "Classe base")
 	var definition := ProfileCatalog.pilot().evolution_definition(id)
 	if definition == null and ClassKitRegistry.is_kit(id): return ClassKitRegistry.display_name(id)

@@ -558,6 +558,24 @@ func _impact(p: Dictionary, c: Vector2, t: float) -> void:
 				var rise := t * (14.0 + 14.0 * _r(p, 10 + i)) * s
 				_canvas.draw_circle(c + Vector2(x, -rise), (2.4 - t) * s, Color(core, fade * 0.8))
 			_ring(c, reach * 0.7, reach * 0.4, Color(glow, fade * 0.6), 1.2)
+		# E10a C1.8: light radiates a gilded cross with a soft halo; shadow folds inwards
+		# in magenta curls around a turquoise eye.
+		&"light":
+			_ring(c, reach * 0.9, reach * 0.9, Color(glow, fade * 0.7), 1.4)
+			for i: int in 8:
+				var a := TAU * float(i) / 8.0
+				var length := reach * (1.1 if i % 2 == 0 else 0.6)
+				_stroke(c + Vector2.from_angle(a) * reach * 0.2, c + Vector2.from_angle(a) * length, Color(core, fade), 2.2 if i % 2 == 0 else 1.4)
+		&"shadow":
+			_canvas.draw_circle(c, reach * 0.45, Color(glow, 0.55 * fade))
+			for i: int in 5:
+				var a := TAU * float(i) / 5.0 + _r(p, i) * 0.5 + t * 1.6
+				var q := PackedVector2Array()
+				for k: int in 4:
+					var r := reach * (1.0 - float(k) * 0.22)
+					q.append(c + Vector2.from_angle(a + float(k) * 0.45) * r)
+				_canvas.draw_polyline(q, Color(core, fade * 0.9), 1.8, true)
+			_canvas.draw_circle(c, 2.2 * s, Color(Palette.SHADOW_ACCENT, fade))
 		&"nature":
 			for i: int in 6:
 				var a := TAU * float(i) / 6.0 + _r(p, i)
@@ -681,6 +699,11 @@ func _rim_accent(p: Dictionary, rim: Vector2, a: float, t: float, core: Color, g
 			_canvas.draw_colored_polygon(PackedVector2Array([rim + Vector2(-2.4, 0), rim + Vector2(0, -6.0), rim + Vector2(2.4, 0)]), Color(glow, fade))
 		&"blood":
 			_canvas.draw_circle(rim + Vector2(0, -1), 1.8, Color(glow, fade))
+		&"light":
+			_stroke(rim, rim + Vector2(0, -8.0), Color(core, fade), 1.6)
+		&"shadow":
+			_canvas.draw_circle(rim + Vector2(0, -1), 2.0, Color(glow, fade))
+			_canvas.draw_circle(rim + Vector2(0, -1), 0.9, Color(Palette.SHADOW_ACCENT, fade))
 		_:
 			_canvas.draw_circle(rim, 1.5, Color(core, fade * 0.8))
 

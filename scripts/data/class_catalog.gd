@@ -7,7 +7,25 @@ static var _skills: Dictionary[StringName, SkillDefinition] = {}
 
 static func class_definition(class_id: StringName) -> ClassDefinition:
 	_ensure_built()
+	if ClassBaseRegistry.is_base(class_id): return _registered_base_definition(class_id)
 	return _classes.get(class_id)
+
+## E10a C1.2: definition of a registered base, composed from its module on every call
+## (fixtures may replace the module). Null while the module is missing or invalid.
+static func _registered_base_definition(base_id: StringName) -> ClassDefinition:
+	if ClassBaseRegistry.module(base_id) == null or not ClassBaseRegistry.validate(base_id)["ok"]: return null
+	var base := ClassBaseRegistry.module(base_id)
+	var attack := ClassBaseRegistry.basic_attack(base_id)
+	var definition := ClassDefinition.new()
+	definition.id = base_id
+	definition.display_name = ClassBaseRegistry.display_name(base_id)
+	definition.attributes = ClassBaseRegistry.initial_attributes(base_id)
+	definition.skill_ids = base.starting_skill_ids()
+	definition.passive_id = base.starting_passive_id()
+	definition.basic_power = float(attack["power"])
+	definition.basic_range = float(attack["range"])
+	definition.basic_delivery = StringName(attack["delivery"])
+	return definition
 
 static func skill_definition(skill_id: StringName) -> SkillDefinition:
 	_ensure_built()

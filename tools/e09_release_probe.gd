@@ -47,7 +47,7 @@ func inspect(expected_path: String, app_name: String) -> void:
 	var kit_ids: Array = expected["kits"].keys()
 	kit_ids.sort()
 	var registry_ids: Array = []
-	for id: StringName in ClassKitRegistry.ids(): registry_ids.append(String(id))
+	for id: StringName in ClassKitRegistry.hybrid_ids(): registry_ids.append(String(id)) # E10a: the four E09 hybrids.
 	registry_ids.sort()
 	check("kit_registry_ids", registry_ids == kit_ids, registry_ids)
 	var ready_rows: Array = []

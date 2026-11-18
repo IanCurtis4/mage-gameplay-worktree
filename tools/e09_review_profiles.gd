@@ -193,7 +193,8 @@ static func write_all(output_root: String, root: String = DEFAULT_ROOT, catalog:
 		report["error_code"] = &"unsafe_output_folder"
 		return report
 	var active_catalog := catalog if catalog != null else ProfileCatalog.pilot()
-	for identity_id: StringName in ClassKitRegistry.ids():
+	# E10a: the E09 tool covers the four hybrids; the Acólito family has tools/e10a_review_profiles.gd (T10).
+	for identity_id: StringName in ClassKitRegistry.hybrid_ids():
 		var read := read_builds(identity_id, root, active_catalog)
 		match read["status"]:
 			PENDING:

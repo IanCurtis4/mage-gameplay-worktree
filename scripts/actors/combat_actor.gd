@@ -56,6 +56,14 @@ var marks := ActorMarks.new()
 var _facing_override := Vector2.ZERO
 var _facing_override_remaining := 0.0
 var _facing_override_owner: StringName = &""
+## E10a C1.7: generic received-damage multipliers, source -> {"multiplier", "owner_id"
+## (0 = any author), "element" (empty = any), "remaining"}. CombatMath composes them once.
+var received_damage_sources: Dictionary = {}
+## E10a C1.7: reductions of this actor's own hit rating, source -> {"reduction",
+## "owner_id", "remaining"}; read through outgoing_hit_rating().
+var accuracy_sources: Dictionary = {}
+## E10a C1.7: heading of the movement disorientation (hard-control family `disorient`).
+var disorient_heading := Vector2.ZERO
 
 # Explicit logical spatial binding. Rendering/input integration awaits D05 presentation.
 var world_motion: WorldActorMotion
@@ -136,10 +144,66 @@ func apply_damage(request: DamageRequest, rng: RandomNumberGenerator) -> Diction
 	if received_increase > 0.0:
 		effective_request = request.copy()
 		effective_request.damage_dealt_multiplier *= 1.0 + received_increase
+	# E10a C1.7: generic sources, composed once (CombatMath) and applied on a copy.
+	if not received_damage_sources.is_empty():
+		var multiplier := CombatMath.received_damage_multiplier(received_damage_sources, request.source_id, request_element(request))
+		if multiplier != 1.0:
+			if effective_request == request: effective_request = request.copy()
+			effective_request.damage_dealt_multiplier *= multiplier
 	return health.apply(effective_request, 0.0 if effective_request.is_secondary and not effective_request.requires_hit_roll() else rng.randf(), 1.0 if effective_request.is_secondary else rng.randf(), attribute_debuffs)
 
 func is_alive() -> bool:
 	return health != null and health.is_alive()
+
+## E10a C1.7: element tag of a request, from the SkillDefinition of its skill (light and
+## shadow skills always declare it); empty when the skill has none.
+static func request_element(request: DamageRequest) -> StringName:
+	var definition := ClassCatalog.skill_definition(request.skill_id) if request != null else null
+	return definition.element if definition != null else &""
+
+## E10a C1.7: adds or replaces a received-damage multiplier for `duration` seconds of the
+## gameplay clock (pause-frozen; cleared with the statuses). Optional author and element filters.
+func add_received_damage_source(source: StringName, multiplier: float, duration: float, owner_id: int = 0, element: StringName = &"") -> bool:
+	if source.is_empty() or not is_alive() or not is_finite(multiplier) or multiplier < 0.0 or not is_finite(duration) or duration <= 0.0: return false
+	received_damage_sources[source] = {"multiplier": multiplier, "owner_id": owner_id, "element": element, "remaining": duration}
+	return true
+
+func remove_received_damage_source(source: StringName) -> bool:
+	return received_damage_sources.erase(source)
+
+## Composed multiplier this actor would receive from `author_id` with `element`.
+func received_damage_multiplier(author_id: int, element: StringName = &"") -> float:
+	return CombatMath.received_damage_multiplier(received_damage_sources, author_id, element)
+
+## E10a C1.7: adds or replaces a reduction (0..1) of this actor's own hit rating.
+func add_accuracy_source(source: StringName, reduction: float, duration: float, owner_id: int = 0) -> bool:
+	if source.is_empty() or not is_alive() or not is_finite(reduction) or reduction < 0.0 or reduction > 1.0 or not is_finite(duration) or duration <= 0.0: return false
+	accuracy_sources[source] = {"reduction": reduction, "owner_id": owner_id, "remaining": duration}
+	return true
+
+func remove_accuracy_source(source: StringName) -> bool:
+	return accuracy_sources.erase(source)
+
+## Hit rating of an attack of this actor after its accuracy sources (CombatMath).
+func outgoing_hit_rating(base_rating: float) -> float:
+	return base_rating * CombatMath.accuracy_multiplier(accuracy_sources) if not accuracy_sources.is_empty() else base_rating
+
+## E10a C1.7: short movement disorientation in the fear pattern (hard control with the
+## magic CC resistance and caps). Bosses refuse it (0). `heading` is the wrong direction
+## the actor walks; zero lets the actor choose (EnemyActor rolls it).
+func apply_disorient(base_duration: float, heading: Vector2 = Vector2.ZERO) -> float:
+	if not is_alive() or hard_controls.boss: return 0.0
+	var applied := hard_controls.apply(&"disorient", base_duration, stat_breakdown.value(&"magic_cc_resistance"))
+	if applied > 0.0:
+		disorient_heading = heading.normalized() if heading.is_finite() and not heading.is_zero_approx() else Vector2.ZERO
+		queue_redraw()
+	return applied
+
+func is_disoriented() -> bool:
+	return hard_controls.is_active(&"disorient")
+
+func disorient_remaining() -> float:
+	return hard_controls.remaining(&"disorient")
 
 ## E09 C1.5: authoritative gameplay facing, the same direction the presentation
 ## draws (canvas space: the 2D arena, or the projected view of the world). An
@@ -364,6 +428,9 @@ func clear_statuses() -> void:
 	electrified_remaining = 0.0
 	hard_controls.clear()
 	marks.clear()
+	received_damage_sources.clear()
+	accuracy_sources.clear()
+	disorient_heading = Vector2.ZERO
 	clear_gameplay_facing_override()
 	queue_redraw()
 
@@ -378,6 +445,8 @@ func advance_statuses(delta: float, simulation_paused: bool = false) -> void:
 		_facing_override_remaining = maxf(0.0, _facing_override_remaining - delta)
 		if _facing_override_remaining <= 0.0: clear_gameplay_facing_override()
 	hard_controls.advance(delta)
+	_advance_modifier_sources(received_damage_sources, delta)
+	_advance_modifier_sources(accuracy_sources, delta)
 	if was_rooted != is_rooted() or was_stunned != is_stunned() or was_feared != is_feared():
 		queue_redraw()
 	var previous_slow := slow_fraction
@@ -432,6 +501,13 @@ func advance_statuses(delta: float, simulation_paused: bool = false) -> void:
 		if bleed_streams.has(key) and bleed_streams[key] == stream and float(stream["remaining"]) <= 0.0:
 			bleed_streams.erase(key)
 			queue_redraw()
+
+## E10a C1.7: the modifier clocks run with the other statuses (pause-frozen).
+static func _advance_modifier_sources(sources: Dictionary, delta: float) -> void:
+	for key: Variant in sources.keys():
+		var entry: Dictionary = sources[key]
+		entry["remaining"] = float(entry.get("remaining", 0.0)) - delta
+		if float(entry["remaining"]) <= 0.0: sources.erase(key)
 
 ## Screen-space body the player sees (local canvas units); picking only, never collision or reach.
 func pick_body_rect() -> Rect2:

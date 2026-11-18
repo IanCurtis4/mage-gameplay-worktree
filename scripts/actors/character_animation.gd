@@ -30,7 +30,9 @@ var _base_ground_offsets := PackedFloat32Array()
 func configure(kind: StringName) -> void:
 	# E09 C1.8: a kit body exists only as a directional unit; without one (or with
 	# an invalid one) the origin body is used as a whole.
-	if ClassKitRegistry.is_body_kind(kind):
+	# E10a C1.8: the chain continues through a registered base folder to its fallback body.
+	for step: int in 4:
+		if not ClassKitRegistry.is_body_kind(kind): break
 		if _configure_kit_body(kind): return
 		kind = ClassKitRegistry.body_origin(kind)
 	actor_kind = kind
@@ -113,7 +115,7 @@ func _select_atlas_for_visual() -> void:
 		return
 	# A missing/invalid V2 unit after cold restore falls back as a whole.
 	if _base_atlas!=null and _base_atlas.get_size()==DirectionalAnimationSet.SIZE:
-		var legacy_kind := ClassKitRegistry.body_origin(actor_kind) if ClassKitRegistry.is_body_kind(actor_kind) else actor_kind
+		var legacy_kind := ClassKitRegistry.legacy_body_kind(actor_kind)
 		_base_atlas=load("res://assets/art/animations/%s.png" % legacy_kind) as Texture2D
 		_base_ground_offsets=_measure_ground_offsets(_base_atlas)
 	if not has_player_contract or not is_player_kind(actor_kind):

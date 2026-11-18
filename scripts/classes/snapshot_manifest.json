@@ -12,5 +12,16 @@
       "targeting"
     ],
     "omitted": {}
+  },
+  "res://scripts/classes/kit_decoy.gd": {
+    "revision": 1,
+    "fields": [
+      "owner_id",
+      "remaining",
+      "drawer_id",
+      "source_id_tag",
+      "removal_reason"
+    ],
+    "omitted": {}
   }
 }
