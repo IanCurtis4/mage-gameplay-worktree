@@ -22,14 +22,17 @@ Executor: Sol (Claude Opus 5.5), sessão T4 iniciada pela arquitetura (`local_44
 | API para T5, T7 e T12 | [t4_madness_api.md](t4_madness_api.md) |
 | Sistema | `scripts/systems/madness/{madness_rules,madness_ecstasy,madness_authority,madness_helpers}.gd`, `snapshot_manifest.json` |
 | Kit de fixture | `scripts/systems/madness/fixture/{madness_fixture_kit.gd,snapshot_manifest.json}` |
-| Retenção de combate (A8) | `scripts/actors/enemy_actor.gd`, +34 linhas: `COMBAT_HOLD_MARK`, `set_combat_hold`, `clear_combat_hold`, `has_combat_hold`, `combat_hold_remaining` e o desvio no início da IA de `_process` |
+| Retenção de combate (A8) | `scripts/actors/enemy_actor.gd`, +34 linhas: `COMBAT_HOLD_MARK`, `set_combat_hold`, `clear_combat_hold`, `has_combat_hold`, `combat_hold_remaining` e o desvio no início da IA de `_process`. Teste: `tests/systems/madness/madness_test.gd` (`_check_combat_hold`) |
 | Testes | `tests/systems/madness/madness_test.gd` |
 
 ### Arquivo fora da posse original
 
 `scripts/actors/enemy_actor.gd` foi editado só pela A8: os métodos da retenção e um bloco em
 `_process`, antes da IA do mundo e da IA plana. O estado é uma marca de `ActorMarks`, então
-o manifesto principal (`runtime_manifest.json`, da T1) não precisou mudar. Pela A8, a posse
+o manifesto principal (`runtime_manifest.json`, da T1) não precisou mudar. O estado entra no
+snapshot pelo campo `CombatActor.marks`, que já está no manifesto. A regra A7 vale:
+`enemy_actor.gd` continua sem nomear `EnemyActor`, e o `enemy_target_test` da T1 confere.
+O plano B ficou descartado. Pela A8, a posse
 volta ao regime de A6 depois desta entrega.
 
 ## Invariantes de C2 cobertas (`madness_test.gd`)
@@ -45,6 +48,7 @@ volta ao regime de A6 depois desta entrega.
 | Contágio de um salto; pulso único ao entrar em Delírio | `_check_contagion` |
 | Abate por Delírio creditado uma vez, inclusive em retry; sem Loucura por dano ou abate entre inimigos | `_check_delirium_kill_credit` |
 | Delírio sem alvo: parado, sem atacar o jogador (A8), alvo retomado quando aparece | `_check_delirium_without_target`, `_check_combat_hold` (mapa e mundo) |
+| Retenção (A8): chefe recusa (`boss_refuses_hold`); sem `HardControlState` e sem bônus de controle (critérios do Caçador e da Sentinela); prazo no relógio de gameplay, congela na pausa e expira; cai com a morte e com `clear_statuses`; sem mover nem atacar nos dois caminhos | `_check_combat_hold`, `_check_world_path` |
 | Êxtase 0–5, MATK e custo por carga, ônus a partir de 3, decaimento, build não mexe, morte zera | `_check_ecstasy` |
 | Ídolo: 1 por dono, HP do dono, comuns e elites o miram, Loucura por tique no chefe também, prazo, prioridade do Delírio | `_check_idol` |
 | `describe()` puro | `_check_describe_and_tick_dedupe` |
@@ -72,7 +76,7 @@ testes rodaram com `tools/verify.ps1 -F1Fixture -Test ...`, como na T1 e no E09.
 | 335 | `base_seam_test` (T1) | 171/171 | `83E3C22E78D21A6C` |
 | 336 | `enemy_target_test` (T1, inclui a regra A7 sobre `enemy_actor.gd`) | 88/88 | `61C1F89F787761EA` |
 | 337 | `flank_test` | 205/205 | `D23DC5D7B03B0FE0` |
-| 338 | **`madness_test` (T4)** | **275/275** | `30B16FB928B400CF` |
+| 338 | **`madness_test` (T4)** | **275/275** (276/276 depois do reforço da A8, rodado direto) | `30B16FB928B400CF` |
 | 339 | `sanctuary_test` | 155/155 | `01B74920641522D9` |
 | 340–349 | kits do E09: `mg_ac` (boss 29, kit 177), `mg_la` (boss 33, kit 231, salto 49), `sp_ac` (boss 25, kit 170), `sp_la` (boss 31, kit 217, aparo 55) | todos 0 falhas | `66AC49C6…`, `814D744C…`, `6710C89E…`, `B480859D…`, `F2E59EE4…`, `26957117…`, `2229F2DC…`, `4F9C0F3F…`, `D2DC91B2…`, `4F0C254B…` |
 

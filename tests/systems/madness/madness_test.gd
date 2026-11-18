@@ -326,6 +326,10 @@ func _check_combat_hold() -> void:
 	_check(wolf.set_combat_hold(player.get_instance_id(), 0.0, &"test")["error_code"] == &"invalid_payload" and wolf.set_combat_hold(player.get_instance_id(), 1.0, &"")["error_code"] == &"invalid_payload" and wolf.set_combat_hold(-1, 1.0, &"test")["error_code"] == &"invalid_payload", "duration, reason and owner are required")
 	_check(wolf.set_combat_hold(player.get_instance_id(), 2.0, &"test")["ok"] and wolf.has_combat_hold() and is_equal_approx(wolf.combat_hold_remaining(), 2.0), "a common enemy accepts the hold")
 	_check(not wolf.is_stunned() and not wolf.is_rooted() and not wolf.is_feared() and wolf.hard_controls.longest_remaining() == 0.0, "the hold is not a control (no HardControlState)")
+	# The "controlled" readers of the player (Hunter opening, PlayerActor:422; Sentinel focus,
+	# PlayerActor:657) read root, stun, fear and slow: none of them sees the hold.
+	var hunter_controlled := wolf.hard_controls.boss or wolf.is_rooted() or wolf.is_stunned() or wolf.is_feared() or wolf.attribute_debuffs.fraction(AttributeDebuffState.MOVE_SPEED) > 0.0
+	_check(not hunter_controlled and not (wolf.is_rooted() or wolf.is_stunned()) and not wolf.is_disoriented(), "no controlled bonus reads the hold (Hunter and Sentinel criteria)")
 	var at := wolf.global_position
 	wolf.attack_cooldown = 0.0
 	wolf.player_target_acquired = true
