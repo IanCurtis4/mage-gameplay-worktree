@@ -80,24 +80,33 @@ duas vezes). Todos sobre o código desta entrega.
 | `skill_allocation_test` | PASS, 44 | `4BBF4DE594BE8F142DB94129FC154393A17EBD463F30E86A1BDBB35A500317A8` |
 | `e06_icon_bar_test` | PASS, 24 | `EB3F9ABDAF6F6B129E2FE140E29916FCDDECD3E077141BF2FE525A5703A692AA` |
 
-Busca por `SCRIPT ERROR` e `still in use` nas saídas dos 20 testes que passam (e `still in use` também nos 3 que falham): **0 ocorrências**. O
+Busca por `SCRIPT ERROR` e `still in use` nas saídas dos testes que passam: **0 ocorrências**. O
 combate integrado mostra, por build (log do motor): Bastião 19,5 s, chefe a 0/6000, 4 Juízos, 1 Hora
 Santa, 2 Santuários, Graça +31 (máx. 15); Inquisição 16,5 s, 3 Juízos, 2 Selos (lentidão 36%, nunca
 raiz), chefe Exposto, Graça +39 (máx. 27). O dano vem em boa parte da Luz Punitiva da base de
 fixture, que não é a base real (T5): é prova de laço, não de balanceamento.
 
-### Falhas esperadas fora da minha pasta (três testes legados, não editados)
+### Ajustes em testes legados (decisão A9 da arquitetura, regra A15 do E09)
 
-`ready_for_play() = true` (exigido pela tarefa) muda três enumerações exatas de outros donos. Nenhuma
-é regressão de comportamento:
+`ready_for_play() = true` muda enumerações exatas de outros arquivos. Pela A9 (`0c157d47` em
+`claude/e10a-arquitetura-a413a1`), quem liga `ready_for_play` atualiza só os checks que contam ou
+afirmam kits prontos, com número exato e sem enfraquecer outro check. Os dois arquivos entraram na
+minha posse só para isso:
 
-| Teste (dono) | Falha | Correção sugerida |
+| Arquivo | Ajuste | Resultado depois |
 |---|---|---|
-| `tests/e10a/base_seam_test.gd:123` (T1) | 1 check: "priest skeleton validates, empty and not ready" | passa a esperar o Sacerdote pronto e só o Cultista como esqueleto (e depois nenhum) |
-| `tests/e08_feedback_recipe_test.gd:98,100` (legado) | 2 checks: exatamente 4 kits prontos, 20 ativas e 8 passivas | contagens exatas novas (A15 do E09): 5 kits, 25 ativas, 10 passivas com o Sacerdote |
-| `tests/e05_evolution_catalog_test.gd:56,213` (T10 cuida das listas) | `KIT_METADATA` não tem `priest` (2 SCRIPT ERROR + 1 check) | acrescentar `priest` (`"Sacerdote"`, `&"acolyte"`, `&"2-1"`, vazio) à lista de destinos prontos |
+| `tests/e10a/base_seam_test.gd` (loop de esqueletos, ~linha 125) | o Sacerdote passa a ser verificado como kit pronto com 7 skills (`validate` ok, `ready_for_play`, 7 definições); o Cultista continua esqueleto vazio e não pronto | PASS, 171 checks, sha256 `83E3C22E78D21A6C9EDC81ACF01599A30F1F4D0795ECAF4668097594536A9BEA` |
+| `tests/e08_feedback_recipe_test.gd` linha 98 | kits prontos: 4 → 5 (mensagem atualizada) | idem abaixo |
+| `tests/e08_feedback_recipe_test.gd` linha 99 | **contagem inalterada, 20 ativas e 8 passivas**: o catálogo de produção só publica as skills de um kit puro quando a base Acólito está pronta (regra da T1), e ela ainda é esqueleto; só a mensagem diz isso. Não usei 25/10, que o catálogo não expõe hoje | idem |
+| `tests/e08_feedback_recipe_test.gd` `_expected_kit_skills()` (linha 100) | a tabela esperada ignora kits puros cuja base registrada não está disponível (`IdentityIds.is_registered_base` + `ProfileCatalog.base_class_is_available`), igual à regra de oferta | PASS, 1309 checks, 0 falhas, sha256 `AA05DF9D217F6F82C1B2B476BC1ECA42F0D94252AC09AF34FE2A96B18D22E54F` |
 
-Perguntei à arquitetura (sessão `local_44faa7bb`) como tratar; segui com a entrega e registro aqui.
+Quando a T5 deixar a base pronta, as contagens de ativas e passivas da linha 99 sobem e o filtro do
+ajudante deixa de excluir o Sacerdote; essa atualização é de quem ligar a base (T5) e do Cultista (T7).
+
+**Ainda falha, fora da A9:** `tests/e05_evolution_catalog_test.gd:56,213` (`KIT_METADATA` sem `priest`:
+2 SCRIPT ERROR e 1 check). É a lista de destinos que o contrato entrega à T10; não editei. Linha a
+acrescentar: `&"priest": ["Sacerdote", &"acolyte", &"2-1", &""]`.
+
 Dois outros testes falham no ambiente, sem relação com a T6: `e08_feedback_vfx_test` e
 `kit_seam_hooks_v3_test` (check "F1 world fixture is current"), por falta de `source_hashes.json` na
 worktree (falha conhecida de worktree novo, como o passo 255 da T1). Não rodei a suíte completa:
