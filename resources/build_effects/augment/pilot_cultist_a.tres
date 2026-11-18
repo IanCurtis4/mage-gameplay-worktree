@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="AugmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_eff"]
+[ext_resource type="Script" path="res://scripts/data/augment_definition.gd" id="2_aug"]
+
+[sub_resource type="Resource" id="Resource_eff"]
+script = ExtResource("1_eff")
+id = &"pilot_cultist_a_effect"
+family_id = &"pilot_cultist_a_effect"
+kind = 2
+handler_id = 3
+trigger = 1
+target_skill_ids = Array[StringName]([&"cultist_shared_delirium"])
+axis = &"magic_damage"
+unit = &"damage"
+magnitude = 6.0
+limit = 60.0
+stack_values = Array[float]([6.0, 12.0, 18.0])
+
+[resource]
+script = ExtResource("2_aug")
+id = &"pilot_cultist_a"
+display_name = "Delírio Compartilhado Profundo"
+flavor_text = "A visão do profeta transborda e machuca quem partilha a loucura."
+description = "Ao acertar: bônus de +6 / +12 / +18 de dano mágico e 0% proporcional; limite do bônus 60. Apenas em acertos de Delírio Compartilhado. Requer rank 1 na habilidade afetada.
+Acumula até 3 vez(es)."
+max_stacks = 3
+allowed_origins = Array[StringName]([&"acolyte"])
+allowed_evolutions = Array[StringName]([&"cultist"])
+effects = Array[ExtResource("1_eff")]([SubResource("Resource_eff")])

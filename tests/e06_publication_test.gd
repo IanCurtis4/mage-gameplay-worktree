@@ -25,7 +25,7 @@ func _run() -> void:
 	source = original["catalog"]; active = loaded["catalog"]; mapping = publication["id_mapping"]
 	_check(original["mechanical_digest"] == SOURCE_DIGEST and publication["source_mechanical_digest"] == SOURCE_DIGEST, "publication cannot change frozen 69 recipe digest")
 	_check(mapping.size() == 12 and publication["entries"].size() == 83, "twelve explicit mappings plus legacy equipment/mobs produce83 resources")
-	_check(active.ids(&"equipment").size() == 37 and active.ids(&"augment").size() == 31 and active.ids(&"card").size() == 6 and active.mob_catalog().ids().size() == 8 and BuildContentLoader.definitions(&"set").size() == 1, "37 equipment31 augments6 cards8 mobs1set active")
+	_check(active.ids(&"equipment").size() == 37 and active.ids(&"augment").size() == 37 and active.ids(&"card").size() == 6 and active.mob_catalog().ids().size() == 8 and BuildContentLoader.definitions(&"set").size() == 1, "37 equipment37 augments6 cards8 mobs1set active")
 	var native_entries: Array[Dictionary] = []
 	for entry: Dictionary in publication["entries"]:
 		var expected: Resource = entry["definition"]
