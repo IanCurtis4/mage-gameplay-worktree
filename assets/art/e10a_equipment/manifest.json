@@ -1,0 +1,98 @@
+{
+  "schema": "e10a_equipment_art_v1",
+  "items": [
+    {
+      "id": "prayer_book",
+      "source": "assets/art/e08_codex_1118/equipment/weapons_b1.png",
+      "source_sha256": "a4a088a4601b5c245aea177a6aaa37da058514f727cf734d8c6aae33d445fdfa",
+      "object_index": 1,
+      "objects_in_sheet": 7,
+      "box": [
+        48,
+        206,
+        335,
+        635
+      ],
+      "prop_png": "props/prayer_book.png",
+      "prop_size": [
+        80,
+        120
+      ],
+      "prop_sha256": "5a9b433e9f48fa5c6fe5cb8a1a331d9d11083daad9e947c38f70eb7cd01de84e",
+      "icon_png": "icons/equipment/painted/prayer_book.png",
+      "icon_sha256": "350288bbd8412a68725f3288e17c3d3c619071a4986941b332c09fe1100afe3a",
+      "post": [
+        {
+          "tool": "assets/art/e10a_equipment/prepare_e10a_equipment.py",
+          "params": {
+            "clear_alpha_at_or_below": 16,
+            "lanczos": true,
+            "bleed_iterations": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "halo_scepter",
+      "source": "assets/art/e08_codex_1118/equipment/weapons_b1.png",
+      "source_sha256": "a4a088a4601b5c245aea177a6aaa37da058514f727cf734d8c6aae33d445fdfa",
+      "object_index": 2,
+      "objects_in_sheet": 7,
+      "box": [
+        385,
+        19,
+        630,
+        708
+      ],
+      "prop_png": "props/halo_scepter.png",
+      "prop_size": [
+        60,
+        168
+      ],
+      "prop_sha256": "69da120c4169e480c9237a73fecb787c8ffc412a8fda17c4b6888c0c01a5d6ff",
+      "icon_png": "icons/equipment/painted/halo_scepter.png",
+      "icon_sha256": "3f8d600859b5cb359558bc9e7a5c4b923fc5e7a0a0b1ae3881f23a860b960402",
+      "post": [
+        {
+          "tool": "assets/art/e10a_equipment/prepare_e10a_equipment.py",
+          "params": {
+            "clear_alpha_at_or_below": 16,
+            "lanczos": true,
+            "bleed_iterations": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "eye_reliquary",
+      "source": "assets/art/e08_codex_1118/equipment/weapons_b1.png",
+      "source_sha256": "a4a088a4601b5c245aea177a6aaa37da058514f727cf734d8c6aae33d445fdfa",
+      "object_index": 3,
+      "objects_in_sheet": 7,
+      "box": [
+        670,
+        56,
+        895,
+        655
+      ],
+      "prop_png": "props/eye_reliquary.png",
+      "prop_size": [
+        56,
+        152
+      ],
+      "prop_sha256": "7c46ce27f74c194f5bbfe8b018858970c78aedd0281f711bfcd14f7fec1071b1",
+      "icon_png": "icons/equipment/painted/eye_reliquary.png",
+      "icon_sha256": "6e0506c29629e8dee90a172aaf819dc6c428c307ddb2c489e2ce24a3f62d2f12",
+      "post": [
+        {
+          "tool": "assets/art/e10a_equipment/prepare_e10a_equipment.py",
+          "params": {
+            "clear_alpha_at_or_below": 16,
+            "lanczos": true,
+            "bleed_iterations": 12
+          }
+        }
+      ]
+    }
+  ]
+}

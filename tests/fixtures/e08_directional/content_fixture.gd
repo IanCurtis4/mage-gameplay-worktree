@@ -26,7 +26,8 @@ static func make(kind: StringName,label: String) -> Dictionary:
 static func equipment_bottom(placed: Dictionary) -> float:
 	# Independent painted PNG oracle in logical units; legacy SVG oracle remains in its V1 test.
 	# E09 T8 (A16): the four new weapon props live beside their own art, still an independent PNG oracle.
-	var folder := "res://assets/art/e09_equipment/props/%s.png" if placed.key in [&"halo_shield",&"buckler",&"rapier",&"prism_staff"] else "res://assets/art/equipment/painted/%s.png"
+	# E10a T9 (A15): the three family props live in assets/art/e10a_equipment/props.
+	var folder := "res://assets/art/e09_equipment/props/%s.png" if placed.key in [&"halo_shield",&"buckler",&"rapier",&"prism_staff"] else "res://assets/art/e10a_equipment/props/%s.png" if placed.key in [&"prayer_book",&"halo_scepter",&"eye_reliquary"] else "res://assets/art/equipment/painted/%s.png"
 	var texture := load(folder % placed.key) as Texture2D
 	var pixels := texture.get_image().get_used_rect()
 	var bounds := Rect2(Vector2(pixels.position)/4.0,Vector2(pixels.size)/4.0)

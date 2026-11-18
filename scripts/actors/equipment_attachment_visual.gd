@@ -3,7 +3,7 @@ extends RefCounted
 ## Grip-based pixel equipment, calibrated per body frame. Cosmetic geometry only.
 
 const CELL := Vector2(64, 64)
-const SUPPORTED: Array[StringName] = [&"sword", &"axe", &"staff", &"bow", &"shield", &"prismatic_focus", &"wooden_beads", &"halo_shield", &"buckler", &"rapier", &"prism_staff"]
+const SUPPORTED: Array[StringName] = [&"sword", &"axe", &"staff", &"bow", &"shield", &"prismatic_focus", &"wooden_beads", &"halo_shield", &"buckler", &"rapier", &"prism_staff", &"prayer_book", &"halo_scepter", &"eye_reliquary"]
 static var _texture_cache: Dictionary = {}
 
 static func describe(snapshot: BuildSnapshot, catalog: BuildEffectCatalog) -> Dictionary:
@@ -44,6 +44,10 @@ const PROFILES := {
 	&"buckler": {"size":Vector2(18,19),"grip":Vector2(9,10),"angle":0.0},
 	&"rapier": {"size":Vector2(10,40),"grip":Vector2(5,33),"angle":0.20},
 	&"prism_staff": {"size":Vector2(13,42),"grip":Vector2(6.5,30),"angle":0.30},
+	# E10a T9: the three Acólito-family items. Values mirror hand_rigs.json "props"; the T8 calibrates the hands.
+	&"prayer_book": {"size":Vector2(20,30),"grip":Vector2(10,18),"angle":0.0},
+	&"halo_scepter": {"size":Vector2(15,42),"grip":Vector2(7.5,33),"angle":0.20},
+	&"eye_reliquary": {"size":Vector2(14,38),"grip":Vector2(7,7),"angle":0.0},
 }
 static var _bounds_cache: Dictionary = {}
 

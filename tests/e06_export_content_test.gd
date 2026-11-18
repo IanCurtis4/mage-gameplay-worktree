@@ -11,8 +11,8 @@ func _run() -> void:
 		quit(1)
 		return
 	# Mob 11→16: F10 Q4 a49459c8 (03/11) added the five forest phase species to the runtime catalog.
-	# Equipment 85→89: E09 T8 (A15) added halo_shield, buckler, rapier and prism_staff (e09_*.tres).
-	var expected := {&"mob": 16, &"equipment": 89, &"card": 6, &"augment": 31, &"set": 14}
+	# Equipment 85→89: E09 T8 (A15) added halo_shield, buckler, rapier and prism_staff (e09_*.tres). E10a T9 (A15) added prayer_book, halo_scepter and eye_reliquary: 89→92.
+	var expected := {&"mob": 16, &"equipment": 92, &"card": 6, &"augment": 31, &"set": 14}
 	var forest_species: Array[StringName] = [&"forest_wolf", &"forest_boar", &"forest_stalker", &"forest_canopy_archer", &"forest_ancient_warden"]
 	var failures := 0
 	var checked := 0

@@ -33,7 +33,7 @@ func _run() -> void:
 	var owner_collection := profile.equipment_for_character(owner_id)
 	var owner_definitions := {}
 	for instance: EquipmentInstance in owner_collection.values(): owner_definitions[instance.definition_id] = true
-	_check(published == 77 and catalog.equipment_ids().size() == 89 and owner_collection.size() == 89 and owner_definitions.size() == 89 and alt_starters > 0 and profile.equipment_instance_ids().size() == 89 + alt_starters and profile.equipment_for_character(second.get("character_id", "")).size() == alt_starters, "all seventy-seven added pieces coexist with historical collection")
+	_check(published == 80 and catalog.equipment_ids().size() == 92 and owner_collection.size() == 92 and owner_definitions.size() == 92 and alt_starters > 0 and profile.equipment_instance_ids().size() == 92 + alt_starters and profile.equipment_for_character(second.get("character_id", "")).size() == alt_starters, "all seventy-seven added pieces coexist with historical collection")
 	_check(store.commit(profile)["ok"], "isolated published collection persisted")
 	var scene := load("res://scenes/character_menu.tscn") as PackedScene
 	var menu: CharacterMenu = scene.instantiate()
