@@ -8,6 +8,7 @@ const KIT_METADATA := {
 	&"mg_ac": ["Taumaturgo", &"mage", &"2-3", &"acolyte"],
 	&"sp_la": ["Duelista", &"swordsman", &"2-3", &"rogue"],
 	&"mg_la": ["Lâmina Arcana", &"mage", &"2-3", &"rogue"],
+	&"priest": ["Sacerdote", &"acolyte", &"2-1", &""],
 }
 
 var failures := 0
@@ -119,6 +120,9 @@ func _ready_kit_ids() -> Array[StringName]:
 	for id: StringName in ClassKitRegistry.ids():
 		var kit := ClassKitRegistry.module(id)
 		if kit != null and kit.ready_for_play():
+			# E10a (A10): a pure kit is offered only when its registered base module is available.
+			var origin := ClassKitRegistry.origin(id)
+			if IdentityIds.is_registered_base(origin) and not ProfileCatalog.pilot().base_class_is_available(origin): continue
 			ready.append(id)
 	return ready
 

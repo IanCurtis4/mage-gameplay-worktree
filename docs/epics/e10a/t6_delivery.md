@@ -103,11 +103,17 @@ minha posse só para isso:
 Quando a T5 deixar a base pronta, as contagens de ativas e passivas da linha 99 sobem e o filtro do
 ajudante deixa de excluir o Sacerdote; essa atualização é de quem ligar a base (T5) e do Cultista (T7).
 
-**Ainda falha, fora da A9:** `tests/e05_evolution_catalog_test.gd:56,213` (`KIT_METADATA` sem `priest`:
-2 SCRIPT ERROR e 1 check). É a lista de destinos que o contrato entrega à T10; não editei. Linha a
-acrescentar: `&"priest": ["Sacerdote", &"acolyte", &"2-1", &""]`.
+**Decisão A10 (`1378115a`):** `tests/e05_evolution_catalog_test.gd` entra na posse da T6 só para isso:
+- linha acrescentada ao `KIT_METADATA`: `&"priest": ["Sacerdote", &"acolyte", &"2-1", &""]`;
+- só ela deixava 1 check falhando ("twelve accepted E00 identities"), porque `_ready_kit_ids()` conta
+  kits prontos e o catálogo de produção ainda não oferece o Sacerdote (base esqueleto). O ajudante ganhou
+  o mesmo filtro de base disponível aceito para `_expected_kit_skills()` (A10 item 2): kit puro só conta
+  quando a base registrada está disponível. Nenhuma expectativa foi enfraquecida;
+- resultado: PASS, 93 checks, 0 SCRIPT ERROR, sha256 `6B7F3B5BBE61238BDDBAAA633CB0AF8DD4276D4F1E4B833DEBADC01062C87AB2`
+  (antes: FAIL com 2 SCRIPT ERROR). Quando a T5 ligar a base, o filtro deixa de excluir o Sacerdote e o
+  teste passa a esperá-lo no catálogo.
 
-Dois outros testes falham no ambiente, sem relação com a T6: `e08_feedback_vfx_test` e
+Última rodada (23 testes, 0 SCRIPT ERROR, 0 "still in use", todos PASS): `.godot/t6_final2.txt`; hashes iguais aos da tabela acima. Dois outros testes falham no ambiente, sem relação com a T6: `e08_feedback_vfx_test` e
 `kit_seam_hooks_v3_test` (check "F1 world fixture is current"), por falta de `source_hashes.json` na
 worktree (falha conhecida de worktree novo, como o passo 255 da T1). Não rodei a suíte completa:
 a T6 não toca arquivos compartilhados.
