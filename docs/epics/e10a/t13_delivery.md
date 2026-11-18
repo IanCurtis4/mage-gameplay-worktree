@@ -356,3 +356,114 @@ O `git status` da worktree tinha só `.import` reescritos e `.gd.uid` de `docs/m
 
 `laughing-mclean-ff1bbd` (branch `claude/laughing-mclean-ff1bbd` mantida em `de11f99d`):
 `git worktree remove --force` e, onde sobrou resíduo, `rm -rf`. O registro Git foi cancelado (`git worktree list` sem ela); a pasta ficou vazia e ocupada (`Device or resource busy`, sessão da T7). Disco: 33 GB livres (93% usados).
+
+## Composição 5 — T5 (base Acólito) (18/11/2026)
+
+### Merge e conflito
+
+| Origem | Base da T5 | Ponta mesclada | Merge |
+|---|---|---|---|
+| T5 (`claude/upbeat-chaum-bbbb8f`) | `0f7d22ea` (tem a T6, não tem a T7) | `50fb61bd` | `58c0ea90` |
+
+A ponta da arquitetura (`f5940eb7`) já estava no candidato, nada a mesclar dela. O merge teve **um
+conflito**, no `tests/e08_feedback_recipe_test.gd`. As mudanças da T5 em `tests/e10a/base_seam_test.gd`
+e `tests/e09/kit_seam_test.gd` entraram sem conflito, mas ficaram desatualizadas porque a T7 liga o
+Cultista (ver "Ajustes depois do merge").
+
+**Resolução do conflito: 36 ativas e 14 passivas.** A conta foi feita pelos módulos e confirmada pelo
+próprio teste, que lê o catálogo de produção (`kit_active.size()` e `library.kit_passive.size()`) e
+passou nesse check:
+
+| Fonte | Ativas | Passivas |
+|---|---|---|
+| quatro kits do E09 | 20 | 8 |
+| base Acólito (T5) | 6 | 2 |
+| Sacerdote (T6) | 5 | 2 |
+| Cultista (T7) | 5 | 2 |
+| **Total** | **36** | **14** |
+
+Kits prontos no registro: **6** (sem mudança; a base não é kit). A T5 escreveu 31/12 sem o Cultista e a
+T7 escreveu 20/8 sem a base; nenhuma das duas via a soma.
+
+### Ajustes depois do merge (`15f4c131`)
+
+Com a base ligada pela T5 e o Cultista pronto pela T7, o catálogo oferece os dois kits puros. A T5 só
+via o Sacerdote. Dois testes da própria regra A11 ficaram com número velho; ajustei só esses checks, com
+o número exato e sem enfraquecê-los:
+
+| Arquivo | Antes (T5) | Agora |
+|---|---|---|
+| `tests/e10a/base_seam_test.gd` | o Acólito oferece `[priest]` | `[priest, cultist]`, ordem do registro |
+| `tests/e09/kit_seam_test.gd` | 13 / 15 / 17 definições | **14 / 16 / 18** (12 + 0/2/4 híbridas + Sacerdote + Cultista) |
+
+### Importação e testes de impacto
+
+- **Importação:** exit 0, saída `8F510058…CABDE`. **Bootstrap F1:** 255 com a falha conhecida
+  (`GitPlugin`, hash `AB79025F…831F`); 256 passou (`9ECB98E8…44A4`).
+- **Lote:** os 40 do recibo da T5 mais `cultist_kit_test`, `cultist_boss_combat_test` e
+  `cultist_campaign_kill_test` (43), um passo por chamada, `-F1Fixture`, timeout 300 s, 0 timeouts,
+  nenhum `SCRIPT ERROR`, `Parse Error`, `Compile Error`, `still in use` ou `ObjectDB`.
+- **40 passaram, 3 falharam** na rodada do merge: `base_seam_test` (1), `kit_seam_test` (3) e
+  `e08_feedback_recipe_test` (4). Os dois primeiros eram as contagens acima e passam depois de
+  `15f4c131`; para isso refiz o bootstrap F1 (as fontes de teste mudaram). Nessa repetição o passo 255 deu
+  outro hash, `1032E084…F186`, com a mesma falha `GitPlugin`: só aparece a linha de progresso
+  `update_scripts_classes (2 steps)`, porque o cache de classes foi refeito.
+
+| Passo | Teste | Resultado | Saída (8) |
+|---|---|---|---|
+| 340 | `acolyte_base_test` | 306, 0 falhas | `E633901A` |
+| 341 | `acolyte_boss_combat_test` | 275, 0 falhas | `0FDD35B1` |
+| 335 | `base_seam_test` | 172, 0 falhas (depois de `15f4c131`) | `F78A568B` |
+| 333 | `kit_seam_test` | 276, 0 falhas (depois de `15f4c131`) | `60643509` |
+| 108 | `e05_evolution_catalog_test` | PASS, 99 (espera Sacerdote e Cultista) | `90F3F112` |
+| 334 | `ui_evolution_test` | 97 | `DF7B1619` (igual) |
+| 342 | `cultist_boss_combat_test` | 49, 0 falhas (50 na composição 4, sobre a base de fixture) | `88E65883` |
+| 344 / 343 | `cultist_kit_test` / `cultist_campaign_kill_test` | 215 / 20 | `215686C4` / `212B00D3` (iguais) |
+| 27 | `e08_feedback_vfx_test` | 697, 0 falhas (eram 681) | `BF9FE3B0` |
+| — | os demais do lote (`enemy_target`, `madness`, `kit_seam_hooks_v2/v3`, `sanctuary`, `priest_*`, os oito de kit e chefe do E09, `equipment_items`, `e05_identity_boundary`, os `e06_*`, `skill_allocation`, `persistent_state`, `stat_threshold_rules`, `e07_f5_death_kits`, `e02_character_menu`, `e05_evolution_menu_integration`, `profile_facade`, `menu_tabs`) | todos passam | hashes em `t13_c5/impact/*` |
+
+Logs em `.godot/verification/t13_c5/` (`impact/` da rodada do merge, `fix/` da repetição).
+
+### FALHA ABERTA — `e08_feedback_recipe_test` (4 falhas, 1425 checks)
+
+Com a base ligada, o catálogo passa a publicar as skills do Cultista e o teste caminha por elas. Os
+quatro checks `planned cue first for …` falham, com a cadeia de áudio da skill/evento sem cue planejada:
+
+| Skill/evento | Cadeia atual |
+|---|---|
+| `cultist_abyss_gaze/impact` | `[world.impact]` |
+| `cultist_impossible_idol/summon` | `[]` |
+| `cultist_impossible_geometry/trap_trigger` | `[world.area_end]` |
+| `cultist_revelation/impact` | `[world.impact]` |
+
+- **Causa:** o mesmo caso que a lista `KIT_AUDIO_GAPS` registra para `acolyte_shadow_seal/impact` (T5) e
+  `priest_sanctuary/impact` (T6). A T7 não podia ver: com a base esqueleto o Cultista não entra no
+  catálogo, e o teste dela passava (composição 4).
+- **Não editei a expectativa.** Registrar as quatro chaves na lista, ou dar cue planejada às quatro,
+  é decisão de áudio da arquitetura e, se for a correção, volta à T7 (Sol). O restante do teste (1421
+  checks, incluindo as contagens 6 kits e 36/14) passa. **Candidato vermelho nesse teste até a decisão.**
+  O hash de saída do teste é `9EC405A5…`.
+
+### Evidências ignoradas pelo Git, preservadas
+
+`.godot/t5_evidence/` (41 arquivos, a pasta `final/` com as 40 saídas) foi para
+`.godot/verification/e10a_t5_evidence/`, com manifesto de SHA256 por arquivo em
+`.godot/verification/e10a_t5_evidence_manifest.sha256` (41 linhas, SHA256 `0588E1E3…`). A worktree
+tinha só `.import` reescritos (os `.gd.uid` sem rastreio eram os de `docs/map_editor`). Não copiei
+`.godot/verification` (1,1 GB, a fixture F1 regenerável).
+
+### Worktree removida
+
+`upbeat-chaum-bbbb8f` (branch `claude/upbeat-chaum-bbbb8f`, mantida em `50fb61bd`). Saiu do registro do
+Git; a pasta ficou vazia e ocupada (`Device or resource busy`, sessão da T5). Disco: 32 GB livres.
+
+### Quando rodar a primeira suíte completa
+
+A família está inteira no candidato, mas **ainda não é a hora**: T9 (itens), T8 (corpos), T10 (UI e
+perfis), T11 (augments) e T12 (HUD) ainda mexem em catálogo de itens, no menu de criação, em recursos de
+augment e no `kit_hud_state`. A suíte leva ~150 min de CPU exclusiva do candidato, e qualquer merge
+durante ela invalida a rodada. Pela norma de revalidação (WORKFLOW) a evidência não é reaproveitável
+depois dessas tarefas. Vale uma rodada única no fechamento, depois da T11 (e da T12, se o E12 estiver em
+`master`). O passo 148 e o 255 seguem a A7 nessa rodada. Se a arquitetura preferir um alarme antecipado
+dos passos fora do impacto, dá para rodar já só os testes que citam base, identidade ou catálogo de
+criação (o lote da T5 já cobre isso por `grep`).
