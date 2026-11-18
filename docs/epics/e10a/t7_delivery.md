@@ -132,3 +132,49 @@ compõe as duas versões.
 A T13 compõe esta branch com a T5 e a T6, soma as contagens acima, roda a suíte completa e roda
 os três testes do Cultista sobre a base real da T5. A T11 (augments) pode usar os IDs e os números
 do contrato.
+
+## Correção de áudio (A14, pedido da T13)
+
+- **Base:** `claude/e10a-candidato` em `1f8ee4f5` (com a T5 e a base Acólito pronta), mesclado
+  nesta branch em `f8c968a9`. A correção é `0b67670b`.
+- **Falha:** no candidato, `e08_feedback_recipe_test` reprovava 4 checks `planned cue first`:
+  `cultist_abyss_gaze/impact`, `cultist_impossible_idol/summon`,
+  `cultist_impossible_geometry/trap_trigger` e `cultist_revelation/impact`.
+- **Causa:** sombra não tem cue P6 próprio (C1.8), então a cadeia cai para família × physical.
+  - Não existe `p6.dot.physical`, `p6.summon.physical` nem `p6.trap.physical`.
+  - O Olhar e a Revelação eram `PERIODIC`, o que leva o impacto para a família `dot`.
+  - O Ídolo e a Geometria declaravam `summon` e `trap`, mas em jogo nunca emitem esses tipos.
+    A ponte só publica `summon` para `enemy_summon` e `trap_trigger` para `PlayerTrap`; o Ídolo
+    é um KitDecoy e a Geometria é uma área do kit.
+- **Correção (só em `scripts/classes/cultist/cultist_kit.gd`, `feedback_recipes()`):**
+  - as quatro linhas passam a ser `[&"area", &"shadow", &"", COMMIT]`;
+  - o Olhar e a Revelação perdem o `PERIODIC`.
+  - As chaves verificadas passam a ser `area_start`, `impact` e `effect_start`, e todas começam
+    em `p6.area.physical` ou `p6.impact.physical` e terminam no cue do tipo.
+  - Nenhum `.wav` novo e nenhuma edição em `audio_event_catalog.gd`,
+    `feedback_recipe_catalog.gd` ou `KIT_AUDIO_GAPS`.
+- **Efeito no jogo:** os tiques do Olhar (0,4 s) e da Revelação (0,5 s) já respeitam o intervalo
+  DOT de 0,4 s, então o limitador de áudio e o de VFX não mudam na prática. O que muda:
+  - o som do tique é o impacto físico em vez do DOT, mais silencioso, que não existia para sombra;
+  - o pulso de impacto do VFX sai em escala 1,0 em vez de 0,6.
+- **Validação:** `e07_f1_import_test` passou com 3555 arquivos idênticos. Depois, com
+  `-SkipEditorImport -F1Fixture`, 12 de 12 passos em `.godot/verification_t7d2/`, e nenhum log
+  tem `SCRIPT ERROR` nem vazamento.
+
+| Passo | Teste | Checks | SHA-256 da saída (16) |
+|---|---|---|---|
+| 25 | `e08_vfx_art_test` | 1238/1238 | — |
+| 26 | `e08_feedback_recipe_test` | 1433 PASS | `1601B34D112F1352` |
+| 27 | `e08_feedback_vfx_test` | 697/697 | `BF9FE3B061909EE6` |
+| 108 | `e05_evolution_catalog_test` | 99 PASS | — |
+| 331–333 | `kit_seam_hooks_v2/v3`, `kit_seam_test` | 38, 63, 276 | `kit_seam` `60643509690EB7E2` |
+| 335 | `base_seam_test` | 172/172 | — |
+| 338 | `madness_test` | 276/276 | — |
+| 342 | `cultist_boss_combat_test` (base de produção) | 49/49 | `88E65883F8333B3D` |
+| 343 | `cultist_campaign_kill_test` | 20/20 | `212B00D3EAEF50D1` |
+| 344 | `cultist_kit_test` | 215/215 | `215686C41CEFCF87` |
+
+- **Luta contra o chefe:** agora roda sobre a base Acólito real. São 49 checks e não 50, porque o
+  check de base de teste não se aplica.
+  - As duas builds abrem 2 janelas de Desorientação.
+  - Com o companheiro, o chefe dá 5 golpes nos lacaios.
