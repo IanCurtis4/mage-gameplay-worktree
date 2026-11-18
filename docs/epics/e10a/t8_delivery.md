@@ -87,7 +87,14 @@ corpo escolhido pelo mesmo caminho do jogo) com o item da T9 na mão principal, 
   (`zoom_priest_scepter_idle.png`).
 - Os 112 grips vivos de cada corpo caem em pixel opaco dentro do recorte de 3×3 dedos (teste), e os três itens chegam
   ao ponto da palma em todas as combinações (3 itens × 3 corpos × 56 poses, teste).
-- **Grips não editados:** `assets/art/equipment/hand_rigs.json` é da T9; ver Limitações 1.
+- **Grip do livro (transferência autorizada pelo usuário em 18/11, depois da primeira entrega):** com o grip (10,18) da T9
+  o livro 20×30 subia até o queixo e cobria o rosto e o torso no sul e no leste. Troquei **só o grip** de `prayer_book`
+  de (10,18) para (10,12), nos três lugares que a T9 mantém espelhados: `assets/art/equipment/hand_rigs.json`,
+  `PROFILES` de `scripts/actors/equipment_attachment_visual.gd` e `EXPECTED` de `tests/e10a/equipment_items_test.gd`
+  (a expectativa do grip, número exato). O tamanho lógico 20×30 não muda (o teste da T9 exige o tamanho ×4 igual ao PNG
+  de 80×120). Resultado nas poses paradas: o livro fica na altura do quadril, longe do rosto, e passa 4 px do chão
+  (`zoom_acolyte_book_idle.png`); nas poses de ataque, com a mão erguida, ainda encosta no rosto. O cetro e o relicário
+  não mudaram.
 
 ## Testes e regressão por impacto
 
@@ -118,10 +125,16 @@ calibração (64 quadros, 112 grips, convenção sul/norte, mortes); dados de en
 peça de cabeça nas 64 poses; 3 itens × 3 corpos × 56 poses de grip; corpos vizinhos intactos e manifesto de outra
 identidade recusado.
 
+Depois do grip do livro refiz a captura do Acólito (sonda do Acólito: 821 checks, 0 falhas) e rodei de novo
+`family_bodies_test` (6.313, 0), `equipment_hand_alignment_test` (4.593, 0), `equipment_items_test` (E09 244 e E10a 301, 0),
+`e08_equipment_art_test` (100.863, 0), `e08_directional_rig_compatibility_test` (83.328, 0) e `e08_directional_units_test`
+(77.804, 0): mesmos contadores e mesmos hashes de log da primeira rodada, sem `SCRIPT ERROR`.
+
 ### Ajustes de enumeração (A15 do E09), cada um com número exato
 
 | Arquivo | Antes → depois |
 |---|---|
+| `tests/e10a/equipment_items_test.gd`, só `EXPECTED[prayer_book]` | grip `Vector2(10, 18)` → `Vector2(10, 12)` (acompanha a troca do grip autorizada pelo usuário) |
 | `tests/e08_equipment_art_test.gd`, só em `head_fit_checks` | lista `kinds` acrescida de `acolyte`, `priest`, `cultist`; `data.classes.size()==14` → `==17` (as 14 peças ficam em 14) |
 
 Nenhum outro teste legado quebrou: `e08_directional_units/content/rig_compatibility/npcs` varrem as pastas por
@@ -145,10 +158,10 @@ por mim, a 2× e 3×.
 | `bare_cultist_sn.png` | `29467fceb59807ed711e268020fe2407095383aadffca218861f8831eed10528` |
 | `bare_priest_ew.png` | `8b23384d410c4aacfb23e67a6f44dc979a145d0a3584d8bdfcd42e86607ffad8` |
 | `bare_priest_sn.png` | `892e6cbb4127eecc041032227144b545cc94d10a038ceed9559f4ca6ff677322` |
-| `book_acolyte_ew.png` | `4ea7e001cd4d8d58f7a024e2bd3302a887f0247a9249c223c43b0d6298484de8` |
-| `book_acolyte_sn.png` | `2a30d48aa73f4d4e4e528335469647879c448f833e6d84efbc1c4b070ace5862` |
-| `grip_acolyte_ew.png` | `97f1e66575dc1901e745823db87dad64504d133ee573c384bea7a1ae229053e2` |
-| `grip_acolyte_sn.png` | `6d9659d049b98be5d78e764179a7638b639d8d43313cbf806869e2830394675b` |
+| `book_acolyte_ew.png` | `d44f9c6e9faea7cb9fbc89582ba1ce60d37296aa98adb31b8d9d4511499e562b` |
+| `book_acolyte_sn.png` | `19a8fbcb3d1567d4a34d1d20a6dac88d713c4b1300dbbcfc6fa3bbb58e523d3b` |
+| `grip_acolyte_ew.png` | `67666b781edfd0eb5303aaed4bfb73424d40bd7369131cc1ad054379821bbcda` |
+| `grip_acolyte_sn.png` | `c9413548a7d9861961e548139dc9e09e959426d34c87202af14a5f8ffea67dc7` |
 | `grip_cultist_ew.png` | `9a31a0bdc5af0c08011672e6f2b617fc40700effd9bd7fafdde8544e2151e677` |
 | `grip_cultist_sn.png` | `e24ef20910fc27158612d9b954b30e7c732db2f6de9183afb350ce29432f0a14` |
 | `grip_priest_ew.png` | `2f31ed81ff36a50f7f57594aaa9188bee52fb73044389f5b3660c33890d44ce0` |
@@ -163,17 +176,15 @@ por mim, a 2× e 3×.
 | `reliquary_cultist_sn.png` | `a1fcc9cfa51f344cd2f14650aea53d5370e937f112e13c225c92b5149ed9022a` |
 | `scepter_priest_ew.png` | `db6e43132a8f65818524763aa4d5db908494a486416cefe9b0c2c9879aff98f1` |
 | `scepter_priest_sn.png` | `8d3a2fa2035e7af8dccdeab1b13b3ab757c239f5be0e7b798c01f376c33ee5f5` |
-| `zoom_acolyte_book_idle.png` | `98614b167fa6890734e453070ac82c83a7433f1d14597111225358d0beca2ec9` |
+| `zoom_acolyte_book_idle.png` | `661b17d60074ca57f93b0ffef6ebab3627b2726347efc8406af5f1f98e5d4ea9` |
 | `zoom_cultist_reliquary_idle.png` | `516eea0d42826a3b9e0678e2d083113cd767046b4ed3c3a047ba654f84d4bf08` |
 | `zoom_priest_scepter_idle.png` | `6fdd538acd75dd136d73d5c3d1a77802b73c0e77c7d44eb4c6902de51707773f` |
 ## Limitações e pendências
 
-1. **Livro grande demais no corpo do Acólito (decisão de arquitetura).** O livro 20×30 com o grip em (10,18) (T9)
-   sobe até a altura do queixo: no sul e no leste cobre o canto do rosto e boa parte do torso do lado da mão
-   (`zoom_acolyte_book_idle.png`). A mão está certa; o que falta é o item. Proposta: transferir a mim, ou à T9, um
-   ajuste de `hand_rigs.json` e `PROFILES` (grip mais baixo, por exemplo (10,24), ou props menores, 16×24); não editei
-   por ser da T9. O relicário pende abaixo dos pés do corpo no sul e no leste; lê-se como corrente longa e não colide
-   com o rosto, mas a escala é da T9 e fica para o aceite visual.
+1. **Livro e relicário (escala de T9).** Com o grip ajustado (seção 5) o livro ainda é grande para o corpo: nas poses de
+   ataque encosta no rosto e na parada passa 4 px abaixo do chão. Reduzir o prop exigiria regenerar o PNG (o teste da T9
+   amarra tamanho lógico ao arquivo); fica para o aceite visual. O relicário pende abaixo dos pés no sul e no leste;
+   lê-se como corrente longa e não colide com o rosto, mas a escala é da T9.
 2. **Ângulo do cetro nos outros portadores.** O ângulo de slot do Sacerdote vale para qualquer item que ele empunhe:
    o livro e o relicário ficam inclinados nele (−0,35 no sul e −0,45 no leste), sem problema para o relicário (pende) e
    com leve tombo no livro. O caminho completo é aceitar ids de prop em `WEAPON_KEYS`/`angle_overrides`
