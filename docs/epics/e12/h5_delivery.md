@@ -1,14 +1,27 @@
 # H5 — recibo da integração e do candidato E12 (C6), 17/11/2026
 
-**Candidato:** `874776ec6683058ae1ac0e15755fbfdadc96baf9`, na branch `claude/e12-candidato`.
-- **Escopo:** é o commit exportado e testado. Os commits seguintes da H5 mexem só em `docs/` e na
-  cópia do script de empacotamento dentro de `docs/epics/e12/`.
+**Candidato:** `250b094872a7e695845579afa3cf3ae8c3beaa06`, na branch `claude/e12-candidato`. É o
+commit de merge que traz o `master` do E09 aceito (`7795f56d`) para cima do commit testado.
+
+| Papel | SHA |
+|---|---|
+| Commit **testado pela suíte completa** (pré-merge) | `874776ec6683058ae1ac0e15755fbfdadc96baf9` |
+| Recibo, roteiro e script da H5 (só `docs/`) | `25ed0f07` |
+| `master` aceito do E09 | `7795f56d` |
+| **Candidato exportado e sondado** (pós-merge) | `250b094872a7e695845579afa3cf3ae8c3beaa06` |
+
+- **Escopo:** a suíte completa rodou no SHA pré-merge `874776ec`. O merge com o `master` é **só
+  documental** (ver "Merge com o `master`"), por isso a suíte não foi repetida. A exportação, as
+  sondas no PCK, os perfis, o smoke e a multidão foram refeitos a partir do SHA pós-merge.
 - **Base:** o candidato E09 `a0c81525` (via `0405f4f6`, que só trouxe o registro da H4).
 - **Aprovação técnica:** ainda depende da supervisão Luna (H6).
 - **Aceite de produto:** é do usuário, pelo [roteiro de playtest](playtest_guide.md).
-- **Git:** sem push e nada em `master`. `codex/playtest`, o rebase sobre `master` e o save pessoal
-  **não** foram tocados (D6 e C6: só depois da H6, da aprovação técnica e do aceite do E09).
+- **Git:** sem push e nada em `master`. `codex/playtest` e o save pessoal **não** foram tocados (D6 e
+  C6: o playtest só avança depois da H6 e da aprovação técnica; a condição do aceite do E09 já está
+  cumprida).
 - **Código de runtime:** nenhuma linha foi editada pela H5. Não houve falha nova a corrigir.
+- **Ordem do recibo:** este recibo foi escrito **depois** do fim da rodada completa (os passos 2 a
+  354 e todos os hashes abaixo são de uma rodada terminada), e atualizado depois do merge.
 
 ## Composição
 
@@ -28,6 +41,26 @@ arquivos dos donos das tarefas H1 a H4 (documentos do épico e da norma, `script
 `tools/verify.ps1` da H3), mais as duas exceções da H4 já registradas: as entradas `omitted` em
 `scripts/core/expedition/snapshot/runtime_manifest.json` e uma asserção em
 `tests/mage_gameplay_test.gd`.
+
+## Merge com o `master`
+
+O E09 foi aceito pelo usuário em 17/11 e está em `master` (`7795f56d`, `codex/playtest` no mesmo
+commit). Foi feito **merge** (não rebase), de modo que o commit testado continua ancestral do
+candidato (`git merge-base --is-ancestor 874776ec 250b0948` confirma).
+
+- **Diferença `a0c81525` → `7795f56d`:** só `AGENTS.md`, `docs/LONG_TERM_EPICS.md` e
+  `docs/epics/e09.md`.
+- **Conflito:** só em `AGENTS.md` (mecânico, um parágrafo). Resolvido mantendo as duas notas: o
+  aceite e a integração do E09 e a autorização do E12. `docs/LONG_TERM_EPICS.md` mesclou sozinho e
+  mantém as linhas do E09 aceito e do E12.
+- **Diff do commit testado `874776ec` até o candidato `250b0948`:** 8 arquivos, todos documentos:
+  `AGENTS.md`, `docs/LONG_TERM_EPICS.md`, `docs/epics/e09.md`, `docs/epics/e12.md` e os quatro
+  arquivos da H5 em `docs/epics/e12/`. **Nenhum** arquivo `res://` de script, cena ou recurso.
+- **Diff do commit de docs da H5 `25ed0f07` até o candidato:** só os três arquivos vindos do
+  `master`.
+- **Prova pelo PCK:** o PCK exportado do SHA pós-merge tem SHA256 **idêntico** ao exportado do SHA
+  pré-merge (`4A91F424…A7242`, 249.615.740 bytes), e o `.exe` também. O merge não mudou nenhum byte
+  empacotado.
 
 ## Suíte completa no candidato
 
@@ -102,15 +135,19 @@ porque a H5 só é dona de `docs/epics/e12/h5_*`. Exporta a partir do fixture F1
 - O fixture `scripts/classes/fixture/hud/` (da H1) cai na mesma pasta de exclusão e **não** está no
   PCK (conferido pela sonda).
 
-Pasta de saída: `.tools/playtest_e12/e12_874776ec/`.
+Pasta de saída do candidato pós-merge: `.tools/playtest_e12/e12_250b0948/`. Uma primeira exportação
+do SHA pré-merge (`e12_874776ec`) gerou os mesmos `.exe` e `.pck`; a pasta foi removida por
+superada, e só a evidência da multidão dela foi mantida (ver "Multidão").
 
 | Artefato | Bytes | SHA256 |
 |---|---|---|
 | `RagRPG-E12-Candidato.exe` | 109.127.680 | `4A9EADED8955EF789AB02651ED9D2DDE80328FBB342BD2A6DB4DB33E86305668` |
 | `RagRPG-E12-Candidato.pck` | 249.615.740 | `4A91F424FF1C921EE8BD806639F9D8EA037A98CAE1AFE8FCD7E5C7F9B8AA7242` |
-| `build_manifest.json` | 1.604 | `68452AE051AA37D1522D09CA9423D87C393B83D8327BB42E3BF4D6937508BCED` |
+| `build_manifest.json` | 1.604 | `B515750C9EEF1FA78847E0B78D9CB7E6B29B1208D3C0E466B061534FE38C68FA` |
 
-O `.exe` é o mesmo do E09 (mesmo template e mesmo nome de motor). O PCK tem 3786 entradas.
+O `.exe` é o mesmo do E09 (mesmo template e mesmo nome de motor). O PCK tem 3786 entradas. O
+`build_manifest.json` difere do da primeira exportação (`68452AE0…BCED`) só porque registra o SHA do
+candidato e o horário.
 
 ## Sondas no PCK exato
 
@@ -137,8 +174,11 @@ candidato.
 - **`normal_boot`, `forest_map_pack` e `export_content`:** passaram (`PACK_PROBE failures=0`), e a
   captura `candidate_forest_zoom.png` foi gerada.
 
-Hashes das saídas: `inspect_pack_e12.output.log` `42A59E8F…E578`, `review_profiles.output.log`
-`96C816C9…7271`, `export.engine.log` `A5223CF0…EDDC`.
+Todas as sondas foram **repetidas no SHA pós-merge** e passaram do mesmo modo (E09 20/20, E12
+24/24, E08, `normal_boot`, `forest_map_pack`, `export_content` com `PACK_PROBE failures=0`).
+
+Hashes das saídas pós-merge: `inspect_pack_e12.output.log` `F2A11FA4…743D`,
+`review_profiles.output.log` `C4DC8BC2…A0C0`, `export.engine.log` `A5223CF0…EDDC`.
 
 ## Perfis de revisão, atalhos e smoke
 
@@ -146,62 +186,75 @@ Hashes das saídas: `inspect_pack_e12.output.log` `42A59E8F…E578`, `review_pro
 - `tools/e09_review_profiles.gd` (inalterado) rodou com `--main-pack` numa pasta isolada
   (`review_profiles_raw`).
 - Saíram **8 perfis válidos no job 40**, sem pendentes nem inválidos.
-- O SHA256 de `profiles/index.json` é `1D67B045…565E`.
+- O SHA256 de `profiles/index.json` é `D5BC50D6…8E56`.
+- Os hashes dos perfis mudam a cada geração (a pasta do perfil guarda data, hora e identificadores),
+  então os da primeira exportação não valem para o candidato pós-merge.
 
 | Perfil | SHA256 |
 |---|---|
-| `sp_ac__paladin_bulwark` | `39bc4955…bcb9` |
-| `sp_ac__paladin_hammer` | `c59452a5…c910` |
-| `mg_ac__thaumaturge_prism_altar` | `6db01b25…b2bb` |
-| `mg_ac__thaumaturge_dawn_choir` | `788fe0ad…f672` |
-| `sp_la__duelist_patient_blade` | `c09877a7…6574` |
-| `sp_la__duelist_arena` | `64019999…7afc` |
-| `mg_la__arcane_blade_execution_chain` | `43d465ac…1d8a` |
-| `mg_la__arcane_blade_prism_specter` | `e4ac7198…9b21` |
+| `sp_ac__paladin_bulwark` | `c54d97ce…8f8d` |
+| `sp_ac__paladin_hammer` | `f5273158…67e5` |
+| `mg_ac__thaumaturge_prism_altar` | `bccc5042…504c` |
+| `mg_ac__thaumaturge_dawn_choir` | `89f148da…2f91` |
+| `sp_la__duelist_patient_blade` | `72e9ae51…1e8c` |
+| `sp_la__duelist_arena` | `a35dffb2…c4b2` |
+| `mg_la__arcane_blade_execution_chain` | `6b3febc3…f829` |
+| `mg_la__arcane_blade_prism_specter` | `648c3364…3d5f` |
 
 **Atalhos:** 8 `launch_<chave>.cmd` e 8 atalhos "Jogar E12 - <classe> - <build>.lnk".
 
 **Smoke:** abriu o primeiro perfil.
-- A janela "RagRPG E12 Candidato" seguia viva aos 25 s (conjunto de trabalho de cerca de 355 MB).
+- A janela "RagRPG E12 Candidato" seguia viva aos 25 s.
 - Fechou com código 0 e sem linhas de erro.
-- O SHA256 do perfil era igual antes e depois (`39bc4955…bcb9`).
+- O SHA256 do perfil era igual antes e depois (`c54d97ce…8f8d`).
 
 ## Multidão contra E08 e E09 (não é certificação de FPS)
 
 **Protocolo:** `tools/e08_crowd_compare.gd`, com 96 atores e 3 passadas por modo (a passada 0 é
 aquecimento e fica fora da média). Foram 2 rodadas com os **três** pacotes (E08 `db7f9252`, E09
-`3843d324` e este candidato), em ordem rotativa, no mesmo motor e na mesma máquina. Evidência em
-`measure_h5_crowd/` (`protocol.json` `D6205BA1…9E2E`, `runs.json` `84798246…4CB0C`).
+`3843d324` e este candidato), em ordem rotativa, no mesmo motor e na mesma máquina. O PCK do E12 é o
+mesmo nas duas medições (hash idêntico), então são duas amostras independentes do mesmo pacote.
 
-| Pacote | Modo | Média das medianas (ms/quadro) | Memória estática |
-|---|---|---|---|
-| E08 `db7f9252` | parado | 3,27 | 139,6 MB |
-| E09 `3843d324` | parado | 3,36 | 146,1 MB |
-| E12 `874776ec` | parado | 3,58 | 147,4 MB |
-| E08 `db7f9252` | em movimento | 6,11 | 139,6 MB |
-| E09 `3843d324` | em movimento | 6,25 | 146,1 MB |
-| E12 `874776ec` | em movimento | 6,49 | 147,4 MB |
+- **Medição A** (feita antes do merge, `measure_h5_crowd_premerge/`): `runs.json` `84798246…4CB0C`.
+- **Medição B** (oficial, no SHA pós-merge, `measure_h5_crowd/`): `protocol.json` `32181388…9A20`,
+  `runs.json` `5E727DA9…27BF`.
 
-Os três pacotes têm 288 draw calls, e todas as seis execuções saíram sem linhas de erro.
+Média das medianas por quadro (ms), das passadas 1 e 2 das duas rodadas:
+
+| Pacote | Modo | A | B (oficial) | Memória estática (B) |
+|---|---|---|---|---|
+| E08 `db7f9252` | parado | 3,27 | 4,51 | 139,3 MB |
+| E09 `3843d324` | parado | 3,36 | 4,65 | 145,7 MB |
+| E12 `250b0948` | parado | 3,58 | 5,21 | 147,0 MB |
+| E08 `db7f9252` | em movimento | 6,11 | 7,94 | 139,3 MB |
+| E09 `3843d324` | em movimento | 6,25 | 8,37 | 145,7 MB |
+| E12 `250b0948` | em movimento | 6,49 | 8,77 | 147,0 MB |
+
+Os três pacotes têm 288 draw calls, e todas as doze execuções saíram sem linhas de erro. A medição B
+rodou com a máquina cerca de 30% mais lenta que a A (os três pacotes subiram juntos), por isso os
+valores absolutos das duas medições não se comparam; vale a ordem entre os pacotes dentro de cada uma.
 
 **Leitura:**
-- O E12 ficou **cerca de 4% (em movimento) e 6% (parado) acima do E09** na mediana. As quatro
-  passadas do E12 ficaram acima das quatro do E09 em cada modo, então não é só ruído de uma
-  execução; mas a diferença é de décimos de milissegundo, com duas rodadas.
+- O E12 ficou **acima do E09 nas duas medições**: cerca de 4% (em movimento) e 6% (parado) na A, e
+  cerca de 5% (em movimento) e 12% (parado) na B. Na B há uma passada do E12 parado a 6,05 ms; sem
+  ela a diferença parada cairia para cerca de 6%. Na B as passadas do E09 e do E12 se sobrepõem em
+  movimento (E09 de 7,70 a 9,37 ms, E12 de 8,24 a 9,10 ms). É uma diferença pequena e consistente
+  de sentido, de décimos a poucos ms por quadro, com poucas amostras.
 - **O que a sonda mede e o que não mede:** ela sobe atores e os desenha, mas **não desenha o HUD
   principal** (painel, barra de cast do jogador e overlay de zonas). Mede só o caminho de desenho
   dos atores, incluindo o que o E12 pôs neles (`overhead_bar_y`, `cast_progress`, a barra de cast
   do inimigo). O custo do HUD em jogo **não foi medido**.
 - A memória estática sobe 1,3 MB sobre o E09, compatível com os scripts novos.
 
-São duas rodadas numa máquina só, sem fixar a frequência da CPU. Não servem para afirmar FPS nem
+São poucas rodadas numa máquina só, sem fixar a frequência da CPU. Não servem para afirmar FPS nem
 regressão.
 
 ## Limitações concretas
 
 1. **Aprovação.** O candidato ainda não tem aprovação técnica (H6) nem aceite de produto. O playtest
-   habitual (`codex/playtest`) **não** foi avançado e o rebase sobre `master` **não** foi feito: ambos
-   dependem da H6, da aprovação técnica e do aceite do E09 (D6, C6).
+   habitual (`codex/playtest`) **não** foi avançado; isso depende da H6 e da aprovação técnica (a
+   condição do aceite do E09 de D6 e C6 já está cumprida). O candidato contém o `master` por merge,
+   não por rebase.
 2. **Passo 255 (`e07_f1_native_import`).** Segue falhando, como em todas as rodadas desde a E08.
 3. **Passo 1 (`editor_import`) e o `GitPlugin`.** Numa worktree nova o import termina, mas imprime as
    duas linhas `ERROR` do plugin e o driver conta falha. É a limitação 7 da H4; foi tratado como no

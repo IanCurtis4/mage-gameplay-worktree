@@ -1,6 +1,6 @@
 # Roteiro de playtest — candidato E12 (HUD de combate)
 
-Candidato técnico `874776ec` (branch `claude/e12-candidato`): o candidato E09 `a0c81525` mais as
+Candidato técnico `250b0948` (branch `claude/e12-candidato`): o E09 aceito (`a0c81525`, hoje em `master`) mais as
 tarefas H1 a H4 do [E12](../e12.md). Este marco só desenha: **nenhum dano, custo, recarga, ameaça,
 regra de cast ou campo de save mudou**. Aprovação técnica não é aceite; o roteiro serve ao seu
 aceite visual. Pontos que só você decide estão em "Para conferir" no fim.
@@ -8,15 +8,15 @@ aceite visual. Pontos que só você decide estão em "Para conferir" no fim.
 ## Como abrir
 
 - **Build Windows (recomendado para o aceite):** pasta
-  `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/playtest_e12/e12_874776ec/`.
+  `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/playtest_e12/e12_250b0948/`.
   - Abra pelos atalhos **"Jogar E12 - <classe> - <build>"**. Cada atalho usa um perfil isolado
     dentro da própria pasta, com um personagem no job 40 e a build já montada (as mesmas oito
     builds do E09: nomes na tabela abaixo).
   - O aplicativo se chama **RagRPG E12 Candidato**; o save é separado do habitual e o pessoal não é
     lido nem alterado. Mantenha o EXE e o PCK juntos.
   - Os perfis não trazem atributos nem equipamento: distribua os pontos e equipe antes de lutar.
-- **Projeto habitual (F5 no Godot):** ainda **não** foi avançado. Isso só acontece depois da
-  supervisão Luna (H6), da aprovação técnica e do aceite do E09 em `master`.
+- **Projeto habitual (F5 no Godot):** ainda **não** foi avançado. O E09 já está aceito e em `master`; falta
+  a supervisão Luna (H6) e a aprovação técnica; só então o playtest habitual é avançado.
 
 | Classe | Build | Atalho |
 |---|---|---|
