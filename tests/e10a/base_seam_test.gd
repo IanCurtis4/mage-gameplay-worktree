@@ -122,7 +122,9 @@ func _check_production_state() -> void:
 		var id: StringName = row[0]
 		var kit := ClassKitRegistry.module(id)
 		_check(kit != null and kit.kit_id() == id and String(ClassKitRegistry.MODULES[id]) == "res://scripts/classes/%s/%s_kit.gd" % [id, id], "%s skeleton loads from its own folder" % id)
-		_check(ClassKitRegistry.validate(id)["ok"] and not ClassKitRegistry.ready_for_play(id) and kit.skill_definitions().is_empty(), "%s skeleton validates, empty and not ready" % id)
+		# E10a A9 (T7): the Cultista is ready in this branch; the Sacerdote stays a skeleton here (T6 elsewhere, T13 composes).
+		if id == &"cultist": _check(ClassKitRegistry.validate(id)["ok"] and ClassKitRegistry.ready_for_play(id) and kit.skill_definitions().size() == 7, "%s (T7) validates, ready, seven skills" % id)
+		else: _check(ClassKitRegistry.validate(id)["ok"] and not ClassKitRegistry.ready_for_play(id) and kit.skill_definitions().is_empty(), "%s skeleton validates, empty and not ready" % id)
 		_check(ClassKitRegistry.origin(id) == &"acolyte" and ClassKitRegistry.branch(id) == row[1] and ClassKitRegistry.affinity(id).is_empty() and ClassKitRegistry.is_pure(id), "%s: origin acolyte, branch %s by data" % [id, row[1]])
 		_check(ClassKitRegistry.display_name(id) == row[2] and ClassKitRegistry.skill_ids(id).size() == 7 and String(ClassKitRegistry.skill_ids(id)[0]).begins_with(String(id) + "_"), "%s: name and seven prefixed IDs of section 1" % id)
 		_check(IdentityIds.is_evolution(id) and IdentityIds.evolution_origin(id) == &"acolyte" and IdentityIds.evolution_belongs_to(id, &"acolyte") and IdentityIds.kit_affinity(id).is_empty(), "%s is an evolution of the Acólito, without affinity" % id)
@@ -229,8 +231,9 @@ func _check_fixture_catalogs() -> void:
 	_check(BuildPresentation.portrait_identity(snapshot) == priest_body, "portrait identity uses the same chain")
 	# Evolutions: the ready pure kit appears for its base with branch 2-1, no affinity.
 	var destinations := catalog.evolution_definitions_for_origin(&"acolyte")
-	_check(destinations.size() == 1 and destinations[0].id == &"priest" and destinations[0].branch_kind == &"2-1" and destinations[0].affinity_class_id.is_empty() and destinations[0].content_ready and destinations[0].entry_skill_id == &"priest_sanctuary", "the ready pure kit is offered with its branch by data")
-	_check(catalog.evolution_definition(&"cultist") == null, "the unready pure kit is not offered")
+	# E10a A9 (T7): the production Cultista is ready too, so both pure kits are offered in registry order.
+	_check(destinations.size() == 2 and destinations[0].id == &"priest" and destinations[0].branch_kind == &"2-1" and destinations[0].affinity_class_id.is_empty() and destinations[0].content_ready and destinations[0].entry_skill_id == &"priest_sanctuary", "the ready pure kit is offered with its branch by data")
+	_check(destinations.size() == 2 and destinations[1].id == &"cultist" and destinations[1].branch_kind == &"2-2" and destinations[1].content_ready and destinations[1].entry_skill_id == &"cultist_abyss_gaze", "the ready Cultista (T7) is offered with branch 2-2")
 	var forced := ProfileCatalog.pilot({}, {}, {&"cultist": {"content_ready": false}})
 	_check(forced.is_valid() and forced.evolution_definition(&"cultist") != null and not forced.evolution_definition(&"cultist").content_ready, "a fixture override lists the unready pure kit as unavailable")
 	ClassBaseRegistry.clear_fixtures()

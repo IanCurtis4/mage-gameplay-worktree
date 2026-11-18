@@ -1,0 +1,11 @@
+{
+  "res://scripts/classes/cultist/fixture/cultist_fixture_base.gd": {
+    "revision": 1,
+    "fields": [
+      "madness",
+      "base_madness",
+      "whisper_serial"
+    ],
+    "omitted": {}
+  }
+}
