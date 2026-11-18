@@ -70,7 +70,13 @@ func _selection() -> void:
 	for family: StringName in Recipes.FAMILIES:
 		if family in [&"death", &"revive"]: continue # No active skill maps to them; covered below.
 		check(drawn_families.has(family), "family has a visual: " + str(family))
-	for element: StringName in Recipes.ELEMENTS: check(drawn_elements.has(element), "element has a visual: " + str(element))
+	# E10a C1.11: shadow has no production recipe until the Acólito family is ready (its
+	# modules are skeletons); its own colour and effect are checked through the palette.
+	for element: StringName in Recipes.ELEMENTS:
+		if element == &"shadow" and not drawn_elements.has(element):
+			check(WorldProjectileArt.PALETTE.has(element) and WorldProjectileArt.PALETTE[element] != WorldProjectileArt.PALETTE[&"arcane"], "element has its own palette entry: shadow")
+			continue
+		check(drawn_elements.has(element), "element has a visual: " + str(element))
 	for kind: StringName in [&"death", &"revive", &"area_end", &"cast_cancel", &"teleport"]:
 		layer.pulses.clear()
 		bridge.emit_confirmed(event(bridge, kind, &"fireball", {"reason":"expire"}))
