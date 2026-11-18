@@ -197,7 +197,8 @@ reescritos e `.gd.uid` de `docs/map_editor`, que não foram versionados (pedido 
 
 `wizardly-hermann-10d51a` (branch `claude/wizardly-hermann-10d51a`, mantida em `e35525c7`):
 `git worktree remove --force`, que cancelou o registro mas falhou com `Filename too long`; o resto
-saiu com `rm -rf`. O disco ficou com 28 GB livres logo após o registro cancelado.
+saiu com `rm -rf`. A pasta ficou **vazia** e ocupada (`Device or resource busy`, como as de T1 a T3: a
+sessão da T4 a usa como diretório de trabalho). Disco: 31 GB livres (94% usados).
 
 ### Conta da A9 para o fechamento
 
