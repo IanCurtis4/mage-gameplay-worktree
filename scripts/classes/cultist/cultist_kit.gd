@@ -139,15 +139,18 @@ func learning_entries() -> Array[Dictionary]:
 		{"skill_id": REVELATION, "category": &"active", "free_rank": 0, "max_purchased_rank": 5, "job_level": 37},
 	]
 
+## Audio (E10a T13 fix): shadow has no P6 cue of its own (C1.8), so every row uses a family whose
+## physical cue exists. The Idol is a KitDecoy and Geometry a kit area, so neither emits `summon` or
+## `trap_trigger`; Gaze and Revelation tick at 0.4/0.5 s, at or above the DOT gap, so no PERIODIC flag.
 func feedback_recipes() -> Dictionary:
 	return {
-		GAZE: [&"area", &"shadow", &"", FeedbackRecipeCatalog.COMMIT | FeedbackRecipeCatalog.PERIODIC],
+		GAZE: [&"area", &"shadow", &"", FeedbackRecipeCatalog.COMMIT],
 		ECSTASY: [&"buff", &"shadow", &"", 0],
-		IDOL: [&"summon", &"shadow", &"", FeedbackRecipeCatalog.COMMIT],
+		IDOL: [&"area", &"shadow", &"", FeedbackRecipeCatalog.COMMIT],
 		SHARED: [&"impact", &"shadow", &"", FeedbackRecipeCatalog.COMMIT],
 		PUPIL: [&"buff", &"shadow", &"", 0],
-		GEOMETRY: [&"trap", &"shadow", &"", FeedbackRecipeCatalog.COMMIT],
-		REVELATION: [&"area", &"shadow", &"", FeedbackRecipeCatalog.COMMIT | FeedbackRecipeCatalog.PERIODIC],
+		GEOMETRY: [&"area", &"shadow", &"", FeedbackRecipeCatalog.COMMIT],
+		REVELATION: [&"area", &"shadow", &"", FeedbackRecipeCatalog.COMMIT],
 	}
 
 func skill_texts() -> Dictionary:
