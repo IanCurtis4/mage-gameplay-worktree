@@ -121,7 +121,7 @@ func _check_production_state() -> void:
 		_check(ClassKitRegistry.skill_owner(id) == &"acolyte" and ClassCatalog.skill_definition(id) != null, "%s belongs to the base and is published by the catalog (ready module, T5, A11)" % id)
 	var catalog := ProfileCatalog.pilot()
 	_check(catalog.is_valid() and catalog.base_class_is_available(&"acolyte"), "production catalog valid; Acólito offered at creation (T5, A11)")
-	_check(catalog.evolution_definitions_for_origin(&"acolyte").map(func(d: EvolutionDefinition) -> StringName: return d.id) == [&"priest"], "the Acólito offers only the ready pure kit of its branch: the Sacerdote (T6); the Cultista skeleton stays out (A11)")
+	_check(catalog.evolution_definitions_for_origin(&"acolyte").map(func(d: EvolutionDefinition) -> StringName: return d.id) == [&"priest", &"cultist"], "the Acólito offers the two ready pure kits of its branch, in registry order: the Sacerdote (T6) and the Cultista (T7, A11)")
 	_check(ClassKitRegistry.ids() == [&"sp_ac", &"mg_ac", &"sp_la", &"mg_la", &"priest", &"cultist"] and ClassKitRegistry.hybrid_ids() == [&"sp_ac", &"mg_ac", &"sp_la", &"mg_la"] and ClassKitRegistry.pure_ids() == [&"priest", &"cultist"], "kit registry: the four hybrids then the two pure kits")
 	for row: Array in [[&"priest", &"2-1", "Sacerdote"], [&"cultist", &"2-2", "Cultista"]]:
 		var id: StringName = row[0]

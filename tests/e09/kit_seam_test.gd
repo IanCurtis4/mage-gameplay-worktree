@@ -131,19 +131,19 @@ func _check_skeleton_and_readiness_states() -> void:
 	var none := ProfileCatalog.pilot()
 	_check(none.is_valid(), "zero ready kits: catalog valid")
 	_check_destinations(none, "zero ready")
-	_check(none.evolution_definitions().size() == 13, "zero ready: the twelve E00 identities plus the Sacerdote, a ready pure kit of the now ready Acólito (T5, T6, A11)")
+	_check(none.evolution_definitions().size() == 14, "zero ready: the twelve E00 identities plus the Sacerdote and the Cultista, the ready pure kits of the now ready Acólito (T5, T6, T7, A11)")
 	# Some ready: one kit of each origin, the other two stay skeletons.
 	_check(ClassKitRegistry.install_fixture(&"sp_ac", FixtureKit.new(&"sp_ac")) and ClassKitRegistry.install_fixture(&"mg_la", FixtureKit.new(&"mg_la")), "ready fixtures install over sp_ac and mg_la")
 	var some := ProfileCatalog.pilot()
 	_check(some.is_valid(), "some ready kits: catalog valid")
 	_check_destinations(some, "some ready")
-	_check(some.evolution_definition(&"mg_ac") == null and some.evolution_definition(&"sp_la") == null and some.evolution_definitions().size() == 15, "some ready: the skeletons stay absent (12 + 2 hybrids + the Sacerdote)")
+	_check(some.evolution_definition(&"mg_ac") == null and some.evolution_definition(&"sp_la") == null and some.evolution_definitions().size() == 16, "some ready: the skeletons stay absent (12 + 2 hybrids + the Sacerdote and the Cultista)")
 	# All four ready.
 	_check(ClassKitRegistry.install_fixture(&"mg_ac", FixtureKit.new(&"mg_ac")) and ClassKitRegistry.install_fixture(&"sp_la", FixtureKit.new(&"sp_la")), "ready fixtures install over mg_ac and sp_la")
 	var all := ProfileCatalog.pilot()
 	_check(all.is_valid(), "four ready kits: catalog valid")
 	_check_destinations(all, "four ready")
-	_check(all.evolution_definitions().size() == 17, "four ready: the twelve plus the four hybrids plus the Sacerdote")
+	_check(all.evolution_definitions().size() == 18, "four ready: the twelve plus the four hybrids plus the Sacerdote and the Cultista")
 	ClassKitRegistry.clear_fixtures()
 
 func _check_identities_and_eligibility() -> void:
