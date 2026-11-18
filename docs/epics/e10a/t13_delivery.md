@@ -355,4 +355,4 @@ O `git status` da worktree tinha só `.import` reescritos e `.gd.uid` de `docs/m
 ### Worktree removida
 
 `laughing-mclean-ff1bbd` (branch `claude/laughing-mclean-ff1bbd` mantida em `de11f99d`):
-`git worktree remove --force` e, onde sobrou resíduo, `rm -rf`.
+`git worktree remove --force` e, onde sobrou resíduo, `rm -rf`. O registro Git foi cancelado (`git worktree list` sem ela); a pasta ficou vazia e ocupada (`Device or resource busy`, sessão da T7). Disco: 33 GB livres (93% usados).
