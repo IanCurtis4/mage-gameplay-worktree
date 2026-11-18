@@ -1,7 +1,7 @@
 extends SceneTree
 ## E10a C1.13 — the base seam and the two-module composition. A fixture base module
 ## (scripts/classes/fixture/fixture_base.gd) is installed over `acolyte` and a fixture kit
-## over `priest`; production modules stay empty skeletons, never ready.
+## over `priest`; the production Cultista stays an empty skeleton, never ready (the Acólito base and the Sacerdote are delivered, T5 and T6).
 const FixtureBase = preload("res://scripts/classes/fixture/fixture_base.gd")
 const FixtureKit = preload("res://scripts/classes/fixture/fixture_kit.gd")
 
@@ -48,6 +48,11 @@ class IncompleteBase extends "res://scripts/classes/fixture/fixture_base.gd":
 		var result := super.skill_texts()
 		result.erase(&"acolyte_devotion")
 		return result
+
+## A base that declares itself unready: the Acólito of production is ready since T5, so the C1.3 rule is proved with this one.
+class UnreadyBase extends "res://scripts/classes/fixture/fixture_base.gd":
+	func ready_for_play() -> bool:
+		return false
 
 ## An origin that cancels every hit before the evolution is asked.
 class OrderedKit extends "res://scripts/classes/fixture/fixture_kit.gd":
@@ -108,15 +113,15 @@ func _check_production_state() -> void:
 	ClassKitRegistry.clear_fixtures()
 	_check(ClassBaseRegistry.ids() == [&"acolyte"] and String(ClassBaseRegistry.MODULES[&"acolyte"]) == "res://scripts/classes/bases/acolyte/acolyte_base.gd", "the base registry lists acolyte in its own folder")
 	var base := ClassBaseRegistry.module(&"acolyte")
-	_check(base != null and base is ClassBase and base.base_id() == &"acolyte" and base.kit_id() == &"acolyte" and base.display_name() == "Acólito", "the acolyte skeleton loads with its ID and pt-BR name")
-	_check(ClassBaseRegistry.validate(&"acolyte")["ok"] and not ClassBaseRegistry.ready_for_play(&"acolyte"), "the skeleton validates and is not ready (C1.3)")
+	_check(base != null and base is ClassBase and base.base_id() == &"acolyte" and base.kit_id() == &"acolyte" and base.display_name() == "Acólito", "the acolyte module loads with its ID and pt-BR name")
+	_check(ClassBaseRegistry.validate(&"acolyte")["ok"] and ClassBaseRegistry.ready_for_play(&"acolyte"), "the Acólito module validates and is ready (C1.3, T5, A11)")
 	_check(ClassBaseRegistry.validate(&"swordsman")["error_code"] == &"base_unknown_identity", "the E00 bases stay outside the base registry")
 	_check(ClassBaseRegistry.skill_ids(&"acolyte").size() == 8 and ClassBaseRegistry.identity(&"acolyte")["fallback_body"] == &"mage", "eight stable library IDs and the Mage fallback body (A5, C1.2)")
 	for id: StringName in ClassBaseRegistry.skill_ids(&"acolyte"):
-		_check(ClassKitRegistry.skill_owner(id) == &"acolyte" and ClassCatalog.skill_definition(id) == null, "%s belongs to the base and is not published while the module is empty" % id)
+		_check(ClassKitRegistry.skill_owner(id) == &"acolyte" and ClassCatalog.skill_definition(id) != null, "%s belongs to the base and is published by the catalog (ready module, T5, A11)" % id)
 	var catalog := ProfileCatalog.pilot()
-	_check(catalog.is_valid() and not catalog.base_class_is_available(&"acolyte"), "production catalog valid; Acólito absent from creation while not ready")
-	_check(catalog.evolution_definitions_for_origin(&"acolyte").is_empty(), "no evolution offered for an unready base")
+	_check(catalog.is_valid() and catalog.base_class_is_available(&"acolyte"), "production catalog valid; Acólito offered at creation (T5, A11)")
+	_check(catalog.evolution_definitions_for_origin(&"acolyte").map(func(d: EvolutionDefinition) -> StringName: return d.id) == [&"priest"], "the Acólito offers only the ready pure kit of its branch: the Sacerdote (T6); the Cultista skeleton stays out (A11)")
 	_check(ClassKitRegistry.ids() == [&"sp_ac", &"mg_ac", &"sp_la", &"mg_la", &"priest", &"cultist"] and ClassKitRegistry.hybrid_ids() == [&"sp_ac", &"mg_ac", &"sp_la", &"mg_la"] and ClassKitRegistry.pure_ids() == [&"priest", &"cultist"], "kit registry: the four hybrids then the two pure kits")
 	for row: Array in [[&"priest", &"2-1", "Sacerdote"], [&"cultist", &"2-2", "Cultista"]]:
 		var id: StringName = row[0]
@@ -132,7 +137,7 @@ func _check_production_state() -> void:
 		_check(IdentityIds.is_evolution(id) and IdentityIds.evolution_origin(id) == &"acolyte" and IdentityIds.evolution_belongs_to(id, &"acolyte") and IdentityIds.kit_affinity(id).is_empty(), "%s is an evolution of the Acólito, without affinity" % id)
 	_check(IdentityIds.reserved_base_ids() == [&"rogue"] and not IdentityIds.is_reserved_base(&"acolyte"), "acolyte is no longer a reserved base")
 	_check(IdentityIds.base_class_ids() == [&"swordsman", &"mage", &"archer"] and IdentityIds.registered_base_ids() == [&"acolyte"] and IdentityIds.all_base_ids() == [&"swordsman", &"mage", &"archer", &"acolyte"], "E00 base list stable; the registered base listed apart")
-	_check(IdentityIds.is_base_class(&"acolyte") and not IdentityIds.is_base_class(&"rogue") and IdentityIds.initial_attributes(&"acolyte").is_empty(), "acolyte is a base class; the skeleton has no attributes yet")
+	_check(IdentityIds.is_base_class(&"acolyte") and not IdentityIds.is_base_class(&"rogue") and IdentityIds.initial_attributes(&"acolyte") == {&"str": 3, &"agi": 4, &"vit": 7, &"int": 8, &"dex": 5, &"luk": 3}, "acolyte is a base class with the attributes of D2 (T5)")
 	_check(IdentityIds.kit_evolution_ids() == ClassKitRegistry.ids() and IdentityIds.kit_affinity(&"sp_ac") == &"acolyte" and IdentityIds.kit_affinity(&"mg_ac") == &"acolyte" and IdentityIds.kit_affinity(&"sp_la") == &"rogue", "kit list and affinity labels come from the registry")
 	_check(&"shadow" in ClassKitRegistry.KIT_ELEMENTS and &"light" in ClassKitRegistry.KIT_ELEMENTS and &"shadow" in ClassBaseRegistry.BASE_ELEMENTS, "shadow joins the accepted skill elements (D5)")
 	_check(&"light" in FeedbackRecipeCatalog.ELEMENTS and &"shadow" in FeedbackRecipeCatalog.ELEMENTS and WorldProjectileArt.PALETTE.has(&"light") and WorldProjectileArt.PALETTE.has(&"shadow") and WorldProjectileArt.PALETTE[&"light"] != WorldProjectileArt.PALETTE[&"arcane"], "light and shadow have their own colour (C1.8)")
@@ -238,7 +243,10 @@ func _check_fixture_catalogs() -> void:
 	var forced := ProfileCatalog.pilot({}, {}, {&"cultist": {"content_ready": false}})
 	_check(forced.is_valid() and forced.evolution_definition(&"cultist") != null and not forced.evolution_definition(&"cultist").content_ready, "a fixture override lists the unready pure kit as unavailable")
 	ClassBaseRegistry.clear_fixtures()
-	_check(ClassKitRegistry.ready_for_play(&"priest") and ProfileCatalog.pilot().evolution_definition(&"priest") == null and not ProfileCatalog.pilot().base_class_is_available(&"acolyte"), "a ready pure kit is not offered while its base is not ready (C1.3)")
+	ClassBaseRegistry.install_fixture(&"acolyte", UnreadyBase.new())
+	_check(ClassKitRegistry.ready_for_play(&"priest") and ProfileCatalog.pilot().evolution_definition(&"priest") == null and not ProfileCatalog.pilot().base_class_is_available(&"acolyte"), "a ready pure kit is not offered while its base is not ready (C1.3): an unready fixture base replaces the ready Acólito (A11)")
+	ClassBaseRegistry.clear_fixtures()
+	_check(ProfileCatalog.pilot().evolution_definition(&"priest") != null and ProfileCatalog.pilot().base_class_is_available(&"acolyte"), "with the production Acólito ready again, the Sacerdote is offered (T5, A11)")
 	ClassKitRegistry.clear_fixtures()
 
 # --- Player: two modules (C1.4) --------------------------------------------------------
