@@ -1,11 +1,91 @@
 {
   "schema": 1,
-  "source": "ClassCatalog + SentinelTuning.SKILL_IDS + HunterTuning.SKILL_IDS + ItemSkillAdapters.IDS + E09 HYBRID_SKILLS",
+  "source": "ClassCatalog + SentinelTuning.SKILL_IDS + HunterTuning.SKILL_IDS + ItemSkillAdapters.IDS + E09 HYBRID_SKILLS + E10a E10A_SKILLS",
   "canvas": [
     64,
     64
   ],
   "entries": [
+    {
+      "id": "acolyte_devotion",
+      "category": "passive",
+      "class": "acolyte",
+      "palette": {
+        "background": "#3d2a52",
+        "silhouette": "#f0cf7f"
+      },
+      "sha256": "dfd8df201f81b13cc2811ac7180cebcea695b4a948ce7160d7ecc6cc87d8a6c2"
+    },
+    {
+      "id": "acolyte_disturbing_whisper",
+      "category": "active",
+      "class": "acolyte",
+      "palette": {
+        "background": "#3d2a52",
+        "silhouette": "#f0cf7f"
+      },
+      "sha256": "48c53becd1ea3f6bc8b28b5a70dd426924f4a3be21189c58ad3256475d83bb98"
+    },
+    {
+      "id": "acolyte_eldritch_vision",
+      "category": "active",
+      "class": "acolyte",
+      "palette": {
+        "background": "#3d2a52",
+        "silhouette": "#f0cf7f"
+      },
+      "sha256": "a0ba3ae0d99b2aa83b039b623590948045db2e314d1e9c0463264f052553e92a"
+    },
+    {
+      "id": "acolyte_prayer",
+      "category": "active",
+      "class": "acolyte",
+      "palette": {
+        "background": "#3d2a52",
+        "silhouette": "#f0cf7f"
+      },
+      "sha256": "0894b9806591e368c5c05c8236070081b01249e149b71ca8f021a17fb8532e8c"
+    },
+    {
+      "id": "acolyte_protective_faith",
+      "category": "passive",
+      "class": "acolyte",
+      "palette": {
+        "background": "#3d2a52",
+        "silhouette": "#f0cf7f"
+      },
+      "sha256": "1bcf335e1b518aa6b865df6cd07f394b05e494938c2509b68969aaff6ad3fc47"
+    },
+    {
+      "id": "acolyte_punishing_light",
+      "category": "active",
+      "class": "acolyte",
+      "palette": {
+        "background": "#3d2a52",
+        "silhouette": "#f0cf7f"
+      },
+      "sha256": "2f6f5a07a7011e7e14a8b05a9c822e38e0910c38bb96fc33a5d16290826d4e97"
+    },
+    {
+      "id": "acolyte_shadow_seal",
+      "category": "active",
+      "class": "acolyte",
+      "palette": {
+        "background": "#3d2a52",
+        "silhouette": "#f0cf7f"
+      },
+      "sha256": "f28e2eeebd69928a0f62f640b0eb8314af385daec7f81ce9beebd4a35cf529f2"
+    },
+    {
+      "id": "acolyte_votive_shield",
+      "category": "active",
+      "class": "acolyte",
+      "palette": {
+        "background": "#3d2a52",
+        "silhouette": "#f0cf7f"
+      },
+      "sha256": "5271b9afcc69ee84e965fa9a3ca3ccecb029e466a34c8ad07877d8f51a6b8362"
+    },
     {
       "id": "arcane_blade_enchanted_edge",
       "category": "passive",
@@ -205,6 +285,83 @@
         "silhouette": "#f1c879"
       },
       "sha256": "e385036c1bd027ed249e3db1cc7dfc5e8c38b8d2b10f71684f12d1c879b66159"
+    },
+    {
+      "id": "cultist_abyss_gaze",
+      "category": "active",
+      "class": "cultist",
+      "palette": {
+        "background": "#0c1426",
+        "silhouette": "#e64fc3",
+        "accent": "#35d6c6"
+      },
+      "sha256": "611109d2affd2bbac9becaa8e651e36e8b90cdb8b7e089cc308e1f7cfdead076"
+    },
+    {
+      "id": "cultist_ecstasy",
+      "category": "passive",
+      "class": "cultist",
+      "palette": {
+        "background": "#0c1426",
+        "silhouette": "#e64fc3",
+        "accent": "#35d6c6"
+      },
+      "sha256": "3b06d681885477ab7397764a052a34ebafe3cca7719494dc1f79ae0291a87aef"
+    },
+    {
+      "id": "cultist_impossible_geometry",
+      "category": "active",
+      "class": "cultist",
+      "palette": {
+        "background": "#0c1426",
+        "silhouette": "#e64fc3",
+        "accent": "#35d6c6"
+      },
+      "sha256": "cfb07aebd5b193edd725b742e65f69b5df17727fe37b206ae55354d633dd8e24"
+    },
+    {
+      "id": "cultist_impossible_idol",
+      "category": "active",
+      "class": "cultist",
+      "palette": {
+        "background": "#0c1426",
+        "silhouette": "#e64fc3",
+        "accent": "#35d6c6"
+      },
+      "sha256": "afbabc7c80846d0086354bc6166ed47e0aa2bedb9ae629e05b37f759273dc664"
+    },
+    {
+      "id": "cultist_open_pupil",
+      "category": "passive",
+      "class": "cultist",
+      "palette": {
+        "background": "#0c1426",
+        "silhouette": "#e64fc3",
+        "accent": "#35d6c6"
+      },
+      "sha256": "e387e8282b2963169208defce0a5b9a0659587f153d4b8294a97512b447d2af2"
+    },
+    {
+      "id": "cultist_revelation",
+      "category": "active",
+      "class": "cultist",
+      "palette": {
+        "background": "#0c1426",
+        "silhouette": "#e64fc3",
+        "accent": "#35d6c6"
+      },
+      "sha256": "2b4ca3b7147ee1bb77c44b553a0d5a824ef9eea8c872d0fab018aed0d3d71657"
+    },
+    {
+      "id": "cultist_shared_delirium",
+      "category": "active",
+      "class": "cultist",
+      "palette": {
+        "background": "#0c1426",
+        "silhouette": "#e64fc3",
+        "accent": "#35d6c6"
+      },
+      "sha256": "07414ecc8540c3a9eec691e9e72614b6db158732b64c66be55393712b194a8f0"
     },
     {
       "id": "dash",
@@ -835,6 +992,83 @@
         "silhouette": "#f1c879"
       },
       "sha256": "0f8a47d35ed09855109a73240332723c32b8688bfdf9f2679de07b2b9f8abd43"
+    },
+    {
+      "id": "priest_aegis",
+      "category": "active",
+      "class": "priest",
+      "palette": {
+        "background": "#315f95",
+        "silhouette": "#f6efd9",
+        "accent": "#e8cf85"
+      },
+      "sha256": "2b7f6ef74bb790ba7a7cacae7a4c6d0a9d315e27302cdca752b32604ebfbb610"
+    },
+    {
+      "id": "priest_exorcist",
+      "category": "passive",
+      "class": "priest",
+      "palette": {
+        "background": "#315f95",
+        "silhouette": "#f6efd9",
+        "accent": "#e8cf85"
+      },
+      "sha256": "4105bb8c4bf10d5c12b1cf5a2c4d4a5a4209d46192ed6c9c3c91b317b601423b"
+    },
+    {
+      "id": "priest_grace",
+      "category": "passive",
+      "class": "priest",
+      "palette": {
+        "background": "#315f95",
+        "silhouette": "#f6efd9",
+        "accent": "#e8cf85"
+      },
+      "sha256": "7a4f7766b6860dcad1f99b7993b02e1189b4965852046ec0831af56042f076c6"
+    },
+    {
+      "id": "priest_holy_hour",
+      "category": "active",
+      "class": "priest",
+      "palette": {
+        "background": "#315f95",
+        "silhouette": "#f6efd9",
+        "accent": "#e8cf85"
+      },
+      "sha256": "501097dd9b19129cb335a71ff1fd8a2b852163a045dddeb713c6bba95ad7e626"
+    },
+    {
+      "id": "priest_judgment",
+      "category": "active",
+      "class": "priest",
+      "palette": {
+        "background": "#315f95",
+        "silhouette": "#f6efd9",
+        "accent": "#e8cf85"
+      },
+      "sha256": "01edbd60ab591db86cff90c4f05f262c847d221f5e212ba526fdaa6d40bde0a5"
+    },
+    {
+      "id": "priest_light_seal",
+      "category": "active",
+      "class": "priest",
+      "palette": {
+        "background": "#315f95",
+        "silhouette": "#f6efd9",
+        "accent": "#e8cf85"
+      },
+      "sha256": "ab00396723a8b7a5ed1a9ff89256840498e58a060c54b78fa1266d738c84808d"
+    },
+    {
+      "id": "priest_sanctuary",
+      "category": "active",
+      "class": "priest",
+      "palette": {
+        "background": "#315f95",
+        "silhouette": "#f6efd9",
+        "accent": "#e8cf85"
+      },
+      "sha256": "056fca28c435de1f53c2bc62a3f20fd4ddd7a7a589e25cba90871b226742a89e"
     },
     {
       "id": "provoke",
