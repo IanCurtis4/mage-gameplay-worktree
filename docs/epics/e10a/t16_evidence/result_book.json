@@ -1,0 +1,22 @@
+{
+  "captures": [
+    "book_acolyte_sn.png",
+    "book_acolyte_ew.png",
+    "grip_acolyte_sn.png",
+    "grip_acolyte_ew.png",
+    "book_priest_sn.png",
+    "book_priest_ew.png",
+    "grip_priest_sn.png",
+    "grip_priest_ew.png",
+    "book_cultist_sn.png",
+    "book_cultist_ew.png",
+    "grip_cultist_sn.png",
+    "grip_cultist_ew.png",
+    "scepter_priest_sn.png",
+    "scepter_priest_ew.png",
+    "reliquary_priest_sn.png",
+    "reliquary_priest_ew.png"
+  ],
+  "checks": 1040,
+  "failures": 0
+}

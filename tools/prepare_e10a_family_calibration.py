@@ -97,19 +97,21 @@ def build_provenance(kind):
     return {'schema': 'ragrpg_art_provenance_v2', 'path_base': 'project', 'records': records}
 
 
-def apply_main_hand_angles(kind, frames):
-    """`main_hand_angle` in calibration_authoring.json: {direction: radians} added to the main-hand slot angle of the living poses.
+def apply_prop_angles(kind, frames):
+    """`prop_angle` in calibration_authoring.json: {prop_id: {direction: radians}}, the final angle of that prop.
 
-    The three family props are not in the directional weapon keys, so they get no per-weapon override: their angle is
-    the profile angle plus this slot angle. The scepter (profile 0.2) leaned onto the face in the south and east views;
-    the Priest, its typical bearer, leans it away from the head with this slot angle.
+    E10a T16 (A15): the angle goes to the main-hand slot's `angle_overrides[prop_id]` of the living poses (0-13), so it
+    only moves that prop (T8 had put it on the slot angle, which also tilted the book and the reliquary of the same
+    bearer). The scepter (profile 0.2) leaned onto the face in the south and east views; the Priest, its typical bearer,
+    leans it away from the head. The override replaces profile + slot angle, so each value is the full angle.
     """
     path = base.BASE / kind / 'calibration_authoring.json'
     hints = json.loads(path.read_text(encoding='utf-8')) if path.exists() else {}
-    for direction, angle in hints.get('main_hand_angle', {}).items():
-        first = base.DIRECTIONS.index(direction) * 16
-        for pose in range(14):
-            frames[first + pose]['slots']['main_hand']['angle'] = float(angle)
+    for prop, by_direction in hints.get('prop_angle', {}).items():
+        for direction, angle in by_direction.items():
+            first = base.DIRECTIONS.index(direction) * 16
+            for pose in range(14):
+                frames[first + pose]['slots']['main_hand']['angle_overrides'][prop] = float(angle)
 
 
 def main():
@@ -117,7 +119,7 @@ def main():
     if kind not in KINDS:
         raise SystemExit('kind must be one of %s' % (KINDS,))
     frames, report, marks, atlas_image = base.build(kind)
-    apply_main_hand_angles(kind, frames)
+    apply_prop_angles(kind, frames)
     if command == 'propose':
         for r in report:
             print(json.dumps(r))

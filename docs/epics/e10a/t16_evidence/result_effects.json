@@ -1,0 +1,19 @@
+{
+  "captures": [
+    "effects_acolyte_1.png",
+    "effects_acolyte_2.png",
+    "effects_priest_1.png",
+    "effects_priest_2.png",
+    "effects_priest_3.png",
+    "effects_cultist_1.png",
+    "effects_cultist_2.png",
+    "effects_cultist_3.png",
+    "cultist_figures_early.png",
+    "cultist_figures_mid.png",
+    "cultist_figures_late.png",
+    "priest_exorcist_burst.png",
+    "priest_exorcist_exposed.png"
+  ],
+  "checks": 125,
+  "failures": 0
+}

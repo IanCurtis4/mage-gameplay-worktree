@@ -37,6 +37,7 @@ func _run() -> void:
 		_check_head_fit(folder)
 		_check_renderer(folder)
 	_check_family_items()
+	_check_prop_angles()
 	_check_other_bodies_intact()
 	print("E10a family bodies: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures > 0 else 0)
@@ -237,6 +238,79 @@ func _check_renderer(folder: StringName) -> void:
 	animation.set_equipment_visual({})
 	animation.state = D.state(3, 10)
 	_check(animation.death_copy().render_descriptor().direction == 3, "%s: the death copy keeps the west view of the body" % folder)
+
+# --- Angle per prop (T16, A15) ---------------------------------------------------------------------
+
+## The Priest's halo scepter (profile 0.2) leans away from the face in the south and east views. That angle is
+## an override of the prop (`angle_overrides.halo_scepter`, the full angle), never the main-hand slot angle,
+## so the book and the reliquary stay straight in every bearer. direction index -> scepter angle.
+const SCEPTER_ANGLES := {0: -0.15, 2: -0.25}
+
+func _check_prop_angles() -> void:
+	for folder: StringName in BODIES:
+		var loaded := DirectionalAnimationSet.load_manifest((ROOT % folder) + "presentation.json")
+		_check(loaded.ok, "%s: the manifest accepts prop ids in its angle overrides" % folder)
+		if not loaded.ok:
+			continue
+		var bundle: DirectionalAnimationSet = loaded.bundle
+		for index: int in 64:
+			var pose: Dictionary = bundle.frame(index).slots.main_hand
+			var overrides: Dictionary = pose.angle_overrides
+			var leaning := folder == &"priest" and index % 16 < 14 and SCEPTER_ANGLES.has(index / 16)
+			_check(is_zero_approx(float(pose.angle)), "%s: pose %d keeps a zero main-hand slot angle" % [folder, index])
+			_check(overrides.has("halo_scepter") == leaning, "%s: pose %d carries the scepter override only on the Priest's living south and east poses" % [folder, index])
+			_check(not overrides.has("prayer_book") and not overrides.has("eye_reliquary"), "%s: pose %d never tilts the book or the reliquary" % [folder, index])
+			if leaning:
+				_check(is_equal_approx(float(overrides.halo_scepter), float(SCEPTER_ANGLES[index / 16])), "%s: pose %d scepter angle" % [folder, index])
+		var animation := CharacterAnimation.new()
+		animation.configure(folder)
+		for item: StringName in ITEMS:
+			animation.set_equipment_visual({"main_hand": item})
+			for direction: int in 4:
+				for pose: int in 14:
+					animation.state = D.state(direction, pose)
+					var placed: Dictionary = animation.render_descriptor().equipment[0]
+					var expected := float(EquipmentAttachmentVisual.PROFILES[item].angle)
+					if folder == &"priest" and item == &"halo_scepter" and SCEPTER_ANGLES.has(direction):
+						expected = float(SCEPTER_ANGLES[direction])
+					_check(is_equal_approx(float(placed.angle), expected), "%s: %s angle %d/%d is %.2f" % [folder, item, direction, pose, expected])
+	var book: Dictionary = EquipmentAttachmentVisual.PROFILES[&"prayer_book"]
+	_check(book.size == Vector2(16, 24) and book.grip == Vector2(8, 12) and is_zero_approx(float(book.angle)), "the book is the reduced 16x24 with its grip at (8, 12) and no angle")
+
+# --- The reduced book against the face and the ground (T16, A15) ---------------------------------
+
+## Raised-hand and prayer poses put the palm beside the face, so a few living poses still touch the head rows;
+## the count below is measured on the three bodies (the head rows are the 14 rows from the top of the body).
+const BOOK_FACE_TOUCHES := 11
+
+func _check_book_clearance() -> void:
+	var profile: Dictionary = EquipmentAttachmentVisual.PROFILES[&"prayer_book"]
+	var touches := 0
+	for folder: StringName in BODIES:
+		var loaded := DirectionalAnimationSet.load_manifest((ROOT % folder) + "presentation.json")
+		if not loaded.ok:
+			continue
+		var bundle: DirectionalAnimationSet = loaded.bundle
+		var atlas := bundle.body(false).get_image()
+		for index: int in 64:
+			if index % 16 >= 14:
+				continue
+			var raw: Dictionary = bundle.frame(index)
+			var pose: Dictionary = raw.slots.main_hand
+			var rect := Rect2i(Vector2i(Vector2(pose.point[0], pose.point[1]) - profile.grip), Vector2i(profile.size))
+			if index % 16 < 4:
+				_check(rect.end.y <= int(raw.ground_y) + 1, "%s: the idle book stays above the ground %d (bottom %d, ground %d)" % [folder, index, rect.end.y, raw.ground_y])
+			if int(pose.depth) != 1:
+				continue
+			var tile := atlas.get_region(Rect2i(index % 4 * 64, index / 4 * 64, 64, 64))
+			var top := tile.get_used_rect().position.y
+			var head_rows := Rect2i(0, top, 64, 14)
+			var hit := false
+			for y: int in range(maxi(rect.position.y, head_rows.position.y), mini(rect.end.y, head_rows.end.y)):
+				for x: int in range(maxi(rect.position.x, 0), mini(rect.end.x, 64)):
+					hit = hit or tile.get_pixel(x, y).a > 0.5
+			touches += 1 if hit else 0
+	_check(touches == BOOK_FACE_TOUCHES, "the book touches the head rows in %d living poses (the raised-hand ones): %d" % [BOOK_FACE_TOUCHES, touches])
 
 # --- The three family items in the hands of the three bodies (A12) ------------------------------
 

@@ -1,6 +1,6 @@
 {
   "actor_kind": "priest",
-  "note": "same pose set as the Acolyte: corrections for prayer (8), raised hands (9, 10, 25-28), a hidden far hand in east 36/38/42 and west idle/walk 48-51, 55, 56; main_hand_angle leans the halo scepter (profile 0.2) away from the face in the south and east views",
+  "note": "same pose set as the Acolyte: corrections for prayer (8), raised hands (9, 10, 25-28), a hidden far hand in east 36/38/42 and west idle/walk 48-51, 55, 56; prop_angle (T16, A15) sets the angle of the halo scepter alone (profile 0.2) away from the face in the south and east views; the book and the reliquary keep their own angle",
   "frames": {
     "8": {
       "left": [
@@ -107,8 +107,10 @@
       ]
     }
   },
-  "main_hand_angle": {
-    "south": -0.35,
-    "east": -0.45
+  "prop_angle": {
+    "halo_scepter": {
+      "south": -0.15,
+      "east": -0.25
+    }
   }
 }

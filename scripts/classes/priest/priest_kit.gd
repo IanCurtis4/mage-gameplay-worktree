@@ -23,6 +23,7 @@ const SEAL_KEY := &"priest_light_seal"
 const GRACE_FAMILY := &"priest_grace"
 const ICE_SOURCE := &"priest_sanctuary_ice"
 const EXPOSED_SOURCE := &"priest_exposed"
+const EXORCIST_MARK_SCRIPT := "res://scripts/classes/priest/priest_exorcist_mark.gd"
 const SEAL_SLOW_SOURCE := &"priest_light_seal"
 const GRACE_PULSE_SOURCE := &"priest_grace_pulse"
 const PRAYER := &"acolyte_prayer"
@@ -123,10 +124,10 @@ func learning_entries() -> Array[Dictionary]:
 func feedback_recipes() -> Dictionary:
 	return {
 		SANCTUARY: [&"area", &"light", &"", FeedbackRecipeCatalog.COMMIT | FeedbackRecipeCatalog.PERIODIC],
-		GRACE: [&"buff", &"light", &"", 0],
+		GRACE: [&"buff", &"light", &"", FeedbackRecipeCatalog.COMMIT],
 		AEGIS: [&"buff", &"light", &"", FeedbackRecipeCatalog.COMMIT],
 		JUDGMENT: [&"impact", &"light", &"", FeedbackRecipeCatalog.COMMIT],
-		EXORCIST: [&"buff", &"light", &"", 0],
+		EXORCIST: [&"buff", &"light", &"", FeedbackRecipeCatalog.COMMIT],
 		LIGHT_SEAL: [&"buff", &"light", &"", FeedbackRecipeCatalog.COMMIT],
 		HOLY_HOUR: [&"buff", &"light", &"", FeedbackRecipeCatalog.COMMIT],
 	}
@@ -185,6 +186,9 @@ func vfx_effects() -> Dictionary:
 		&"priest_aegis_pulse": {"skill_id": AEGIS, "kinds": [&"impact"], "size": 120.0},
 		&"priest_seal_ring": {"skill_id": LIGHT_SEAL, "kinds": [&"effect_start"], "size": 80.0},
 		&"priest_holy_hour_circle": {"skill_id": HOLY_HOUR, "kinds": [&"effect_start"], "size": 340.0},
+		# T16 (A15): feedback events of the two passives (the kit emits `skill_committed` for them).
+		&"priest_grace_gain": {"skill_id": GRACE, "kinds": [&"effect_start"], "size": 80.0},
+		&"priest_exorcist_flash": {"skill_id": EXORCIST, "kinds": [&"effect_start"], "size": 80.0},
 	}
 
 const IVORY := Color(1.0, 0.97, 0.86)
@@ -225,6 +229,21 @@ func draw_vfx(effect_id: StringName, canvas: CanvasItem, _pulse: Dictionary, pos
 			var radius := 48.0 * (1.0 - 0.6 * t)
 			canvas.draw_arc(position + Vector2(0.0, -20.0), radius, 0.0, TAU, 28, Color(IVORY, fade), 3.0)
 			for k: int in 4: canvas.draw_line(position + Vector2(0.0, -20.0) + Vector2.from_angle(k * TAU / 4.0 + t) * radius, position + Vector2(0.0, -20.0) + Vector2.from_angle(k * TAU / 4.0 + t) * (radius + 8.0), Color(GOLD, fade), 2.0)
+		&"priest_grace_gain":
+			# One ring of light rises around the Sacerdote for each charge gained.
+			for k: int in 2:
+				var rise := clampf(t * 1.4 - 0.25 * k, 0.0, 1.0)
+				canvas.draw_arc(position + Vector2(0.0, -10.0 - 56.0 * rise), 16.0 - 4.0 * rise, 0.0, TAU, 20, Color(GOLD, (1.0 - rise) * 0.9), 2.5)
+			for k: int in 3: canvas.draw_circle(position + Vector2(-10.0 + 10.0 * k, -20.0 - 40.0 * t - 5.0 * k), 2.5 * fade + 0.5, Color(IVORY, 0.85 * fade))
+		&"priest_exorcist_flash":
+			# A sun-cross flares at the Sacerdote's hands: the light is purging.
+			var center := position + Vector2(0.0, -34.0)
+			canvas.draw_arc(center, 8.0 + 22.0 * t, 0.0, TAU, 24, Color(GOLD, 0.9 * fade), 2.5)
+			for k: int in 4:
+				var dir := Vector2.from_angle(PI * 0.25 + PI * 0.5 * k)
+				canvas.draw_line(center + dir * (6.0 + 8.0 * t), center + dir * (14.0 + 22.0 * t), Color(IVORY, fade), 2.0)
+			canvas.draw_line(center + Vector2(-9.0 * fade, 0.0), center + Vector2(9.0 * fade, 0.0), Color(IVORY, fade), 2.0)
+			canvas.draw_line(center + Vector2(0.0, -9.0 * fade), center + Vector2(0.0, 9.0 * fade), Color(IVORY, fade), 2.0)
 		&"priest_holy_hour_circle":
 			var reach := 224.0 * minf(1.0, t * 2.0)
 			canvas.draw_set_transform(position, 0.0, Vector2(1.0, 0.5))
@@ -268,7 +287,9 @@ func skill_cost(_player: PlayerActor, skill_id: StringName, base_cost: float) ->
 ## T1.2: Prece and Escudo Votivo (Acólito) give +1 Grace per paid commit.
 func on_base_skill_committed(player: PlayerActor, skill_id: StringName, _context: Dictionary) -> void:
 	if skill_id == PRAYER or skill_id == VOTIVE_SHIELD:
+		var before := grace_charges()
 		sanctuary.gain({"key": "base:%s@%.5f" % [skill_id, player.kit_time]}, 1)
+		_announce_grace(player, before)
 
 func resolve_cast(player: PlayerActor, cast: Dictionary) -> bool:
 	var skill := StringName(cast["skill_id"])
@@ -295,13 +316,18 @@ func on_shield_broken(player: PlayerActor, hit: Dictionary, result: Dictionary) 
 	sanctuary.on_shield_broken(player, hit, result)
 
 func on_heal(player: PlayerActor, requested: float, applied: float, source: StringName) -> void:
+	var before := grace_charges()
 	sanctuary.on_heal(player, requested, applied, source)
+	_announce_grace(player, before)
 
 ## Light damage on the sealed enemy gives Grace; a direct light hit triggers the Exorcista.
 func on_damage_dealt(player: PlayerActor, result: Dictionary) -> void:
 	var victim := instance_from_id(int(result.get("target_id", 0))) as CombatActor
 	if victim == null or not is_instance_valid(victim) or not SanctuaryHelpers.is_light_result(result): return
-	if sanctuary.is_sealed(victim): sanctuary.gain(SanctuaryHelpers.result_event(result), 1)
+	if sanctuary.is_sealed(victim):
+		var before := grace_charges()
+		sanctuary.gain(SanctuaryHelpers.result_event(result), 1)
+		_announce_grace(player, before)
 	if bool(result.get("secondary", false)) or not bool(result.get("landed", false)) or not victim.is_alive(): return
 	var rank := player.skill_rank(EXORCIST)
 	if rank > 0: exorcise(player, victim, rank)
@@ -343,13 +369,36 @@ func exorcise(player: PlayerActor, victim: CombatActor, rank: int) -> StringName
 	if not is_instance_valid(victim) or not victim.is_alive() or rank < 1: return &""
 	if victim.health.shield_hp > 0.0:
 		victim.health.clear_shield()
+		_announce_exorcism(player, victim, &"shield")
 		return &"shield"
 	var buff := _strongest_buff(victim)
 	if not buff.is_empty():
 		victim.remove_received_damage_source(buff)
+		_announce_exorcism(player, victim, &"buff")
 		return &"buff"
 	var i := clampi(rank, 1, 3) - 1
-	return &"exposed" if victim.add_received_damage_source(EXPOSED_SOURCE, EXPOSED_MULTIPLIER[i], EXPOSED_DURATION[i], player.get_instance_id(), SanctuaryRules.LIGHT_ELEMENT) else &""
+	if not victim.add_received_damage_source(EXPOSED_SOURCE, EXPOSED_MULTIPLIER[i], EXPOSED_DURATION[i], player.get_instance_id(), SanctuaryRules.LIGHT_ELEMENT): return &""
+	_announce_exorcism(player, victim, &"exposed")
+	return &"exposed"
+
+# --- Feedback events (presentation only, T16 / A15) ---------------------------------------
+
+## The passive's own commit effect: `skill_committed` for a passive skill id, which the
+## bridge turns into the `effect_start` of the recipe (the COMMIT flag) at the Sacerdote.
+func _announce(player: PlayerActor, skill: StringName) -> void:
+	if is_instance_valid(player): player.presentation_fact.emit(&"skill_committed", skill, Vector2.ZERO, 0.0)
+
+## A Graça charge was gained when the count is above `before` (a full reserve gains nothing).
+func _announce_grace(player: PlayerActor, before: int) -> void:
+	if grace_charges() > before: _announce(player, GRACE)
+
+## The Exorcista acted on `victim`: the flash at the Sacerdote, and the drawing on the enemy
+## (the aro and seal while Exposed, or the burst of a shield or buff removed).
+func _announce_exorcism(player: PlayerActor, victim: CombatActor, outcome: StringName) -> void:
+	_announce(player, EXORCIST)
+	var mark := load(EXORCIST_MARK_SCRIPT) as Script
+	if mark == null: return
+	mark.call(&"attach", victim, &"exposed" if outcome == &"exposed" else &"stripped", EXPOSED_SOURCE, player.get_instance_id())
 
 # --- Internals --------------------------------------------------------------------------
 
@@ -447,6 +496,7 @@ func _check_entry(player: PlayerActor) -> void:
 	if rank < 1: return
 	pulse_cooldown = GRACE_PULSE_COOLDOWN
 	player.heal_player(player.health.max_hp * GRACE_PULSE_HEAL[clampi(rank, 1, 3) - 1], GRACE_PULSE_SOURCE)
+	_announce(player, GRACE)
 
 func _sanctuary_config(rank: int, point: Variant, duration: float, shape: StringName, hour: bool) -> Dictionary:
 	var i := clampi(rank, 1, 5) - 1

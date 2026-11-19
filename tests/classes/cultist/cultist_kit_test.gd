@@ -24,6 +24,15 @@ const REVELATION := &"cultist_revelation"
 class Controller extends RunController:
 	func _ready() -> void: pass
 
+## Calls the persistent drawers inside a real _draw() pass (world scale for the figure, flat for the eye).
+class PersistentProbe extends Node2D:
+	var kit: ClassKit
+	var geometry_state: Dictionary = {}
+	var revelation_state: Dictionary = {}
+	var results: Array = []
+	func _draw() -> void:
+		results = [kit.call(&"draw_persistent", &"geometry", self, geometry_state, true), kit.call(&"draw_persistent", &"revelation", self, revelation_state, false), kit.call(&"draw_persistent", &"unknown", self, {}, false)]
+
 var checks := 0
 var failures := 0
 var owned: Array[Node] = []
@@ -57,6 +66,7 @@ func _run() -> void:
 	_check_pupil()
 	_check_geometry()
 	_check_revelation()
+	await _check_figure_nodes()
 	_check_base_madness()
 	_check_delirium_kill()
 	_check_death_and_pause()
@@ -437,11 +447,17 @@ func _check_geometry() -> void:
 	_check(not boss.is_disoriented() and boss.slow_remaining > 0.0 and is_equal_approx(boss.slow_fraction, 0.40) and boss.combat_target() == player and not boss.has_target_override(), "the boss is only slowed, never disoriented nor retargeted")
 	_check(not outside.is_disoriented() and MadnessAuthority.madness_of(outside) == 0.0, "nothing outside the figure")
 	_check(kit.call(&"snapshot_compact_blocker", player) == "cultist_geometry", "the figure forces the exact snapshot")
+	var figure := _figure(&"geometry")
+	_check(figure != null and int(figure.get("serial")) == int(kit.get("geometry_serial")) and figure.get_parent() == controller and not figure.is_in_group("player_effects"), "T16: the figure has its persistent node beside the player, outside the snapshot groups")
 	var madness_before := MadnessAuthority.madness_of(wolf)
 	_advance_for(1.0)
 	_check(MadnessAuthority.madness_of(wolf) <= madness_before + 0.001, "once per enemy per figure")
-	_advance_for(3.2)
+	_check(_figure(&"geometry") == figure, "T16: the same node lasts through the figure (3 s left)")
+	_advance_for(2.9)
+	_check(_figure(&"geometry") == figure, "T16: the node is still there at 3.9 s")
+	_advance_for(0.3)
 	_check(not bool(kit.call(&"geometry_active")), "the figure ends after 4 s")
+	_check(_figure(&"geometry") == null and figure.is_queued_for_deletion(), "T16: the node is released when the figure ends")
 
 # --- Revelação -------------------------------------------------------------------------
 
@@ -475,8 +491,67 @@ func _check_revelation() -> void:
 	var source: Dictionary = a.received_damage_sources.get(&"cultist_revelation", {})
 	_check(is_equal_approx(float(source.get("multiplier", 0.0)), 1.60) and int(source.get("owner_id", 0)) == player.get_instance_id(), "delirious enemies take ×1.60 of the owner's damage, including each other's relayed hits")
 	_check(kit.call(&"snapshot_compact_blocker", player) == "cultist_revelation", "the eye forces the exact snapshot")
-	_advance_for(4.5)
+	var eye := _figure(&"revelation")
+	_check(eye != null and int(eye.get("serial")) == serial and eye.get_parent() == controller, "T16: the eye has its persistent node during the whole duration (after 3 s)")
+	_advance_for(2.5)
+	_check(_figure(&"revelation") == eye, "T16: the eye node is still there at 5.5 s of 7 s")
+	_advance_for(2.0)
 	_check(not bool(kit.call(&"revelation_active")) and not a.received_damage_sources.has(&"cultist_revelation"), "the eye closes after 7 s and the bonus leaves")
+	_check(_figure(&"revelation") == null and eye.is_queued_for_deletion(), "T16: the eye node is released when the Revelação ends")
+
+## T16 (A15): the persistent node of a figure, beside the player.
+func _figure(kind: StringName) -> Node:
+	return controller.get_node_or_null(NodePath("CultistFigure_%s_%d" % [kind, player.get_instance_id()]))
+
+## The nodes draw for real (a _draw pass), replace a figure of an older serial, follow the
+## player (the eye), and leave when a restore changes the kit state or the kit object.
+func _check_figure_nodes() -> void:
+	_setup()
+	_mob(&"forest_wolf", Vector2(500, 350))
+	_check(_cast(GEOMETRY, null, Vector2(520, 350)) and _cast(REVELATION), "the figure and the eye are cast")
+	controller.set_process(false) # the real controller loop is not under test (frames below only run the nodes)
+	controller.set_physics_process(false)
+	var figure := _figure(&"geometry")
+	var eye := _figure(&"revelation")
+	await process_frame
+	await process_frame
+	_check(figure != null and eye != null and int(figure.get("draw_count")) > 0 and int(eye.get("draw_count")) > 0, "T16: both nodes draw inside a real _draw pass")
+	_check((figure as Node2D).global_position.is_equal_approx(Vector2(520, 350)) and (figure as Node2D).z_index == -1, "the figure sits on the ground point of the cast, under the actors")
+	player.global_position = Vector2(340, 330)
+	await process_frame
+	_check((eye as Node2D).global_position.is_equal_approx(Vector2(340, 330)) and (eye as Node2D).z_index == 5, "the eye follows the Cultista, above the actors")
+	var probe := PersistentProbe.new()
+	probe.kit = kit
+	probe.geometry_state = kit.call(&"figure_state", &"geometry")
+	probe.revelation_state = kit.call(&"figure_state", &"revelation")
+	owned.append(probe)
+	root.add_child(probe)
+	probe.queue_redraw()
+	await process_frame
+	await process_frame
+	_check(probe.results == [true, true, false], "the persistent drawers also draw in world scale inside a _draw pass; an unknown kind is refused: %s" % [probe.results])
+	# A second Geometria replaces the first node (new serial); the eye keeps its own.
+	_check(_cast(GEOMETRY, null, Vector2(600, 350)), "a second figure is cast")
+	var replaced := _figure(&"geometry")
+	_check(replaced != null and replaced != figure and figure.is_queued_for_deletion() and int(replaced.get("serial")) == int(kit.get("geometry_serial")) and _figure(&"revelation") == eye, "T16: a new figure replaces the node of the older serial")
+	# Snapshot restore: the kit state changes underneath; the node follows within one tick.
+	kit.set("geometry_remaining", 0.0)
+	_check(not bool(replaced.call(&"is_source_current")), "a restored state without the figure makes its node stale")
+	_advance(0.05)
+	_check(_figure(&"geometry") == null, "the next tick releases the stale figure node")
+	kit.set("geometry_remaining", 2.0)
+	kit.set("geometry_serial", 9)
+	_advance(0.05)
+	var restored := _figure(&"geometry")
+	_check(restored != null and int(restored.get("serial")) == 9, "a restored figure gets its node back with the restored serial")
+	# The kit object is no longer the player's: nodes leave on their own.
+	var stale_kit := player.kit
+	player.kit = null
+	_check(not bool(restored.call(&"is_source_current")) and not bool(eye.call(&"is_source_current")), "nodes of a kit that is no longer the player's are stale")
+	player.kit = stale_kit
+	# Death: both nodes are gone.
+	kit.on_death(player)
+	_check(_figure(&"geometry") == null and _figure(&"revelation") == null, "death leaves no node behind")
 
 # --- Base interactions -------------------------------------------------------------------
 
@@ -525,7 +600,9 @@ func _check_death_and_pause() -> void:
 	# Pause: PlayerActor._process does not run on_tick; nothing advances.
 	_check(is_equal_approx(float(kit.get("revelation_remaining")), remaining), "pause freezes the kit clocks")
 	paused = false
+	_check(_figure(&"geometry") != null and _figure(&"revelation") != null, "T16: both nodes exist before the death")
 	kit.on_death(player)
+	_check(_figure(&"geometry") == null and _figure(&"revelation") == null, "T16: death releases both nodes")
 	_check(not bool(kit.call(&"channeling")) and not bool(kit.call(&"geometry_active")) and not bool(kit.call(&"revelation_active")) and kit.call(&"snapshot_compact_blocker", player) == "", "death ends channel, figure and eye")
 
 # --- Snapshot ------------------------------------------------------------------------------

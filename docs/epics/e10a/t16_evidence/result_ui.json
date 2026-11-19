@@ -1,0 +1,11 @@
+{
+  "captures": [
+    "ui_creation_fresh.png",
+    "ui_creation_acolyte_selected.png",
+    "ui_onboarding_acolyte.png",
+    "ui_onboarding_priest.png",
+    "ui_onboarding_cultist.png"
+  ],
+  "checks": 9,
+  "failures": 0
+}

@@ -28,7 +28,7 @@
             3,
             3
           ],
-          "angle": -0.35,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -38,7 +38,8 @@
             "bow": 0.65,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.15
           }
         },
         "off_hand": {
@@ -106,7 +107,7 @@
             3,
             3
           ],
-          "angle": -0.35,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -116,7 +117,8 @@
             "bow": 0.65,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.15
           }
         },
         "off_hand": {
@@ -184,7 +186,7 @@
             3,
             3
           ],
-          "angle": -0.35,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -194,7 +196,8 @@
             "bow": 0.65,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.15
           }
         },
         "off_hand": {
@@ -262,7 +265,7 @@
             3,
             3
           ],
-          "angle": -0.35,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -272,7 +275,8 @@
             "bow": 0.65,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.15
           }
         },
         "off_hand": {
@@ -340,7 +344,7 @@
             3,
             3
           ],
-          "angle": -0.35,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -350,7 +354,8 @@
             "bow": 0.65,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.15
           }
         },
         "off_hand": {
@@ -418,7 +423,7 @@
             3,
             3
           ],
-          "angle": -0.35,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -428,7 +433,8 @@
             "bow": 0.65,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.15
           }
         },
         "off_hand": {
@@ -496,7 +502,7 @@
             3,
             3
           ],
-          "angle": -0.35,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -506,7 +512,8 @@
             "bow": 0.65,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.15
           }
         },
         "off_hand": {
@@ -574,7 +581,7 @@
             3,
             3
           ],
-          "angle": -0.35,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -584,7 +591,8 @@
             "bow": 0.65,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.15
           }
         },
         "off_hand": {
@@ -652,7 +660,7 @@
             3,
             3
           ],
-          "angle": -0.35,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -662,7 +670,8 @@
             "bow": 0.08,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.15
           }
         },
         "off_hand": {
@@ -730,7 +739,7 @@
             3,
             3
           ],
-          "angle": -0.35,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -740,7 +749,8 @@
             "bow": 0.05,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.15
           }
         },
         "off_hand": {
@@ -808,7 +818,7 @@
             3,
             3
           ],
-          "angle": -0.35,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -818,7 +828,8 @@
             "bow": 0.12,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.15
           }
         },
         "off_hand": {
@@ -886,7 +897,7 @@
             3,
             3
           ],
-          "angle": -0.35,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -896,7 +907,8 @@
             "bow": 0.14,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.15
           }
         },
         "off_hand": {
@@ -964,7 +976,7 @@
             3,
             3
           ],
-          "angle": -0.35,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -974,7 +986,8 @@
             "bow": 0.65,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.15
           }
         },
         "off_hand": {
@@ -1042,7 +1055,7 @@
             3,
             3
           ],
-          "angle": -0.35,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -1052,7 +1065,8 @@
             "bow": 0.65,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.15
           }
         },
         "off_hand": {
@@ -2572,7 +2586,7 @@
             3,
             3
           ],
-          "angle": -0.45,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -2582,7 +2596,8 @@
             "bow": 0.65,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.25
           }
         },
         "off_hand": {
@@ -2650,7 +2665,7 @@
             3,
             3
           ],
-          "angle": -0.45,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -2660,7 +2675,8 @@
             "bow": 0.65,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.25
           }
         },
         "off_hand": {
@@ -2728,7 +2744,7 @@
             3,
             3
           ],
-          "angle": -0.45,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -2738,7 +2754,8 @@
             "bow": 0.65,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.25
           }
         },
         "off_hand": {
@@ -2806,7 +2823,7 @@
             3,
             3
           ],
-          "angle": -0.45,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -2816,7 +2833,8 @@
             "bow": 0.65,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.25
           }
         },
         "off_hand": {
@@ -2884,7 +2902,7 @@
             3,
             3
           ],
-          "angle": -0.45,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -2894,7 +2912,8 @@
             "bow": 0.65,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.25
           }
         },
         "off_hand": {
@@ -2962,7 +2981,7 @@
             3,
             3
           ],
-          "angle": -0.45,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -2972,7 +2991,8 @@
             "bow": 0.65,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.25
           }
         },
         "off_hand": {
@@ -3040,7 +3060,7 @@
             3,
             3
           ],
-          "angle": -0.45,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -3050,7 +3070,8 @@
             "bow": 0.65,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.25
           }
         },
         "off_hand": {
@@ -3118,7 +3139,7 @@
             3,
             3
           ],
-          "angle": -0.45,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -3128,7 +3149,8 @@
             "bow": 0.65,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.25
           }
         },
         "off_hand": {
@@ -3196,7 +3218,7 @@
             3,
             3
           ],
-          "angle": -0.45,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -3206,7 +3228,8 @@
             "bow": 0.08,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.25
           }
         },
         "off_hand": {
@@ -3274,7 +3297,7 @@
             3,
             3
           ],
-          "angle": -0.45,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -3284,7 +3307,8 @@
             "bow": 0.05,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.25
           }
         },
         "off_hand": {
@@ -3352,7 +3376,7 @@
             3,
             3
           ],
-          "angle": -0.45,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -3362,7 +3386,8 @@
             "bow": 0.12,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.25
           }
         },
         "off_hand": {
@@ -3430,7 +3455,7 @@
             3,
             3
           ],
-          "angle": -0.45,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -3440,7 +3465,8 @@
             "bow": 0.14,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.25
           }
         },
         "off_hand": {
@@ -3508,7 +3534,7 @@
             3,
             3
           ],
-          "angle": -0.45,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -3518,7 +3544,8 @@
             "bow": 0.65,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.25
           }
         },
         "off_hand": {
@@ -3586,7 +3613,7 @@
             3,
             3
           ],
-          "angle": -0.45,
+          "angle": 0.0,
           "depth": 1,
           "flip": false,
           "angle_overrides": {
@@ -3596,7 +3623,8 @@
             "bow": 0.65,
             "shield": 0.0,
             "prismatic_focus": -0.1,
-            "wooden_beads": 0.0
+            "wooden_beads": 0.0,
+            "halo_scepter": -0.25
           }
         },
         "off_hand": {

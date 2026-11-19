@@ -15,10 +15,10 @@
       ],
       "prop_png": "props/prayer_book.png",
       "prop_size": [
-        80,
-        120
+        64,
+        96
       ],
-      "prop_sha256": "5a9b433e9f48fa5c6fe5cb8a1a331d9d11083daad9e947c38f70eb7cd01de84e",
+      "prop_sha256": "d9510d53e282f785257740ba39b683bae3f987969e72853cbaaaa3d778a3a09d",
       "icon_png": "icons/equipment/painted/prayer_book.png",
       "icon_sha256": "350288bbd8412a68725f3288e17c3d3c619071a4986941b332c09fe1100afe3a",
       "post": [
@@ -29,6 +29,30 @@
             "lanczos": true,
             "bleed_iterations": 12
           }
+        },
+        {
+          "tool": "assets/art/e10a_equipment/prayer_book_reduce.py",
+          "version": "e10a-t16",
+          "params": {
+            "filter": "nearest",
+            "smoothing": false,
+            "from_size": [
+              80,
+              120
+            ],
+            "to_size": [
+              64,
+              96
+            ],
+            "logical_size": [
+              16,
+              24
+            ],
+            "decision": "A15 item 2 of docs/epics/e10a.md"
+          },
+          "input": "assets/art/e10a_equipment/prayer_book_full.png",
+          "input_sha256": "5a9b433e9f48fa5c6fe5cb8a1a331d9d11083daad9e947c38f70eb7cd01de84e",
+          "output_sha256": "d9510d53e282f785257740ba39b683bae3f987969e72853cbaaaa3d778a3a09d"
         }
       ]
     },
