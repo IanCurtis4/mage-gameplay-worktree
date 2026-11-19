@@ -6,6 +6,8 @@ extends SceneTree
 ## doubled Madness), Delírio on the base, Devoção (light/shadow alternation by element, also for the
 ## evolution's commits), Fé Protetora (heal bonus, no recursion), the Madness authority wiring,
 ## build change, death, pause, both snapshot formats, the evolution destinations and the world path.
+## T15 (A15.3): the barrier_received hook of the seam (CombatActor.grant_barrier) and the Fé
+## Protetora on every barrier, the Votive counted once.
 ## Fixture profiles only; nothing is written to disk.
 const WorldFixture = preload("res://tests/fixtures/e07/f1/fixture_input.gd")
 const BASE_PATH := "res://scripts/classes/bases/acolyte/acolyte_base.gd"
@@ -13,6 +15,17 @@ const SKILLS: Array[StringName] = [&"acolyte_punishing_light", &"acolyte_prayer"
 
 class Controller extends RunController:
 	func _ready() -> void: pass
+
+## T15: an evolution module that records the barrier hook and answers a programmed value.
+class BarrierProbeKit extends ClassKit:
+	var seen: Array[Dictionary] = []
+	var answer: Variant = null
+	var add := 0.0
+	func kit_id() -> StringName: return &"t15_barrier_probe"
+	func barrier_received(_player: PlayerActor, capacity: float, context: Dictionary) -> float:
+		seen.append({"capacity": capacity, "context": context.duplicate()})
+		if answer != null: return float(answer)
+		return capacity + add
 
 ## Calls the effect drawers inside a real _draw() pass.
 class DrawProbe extends Node2D:
@@ -51,6 +64,7 @@ func _run() -> void:
 	_check_light()
 	_check_prayer_and_faith()
 	_check_votive_shield()
+	_check_barrier_hook()
 	_check_shadow_seal()
 	_check_whisper()
 	_check_madness_wiring()
@@ -403,6 +417,56 @@ func _check_votive_shield() -> void:
 	player.apply_damage(_enemy_request(enemy, 10.0), controller.rng)
 	_check(player.health.shield_hp < shield, "the barrier absorbs damage")
 	_check(base.snapshot_compact_blocker(player) == "acolyte_votive_shield", "an active barrier forces the exact snapshot format")
+
+# --- Barreira recebida (T15, A15.3) -----------------------------------------------------
+
+func _check_barrier_hook() -> void:
+	_setup(_all_ranks(5, 3))
+	for rank: int in [0, 1, 2, 3]:
+		var ranks := _all_ranks(5, 3)
+		ranks[&"acolyte_protective_faith"] = rank
+		_setup(ranks)
+		var factors: Array[float] = [1.0, 1.10, 1.15, 1.20]
+		var expected: float = 100.0 * factors[rank]
+		_check(is_equal_approx(base.barrier_received(player, 100.0, {"source": &"t15", "raw_capacity": 100.0}), expected), "Fé Protetora R%d: barrier_received gives %.0f of 100" % [rank, expected])
+		var granted := player.grant_barrier(100.0, &"t15_other_source")
+		_check(is_equal_approx(granted, expected) and is_equal_approx(player.health.shield_hp, expected), "Fé Protetora R%d: a barrier of any source is reinforced once (%.2f)" % [rank, player.health.shield_hp])
+	# The Votive asks for the plain capacity: one reinforcement, never two.
+	_setup(_all_ranks(5, 3))
+	_check(_cast(&"acolyte_votive_shield"), "Escudo Votivo commits with Fé R3")
+	var plain := StatCalculator.personal_shield_capacity(78.0, player.stat_breakdown)
+	_check(_near(player.health.shield_hp, plain * 1.20, 0.01) and _near(float(base.get("votive_capacity")), player.health.shield_hp, 0.001), "Votive R5 with Fé R3: plain capacity × 1.20 once, and the module keeps the granted value (%.2f of %.2f)" % [player.health.shield_hp, plain])
+	_advance(5.2)
+	_check(is_zero_approx(player.health.shield_hp), "the reinforced Votive still ends with its window (the module recognises its own barrier)")
+	# Invalid grants and other actors.
+	_setup(_all_ranks(5, 3))
+	for bad: float in [0.0, -10.0, NAN, INF]:
+		_check(is_zero_approx(player.grant_barrier(bad, &"t15")) and is_zero_approx(player.health.shield_hp), "an invalid capacity (%s) grants nothing" % str(bad))
+	var wolf := _mob(&"forest_wolf", Vector2(600, 350))
+	_check(is_equal_approx(wolf.grant_barrier(50.0, &"t15"), 50.0) and is_equal_approx(wolf.health.shield_hp, 50.0), "an actor without seam modules gets the barrier as it is")
+	# Order origin -> evolution, context, and the answers that keep or refuse.
+	var probe := BarrierProbeKit.new()
+	probe.add = 7.0
+	player.attach_kit(probe)
+	var modules := player.kit_modules()
+	_check(modules.size() == 2 and modules[0] == base and modules[1] == probe, "probe attached as the evolution module")
+	var composed := player.grant_barrier(100.0, &"priest_aegis")
+	_check(probe.seen.size() == 1 and is_equal_approx(float(probe.seen[0]["capacity"]), 120.0) and is_equal_approx(composed, 127.0) and is_equal_approx(player.health.shield_hp, 127.0), "chained origin then evolution: Fé 100 → 120, then the evolution +7 → 127 (%.2f)" % composed)
+	_check(probe.seen.size() == 1 and probe.seen[0]["context"].get("source") == &"priest_aegis" and is_equal_approx(float(probe.seen[0]["context"].get("raw_capacity", 0.0)), 100.0), "context carries the source and the raw capacity")
+	player.health.clear_shield()
+	for kept: float in [NAN, INF, -3.0]:
+		probe.answer = kept
+		_check(is_equal_approx(player.grant_barrier(100.0, &"t15"), 120.0), "a non-finite or negative answer (%s) keeps the previous value" % str(kept))
+		player.health.clear_shield()
+	probe.answer = 0.0
+	_check(is_zero_approx(player.grant_barrier(100.0, &"t15")) and is_zero_approx(player.health.shield_hp), "an answer of 0 refuses the grant")
+	probe.answer = null
+	player.health.grant_shield(500.0)
+	_check(is_equal_approx(player.grant_barrier(100.0, &"t15"), 127.0) and is_equal_approx(player.health.shield_hp, 500.0), "a smaller grant keeps the larger barrier and reports its own capacity")
+	var calls := probe.seen.size()
+	player.health.current_hp = 0.0
+	_check(not player.is_alive() and is_zero_approx(player.grant_barrier(100.0, &"t15")) and probe.seen.size() == calls, "a dead player gains no barrier and the hook is not called")
+	player.attach_kit(null)
 
 # --- Selo Sombrio -------------------------------------------------------------------------
 

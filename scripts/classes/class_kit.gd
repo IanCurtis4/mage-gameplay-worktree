@@ -151,6 +151,16 @@ func after_hit_mitigation(_player: PlayerActor, _hit: Dictionary, _result: Dicti
 func on_shield_broken(_player: PlayerActor, _hit: Dictionary, _result: Dictionary) -> void:
 	pass
 
+## E10a T15 (A15.3): barrier received. Every barrier the player gains through
+## CombatActor.grant_barrier (Escudo Votivo, Égide and any later producer) calls this hook
+## before HealthState.grant_shield, chained origin then evolution: each module receives the
+## capacity so far and returns the new one. A non-finite or negative answer keeps the previous
+## value; 0 refuses the grant. context: "source" (StringName, the skill or system that grants;
+## empty if unknown), "raw_capacity" (float, before any module). Pure: must not grant barriers,
+## heal, cast or spend (no re-entry guard, like skill_cost).
+func barrier_received(_player: PlayerActor, capacity: float, _context: Dictionary) -> float:
+	return capacity
+
 ## Heal through PlayerActor.heal_player() or a base heal: requested vs applied.
 func on_heal(_player: PlayerActor, _requested: float, _applied: float, _source: StringName) -> void:
 	pass
@@ -207,3 +217,55 @@ func snapshot_compact_blocker(_player: PlayerActor) -> String:
 ## {} means "no HUD state" (the default) and is always valid.
 func hud_state(_player: PlayerActor) -> Dictionary:
 	return {}
+
+# --- World floor of a selection (E10a T15: A19, A20, A21) ------------------------------
+# Static and pure. A world selection of the family (Juízo, Olhar, Sussurro, Geometria,
+# Revelação, Ídolo, contagion) keeps its own planar or 3D test and also asks these helpers
+# whether the target stands on the floor of the selection's anchor: the canonical ground
+# selection of the E07 (WorldEffectArea, `ground_connected`), the same rule as the Santuário.
+# Two floors stacked within the height band (the F1 bridge, 40 above) are never mixed.
+
+## Ground area of `anchor` for the traversal of `actor` (the caster, the decoy or the centre
+## enemy). Null on the flat map, with no anchor, or when the point cannot anchor a ground area
+## for that traversal (on_anchor_floor then compares surfaces).
+static func floor_area(actor: CombatActor, anchor: ExpeditionWorldPoint) -> WorldEffectArea:
+	if anchor == null or not is_instance_valid(actor) or actor.world_motion == null or actor.world_motion.geometry == null: return null
+	var world := actor.world_motion.geometry
+	var area := WorldEffectArea.new()
+	return area if area.configure(world, anchor, actor.world_motion.profile(), &"ground_connected", world.geometry_revision)["ok"] else null
+
+## True when `target` stands on the floor of `anchor`, reachable over the ground within `reach`
+## plus its own world radius. Always true on the flat map (`anchor` null); false for a target
+## outside the anchor's world or stage. Without an area, the same surface decides.
+static func on_anchor_floor(area: WorldEffectArea, anchor: ExpeditionWorldPoint, target: CombatActor, reach: float) -> bool:
+	if anchor == null: return true
+	if not is_instance_valid(target) or target.world_motion == null or target.world_point() == null: return false
+	var at := target.world_point()
+	if at.stage_id != anchor.stage_id: return false
+	if area == null: return at.surface_id == anchor.surface_id
+	var reached := area.query(target, maxf(0.0, reach) + float(target.world_motion.profile()["radius"]))
+	return bool(reached.get("ok", false)) and bool(reached.get("data", {}).get("hit", false))
+
+## World point of `actor`, or null on the flat map. The anchor of a selection centred on it.
+static func world_anchor(actor: CombatActor) -> ExpeditionWorldPoint:
+	return actor.world_point() if is_instance_valid(actor) and actor.world_motion != null and actor.world_motion.is_current_world() else null
+
+## Anchor of a ground point kept only as a position (a figure's centre between pulses): the
+## surface among `around` (actors of the same world) whose support at the point's x/z has the
+## point's height. Null on the flat map or when no such surface is found.
+static func anchor_on_floor(actor: CombatActor, position: Vector3, around: Array) -> ExpeditionWorldPoint:
+	var own := world_anchor(actor)
+	if own == null or not position.is_finite(): return null
+	var world := actor.world_motion.geometry
+	var surfaces: Array[String] = [own.surface_id]
+	for candidate: Variant in around:
+		var other := candidate as CombatActor
+		var point := world_anchor(other)
+		if point != null and point.stage_id == own.stage_id and point.surface_id not in surfaces: surfaces.append(point.surface_id)
+	for surface: String in surfaces:
+		var found := world.support_at(surface, Vector2(position.x, position.z), world.geometry_revision)
+		if not found.get("ok", false): continue
+		var data: Dictionary = found["data"]["point"]
+		var at := ExpeditionWorldPoint.create(data["stage_id"], data["surface_id"], data["position"])
+		if absf(at.position.y - position.y) <= 0.5: return at
+	return null

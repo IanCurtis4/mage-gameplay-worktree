@@ -174,6 +174,26 @@ func apply_damage(request: DamageRequest, rng: RandomNumberGenerator) -> Diction
 func is_alive() -> bool:
 	return health != null and health.is_alive()
 
+## E10a T15 (A15.3): the single path of a barrier the actor gains. On a player, the
+## barrier_received hook of the seam modules (origin, then evolution) composes the capacity
+## before HealthState.grant_shield; other actors grant it as it is. Returns the capacity
+## actually granted (the composed one; HealthState keeps the larger of it and the current
+## barrier), or 0 when nothing was granted (dead actor, invalid or refused capacity).
+## Producers keep the answer to recognise their own barrier at expiry. The modules are reached
+## by method on purpose: naming ClassKit here closes the script cycle described at request_element.
+func grant_barrier(capacity: float, source: StringName = &"") -> float:
+	if health == null or not health.is_alive() or not is_finite(capacity) or capacity <= 0.0: return 0.0
+	var value := capacity
+	if has_method(&"kit_modules"):
+		var context := {"source": source, "raw_capacity": capacity}
+		var modules: Array = call(&"kit_modules")
+		for module: Object in modules:
+			if module == null or not module.has_method(&"barrier_received"): continue
+			var next: Variant = module.call(&"barrier_received", self, value, context)
+			if (typeof(next) == TYPE_FLOAT or typeof(next) == TYPE_INT) and is_finite(float(next)) and float(next) >= 0.0: value = float(next)
+	if value <= 0.0 or not health.grant_shield(value): return 0.0
+	return value
+
 ## E10a C1.7: element tag of a request, from the SkillDefinition of its skill (light and
 ## shadow skills always declare it); empty when the skill has none. The catalog is reached
 ## by path on purpose: naming ClassCatalog here closes a script cycle (CombatActor ->

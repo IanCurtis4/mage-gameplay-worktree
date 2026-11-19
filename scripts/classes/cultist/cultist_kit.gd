@@ -419,6 +419,7 @@ func revelation_active() -> bool:
 	return revelation_remaining > 0.0
 
 ## Live enemies of `player` inside the Olhar cone (range plus the enemy radius), by stable key.
+## E10a T15 (A20): in the world, only on the Cultista's floor (ClassKit.on_anchor_floor).
 func gaze_targets(player: PlayerActor, actors: Array = []) -> Array[CombatActor]:
 	var result: Array[CombatActor] = []
 	var origin := FlankRules.ground_position(player)
@@ -426,11 +427,14 @@ func gaze_targets(player: PlayerActor, actors: Array = []) -> Array[CombatActor]
 	var heading := Vector2(facing.x, facing.z)
 	if not origin.is_finite() or heading.is_zero_approx(): return result
 	heading = heading.normalized()
+	var anchor := ClassKit.world_anchor(player)
+	var area := ClassKit.floor_area(player, anchor)
 	for enemy: CombatActor in _live_enemies(player, actors):
 		var offset3 := FlankRules.ground_position(enemy) - origin
 		var offset := Vector2(offset3.x, offset3.z)
 		if offset.length() > GAZE_RANGE + enemy.collision_radius: continue
 		if offset.length() > 0.001 and absf(heading.angle_to(offset.normalized())) > GAZE_HALF_ANGLE + 0.0001: continue
+		if not ClassKit.on_anchor_floor(area, anchor, enemy, GAZE_RANGE): continue
 		result.append(enemy)
 	return result
 
@@ -585,12 +589,19 @@ func _advance_geometry(player: PlayerActor, delta: float) -> void:
 
 ## One pulse of the figure: a common or elite inside loses its way once per figure (and
 ## gains Madness then); the boss inside is slowed, never disoriented nor retargeted.
+## E10a T15 (A21): in the world, only on the figure's floor; the anchor is rebuilt from the
+## centre each pulse (ClassKit.anchor_on_floor), so no state is added to the snapshot.
 func _geometry_pulse(player: PlayerActor, actors: Array = []) -> void:
 	var i := geometry_rank - 1
 	var madness := _madness(player)
 	var owner_id := player.get_instance_id()
-	for enemy: CombatActor in _live_enemies(player, actors):
+	var enemies := _live_enemies(player, actors)
+	var in_world := ClassKit.world_anchor(player) != null
+	var anchor := ClassKit.anchor_on_floor(player, geometry_center, enemies)
+	var area := ClassKit.floor_area(player, anchor)
+	for enemy: CombatActor in enemies:
 		if _ground_distance(FlankRules.ground_position(enemy), geometry_center) > GEOMETRY_RADIUS + enemy.collision_radius: continue
+		if in_world and (anchor == null or not ClassKit.on_anchor_floor(area, anchor, enemy, GEOMETRY_RADIUS)): continue
 		if MadnessHelpers.is_boss(enemy):
 			enemy.apply_slow(GEOMETRY_SLOW[i], GEOMETRY_SLOW_DURATION, GEOMETRY_SOURCE)
 			continue
@@ -640,11 +651,14 @@ func _revelation_tick(player: PlayerActor, actors: Array = []) -> void:
 	for enemy: CombatActor in _in_sight(player, actors):
 		if MadnessHelpers.is_live(enemy): madness.add(enemy, REVELATION_MADNESS[revelation_rank - 1], key, player)
 
+## E10a T15 (A21): in the world, only on the Cultista's floor (ClassKit.on_anchor_floor).
 func _in_sight(player: PlayerActor, actors: Array = []) -> Array[CombatActor]:
 	var result: Array[CombatActor] = []
 	var origin := FlankRules.ground_position(player)
+	var anchor := ClassKit.world_anchor(player)
+	var area := ClassKit.floor_area(player, anchor)
 	for enemy: CombatActor in _live_enemies(player, actors):
-		if _ground_distance(FlankRules.ground_position(enemy), origin) <= REVELATION_RADIUS + enemy.collision_radius: result.append(enemy)
+		if _ground_distance(FlankRules.ground_position(enemy), origin) <= REVELATION_RADIUS + enemy.collision_radius and ClassKit.on_anchor_floor(area, anchor, enemy, REVELATION_RADIUS): result.append(enemy)
 	return result
 
 func _rank_values(player: PlayerActor, skill: StringName, rank: int) -> SkillRankDefinition:

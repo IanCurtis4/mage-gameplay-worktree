@@ -317,9 +317,13 @@ func _idol_gaze(player: PlayerActor, decoy: CombatActor, enemies: Array, with_ma
 	var key := "idol:%d:%d" % [idol_serial, idol_ticks]
 	var listed := enemies.duplicate()
 	listed.sort_custom(func(a: Variant, b: Variant) -> bool: return MadnessHelpers.enemy_key(a as CombatActor) < MadnessHelpers.enemy_key(b as CombatActor))
+	# E10a T15 (A21): in the world, only the enemies on the Idol's floor.
+	var anchor := ClassKit.world_anchor(decoy)
+	var area := ClassKit.floor_area(decoy, anchor)
 	for candidate: Variant in listed:
 		var enemy := candidate as CombatActor
 		if not MadnessHelpers.is_enemy(enemy) or not MadnessHelpers.is_live(enemy) or MadnessHelpers.distance(decoy, enemy) > idol_radius: continue
+		if not ClassKit.on_anchor_floor(area, anchor, enemy, idol_radius): continue
 		var hostile := enemy as EnemyActor
 		if not MadnessHelpers.is_boss(enemy) and not enemy.marks.has_mark(MadnessRules.MARK_DELIRIUM) and left > 0.0:
 			var reason := hostile.target_override_reason()
