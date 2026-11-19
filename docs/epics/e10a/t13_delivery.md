@@ -819,3 +819,27 @@ Cada pasta tem `…_manifest.sha256` ao lado. Não copiei as subpastas de fixtur
 `e08_art_units`, `f1_visual_fixture`), regeneráveis. As duas worktrees só tinham `.import` reescritos; saíram do
 registro do Git e as pastas ficaram vazias e ocupadas (sessões abertas). Branches mantidas em `8530b3e5` e
 `223f05e8`. A T12 pode partir do candidato desta composição.
+
+## Composição 12 — T12 (HUD da família) e ponta A23 (19/11/2026)
+
+| Origem | Ponta | Merge |
+|---|---|---|
+| T12 (`claude/fervent-torvalds-91db0b`, parte de `65f32d47`) | `2d3bfc57` | `67aeef30` |
+| arquitetura (A23) | `5c6b03df` | `3552155e` (só `docs/epics/e10a.md`) |
+
+Sem conflito. Importação exit 0 (`63693721…B541`); bootstrap F1: 255 com a falha conhecida (`AB79025F…831F`),
+256 passou (`8FFE7007…7EFD`). **15 passos, todos verdes**, um por chamada, sem `SCRIPT ERROR`, `still in use` ou
+`ObjectDB`. Logs em `.godot/verification/t13_c12/` (fora do Git).
+
+| Passo | Teste | Resultado | Saída (8) |
+|---|---|---|---|
+| 342 | `hud_family_test` (novo) | **118**, 0 falhas | `ADDE054E` |
+| 370 / 368 / 369 | `hud_seam_test` / `hud_components_test` / `hud_integration_test` | 194 / **168** / 234 | `3A4F49A0` / `D0F3C374` / `940E9619` |
+| 353 / 356 / 362 / 365 | `mg_ac` / `mg_la` / `sp_ac` / `sp_la` `_hud_test` | 60 / 53 / 57 / 49 | `000BB13B` / `13CB6B25` / `11A7268D` / `D74B43A7` (iguais) |
+| 347 / 360 / 351 | `acolyte_base_test` / `priest_kit_test` / `cultist_kit_test` | 332 / 240 / 237 | `93F81F64` / `64BC6C0B` / `3D91804D` (iguais) |
+| 345 / 333 / 336 | `madness_test` / `kit_seam_test` / `base_seam_test` | 276 / 276 / 172 | iguais |
+| 33 | `mage_gameplay_test` | PASS, 52 | `02D14E4B` (igual) |
+
+Evidência: `.godot/verification/e10a_t12_evidence/` (36 arquivos, manifesto `DBFB1F2D…`; a fixture
+`e10a_t12_fixture`, regenerável, não foi copiada). A worktree da T12 saiu do registro do Git (pasta vazia e
+ocupada); branch em `2d3bfc57`.
