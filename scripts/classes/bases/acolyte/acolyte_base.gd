@@ -381,6 +381,33 @@ func snapshot_compact_blocker(player: PlayerActor) -> String:
 	if votive_remaining > 0.0: return "acolyte_votive_shield"
 	return madness.compact_blocker(player)
 
+# --- HUD (E10a T12, C9) -----------------------------------------------------------------------
+
+## Degrees of the Madness mark over an enemy (pure presentation: THRESHOLD split in steps).
+const HUD_MADNESS_STEPS := 5
+const HUD_MADNESS_KEY := &"madness"
+const HUD_DELIRIUM_KEY := &"madness_delirium"
+
+## Pure read for the HUD (ragrpg_kit_hud_v1): the Madness of every living enemy that carries
+## it, in degrees (pips), and a badge for each one in Delirium. The base is the only publisher
+## of Madness (A18); values come from MadnessAuthority.describe_enemy, no formula here.
+func hud_state(player: PlayerActor) -> Dictionary:
+	var marks: Array[Dictionary] = []
+	if is_instance_valid(player):
+		for candidate: Variant in MadnessHelpers.enemies_of(player):
+			var enemy := candidate as CombatActor
+			if not MadnessHelpers.is_enemy(enemy) or not MadnessHelpers.is_live(enemy): continue
+			var line := MadnessAuthority.describe_enemy(enemy)
+			if line.is_empty(): continue
+			var target := int(line["id"])
+			if line["state"] == MadnessRules.STATE_DELIRIUM:
+				marks.append({"target_id": target, "key": HUD_DELIRIUM_KEY, "kind": &"badge", "element": &"shadow"})
+			elif float(line["madness"]) > 0.0:
+				var steps := clampi(ceili(float(line["madness"]) / float(line["threshold"]) * HUD_MADNESS_STEPS), 1, HUD_MADNESS_STEPS)
+				marks.append({"target_id": target, "key": HUD_MADNESS_KEY, "kind": &"pips", "value": steps, "max": HUD_MADNESS_STEPS, "element": &"shadow"})
+	if marks.is_empty(): return {}
+	return {"schema": KitHudState.SCHEMA, "kit_id": kit_id(), "target_marks": marks}
+
 # --- Queries --------------------------------------------------------------------------
 
 func prayer_active() -> bool:

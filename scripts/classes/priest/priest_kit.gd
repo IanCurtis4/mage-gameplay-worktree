@@ -349,6 +349,24 @@ func snapshot_compact_blocker(_player: PlayerActor) -> String:
 	if hour_active(): return "priest_holy_hour"
 	return sanctuary.compact_blocker()
 
+# --- HUD (E10a T12, C9) -----------------------------------------------------------------------
+
+## Pure read for the HUD (ragrpg_kit_hud_v1): Grace (unlimited with the deadline in the Hora
+## Santa), the Égide and the Hora deadlines, the Santuário zone and the Selo de Luz badge.
+## Values come from the SanctuaryAuthority and the kit state; no formula.
+func hud_state(player: PlayerActor) -> Dictionary:
+	var rank := clampi(player.skill_rank(HOLY_HOUR), 1, 5) if is_instance_valid(player) else 1
+	var hour_total := HOUR_DURATION[rank - 1]
+	var resources: Array[Dictionary] = [sanctuary.hud_grace(hour_total)]
+	var aegis := sanctuary.hud_aegis(AEGIS, AEGIS_DURATION)
+	if not aegis.is_empty(): resources.append(aegis)
+	if hour_active():
+		resources.append({"id": HOLY_HOUR, "label": "Hora Santa", "kind": &"timer", "remaining": hour_remaining, "total": maxf(hour_total, hour_remaining), "element": SanctuaryAuthority.HUD_LIGHT})
+	var marks: Array[Dictionary] = []
+	var seal := sanctuary.hud_seal_mark()
+	if not seal.is_empty(): marks.append(seal)
+	return {"schema": KitHudState.SCHEMA, "kit_id": kit_id(), "resources": resources, "zones": sanctuary.hud_zones(player), "target_marks": marks}
+
 # --- Queries --------------------------------------------------------------------------
 
 func hour_active() -> bool:
