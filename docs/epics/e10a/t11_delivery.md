@@ -90,3 +90,23 @@ Worktree recriada da branch e levada ao candidato por `git merge --ff-only claud
 | `ui_family_test` | 86 checks, 0 falhas | `99F94E287D1454AB5E4F01AE6ED08C2BCE71DD0B6502A16318CF903DDA899D2D` |
 | `kit_seam_test` | 276 checks, 0 falhas | `387339E5A5C3F2A138ED2301861C3BC9EA4FBEC29810CB397E25270B55B7C888` |
 | `e07_f1_composition_test` | 342 checks, **2 falhas** (priest_b, cultist_b), com edições não commitadas | n/a |
+
+## A19 — fecho do item 2 (decisão de Astra `fe12a023`)
+
+`tests/e07_f1_composition_test.gd`: contagem 27 → 31 (rótulo "all31"); `_setup` dá à base `acolyte` os ranks da família e, nos casos da família, `lower` e `upper` são `EnemyActor` reais (`configure(&"chaser", …)`, mesmo ponto e mesmo andar da fixture), sem carrier falso e sem check específico; SP e facing de solo no PROC de skill de kit, e 25 passos de 0,1 s do relógio real para o canal do Olhar. Rótulos dos dois checks de PROC passaram a citar a família (diagnóstico).
+
+Resultado: 342 checks, **2 falhas**, ambas no check "contato causal respeita corpo/andar": medições com `lower`/`upper` (vida antes → depois):
+
+| Caso | lower | upper (outro andar) |
+|---|---|---|
+| `pilot_priest_b` (Juízo) | 100000 → 99854 | 100000 → 99854 |
+| `pilot_cultist_b` (Olhar do Abismo) | 100000 → 99829 | 100000 → 99829 |
+| `pilot_cultist_a` (Delírio Compartilhado, alvo único) | 100000 → 99907 | 100000 → 100000 (passa) |
+
+O Juízo é o defeito já classificado como de runtime (T15, `SanctuaryHelpers.judgment_targets`). **O Olhar do Abismo também fica vermelho pelo mesmo tipo de defeito:** com `EnemyActor` reais o cone atinge, mas `CultistKit.gaze_targets` mede só a distância no plano (`FlankRules.ground_position`, sem filtro de altura), então também acerta o inimigo da ponte. Não toquei nesse check nem criei exceção; vai à T15 junto com o Juízo.
+
+| Teste | Resultado | sha256 |
+|---|---|---|
+| `e07_f1_composition_test` | 342 checks, 2 falhas (Juízo e Olhar, T15) | `D6BDB098A441404858A07DC454D05D54BDD38C7F02F285FFCE5D5D1E0AF4282F` |
+| `ui_evolution_test` | 97 checks, 0 falhas | `AF5649F0015025B91CD431E0D5A6AC607D4D490757B4B471B39C45DF7B823E60` |
+| `augments_test` | 180 checks, 0 falhas | `D2080594CFEB43E2D9225D07137E629AFA2586980F8246E5464AF1E83ED2357A` |

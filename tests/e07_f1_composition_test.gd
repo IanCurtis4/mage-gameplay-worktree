@@ -30,7 +30,7 @@ func _run() -> void:
 			for effect: EffectDefinition in definition.effects:
 				if effect.kind == EffectDefinition.Kind.STAT: continue
 				_case(origin,id,definition,effect)
-	check(evidence.size() == 27,"all27 non-stat production recipes have explicit spatial evidence")
+	check(evidence.size() == 31,"all31 non-stat production recipes have explicit spatial evidence")
 	var output := FileAccess.open("res://.godot/f1_composition_evidence.json",FileAccess.WRITE); output.store_string(JSON.stringify(evidence,"  ",true)); output.close()
 	_cleanup()
 	await process_frame
@@ -96,13 +96,22 @@ func _proc_case(effect: EffectDefinition,skill: StringName) -> void:
 		c.player._try_basic_attack()
 	else:
 		c.player.sentinel_state.focus = SentinelTuning.FOCUS_CAP
+		if c.player.has_kit():
+			# E10a T11: kit skills pay real SP; the fixture only guarantees there is enough.
+			c.player.max_sp = 1000.0
+			c.player.current_sp = 1000.0
+			# Face the target on the ground plane (canvas direction of ground +x), so the gaze cone covers it.
+			c.player.character_animation.state.face(Vector2(0.85,0.425))
 		var cast := c.cast_world_skill(skill,lower.world_point(),Vector3.RIGHT,lower,world.geometry_revision)
 		check(cast["ok"],"targeted proc source enters actual canonical spatial skill")
 		if c.player.has_active_cast(): c.player._advance_world_cast(10)
+		if c.player.has_kit():
+			# Channeled kit skills (the gaze) hit on kit ticks: advance the real clock, as the kit tests do.
+			for step: int in 25: c.player._process(0.1)
 	_drain()
 	var procs := results.filter(func(result: Dictionary) -> bool: return result.get("skill_id",&"") == effect.family_id)
-	check(lower.health.current_hp < hp and upper.health.current_hp == upper_hp,"causal parent contact respects supported body/floor")
-	check(procs.size() == 1 and procs[0]["target_id"] == lower.get_instance_id() and not bool(procs[0].get("can_trigger_effects",true)),"real catalog PROC is one claimed same-target secondary, never another spatial selection")
+	check(lower.health.current_hp < hp and upper.health.current_hp == upper_hp,"causal parent contact respects supported body/floor: "+String(effect.family_id))
+	check(procs.size() == 1 and procs[0]["target_id"] == lower.get_instance_id() and not bool(procs[0].get("can_trigger_effects",true)),"real catalog PROC is one claimed same-target secondary, never another spatial selection: "+String(effect.family_id)+" n="+str(procs.size()))
 	if not procs.is_empty():
 		var before := lower.health.current_hp
 		c.player.resolve_build_effect_procs(procs[0])
@@ -126,6 +135,10 @@ func _setup(base: StringName,evolution: StringName,origin: StringName,id: String
 	if evolution == &"hunter":
 		for active: StringName in [&"hunter_mark",&"hunter_covering_shot",&"hunter_freezing_trap",&"hunter_tar_trap",&"hunter_thorn_trap"]: build.skill_ranks[active] = 1
 	if evolution == &"spiritualist": build.skill_ranks[&"spiritualist_echo_curse"] = 1; build.skill_ranks[&"spiritualist_soul_drain"] = 1
+	if base == &"acolyte":
+		# E10a T11: the family's own ranks, so the kit skills exist and the PROC reaches them on the canonical path.
+		for acolyte_skill: StringName in [&"acolyte_punishing_light",&"acolyte_prayer",&"acolyte_votive_shield",&"acolyte_shadow_seal"]: build.skill_ranks[acolyte_skill] = 3
+		for kit_skill: StringName in ClassKitRegistry.skill_ids(evolution) if evolution != &"" else []: build.skill_ranks[kit_skill] = 3 if kit_skill in [&"priest_grace",&"priest_exorcist",&"cultist_ecstasy",&"cultist_open_pupil"] else 5
 	Dependencies.complete_snapshot(build); build.library_skill_ids = build._skill_catalog.skill_ids_for_identity(base,evolution)
 	if origin == &"equipment": _equip(build,definition as EquipmentDefinition,&"recipe_item")
 	elif origin == &"card":
@@ -143,7 +156,7 @@ func _setup(base: StringName,evolution: StringName,origin: StringName,id: String
 	c.player = PlayerActor.new(); c.add_child(c.player); c.player.configure(c.navigation,c.run_state); c.player.set_process(false)
 	check(c.player.bind_world_geometry(world,Fixture.point("root",Vector3(80,0,500)),profile,str(c.player.get_instance_id()))["ok"],"composition caster has explicit support")
 	c.player.global_position = Vector2(-9999,9999)
-	lower = _actor(Fixture.point("root",Vector3(130,0,500))); upper = _actor(Fixture.point("bridge",Vector3(130,40,500))); c.enemies.assign([lower,upper])
+	lower = _actor(Fixture.point("root",Vector3(130,0,500)),base == &"acolyte"); upper = _actor(Fixture.point("bridge",Vector3(130,40,500)),base == &"acolyte"); c.enemies.assign([lower,upper])
 	lower.health.damage_applied.connect(c._on_enemy_damage_resolved)
 	lower.health.damage_applied.connect(func(result: Dictionary) -> void: results.append(result.duplicate(true)))
 	upper.health.damage_applied.connect(c._on_enemy_damage_resolved)
@@ -162,8 +175,14 @@ func _equip(build: BuildSnapshot,definition: EquipmentDefinition,instance: Strin
 	created["instance"].owner_character_id = build.character_id
 	build.equipment_instances[instance] = created["instance"]
 	build.equipped[&"accessory_1" if definition.slot == &"accessory" else definition.slot] = instance
-func _actor(point: ExpeditionWorldPoint) -> CombatActor:
-	var actor := CombatActor.new(); root.add_child(actor); owned.append(actor); actor.set_process(false); actor.setup("Portador",Color.WHITE,StatCalculator.calculate({&"vit":10})); actor.health.max_hp = 100000; actor.health.current_hp = 100000
+## `family`: the Acólito family (D4) only acts on real EnemyActor bodies (Madness, gaze cone), so those cases get one with the same floor and place.
+func _actor(point: ExpeditionWorldPoint,family: bool = false) -> CombatActor:
+	var actor: CombatActor
+	if family:
+		var hostile := EnemyActor.new(); hostile.configure(&"chaser",c.navigation,c.player); root.add_child(hostile); actor = hostile
+		owned.append(actor); actor.set_process(false); actor.health.max_hp = 100000; actor.health.current_hp = 100000
+	else:
+		actor = CombatActor.new(); root.add_child(actor); owned.append(actor); actor.set_process(false); actor.setup("Portador",Color.WHITE,StatCalculator.calculate({&"vit":10})); actor.health.max_hp = 100000; actor.health.current_hp = 100000
 	check(actor.bind_world_geometry(world,point,profile,str(actor.get_instance_id()))["ok"],"composition target has explicit independent floor")
 	actor.global_position = Vector2(9999,-9999)
 	return actor
