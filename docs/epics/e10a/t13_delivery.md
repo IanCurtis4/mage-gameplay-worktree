@@ -720,6 +720,5 @@ chamada, timeout 300 s, 0 timeouts, nenhum `SCRIPT ERROR`, `Parse Error`, `Compi
 | 26 | `e08_feedback_recipe_test` | PASS, 1433 | `1601B34D` (igual) |
 | 108 / 39 / 342 | `e05_evolution_catalog_test` / `e02_character_menu_test` / `madness_test` | PASS 99 / PASS 26 / 276 | `90F3F112` / `92E83227` / `D4DAEAF5` (iguais) |
 
-Como o E12 passou a ser descoberto pelo `verify.ps1`, os índices dos passos mudaram (`kit_seam_test` 333, os
-três de kit e os de HUD têm números novos); o hash de cada saída não mudou. Os vermelhos da composição 8
+Como o E12 passou a ser descoberto pelo `verify.ps1`, alguns índices mudaram (por exemplo, `priest_kit_test` de 355 para 357); o hash de cada saída conferida não mudou. Os vermelhos da composição 8
 (`ui_evolution_test` e `e07_f1_composition_test`) **não foram rodados aqui** e seguem abertos até a T11 (A16).
