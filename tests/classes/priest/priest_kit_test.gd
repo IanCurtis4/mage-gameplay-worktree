@@ -7,6 +7,7 @@ extends SceneTree
 ## The Acólito is the T1 fixture base (scripts/classes/fixture/fixture_base.gd): the production
 ## base is still an empty skeleton (T5). Fixture profiles only; nothing is written to disk.
 const FixtureBase = preload("res://scripts/classes/fixture/fixture_base.gd")
+const AudioCatalog = preload("res://scripts/presentation/audio_event_catalog.gd")
 const KIT_PATH := "res://scripts/classes/priest/priest_kit.gd"
 const BUILDS_PATH := "res://scripts/classes/priest/review_builds.json"
 
@@ -23,6 +24,7 @@ class DrawProbe extends Node2D:
 
 var checks := 0
 var failures := 0
+var facts: Array = []
 var owned: Array[Node] = []
 var controller: Controller
 var player: PlayerActor
@@ -49,6 +51,7 @@ func _run() -> void:
 	_check_aegis()
 	_check_judgment()
 	_check_exorcist()
+	await _check_feedback_events()
 	_check_light_seal()
 	_check_holy_hour()
 	_check_build_change_death_and_pause()
@@ -204,7 +207,7 @@ func _check_catalog() -> void:
 		var recipe := FeedbackRecipeCatalog.recipe(skill)
 		_check(not recipe.generic and recipe.element == &"light", "%s has a light feedback recipe" % skill)
 	var effects := module.vfx_effects()
-	_check(effects.size() == 8, "eight reserved flipbook IDs")
+	_check(effects.size() == 10, "ten reserved flipbook IDs (T16: two passive feedback effects)")
 	for effect_id: StringName in effects: _check(String(effect_id).begins_with("priest_"), "effect %s carries the prefix" % effect_id)
 	_check(ClassKitRegistry.vfx_effect(&"priest_judgment", &"impact")["effect_id"] == &"priest_judgment_column" and ClassKitRegistry.vfx_effect(&"priest_sanctuary", &"effect_start")["effect_id"] == &"priest_sanctuary_circle", "effects reach the presentation catalog by skill and kind")
 	_check(is_equal_approx(module.skill_definitions()[3].ranks[4].secondary_power, SanctuaryRules.JUDGMENT_PER_CHARGE), "the Juízo scales 0.40 per charge (the Sanctuary system value)")
@@ -260,7 +263,74 @@ func _check_drawers() -> void:
 	await process_frame
 	var drawn_all := true
 	for effect_id: StringName in probe.kit.vfx_effects(): drawn_all = drawn_all and bool(probe.drawn.get(effect_id, false))
-	_check(probe.drawn.size() == 9 and drawn_all and probe.drawn.get(&"priest_unknown") == false, "every reserved effect draws inside _draw(); an unknown ID is refused")
+	_check(probe.drawn.size() == 11 and drawn_all and probe.drawn.get(&"priest_unknown") == false, "every reserved effect draws inside _draw(); an unknown ID is refused")
+
+# --- T16 (A15): feedback events of Graça and Exorcista, and the drawing of the Exorcista ---
+
+func _facts_of(skill: StringName) -> int:
+	var count := 0
+	for fact: Array in facts:
+		if fact[1] == skill: count += 1
+	return count
+
+func _check_feedback_events() -> void:
+	_setup()
+	facts.clear()
+	player.presentation_fact.connect(func(kind: StringName, skill: StringName, _direction: Vector2, _duration: float) -> void: facts.append([kind, skill]))
+	for skill: StringName in [&"priest_grace", &"priest_exorcist"]:
+		_check(bool(FeedbackRecipeCatalog.recipe(skill).commit_effect) and ClassKitRegistry.vfx_effect(skill, &"effect_start").has("effect_id"), "%s publishes a commit effect with a drawer" % skill)
+	# Audio: no new cue. The passive commit effects reuse the chain of the Égide (buff x light): a planned cue is first.
+	for skill: StringName in [&"priest_grace", &"priest_exorcist"]:
+		var chain: Array = AudioCatalog.candidates(&"effect_start", FeedbackRecipeCatalog.recipe(skill))
+		_check(not chain.is_empty() and AudioCatalog.PLANNED.has(chain[0]) and chain == AudioCatalog.candidates(&"effect_start", FeedbackRecipeCatalog.recipe(&"priest_aegis")), "%s: its effect_start resolves an existing planned cue (%s), the same chain as the Égide" % [skill, chain])
+	_check(ClassKitRegistry.vfx_effect(&"priest_grace", &"effect_start")["effect_id"] == &"priest_grace_gain" and ClassKitRegistry.vfx_effect(&"priest_exorcist", &"effect_start")["effect_id"] == &"priest_exorcist_flash", "the passives reach the presentation catalog")
+	# Graça: one event per gain, none for a heal without excess nor for a full reserve.
+	player.health.current_hp = player.health.max_hp
+	player.heal_player(player.health.max_hp * 0.11, &"test_heal")
+	_check(_grace() == 2 and _facts_of(&"priest_grace") == 1, "an excess heal that gives charges emits one Graça event")
+	player.health.current_hp = player.health.max_hp * 0.5
+	player.heal_player(player.health.max_hp * 0.2, &"test_heal")
+	_check(_facts_of(&"priest_grace") == 1, "a heal without excess emits no Graça event")
+	(kit as Object).call(&"on_base_skill_committed", player, &"acolyte_prayer", {})
+	_check(_grace() == 3 and _facts_of(&"priest_grace") == 2, "Prece gives a charge and its event")
+	_fill_grace(5)
+	(kit as Object).call(&"on_base_skill_committed", player, &"acolyte_votive_shield", {})
+	_check(_grace() == 5 and _facts_of(&"priest_grace") == 2, "a full reserve gains nothing and emits nothing")
+	_check(facts.all(func(fact: Array) -> bool: return fact[0] == &"skill_committed"), "events are skill_committed facts (the bridge turns them into effect_start)")
+	# Exorcista on a shielded enemy: the flash and a short burst on the enemy.
+	var enemy := _enemy(Vector2(520, 350))
+	enemy.health.grant_shield(500.0)
+	var exorcism := _facts_of(&"priest_exorcist")
+	var outcome := (kit as Object).call(&"exorcise", player, enemy, 3) as StringName
+	var burst := enemy.get_node_or_null(NodePath("PriestExorcist_stripped"))
+	_check(outcome == &"shield" and _facts_of(&"priest_exorcist") == exorcism + 1 and burst != null, "removing a shield emits the Exorcista event and puts the burst on the enemy")
+	burst.call(&"_process", 0.7)
+	_check(enemy.get_node_or_null(NodePath("PriestExorcist_stripped")) == null, "the burst frees itself after 0.6 s")
+	# Exposed enemy: the aro and seal last as long as the Exposto source.
+	outcome = (kit as Object).call(&"exorcise", player, enemy, 3) as StringName
+	var mark := enemy.get_node_or_null(NodePath("PriestExorcist_exposed"))
+	_check(outcome == &"exposed" and mark != null and _facts_of(&"priest_exorcist") == exorcism + 2, "an Exposto enemy gets the drawing and the event")
+	controller.set_process(false) # the real controller loop is not under test (frames below only run the nodes)
+	controller.set_physics_process(false)
+	await process_frame
+	await process_frame
+	_check(int(mark.get("draw_count")) > 0 and mark.get_parent() == enemy and not mark.is_in_group("player_effects"), "the Exposto drawing is drawn by a real _draw pass, as a child of the enemy")
+	var again := (kit as Object).call(&"exorcise", player, enemy, 3) as StringName
+	_check(again == &"exposed" and enemy.get_node_or_null(NodePath("PriestExorcist_exposed")) != mark and mark.is_queued_for_deletion(), "a second Exposto replaces the drawing, never stacks")
+	mark = enemy.get_node_or_null(NodePath("PriestExorcist_exposed"))
+	enemy.advance_statuses(10.0)
+	mark.call(&"_process", 0.1)
+	_check(not enemy.received_damage_sources.has(&"priest_exposed") and enemy.get_node_or_null(NodePath("PriestExorcist_exposed")) == null, "the drawing leaves when the Exposto expires")
+	(kit as Object).call(&"exorcise", player, enemy, 3)
+	mark = enemy.get_node_or_null(NodePath("PriestExorcist_exposed"))
+	enemy.received_damage_sources[&"priest_exposed"]["owner_id"] = player.get_instance_id() + 1
+	mark.call(&"_process", 0.1)
+	_check(enemy.get_node_or_null(NodePath("PriestExorcist_exposed")) == null, "another owner's Exposto never keeps this drawing")
+	(kit as Object).call(&"exorcise", player, enemy, 3)
+	mark = enemy.get_node_or_null(NodePath("PriestExorcist_exposed"))
+	enemy.health.current_hp = 0.0
+	mark.call(&"_process", 0.1)
+	_check(enemy.get_node_or_null(NodePath("PriestExorcist_exposed")) == null, "the drawing leaves when the enemy dies")
 
 # --- Santuário ------------------------------------------------------------------------------
 

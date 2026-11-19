@@ -24,6 +24,12 @@ const PUPIL_SOURCE := &"cultist_open_pupil"
 const REVELATION_SOURCE := &"cultist_revelation"
 const GEOMETRY_SOURCE := &"cultist_impossible_geometry"
 const GEOMETRY_MARK := &"cultist_geometry"
+## Persistent drawn figures (T16, A15): kinds of cultist_figure_node.gd.
+const FIGURE_GEOMETRY := &"geometry"
+const FIGURE_REVELATION := &"revelation"
+const FIGURE_SCRIPT := "res://scripts/classes/cultist/cultist_figure_node.gd"
+const GROUND_FLAT := Vector2(1.0, 0.55)
+const GROUND_WORLD := Vector2(1.202, 0.601)
 const STAT_SOURCE := &"cultist_ecstasy"
 ## Short C1.7 sources renewed on every kit tick while their condition holds.
 const SOURCE_REFRESH := 0.6
@@ -235,19 +241,17 @@ func draw_vfx(effect_id: StringName, canvas: CanvasItem, pulse: Dictionary, posi
 			for k: int in 6: canvas.draw_line(position, position + Vector2.from_angle(TAU * k / 6.0 + t) * SHARED_RADIUS * t, Color(MAGENTA, 0.7 * fade), 2.0)
 			canvas.draw_arc(position, SHARED_RADIUS * t, 0.0, TAU * 0.85, 32, Color(TURQUOISE, 0.6 * fade), 2.0)
 		&"cultist_impossible_geometry":
-			# A figure that never closes: an open polygon that turns, with one side missing.
-			var points := PackedVector2Array()
-			for k: int in 7:
-				var a := TAU * k / 7.0 + t * 0.8
-				points.append(position + Vector2(cos(a), sin(a) * 0.5) * GEOMETRY_RADIUS * (0.9 + 0.1 * sin(t * TAU + k)))
-			canvas.draw_polyline(points, Color(MAGENTA, 0.9 * fade), 3.0)
-			canvas.draw_polyline(PackedVector2Array([points[1], points[4], points[0], points[3], points[6]]), Color(TURQUOISE, 0.55 * fade), 1.5)
+			# The commit burst only: the figure itself is the persistent node (draw_persistent).
+			var burst := PackedVector2Array()
+			for k: int in 25: burst.append(position + Vector2(cos(TAU * k / 24.0), sin(TAU * k / 24.0) * 0.5) * GEOMETRY_RADIUS * minf(1.0, t * 3.0))
+			canvas.draw_polyline(burst, Color(MAGENTA, 0.9 * fade), 3.0)
+			canvas.draw_polyline(burst, Color(TURQUOISE, 0.5 * fade), 1.5)
 		&"cultist_impossible_geometry_slip":
 			_spiral(canvas, position + Vector2(0.0, -10.0), 16.0, t, fade)
 		&"cultist_revelation_eye":
+			# The commit burst only: the open eye and its sight ring are the persistent node.
 			var open := minf(1.0, t * 2.0)
-			canvas.draw_circle(position, REVELATION_RADIUS * open, Color(ABYSS, 0.25 * fade))
-			_eye(canvas, position + Vector2(0.0, -90.0), 46.0, open, fade)
+			_eye(canvas, position + Vector2(0.0, -90.0), 46.0 * (1.0 + 0.4 * t), open, fade)
 			for k: int in 10: canvas.draw_line(position + Vector2(0.0, -90.0), position + Vector2(0.0, -90.0) + Vector2.from_angle(TAU * k / 10.0) * 120.0 * open, Color(MAGENTA, 0.3 * fade), 1.5)
 		&"cultist_revelation_gaze":
 			_eye(canvas, position + Vector2(0.0, -34.0), 8.0, 1.0, fade)
@@ -271,6 +275,75 @@ static func _spiral(canvas: CanvasItem, center: Vector2, size: float, t: float, 
 		points.append(center + Vector2.from_angle(k * TAU * 1.6 + t * 2.0) * size * k)
 	canvas.draw_polyline(points, Color(MAGENTA, 0.85 * fade), 2.0)
 
+## Pure read for the persistent figure node: {"active", "serial", "remaining", "duration", "center", "rank"}.
+func figure_state(kind: StringName) -> Dictionary:
+	match kind:
+		FIGURE_GEOMETRY:
+			return {"active": geometry_remaining > 0.0, "serial": geometry_serial, "remaining": geometry_remaining, "duration": GEOMETRY_DURATION, "center": geometry_center, "rank": geometry_rank}
+		FIGURE_REVELATION:
+			var duration: float = REVELATION_DURATION[clampi(revelation_rank, 1, 5) - 1]
+			return {"active": revelation_remaining > 0.0, "serial": revelation_serial, "remaining": revelation_remaining, "duration": duration, "center": Vector3.ZERO, "rank": revelation_rank}
+	return {"active": false, "serial": 0, "remaining": 0.0, "duration": 0.0, "center": Vector3.ZERO, "rank": 1}
+
+## One frame of a persistent figure, drawn around the node origin. Presentation only. The
+## figure fades in for 0.3 s and out for the last 0.6 s; between them it is steady, turning.
+func draw_persistent(kind: StringName, canvas: CanvasItem, state: Dictionary, world: bool = false) -> bool:
+	var duration := maxf(0.001, float(state.get("duration", 1.0)))
+	var remaining := clampf(float(state.get("remaining", 0.0)), 0.0, duration)
+	var age := duration - remaining
+	var fade := minf(clampf(age / 0.3, 0.0, 1.0), clampf(remaining / 0.6, 0.0, 1.0))
+	var ground := GROUND_WORLD if world else GROUND_FLAT
+	match kind:
+		FIGURE_GEOMETRY:
+			# A figure that never closes: an open polygon that turns, with one side missing.
+			var points := PackedVector2Array()
+			for k: int in 7:
+				var a := TAU * k / 7.0 + age * 0.8
+				points.append(Vector2(cos(a) * ground.x, sin(a) * ground.y) * GEOMETRY_RADIUS * (0.9 + 0.1 * sin(age * PI + k)))
+			var edge := PackedVector2Array()
+			for k: int in 49: edge.append(Vector2(cos(TAU * k / 48.0) * ground.x, sin(TAU * k / 48.0) * ground.y) * GEOMETRY_RADIUS)
+			canvas.draw_polyline(edge, Color(ABYSS, 0.55 * fade), 2.0)
+			canvas.draw_polyline(points, Color(MAGENTA, 0.9 * fade), 3.0)
+			canvas.draw_polyline(PackedVector2Array([points[1], points[4], points[0], points[3], points[6]]), Color(TURQUOISE, 0.55 * fade), 1.5)
+			for k: int in 4:
+				var rune := Vector2.from_angle(-age * 0.5 + TAU * k / 4.0)
+				canvas.draw_circle(Vector2(rune.x * ground.x, rune.y * ground.y) * GEOMETRY_RADIUS * 0.45, 2.5, Color(TURQUOISE, 0.8 * fade))
+		FIGURE_REVELATION:
+			var ring := PackedVector2Array()
+			for k: int in 65: ring.append(Vector2(cos(TAU * k / 64.0) * ground.x, sin(TAU * k / 64.0) * ground.y) * REVELATION_RADIUS)
+			canvas.draw_polyline(ring, Color(MAGENTA, 0.28 * fade), 2.0)
+			var open := clampf(0.8 + 0.2 * sin(age * 2.4), 0.0, 1.0) * (0.15 if fmod(age, 2.2) > 2.05 else 1.0) # a slow blink
+			var eye := Vector2(0.0, -90.0)
+			canvas.draw_circle(Vector2.ZERO, 26.0, Color(ABYSS, 0.35 * fade))
+			_eye(canvas, eye, 46.0, open, fade)
+			for k: int in 10: canvas.draw_line(eye + Vector2.from_angle(TAU * k / 10.0 + age * 0.3) * 56.0, eye + Vector2.from_angle(TAU * k / 10.0 + age * 0.3) * 120.0, Color(MAGENTA, 0.3 * fade), 1.5)
+		_:
+			return false
+	return true
+
+## Creates, replaces or releases the persistent node of a figure to match the kit state.
+## The node lives under the player's parent (the arena or the expedition view), outside every
+## snapshot scan; nothing here is state of the run.
+func _sync_figure(player: PlayerActor, kind: StringName) -> void:
+	if not is_instance_valid(player): return
+	var host := player.get_parent()
+	if host == null: return
+	var node_name := "CultistFigure_%s_%d" % [kind, player.get_instance_id()]
+	var existing := host.get_node_or_null(NodePath(node_name))
+	var state := figure_state(kind)
+	if existing != null:
+		if bool(state["active"]) and int(existing.get(&"serial")) == int(state["serial"]) and existing.get(&"kit") == self: return
+		existing.call(&"release")
+	if not bool(state["active"]) or not host.is_inside_tree(): return
+	var node: Node2D = (load(FIGURE_SCRIPT) as Script).new()
+	node.name = node_name
+	node.call(&"setup", self, player, kind, int(state["serial"]))
+	host.add_child(node)
+
+func _sync_figures(player: PlayerActor) -> void:
+	_sync_figure(player, FIGURE_GEOMETRY)
+	_sync_figure(player, FIGURE_REVELATION)
+
 # --- Hooks -------------------------------------------------------------------------------
 
 func on_attach(player: PlayerActor) -> void:
@@ -286,6 +359,7 @@ func on_tick(player: PlayerActor, delta: float) -> void:
 	if geometry_remaining > 0.0: _advance_geometry(player, delta)
 	if revelation_remaining > 0.0: _advance_revelation(player, delta)
 	_refresh_sources(player)
+	_sync_figures(player)
 
 func on_cast_confirmed(player: PlayerActor, cast: Dictionary) -> void:
 	# Any other skill of the Cultista interrupts the channel.
@@ -320,11 +394,12 @@ func before_hit_mitigation(player: PlayerActor, hit: Dictionary) -> Dictionary:
 	var madness := _madness(player)
 	return madness.before_hit(player, hit) if madness != null else {}
 
-func on_death(_player: PlayerActor) -> void:
+func on_death(player: PlayerActor) -> void:
 	_end_gaze()
 	_end_geometry()
 	revelation_remaining = 0.0
 	revelation_next_tick = 0.0
+	_sync_figures(player)
 
 func snapshot_compact_blocker(_player: PlayerActor) -> String:
 	if gaze_remaining > 0.0: return "cultist_channel"
@@ -497,6 +572,7 @@ func _resolve_geometry(player: PlayerActor, cast: Dictionary, values: SkillRankD
 	geometry_remaining = GEOMETRY_DURATION
 	geometry_next_pulse = GEOMETRY_INTERVAL
 	_geometry_pulse(player, cast.get("actors", []))
+	_sync_figure(player, FIGURE_GEOMETRY)
 	return true
 
 func _advance_geometry(player: PlayerActor, delta: float) -> void:
@@ -545,6 +621,7 @@ func _resolve_revelation(player: PlayerActor, cast: Dictionary, values: SkillRan
 			if MadnessHelpers.is_boss(enemy): madness.disorient(enemy, "revelation:%d" % revelation_serial, player, strong)
 	_revelation_tick(player, cast.get("actors", []))
 	_refresh_sources(player)
+	_sync_figure(player, FIGURE_REVELATION)
 	return true
 
 func _advance_revelation(player: PlayerActor, delta: float) -> void:

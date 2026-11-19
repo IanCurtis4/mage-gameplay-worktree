@@ -5,6 +5,8 @@ const FORMAT := "ragrpg_directional_animation_v2"
 const SIZE := Vector2(256, 1024)
 const SLOTS := ["main_hand", "off_hand", "arms"]
 const WEAPON_KEYS := ["sword", "axe", "staff", "bow", "shield", "prismatic_focus", "wooden_beads"]
+## E10a T16 (A15): prop ids may also appear in `angle_overrides`/`depth_overrides`, so a body can set the angle of one prop (the scepter) without tilting the others.
+const PROP_KEYS := ["prayer_book", "halo_scepter", "eye_reliquary"]
 static var _manifests: Dictionary = {}
 static var _textures: Dictionary = {}
 var _kind: StringName
@@ -134,9 +136,9 @@ static func _validate_frame(raw: Variant, index: int, images: Array[Image], equi
 			if not _crop(pose.get("fingers")): return "invalid_finger_crop"
 			if not pose.get("angle_overrides",{}) is Dictionary or not pose.get("depth_overrides",{}) is Dictionary: return "invalid_overrides"
 			for key: Variant in pose.get("angle_overrides",{}):
-				if key not in WEAPON_KEYS or not _angle(pose.angle_overrides[key]): return "invalid_angle_override"
+				if (key not in WEAPON_KEYS and key not in PROP_KEYS) or not _angle(pose.angle_overrides[key]): return "invalid_angle_override"
 			for key: Variant in pose.get("depth_overrides",{}):
-				if key not in WEAPON_KEYS or not _integer(pose.depth_overrides[key],0,1): return "invalid_depth_override"
+				if (key not in WEAPON_KEYS and key not in PROP_KEYS) or not _integer(pose.depth_overrides[key],0,1): return "invalid_depth_override"
 			if equippable and slot != "arms" and index%16 < 14:
 				if tile.get_pixel(int(pose.point[0]),int(pose.point[1])).a <= 0.5: return "grip_outside_body"
 				var crop := tile.get_region(Rect2i(int(pose.fingers[0]),int(pose.fingers[1]),int(pose.fingers[2]),int(pose.fingers[3])))

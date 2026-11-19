@@ -7,7 +7,7 @@ const FAMILY: Array[StringName] = [&"acolyte", &"priest", &"cultist"]
 const CLOTH_IDENTITIES: Array[StringName] = [&"mage", &"elementalist", &"spiritualist", &"mg_ar", &"acolyte", &"priest", &"cultist"]
 ## id -> [quality, min level, max level, starter, art size at x4, logical grip, angle]
 const EXPECTED := {
-	&"prayer_book": [&"common", 2, 5, true, Vector2(80, 120), Vector2(10, 12), 0.0],
+	&"prayer_book": [&"common", 2, 5, true, Vector2(64, 96), Vector2(8, 12), 0.0],
 	&"halo_scepter": [&"rare", 6, 10, false, Vector2(60, 168), Vector2(7.5, 33), 0.2],
 	&"eye_reliquary": [&"rare", 6, 10, false, Vector2(56, 152), Vector2(7, 7), 0.0],
 }
