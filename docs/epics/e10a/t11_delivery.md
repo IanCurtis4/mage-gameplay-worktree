@@ -67,3 +67,46 @@ Um, com número exato: `tests/e06_publication_test.gd` linha 28, `ids(&"augment"
 ## Próximo passo
 
 T13 compõe esta ponta no candidato; conferir a contagem 37 após a composição.
+
+## A16 — correção na composição 8 (parcial: item 1 feito, item 2 bloqueado)
+
+Worktree recriada da branch e levada ao candidato por `git merge --ff-only claude/e10a-candidato` (HEAD `c497f26e`).
+
+**Item 1 (feito):** `tests/e09/ui_evolution_test.gd`, `_install_states`: `ClassKitRegistry.ids()` → `hybrid_ids()`. Nenhuma expectativa mudou. Antes: falha por `unknown_skill_target` (Sacerdote e Cultista viravam esqueleto); depois: 97 checks, 0 falhas.
+
+**Item 2 (NÃO entregue, reportado à arquitetura):** `e07_f1_composition_test`.
+- A contagem `27 → 31` e os ranks da família no `_setup` ficaram só na árvore de trabalho, sem commit. Com isso: 342 checks, 2 falhas (antes 3); `pilot_acolyte_pressure` (básico) e `pilot_cultist_a` (`cultist_shared_delirium`) passam.
+- `pilot_priest_b` (`priest_judgment`): a coluna do Juízo acerta o inimigo do andar de cima também (`JUDGMENT_COLUMN_HALF_HEIGHT = 200`, a ponte está a y=40). Medido: `lower` 100000→99856 e `upper` 100000→99856. O check "nunca projeta no outro andar" não é satisfeito por desenho da coluna.
+- `pilot_cultist_b` (`cultist_abyss_gaze`): `gaze_targets` retorna 0 alvos porque a família só reconhece inimigo que seja `EnemyActor` (`MadnessHelpers.is_enemy` exige `set_target_override`; `madness_authority.gd:325` tipa `hostile` como `EnemyActor`). O fixture usa `CombatActor`; um carrier com os métodos falsos ainda quebra no `as EnemyActor` (Nil). Prova do cone: facing e posições corretos, `channeling=true`, 0 alvos.
+- Não é lacuna do PROC em si (o handler dispara); é o fixture F1 sem `EnemyActor` real e a coluna do Juízo sem filtro de andar. Decisão para a arquitetura: fixture com `EnemyActor` real, ou filtro de andar no Juízo (T15), ou check específico.
+
+### Testes depois da A16 (item 1)
+
+| Teste | Resultado | sha256 |
+|---|---|---|
+| `ui_evolution_test` | 97 checks, 0 falhas | `AF5649F0015025B91CD431E0D5A6AC607D4D490757B4B471B39C45DF7B823E60` |
+| `augments_test` | 180 checks, 0 falhas | `D2080594CFEB43E2D9225D07137E629AFA2586980F8246E5464AF1E83ED2357A` |
+| `e06_publication_test` | 1162 checks, 0 falhas | `BBEA52A2C04245B24C361A4E8EBD95FEA8B9D744F6A6F396851B0BB180A27EC8` |
+| `ui_family_test` | 86 checks, 0 falhas | `99F94E287D1454AB5E4F01AE6ED08C2BCE71DD0B6502A16318CF903DDA899D2D` |
+| `kit_seam_test` | 276 checks, 0 falhas | `387339E5A5C3F2A138ED2301861C3BC9EA4FBEC29810CB397E25270B55B7C888` |
+| `e07_f1_composition_test` | 342 checks, **2 falhas** (priest_b, cultist_b), com edições não commitadas | n/a |
+
+## A19 — fecho do item 2 (decisão de Astra `fe12a023`)
+
+`tests/e07_f1_composition_test.gd`: contagem 27 → 31 (rótulo "all31"); `_setup` dá à base `acolyte` os ranks da família e, nos casos da família, `lower` e `upper` são `EnemyActor` reais (`configure(&"chaser", …)`, mesmo ponto e mesmo andar da fixture), sem carrier falso e sem check específico; SP e facing de solo no PROC de skill de kit, e 25 passos de 0,1 s do relógio real para o canal do Olhar. Rótulos dos dois checks de PROC passaram a citar a família (diagnóstico).
+
+Resultado: 342 checks, **2 falhas**, ambas no check "contato causal respeita corpo/andar": medições com `lower`/`upper` (vida antes → depois):
+
+| Caso | lower | upper (outro andar) |
+|---|---|---|
+| `pilot_priest_b` (Juízo) | 100000 → 99854 | 100000 → 99854 |
+| `pilot_cultist_b` (Olhar do Abismo) | 100000 → 99829 | 100000 → 99829 |
+| `pilot_cultist_a` (Delírio Compartilhado, alvo único) | 100000 → 99907 | 100000 → 100000 (passa) |
+
+O Juízo é o defeito já classificado como de runtime (T15, `SanctuaryHelpers.judgment_targets`). **O Olhar do Abismo também fica vermelho pelo mesmo tipo de defeito:** com `EnemyActor` reais o cone atinge, mas `CultistKit.gaze_targets` mede só a distância no plano (`FlankRules.ground_position`, sem filtro de altura), então também acerta o inimigo da ponte. Não toquei nesse check nem criei exceção; vai à T15 junto com o Juízo.
+
+| Teste | Resultado | sha256 |
+|---|---|---|
+| `e07_f1_composition_test` | 342 checks, 2 falhas (Juízo e Olhar, T15) | `D6BDB098A441404858A07DC454D05D54BDD38C7F02F285FFCE5D5D1E0AF4282F` |
+| `ui_evolution_test` | 97 checks, 0 falhas | `AF5649F0015025B91CD431E0D5A6AC607D4D490757B4B471B39C45DF7B823E60` |
+| `augments_test` | 180 checks, 0 falhas | `D2080594CFEB43E2D9225D07137E629AFA2586980F8246E5464AF1E83ED2357A` |
