@@ -93,7 +93,7 @@ func _run() -> void:
 
 func _install_states(ready_ids: Array) -> void:
 	ClassKitRegistry.clear_fixtures()
-	for id: StringName in ClassKitRegistry.ids():
+	for id: StringName in ClassKitRegistry.hybrid_ids():
 		ClassKitRegistry.install_fixture(id, FixtureKit.new(id) if id in ready_ids else SkeletonKit.new(id))
 
 func _open_menu(origin: StringName, label: String) -> CharacterMenu:
