@@ -843,3 +843,118 @@ Sem conflito. Importação exit 0 (`63693721…B541`); bootstrap F1: 255 com a f
 Evidência: `.godot/verification/e10a_t12_evidence/` (36 arquivos, manifesto `DBFB1F2D…`; a fixture
 `e10a_t12_fixture`, regenerável, não foi copiada). A worktree da T12 saiu do registro do Git (pasta vazia e
 ocupada); branch em `2d3bfc57`.
+
+## Composição 13 e fechamento (C10, §11) (19/11/2026)
+
+### Composição 13
+
+| Origem | Ponta | Merge |
+|---|---|---|
+| arquitetura (A24) | `91356e00` | `5e979df3` (só `docs/epics/e10a.md`) |
+| T12, correção do vazamento (A24) | `7071c8bc` | `a432e56f` |
+
+Mais dois commits meus, de enumeração exata: `4f4140eb` (`tests/e06_export_content_test.gd`, 31 → 37 augments,
+autorizado pela A24, enumeração da A15 do E09) e `93f1425b` (`tools/export_content_probe.gd`, 89 → 92
+equipamentos e 31 → 37 augments, ferramenta de release). **O commit testado e exportado é `a432e56f`.**
+
+### Suíte completa (`tools/verify.ps1` sem `-Test`)
+
+- **Ambiente:** worktree limpo e destacado (`.claude/worktrees/e10a-suite`), sem alterações rastreadas;
+  `Godot_v4.7.2-stable_win64.exe` em `-GodotPath` (A7); um passo por chamada, timeout 300 s; os quatro
+  passos de bootstrap (`editor_import`, `e07_f0_import_test`, `e07_f1_native_import`, `e07_f1_import_test`)
+  sem `-F1Fixture` e os outros 367 com ele, como no E09. Uma chamada única (todos os passos juntos) não serve:
+  o `e08_presentation_test` (passo 11) falha com "stale fixture" porque a fixture F1 só nasce no 255 e 256.
+- **Rodada completa sobre `363f6671`:** 371 passos, **161 min**, 0 timeouts. 365 verdes e 6 vermelhos:
+
+| Passo | Teste | Resultado | Destino |
+|---|---|---|---|
+| 255 | `e07_f1_native_import` | `Cannot get class 'GitPlugin'`, hash `AB79025F…831F` | falha conhecida (A7), igual em todas as rodadas |
+| 80, 81, 89, 92 | `e04_archer_snare_trap`, `e04_archer_explosive_trap`, `e04_mage_electric_discharge`, `e04_mage_haunt` (`_rank_integration_test`) | passam, mas `N resources still in use at exit` (20, 34, 22, 22) | T12: `static var _hud_warned` em `player_actor.gd`; A24 |
+| 250 | `e06_export_content_test` | `augment: expected 31 resources, found 37` | contagem exata da T11; A24 |
+
+  A bisseção do vazamento rodou o passo 80 em `34228347` (`master`), `5fd7dd86`, `a3a03708`, `2a1ebb8b`,
+  `2107f222` e `f872b025` (sem vazamento) e em `67aeef30` e `363f6671` (com). Trocando só a `static var` por
+  variável de instância, no meu worktree e depois revertido, o passo voltou a limpo. O passo 148
+  (`e05_sentinel_net_test`) passou, sem o vazamento de 1 recurso da A7.
+- **Repetição sobre `a432e56f` (A24):** 37 passos, **todos verdes, exceto o 255**: os quatro `e04_*` (69, 56,
+  71 e 84 checks, sem `still in use`), o 148, o 250 (180 checks, 0 falhas) e a lista de HUD, kit e família
+  (`hud_family_test` 118, `hud_seam_test` 194, `hud_components_test` 168, `hud_integration_test` 234, os quatro
+  `_hud_test` das híbridas, `acolyte_base_test` 332, `priest_kit_test` 240, `cultist_kit_test` 237,
+  `madness_test` 276, `kit_seam_test` 276, `base_seam_test` 172, `e07_f1_composition_test` 342, `sanctuary_test`
+  155, `family_world_test` 149, `family_integration_test` 60, `ui_family_test` 86, `ui_evolution_test` 97,
+  `augments_test` 180, `e06_publication_test` 1162, `e08_feedback_recipe_test` 1433, `mage_gameplay_test` 52).
+  Os demais 334 passos da rodada completa não dependem das mudanças feitas depois dela (a correção da T12 mexe
+  em `player_actor.gd` e `kit_hud_state.gd`; o 250 é um teste de contagem), e não foram repetidos.
+- **Evidências** (fora do Git, `.godot/verification/`): `t13_full/full/` (371 pastas e `steps.tsv`,
+  SHA256 `B78FD172…`), `t13_full/run2` e `t13_full/run` (tentativas que não valeram, ver acima),
+  `t13_final/partial/` (repetição, `steps.tsv` `AC1F8BAF…`).
+
+### Exportação sobre `a432e56f`
+
+- **Ferramentas novas:** `tools/e10a_package.ps1` (derivada da E09: fixture da F1 em paridade, mesmo motor e
+  template verificados, VCS desligado, plugin do editor de mapas ativo, app "RagRPG E10a Candidato" com saves
+  isolados), `tools/e10a_release_probe.gd` e `tools/e10a_crowd_probe.gd`. `export_presets.cfg` ganhou
+  `scripts/classes/cultist/fixture/*` e `scripts/systems/madness/fixture/*` no `exclude_filter`; sem isso os
+  fixtures da Loucura e do Cultista iriam para o PCK. O `include_filter` já cobre os
+  `snapshot_manifest.json` novos (`scripts/classes/*/snapshot_manifest.json` casa
+  `scripts/classes/bases/acolyte/…`, e a sonda confere a lista exata).
+- **Destino:** `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/playtest_e10a/a432e56f/` (360 MB).
+
+| Arquivo | Bytes | SHA256 |
+|---|---|---|
+| `RagRPG-E10a-Candidato.exe` | 109.127.680 | `4A9EADED8955EF789AB02651ED9D2DDE80328FBB342BD2A6DB4DB33E86305668` |
+| `RagRPG-E10a-Candidato.pck` | 252.113.472 | `D5B0970612FD3309B704A0F011CD8ACBE6BC4B238335825A2B815242647B6DFE` |
+
+- **Paridade com a fixture:** 3695 entradas do manifesto iguais, 2999 arquivos rastreáveis, 282 artes-fonte
+  fora do PCK (regra do E08); o PCK tem 3977 entradas.
+- **Sondas no PCK exato, todas verdes** (`validation/runs.json`):
+  - `inspect_pack_e10a`, **23 de 23 checks**: o Acólito como base registrada pronta e criável; só Sacerdote e
+    Cultista como puras e oferecidas no job 20 (as quatro híbridas seguem registradas); onboarding dos dois; os
+    **3 corpos** V2 (6 texturas); os **22 ícones** e o ícone próprio de cada uma das 22 skills; as 22 receitas de
+    feedback e as entradas de efeito (`acolyte` 6, `cultist` 9, `priest` 10) resolvendo; os **3 itens**
+    (definição, loot nas faixas, ícone pintado e arte na mão); o catálogo de conteúdo e o resolvedor de loot
+    de produção; os **fragmentos de snapshot** exatos e fundidos sem erro (22 de 22 tipos); nenhum fixture no
+    pacote.
+  - `inspect_pack_e08` (regressão do E08 no PCK), `normal_boot` (menu normal), `forest_map_pack` (a fase da
+    floresta abre do PCK) e `export_content` (contagens 92 equipamentos, 37 augments).
+- **Perfis de revisão** (a ferramenta da T10, no PCK exato; job 40; 4 perfis, 0 inválidos): Sacerdote
+  (Bastião da Fé, Inquisição) e Cultista (Profeta, Vidente), cada um isolado dentro da própria pasta; 4
+  lançadores `.cmd` e 4 atalhos "Jogar E10a - <classe> - <build>".
+- **Smoke:** o EXE abre pelo ambiente de um lançador, fica vivo 25 s com a janela "RagRPG E10a Candidato" (386 MB
+  de working set), fecha limpo, sem linha de erro, e o perfil não muda (SHA256 antes e depois iguais).
+
+### Medição de multidão (sem alegar FPS)
+
+Protocolo (`measure_e10a_final/protocol.json`): a mesma sonda (`tools/e10a_crowd_probe.gd`) nos dois PCKs, na
+mesma sessão, `gl_compatibility` em janela 1280×720 sem vsync, 3 rodadas com a ordem alternada, 96 atores como
+na sonda do E08, GTX 1080 e i7-8700. O PCK do E08 (`db7f9252`, SHA256 `3D7456FB…7330`, conferido) não tem a
+Loucura, então o Delírio só existe no candidato. **No candidato, três inimigos reais da floresta ficam em
+Delírio durante toda a amostra** (D4: no máximo três), entrados pela `MadnessAuthority` de produção, com o `tick`
+da autoridade e o relógio de cada inimigo a cada quadro: 3281 a 3424 quadros por rodada, todos com Delírio ativo.
+
+| Pacote | Mediana, movendo (ms, 3 passes por rodada) | Mediana, parado (ms) | Chamadas de desenho | Pico de memória (bytes) |
+|---|---|---|---|---|
+| E08 `db7f9252` | 6,18 a 6,31 | 3,33 a 3,46 | 288 | 424.8 M |
+| E10a candidato | 6,93 a 7,21 | 3,94 a 4,30 | 306 | 440.4 M a 440.9 M |
+
+O candidato mede cerca de 0,7 ms a mais por quadro movendo e 0,6 ms parado, com 18 chamadas de desenho a mais.
+**A comparação não é de igual para igual:** a camada do candidato acrescenta um jogador na árvore, seis
+inimigos reais da floresta e o `tick` do Delírio, que o E08 não tem. Os números dizem só isso; não são uma
+certificação de desempenho nem um valor de FPS. As três rodadas concordam entre si.
+
+### Roteiro e revisão
+
+`docs/epics/e10a/playtest_guide.md`: como abrir, as quatro builds nomeadas, e o roteiro (criação do Acólito,
+evolução, Loucura, Sacerdote, Cultista, HUD, livro, cetro e relicário, augments, seleções de andar A19–A22, Fé
+Protetora sobre a Égide, a fase da floresta com o Guardião Antigo e o roteiro do E06 com o Mestre das Feras).
+
+### Limitações
+
+- O passo 255 falha em toda rodada (a falha conhecida do `GitPlugin`, A7); não é regressão.
+- Dos 371 passos, 334 não foram repetidos depois de `363f6671`: o que mudou depois (`player_actor.gd` só na
+  composição de HUD, `kit_hud_state.gd`, uma contagem de teste, ferramentas e documentos) está coberto pelos
+  37 passos repetidos. Se a T14 preferir uma segunda rodada completa, é uma decisão dela.
+- `tests/e06_export_content_test.gd` e `tools/export_content_probe.gd` são enumerações exatas e mudam a cada
+  conteúdo novo (equipamentos e augments).
+- Os fixtures (`e07_f1`, `e07_f2`, `e08_art_units`…) e as pastas de verificação ocupam muito disco: ficam em
+  `.godot/verification/` do candidato e do worktree `e10a-suite`, que o próximo executor pode remover.

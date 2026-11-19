@@ -1,6 +1,6 @@
 # Roteiro de playtest — candidato E10a
 
-Candidato `{SHA}` (branch `claude/e10a-candidato`): a base **Acólito** e as duas evoluções puras,
+Build do commit `a432e56f` (branch `claude/e10a-candidato`; os commits seguintes só acrescentam documentos): a base **Acólito** e as duas evoluções puras,
 **Sacerdote** e **Cultista**, mais o HUD da família. Aprovação técnica não é aceite: este roteiro
 serve para o seu aceite visual e de jogo. Os números dos kits são ajuste de playtest, não equilíbrio
 certificado.
@@ -8,7 +8,7 @@ certificado.
 ## Como abrir
 
 - **Build Windows (recomendado para o aceite):** pasta
-  `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/playtest_e10a/{SHA}/`.
+  `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/playtest_e10a/a432e56f/`.
   - Abra pelos atalhos **"Jogar E10a - <classe> - <build>"**. Cada atalho usa um perfil isolado dentro
     da própria pasta, com um personagem no job 40 e a build já montada.
   - O perfil é separado do RagRPG habitual; o save pessoal não é lido nem alterado. Não copie saves
@@ -104,4 +104,4 @@ O personagem se chama "E10a <build>".
 
 - Mortos-vivos e fantasmas: o bônus do Exorcista contra eles fica dormente até a categoria existir.
 - Nenhum som novo: as deixas de áudio que faltam ficam como lacunas registradas (`KIT_AUDIO_GAPS`).
-- A medição de multidão com Delírio ativo está no recibo da T13; ela não alega FPS.
+- A medição de multidão com Delírio ativo está no recibo da T13 (`t13_delivery.md`); ela compara duas builds na mesma sessão e não alega FPS.
