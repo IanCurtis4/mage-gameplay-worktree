@@ -64,7 +64,6 @@ func _check(condition: bool, label: String) -> void:
 func _run() -> void:
 	ClassKitRegistry.clear_fixtures()
 	KitHudState.reset_reports()
-	PlayerActor.reset_hud_composition_warnings()
 	var args := OS.get_cmdline_user_args()
 	if not args.is_empty(): capture_directory = String(args[0])
 	root.size = Vector2i(1280, 720)
@@ -408,7 +407,7 @@ func _check_collision() -> void:
 	var first := _state(&"acolyte", [_resource(&"madness_a", "Primeiro", 1), _resource(&"sanctuary_grace", "Graça A", 2)], [_zone(&"shared", 30.0)], [_mark(target, &"madness_delirium")], judgment)
 	var second := _state(&"priest", [_resource(&"sanctuary_grace", "Graça B", 4), _resource(&"priest_extra", "Extra", 5)], [_zone(&"shared", 99.0), _zone(&"only_second", 40.0)], [_mark(target, &"madness_delirium"), _mark(target, &"priest_light_seal")], rivals)
 	var stubs := _stubs(controller, first, second)
-	PlayerActor.reset_hud_composition_warnings()
+	KitHudState.reset_reports()
 	var dto := player.kit_hud_state()
 	_check(stubs[0].reads == 1 and stubs[1].reads == 1, "each module is read once")
 	_check(dto.get("kit_id") == &"priest" and dto.get("schema") == KitHudState.SCHEMA, "kit_id is the active identity (the evolution)")
@@ -430,7 +429,10 @@ func _check_collision() -> void:
 	await _discard(controller)
 
 func _composition_warning_count() -> int:
-	return PlayerActor._hud_warned.size()
+	var count := 0
+	for report: String in KitHudState.reported_warnings():
+		if report.begins_with("composition:"): count += 1
+	return count
 
 func _check_invalid_module() -> void:
 	var controller := _mount_family(&"priest", 1)

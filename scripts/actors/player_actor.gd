@@ -2771,22 +2771,14 @@ func kit_hud_state() -> Dictionary:
 	if not marks.is_empty(): merged["target_marks"] = marks
 	return merged
 
-## Warning keys of the HUD composition already reported (one per duplicate key).
-static var _hud_warned: Dictionary = {}
-
-## True when `key` is new in the composition; a repeat keeps the first and warns once per key.
+## True when `key` is new in the composition; a repeat keeps the first and warns once per key
+## (KitHudState.warn_duplicate: the registry is static there, not here).
 func _hud_claim(seen: Dictionary, key: String, owner: String) -> bool:
 	if not seen.has(key):
 		seen[key] = owner
 		return true
-	if not _hud_warned.has(key):
-		_hud_warned[key] = true
-		push_warning("PlayerActor.kit_hud_state: duplicate HUD key '%s' from '%s' dropped (kept the one from '%s')." % [key, owner, seen[key]])
+	KitHudState.warn_duplicate(key, owner, String(seen[key]))
 	return false
-
-## Test helper: forgets the composition warnings.
-static func reset_hud_composition_warnings() -> void:
-	_hud_warned.clear()
 
 func skill_cast_time(skill_id: StringName) -> float:
 	var rank_definition := _runtime_rank_definition(skill_id)
