@@ -761,3 +761,61 @@ PROC da composição 8 caíram para 2: o `_setup` da família e a contagem 31 pa
 Evidência da correção copiada para `.godot/verification/e10a_t11_evidence/fix_a16_a19/` (18 arquivos,
 manifesto `e10a_t11_fix_manifest.sha256`, `66B2FE85…`). A worktree da T11 foi removida de novo (a pasta
 ficou vazia e ocupada); a branch fica em `fddea9ed`.
+
+## Composição 11 — T16, T15 e ponta A21 e A22 (19/11/2026)
+
+| Ordem | Origem | Ponta | Merge |
+|---|---|---|---|
+| 1 | T16 (`claude/modest-franklin-aa99e3`) | `8530b3e5` | `2a1ebb8b` |
+| 2 | T15 (`claude/youthful-meninsky-4da2e3`) | `223f05e8` | `2107f222` |
+| 3 | arquitetura (A21, A22) | `8917268b` | `f872b025` (só `docs/epics/e10a.md`) |
+
+**Sem conflito nos três merges.** `scripts/classes/cultist/cultist_kit.gd` (o arquivo que a A21 apontou) entrou
+por auto-merge: os hunks da T16 e os da T15 estão em regiões separadas. Conferi o resultado contra as duas
+pontas: contra a T15 só diferem os hunks da T16 (constantes, `draw_vfx`, `figure_state`/`_sync_figure(s)`,
+`on_tick`, `on_death`, e as chamadas a `_sync_figure` em `_resolve_geometry` e `_resolve_revelation`); contra a
+T16 só diferem os da T15 (`gaze_targets`, a chamada em `_advance_geometry`, `_revelation_tick`). Logo
+`gaze_targets`, `_geometry_pulse` e `_in_sight` ficam com o texto da T15, como a A21 pede.
+
+### Importação e testes de impacto
+
+Importação exit 0 (`FBAF3F88…64F1`); bootstrap F1: 255 com a falha conhecida (`AB79025F…831F`), 256 passou
+(`76870A7C…274E`), refeito depois do último merge. **33 passos (32 nomes; `equipment_items_test` tem dois),
+todos verdes**, um por chamada, 0 timeouts, sem `SCRIPT ERROR`, `still in use` ou `ObjectDB`. Logs em
+`.godot/verification/t13_c11/` (fora do Git).
+
+| Passo | Teste | Resultado | Saída (8) |
+|---|---|---|---|
+| 321 | `e07_f1_composition_test` | **342 checks, 0 falhas** (fecha as duas falhas aceitas), `recipes=31` | `4540C933` |
+| 345 | `sanctuary_test` | 155 | `01B74920` |
+| 362 / 361 / 360 | `sp_ac_kit_test` / `sp_ac_hud_test` / `sp_ac_boss_combat_test` | 170 / 57 / 25 | `2229F2DC` / `11A7268D` / `26957117` |
+| 341 / 340 | `family_world_test` / `family_integration_test` | 149 / 60 | `E7659AD9` / `9369764E` |
+| 346 / 347 | `acolyte_base_test` / `acolyte_boss_combat_test` | 332 / 295 | `93F81F64` / `BBD898B8` |
+| 359 / 358 | `priest_kit_test` / `priest_boss_combat_test` | 240 / 32 | `64BC6C0B` / `16BBBC37` |
+| 350 / 348 / 349 | `cultist_kit_test` / `cultist_boss_combat_test` / `cultist_campaign_kill_test` | 237 / 49 / 20 | `3D91804D` / `88E65883` / `212B00D3` |
+| 344 / 333 | `madness_test` / `kit_seam_test` | 276 / 276 | `D4DAEAF5` / `60643509` (iguais) |
+| 331 / 332 / 336 | `kit_seam_hooks_v2_test` / `v3_test` / `base_seam_test` | 38 / 63 / 172 | iguais às composições 8 e 9 |
+| 339 | `family_bodies_test` | 7425 | `0C332E50` |
+| 329 / 338 | `equipment_items_test` (E09 / E10a) | 244 / 301 | `EB9A6284` / `97A9EEBE` (iguais) |
+| 239 / 20 | `equipment_hand_alignment_test` / `e08_equipment_art_test` | 4593 / 100863 | `38A87BF0` / `5F377D76` (iguais) |
+| 26 / 27 | `e08_feedback_recipe_test` / `e08_feedback_vfx_test` | PASS 1433 / 697 | `1601B34D` / `BF9FE3B0` (iguais) |
+| 334 / 342 / 335 | `ui_evolution_test` / `ui_family_test` / `augments_test` | 97 / 86 / 180 | `DF7B1619` / `9D58F18C` / `D2E49FD9` (iguais) |
+| 369 / 367 / 368 | `hud_seam_test` / `hud_components_test` / `hud_integration_test` | 194 / 167 / 234 | `4B5ED8FE` / `6C770612` / `940E9619` (iguais) |
+| 33 | `mage_gameplay_test` | PASS, 52 | `02D14E4B` (igual) |
+
+Os números conferem com os que a arquitetura esperava (`e07_f1_composition_test` 342, `sanctuary_test` 155,
+`family_world_test` 149, `priest_kit_test` 240, `cultist_kit_test` 237, `family_bodies_test` 7425). Os índices dos
+passos mudaram (a T15 trouxe dois testes novos em `tests/e10a`); os hashes das saídas dos testes que nenhuma das
+duas tarefas tocou não mudaram.
+
+### Evidências ignoradas pelo Git e worktrees
+
+| Tarefa | Pasta no candidato | Arquivos | Manifesto SHA256 |
+|---|---|---|---|
+| T16 | `.godot/verification/e10a_t16_evidence/` (inclui `e10a_t16_ui` e `verification_t16`) | 93 | `14A01747…` |
+| T15 | `.godot/verification/e10a_t15_evidence/` (inclui `t15_evidence` e `t15_probe`) | 99 | `37A19F32…` |
+
+Cada pasta tem `…_manifest.sha256` ao lado. Não copiei as subpastas de fixture (`e07_f1`, `e07_f2`,
+`e08_art_units`, `f1_visual_fixture`), regeneráveis. As duas worktrees só tinham `.import` reescritos; saíram do
+registro do Git e as pastas ficaram vazias e ocupadas (sessões abertas). Branches mantidas em `8530b3e5` e
+`223f05e8`. A T12 pode partir do candidato desta composição.
