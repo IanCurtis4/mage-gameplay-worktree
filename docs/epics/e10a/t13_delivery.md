@@ -958,3 +958,23 @@ Protetora sobre a Égide, a fase da floresta com o Guardião Antigo e o roteiro 
   conteúdo novo (equipamentos e augments).
 - Os fixtures (`e07_f1`, `e07_f2`, `e08_art_units`…) e as pastas de verificação ocupam muito disco: ficam em
   `.godot/verification/` do candidato e do worktree `e10a-suite`, que o próximo executor pode remover.
+
+### Playtest habitual (`codex/playtest`) (19/11/2026)
+
+- **Avanço:** fast-forward de `7795f56d` até `4f589803` (o candidato `a432e56f` mais os documentos do
+  fechamento; nenhum arquivo de runtime muda entre os dois). Sem `master`, sem push.
+- **Backup antes do avanço**, em `.tools/playtest_backup_e10a_20261119/`: `status_before.txt` (1980 entradas),
+  `inventory_before.json` (SHA256 `172DEAB3…`), `local_tracked_changes.patch` (`253073A4…`) e
+  `save_hashes_before.json` (`37B2C25E…`). Das 587 modificações rastreadas, só 2 têm conteúdo:
+  `export_presets.cfg` (`export_path` `v0.4` → `v0.6`) e `docs/epics/e07.md`; as outras 585 são `.import` que
+  diferem só no fim de linha.
+- **Cruzamento com o delta** (432 arquivos): um único caminho em comum, `export_presets.cfg`. A edição local é
+  vizinha da linha de filtro que mudei, e o avanço recusaria. O arquivo foi restaurado ao commit, o avanço foi
+  feito e a edição local (a troca para `v0.6`) foi reaplicada sobre o preset do candidato; o diff local é de novo só essa
+  linha. Nenhum arquivo não rastreado local coincide com um arquivo do delta.
+- **Depois do avanço:** as outras 1979 alterações locais estão byte-idênticas (inventário refeito com o mesmo
+  conjunto de caminhos, `status_after.txt` com os mesmos 587 ` M` e 1393 `??`), inclusive `docs/epics/e07.md`.
+  Os 5 arquivos do save pessoal (`profile.json`, `profile.backup.json`, `controls.cfg` e os de `admin_backups`)
+  conferem por hash antes e depois, sem o conteúdo ter sido lido no registro.
+- **Não feito:** não rodei importação headless no diretório habitual; o Godot importa os assets novos na
+  primeira abertura. A build do roteiro (`.tools/playtest_e10a/a432e56f/`) não depende disso.
