@@ -11,6 +11,9 @@ var delirium_rows: Dictionary = {}
 var delirium_player: PlayerActor = null
 var delirium_authority: RefCounted = null
 var delirium_mobs: Array[EnemyActor] = []
+var delirium_serial := 0
+var delirium_frames := 0
+var delirium_active_frames := 0
 func _initialize() -> void: run.call_deferred()
 func run() -> void:
 	var tick_only := "--cpu-tick" in OS.get_cmdline_user_args()
@@ -61,7 +64,9 @@ func run() -> void:
 		rows.append(row); print("WORLD_CROWD_SAMPLE ",JSON.stringify(row))
 	await RenderingServer.frame_post_draw
 	root.get_texture().get_image().save_png(OS.get_environment("TERRAIN_EVIDENCE").path_join("world_crowd.png"))
-	print("WORLD_CROWD_RESULT ",JSON.stringify({"ok":rows.size()==6,"rows":rows,"draw_calls":Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),"delirium":delirium_report()})); quit()
+	var report := delirium_report()
+	cleanup_delirium()
+	print("WORLD_CROWD_RESULT ",JSON.stringify({"ok":rows.size()==6,"rows":rows,"draw_calls":Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),"delirium":report})); quit()
 
 ## Run the same full actor callback with a fixed delta. Time the 96 actors
 ## together, with no frame scheduling or renderer work inside the sample.
@@ -149,9 +154,28 @@ func advance_delirium(delta: float) -> void:
 		if is_instance_valid(hostile) and hostile.is_alive():
 			hostile.advance_statuses(delta)
 			hostile._advance_target_override(delta)
+	# Keep up to three enemies in Delirium (D4 cap) for the whole sample: a new event re-enters it.
+	for hostile: EnemyActor in delirium_mobs:
+		if delirium_authority.delirium_count(delirium_player, delirium_mobs) >= 3: break
+		if is_instance_valid(hostile) and hostile.is_alive():
+			delirium_serial += 1
+			delirium_authority.add(hostile, 100.0, "t13_crowd_again@%d" % delirium_serial, delirium_player, false, delirium_mobs)
 	delirium_authority.tick(delirium_player, delta, delirium_mobs)
+	delirium_frames += 1
+	if delirium_authority.delirium_count(delirium_player, delirium_mobs) > 0: delirium_active_frames += 1
 
 func delirium_report() -> Dictionary:
 	if delirium_authority != null:
 		delirium_rows["delirium_count_end"] = delirium_authority.delirium_count(delirium_player, delirium_mobs)
+		delirium_rows["frames_with_delirium"] = delirium_active_frames
+		delirium_rows["frames_ticked"] = delirium_frames
 	return delirium_rows
+
+## Free the Delirium layer before quitting so the engine exits without leaked resources.
+func cleanup_delirium() -> void:
+	delirium_authority = null
+	for hostile: EnemyActor in delirium_mobs:
+		if is_instance_valid(hostile): hostile.free()
+	delirium_mobs.clear()
+	if is_instance_valid(delirium_player): delirium_player.free()
+	delirium_player = null
