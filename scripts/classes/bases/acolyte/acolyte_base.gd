@@ -175,7 +175,7 @@ func skill_texts() -> Dictionary:
 		WHISPER: {"flavor": "Algo atrás de você diz o seu nome.", "effect": "Um sussurro em cone curto dá Loucura aos inimigos à frente e afasta os comuns por um instante. O chefe não recua.", "combo": "Com a Visão Eldritch carregada, a Loucura do Sussurro vale o dobro.", "mechanics": "Cone curto de 50° de semiângulo; sem dano; empurra os comuns."},
 		VISION: {"flavor": "Os olhos se abrem para o que não devia ser visto.", "effect": "Por alguns segundos, o ataque básico alcança mais longe, e o próximo Selo Sombrio ou Sussurro dá o dobro de Loucura.", "combo": "Feche com o Sussurro para levar a Loucura ao limiar.", "mechanics": "Reforço curto; a carga some ao usar ou ao fim do reforço."},
 		DEVOTION: {"flavor": "Servir e contemplar são o mesmo ofício, em turnos.", "effect": "Usar uma skill de luz e depois uma de sombra (ou o contrário) deixa a skill seguinte mais forte.", "combo": "Vale também para as skills da evolução, pelo elemento de cada uma.", "mechanics": "Passiva automática; alterna light e shadow em até 8s."},
-		FAITH: {"flavor": "Quem crê é mais difícil de ferir.", "effect": "Toda cura recebida rende mais, e a barreira do Escudo Votivo fica mais forte.", "combo": "Soma-se à cura do Santuário e à Graça do Sacerdote.", "mechanics": "Passiva automática; cura extra do mesmo tamanho pedido."},
+		FAITH: {"flavor": "Quem crê é mais difícil de ferir.", "effect": "Toda cura recebida rende mais, e toda barreira recebida fica mais forte: o Escudo Votivo, a Égide do Sacerdote e as outras.", "combo": "Soma-se à cura do Santuário e à Graça do Sacerdote.", "mechanics": "Passiva automática; cura extra do mesmo tamanho pedido; barreiras de qualquer fonte, uma vez cada."},
 	}
 	for skill: StringName in SKILLS:
 		var ranks: Array[String] = []
@@ -211,7 +211,7 @@ func rank_tooltip(skill_id: StringName, rank: int) -> String:
 			return "R%d: a skill seguinte ao par luz e sombra sai com MATQ +%d%%" % [rank, roundi(DEVOTION_BONUS[i] * 100.0)]
 		FAITH:
 			if i < 0 or i >= 3: return ""
-			return "R%d: cura recebida e barreira do Escudo Votivo +%d%%" % [rank, roundi(FAITH_BONUS[i] * 100.0)]
+			return "R%d: cura recebida e barreiras recebidas +%d%%" % [rank, roundi(FAITH_BONUS[i] * 100.0)]
 	return ""
 
 func vfx_effects() -> Dictionary:
@@ -334,6 +334,14 @@ func on_heal(player: PlayerActor, requested: float, _applied: float, source: Str
 	if rank < 1: return
 	player.heal_player(requested * FAITH_BONUS[clampi(rank, 1, 3) - 1], FAITH_HEAL_SOURCE)
 
+## Fé Protetora (T15, A15.3): every barrier the player gains (Escudo Votivo, Égide of the
+## Sacerdote, any later producer through CombatActor.grant_barrier) is +10/15/20%. Once per
+## grant: the composition calls each module once, and the Votive asks for the plain capacity.
+func barrier_received(player: PlayerActor, capacity: float, _context: Dictionary) -> float:
+	var rank := player.skill_rank(FAITH) if is_instance_valid(player) else 0
+	if rank < 1: return capacity
+	return capacity * (1.0 + FAITH_BONUS[clampi(rank, 1, 3) - 1])
+
 func on_death(player: PlayerActor) -> void:
 	madness.on_death(player)
 	prayer_pulses = 0
@@ -402,13 +410,14 @@ func _resolve_prayer(values: SkillRankDefinition) -> bool:
 	prayer_fraction = values.power / float(PRAYER_PULSES)
 	return true
 
+## The Fé Protetora reinforces the Votive through barrier_received, like any other barrier
+## (T15, A15.3): the capacity here is the plain one, so it is never counted twice.
 func _resolve_votive(player: PlayerActor, values: SkillRankDefinition) -> bool:
-	var rank := player.skill_rank(FAITH)
 	var capacity := StatCalculator.personal_shield_capacity(values.power, player.stat_breakdown)
 	if not is_finite(capacity) or capacity <= 0.0: return false
-	if rank > 0: capacity *= 1.0 + FAITH_BONUS[clampi(rank, 1, 3) - 1]
-	if not player.health.grant_shield(capacity): return false
-	votive_capacity = capacity
+	var granted := player.grant_barrier(capacity, VOTIVE_SHIELD)
+	if granted <= 0.0: return false
+	votive_capacity = granted
 	votive_remaining = values.secondary_power
 	player.resources_changed.emit()
 	return true
@@ -443,12 +452,16 @@ func _resolve_whisper(player: PlayerActor, cast: Dictionary, values: SkillRankDe
 	var push := WHISPER_PUSH[clampi(values.rank, 1, 5) - 1]
 	var event := MadnessHelpers.cast_event(cast, player.kit_time)
 	var reached := 0
+	# T15 (A20): in the world, the cone reaches only the Acolyte's floor.
+	var anchor := ClassKit.world_anchor(player)
+	var area := ClassKit.floor_area(player, anchor)
 	for candidate: Variant in actors:
 		var enemy := candidate as CombatActor
 		if enemy == null or enemy == player or not MadnessHelpers.is_enemy(enemy) or not MadnessHelpers.is_live(enemy): continue
 		var offset := _offset(player, enemy)
 		if offset.length() > values.range + enemy.collision_radius: continue
 		if not offset.is_zero_approx() and offset.normalized().dot(direction) < WHISPER_HALF_ANGLE_COS: continue
+		if not ClassKit.on_anchor_floor(area, anchor, enemy, values.range): continue
 		reached += 1
 		madness.add(enemy, amount, event, player, false, actors)
 		if is_instance_valid(enemy) and enemy.is_alive() and not enemy.hard_controls.boss: _push(player, enemy, offset, push)

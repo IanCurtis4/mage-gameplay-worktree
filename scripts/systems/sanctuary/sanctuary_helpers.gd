@@ -35,12 +35,16 @@ static func judgment_request(owner: PlayerActor, victim: CombatActor, skill_id: 
 	if amount <= 0.0 or not is_instance_valid(owner) or not is_instance_valid(victim): return null
 	return owner.kit_make_request(victim, skill_id, 0.0, amount, DamageRequest.AccuracyMode.GEOMETRY, can_crit)
 
-## Enemies hit by a vertical column at `point` (world: x/z distance and height band;
-## flat arena: distance). A zone, when given, replaces the column: every enemy inside.
+## Enemies hit by a vertical column at `point` (world: x/z distance and height band, on the
+## point's own floor; flat arena: distance). A zone, when given, replaces the column: every
+## enemy inside. E10a T15 (A19, A21): in the world the column reaches only the floor of its
+## point (ClassKit.on_anchor_floor: the canonical ground selection of the E07, the same reach);
+## an enemy on another floor inside the height band (the F1 bridge) is never hit.
 static func judgment_targets(owner: PlayerActor, actors: Array, point: Variant, column_radius: float = SanctuaryRules.JUDGMENT_COLUMN_RADIUS, zone: SanctuaryZone = null) -> Array[CombatActor]:
 	var result: Array[CombatActor] = []
 	if not is_instance_valid(owner): return result
 	var radius := clampf(column_radius, SanctuaryRules.JUDGMENT_COLUMN_RADIUS_RANGE.x, SanctuaryRules.JUDGMENT_COLUMN_RADIUS_RANGE.y)
+	var floor_area: WorldEffectArea = ClassKit.floor_area(owner, point) if zone == null and point is ExpeditionWorldPoint else null
 	for candidate: Variant in actors:
 		var actor := candidate as CombatActor
 		if not is_instance_valid(actor) or not actor.is_alive() or actor == owner: continue
@@ -53,7 +57,8 @@ static func judgment_targets(owner: PlayerActor, actors: Array, point: Variant, 
 			if at == null or at.stage_id != anchor.stage_id: continue
 			var offset := at.position - anchor.position
 			var reach := radius + (float(actor.world_motion.profile()["radius"]) if actor.world_motion != null else actor.collision_radius)
-			if Vector2(offset.x, offset.z).length() <= reach and absf(offset.y) <= SanctuaryRules.JUDGMENT_COLUMN_HALF_HEIGHT: result.append(actor)
+			if Vector2(offset.x, offset.z).length() > reach or absf(offset.y) > SanctuaryRules.JUDGMENT_COLUMN_HALF_HEIGHT: continue
+			if ClassKit.on_anchor_floor(floor_area, anchor, actor, radius): result.append(actor)
 		elif point is Vector2:
 			if actor.global_position.distance_to(point) <= radius + actor.collision_radius: result.append(actor)
 	return result

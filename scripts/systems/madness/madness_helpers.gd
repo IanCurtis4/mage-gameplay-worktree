@@ -79,12 +79,15 @@ static func nearest_non_boss(enemy: CombatActor, actors: Array) -> CombatActor:
 	return best
 
 ## Live enemies within `radius` of `center` (an actor), center excluded, by stable key.
+## E10a T15 (A21): in the world, only on the centre's floor (ClassKit.on_anchor_floor).
 static func neighbours(center: CombatActor, actors: Array, radius: float) -> Array[CombatActor]:
 	var result: Array[CombatActor] = []
+	var anchor := ClassKit.world_anchor(center)
+	var area := ClassKit.floor_area(center, anchor)
 	for candidate: Variant in actors:
 		var other := candidate as CombatActor
 		if other == null or other == center or not is_enemy(other) or not is_live(other): continue
-		if distance(center, other) <= radius: result.append(other)
+		if distance(center, other) <= radius and ClassKit.on_anchor_floor(area, anchor, other, radius): result.append(other)
 	result.sort_custom(func(a: CombatActor, b: CombatActor) -> bool: return enemy_key(a) < enemy_key(b))
 	return result
 

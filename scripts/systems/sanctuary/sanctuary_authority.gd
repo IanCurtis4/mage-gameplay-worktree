@@ -303,13 +303,15 @@ func begin_unlimited(seconds: float) -> bool:
 
 # --- Égide -------------------------------------------------------------------------
 
-## Halo shield through HealthState.grant_shield. One pulse (optional light damage and
+## Halo shield through CombatActor.grant_barrier (A17). One pulse (optional light damage and
 ## a push) when it breaks or expires. Call while resolving the cast (prototype root).
 func grant_aegis(player: PlayerActor, capacity: float, duration: float = SanctuaryRules.AEGIS_DURATION, pulse_magic: float = 0.0, skill_id: StringName = &"", radius: float = SanctuaryRules.AEGIS_PULSE_RADIUS) -> bool:
 	if not is_instance_valid(player) or not is_finite(duration) or duration <= 0.0 or not is_finite(radius) or radius <= 0.0: return false
-	if not player.health.grant_shield(capacity): return false
+	# E10a T15 (A17): through the barrier hook of the seam; the expiry recognises the granted value.
+	var granted := player.grant_barrier(capacity, skill_id)
+	if granted <= 0.0: return false
 	_bind_owner(player)
-	aegis_capacity = capacity
+	aegis_capacity = granted
 	aegis_remaining = duration
 	aegis_radius = radius
 	aegis_prototype = null

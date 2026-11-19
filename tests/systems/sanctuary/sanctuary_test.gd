@@ -637,7 +637,7 @@ func _check_world_geometry() -> void:
 	_tick(0.2)
 	_check(hits.size() == 1 and upper_hits.is_empty(), "the world pulse burns only who is inside")
 	var column := SanctuaryHelpers.judgment_targets(player, controller.enemies, WorldFixture.point("root", Vector3(60, 0, 150)))
-	_check(lower in column and upper in column and far not in column, "the Juízo column is vertical (x/z radius, height band)")
+	_check(lower in column and upper not in column and far not in column, "the Juízo column reaches only its floor (A22)")
 	var cone := authority.open_zone(player, {"role": &"oath", "skill_id": _slot(0), "shape": &"cone"})
 	_check(cone["ok"], "world cone opens on the owner")
 	if cone["ok"]:

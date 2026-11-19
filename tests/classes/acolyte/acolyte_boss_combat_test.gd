@@ -7,6 +7,10 @@ extends SceneTree
 ## of the route that matches J (1: levels 2, 4, 6, 9, 12, 15). The master runs its own AI and
 ## attacks through RunController._on_enemy_attack_requested; the player casts through
 ## PlayerActor.use_kit_skill and attacks with the basic attack while the gameplay clocks tick.
+## T15 (A15, item 4): one more fight at job 19 changes only the scenario, never the numbers: a
+## contemplative legal order (Selo Sombrio and Sussurro at R5, Visão Eldritch at R3) and a forest
+## wolf beside the master as a second target. The doubled Sussurro (80) and the Selo (26) take the
+## master past 100, so the Delírio happens in the integrated combat at least once.
 ## Fixture profile only; nothing is written to disk.
 const STEP := 0.05
 const DURATION := 60.0
@@ -20,6 +24,13 @@ const ORDER: Array[StringName] = [
 	&"acolyte_punishing_light", &"acolyte_disturbing_whisper", &"acolyte_prayer", &"acolyte_punishing_light", &"acolyte_shadow_seal",
 	&"acolyte_protective_faith", &"acolyte_devotion", &"acolyte_eldritch_vision", &"acolyte_punishing_light", &"acolyte_prayer",
 	&"acolyte_votive_shield", &"acolyte_disturbing_whisper", &"acolyte_shadow_seal", &"acolyte_protective_faith"]
+## T15: spending order of the Delírio scenario, same length as ORDER (every prefix is legal). At
+## job 19 the 18 points are Luz 2, Prece 2, Escudo 1, Selo 5, Sussurro 5 and Visão 3.
+const DELIRIUM_ORDER: Array[StringName] = [
+	&"acolyte_punishing_light", &"acolyte_prayer", &"acolyte_shadow_seal", &"acolyte_disturbing_whisper", &"acolyte_eldritch_vision",
+	&"acolyte_shadow_seal", &"acolyte_disturbing_whisper", &"acolyte_shadow_seal", &"acolyte_disturbing_whisper", &"acolyte_shadow_seal",
+	&"acolyte_disturbing_whisper", &"acolyte_votive_shield", &"acolyte_punishing_light", &"acolyte_prayer", &"acolyte_eldritch_vision",
+	&"acolyte_disturbing_whisper", &"acolyte_eldritch_vision", &"acolyte_shadow_seal", &"acolyte_punishing_light"]
 const STAGES: Array[StringName] = [&"trial_stage_1", &"trial_stage_1", &"trial_stage_1", &"trial_stage_2", &"trial_stage_2", &"trial_stage_2", &"trial_stage_3", &"trial_stage_3", &"trial_stage_3", &"trial_stage_4", &"trial_stage_4", &"trial_stage_4", &"trial_stage_5", &"trial_stage_5", &"trial_stage_5", &"trial_stage_5", &"trial_stage_6", &"trial_stage_6", &"trial_stage_6"]
 
 class Controller extends RunController:
@@ -42,6 +53,8 @@ func _run() -> void:
 	ClassKitRegistry.clear_fixtures()
 	_check(ORDER.size() == 19 and STAGES.size() == 19, "the order spends the 19 base points and every job level has a stage")
 	for job_level: int in range(1, 20): _fight(job_level)
+	_check(DELIRIUM_ORDER.size() == 19, "the Delírio order has one entry per job level, like ORDER")
+	_fight(19, DELIRIUM_ORDER, true)
 	print("E10a T5 acolyte boss combat: %d checks, %d failures" % [checks, failures])
 	for line: String in summary: print(line)
 	quit(1 if failures > 0 else 0)
@@ -65,15 +78,15 @@ func _attributes_for(base_level: int) -> Dictionary[StringName, int]:
 				progressed = true
 	return allocations
 
-func _ranks_for(job_level: int) -> Dictionary[StringName, int]:
+func _ranks_for(job_level: int, order: Array[StringName] = ORDER) -> Dictionary[StringName, int]:
 	var ranks: Dictionary[StringName, int] = {}
 	for index: int in job_level - 1:
-		var skill := ORDER[index]
+		var skill := order[index]
 		ranks[skill] = int(ranks.get(skill, 0)) + 1
 	return ranks
 
-func _fight(job_level: int) -> void:
-	var label := "job %d" % job_level
+func _fight(job_level: int, order: Array[StringName] = ORDER, delirium_scenario: bool = false) -> void:
+	var label := ("job %d" % job_level) + (" Delírio" if delirium_scenario else "")
 	var navigation := ArenaNavigation.new()
 	navigation.configure(Rect2(0, 0, 1400, 900), [], 20.0)
 	var controller := Controller.new()
@@ -90,7 +103,7 @@ func _fight(job_level: int) -> void:
 	while ProgressionRules.base_level_for_xp(xp) < job_level and xp < ProgressionRules.MAX_BASE_XP: xp += 10
 	_check(ProgressionRules.attribute_points_available(xp, snapshot.attribute_allocations, &"acolyte") >= 0, "%s: legal attributes for base level %d" % [label, job_level])
 	snapshot.library_skill_ids = catalog.skill_ids_for_identity(&"acolyte", &"")
-	var ranks := _ranks_for(job_level)
+	var ranks := _ranks_for(job_level, order)
 	var legal := catalog.validate_purchased_ranks(&"acolyte", &"", job_level, ranks)
 	_check(legal.get("ok", false) and catalog.skill_points_spent(ranks, ProfileCatalog.BASE_WALLET) == job_level - 1, "%s: %d base points, legal: %s" % [label, job_level - 1, legal])
 	snapshot.skill_ranks = {}
@@ -100,7 +113,7 @@ func _fight(job_level: int) -> void:
 		if ranks.has(skill) and slots.size() < 5 and ClassKitRegistry.skill_definition(skill).category == SkillDefinition.Category.ACTIVE: slots.append(skill)
 	snapshot.active_slots = slots
 	var player := PlayerActor.new()
-	player.configure(navigation, RunState.from_build("acolyte-boss-%d" % job_level, snapshot))
+	player.configure(navigation, RunState.from_build("acolyte-boss-%d%s" % [job_level, "-delirium" if delirium_scenario else ""], snapshot))
 	controller.add_child(player)
 	player.set_process(false)
 	player.global_position = Vector2(500, 450)
@@ -119,7 +132,7 @@ func _fight(job_level: int) -> void:
 		controller.free()
 		return
 	var occurrence := MobOccurrence.new()
-	occurrence.occurrence_id = "t5_master_%d" % job_level
+	occurrence.occurrence_id = "t5_master_%d%s" % [job_level, "_delirium" if delirium_scenario else ""]
 	occurrence.mob_base_id = &"test_beast_master"
 	occurrence.category_id = &"rare"
 	occurrence.origin_id = STAGES[job_level - 1]
@@ -131,6 +144,10 @@ func _fight(job_level: int) -> void:
 		controller.free()
 		return
 	master.global_position = player.global_position + Vector2(170, 0)
+	# T15: configure_occurrence took the post before this placement (the origin). The Delírio
+	# scenario puts the post where the fight is, or the R5 Sussurro push leaves the 850 leash
+	# and the master walks back to a corner of the arena, immune (F10 Q2), for the rest of the fight.
+	if delirium_scenario: master.spawn_home = master.global_position
 	master.attack_requested.connect(controller._on_enemy_attack_requested)
 	master.mob_skill_requested.connect(controller._on_mob_skill_requested)
 	master.health.damage_applied.connect(controller._on_enemy_damage_resolved)
@@ -142,8 +159,11 @@ func _fight(job_level: int) -> void:
 	var master_hp := FIGHT_HP_BASE + FIGHT_HP_PER_JOB * float(job_level)
 	master.health.max_hp = master_hp
 	master.health.current_hp = master_hp
-	_check(controller.enemies.size() == 1 and not master.hard_controls.boss, "%s: a single Mestre das Feras (rare), no adds" % label)
-	var tally := {"casts": {}, "madness": 0.0, "slowdown": 0}
+	var wolf: EnemyActor = null
+	if delirium_scenario: wolf = _second_target(controller, player, navigation, master)
+	_check(controller.enemies.size() == (2 if delirium_scenario else 1) and not master.hard_controls.boss, "%s: the Mestre das Feras (rare)%s" % [label, " and a forest wolf" if delirium_scenario else ", no adds"])
+	var tally := {"casts": {}, "madness": 0.0, "slowdown": 0, "delirium_steps": 0, "delirium_entries": 0}
+	var was_delirious := false
 	var hits_taken := 0
 	var time := 0.0
 	player.target = master
@@ -155,11 +175,16 @@ func _fight(job_level: int) -> void:
 		master._process(STEP)
 		player._process(STEP)
 		if player.health.current_hp < hp_before: hits_taken += 1
+		if is_instance_valid(wolf) and wolf.is_alive(): wolf._process(STEP)
 		tally["madness"] = maxf(float(tally["madness"]), MadnessAuthority.madness_of(master))
+		var delirious := MadnessAuthority.state_of(master) == MadnessRules.STATE_DELIRIUM
+		if delirious: tally["delirium_steps"] = int(tally["delirium_steps"]) + 1
+		if delirious and not was_delirious: tally["delirium_entries"] = int(tally["delirium_entries"]) + 1
+		was_delirious = delirious
 		time += STEP
 	var casts: Dictionary = tally["casts"]
 	var damage := 1.0 - master.health.current_hp / master_hp
-	var line := "%s (%s, %d pts): %.1fs master %.0f%% of %.0f taken, player %.0f/%.0f %s, casts %s, hits taken %d, max Madness %.0f" % [label, STAGES[job_level - 1], job_level - 1, time, damage * 100.0, master_hp, player.health.current_hp, player.health.max_hp, "alive" if player.is_alive() else "dead", casts, hits_taken, float(tally["madness"])]
+	var line := "%s (%s, %d pts): %.1fs master %.0f%% of %.0f taken, player %.0f/%.0f %s, casts %s, hits taken %d, max Madness %.0f, Delírio %d (%.1fs)" % [label, STAGES[job_level - 1], job_level - 1, time, damage * 100.0, master_hp, player.health.current_hp, player.health.max_hp, "alive" if player.is_alive() else "dead", casts, hits_taken, float(tally["madness"]), int(tally["delirium_entries"]), float(tally["delirium_steps"]) * STEP]
 	summary.append(line)
 	_check(damage > 0.0, "%s: the Acólito hurts the Mestre das Feras (%.1f%%)" % [label, damage * 100.0])
 	_check(player.is_alive() or not master.is_alive() or damage > 0.0, "%s: the fight resolves without error" % label)
@@ -175,8 +200,35 @@ func _fight(job_level: int) -> void:
 		_check(int(casts.get(&"acolyte_eldritch_vision", 0)) >= 1, "%s: Visão Eldritch is cast" % label)
 	# At every job level the Acólito beats the master of its stage alone, hurt but alive.
 	_check(player.is_alive() and not master.is_alive(), "%s: the Acólito beats the Mestre das Feras of its stage alone" % label)
-	_check(controller.enemies.size() == 1, "%s: no add joined the fight" % label)
+	if delirium_scenario:
+		_check(int(tally["delirium_entries"]) >= 1, "%s: the Delírio happens in the integrated combat (%d entries, max Madness %.0f)" % [label, int(tally["delirium_entries"]), float(tally["madness"])])
+		_check(int(casts.get(&"acolyte_eldritch_vision", 0)) >= 1 and int(casts.get(&"acolyte_disturbing_whisper", 0)) >= 1 and int(casts.get(&"acolyte_shadow_seal", 0)) >= 1, "%s: Visão, Sussurro and Selo carry it (%s)" % [label, casts])
+		_check(not master.has_target_override() or master.combat_target() != player, "%s: a delirious master never aims at the Acólito" % label)
+	else:
+		_check(controller.enemies.size() == 1, "%s: no add joined the fight" % label)
 	controller.free()
+
+## T15: a real forest wolf of the same stage beside the master (the Delírio's other target).
+func _second_target(controller: Controller, player: PlayerActor, navigation: ArenaNavigation, master: EnemyActor) -> EnemyActor:
+	var occurrence := MobOccurrence.new()
+	occurrence.occurrence_id = "t15_wolf_delirium"
+	occurrence.mob_base_id = &"forest_wolf"
+	occurrence.category_id = &"normal"
+	occurrence.origin_id = &"trial_stage_1" # wolves live in the first stage of the route
+	var wolf := EnemyActor.new()
+	wolf.global_position = master.global_position + Vector2(0, 90) # placed first: the post is taken at configure
+	var configured := wolf.configure_occurrence(occurrence, player.run_state.effect_catalog().mob_catalog(), navigation, player)
+	_check(configured.get("ok", false), "the second target configures: %s" % [configured])
+	if not configured.get("ok", false):
+		wolf.free()
+		return null
+	wolf.attack_requested.connect(controller._on_enemy_attack_requested)
+	wolf.health.damage_applied.connect(controller._on_enemy_damage_resolved)
+	wolf.status_damage_requested.connect(controller._on_attack_requested)
+	controller.add_child(wolf)
+	controller.enemies.append(wolf)
+	wolf.set_process(false)
+	return wolf
 
 ## Fixed priority rotation: Prece when hurt, Escudo Votivo when pressed, Visão Eldritch before
 ## the Selo/Sussurro pair, the Sussurro in the cone, the Selo, Luz Punitiva otherwise; the basic
