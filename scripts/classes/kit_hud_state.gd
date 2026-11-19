@@ -86,6 +86,14 @@ static func checked(state: Dictionary, kit: ClassKit) -> Dictionary:
 		push_warning("KitHudState: invalid HUD state from kit '%s' (%s at %s); the HUD shows nothing for it." % [key.get_slice(":", 0), result["error_code"], result["detail"]])
 	return {}
 
+## E10a A18/A24: one warning per repeated key of the two-module composition
+## (PlayerActor.kit_hud_state). Reported once, in the same registry as `checked`.
+static func warn_duplicate(key: String, dropped_owner: String, kept_owner: String) -> void:
+	var report := "composition:%s" % key
+	if _warned.has(report): return
+	_warned[report] = true
+	push_warning("PlayerActor.kit_hud_state: duplicate HUD key '%s' from '%s' dropped (kept the one from '%s')." % [key, dropped_owner, kept_owner])
+
 ## Warning keys already reported ("<kit_id>:<error_code>"), for tests and diagnostics.
 static func reported_warnings() -> Array[String]:
 	var keys: Array[String] = []

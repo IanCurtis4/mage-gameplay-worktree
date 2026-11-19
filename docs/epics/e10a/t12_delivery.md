@@ -53,3 +53,25 @@ Priest: Graça (3 pips), Égide, círculo do Santuário e selo. Cultista: Êxtas
 4. `skills` não é publicado por nenhum dos três módulos (fora do C9); a união de `skills` só é exercida pelo teste de colisão, com módulos de teste.
 5. O Ídolo no mundo da expedição usa `world_point()` do decoy; o teste cobre só a arena plana (como o C9 pede para a captura). O mundo F1 não foi exercitado para a família.
 6. Não-verificado: o passo 148 e a suíte completa ficam para a T13/T14.
+
+## A24 — registro de avisos fora do `PlayerActor`
+
+A suíte completa achou "N resources still in use at exit" nos passos 80, 81, 89 e 92 (`e04_*` de armadilhas, descarga elétrica e assombro); a bisseção da T13 apontou o `static var _hud_warned` do `PlayerActor`. Correção:
+- `KitHudState.warn_duplicate(key, dropped_owner, kept_owner)` guarda o aviso no `_warned` que já existe (uma entrada `composition:<chave>`); `reset_reports()` o limpa. Formato v1 e validador intactos.
+- `PlayerActor` perdeu `_hud_warned` e `reset_hud_composition_warnings`; `_hud_claim` chama o auxiliar. Sem estado estático no ator.
+- `hud_family_test` passou a contar os avisos `composition:` por `KitHudState.reported_warnings()` e a chamar `reset_reports()` antes da colisão; as expectativas (4 avisos, sem repetição) não mudaram.
+
+A worktree da T12 havia sido removida; foi recriada na mesma branch e o candidato foi composto (`4f4140eb`). `editor_import` duas vezes e `e07_f1_import_test` (3673 arquivos idênticos) antes dos testes.
+
+| Teste | Resultado | "still in use" no log |
+|---|---|---|
+| `e04_archer_snare_trap_rank_integration_test` | PASS, 69 | nenhum |
+| `e04_archer_explosive_trap_rank_integration_test` | PASS, 56 | nenhum |
+| `e04_mage_electric_discharge_rank_integration_test` | PASS, 71 | nenhum |
+| `e04_mage_haunt_rank_integration_test` | PASS, 84 | nenhum |
+| `hud_family_test` | 118, 0 falhas | nenhum |
+| `hud_seam_test` / `hud_components_test` / `hud_integration_test` | 194 / 168 / 234, 0 | nenhum |
+| `mg_ac_hud_test` / `mg_la_hud_test` / `sp_ac_hud_test` / `sp_la_hud_test` | 60 / 53 / 57 / 49, 0 | nenhum |
+| `mage_gameplay_test` | PASS, 52 | nenhum |
+
+SHA256: `hud_family_test.gd` `618be659f94c8da4c62ac35bf6a2d68efb6d8d4ccdb5cf5ecc10103c3c13b111`; `kit_hud_state.gd` `73b5281bb5291b5d72599e5fcc312c8887f28ab39df39c58486329ad6652967b`; `player_actor.gd` `e35f5e085b42d7db081c9b2b8fe34b8bb2f6759181c4d641fba2fc4e700a8255`.
