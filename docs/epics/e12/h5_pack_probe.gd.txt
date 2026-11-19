@@ -1,0 +1,98 @@
+extends SceneTree
+## E12 H5 (C6): standard engine mounting the EXACT exported E12 candidate PCK (--main-pack),
+## isolated APPDATA. Complements tools/e09_release_probe.gd (E09 content, unchanged) with the
+## scripts the E12 adds. Kept as .gd.txt so the editor never imports it; the packaging script
+## copies it to a .gd file next to the evidence before running.
+## Mode (user args): inspect_e12 <evidence_dir> <app_name>
+## Prints one line "E12_H5_INSPECT_RESULT {json}" with {"ok": bool, "checks": [...]}.
+var checks: Array[Dictionary] = []
+
+const NEW_SCRIPTS := {
+	"KitHudState": "res://scripts/classes/kit_hud_state.gd",
+	"HudPalette": "res://scripts/ui/hud/hud_palette.gd",
+	"CastBar": "res://scripts/ui/hud/cast_bar.gd",
+	"KitResourcePanel": "res://scripts/ui/hud/kit_resource_panel.gd",
+	"ActorCastBar": "res://scripts/presentation/actor_cast_bar.gd",
+	"KitWorldOverlay": "res://scripts/presentation/kit_world_overlay.gd",
+}
+const FIXTURE_HUD := "res://scripts/classes/fixture/hud/fixture_hud_kit.gd"
+
+func _initialize() -> void: _run.call_deferred()
+
+func check(id: String, value: bool, detail: Variant = "") -> void:
+	checks.append({"id": id, "ok": value, "detail": str(detail)})
+	print("E12_H5_CHECK ", id, " ", value, " ", str(detail).left(300))
+
+func _run() -> void:
+	var args := OS.get_cmdline_user_args()
+	if args.size() != 3 or args[0] != "inspect_e12":
+		push_error("Usage: -- inspect_e12 <evidence_dir> <app_name>")
+		quit(2)
+		return
+	var app_name: String = args[2]
+	var name: String = ProjectSettings.get_setting("application/config/name", "")
+	check("app_name", name == app_name, name)
+	check("isolated_user_dir", OS.get_user_data_dir().ends_with("/" + app_name), OS.get_user_data_dir())
+
+	# 1. Every new script is in the pack, loads, is registered as a global class at that path.
+	var registered := {}
+	for entry: Dictionary in ProjectSettings.get_global_class_list():
+		registered[String(entry["class"])] = String(entry["path"])
+	for class_id: String in NEW_SCRIPTS:
+		var path: String = NEW_SCRIPTS[class_id]
+		var exists := ResourceLoader.exists(path)
+		var script := load(path) as Script if exists else null
+		check("script_" + class_id, exists and script != null, path)
+		check("global_class_" + class_id, registered.get(class_id, "") == path, registered.get(class_id, "<missing>"))
+	check("fixture_hud_not_in_pack", not ResourceLoader.exists(FIXTURE_HUD), FIXTURE_HUD)
+
+	# 2. The kits expose hud_state, the validator accepts a minimal valid DTO per kit and refuses
+	#    a bad one, and the player-side methods exist on the shipped scripts.
+	var kit_rows: Array = []
+	for kit_id: StringName in ClassKitRegistry.ids():
+		var kit := ClassKitRegistry.module(kit_id)
+		var prefix: String = String(ClassKitRegistry.IDENTITIES[kit_id]["prefix"])
+		var has_hook: bool = kit != null and kit.get_script().get_script_method_list().any(func(m: Dictionary) -> bool: return m["name"] == "hud_state")
+		var dto := {
+			"schema": KitHudState.SCHEMA, "kit_id": kit_id,
+			"resources": [{"id": StringName(prefix + "probe"), "label": "Teste", "kind": &"pips", "value": 2, "max": 5}],
+		}
+		var valid: bool = KitHudState.validate(dto, kit).get("ok", false)
+		var bad := dto.duplicate(true)
+		bad["surprise"] = 1
+		var refused: bool = not KitHudState.validate(bad, kit).get("ok", true)
+		var rows := KitResourcePanel.rows_for(dto)
+		kit_rows.append({"kit": String(kit_id), "hook": has_hook, "valid": valid, "bad_refused": refused, "panel_rows": rows.size()})
+	check("kits_hud_state", kit_rows.size() == 4 and kit_rows.all(func(r: Dictionary) -> bool: return r.hook and r.valid and r.bad_refused and r.panel_rows == 1), kit_rows)
+	var player_script := load("res://scripts/actors/player_actor.gd") as Script
+	var enemy_script := load("res://scripts/actors/enemy_actor.gd") as Script
+	var player_methods: Array = player_script.get_script_method_list().map(func(m: Dictionary) -> String: return m["name"])
+	var enemy_methods: Array = enemy_script.get_script_method_list().map(func(m: Dictionary) -> String: return m["name"])
+	check("player_cast_progress_and_hud", "cast_progress" in player_methods and "kit_hud_state" in player_methods, "")
+	check("enemy_cast_progress", "cast_progress" in enemy_methods, "")
+
+	# 3. The visual components draw from their data without error.
+	var progress := {"active": true, "label": "Prova", "remaining": 0.5, "total": 1.0}
+	var bar := CastBar.new()
+	bar.set_progress(progress)
+	var bar_plan := bar.plan()
+	check("cast_bar_plan", not bar_plan.is_empty() and absf(float(bar_plan["ratio"]) - 0.5) < 0.001, bar_plan)
+	bar.set_progress({"active": false})
+	check("cast_bar_hidden", bar.plan().is_empty(), "")
+	bar.free()
+	var overhead := ActorCastBar.plan_overhead(progress, -40.0, 36.0, &"", true)
+	check("actor_cast_bar_plan", not overhead.is_empty(), overhead.keys())
+	var zone_dto := {"schema": KitHudState.SCHEMA, "kit_id": &"sp_ac", "zones": [{"role": &"probe", "space": &"flat", "center": Vector3(10, 20, 0), "shape": &"circle", "radius": 30.0}]}
+	check("overlay_zone_plan", KitWorldOverlay.zone_plan(zone_dto).size() == 1, "")
+	var panel := KitResourcePanel.new()
+	panel.set_state({})
+	check("panel_empty_state", panel.plan().is_empty(), "")
+	panel.free()
+	var overlay := KitWorldOverlay.new()
+	overlay.set_state({}, {})
+	check("overlay_empty_state", overlay.plan().is_empty(), "")
+	overlay.free()
+
+	var ok := checks.all(func(c: Dictionary) -> bool: return c.ok)
+	print("E12_H5_INSPECT_RESULT ", JSON.stringify({"ok": ok, "checks": checks, "passed": checks.filter(func(c: Dictionary) -> bool: return c.ok).size(), "total": checks.size(), "editor_feature": OS.has_feature("editor")}))
+	quit(0 if ok else 1)

@@ -34,6 +34,20 @@ var slot_buttons: Array[Button] = []
 var available_ranks: Dictionary = {}
 var _cooldown_spans: Dictionary = {}
 var _cooldown_last: Dictionary = {}
+## E12 C5: pt-BR status of a kit skill that is not ready, by the same error code the rule
+## refuses with (A6). Any other code reads as a generic unavailable state.
+const KIT_REASON_TEXT: Dictionary[StringName, String] = {
+	&"arcane_blade_refraction_recharging": "SEM CARGA",
+	&"arcane_blade_already_concealed": "OCULTO",
+	&"paladin_hour_active": "HORA ATIVA",
+	&"thaumaturge_dawn_active": "AURORA ATIVA",
+	&"thaumaturge_no_circle": "SEM CÍRCULO",
+	&"duelist_duel_active": "DUELO ATIVO",
+}
+const KIT_STATUS_FALLBACK := "INDISPONÍVEL"
+const KIT_STATUS_FONT_SIZE := 9
+## skill_id -> hud_state()["skills"][id] of the latest HUD update (presentation only).
+var _kit_skill_states: Dictionary = {}
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -301,15 +315,49 @@ func set_skill_ranks(ranks: Dictionary) -> void:
 	available_ranks = ranks.duplicate()
 	if action_editor != null: action_editor.available_ranks = available_ranks.duplicate()
 
+## E12 C5: the kit's own readiness per skill (ragrpg_kit_hud_v1 `skills`), from the one DTO the
+## controller reads per HUD update. Anything that is not a dictionary is ignored.
+func set_kit_skill_states(states: Variant) -> void:
+	_kit_skill_states = states if typeof(states) == TYPE_DICTIONARY else {}
+
+## Status word of a kit skill that is not ready ("" when ready or unknown). The rule still
+## refuses the cast; this only tells the player why.
+static func kit_status_text(state: Variant) -> String:
+	if typeof(state) != TYPE_DICTIONARY or state.is_empty() or typeof(state.get("ready")) != TYPE_BOOL or state["ready"]: return ""
+	var reason: Variant = state.get("reason", &"")
+	return KIT_REASON_TEXT.get(reason, KIT_STATUS_FALLBACK) if typeof(reason) == TYPE_STRING_NAME else KIT_STATUS_FALLBACK
+
+## "Cargas 0/1 · recarga própria 4.2s" for the tooltip; "" when the kit reports neither.
+static func kit_detail_text(state: Variant) -> String:
+	if typeof(state) != TYPE_DICTIONARY: return ""
+	var parts: PackedStringArray = []
+	if typeof(state.get("charges")) == TYPE_INT and typeof(state.get("max_charges")) == TYPE_INT:
+		parts.append("Cargas %d/%d" % [state["charges"], state["max_charges"]])
+	if state.get("recharge_remaining") is float and state["recharge_remaining"] > 0.0:
+		parts.append("recarga própria %.1fs" % state["recharge_remaining"])
+	return " · ".join(parts)
+
 func show_skill_state(skill: StringName, state_text: String, active: bool, requested_rank: int = -1) -> void:
+	var kit_state: Variant = _kit_skill_states.get(skill, {})
+	var kit_status := kit_status_text(kit_state)
 	for raw: Button in slot_buttons:
 		var button := raw as ActionBarSlot
 		if button.skill_id != skill or (requested_rank >= 0 and button.cast_rank != requested_rank): continue
 		var lines := state_text.split("\n")
 		var status := String(lines[-1]).split(" · ")[-1]
-		button.set_combat_blocked(button.disabled or status.begins_with("SEM ") or status.contains("INSUFICIENTE") or status.contains("INDISPONÍVEL"))
+		var kit_blocked := not kit_status.is_empty() and status == kit_status
+		button.set_combat_blocked(button.disabled or kit_blocked or status.begins_with("SEM ") or status.contains("INSUFICIENTE") or status.contains("INDISPONÍVEL"))
+		# The canonical recharge wins the face; the kit word shows only when it is the status.
+		if button.blocked_hint != null:
+			if kit_blocked:
+				button.blocked_hint.text = kit_status
+				button.blocked_hint.add_theme_font_size_override("font_size", KIT_STATUS_FONT_SIZE)
+			else:
+				button.blocked_hint.remove_theme_font_size_override("font_size")
 		var copy := SkillCopy.text_for(skill)
 		button.tooltip_text = state_text + "\n" + SkillPresentation.emphasize(String(copy.get("effect", ""))) + "\n" + SkillPresentation.emphasize(String(copy.get("combo", "")))
+		var detail := kit_detail_text(kit_state) if kit_blocked else ""
+		if not detail.is_empty(): button.tooltip_text += "\n" + detail
 		button.set_pressed_no_signal(active)
 
 func set_aim_text(text: String) -> void:
@@ -351,7 +399,15 @@ func show_skill_cooldown(skill: StringName, remaining: float) -> void:
 	elif not _cooldown_spans.has(skill) or current > previous + 0.001:
 		_cooldown_spans[skill] = current
 	_cooldown_last[skill] = current
+	# E12 C5 priority: canonical recharge, then the kit's own recharge, then ready.
+	var face_remaining := current
+	var face_span := float(_cooldown_spans.get(skill, 0.0))
+	if current <= 0.0:
+		var kit_state: Variant = _kit_skill_states.get(skill, {})
+		if not kit_status_text(kit_state).is_empty() and kit_state.get("recharge_remaining") is float and kit_state.get("recharge_total") is float and kit_state["recharge_remaining"] > 0.0 and kit_state["recharge_total"] > 0.0:
+			face_remaining = kit_state["recharge_remaining"]
+			face_span = kit_state["recharge_total"]
 	for raw: Button in slot_buttons:
 		var slot := raw as ActionBarSlot
 		if slot.skill_id == skill:
-			slot.show_cooldown(current, float(_cooldown_spans.get(skill, 0.0)))
+			slot.show_cooldown(face_remaining, face_span)

@@ -463,7 +463,8 @@ Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/
 # E09 C1.11: own group, discovered by folder in a stable order. Each kit or system
 # task adds tests/classes/<id>/*_test.gd, tests/systems/<name>/*_test.gd or
 # tests/e09/*_test.gd without editing this runner. Indices of the steps above are kept.
-foreach ($group in @('tests/e09', 'tests/systems', 'tests/classes')) {
+# E12 H1: tests/e12 joins the discovered groups, after the E09 ones.
+foreach ($group in @('tests/e09', 'tests/systems', 'tests/classes', 'tests/e12')) {
     $groupPath = Join-Path $projectPath $group
     if (-not (Test-Path -LiteralPath $groupPath)) { continue }
     $discovered = @(Get-ChildItem -LiteralPath $groupPath -Recurse -File -Filter '*_test.gd' | ForEach-Object {

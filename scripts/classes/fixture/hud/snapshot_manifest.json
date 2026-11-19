@@ -1,0 +1,9 @@
+{
+  "res://scripts/classes/fixture/hud/fixture_hud_kit.gd": {
+    "revision": 1,
+    "fields": [
+      "hud_variant"
+    ],
+    "omitted": {}
+  }
+}
