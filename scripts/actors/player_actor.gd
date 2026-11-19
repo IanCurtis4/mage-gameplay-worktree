@@ -2740,8 +2740,53 @@ func cast_progress() -> Dictionary:
 ## the kit becomes {} with one warning per kit and error code (KitHudState.checked);
 ## never fails the tick. Pure: may be read every HUD update and while paused.
 func kit_hud_state() -> Dictionary:
-	if kit == null: return {}
-	return KitHudState.checked(kit.hud_state(self), kit)
+	var states: Array[Dictionary] = []
+	for module: ClassKit in kit_modules():
+		var state := KitHudState.checked(module.hud_state(self), module)
+		if not state.is_empty(): states.append(state)
+	if states.is_empty(): return {}
+	if states.size() == 1: return states[0]
+	# E10a A18: origin then evolution in one v1 state; the first module wins a duplicate key.
+	var identity: StringName = kit.kit_id() if kit != null else origin_kit.kit_id()
+	var merged := {"schema": KitHudState.SCHEMA, "kit_id": identity}
+	var resources: Array[Dictionary] = []
+	var zones: Array[Dictionary] = []
+	var marks: Array[Dictionary] = []
+	var skills := {}
+	var seen := {}
+	for state: Dictionary in states:
+		var owner := String(state["kit_id"])
+		for resource: Dictionary in state.get("resources", []):
+			if _hud_claim(seen, "resource:%s" % resource["id"], owner): resources.append(resource)
+		for zone: Dictionary in state.get("zones", []):
+			if _hud_claim(seen, "zone:%s" % zone["role"], owner): zones.append(zone)
+		for mark: Dictionary in state.get("target_marks", []):
+			if _hud_claim(seen, "mark:%d:%s" % [int(mark["target_id"]), mark["key"]], owner): marks.append(mark)
+		var listed: Dictionary = state.get("skills", {})
+		for skill: Variant in listed:
+			if _hud_claim(seen, "skill:%s" % skill, owner): skills[skill] = listed[skill]
+	if not resources.is_empty(): merged["resources"] = resources
+	if not skills.is_empty(): merged["skills"] = skills
+	if not zones.is_empty(): merged["zones"] = zones
+	if not marks.is_empty(): merged["target_marks"] = marks
+	return merged
+
+## Warning keys of the HUD composition already reported (one per duplicate key).
+static var _hud_warned: Dictionary = {}
+
+## True when `key` is new in the composition; a repeat keeps the first and warns once per key.
+func _hud_claim(seen: Dictionary, key: String, owner: String) -> bool:
+	if not seen.has(key):
+		seen[key] = owner
+		return true
+	if not _hud_warned.has(key):
+		_hud_warned[key] = true
+		push_warning("PlayerActor.kit_hud_state: duplicate HUD key '%s' from '%s' dropped (kept the one from '%s')." % [key, owner, seen[key]])
+	return false
+
+## Test helper: forgets the composition warnings.
+static func reset_hud_composition_warnings() -> void:
+	_hud_warned.clear()
 
 func skill_cast_time(skill_id: StringName) -> float:
 	var rank_definition := _runtime_rank_definition(skill_id)

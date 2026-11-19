@@ -438,6 +438,38 @@ func gaze_targets(player: PlayerActor, actors: Array = []) -> Array[CombatActor]
 		result.append(enemy)
 	return result
 
+# --- HUD (E10a T12, C9) -----------------------------------------------------------------------
+
+## Pure read for the HUD (ragrpg_kit_hud_v1): the Êxtase charges (0..5) while the passive is
+## learned, and the Ídolo Impossível as a timer and a ground zone. Madness itself is published
+## by the base (A18). Values come from the MadnessAuthority; no formula.
+func hud_state(player: PlayerActor) -> Dictionary:
+	var madness := _madness(player)
+	if madness == null or not is_instance_valid(player): return {}
+	var resources: Array[Dictionary] = []
+	if madness.ecstasy.enabled:
+		resources.append({"id": ECSTASY, "label": "Êxtase", "kind": &"pips", "value": clampi(madness.ecstasy.charges, 0, MadnessRules.ECSTASY_CAP), "max": MadnessRules.ECSTASY_CAP, "element": &"shadow"})
+	var zones: Array[Dictionary] = []
+	var idol := madness.idol(player)
+	if idol != null and idol.is_alive():
+		var remaining := float(idol.get(&"remaining"))
+		var total := maxf(IDOL_DURATION[clampi(player.skill_rank(IDOL), 1, 5) - 1], remaining)
+		if remaining > 0.0:
+			resources.append({"id": IDOL, "label": "Ídolo Impossível", "kind": &"timer", "remaining": remaining, "total": total, "element": &"shadow"})
+			var center := Vector3.ZERO
+			var world := player.world_motion != null
+			var found := true
+			if world:
+				var point: ExpeditionWorldPoint = idol.world_point()
+				if point == null: found = false
+				else: center = point.position
+			else:
+				center = Vector3(idol.global_position.x, idol.global_position.y, 0.0)
+			if found and center.is_finite() and madness.idol_radius > 0.0:
+				zones.append({"role": &"idol", "space": &"world" if world else &"flat", "center": center, "shape": SanctuaryRules.SHAPE_CIRCLE, "radius": madness.idol_radius, "element": &"shadow", "remaining": minf(remaining, total), "total": total})
+	if resources.is_empty() and zones.is_empty(): return {}
+	return {"schema": KitHudState.SCHEMA, "kit_id": kit_id(), "resources": resources, "zones": zones}
+
 # --- Internals ------------------------------------------------------------------------------
 
 ## The origin's Madness authority, read on every use (never stored: one copy in the snapshot).

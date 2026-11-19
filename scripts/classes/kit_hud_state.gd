@@ -39,9 +39,9 @@ const SPACE_WORLD := &"world"
 const SPACE_FLAT := &"flat"
 const SPACES: Array[StringName] = [SPACE_WORLD, SPACE_FLAT]
 ## Presentation elements; empty means "no element colour".
-const ELEMENTS: Array[StringName] = [&"", &"none", &"fire", &"ice", &"lightning", &"tricolor", &"light", &"arcane"]
+const ELEMENTS: Array[StringName] = [&"", &"none", &"fire", &"ice", &"lightning", &"tricolor", &"light", &"shadow", &"arcane"]
 ## Resource IDs carry the kit prefix (ClassKitRegistry.IDENTITIES) or a system prefix.
-const SYSTEM_PREFIXES: Array[String] = ["sanctuary_", "flank_"]
+const SYSTEM_PREFIXES: Array[String] = ["sanctuary_", "flank_", "madness_"]
 
 ## Skill IDs of each kit script, cached: catalog data is immutable (AGENTS), and building
 ## the SkillDefinitions every HUD frame would be wasted work.
