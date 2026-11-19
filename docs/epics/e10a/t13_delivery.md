@@ -659,3 +659,16 @@ Cada pasta tem um `…_manifest.sha256` ao lado. Não copiei as subpastas de fix
 `youthful-robinson-db714a`, `admiring-proskuriakova-de00f1` e `cool-northcutt-0a2f7d` saíram do registro do
 Git (as três só tinham `.import` reescritos). As pastas ficaram vazias e ocupadas (`Device or resource busy`,
 sessões ainda abertas). Branches mantidas em `dc99e9c1`, `709f0a6b` e `74317a9b`. Disco: 34 GB livres.
+
+## Composição 9 — pontas de arquitetura e estado de espera (19/11/2026)
+
+| Origem | Ponta | Merge | Conteúdo |
+|---|---|---|---|
+| arquitetura (A15, T15, T16) | `cf176e6a` | `c1fad1f3` | só `docs/epics/e10a.md`, sem conflito |
+| arquitetura (A16) | `6a629434` | `5fd7dd86` | só `docs/epics/e10a.md` (1 linha), sem conflito |
+
+Nenhum teste rodado: as duas pontas só mudam documento. **Pendente para fechar a composição 9:** o
+`master` ainda não tem o E12 (fast-forward `7795f56d` → `34228347` espera a aprovação do usuário na sessão do
+E12), e a T11 vai entregar a correção da A16 (`ui_evolution_test` percorrendo `hybrid_ids()`;
+`e07_f1_composition_test` 27 → 31 com `_setup` da família para os PROC). Os dois vermelhos da composição 8
+seguem abertos até essa entrega. As cards T15 e T16 só começam com E12 e a correção da T11 no candidato.
