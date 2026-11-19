@@ -569,3 +569,93 @@ A worktree da T9 não tinha pasta de evidência nomeada. Copiei os 66 arquivos s
 `.godot/verification/e10a_t9_evidence/`, com manifesto de SHA256 (`C3B5CFBD…`, 66 linhas). As subpastas
 (`e06_*`, `e07_f1`, `e07_f2`, `e08_art_units`, 1,1 GB) são fixtures geradas e regenerável, e não foram copiadas.
 A worktree só tinha `.import` reescritos. Removida; a branch `claude/musing-austin-58a118` fica em `6b7e3df8`. Registro e pasta saíram por inteiro (desta vez sem resíduo). Disco: 29 GB livres (94% usados; outras sessões também consomem).
+
+## Composição 8 — T11 (augments), T10 (criação e UI) e T8 (corpos) (18/11/2026)
+
+### Merges
+
+| Ordem | Origem | Base da tarefa | Ponta mesclada | Merge |
+|---|---|---|---|---|
+| 1 | T11 (`claude/youthful-robinson-db714a`) | `5f702caa` | `dc99e9c1` | `3d019911` |
+| 2 | T10 (`claude/admiring-proskuriakova-de00f1`) | `b0583e16` | `709f0a6b` | `a71d2713` |
+| 3 | T8 (`claude/cool-northcutt-0a2f7d`) | `5f702caa` | `74317a9b` | `76b02ce7` |
+
+`--no-ff`, **sem conflito nos três**, sobre `b0583e16`. A ponta de arquitetura (`67383625`) já estava no
+candidato. Seis augments novas (T11); menu de criação com o Acólito, onboarding dos três e
+`tools/e10a_review_profiles.gd` (T10); três corpos, calibração e `equipment_head_fit_data.gd` (T8).
+
+**Contagens exatas conferidas (A9):** 37 augments, tanto em `e06_publication_test` (1162 checks) quanto em
+`augments_test` (180); 4 botões de criação em `e02_character_menu_test` (26 checks); head-fit de 17 classes
+e 14 peças em `e08_equipment_art_test` (de 83559 para 100863 checks, por causa das três classes novas);
+grip do `prayer_book` em (10,12) nos espelhos da T9: `equipment_items_test` E10a 301 checks (a T8 trocou só
+o grip esperado, número exato).
+
+### Importação e testes de impacto
+
+- **Importação:** exit 0 (`377F3374…FDC2`). **Bootstrap F1:** 255 com a falha conhecida (`AB79025F…831F`),
+  256 passou (`0095C54D…1D2`), refeito depois do último merge, como pedido.
+- **Lote de 25 passos (24 nomes; `equipment_items_test` tem dois):** um passo por chamada, `-F1Fixture
+  -SkipEditorImport`, timeout 300 s, 0 timeouts. Logs em `.godot/verification/t13_c8/` (fora do Git).
+  **23 verdes, 2 vermelhos** (abaixo). Os vermelhos têm a mesma causa: as augments da T11.
+
+| Passo | Teste | Resultado | Saída (8) |
+|---|---|---|---|
+| 335 | `augments_test` | 180, 0 falhas | `D2E49FD9` |
+| 221 | `e06_publication_test` | 1162, 0 falhas | `787D3A35` (igual) |
+| 213 / 214 | `e06_content_pilot_test` / `e06_content_pilot_runtime_test` | 481 / 252 | `7BD005C8` / `4C7EF8B6` |
+| 340 | `ui_family_test` | 86, 0 falhas | `9D58F18C` |
+| 334 | `ui_evolution_test` | **2 falhas de 90** | `A4F195A5` |
+| 39 | `e02_character_menu_test` | PASS, 26 | `92E83227` |
+| 110 / 108 | `e05_evolution_menu_integration_test` / `e05_evolution_catalog_test` | PASS 25 / PASS 99 | `4971C5F9` / `90F3F112` (igual) |
+| 333 / 336 | `kit_seam_test` / `base_seam_test` | 276 / 172 | `60643509` / `F78A568B` (iguais) |
+| 339 / 330 | `family_bodies_test` / `hybrid_bodies_test` | 6313 / 6300 | `C5B17150` / `B9C7E703` |
+| 329 / 338 | `equipment_items_test` (E09 / E10a) | 244 / 301 | `EB9A6284` / `97A9EEBE` (iguais) |
+| 239 | `equipment_hand_alignment_test` | 4593 | `38A87BF0` (igual) |
+| 20 | `e08_equipment_art_test` | 100863, 0 falhas | `5F377D76` |
+| 19 / 21 / 18 | `e08_directional_units_test` / `rig_compatibility` / `content` | 7684 / 83328 / 6324 | `F42ED54C` / `32793134` / `D0CF826C` (iguais) |
+| 26 | `e08_feedback_recipe_test` | PASS, 1433 | `1601B34D` (igual) |
+| 344 / 355 / 348 | `acolyte_base_test` / `priest_kit_test` / `cultist_kit_test` | 306 / 220 / 215 | `E633901A` / `942D0B90` / `215686C4` |
+| 321 | `e07_f1_composition_test` | **4 falhas de 341** | `A859E109` |
+
+Nenhum `SCRIPT ERROR`, `Parse Error`, `Compile Error`, `still in use` ou `ObjectDB` nos 23 verdes. Durante o
+lote rodei o `ui_evolution_test` por fora (para reproduzir), em paralelo com o passo do `equipment_items_test`;
+o resultado dele não mudou em relação à composição 7 (mesmos hashes), e nenhum outro passo coincidiu.
+
+### FALHAS ABERTAS (as duas vêm das augments da T11; não editei nenhum teste)
+
+**1. `ui_evolution_test` (E09, 2 falhas, 90 checks; no candidato antes da T11 passava com 97).** O teste
+instala kits de fixture (esqueleto) no registro. Com isso, `facade.build_preview` do espadachim devolve
+`unknown_skill_target`, e o painel de evolução mostra "Não foi possível consultar a evolução" (zero opções),
+então caem a opção `defender, berserker` e a de híbridas, mais um `SCRIPT ERROR` de nó nulo no check seguinte.
+**Causa conferida:** três augments da T11 têm `target_skill_ids` em skills dos kits Sacerdote e Cultista
+(`pilot_priest_b`, `pilot_cultist_a`, `pilot_cultist_b`). Com o registro em esqueleto essas skills somem do
+catálogo, e `BuildEffectCatalog.validate_effect` (`build_effect_catalog.gd:146`) rejeita a augment. Prova:
+retirei só essas três por um instante e o teste voltou a **97 checks, 0 falhas**; restaurei com
+`git checkout` (árvore limpa). A T10 passou o teste sozinha (97) porque a T11 ainda não estava no candidato.
+
+**2. `e07_f1_composition_test` (4 falhas, 341 checks, `recipes=31`).** O teste percorre toda receita de produção
+não-stat e exige exatamente 27 (`check(evidence.size() == 27, …)`, linha 33). As augments da T11 somam 4
+receitas não-stat (31) e duas delas falham os checks de PROC espacial (`causal parent contact…` e
+`real catalog PROC is one claimed same-target secondary…`, `_proc_case`, linhas 104–105). A contagem 27 → 31 é
+conta exata. Os dois checks de PROC pedem `_setup` do teste para as skills do Sacerdote/Cultista.
+
+Ambos tocam o arquivo e as expectativas de outros donos (E09/E07), portanto voltam à arquitetura para decidir
+com a T11. **O candidato fica vermelho nesses dois testes até lá.** Todo o resto do impacto passa, incluindo
+os de corpo, item, UI de criação e `e02_character_menu_test`.
+
+### Evidências ignoradas pelo Git, preservadas
+
+| Tarefa | Pasta no candidato | Arquivos | Manifesto SHA256 |
+|---|---|---|---|
+| T11 | `.godot/verification/e10a_t11_evidence/` | 22 | `095F696B…` |
+| T10 | `.godot/verification/e10a_t10_evidence/` (inclui `e10a_capture`) | 27 | `3CFF6B8D…` |
+| T8 | `.godot/verification/e10a_t8_evidence/` (`t8_native`) | 40 | `4FA804B3…` |
+
+Cada pasta tem um `…_manifest.sha256` ao lado. Não copiei as subpastas de fixture (`e07_f1`, `e07_f2`,
+`e08_art_units`, `e06_publication`; cerca de 1,1 GB por worktree, regeneráveis).
+
+### Worktrees removidas
+
+`youthful-robinson-db714a`, `admiring-proskuriakova-de00f1` e `cool-northcutt-0a2f7d` saíram do registro do
+Git (as três só tinham `.import` reescritos). As pastas ficaram vazias e ocupadas (`Device or resource busy`,
+sessões ainda abertas). Branches mantidas em `dc99e9c1`, `709f0a6b` e `74317a9b`. Disco: 34 GB livres.
