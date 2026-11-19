@@ -13,7 +13,7 @@ const ELEMENT_COLORS := {
 	&"lightning": Color("e9d76a"),
 	&"tricolor": Color("e58cc8"),
 	&"light": Color("f6e7a8"),
-	&"shadow": Color("8a5fb0"),
+	&"shadow": Color("d16ad8"),
 	&"arcane": Color("ba8de9"),
 }
 const NEUTRAL := Color("c9c3b4")

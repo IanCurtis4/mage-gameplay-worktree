@@ -12,7 +12,7 @@
 | `scripts/classes/bases/acolyte/acolyte_base.gd` | `hud_state`: Loucura em `target_marks`, em 5 degraus (`pips`, chave `madness`, `shadow`) e selo `madness_delirium` (`badge`) para o inimigo em Delírio. Sem recurso. |
 | `scripts/classes/priest/priest_kit.gd` | `hud_state`: Graça (pips, ∞ com prazo na Hora Santa), Égide e Hora Santa (timers), zona do Santuário, selo de Luz (badge). |
 | `scripts/classes/cultist/cultist_kit.gd` | `hud_state`: Êxtase (pips 0–5, só com a passiva ativa) e Ídolo (timer e zona circular `idol`). Não publica Loucura. |
-| `scripts/ui/hud/hud_palette.gd` | **Fora da posse da T12.** Uma linha: `&"shadow": Color("8a5fb0")`. Ver limitação 1. |
+| `scripts/ui/hud/hud_palette.gd` | **Fora da posse da T12.** Uma linha: `&"shadow": Color("d16ad8")` (autorizado pela Astra, A23 em `5c6b03df`; mesma cor dos projéteis de sombra). Contraste legível nas capturas; a `8a5fb0` não foi necessária. |
 | `tests/e10a/hud_family_test.gd` | Teste novo, 131 checagens (118 headless). |
 
 ### Composição (A18)
@@ -33,21 +33,21 @@ Antes: `editor_import` duas vezes e `e07_f1_import_test` (refeito depois de cada
 
 Suíte completa **não** rodada (como pedido). Os avisos `duplicate HUD key` e `invalid HUD state` na saída do `hud_family_test` são esperados: vêm dos testes de colisão e de módulo inválido.
 
-Hashes (SHA256): `hud_family_test.gd` `66ac74b12e3c545d…` (prefixo); verificar com `sha256sum` no commit.
+Depois da A23 (cor `d16ad8`), `e07_f1_import_test` refeito e `hud_components_test` (168), `hud_integration_test` (234) e `hud_family_test` (118) rodados de novo: 0 falhas.
 
 ## Capturas nativas (Godot 4.7.2, janela e renderer reais, 1280×720)
 `docs/epics/e10a/t12_evidence/`, geradas por `hud_family_test.gd -- <dir>` (131 checagens, 0 falhas):
 
 | Arquivo | SHA256 |
 |---|---|
-| `t12_acolyte.png` | `c263c27f40317d36b54049582b569704a59e286620b802ba86dd2b0564554de1` |
-| `t12_priest.png` | `e4f05daed4b36fdb5e3b4c19deda2cdc9d17cf58130fc8551ce17f7637f13011` |
-| `t12_cultist.png` | `7b288e7b40102e0aca5c3ad79a27a131eaddb57e02687d498633b26cdef47ad3` |
+| `t12_acolyte.png` | `b51251a5654b24b4a8b0f18bb57d3f733c9af287a2f9942c1687d0f184e1a81e` |
+| `t12_priest.png` | `4264f55b8f33b47044e314ea904b23fbe17958b648d513e1cc5686bb847f52d6` |
+| `t12_cultist.png` | `ac47f666f143e405398b9767b8d37971c5649949c712038df8458855d3ed1570` |
 
 Priest: Graça (3 pips), Égide, círculo do Santuário e selo. Cultista: Êxtase (3 pips), Ídolo (timer) e zona do Ídolo; Loucura sobre o inimigo. Acólito: só marcas de Loucura sobre os inimigos.
 
 ## Limitações
-1. **Paleta:** `HudPalette.ELEMENT_COLORS` não tinha `shadow`, e `KitResourcePanel`/`KitWorldOverlay` descartam a entrada inteira de elemento desconhecido. Sem a linha acima, Êxtase, Ídolo e Loucura não aparecem. Pedi autorização à arquitetura; sem resposta até o commit, a linha segue no commit e deve ser confirmada ou revertida pela T13/Astra (a cor `8a5fb0` é provisória, de playtest).
+1. **Paleta:** a entrada `shadow` é a única mudança em `hud_palette.gd` (A23); sem ela, Êxtase, Ídolo e Loucura seriam descartados pelo painel e pelos overlays.
 2. O Acólito sem evolução não tem linha de recurso: a Loucura aparece só como marcas sobre os inimigos (painel oculto). Vale para a base com qualquer evolução, que também publica as marcas.
 3. A Loucura é mostrada em degraus de 20 (`ceil(Loucura/100×5)`); o valor exato não é exposto na marca. Sem fórmula nova: a leitura vem de `MadnessAuthority.describe_enemy`.
 4. `skills` não é publicado por nenhum dos três módulos (fora do C9); a união de `skills` só é exercida pelo teste de colisão, com módulos de teste.
