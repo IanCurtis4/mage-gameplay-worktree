@@ -672,3 +672,54 @@ Nenhum teste rodado: as duas pontas só mudam documento. **Pendente para fechar 
 E12), e a T11 vai entregar a correção da A16 (`ui_evolution_test` percorrendo `hybrid_ids()`;
 `e07_f1_composition_test` 27 → 31 com `_setup` da família para os PROC). Os dois vermelhos da composição 8
 seguem abertos até essa entrega. As cards T15 e T16 só começam com E12 e a correção da T11 no candidato.
+
+### Composição 9, parte 2 — `master` `34228347` (E12) no candidato (19/11/2026)
+
+| Origem | Ponta | Merge |
+|---|---|---|
+| `master` (E12 `1d202bb0` mais o registro do aceite) | `34228347` | `a3a03708`, sobre `c497f26e` |
+
+`claude/e12-candidato` é ancestral do `master`. **Três conflitos, todos mecânicos (união dos dois lados), nenhum
+nos cinco arquivos de código observados:**
+
+| Arquivo | Resolução |
+|---|---|
+| `tools/verify.ps1` | `foreach ($group in @('tests/e09', 'tests/e10a', 'tests/systems', 'tests/classes', 'tests/e12'))`: a lista da C1.12 do E10a mais o `tests/e12` da H1, com os dois comentários |
+| `AGENTS.md` | o parágrafo do E10a e a frase do E12 (autorizado 17/11, aceito 18/11), nessa ordem |
+| `docs/LONG_TERM_EPICS.md` | as linhas E10a e E10b–E10e/E11, mais a linha E12 |
+
+`class_kit.gd`, `combat_actor.gd`, `player_actor.gd`, `enemy_actor.gd` e `main.gd` entraram por auto-merge
+(sem marcador de conflito); `runtime_manifest.json` também, e continua JSON válido (127 chaves de topo). O
+`codex/playtest` não foi tocado.
+
+**Gancho `hud_state` (limitação 5 da T1): o auto-merge NÃO compõe os dois módulos, e não corrigi.**
+`PlayerActor.kit_hud_state()` (`player_actor.gd:2742`) é `if kit == null: return {}` e depois
+`KitHudState.checked(kit.hud_state(self), kit)`: só lê `kit`, nunca `origin_kit`, ao contrário de
+`kit_modules()` (`player_actor.gd:359`, origem e depois evolução). Hoje isso é inofensivo: só `mg_ac`, `mg_la`,
+`sp_ac`, `sp_la` e a fixture implementam `hud_state`; a base Acólito e os kits Sacerdote e Cultista usam o
+padrão `{}`, e todos os testes passam. Mas o Acólito sem evolução tem `kit == null` e `origin_kit` preenchido e
+fica sem HUD; e quando a T12 der `hud_state` à base e aos kits puros, o resultado de dois módulos precisa de
+regra de composição (recursos, skills, zonas e marcas de cada módulo, e o validador `KitHudState.checked`, que
+recebe um único kit para prefixo de recurso e IDs de skill). É decisão de formato, não de merge: **volta à
+arquitetura (T1 e T12)**.
+
+**Importação e testes:** importação exit 0 (`6D1E7A54…24AA`); bootstrap F1: 255 com a falha conhecida
+(`AB79025F…831F`), 256 passou (`C0B81248…A7F2`), refeito depois do merge. **20 passos, todos verdes**, um por
+chamada, timeout 300 s, 0 timeouts, nenhum `SCRIPT ERROR`, `Parse Error`, `Compile Error`, `still in use` ou
+`ObjectDB`. Logs em `.godot/verification/t13_c9/` (fora do Git).
+
+| Passo | Teste | Resultado | Saída (8) |
+|---|---|---|---|
+| 367 / 365 / 366 | `hud_seam_test` / `hud_components_test` / `hud_integration_test` (E12) | 194 / 167 / 234 | `4B5ED8FE` / `6C770612` / `940E9619` |
+| 350 / 353 / 359 / 362 | `mg_ac` / `mg_la` / `sp_ac` / `sp_la` `_hud_test` | 60 / 53 / 57 / 49 | `000BB13B` / `13CB6B25` / `11A7268D` / `D74B43A7` |
+| 33 | `mage_gameplay_test` | PASS, 52 | `02D14E4B` |
+| 336 / 333 | `base_seam_test` / `kit_seam_test` | 172 / 276 | `F78A568B` / `60643509` (iguais à composição 8) |
+| 331 / 332 | `kit_seam_hooks_v2_test` / `v3_test` | 38 / 63 | `5182F32B` / `D1DFD323` (iguais) |
+| 344 / 357 / 348 | `acolyte_base_test` / `priest_kit_test` / `cultist_kit_test` | 306 / 220 / 215 | `E633901A` / `942D0B90` / `215686C4` (iguais) |
+| 340 | `ui_family_test` | 86 | `9D58F18C` (igual) |
+| 26 | `e08_feedback_recipe_test` | PASS, 1433 | `1601B34D` (igual) |
+| 108 / 39 / 342 | `e05_evolution_catalog_test` / `e02_character_menu_test` / `madness_test` | PASS 99 / PASS 26 / 276 | `90F3F112` / `92E83227` / `D4DAEAF5` (iguais) |
+
+Como o E12 passou a ser descoberto pelo `verify.ps1`, os índices dos passos mudaram (`kit_seam_test` 333, os
+três de kit e os de HUD têm números novos); o hash de cada saída não mudou. Os vermelhos da composição 8
+(`ui_evolution_test` e `e07_f1_composition_test`) **não foram rodados aqui** e seguem abertos até a T11 (A16).
