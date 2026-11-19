@@ -67,3 +67,26 @@ Um, com número exato: `tests/e06_publication_test.gd` linha 28, `ids(&"augment"
 ## Próximo passo
 
 T13 compõe esta ponta no candidato; conferir a contagem 37 após a composição.
+
+## A16 — correção na composição 8 (parcial: item 1 feito, item 2 bloqueado)
+
+Worktree recriada da branch e levada ao candidato por `git merge --ff-only claude/e10a-candidato` (HEAD `c497f26e`).
+
+**Item 1 (feito):** `tests/e09/ui_evolution_test.gd`, `_install_states`: `ClassKitRegistry.ids()` → `hybrid_ids()`. Nenhuma expectativa mudou. Antes: falha por `unknown_skill_target` (Sacerdote e Cultista viravam esqueleto); depois: 97 checks, 0 falhas.
+
+**Item 2 (NÃO entregue, reportado à arquitetura):** `e07_f1_composition_test`.
+- A contagem `27 → 31` e os ranks da família no `_setup` ficaram só na árvore de trabalho, sem commit. Com isso: 342 checks, 2 falhas (antes 3); `pilot_acolyte_pressure` (básico) e `pilot_cultist_a` (`cultist_shared_delirium`) passam.
+- `pilot_priest_b` (`priest_judgment`): a coluna do Juízo acerta o inimigo do andar de cima também (`JUDGMENT_COLUMN_HALF_HEIGHT = 200`, a ponte está a y=40). Medido: `lower` 100000→99856 e `upper` 100000→99856. O check "nunca projeta no outro andar" não é satisfeito por desenho da coluna.
+- `pilot_cultist_b` (`cultist_abyss_gaze`): `gaze_targets` retorna 0 alvos porque a família só reconhece inimigo que seja `EnemyActor` (`MadnessHelpers.is_enemy` exige `set_target_override`; `madness_authority.gd:325` tipa `hostile` como `EnemyActor`). O fixture usa `CombatActor`; um carrier com os métodos falsos ainda quebra no `as EnemyActor` (Nil). Prova do cone: facing e posições corretos, `channeling=true`, 0 alvos.
+- Não é lacuna do PROC em si (o handler dispara); é o fixture F1 sem `EnemyActor` real e a coluna do Juízo sem filtro de andar. Decisão para a arquitetura: fixture com `EnemyActor` real, ou filtro de andar no Juízo (T15), ou check específico.
+
+### Testes depois da A16 (item 1)
+
+| Teste | Resultado | sha256 |
+|---|---|---|
+| `ui_evolution_test` | 97 checks, 0 falhas | `AF5649F0015025B91CD431E0D5A6AC607D4D490757B4B471B39C45DF7B823E60` |
+| `augments_test` | 180 checks, 0 falhas | `D2080594CFEB43E2D9225D07137E629AFA2586980F8246E5464AF1E83ED2357A` |
+| `e06_publication_test` | 1162 checks, 0 falhas | `BBEA52A2C04245B24C361A4E8EBD95FEA8B9D744F6A6F396851B0BB180A27EC8` |
+| `ui_family_test` | 86 checks, 0 falhas | `99F94E287D1454AB5E4F01AE6ED08C2BCE71DD0B6502A16318CF903DDA899D2D` |
+| `kit_seam_test` | 276 checks, 0 falhas | `387339E5A5C3F2A138ED2301861C3BC9EA4FBEC29810CB397E25270B55B7C888` |
+| `e07_f1_composition_test` | 342 checks, **2 falhas** (priest_b, cultist_b), com edições não commitadas | n/a |
