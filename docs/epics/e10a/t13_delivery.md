@@ -722,3 +722,10 @@ chamada, timeout 300 s, 0 timeouts, nenhum `SCRIPT ERROR`, `Parse Error`, `Compi
 
 Como o E12 passou a ser descoberto pelo `verify.ps1`, alguns índices mudaram (por exemplo, `priest_kit_test` de 355 para 357); o hash de cada saída conferida não mudou. Os vermelhos da composição 8
 (`ui_evolution_test` e `e07_f1_composition_test`) **não foram rodados aqui** e seguem abertos até a T11 (A16).
+
+### Ponta de arquitetura `3d0fb3d1` (A17, A18) (19/11/2026)
+
+Merge `e3fcc23a`, só `docs/epics/e10a.md`, sem conflito; nenhum teste (documento). A A18 decide o
+`hud_state` apontado acima: a T12 compõe os dois módulos em `PlayerActor.kit_hud_state()` e, com um só
+módulo, nada muda. A A17 dá à T15 a posse de `grant_aegis` no Santuário. Pendentes no candidato: a correção
+da T11 (A16), a T15, a T16 e a T12.
