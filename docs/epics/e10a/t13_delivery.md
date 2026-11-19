@@ -729,3 +729,35 @@ Merge `e3fcc23a`, só `docs/epics/e10a.md`, sem conflito; nenhum teste (document
 `hud_state` apontado acima: a T12 compõe os dois módulos em `PlayerActor.kit_hud_state()` e, com um só
 módulo, nada muda. A A17 dá à T15 a posse de `grant_aegis` no Santuário. Pendentes no candidato: a correção
 da T11 (A16), a T15, a T16 e a T12.
+
+## Composição 10 — T11 corrigida (A16 e A19) e ponta A19 e A20 (19/11/2026)
+
+| Origem | Ponta | Merge |
+|---|---|---|
+| T11 (`claude/youthful-robinson-db714a`) | `fddea9ed` | `37fb1211` |
+| arquitetura (A19, A20) | `651d0b38` | `57001ae3` (só `docs/epics/e10a.md`) |
+
+Sem conflito. A T11 trouxe `tests/e09/ui_evolution_test.gd` (`_install_states` percorre `hybrid_ids()`),
+`tests/e07_f1_composition_test.gd` (27 → 31, `_setup` da família, `EnemyActor` reais) e o recibo.
+
+Importação exit 0 (`00C38D09…5B76`); bootstrap F1: 255 com a falha conhecida (`AB79025F…831F`), 256 passou
+(`0B8A5677…4B42`), refeito depois do último merge. Seis passos, um por chamada, 0 timeouts, sem `SCRIPT ERROR`,
+`still in use` ou `ObjectDB`. Logs em `.godot/verification/t13_c10/`.
+
+| Passo | Teste | Resultado | Saída (8) |
+|---|---|---|---|
+| 334 | `ui_evolution_test` | **97, 0 falhas** (era 2 falhas de 90) | `DF7B1619` (igual à composição 5) |
+| 321 | `e07_f1_composition_test` | **342 checks, 2 falhas aceitas**; `recipes=31` | `36AEC768` |
+| 335 | `augments_test` | 180, 0 falhas | `D2E49FD9` (igual) |
+| 221 | `e06_publication_test` | 1162, 0 falhas | `787D3A35` (igual) |
+| 340 | `ui_family_test` | 86, 0 falhas | `9D58F18C` (igual) |
+| 333 | `kit_seam_test` | 276, 0 falhas | `60643509` (igual) |
+
+**As 2 falhas aceitas do `e07_f1_composition_test`** (A19 e A20, abertas até a T15):
+`causal parent contact respects supported body/floor: pilot_priest_b_effect` (Juízo: a coluna acerta também o
+andar de cima) e `…: pilot_cultist_b_effect` (Olhar: o cone só reconhece `EnemyActor`). Os 4 checks de
+PROC da composição 8 caíram para 2: o `_setup` da família e a contagem 31 passam.
+
+Evidência da correção copiada para `.godot/verification/e10a_t11_evidence/fix_a16_a19/` (18 arquivos,
+manifesto `e10a_t11_fix_manifest.sha256`, `66B2FE85…`). A worktree da T11 foi removida de novo (a pasta
+ficou vazia e ocupada); a branch fica em `fddea9ed`.
