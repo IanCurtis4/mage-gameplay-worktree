@@ -198,3 +198,12 @@ func on_reveal(_player: PlayerActor, _duration: float) -> void:
 ## Required while a zone or temporary entity is active without a contracted projection.
 func snapshot_compact_blocker(_player: PlayerActor) -> String:
 	return ""
+
+## Pure read of the kit state for the HUD and the world overlay (E12 C1). Format
+## `ragrpg_kit_hud_v1`, validated by KitHudState (docs/epics/e12/h1_hud_seam_api.md).
+## Same purity rule as skill_cost and temporary_stat_sources: no state change, no node
+## creation, no signal, no randomness; may run every HUD update and while the tree is
+## paused. Values come from the authorities; no formula is recomputed for the HUD.
+## {} means "no HUD state" (the default) and is always valid.
+func hud_state(_player: PlayerActor) -> Dictionary:
+	return {}

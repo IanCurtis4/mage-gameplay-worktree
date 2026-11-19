@@ -678,6 +678,25 @@ func _try_declared_skill() -> bool:
 		return true
 	return false
 
+## E12 C2: read-only view of the mob cast clock (_mob_cast), only with cast_time > 0.
+## The category follows the same source as the flank rules' category_of without
+## importing that system: occurrence.category_id when known, boss controls, else normal.
+func cast_progress() -> Dictionary:
+	if _mob_cast.is_empty(): return {"active": false}
+	var total := float(_mob_cast.get("cast_time", 0.0))
+	if not is_finite(total) or total <= 0.0: return {"active": false}
+	var request := _mob_cast.get("request") as DamageRequest
+	var skill: StringName = request.skill_id if request != null else &""
+	var definition := ClassCatalog.skill_definition(skill) if not skill.is_empty() else null
+	var label := definition.display_name if definition != null and not definition.display_name.is_empty() else "Conjuração"
+	var remaining := float(_mob_cast.get("remaining", total))
+	return {"active": true, "skill_id": skill, "label": label, "total": total, "remaining": clampf(remaining if is_finite(remaining) else total, 0.0, total), "kind": &"cast", "category": _cast_category()}
+
+func _cast_category() -> StringName:
+	if occurrence != null and occurrence.category_id in MobCatalog.CATEGORIES: return occurrence.category_id
+	if hard_controls != null and hard_controls.boss: return &"boss"
+	return &"normal"
+
 func _advance_mob_cast(delta: float) -> void:
 	if _mob_cast.is_empty(): return
 	_mob_cast["remaining"] = maxf(0.0, float(_mob_cast["remaining"]) - delta)

@@ -322,6 +322,39 @@ func snapshot_compact_blocker(_player: PlayerActor) -> String:
 	if hour_active(): return "paladin_hour"
 	return sanctuary.compact_blocker()
 
+# --- HUD (E12 H2, contract §5) ----------------------------------------------------------
+
+## Pure read for the HUD (ragrpg_kit_hud_v1): Grace (unlimited with the deadline in the
+## Hora), the deadlines of the Juramento, the Égide and the Hora, the Oath zone (cone, or
+## circle in the Hora), the Seal badge on the living sealed enemy, and the kit refusal of
+## the Juramento. Values come from the SanctuaryAuthority and the kit state; no formula.
+func hud_state(player: PlayerActor) -> Dictionary:
+	var hour_total := HOUR_DURATION[_hud_rank(player, HOUR) - 1]
+	var resources: Array[Dictionary] = [sanctuary.hud_grace(hour_total)]
+	var oath := sanctuary.zone(ROLE_OATH)
+	if oath != null and oath.duration > 0.0:
+		resources.append({"id": &"paladin_oath", "label": "Juramento", "kind": &"timer", "remaining": minf(oath.remaining, oath.duration), "total": oath.duration, "element": SanctuaryAuthority.HUD_LIGHT})
+	var aegis := sanctuary.hud_aegis(&"paladin_aegis", AEGIS_DURATION)
+	if not aegis.is_empty(): resources.append(aegis)
+	if hour_active():
+		resources.append({"id": &"paladin_hour", "label": "Hora do Juramento", "kind": &"timer", "remaining": hour_remaining, "total": maxf(hour_total, hour_remaining), "element": SanctuaryAuthority.HUD_LIGHT})
+	var marks: Array[Dictionary] = []
+	var seal := sanctuary.hud_seal_mark()
+	if not seal.is_empty(): marks.append(seal)
+	return {
+		"schema": KitHudState.SCHEMA, "kit_id": kit_id(), "resources": resources,
+		"skills": {OATH: _hud_readiness(can_cast(player, {"skill_id": OATH}))},
+		"zones": sanctuary.hud_zones(player), "target_marks": marks,
+	}
+
+func _hud_rank(player: PlayerActor, skill: StringName) -> int:
+	return clampi(player.skill_rank(skill), 1, 5) if is_instance_valid(player) else 1
+
+## A6 of E12: the readiness of a kit skill is the kit's own can_cast answer (same code).
+static func _hud_readiness(answer: Dictionary) -> Dictionary:
+	if bool(answer.get("ok", false)): return {"ready": true, "reason": &""}
+	return {"ready": false, "reason": StringName(answer.get("error_code", &""))}
+
 # --- Queries --------------------------------------------------------------------------
 
 func hour_active() -> bool:

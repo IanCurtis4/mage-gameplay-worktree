@@ -335,6 +335,34 @@ func concealment_active(_player: PlayerActor) -> bool:
 func on_reveal(player: PlayerActor, duration: float) -> void:
 	flank.on_reveal(player, duration)
 
+# --- HUD (E12 H2, contract §5) ----------------------------------------------------------
+
+## Pure read for the HUD (ragrpg_kit_hud_v1): the Duelo and automatic-parry deadlines,
+## the Guarda Paciente once ready, the Sentence pips on the living victim and the kit
+## refusal of the Aparo. Values come from the FlankAuthority and the kit state.
+func hud_state(player: PlayerActor) -> Dictionary:
+	var resources: Array[Dictionary] = []
+	if duel_active():
+		var rank := clampi(player.skill_rank(DUEL), 1, 5) if is_instance_valid(player) else 1
+		resources.append({"id": &"duelist_duel", "label": "Duelo", "kind": &"timer", "remaining": duel_remaining, "total": maxf(DUEL_DURATION[rank - 1], duel_remaining)})
+	if auto_parry_remaining > 0.0:
+		resources.append({"id": &"duelist_auto_parry", "label": "Aparo automático", "kind": &"timer", "remaining": auto_parry_remaining, "total": maxf(AUTO_PARRY_DURATION, auto_parry_remaining)})
+	if is_instance_valid(player) and patient(player):
+		resources.append({"id": &"duelist_patient_guard", "label": "Guarda Paciente", "kind": &"pips", "value": 1, "max": 1})
+	var marks: Array[Dictionary] = []
+	var victim_mark := FlankAuthority.hud_victim_mark(flank.describe(player))
+	if not victim_mark.is_empty(): marks.append(victim_mark)
+	return {
+		"schema": KitHudState.SCHEMA, "kit_id": kit_id(), "resources": resources,
+		"skills": {PARRY: _hud_readiness(can_cast(player, {"skill_id": PARRY}))},
+		"target_marks": marks,
+	}
+
+## A6 of E12: the readiness of a kit skill is the kit's own can_cast answer (same code).
+static func _hud_readiness(answer: Dictionary) -> Dictionary:
+	if bool(answer.get("ok", false)): return {"ready": true, "reason": &""}
+	return {"ready": false, "reason": StringName(answer.get("error_code", &""))}
+
 # --- Queries --------------------------------------------------------------------------
 
 func duel_active() -> bool:

@@ -21,6 +21,7 @@ anteriores. Normas: [WORKFLOW](WORKFLOW.md); direção: [PRODUCT_DIRECTION](PROD
 | Integração/demo | Reserva antiga do E09, [preservada](epics/e09.history_2026_11_16.md) e ainda sem número. Validação operacional Luna/Sol, com aceite humano |
 | E10a | [Autorizado em 17/11 e aprovado em 18/11](epics/e10a.md): base Acólito, Sacerdote e Cultista, com costura de base, Loucura/Êxtase/Ídolo e arte da staging, sem geração nova. Em execução, uma sessão por tarefa |
 | E10b–E10e/E11 | Reservados. Bruxo, Druida, Ladino, Monge e híbridas futuras mantêm autorização por família/par; não produzir kits por efeito de roadmap |
+| E12 | [Aceito em 18/11](epics/e12.md) e integrado em `master` sem push: HUD de combate, com os recursos das quatro híbridas do E09 e barras de cast do jogador e dos inimigos; "outros players" reservado, sem multiplayer |
 | Economia/consumíveis/misc | Direção atualizada em18/10; alocação a épico/pacotes ainda a definir, sem execução automática |
 | Consumíveis ampliados/profissões | [Gate separado](gates/consumables_professions.md) solicitado em18/10; profissões ainda em discussão, sem implementação autorizada |
 | Cenários 3D low-poly | [Gate separado](gates/low_poly_environments.md) solicitado em18/10; natureza/construções e locais temáticos, sem produção ou mudança de renderer autorizadas |

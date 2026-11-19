@@ -217,6 +217,16 @@ var geometer_onboarding: GeometerOnboarding
 var sentinel_onboarding: SentinelOnboarding
 ## E09 C1.12: onboarding of a kit evolution (res://scripts/ui/classes/<id>_onboarding.gd).
 var kit_onboarding: Control
+## E12 C5: combat HUD wiring. Presentation only (outside the snapshot): nothing here writes a
+## rule, a clock or a save. The kit DTO is read once per HUD update and shared by the panel
+## and both world overlays.
+var cast_bar: CastBar
+var kit_resource_panel: KitResourcePanel
+var kit_ground_overlay: KitWorldOverlay
+var kit_overhead_overlay: KitWorldOverlay
+var _hud_kit_state: Dictionary = {}
+var _hud_cast_seen := false
+var _hud_overlays_empty := true
 ## E09 C1.5: enemy attack commits waiting for their impact on the player (transient).
 var _kit_attack_commits: Dictionary = {}
 ## E09 C1.5: an enemy committed an attack on the player. Keys in the kit seam API.
@@ -921,8 +931,8 @@ func _update_aim_with_rank(point: Vector2) -> void:
 	if skill == &"" or get_tree().paused or run_finished:
 		battle_indicators.clear_aim()
 		if player != null and player.has_active_cast() and not get_tree().paused and not run_finished:
-			var cast_definition := ClassCatalog.skill_definition(player.active_cast_skill)
-			battle_controls.set_aim_text("Conjurando %s · %.1fs  |  mover / Direito / Esc cancela" % [cast_definition.display_name, player.active_cast_remaining])
+			# E12 C5: the name and the remaining time are on the cast bar; only the help stays here.
+			battle_controls.set_aim_text("mover / Direito / Esc cancela")
 			bottom_controls.visible = false
 		else:
 			battle_controls.set_aim_text("")
@@ -3511,6 +3521,7 @@ func _update_hud() -> void:
 		var focus := player.sentinel_state
 		sentinel_focus_label.text = "FOCO  %d / 100%s" % [floori(focus.free_focus()), " · %d reservado" % floori(focus.reserved_focus) if focus.reserved_focus > 0.0 else ""]
 		sentinel_focus_bar.value = focus.focus
+	_update_combat_hud()
 	if training_mode and training_boss != null and training_boss.is_alive():
 		training_status_label.text = "TREINO · Guardião %d/%d HP · reforços %d/%d" % [ceili(training_boss.health.current_hp), ceili(training_boss.health.max_hp), enemies.size() - 1, TRAINING_ADD_CAP]
 	var skill_lines: PackedStringArray = []
@@ -3543,6 +3554,87 @@ func _update_hud() -> void:
 			battle_controls.show_skill_state(skill_id, "%s · %s%s\n%d SP · %s" % [_skill_input_label(skill_id), definition.display_name.to_upper(), rank_text, int(cost), state], cast_intent.active_skill == skill_id or player.active_cast_skill == skill_id)
 
 		_update_slot_skill_states()
+
+## E12 C5: one kit_hud_state() read per update (never per actor), handed to the resource
+## panel and to both world overlays, plus the player's cast bar.
+func _update_combat_hud() -> void:
+	var progress := player.cast_progress()
+	_hud_cast_seen = bool(progress.get("active", false))
+	# The flat arena hides the status rows during a cast; the world keeps them, so its cast bar
+	# sits above the status line instead of over it.
+	if cast_bar != null:
+		var top := -258.0 if expedition_view != null else -218.0
+		if cast_bar.offset_top != top:
+			cast_bar.offset_top = top
+			cast_bar.offset_bottom = top + CastBar.BAR_SIZE.y
+	if cast_bar != null:
+		cast_bar.set_progress(progress)
+	_hud_kit_state = player.kit_hud_state()
+	if kit_resource_panel != null:
+		kit_resource_panel.set_state(_hud_kit_state)
+		# The resource panel grows the HUD box downwards: the playtest admin button keeps below it.
+		var admin := ui_root.get_node_or_null("AdminButton") as Control if ui_root != null else null
+		if admin != null and hud_panel != null:
+			admin.position.y = maxf(172.0, hud_panel.position.y + hud_panel.size.y + 8.0)
+	if battle_controls != null:
+		battle_controls.set_kit_skill_states(_hud_kit_state.get("skills", {}))
+	_sync_kit_overlays(_hud_kit_state)
+
+func _sync_kit_overlays(dto: Dictionary) -> void:
+	if dto.is_empty() and _hud_overlays_empty:
+		return
+	if not player.has_kit():
+		return
+	var host: Node = expedition_view if expedition_view != null else arena_view
+	kit_ground_overlay = _kit_overlay(kit_ground_overlay, &"ground", host)
+	kit_overhead_overlay = _kit_overlay(kit_overhead_overlay, &"overhead", host)
+	var world := expedition_view != null
+	kit_ground_overlay.z_index = _kit_ground_z(dto) if world else -1
+	kit_overhead_overlay.z_index = 4001 if world else 5
+	# target_id -> living enemy; the overlay ignores any id outside it (decision A7).
+	var actors: Dictionary = {}
+	if not dto.get("target_marks", []).is_empty():
+		for enemy: CombatActor in enemies:
+			if is_instance_valid(enemy) and enemy.is_alive():
+				actors[enemy.get_instance_id()] = enemy
+	kit_ground_overlay.set_state(dto, actors)
+	kit_overhead_overlay.set_state(dto, actors)
+	_hud_overlays_empty = dto.is_empty()
+
+## Overlays live under the arena or the expedition view: both are presentation targets the
+## snapshot never scans, and their local space is the one the overlay draws in.
+func _kit_overlay(current: KitWorldOverlay, mode: StringName, host: Node) -> KitWorldOverlay:
+	var overlay := current
+	if overlay == null or not is_instance_valid(overlay):
+		overlay = KitWorldOverlay.new()
+		overlay.name = "KitGroundOverlay" if mode == &"ground" else "KitOverheadOverlay"
+		overlay.mode = mode
+		overlay.z_as_relative = false
+		overlay.process_mode = Node.PROCESS_MODE_PAUSABLE
+	if host != null and overlay.get_parent() != host:
+		if overlay.get_parent() != null:
+			overlay.get_parent().remove_child(overlay)
+		host.add_child(overlay)
+	return overlay
+
+## World zones sit between the deck and the actors of the same height (decks use
+## floor(y*4), actors floor(y*4)+2), so the actor bodies stay above the zone.
+func _kit_ground_z(dto: Dictionary) -> int:
+	for zone: Dictionary in dto.get("zones", []):
+		if zone.get("space") == &"world":
+			return clampi(floori((zone["center"] as Vector3).y * 4.0) + 1, -4000, 4000)
+	return -1
+
+## The cast bar flash follows the existing presentation actions (no new signal). A bar only
+## flashes when a cast was on screen in the previous update, so instant actions that also
+## emit cast_release never light a stale bar.
+func _on_player_cast_presentation(action: StringName, _direction: Vector2, _duration: float) -> void:
+	if cast_bar == null or not _hud_cast_seen:
+		return
+	if action == &"cast_cancel":
+		cast_bar.flash(&"cancel")
+	elif action == &"cast_release":
+		cast_bar.flash(&"release")
 
 func _update_slot_skill_states() -> void:
 	for index: int in action_slots.size():
@@ -3600,8 +3692,6 @@ func _display_skill_state(skill_id: StringName, sp_cost: float) -> String:
 		return "ATIVO %.1fs · %s" % [player.sentinel_state.absolute_remaining, _skill_state(player.skill_cooldown(skill_id), sp_cost, skill_id)]
 	if skill_id == &"sentinel_explosive_shot" and player.sentinel_state.explosive_prepared:
 		return "PREPARADO · CANCELAR"
-	if player.active_cast_skill == skill_id:
-		return "CONJURANDO %.1fs" % player.active_cast_remaining
 	if skill_id == &"shield_wall" and player.has_shield_stance():
 		return "ATIVA %.1fs · %d cargas · DESLIGAR" % [player.shield_remaining, player.shield_resistance]
 	if skill_id == &"perseverance" and player.perseverance_remaining > 0.0:
@@ -3615,6 +3705,11 @@ func _display_skill_state(skill_id: StringName, sp_cost: float) -> String:
 func _skill_state(cooldown: float, sp_cost: float, skill_id: StringName = &"") -> String:
 	if cooldown > 0.0:
 		return "RECARGA %.1fs" % cooldown
+	# E12 C5: the kit's own refusal (for example a Refração without charge) after the canonical
+	# recharge and before "pronto"; the rule still refuses the cast, the HUD only informs.
+	var kit_status := BattleControls.kit_status_text(_hud_kit_state.get("skills", {}).get(skill_id, {}))
+	if not kit_status.is_empty():
+		return kit_status
 	if player.is_sentinel():
 		if skill_id in SentinelTuning.SKILL_IDS and not player.sentinel_state.can_pay(float(SentinelTuning.values(skill_id, player.skill_rank(skill_id)).get("focus_cost", 0.0))):
 			return "SEM FOCO"
@@ -3789,6 +3884,7 @@ func _build_ui() -> void:
 	ui_root.theme = _battle_theme()
 	var admin_button := Button.new()
 	admin_button.text = "Admin · F10"
+	admin_button.name = "AdminButton"
 	admin_button.position = Vector2(24, 172)
 	admin_button.pressed.connect(_open_admin_tools)
 	ui_root.add_child(admin_button)
@@ -3822,6 +3918,9 @@ func _build_ui() -> void:
 	skill_label.hide()
 	hud_column.add_child(health_label)
 	hud_column.add_child(sp_label)
+	if player.has_kit():
+		kit_resource_panel = KitResourcePanel.new()
+		hud_column.add_child(kit_resource_panel)
 	if player.is_sentinel():
 		hud_panel.offset_bottom = 156.0
 		sentinel_focus_label = _make_label("FOCO 0 / 100", 16, Color("b4decb"))
@@ -4026,6 +4125,18 @@ func _build_ui() -> void:
 	battle_controls.bindings_changed.connect(_change_action_bindings)
 	# The battle controls belong below end-of-run and reward modals.
 	ui_root.move_child(battle_controls, augment_overlay.get_index())
+	# E12 C5: the player's cast bar, centered above the shortcut bar and its help line.
+	cast_bar = CastBar.new()
+	ui_root.add_child(cast_bar)
+	cast_bar.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	cast_bar.offset_left = -CastBar.BAR_SIZE.x * 0.5
+	cast_bar.offset_right = CastBar.BAR_SIZE.x * 0.5
+	cast_bar.offset_top = -218.0
+	cast_bar.offset_bottom = -218.0 + CastBar.BAR_SIZE.y
+	ui_root.move_child(cast_bar, augment_overlay.get_index())
+	# A restored snapshot already rebuilt this binding (the registry reconnects what it saved).
+	if not player.presentation_action.is_connected(_on_player_cast_presentation):
+		player.presentation_action.connect(_on_player_cast_presentation)
 
 	class_button = Button.new()
 	class_button.text = "Classe: %s" % player.class_definition.display_name

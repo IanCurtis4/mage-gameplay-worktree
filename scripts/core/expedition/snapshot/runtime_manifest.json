@@ -79,7 +79,11 @@
     "omitted": {
       "contact_shadows_enabled": "local presentation preference; defaults to enabled on restore",
       "_ground_shadow_cache": "derived receiver mesh and process-local geometry epoch; rebuilt from restored world support",
-      "_presentation_key": "derived draw-command inputs; empty after restore, rebuilt without changing animation or gameplay clocks"
+      "_presentation_key": "derived draw-command inputs; empty after restore, rebuilt without changing animation or gameplay clocks",
+      "_cast_last": "presentation-only cast bar state (E12 H4); empty after restore, rebuilt from the cast clock, never gameplay authority",
+      "_cast_flash_kind": "presentation-only cast bar state (E12 H4); empty after restore, rebuilt from the cast clock, never gameplay authority",
+      "_cast_flash_time": "presentation-only cast bar state (E12 H4); empty after restore, rebuilt from the cast clock, never gameplay authority",
+      "_cast_bar_drawn": "presentation-only cast bar state (E12 H4); empty after restore, rebuilt from the cast clock, never gameplay authority"
     }
   },
   "res://scripts/actors/enemy_actor.gd": {
@@ -1470,7 +1474,14 @@
       "_auto_collect_after_msec": "transient retry delay of the automatic reward collection (checkpoint38)",
       "_death_flush_after_msec": "transient pacing of the in-combat death journal entries (checkpoint40)",
       "kit_onboarding": "presentation/input settings or externally rebound profile authority",
-      "_kit_attack_commits": "transient enemy-attack commits; an impact after restore uses its own instant and kind"
+      "_kit_attack_commits": "transient enemy-attack commits; an impact after restore uses its own instant and kind",
+      "cast_bar": "disposable combat HUD presentation (E12 H4); rebuilt from the kit DTO and the cast clock, never gameplay authority",
+      "kit_resource_panel": "disposable combat HUD presentation (E12 H4); rebuilt from the kit DTO and the cast clock, never gameplay authority",
+      "kit_ground_overlay": "disposable combat HUD presentation (E12 H4); rebuilt from the kit DTO and the cast clock, never gameplay authority",
+      "kit_overhead_overlay": "disposable combat HUD presentation (E12 H4); rebuilt from the kit DTO and the cast clock, never gameplay authority",
+      "_hud_kit_state": "disposable combat HUD presentation (E12 H4); rebuilt from the kit DTO and the cast clock, never gameplay authority",
+      "_hud_cast_seen": "disposable combat HUD presentation (E12 H4); rebuilt from the kit DTO and the cast clock, never gameplay authority",
+      "_hud_overlays_empty": "disposable combat HUD presentation (E12 H4); rebuilt from the kit DTO and the cast clock, never gameplay authority"
     },
     "omitted_signals": {
       "memory_snapshot_ready": "out-of-graph capture result consumer, emitted only after capture"

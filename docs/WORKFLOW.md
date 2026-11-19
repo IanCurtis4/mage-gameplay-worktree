@@ -1,5 +1,9 @@
 # Desenvolvimento, revisão e playtest
 
+> 17/11/2026: [E12 — HUD de combate autorizado](epics/e12.md), no mesmo modelo do E09 (uma
+> sessão de arquitetura e uma por tarefa). Começa sobre o candidato E09; a integração espera o
+> aceite do E09. E10 e E11 continuam reservados.
+
 > 16/11/2026: E08 aceito e integrado. [E09 autorizado](epics/e09.md), com uma sessão de
 > arquitetura e uma sessão por tarefa, de modelo e esforço proporcionais. O dono exclusivo, as
 > dependências e os critérios de cada tarefa estão no índice do épico. As regras abaixo

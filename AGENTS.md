@@ -22,7 +22,9 @@
 > por tarefa; aceito em 17/11 e integrado em `master`. E10a autorizado em 17/11 e aprovado
 > em 18/11: [base Acólito, Sacerdote e Cultista](docs/epics/e10a.md), uma sessão por tarefa.
 > Contratos antes dos consumidores; E10b em diante, E11 e a reserva antiga de
-> integração/demo permanecem reservados.
+> integração/demo permanecem reservados. E12 autorizado em 17/11:
+> [HUD de combate](docs/epics/e12.md) (recursos das híbridas e barras de cast),
+> uma sessão por tarefa; multiplayer continua fora. E12 aceito em 18/11 e integrado em `master`.
 
 - Leia `docs/MVP.md`, `docs/ARCHITECTURE.md` e o contrato/checkpoint correspondente
   antes de editar. E00 e decisões posteriores explícitas prevalecem sobre o piloto.

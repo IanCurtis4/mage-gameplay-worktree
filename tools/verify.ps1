@@ -465,7 +465,8 @@ Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/
 # tests/e09/*_test.gd without editing this runner. Indices of the steps above are kept.
 # E10a C1.12: tests/e10a/**/*_test.gd joins the same group (tests/classes and tests/systems
 # already recurse, so new class and system folders need no edit).
-foreach ($group in @('tests/e09', 'tests/e10a', 'tests/systems', 'tests/classes')) {
+# E12 H1: tests/e12 joins the discovered groups, after the others.
+foreach ($group in @('tests/e09', 'tests/e10a', 'tests/systems', 'tests/classes', 'tests/e12')) {
     $groupPath = Join-Path $projectPath $group
     if (-not (Test-Path -LiteralPath $groupPath)) { continue }
     $discovered = @(Get-ChildItem -LiteralPath $groupPath -Recurse -File -Filter '*_test.gd' | ForEach-Object {

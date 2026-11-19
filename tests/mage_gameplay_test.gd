@@ -269,7 +269,8 @@ func _test_class_reset_and_ui() -> void:
 	controller.cast_intent.cancel()
 	controller._update_hud()
 	controller._update_aim(fireball_point)
-	_check(controller.battle_controls.aim_label.text.contains("Conjurando") and controller.skill_label.text.contains("CONJURANDO"), "HUD exposes remaining cast time after target confirmation")
+	# E12 C5: the name and the remaining time moved from the help line and the slot state to the cast bar.
+	_check(controller.cast_bar.visible and controller.cast_bar.plan()["time_text"] == "%.1fs" % controller.player.active_cast_remaining and controller.battle_controls.aim_label.text == "mover / Direito / Esc cancela" and not controller.skill_label.text.contains("CONJURANDO"), "HUD exposes remaining cast time after target confirmation")
 	controller.player._process(controller.player.active_cast_remaining + 0.01)
 	_check(not controller.player.has_active_cast() and is_equal_approx(controller.player.current_sp, fireball_sp - controller.player.skill_cost(&"fireball")) and controller.player.skill_cooldown(&"fireball") == ClassCatalog.skill_definition(&"fireball").cooldown, "completed fireball spends and starts base cooldown exactly once")
 
