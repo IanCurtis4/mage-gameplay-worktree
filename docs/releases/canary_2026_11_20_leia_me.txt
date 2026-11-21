@@ -1,5 +1,6 @@
 RagRPG Canary — 20/11/2026 — Windows 64 bits
 ============================================
+Build: a432e56f (cite este código ao mandar feedback)
 
 Esta é a build "canary": a versão mais nova em desenvolvimento, liberada
 antes do fechamento para você testar. Ela pode ter bugs, números de
