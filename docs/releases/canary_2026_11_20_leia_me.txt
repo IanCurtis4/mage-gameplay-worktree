@@ -1,0 +1,104 @@
+RagRPG Canary — 20/11/2026 — Windows 64 bits
+============================================
+
+Esta é a build "canary": a versão mais nova em desenvolvimento, liberada
+antes do fechamento para você testar. Ela pode ter bugs, números de
+balanceamento provisórios e conteúdo que ainda vai mudar.
+
+
+COMO JOGAR
+----------
+1. Extraia o ZIP inteiro para uma pasta. Não rode o jogo de dentro do ZIP.
+2. Abra "RagRPG-Canary.exe". O .exe e o .pck precisam ficar juntos na
+   mesma pasta.
+3. Na primeira vez, o Windows pode mostrar "O Windows protegeu o
+   computador" (SmartScreen), porque o executável não tem assinatura
+   digital. Clique em "Mais informações" e depois em "Executar assim mesmo".
+
+Requisitos: Windows 10 ou 11 de 64 bits e placa de vídeo com OpenGL 3.3.
+
+
+SAVES
+-----
+- O progresso fica em %APPDATA%\Godot\app_userdata\RagRPG Canary\
+  (cole esse caminho na barra de endereço do Explorador de Arquivos).
+- O canary não lê nem altera saves de outras versões do RagRPG.
+- Como é uma build de teste, talvez seja preciso recomeçar o personagem
+  numa versão futura.
+
+
+TESTE RÁPIDO (opcional)
+-----------------------
+Os arquivos "Teste rapido - ... .cmd" abrem o jogo com um personagem pronto
+no job 40, já com a build montada:
+  - Sacerdote - Bastião da Fé
+  - Sacerdote - Inquisição
+  - Cultista - Profeta
+  - Cultista - Vidente
+Cada um usa um perfil separado, guardado dentro desta pasta (subpasta
+"profiles"), e não mexe no seu save normal. Os perfis não trazem atributos
+nem equipamento: distribua os pontos e equipe antes de lutar.
+
+
+O QUE HÁ DE NOVO
+----------------
+Nova classe base: ACÓLITO (fé e sombra)
+  - Aparece na criação de personagem, ao lado de Espadachim, Mago e
+    Arqueiro. Ataque básico mágico com o livro e 8 skills: Luz Punitiva,
+    Prece, Escudo Votivo, Selo Sombrio, Sussurro Perturbador, Visão
+    Eldritch e as passivas Devoção e Fé Protetora.
+  - Loucura: as skills de sombra acumulam Loucura nos inimigos
+    (5 degraus, em roxo).
+  - No job 20 o Acólito evolui para:
+      SACERDOTE — Santuário no chão, Graça vinda da cura, Égide, Juízo,
+                  Selo de Luz, Exorcista e Hora Santa.
+      CULTISTA  — Delírio (até 3 inimigos passam a atacar os outros
+                  inimigos), Êxtase de 0 a 5 (mais dano recebido a partir
+                  de 3), Ídolo, Geometria Impossível, Olhar do Abismo e
+                  Revelação.
+  - Itens novos no loot: Livro de Orações do Noviço, Cetro do Halo
+    Dourado e Relicário do Olho Atento. Seis augments novos da família.
+
+Quatro classes híbridas no job 20
+  - Espadachim → Paladino ou Duelista.
+  - Mago → Taumaturgo ou Lâmina Arcana.
+  - Cada uma tem 7 skills, duas builds sugeridas e traje próprio. Quatro
+    armas novas entram no loot normal.
+
+HUD de combate
+  - Recursos de classe na tela, sem abrir menu: Graça, Sentença, Êxtase,
+    Loucura, a zona do Santuário no chão, os prazos ativos do kit e a
+    recarga da Refração.
+  - Barra de cast do jogador (acima da barra de atalhos) e dos inimigos
+    (embaixo da barra de vida, durante o cast).
+
+
+O QUE VALE A PENA TESTAR
+------------------------
+- Criar um Acólito do zero e jogar até o job 20.
+- Evoluir para Sacerdote e para Cultista e comparar os dois.
+- Jogar com uma híbrida (Paladino, Duelista, Taumaturgo ou Lâmina Arcana).
+- A fase da floresta, com o chefe Guardião Antigo, com qualquer classe nova.
+- Ver se a HUD mostra com clareza o que está acontecendo no combate.
+Para chegar mais rápido aos jobs altos, o jogo tem o menu Admin (F10).
+
+
+LIMITAÇÕES CONHECIDAS
+---------------------
+- Números de dano, cura e recarga são provisórios.
+- Ainda não há sons novos para os efeitos de luz e de sombra.
+- Vários nomes de skill são provisórios, e os ícones novos são vetoriais
+  (os pintados vêm depois).
+- O bônus do Exorcista contra mortos-vivos só vale quando esse tipo de
+  inimigo existir no jogo.
+- O desempenho não foi medido em outras máquinas: conte como ficou no
+  seu PC.
+
+
+COMO MANDAR FEEDBACK
+--------------------
+Mande para quem te passou esta build:
+  - classe e build, o que você fez, o que esperava e o que aconteceu;
+  - um print ou vídeo curto, se der;
+  - em caso de travamento ou erro, o arquivo de log:
+    %APPDATA%\Godot\app_userdata\RagRPG Canary\logs\godot.log

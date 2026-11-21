@@ -7,7 +7,12 @@ param(
     [Parameter(Mandatory)][ValidateSet('Export','Inspect','Measure','Profiles','Launchers','Smoke')][string]$Stage,
     [Parameter(Mandatory)][ValidatePattern('^[0-9a-f]{40}$')][string]$CandidateCommit,
     [ValidatePattern('^[a-z0-9_]+$')][string]$EvidenceName='',
-    [ValidateRange(1,5)][int]$Rounds=2
+    [ValidateRange(1,5)][int]$Rounds=2,
+    # Release overrides (canary for players). The defaults keep the T13 candidate build unchanged.
+    [ValidatePattern('^[A-Za-z0-9 ]+$')][string]$AppName='RagRPG E10a Candidato',
+    [ValidatePattern('^[A-Za-z0-9-]+$')][string]$BaseName='RagRPG-E10a-Candidato',
+    [string]$OutputDir='',
+    [ValidatePattern('^[A-Za-z0-9 ]+$')][string]$LauncherLabel='Jogar E10a'
 )
 $ErrorActionPreference = 'Stop'
 $pkSource = Split-Path -Parent $PSScriptRoot
@@ -19,9 +24,9 @@ $pkEngine = Join-Path $pkMain '.tools/godot/Godot_v4.7.2-stable_win64.exe'
 $pkEngineSha = 'ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424'
 $pkTemplate = 'C:/Users/João Pedro/AppData/Roaming/Godot/export_templates/4.7.2.stable/windows_release_x86_64.exe'
 $pkTemplateSha = 'd34d36f3be1a6c49c56525ae86469b92e4f417ddf0b43cf00dd80c385c4b0562'
-$pkAppName = 'RagRPG E10a Candidato'
-$pkBaseName = 'RagRPG-E10a-Candidato'
-$pkOutput = Join-Path $pkMain ('.tools/playtest_e10a/' + $CandidateCommit.Substring(0, 8))
+$pkAppName = $AppName
+$pkBaseName = $BaseName
+$pkOutput = if ($OutputDir) { [IO.Path]::GetFullPath($OutputDir) } else { Join-Path $pkMain ('.tools/playtest_e10a/' + $CandidateCommit.Substring(0, 8)) }
 $pkExe = Join-Path $pkOutput ($pkBaseName + '.exe')
 $pkPck = Join-Path $pkOutput ($pkBaseName + '.pck')
 $pkEvidence = Join-Path $pkOutput 'validation'
@@ -299,11 +304,11 @@ if ($Stage -eq 'Launchers') {
     $shell = New-Object -ComObject WScript.Shell
     foreach ($row in $index) {
         $cmd = Join-Path $pkOutput ("launch_$($row.key).cmd")
-        $body = "@echo off`r`nrem RagRPG E10a candidato - perfil isolado $($row.key) (nao usa o perfil pessoal)`r`nset `"APPDATA=%~dp0profiles\$($row.key)\appdata`"`r`nset `"LOCALAPPDATA=%~dp0profiles\$($row.key)\localappdata`"`r`nstart `"`" /D `"%~dp0`" `"%~dp0$pkBaseName.exe`"`r`n"
+        $body = "@echo off`r`nrem $pkAppName - perfil isolado $($row.key) (nao usa o perfil pessoal)`r`nset `"APPDATA=%~dp0profiles\$($row.key)\appdata`"`r`nset `"LOCALAPPDATA=%~dp0profiles\$($row.key)\localappdata`"`r`nstart `"`" /D `"%~dp0`" `"%~dp0$pkBaseName.exe`"`r`n"
         [IO.File]::WriteAllText($cmd, $body, [Text.Encoding]::ASCII)
-        $link = $shell.CreateShortcut((Join-Path $pkOutput ("Jogar E10a - $($row.class_name) - $($row.build_name).lnk")))
+        $link = $shell.CreateShortcut((Join-Path $pkOutput ("$LauncherLabel - $($row.class_name) - $($row.build_name).lnk")))
         $link.TargetPath = $cmd; $link.WorkingDirectory = $pkOutput; $link.WindowStyle = 7
-        $link.IconLocation = $pkExe + ',0'; $link.Description = "RagRPG E10a candidato - $($row.class_name), $($row.build_name) (perfil isolado)"
+        $link.IconLocation = $pkExe + ',0'; $link.Description = "$pkAppName - $($row.class_name), $($row.build_name) (perfil isolado)"
         $link.Save()
     }
     Get-ChildItem -LiteralPath $pkOutput -Filter '*.lnk' | ForEach-Object { Write-Output $_.Name }
